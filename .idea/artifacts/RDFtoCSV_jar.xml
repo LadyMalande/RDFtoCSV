@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="RDFtoCSV:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/RDFtoCSV_jar</output-path>
+    <root id="archive" name="RDFtoCSV.jar">
+      <element id="module-output" name="RDFtoCSV" />
+    </root>
+  </artifact>
+</component>
