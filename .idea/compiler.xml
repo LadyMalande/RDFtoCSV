@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="RDFtoCSV" target="19" />
+      <module name="RDFtoCSV" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
