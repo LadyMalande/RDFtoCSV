@@ -1,5 +1,6 @@
 package support;
 
+import convertor.RDFParser;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParseException;
@@ -30,7 +31,7 @@ public class FileReader {
         return null;
     }
 
-    public void readRDF(String resource) throws UnsupportedEncodingException {
+    public Model readRDF(String resource) throws UnsupportedEncodingException {
         String filename = "typy-pracovních-vztahů.nt";
         // read the file 'example-data-artists.ttl' as an InputStream.
         InputStream input = FileReader.class.getResourceAsStream("/" + resource);
@@ -43,31 +44,32 @@ public class FileReader {
         if(model == null){
             throw new UnsupportedEncodingException("You have provided RDF in unsupported format. Please provide different format.");
         } else {
-            model.forEach(System.out::println);
+            RDFParser rdfParser = new RDFParser(model);
+            rdfParser.printModelByRows();
         }
 
         System.out.println(model.getNamespaces());
+        return model;
     }
 
     private RDFFormat getFileFormatFromExtension(String resource) {
         String[] separatedResource = resource.split("\\.");
         String extension = separatedResource[1];
-        switch(extension){
-            case "nq": return RDFFormat.NQUADS;
-            case "nt": return RDFFormat.NTRIPLES;
-            case "ttl": return RDFFormat.TURTLE;
-            case "trig": return RDFFormat.TRIG;
-            default: return null;
-        }
+        return switch (extension) {
+            case "nq" -> RDFFormat.NQUADS;
+            case "nt" -> RDFFormat.NTRIPLES;
+            case "ttl" -> RDFFormat.TURTLE;
+            case "trig" -> RDFFormat.TRIG;
+            default -> null;
+        };
     }
 
     private Model tryParseFromRDFFormats(InputStream input, RDFFormat format){
-        Model model = null;
+        Model model;
         try {
             model = Rio.parse(input, "", format);
             return model;
-        } catch (RDFParseException e) {}
-        catch (IOException i){}
+        } catch (RDFParseException | IOException e) {e.printStackTrace();}
         return null;
     }
 
