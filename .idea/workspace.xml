@@ -4,14 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b23b301-f976-48d5-ad0c-39e02bd54d65" name="Changes" comment="Reading different file types.">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/metadata/Metadata.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/namespaces/MetadataNamespaces.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/support/FileWrite.java" afterDir="false" />
+    <list default="true" id="3b23b301-f976-48d5-ad0c-39e02bd54d65" name="Changes" comment="Implemented Writing Subjects of different types to different Files.&#10;Filtering of Subjects by RDF.TYPE.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/convertor/CSV.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/convertor/AbstractClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/convertor/RDFParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/support/FileReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/support/FileReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/convertor/RDFParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/convertor/RDFParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/support/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/support/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/typy-pracovních-vztahů.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/typy-pracovních-vztahů.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +97,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677346012061</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Implemented Writing Subjects of different types to different Files.&#10;Filtering of Subjects by RDF.TYPE.">
+      <created>1679562905981</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1679562905981</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -116,6 +121,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Reading different file types." />
-    <option name="LAST_COMMIT_MESSAGE" value="Reading different file types." />
+    <MESSAGE value="Implemented Writing Subjects of different types to different Files.&#10;Filtering of Subjects by RDF.TYPE." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented Writing Subjects of different types to different Files.&#10;Filtering of Subjects by RDF.TYPE." />
   </component>
 </project>

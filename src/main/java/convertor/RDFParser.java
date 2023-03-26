@@ -12,6 +12,7 @@ import java.util.Set;
 public class RDFParser {
 
     Model model;
+    CSV outputCSV;
 
     public RDFParser(Model m) {
         this.model = m;
@@ -47,10 +48,29 @@ public class RDFParser {
             numberOfFile++;
             assert fileToWriteTo != null;
             FileWrite.writeSubjectsTotheFile(fileToWriteTo, resourcesByType);
+            linkSubjectsToOtherSubjects();
         }
     }
 
+    private void linkSubjectsToOtherSubjects(){
+        Set<Resource> resourcesInObject = model.filter(null, RDF.TYPE, null).subjects();
+        for(Resource r : resourcesInObject){
+            Set<Resource> linked = model.filter(null, null, r).subjects();
+            System.out.println("Linked to " + r.stringValue() + " are :" + linked);
+            if(linked.size() > 0){
+                // link it to the row of the resource it is linked to
+                linkTheResourceInObjectToSubject(linked, r);
+                System.out.println("We are linking " + linked.toString() + " to " + r.toString());
+            }
+        }
+    }
 
+    private void linkTheResourceInObjectToSubject(Set<Resource> list, Resource addColumn) {
+        for(int i = 0; i < list.size(); i++){
+            outputCSV.getTable()[0][i] =
+        }
+
+    }
 
 
 }

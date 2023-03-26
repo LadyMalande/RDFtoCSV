@@ -10,6 +10,7 @@ public class Main {
         FileReader fr = new FileReader();
         try {
             fr.readRDF("typy-pracovních-vztahů.trig");
+
         } catch (UnsupportedEncodingException e) {
             System.out.println(e.toString());
         }
