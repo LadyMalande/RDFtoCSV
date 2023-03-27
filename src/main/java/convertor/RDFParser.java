@@ -13,9 +13,11 @@ public class RDFParser {
 
     Model model;
     CSV outputCSV;
+    int columnIndex;
 
     public RDFParser(Model m) {
         this.model = m;
+        columnIndex = 0;
     }
 
     public void printModelByRows(){
@@ -67,7 +69,7 @@ public class RDFParser {
 
     private void linkTheResourceInObjectToSubject(Set<Resource> list, Resource addColumn) {
         for(int i = 0; i < list.size(); i++){
-            outputCSV.getTable()[0][i] =
+            //outputCSV.getTable()[0][i] =
         }
 
     }
