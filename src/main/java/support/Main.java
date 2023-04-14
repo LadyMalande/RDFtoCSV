@@ -6,7 +6,11 @@ import java.io.UnsupportedEncodingException;
 
 public class Main {
     public static void main(String[] args){
+        ExampleMaker exm = new ExampleMaker();
+        exm.makeExample();
+        /*
         BasicConfigurator.configure();
+
         FileReader fr = new FileReader();
         try {
             fr.readRDF("typy-pracovních-vztahů.trig");
@@ -14,5 +18,6 @@ public class Main {
         } catch (UnsupportedEncodingException e) {
             System.out.println(e.toString());
         }
+         */
     }
 }
