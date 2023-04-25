@@ -60,6 +60,10 @@ public class FileReader {
             case "nt" -> RDFFormat.NTRIPLES;
             case "ttl" -> RDFFormat.TURTLE;
             case "trig" -> RDFFormat.TRIG;
+            case "json" -> RDFFormat.JSONLD;
+            case "n3" -> RDFFormat.N3;
+            case "" -> RDFFormat.RDFA; // doesnt have precise file extension, has several ones
+            case "rdf" -> RDFFormat.RDFXML;
             default -> null;
         };
     }
