@@ -31,7 +31,7 @@ import java.io.InputStream;
  */
 public class CSVTableCreator {
 
-    String resultCSV;
+    String resultCSV = "";
 
 
     public String getCSVTableAsString(){
@@ -66,7 +66,7 @@ public class CSVTableCreator {
                     // ... and print out the value of the variable binding for ?s and ?n
                     System.out.println("?job = " + solution.getValue("job"));
                 }
-                resultCSV = ;
+
             }
         } finally {
         // Before our program exits, make sure the database is properly shut down.
@@ -86,7 +86,7 @@ public class CSVTableCreator {
         // Create the query to get all data in CSV format
         SelectQuery selectQuery = Queries.SELECT();
         Variable job = SparqlBuilder.var("job"), pos = SparqlBuilder.var("pos");
-        selectQuery.prefix(skos).select(job).where(job.isA(skos.iri("prefLabel")));
+        selectQuery.prefix(skos).select(job).where(job.has(skos.iri("prefLabel"), pos));
         System.out.println(selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
