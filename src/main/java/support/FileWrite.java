@@ -25,6 +25,22 @@ public class FileWrite {
         }
     }
 
+    public static File makeFileByNameAndExtension(String name, String ext) {
+        try {
+            File newFile = new File(name + "." + ext);
+            if (newFile.createNewFile()) {
+                System.out.println("File created: " + newFile.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+            return newFile;
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static void writeSubjectsTotheFile(File file, Set<Resource> resources) {
         try {
             FileWriter myWriter = new FileWriter(file.getName());
@@ -32,6 +48,20 @@ public class FileWrite {
                 myWriter.write(r.toString());
                 myWriter.write("\n");
             }
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeTotheFile(File file, Object something) {
+        try {
+            FileWriter myWriter = new FileWriter(file.getName());
+
+            myWriter.write(something.toString());
+
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
