@@ -1,7 +1,5 @@
 package convertor;
 
-import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -17,12 +15,9 @@ import org.eclipse.rdf4j.sparqlbuilder.core.SparqlBuilder;
 import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
-import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
-import org.eclipse.rdf4j.sparqlbuilder.util.SparqlBuilderUtils;
 import support.FileWrite;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -41,7 +36,7 @@ public class CSVTableCreator {
 
     private String queryRDFModel(String queryString) {
         // Query the data and pass the result as String
-        String resultString = "";
+        StringBuilder resultString = new StringBuilder();
 
         // Query in rdf4j
         // Create a new Repository.
@@ -65,6 +60,8 @@ public class CSVTableCreator {
                 for (BindingSet solution : result) {
                     // ... and print out the value of the variable binding for ?s and ?n
                     System.out.println("?job = " + solution.getValue("job"));
+                    resultString.append(solution.getValue("job").stringValue());
+                    resultString.append("\n");
                 }
 
             }
@@ -74,10 +71,10 @@ public class CSVTableCreator {
         }
 
         // Verify the output in console
-
+        resultCSV = resultString.toString();
         System.out.println(resultString);
         saveCSVasFile("resultCSVPrimer");
-        return resultString;
+        return resultString.toString();
     }
 
     private String getCSVTableQueryForModel() {
@@ -93,6 +90,7 @@ public class CSVTableCreator {
 
     private void saveCSVasFile(String fileName){
         File f = FileWrite.makeFileByNameAndExtension(fileName, "csv");
+        assert f != null;
         FileWrite.writeTotheFile(f, resultCSV);
         System.out.println("Written CSV table to the file " + f + ".");
     }
