@@ -66,7 +66,7 @@ public class CSVTableCreator {
                     // ... and print out the value of the variable binding for ?s and ?n
                     System.out.println("?job = " + solution.getValue("job"));
                 }
-                resultCSV = ;
+                resultCSV = result.toString();
             }
         } finally {
         // Before our program exits, make sure the database is properly shut down.
