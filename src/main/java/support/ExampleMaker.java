@@ -12,6 +12,10 @@ import org.eclipse.rdf4j.rio.Rio;
 
 public class ExampleMaker {
 
+    public Model getModel() {
+        return model;
+    }
+
     Model model;
 
     public void makeExample(){
@@ -36,16 +40,16 @@ public class ExampleMaker {
         builder.defaultGraph().subject("ex:myGraph").add(RDF.TYPE, "rdf:Graph");
 
         // return the Model object
-        Model m = builder.build();
-        Rio.write(m, System.out, RDFFormat.TURTLE);
+        model = builder.build();
+        Rio.write(model, System.out, RDFFormat.TURTLE);
         System.out.println();
-        Rio.write(m, System.out, RDFFormat.TRIG);
+        Rio.write(model, System.out, RDFFormat.TRIG);
         System.out.println();
-        Rio.write(m, System.out, RDFFormat.NTRIPLES);
+        Rio.write(model, System.out, RDFFormat.NTRIPLES);
         System.out.println();
-        Rio.write(m, System.out, RDFFormat.NQUADS);
+        Rio.write(model, System.out, RDFFormat.NQUADS);
         System.out.println();
-        Rio.write(m, System.out, RDFFormat.JSONLD);
+        Rio.write(model, System.out, RDFFormat.JSONLD);
         //m.forEach(System.out::println);
     }
 }
