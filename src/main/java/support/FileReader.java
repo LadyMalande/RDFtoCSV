@@ -31,8 +31,28 @@ public class FileReader {
         return null;
     }
 
+    public String readFileToString(String filename){
+        StringBuilder sb = new StringBuilder();
+        try{
+            File myObj = new File(filename);
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+
+                String data = myReader.nextLine();
+                sb.append(data + "\n");
+                System.out.println(data);
+            }
+
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+
     public Model readRDF(String resource) throws UnsupportedEncodingException {
-        String filename = "typy-pracovních-vztahů.nt";
+        String filename = resource;
         // read the file 'example-data-artists.ttl' as an InputStream.
         InputStream input = FileReader.class.getResourceAsStream("/" + resource);
 

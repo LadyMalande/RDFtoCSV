@@ -20,6 +20,7 @@ import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf;
 import org.eclipse.rdf4j.sparqlbuilder.util.SparqlBuilderUtils;
+import support.FileReader;
 import support.FileWrite;
 
 import java.io.File;
@@ -111,7 +112,9 @@ public class CSVTableCreator {
         augmentMapsByMissingKeys();
         saveCSFFileFromRows(CSVFileTOWriteTo);
         //saveCSVasFile("resultCSVPrimer");
-        return resultCSV;
+        FileReader fr = new FileReader();
+
+        return fr.readFileToString(CSVFileTOWriteTo + ".csv");
     }
 
     private void recursiveQueryForSubjects(RepositoryConnection conn,Row root, String object,String predicateOfIRI){

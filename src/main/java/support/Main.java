@@ -15,6 +15,7 @@ public class Main {
         String CSVFileToWriteTo = args[2];
         FileReader fr = new FileReader();
         FileWrite fw = new FileWrite();
+        /*
         try {
 
             //Model m = fr.readRDF("vhodnosti-pro-typ-zamestnance.jsonld");
@@ -23,6 +24,8 @@ public class Main {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
+         */
 
 
 
@@ -39,7 +42,7 @@ public class Main {
 
         BasicConfigurator.configure();
 
-
+/*
         try {
             fr.readRDF("typy-pracovních-vztahů.trig");
 
@@ -47,5 +50,7 @@ public class Main {
             System.out.println(e.toString());
         }
 
+
+ */
     }
 }
