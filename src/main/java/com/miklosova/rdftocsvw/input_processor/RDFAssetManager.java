@@ -1,4 +1,4 @@
-package com.miklosova.rdftocsvw.support;
+package com.miklosova.rdftocsvw.input_processor;
 
 import org.eclipse.rdf4j.rio.RDFFormat;
 

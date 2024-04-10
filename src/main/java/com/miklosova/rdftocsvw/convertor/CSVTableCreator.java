@@ -1,6 +1,6 @@
 package com.miklosova.rdftocsvw.convertor;
 
-import com.miklosova.rdftocsvw.support.RDFAssetManager;
+import com.miklosova.rdftocsvw.input_processor.RDFAssetManager;
 import lombok.extern.java.Log;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
 import org.eclipse.rdf4j.query.BindingSet;
@@ -89,7 +89,7 @@ public class CSVTableCreator {
                 // we just iterate over all solutions in the result...
                 System.out.println();
                 System.out.println(result == null);
-                System.out.println(result.getBindingNames());
+                System.out.println("Binding names: " + result.getBindingNames());
                 roots = new ArrayList<>();
                 //System.out.println(result.stream().count());
                 for (BindingSet solution : result) {
@@ -181,7 +181,7 @@ public class CSVTableCreator {
         Variable o = SparqlBuilder.var("o"), s = SparqlBuilder.var("s"),
                  s_in = SparqlBuilder.var("s_in"),p_in = SparqlBuilder.var("p_in");
         selectQuery.prefix(skos).select(s).where(s.isA(o).filterNotExists(s_in.has(p_in, s)));
-        System.out.println(selectQuery.getQueryString());
+        System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
