@@ -4,7 +4,7 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 
 import java.io.File;
 
-public class NtriplesParser implements IParsingMethod {
+public class NtriplesParser implements IRDF4JParsingMethod {
     @Override
     public RDFFormat processInput(File fileToParse) {
         return RDFFormat.NTRIPLES;

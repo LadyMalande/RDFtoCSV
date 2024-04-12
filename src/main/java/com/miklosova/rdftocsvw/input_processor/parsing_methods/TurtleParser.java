@@ -4,7 +4,7 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 
 import java.io.File;
 
-public class TurtleParser implements IParsingMethod {
+public class TurtleParser implements IRDF4JParsingMethod {
     @Override
     public RDFFormat processInput(File fileToParse) {
         return RDFFormat.TURTLE;

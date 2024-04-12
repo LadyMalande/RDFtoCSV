@@ -1,14 +1,14 @@
 package com.miklosova.rdftocsvw.input_processor;
 
-import com.miklosova.rdftocsvw.input_processor.parsing_methods.IParsingMethod;
+import com.miklosova.rdftocsvw.input_processor.parsing_methods.IRDF4JParsingMethod;
 import org.eclipse.rdf4j.rio.RDFFormat;
 
 import java.io.File;
 
 public class InputGateway {
-    private IParsingMethod parsingMethod;
+    private IRDF4JParsingMethod parsingMethod;
 
-    public void setParsingMethod(IParsingMethod parsingMethod) {
+    public void setParsingMethod(IRDF4JParsingMethod parsingMethod) {
         this.parsingMethod = parsingMethod;
     }
 

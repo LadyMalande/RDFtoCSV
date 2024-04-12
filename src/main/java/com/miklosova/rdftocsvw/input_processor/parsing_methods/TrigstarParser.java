@@ -4,7 +4,7 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 
 import java.io.File;
 
-public class TrigstarParser implements IParsingMethod {
+public class TrigstarParser implements IRDF4JParsingMethod {
     @Override
     public RDFFormat processInput(File fileToParse) {
         return RDFFormat.TRIGSTAR;

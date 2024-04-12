@@ -4,6 +4,6 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 
 import java.io.File;
 
-public interface IParsingMethod {
+public interface IRDF4JParsingMethod {
     RDFFormat processInput(File fileToParse);
 }

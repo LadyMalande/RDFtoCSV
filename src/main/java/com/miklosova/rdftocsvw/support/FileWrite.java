@@ -1,5 +1,6 @@
 package com.miklosova.rdftocsvw.support;
 
+import com.miklosova.rdftocsvw.convertor.Row;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
@@ -9,6 +10,7 @@ import org.eclipse.rdf4j.rio.RDFWriter;
 import org.eclipse.rdf4j.rio.Rio;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Set;
 
 public class FileWrite {
@@ -27,6 +29,40 @@ public class FileWrite {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static String saveCSFFileFromRows(String fileName, ArrayList<String> keys, ArrayList<Row> rows, String delimiter){
+        StringBuilder forOutput = new StringBuilder();
+        //File f = FileWrite.makeFileByNameAndExtension("../" + fileName, "csv");
+        File f = FileWrite.makeFileByNameAndExtension( fileName, "csv");
+
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAME,f.getName());
+
+        StringBuilder sb1 = new StringBuilder();
+        sb1.append("id" + delimiter);
+        keys.forEach(key -> sb1.append(key + delimiter));
+        sb1.deleteCharAt(sb1.length() - 1);
+        sb1.append("\n");
+        FileWrite.writeTotheFile(f, sb1.toString());
+        for(Row row : rows){
+            StringBuilder sb = new StringBuilder();
+            sb.append(row.id).append(delimiter);
+            for(String key : keys){
+                sb.append(row.map.get(key)).append(delimiter);
+                System.out.println("in entry set " + row.map.get(key) + ".");
+
+            }
+
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append("\n");
+            System.out.println("row: " + sb.toString() + ".");
+            FileWrite.writeTotheFile(f, sb.toString());
+            forOutput.append(sb.toString());
+        }
+        System.out.println("Written CSV from rows to the file " + f + ".");
+        return forOutput.toString();
+        //FileWrite.writeTotheFile(f, resultCSV);
+
     }
 
     public static File makeFileByNameAndExtension(String name, String ext) {
