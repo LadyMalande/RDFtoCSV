@@ -34,7 +34,7 @@ public class Main {
         // Transform the data from the model to CSV
         // TODO
         ConversionService cs = new ConversionService();
-        PrefinishedOutput convertedToCSV = cs.convertByQuery(rc, conversionMethod, db);
+        PrefinishedOutput convertedToCSV = cs.convertByQuery(rc, db);
 
         db.shutDown();
         // Finalize the output to .zip
