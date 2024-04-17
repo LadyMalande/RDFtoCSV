@@ -29,11 +29,14 @@ public class ParsingService {
     private TurtlestarParser turtlestarParser;
     private TrigstarParser trigstarParser;
 
-    public void processInput(File fileToRead) {
+    public RDFFormat processInput(File fileToRead) {
         String fileName = fileToRead.getName();
+        inputGateway = new InputGateway();
         processExtension(fileName);
+
         RDFFormat parsedInput = inputGateway.processInput(fileToRead);
         System.out.println("Processed file: " + fileToRead.getAbsolutePath());
+        return parsedInput;
     }
 
     private void processExtension(String fileName){
@@ -42,55 +45,55 @@ public class ParsingService {
 
         switch (fileExtension) {
             case "ttl":
-                inputGateway.setParsingMethod(turtleParser);
+                inputGateway.setParsingMethod(new TurtleParser());
                 break;
             case "brf":
-                inputGateway.setParsingMethod(binaryParser);
+                inputGateway.setParsingMethod(new BinaryParser());
                 break;
             case "hdt":
-                inputGateway.setParsingMethod(hdtParser);
+                inputGateway.setParsingMethod(new HdtParser());
                 break;
             case "jsonld":
-                inputGateway.setParsingMethod(jsonldParser);
+                inputGateway.setParsingMethod(new JsonldParser());
                 break;
             case "n3":
-                inputGateway.setParsingMethod(n3Parser);
+                inputGateway.setParsingMethod(new N3Parser());
                 break;
             case "ndjsonld":
             case "jsonl":
             case "ndjson":
-                inputGateway.setParsingMethod(ndjsonldParser);
+                inputGateway.setParsingMethod(new NdjsonldParser());
                 break;
             case "nq":
-                inputGateway.setParsingMethod(nquadsParser);
+                inputGateway.setParsingMethod(new NquadsParser());
                 break;
             case "nt":
-                inputGateway.setParsingMethod(ntriplesParser);
+                inputGateway.setParsingMethod(new NtriplesParser());
                 break;
             case "xhtml":
             case "html":
-                inputGateway.setParsingMethod(rdfaParser);
+                inputGateway.setParsingMethod(new RdfaParser());
                 break;
             case "rj":
-                inputGateway.setParsingMethod(rdfjsonParser);
+                inputGateway.setParsingMethod(new RdfjsonParser());
                 break;
             case "rdf":
             case "rdfs":
             case "owl":
             case "xml":
-                inputGateway.setParsingMethod(rdfxmlParser);
+                inputGateway.setParsingMethod(new RdfxmlParser());
                 break;
             case "trig":
-                inputGateway.setParsingMethod(trigParser);
+                inputGateway.setParsingMethod(new TrigParser());
                 break;
             case "trigs":
-                inputGateway.setParsingMethod(trigstarParser);
+                inputGateway.setParsingMethod(new TrigstarParser());
                 break;
             case "trix":
-                inputGateway.setParsingMethod(trixParser);
+                inputGateway.setParsingMethod(new TrixParser());
                 break;
             case "ttls":
-                inputGateway.setParsingMethod(turtlestarParser);
+                inputGateway.setParsingMethod(new TurtlestarParser());
                 break;
             default:
                 throw new IllegalArgumentException("Invalid payment method");

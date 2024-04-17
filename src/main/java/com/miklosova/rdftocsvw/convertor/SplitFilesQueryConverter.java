@@ -1,5 +1,6 @@
 package com.miklosova.rdftocsvw.convertor;
 
+import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
 import lombok.extern.java.Log;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
@@ -8,6 +9,8 @@ import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.sparqlbuilder.constraint.Expression;
+import org.eclipse.rdf4j.sparqlbuilder.constraint.Expressions;
 import org.eclipse.rdf4j.sparqlbuilder.core.Prefix;
 import org.eclipse.rdf4j.sparqlbuilder.core.SparqlBuilder;
 import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
@@ -42,6 +45,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
     @Override
     public PrefinishedOutput convertWithQuery(RepositoryConnection rc) {
         loadConfiguration();
+
         String query = getCSVTableQueryForModel();
 
         String queryResult = queryRDFModel(query);
@@ -52,17 +56,11 @@ public class SplitFilesQueryConverter implements IQueryParser{
     }
 
     private void loadConfiguration(){
-        Properties prop = new Properties();
-        String fileName = "./src/main/resources/app.config";
-        try (FileInputStream fis = new FileInputStream(fileName)) {
-            prop.load(fis);
-        } catch (FileNotFoundException ex) {
-        } catch (IOException ex) {
-        }
-        delimiter = prop.getProperty("input.delimiter");
+
+        delimiter = ConfigurationManager.getVariableFromConfigFile("input.delimiter");
         System.out.println("READ delimiter from input.delimiter to: " + delimiter);
 
-        CSVFileTOWriteTo = prop.getProperty("input.outputFileName");
+        CSVFileTOWriteTo = ConfigurationManager.getVariableFromConfigFile("input.outputFileName");
         System.out.println("READ delimiter from input.CSVFileTOWriteTo to: " + CSVFileTOWriteTo);
     }
 
@@ -71,10 +69,14 @@ public class SplitFilesQueryConverter implements IQueryParser{
         // Create the query to get all data in CSV format
         SelectQuery selectQuery = Queries.SELECT();
 
-        Variable o = SparqlBuilder.var("o"), s = SparqlBuilder.var("s"),
-                s_in = SparqlBuilder.var("s_in"),p_in = SparqlBuilder.var("p_in");
-        selectQuery.prefix(skos).select(s).where(s.isA(o).filterNotExists(s_in.has(p_in, s)));
-        System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
+        Variable predicate = SparqlBuilder.var("predicate"), subject = SparqlBuilder.var("subject"),
+                o = SparqlBuilder.var("o"),p_in = SparqlBuilder.var("dist_subj"),
+                o2 = SparqlBuilder.var("o2"),subject2 = SparqlBuilder.var("subject2");
+        Expression countAgg = Expressions.count(subject).distinct();
+
+        //selectQuery.prefix(skos).select(predicate, countAgg.as(p_in)).where(subject.has(predicate, o).and(subject2.has(predicate, o2))).groupBy(predicate);
+
+        System.out.println("splitfiles query getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
@@ -100,9 +102,9 @@ public class SplitFilesQueryConverter implements IQueryParser{
                 //System.out.println(result.stream().count());
                 for (BindingSet solution : result) {
                     // ... and print out the value of the variable binding for ?s and ?n
-                    System.out.println("?o = " + solution.getValue("s"));
+                    System.out.println("?subject = " + solution.getValue("subject") + " ?predicate = " + solution.getValue("predicate"));
                     System.out.println("inside");
-                    roots.add(solution.getValue("s").toString());
+                    roots.add(solution.getValue("subject").toString());
                 }
                 for (String root : roots) {
                     Row newRow = new Row(root);
