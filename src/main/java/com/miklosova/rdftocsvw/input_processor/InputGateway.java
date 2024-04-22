@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.input_processor;
 
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.IRDF4JParsingMethod;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
 
 import java.io.File;
@@ -12,9 +13,9 @@ public class InputGateway {
         this.parsingMethod = parsingMethod;
     }
 
-    public RDFFormat processInput(File fileToProcess) {
-        RDFFormat format = parsingMethod.processInput(fileToProcess);
-        return parsingMethod.processInput(fileToProcess);
+    public RepositoryConnection processInput(RepositoryConnection conn, File fileToProcess) {
+
+        return parsingMethod.processInput(conn , fileToProcess);
     }
 
 }

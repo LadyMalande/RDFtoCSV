@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.input_processor;
 
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.*;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
 
 import java.io.File;
@@ -29,14 +30,14 @@ public class ParsingService {
     private TurtlestarParser turtlestarParser;
     private TrigstarParser trigstarParser;
 
-    public RDFFormat processInput(File fileToRead) {
+    public RepositoryConnection processInput(RepositoryConnection conn, File fileToRead) {
         String fileName = fileToRead.getName();
         inputGateway = new InputGateway();
         processExtension(fileName);
 
-        RDFFormat parsedInput = inputGateway.processInput(fileToRead);
+        conn = inputGateway.processInput(conn, fileToRead);
         System.out.println("Processed file: " + fileToRead.getAbsolutePath());
-        return parsedInput;
+        return conn;
     }
 
     private void processExtension(String fileName){

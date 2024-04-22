@@ -56,9 +56,11 @@ public class FileWrite {
             sb.deleteCharAt(sb.length() - 1);
             sb.append("\n");
             System.out.println("row: " + sb.toString() + ".");
-            FileWrite.writeTotheFile(f, sb.toString());
-            forOutput.append(sb.toString());
+            //FileWrite.writeTotheFile(f, sb.toString());
+            forOutput.append(sb);
         }
+        System.out.println("Written rows from rows to the file " + forOutput.toString() + ".");
+        FileWrite.writeTotheFile(f, forOutput.toString());
         System.out.println("Written CSV from rows to the file " + f + ".");
         return forOutput.toString();
         //FileWrite.writeTotheFile(f, resultCSV);
