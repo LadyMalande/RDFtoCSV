@@ -6,7 +6,7 @@ import java.util.Properties;
 public class ConfigurationManager {
 
     private static final String CONFIG_FILE_NAME = "./src/main/resources/app.config";
-    public static final String INTERMEDIATE_FILE_NAME = "app.filesInProgress";
+    public static final String INTERMEDIATE_FILE_NAMES = "app.filesInProgress";
     public static final String OUTPUT_ZIPFILE_NAME = "output.zipname";
     public static final String CONVERSION_METHOD = "conversion.method";
 

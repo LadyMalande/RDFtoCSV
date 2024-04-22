@@ -21,7 +21,7 @@ public class ZipOutputProcessor implements IOutputProcessor{
     }
 
     private ZipOutputStream zipPrefinishedOutput(PrefinishedOutput prefinishedOutput){
-        String sourceFile = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAME);
+        String sourceFile = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
 
 
         try {
@@ -56,10 +56,8 @@ public class ZipOutputProcessor implements IOutputProcessor{
     }
 
     public ZipOutputStream zipMultipleFiles(PrefinishedOutput prefinishedOutput){
-        String inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAME);
+        String inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
 
-        File inputFile = new File(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAME));
-        File outputFile = new File(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME));
         String filenameForZip = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME);
         String[] listOfFiles = inputFilesInString.split(",");
         final List<String> srcFiles = Arrays.asList(listOfFiles);

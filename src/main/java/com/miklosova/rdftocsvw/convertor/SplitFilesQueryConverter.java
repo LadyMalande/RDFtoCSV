@@ -43,6 +43,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
     ArrayList<Row> rows;
     ArrayList<String> keys;
 
+    ArrayList<String> fileNamesCreated;
     public Map<String, Integer> mapOfPredicatesAndTheirNumbers;
     public Map<String, Integer> mapOfTypesAndTheirNumbers;
     String delimiter;
@@ -56,6 +57,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
         this.keys = new ArrayList<>();
         this.db = db;
         this.fileNumberX = 0;
+        this.fileNamesCreated = new ArrayList<>();
     }
 
     @Override
@@ -163,10 +165,16 @@ public class SplitFilesQueryConverter implements IQueryParser{
 
         //System.out.println(resultString);
 
-
+        writeFilesToconfigFile();
         //saveCSVasFile("resultCSVPrimer");
         //return resultCSV;
         return allRowsOfOutput;
+    }
+
+    private void writeFilesToconfigFile() {
+        StringBuilder sb = new StringBuilder();
+        fileNamesCreated.forEach(fileName -> sb.append(fileName + ","));
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,sb.toString());
     }
 
     private void recursiveQueryForFiles(RepositoryConnection conn, String dominantType) {
@@ -190,6 +198,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
         System.out.println("Number of keys : " + keys.size());
         // Write the rows with respective keys to the current file
         FileWrite.saveCSFFileFromRows(CSVFileTOWriteTo + fileNumberX, keys, rows, delimiter);
+        fileNamesCreated.add(CSVFileTOWriteTo + fileNumberX + ".csv");
         // Increase the file number so that the next file has different name
         fileNumberX = fileNumberX+1;
     }

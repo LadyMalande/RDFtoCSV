@@ -36,7 +36,6 @@ public class FileWrite {
         //File f = FileWrite.makeFileByNameAndExtension("../" + fileName, "csv");
         File f = FileWrite.makeFileByNameAndExtension( fileName, "csv");
 
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAME,f.getName());
 
         StringBuilder sb1 = new StringBuilder();
         sb1.append("id" + delimiter);
