@@ -13,6 +13,7 @@ public class NdjsonldParser implements IRDF4JParsingMethod {
     public RepositoryConnection processInput(RepositoryConnection conn, File fileToParse) {
         RDFFormat fileFormat = RDFFormat.NDJSONLD;
         try {
+
             InputStream targetStream = new FileInputStream(fileToParse);
 
             conn.add(targetStream, "", fileFormat);

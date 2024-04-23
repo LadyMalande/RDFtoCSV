@@ -116,10 +116,193 @@ public class FormatsProcessingTest {
     }
 
     @Test
+    void csvIsCreatedFromBrf() {
+        String filePath = "src/test/resources/testingInput.brf";
+
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+    @Test
+    void csvIsCreatedFromNdjsonld() {
+        String filePath = "src/test/resources/testingInput.ndjsonld";
+
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+    // HDT format writer/reader is not implemented in RDF4J due to licencing issues.
+    @Test
+    @Disabled
+    void csvIsCreatedFromHdt() {
+        String filePath = "src/test/resources/testingInput.hdt";
+
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+    @Test
+    void csvIsCreatedFromN3() {
+        String filePath = "src/test/resources/testingInput.n3";
+
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+    @Test
+    void csvIsCreatedFromJsonl() {
+        String filePath = "src/test/resources/testingInput.jsonl";
+
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+    @Test
+    void csvIsCreatedFromNdjson() {
+        String filePath = "src/test/resources/testingInput.ndjson";
+
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+    @Test
+    void csvIsCreatedFromXhtml() {
+        String filePath = "src/test/resources/testingInput.xhtml";
+
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+    @Test
+    void csvIsCreatedFromRj() {
+        String filePath = "src/test/resources/testingInput.rj";
+
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+    @Test
+    void csvIsCreatedFromRdfs() {
+        String filePath = "src/test/resources/testingInput.rdfs";
+
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+    @Test
+    void csvIsCreatedFromOwl() {
+        String filePath = "src/test/resources/testingInput.owl";
+
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+    @Test
+    void csvIsCreatedFromXml() {
+        String filePath = "src/test/resources/testingInput.xml";
+
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+    @Test
+    void csvIsCreatedFromTrigs() {
+        String filePath = "src/test/resources/testingInput.trigs";
+
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+    @Test
+    void csvIsCreatedFromTrix() {
+        String filePath = "src/test/resources/testingInput.trix";
+
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+    @Test
+    void csvIsCreatedFromTtls() {
+        String filePath = "src/test/resources/testingInput.ttls";
+
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+
+    @Test
     @Disabled
     void csvIsCreatedFromHTML() {
         String filePath = "src/test/resources/typy-tříděného-odpadu.html";
 
+        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
+
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        System.out.println("Reporting from tests " + methodName);
+        System.out.println(rc != null);
+        Assert.assertNotNull(rc);
+    }
+
+    @Test
+    void csvIsCreatedFromURI() {
+        String filePath = "https://gist.githubusercontent.com/kal/ee1260ceb462d8e0d5bb/raw/1364c2bb469af53323fdda508a6a579ea60af6e4/log_sample.ttl";
+        System.out.println(filePath.toString());
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
         String methodName = new Object() {}.getClass().getEnclosingMethod().getName();

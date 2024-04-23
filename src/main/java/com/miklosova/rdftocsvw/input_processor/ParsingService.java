@@ -4,7 +4,10 @@ import com.miklosova.rdftocsvw.input_processor.parsing_methods.*;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
 
-import java.io.File;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class ParsingService {
 
@@ -33,6 +36,7 @@ public class ParsingService {
     public RepositoryConnection processInput(RepositoryConnection conn, File fileToRead) {
         String fileName = fileToRead.getName();
         inputGateway = new InputGateway();
+        //processURI(fileName);
         processExtension(fileName);
 
         conn = inputGateway.processInput(conn, fileToRead);
@@ -44,61 +48,118 @@ public class ParsingService {
         String[] splitName = fileName.split("\\.");
         String fileExtension = splitName[splitName.length - 1];
 
-        switch (fileExtension) {
-            case "ttl":
-                inputGateway.setParsingMethod(new TurtleParser());
-                break;
-            case "brf":
-                inputGateway.setParsingMethod(new BinaryParser());
-                break;
-            case "hdt":
-                inputGateway.setParsingMethod(new HdtParser());
-                break;
-            case "jsonld":
-                inputGateway.setParsingMethod(new JsonldParser());
-                break;
-            case "n3":
-                inputGateway.setParsingMethod(new N3Parser());
-                break;
-            case "ndjsonld":
-            case "jsonl":
-            case "ndjson":
-                inputGateway.setParsingMethod(new NdjsonldParser());
-                break;
-            case "nq":
-                inputGateway.setParsingMethod(new NquadsParser());
-                break;
-            case "nt":
-                inputGateway.setParsingMethod(new NtriplesParser());
-                break;
-            case "xhtml":
-            case "html":
-                inputGateway.setParsingMethod(new RdfaParser());
-                break;
-            case "rj":
-                inputGateway.setParsingMethod(new RdfjsonParser());
-                break;
-            case "rdf":
-            case "rdfs":
-            case "owl":
-            case "xml":
-                inputGateway.setParsingMethod(new RdfxmlParser());
-                break;
-            case "trig":
-                inputGateway.setParsingMethod(new TrigParser());
-                break;
-            case "trigs":
-                inputGateway.setParsingMethod(new TrigstarParser());
-                break;
-            case "trix":
-                inputGateway.setParsingMethod(new TrixParser());
-                break;
-            case "ttls":
-                inputGateway.setParsingMethod(new TurtlestarParser());
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid payment method");
+            switch (fileExtension) {
+                case "ttl":
+                    inputGateway.setParsingMethod(new TurtleParser());
+                    break;
+                case "brf":
+                    inputGateway.setParsingMethod(new BinaryParser());
+                    break;
+                case "hdt":
+                    inputGateway.setParsingMethod(new HdtParser());
+                    break;
+                case "jsonld":
+                    inputGateway.setParsingMethod(new JsonldParser());
+                    break;
+                case "n3":
+                    inputGateway.setParsingMethod(new N3Parser());
+                    break;
+                case "ndjsonld":
+                case "jsonl":
+                case "ndjson":
+                    inputGateway.setParsingMethod(new NdjsonldParser());
+                    break;
+                case "nq":
+                    inputGateway.setParsingMethod(new NquadsParser());
+                    break;
+                case "nt":
+                    inputGateway.setParsingMethod(new NtriplesParser());
+                    break;
+                case "xhtml":
+                case "html":
+                    inputGateway.setParsingMethod(new RdfaParser());
+                    break;
+                case "rj":
+                    inputGateway.setParsingMethod(new RdfjsonParser());
+                    break;
+                case "rdf":
+                case "rdfs":
+                case "owl":
+                case "xml":
+                    inputGateway.setParsingMethod(new RdfxmlParser());
+                    break;
+                case "trig":
+                    inputGateway.setParsingMethod(new TrigParser());
+                    break;
+                case "trigs":
+                    inputGateway.setParsingMethod(new TrigstarParser());
+                    break;
+                case "trix":
+                    inputGateway.setParsingMethod(new TrixParser());
+                    break;
+                case "ttls":
+                    inputGateway.setParsingMethod(new TurtlestarParser());
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid file extension");
+            }
+
+    }
+    /*
+    private boolean isURI(){
+        boolean isURI = false;
+
+        String[] URLPrefixes = {"http","https", "example"};
+        UrlValidator urlValidator = new UrlValidator(URLPrefixes);
+        if (urlValidator.isValid("http://www.example.com/gizmos")) {
+            System.out.println("URL is valid");
+        } else {
+            System.out.println("URL is invalid");
+        }
+
+
+        return isURI;
+    }
+
+     */
+
+    private void processURI(String fileName) {
+        try {
+            URL url = new URL(fileName);
+            URLConnection conn = url.openConnection();
+            conn.connect();
+
+            BufferedReader readr =
+                    new BufferedReader(new InputStreamReader(url.openStream()));
+
+            String[] splitURI = fileName.split("\\.");
+            String nameForFile = splitURI[splitURI.length - 2];
+            String extension = splitURI[splitURI.length - 1];
+
+            // Enter filename in which you want to download
+            BufferedWriter writer =
+                    new BufferedWriter(new FileWriter(nameForFile + "\\." + extension));
+
+            // read each line from stream till end
+            String line;
+            while ((line = readr.readLine()) != null) {
+                writer.write(line);
+            }
+
+            readr.close();
+            writer.close();
+            System.out.println("Successfully Downloaded.");
+        } catch (MalformedURLException e) {
+            System.out.println("URL is invalid");
+            e.printStackTrace();
+
+            // the URL is not in a valid form
+        } catch (IOException ex) {
+            System.out.println("the connection couldn't be established");
+            ex.printStackTrace();
+            // the connection couldn't be established
         }
     }
+
 
 }

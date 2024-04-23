@@ -20,7 +20,7 @@ public class RdfaParser implements IRDF4JParsingMethod {
 
             ParserConfig parserConfig = new ParserConfig();
             parserConfig.set(RDFaParserSettings.RDFA_COMPATIBILITY, RDFaVersion.RDFA_1_1);
-            Model model = Rio.parse(inputStream, "https://example.org", RDFFormat.RDFA,
+            Model model = Rio.parse(inputStream, "", RDFFormat.RDFA,
                     parserConfig, SimpleValueFactory.getInstance(), new ParseErrorLogger());
 
             conn.add(model);
