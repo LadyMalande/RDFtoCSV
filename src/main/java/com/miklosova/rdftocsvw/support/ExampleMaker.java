@@ -87,4 +87,31 @@ public class ExampleMaker {
         //m.forEach(System.out::println);
         return model;
     }
+
+    public void exampleFilesInAllExtensions(){
+        // Creation of example RDFs in various formats
+        Model exampleModel = this.makeExampleModel();
+        CreateOtherRDFFormats cof = new CreateOtherRDFFormats(exampleModel);
+        cof.writeModelToFile("exampleFile.brf", RDFFormat.BINARY);
+        //cof.writeModelToFile("exampleFile.hdt", RDFFormat.HDT);
+        //cof.writeModelToFile("exampleFile.html", RDFFormat.RDFA);
+        cof.writeModelToFile("exampleFile.jsonl", RDFFormat.NDJSONLD);
+        cof.writeModelToFile("exampleFile.jsonld", RDFFormat.JSONLD);
+        cof.writeModelToFile("exampleFile.n3", RDFFormat.N3);
+        cof.writeModelToFile("exampleFile.ndjson", RDFFormat.NDJSONLD);
+        cof.writeModelToFile("exampleFile.ndjsonld", RDFFormat.NDJSONLD);
+        cof.writeModelToFile("exampleFile.nq", RDFFormat.NQUADS);
+        cof.writeModelToFile("exampleFile.nt", RDFFormat.NTRIPLES);
+        cof.writeModelToFile("exampleFile.owl", RDFFormat.RDFXML);
+        cof.writeModelToFile("exampleFile.rdf", RDFFormat.RDFXML);
+        cof.writeModelToFile("exampleFile.rdfs", RDFFormat.RDFXML);
+        cof.writeModelToFile("exampleFile.rj", RDFFormat.RDFJSON);
+        cof.writeModelToFile("exampleFile.trig", RDFFormat.TRIG);
+        cof.writeModelToFile("exampleFile.trigs", RDFFormat.TRIGSTAR);
+        cof.writeModelToFile("exampleFile.trix", RDFFormat.TRIX);
+        cof.writeModelToFile("exampleFile.ttl", RDFFormat.TURTLE);
+        cof.writeModelToFile("exampleFile.ttls", RDFFormat.TURTLESTAR);
+        //cof.writeModelToFile("exampleFile.xhtml", RDFFormat.RDFA);
+        cof.writeModelToFile("exampleFile.xml", RDFFormat.RDFXML);
+    }
 }

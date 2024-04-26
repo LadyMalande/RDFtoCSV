@@ -187,7 +187,7 @@ public class CSVTableCreator {
 
     private void saveCSVasFile(String fileName){
         File f = FileWrite.makeFileByNameAndExtension(fileName, "csv");
-        FileWrite.writeTotheFile(f, resultCSV);
+        FileWrite.writeToTheFile(f, resultCSV);
         System.out.println("Written CSV table to the file " + f + ".");
     }
 
@@ -201,7 +201,7 @@ public class CSVTableCreator {
         keys.forEach(key -> sb1.append(key + delimiter));
         sb1.deleteCharAt(sb1.length() - 1);
         sb1.append("\n");
-        FileWrite.writeTotheFile(f, sb1.toString());
+        FileWrite.writeToTheFile(f, sb1.toString());
         for(Row row : rows){
             StringBuilder sb = new StringBuilder();
             sb.append(row.id).append(delimiter);
@@ -214,7 +214,7 @@ public class CSVTableCreator {
             sb.deleteCharAt(sb.length() - 1);
             sb.append("\n");
             System.out.println("row: " + sb.toString() + ".");
-            FileWrite.writeTotheFile(f, sb.toString());
+            FileWrite.writeToTheFile(f, sb.toString());
             forOutput.append(sb.toString());
         }
         allRowsOfOutput = forOutput.toString();

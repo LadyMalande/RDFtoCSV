@@ -42,7 +42,7 @@ public class FileWrite {
         keys.forEach(key -> sb1.append(key + delimiter));
         sb1.deleteCharAt(sb1.length() - 1);
         sb1.append("\n");
-        FileWrite.writeTotheFile(f, sb1.toString());
+        FileWrite.writeToTheFile(f, sb1.toString());
         for(Row row : rows){
             StringBuilder sb = new StringBuilder();
             sb.append(row.id).append(delimiter);
@@ -59,7 +59,7 @@ public class FileWrite {
             forOutput.append(sb);
         }
         System.out.println("Written rows from rows to the file " + forOutput.toString() + ".");
-        FileWrite.writeTotheFile(f, forOutput.toString());
+        FileWrite.writeToTheFile(f, forOutput.toString());
         System.out.println("Written CSV from rows to the file " + f + ".");
         return forOutput.toString();
         //FileWrite.writeTotheFile(f, resultCSV);
@@ -99,7 +99,7 @@ public class FileWrite {
         }
     }
 
-    public static void writeTotheFile(File file, Object something) {
+    public static void writeToTheFile(File file, Object something) {
         try {
 
             FileWriter myWriter = new FileWriter(file.getName(),true);
