@@ -1,5 +1,6 @@
 package com.miklosova.rdftocsvw.convertor;
 
+import com.miklosova.rdftocsvw.metadata.Metadata;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
 import lombok.extern.java.Log;
@@ -42,6 +43,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
     ArrayList<String> roots;
     ArrayList<Row> rows;
     ArrayList<String> keys;
+    Metadata metadata;
 
     ArrayList<String> fileNamesCreated;
     public Map<String, Integer> mapOfPredicatesAndTheirNumbers;
@@ -58,6 +60,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
         this.db = db;
         this.fileNumberX = 0;
         this.fileNamesCreated = new ArrayList<>();
+        this.metadata = new Metadata();
     }
 
     @Override
@@ -196,9 +199,11 @@ public class SplitFilesQueryConverter implements IQueryParser{
         augmentMapsByMissingKeys();
         System.out.println("Number of Rows : " + rows.size());
         System.out.println("Number of keys : " + keys.size());
+        String newFileName = CSVFileTOWriteTo + fileNumberX;
         // Write the rows with respective keys to the current file
-        FileWrite.saveCSFFileFromRows(CSVFileTOWriteTo + fileNumberX, keys, rows, delimiter);
-        fileNamesCreated.add(CSVFileTOWriteTo + fileNumberX + ".csv");
+        metadata.addMetadata(newFileName, keys, rows);
+        FileWrite.saveCSFFileFromRows(newFileName, keys, rows, delimiter);
+        fileNamesCreated.add(newFileName + ".csv");
         // Increase the file number so that the next file has different name
         fileNumberX = fileNumberX+1;
     }
