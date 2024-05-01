@@ -2,6 +2,8 @@ package com.miklosova.rdftocsvw.convertor;
 
 import com.miklosova.rdftocsvw.input_processor.RDFAssetManager;
 import lombok.extern.java.Log;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -23,6 +25,9 @@ import com.miklosova.rdftocsvw.support.FileWrite;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
+
+import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 /**
  * Class for creating CSV table with the help of SPARQL query on the RDF data
@@ -31,9 +36,9 @@ import java.util.ArrayList;
 public class CSVTableCreator {
 
     String resultCSV;
-    ArrayList<String> roots;
+    ArrayList<Value> roots;
     ArrayList<Row> rows;
-    ArrayList<String> keys;
+    ArrayList<Value> keys;
     String delimiter;
     String CSVFileTOWriteTo;
     String fileToRead;
@@ -96,10 +101,12 @@ public class CSVTableCreator {
                     // ... and print out the value of the variable binding for ?s and ?n
                     System.out.println("?o = " + solution.getValue("s"));
                     System.out.println("inside");
-                    roots.add(solution.getValue("s").toString());
+                    roots.add(solution.getValue("s"));
                 }
-                for (String root : roots) {
-                    Row newRow = new Row(root);
+                for (Value root : roots) {
+                    Iri typeIri = iri("rdf:type");
+                    Value typeValue = (IRI) typeIri;
+                    Row newRow = new Row(root, typeValue);
                     recursiveQueryForSubjects(conn, newRow, root, null);
                     rows.add(newRow);
 
@@ -122,37 +129,41 @@ public class CSVTableCreator {
         return allRowsOfOutput;
     }
 
-    private void recursiveQueryForSubjects(RepositoryConnection conn,Row root, String object,String predicateOfIRI){
+    private void recursiveQueryForSubjects(RepositoryConnection conn,Row root, Value object,String predicateOfIRI){
         String queryForSubjects = createQueryForSubjects(object);
         TupleQuery query = conn.prepareTupleQuery(queryForSubjects);
         try (TupleQueryResult result = query.evaluate()) {
             // we just iterate over all solutions in the result...
             for (BindingSet solution : result) {
                 if(root.id.equals(object)){
-                    root.map.put(solution.getValue("p").toString(),solution.getValue("s").toString());
+                    root.map.put(solution.getValue("p"), List.of(solution.getValue("s")));
                     if(!keys.contains(solution.getValue("p").toString())){
-                        keys.add(solution.getValue("p").toString());
+                        keys.add(solution.getValue("p"));
                     }
                 } else {
+                    /*
+                    // TODO Provide sensible headers for all data in just one csv
                     String keyOfNextLevels = predicateOfIRI + "." + solution.getValue("p").toString();
                     root.map.put(keyOfNextLevels, solution.getValue("s").toString());
                     if(!keys.contains(keyOfNextLevels)) {
 
                         keys.add(keyOfNextLevels);
                     }
+
+                     */
                 }
 
                 System.out.println(solution.getValue("p").toString() + " " + solution.getValue("s").toString());
                 if(solution.getValue("s").isIRI()){
-                    recursiveQueryForSubjects(conn, root, solution.getValue("s").toString(), solution.getValue("p").toString());
+                    recursiveQueryForSubjects(conn, root, solution.getValue("s"), solution.getValue("p").toString());
                 }
             }
         }
     }
 
-    private String createQueryForSubjects(String object) {
+    private String createQueryForSubjects(Value object) {
         SelectQuery selectQuery = Queries.SELECT();
-        Iri iri = Rdf.iri(object);
+        Iri iri = Rdf.iri(object.toString());
         Variable s = SparqlBuilder.var("s"), p = SparqlBuilder.var("p");
         selectQuery.select(s,p).where(iri.has(p, s));
         System.out.println(selectQuery.getQueryString());
@@ -161,13 +172,13 @@ public class CSVTableCreator {
 
     private void augmentMapsByMissingKeys(){
         for(Row row : rows){
-            ArrayList<String> missingKeys = new ArrayList<>();
-            for(String key : keys){
+            ArrayList<Value> missingKeys = new ArrayList<>();
+            for(Value key : keys){
                 if(!row.map.keySet().contains(key)){
                     missingKeys.add(key);
                 }
             }
-            missingKeys.forEach(key -> row.map.put(key, ""));
+            missingKeys.forEach(key -> row.map.put(key, null));
         }
     }
 
@@ -205,7 +216,7 @@ public class CSVTableCreator {
         for(Row row : rows){
             StringBuilder sb = new StringBuilder();
             sb.append(row.id).append(delimiter);
-            for(String key : keys){
+            for(Value key : keys){
                 sb.append(row.map.get(key)).append(delimiter);
                 System.out.println("in entry set " + row.map.get(key) + ".");
 
