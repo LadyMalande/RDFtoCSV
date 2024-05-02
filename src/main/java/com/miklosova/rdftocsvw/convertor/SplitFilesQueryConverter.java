@@ -73,8 +73,8 @@ public class SplitFilesQueryConverter implements IQueryParser{
         String query = getCSVTableQueryForModel();
 
         String queryResult = queryRDFModel(query);
-        System.out.println("CSVFileTOWriteTo: " + CSVFileTOWriteTo + "delimiter: " + delimiter);
-        FileWrite.saveCSFFileFromRows(CSVFileTOWriteTo, keys, rows, delimiter, metadata);
+        //System.out.println("CSVFileTOWriteTo: " + CSVFileTOWriteTo + "delimiter: " + delimiter);
+        //FileWrite.saveCSFFileFromRows(CSVFileTOWriteTo, keys, rows, delimiter, metadata);
         return new PrefinishedOutput(queryResult);
 
     }

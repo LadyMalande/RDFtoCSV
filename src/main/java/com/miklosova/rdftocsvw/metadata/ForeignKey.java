@@ -9,4 +9,9 @@ public class ForeignKey {
      * Reference for the foreign key containing the file name and the column name of the reference.
      */
     private Reference reference;
+
+    public ForeignKey(String columnReference, Reference reference) {
+        this.columnReference = columnReference;
+        this.reference = reference;
+    }
 }

@@ -7,6 +7,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -57,10 +58,12 @@ public class ZipOutputProcessor implements IOutputProcessor{
 
     public ZipOutputStream zipMultipleFiles(PrefinishedOutput prefinishedOutput){
         String inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-
         String filenameForZip = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME);
         String[] listOfFiles = inputFilesInString.split(",");
-        final List<String> srcFiles = Arrays.asList(listOfFiles);
+
+        List<String> srcFiles = new ArrayList<String>(Arrays.asList(listOfFiles));
+        srcFiles.add(ConfigurationManager.METADATA_FILE_NAME);
+
         try {
 
 
