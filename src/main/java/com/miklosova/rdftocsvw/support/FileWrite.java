@@ -9,6 +9,7 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFHandlerException;
 import org.eclipse.rdf4j.rio.RDFWriter;
 import org.eclipse.rdf4j.rio.Rio;
+import static org.eclipse.rdf4j.model.util.Values.iri;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -100,21 +101,54 @@ public class FileWrite {
 
     private static void appendColumnValueByKey(Column column, Row row, StringBuilder sb) {
         // Simple go through
+        List<Value> values = row.map.get(iri(column.getPropertyUrl()));
         if(column.getLang() == null){
             // TODO if it is IRI, parse it by valueURL. If it is literal, just write down its Label.
-            List<Value> value = row.map.get(column.getPropertyUrl());
-            sb.append(row.map.get(column.getPropertyUrl()));
+            System.out.println("column.getPropertyUrl() = " + column.getPropertyUrl());
+            row.map.entrySet().forEach(entry -> System.out.println(entry.getKey() + ": " + entry.getValue()));
+
+            assert values != null;
+            if(values.get(0).isIRI()){
+                if(values.size() == 1){
+                    IRI iri = (IRI) values.get(0);
+                    sb.append(iri.getLocalName());
+                } else{
+                    // There are multiple values from the language, we need to enclose them in " "
+                    sb.append('"');
+                    values.forEach(val -> {
+                        String strValue = ((IRI)val).getLocalName();
+                        sb.append(strValue);
+                        sb.append(",");});
+                    sb.deleteCharAt(sb.length() - 1);
+                    sb.append('"');
+                }
+            } else if(values.get(0).isLiteral()){
+                if(values.size() == 1){
+                    Literal literal = (Literal) values.get(0);
+                    sb.append(literal.getLabel());
+                } else{
+                    // There are multiple values from the language, we need to enclose them in " "
+                    sb.append('"');
+                    values.forEach(val -> {
+                        String strValue = ((Literal)val).getLabel();
+                        sb.append(strValue);
+                        sb.append(",");});
+                    sb.deleteCharAt(sb.length() - 1);
+                    sb.append('"');
+                }
+            }
         }
         // Language versions split
         else {
             System.out.println("column.getPropertyUrl() = " + column.getPropertyUrl());
-            System.out.println(row.map.get(column.getPropertyUrl()));
-            List<Value> languageVariations =  row.map.get(column.getPropertyUrl());
+            System.out.println(values);
+            List<Value> languageVariations =  values;
             if(languageVariations == null){sb.append(","); return;}
             List<Value> valuesByLang = languageVariations.stream().filter(val -> ((Literal)val).getLanguage().get().equals(column.getLang())).collect(Collectors.toList());
             // There is only one value of this language
             if(valuesByLang.size() == 1){
-                sb.append(valuesByLang.get(0));
+                Value val = valuesByLang.get(0);
+                sb.append(((Literal)val).getLabel());
             } else {
                 // There are multiple values from the language, we need to enclose them in " "
                 sb.append('"');
@@ -147,10 +181,11 @@ public class FileWrite {
         sb1.append(firstColumn.getTitles());
         sb1.append(",");
         for(Column column : fud.getTableSchema().getColumns()){
-            if(column != firstColumn || column.getVirtual() == null ){
+            if(column != firstColumn && column.getVirtual() == null ){
                 sb1.append(column.getTitles());
                 sb1.append(",");
                 orderOfColumns.add(column);
+                System.out.println("Added column to ordered columns: " + column.getTitles() + " " + column.getName() + " " + column.getVirtual() + " " + column.getPropertyUrl());
             }
         }
         sb1.deleteCharAt(sb1.length() - 1);
