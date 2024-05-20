@@ -30,6 +30,9 @@ public class ConversionService {
             case "splitQuery":
                 conversionGateway.setConversionMethod(new SplitFilesQueryConverter(db));
                 break;
+            case "codelistQuery":
+                conversionGateway.setConversionMethod(new CodelistQueryConverter(db));
+                break;
             default:
                 throw new IllegalArgumentException("Invalid payment method");
         }

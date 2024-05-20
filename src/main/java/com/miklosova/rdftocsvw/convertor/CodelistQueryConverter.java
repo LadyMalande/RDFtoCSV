@@ -16,14 +16,16 @@ import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
+
 
 @Log
-public class BasicQueryConverter implements IQueryParser{
+public class CodelistQueryConverter implements IQueryParser{
 
     String resultCSV;
     ArrayList<Value> roots;
@@ -34,7 +36,7 @@ public class BasicQueryConverter implements IQueryParser{
     String allRowsOfOutput;
     Repository db;
 
-    public BasicQueryConverter(Repository db) {
+    public CodelistQueryConverter(Repository db) {
         this.keys = new ArrayList<>();
         this.db = db;
     }
@@ -72,8 +74,8 @@ public class BasicQueryConverter implements IQueryParser{
 
         Variable o = SparqlBuilder.var("o"), s = SparqlBuilder.var("s"),
                 s_in = SparqlBuilder.var("s_in"),p_in = SparqlBuilder.var("p_in");
-        selectQuery.prefix(skos).select(s).where(s.isA(o).filterNotExists(s_in.has(p_in, s)));
-        System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
+        selectQuery.prefix(skos).select(s).where(s.isA(SKOS.CONCEPT));
+        System.out.println("getCSVTableQueryForModel query string for skos:Concept\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
@@ -99,13 +101,14 @@ public class BasicQueryConverter implements IQueryParser{
                 //System.out.println(result.stream().count());
                 for (BindingSet solution : result) {
                     // ... and print out the value of the variable binding for ?s and ?n
-                    System.out.println("?o = " + solution.getValue("s"));
+                    System.out.println("?s = " + solution.getValue("s"));
                     System.out.println("inside");
                     roots.add(solution.getValue("s"));
                 }
                 for (Value root : roots) {
                     // TODO
                     Row newRow = new Row(root, null);
+                    System.out.println("Enriching root " + root);
                     recursiveQueryForSubjects(conn, newRow, root, null);
                     rows.add(newRow);
 
@@ -118,7 +121,7 @@ public class BasicQueryConverter implements IQueryParser{
         // Verify the output in console
 
         //System.out.println(resultString);
-        augmentMapsByMissingKeys();
+        //   augmentMapsByMissingKeys();
 
         //saveCSVasFile("resultCSVPrimer");
         //return resultCSV;
@@ -137,31 +140,42 @@ public class BasicQueryConverter implements IQueryParser{
         }
     }
 
-    private void recursiveQueryForSubjects(RepositoryConnection conn,Row root, Value object,String predicateOfIRI){
-        String queryForSubjects = createQueryForSubjects(object);
+    private void recursiveQueryForSubjects(RepositoryConnection conn,Row root, Value subject,String predicateOfIRI){
+        String queryForSubjects = createQueryForSubjects(subject);
         TupleQuery query = conn.prepareTupleQuery(queryForSubjects);
         try (TupleQueryResult result = query.evaluate()) {
             // we just iterate over all solutions in the result...
             for (BindingSet solution : result) {
-                if(root.id.equals(object)){
-                    root.map.put(solution.getValue("p"), List.of(solution.getValue("s")));
-                    if(!keys.contains(solution.getValue("p").toString())){
+
+                System.out.println("recursiveQueryForSubjects p=" + solution.getValue("p") + " o=" + solution.getValue("o"));
+                if(root.id.equals(subject)){
+                    if(root.map.get(solution.getValue("p")) != null){
+                        //List<Value> oldStringValue = root.map.get(solution.getBinding("p").getValue());
+                        List<Value> oldStringValue = new ArrayList<>(root.map.get(solution.getBinding("p").getValue()));
+                        oldStringValue.add(solution.getBinding("o").getValue());
+                        root.map.put(solution.getBinding("p").getValue(), oldStringValue );
+                    } else{
+                        root.map.put(solution.getValue("p"), new ArrayList<>(Arrays.asList(solution.getBinding("o").getValue())));
+                    }
+
+                    if(!keys.contains(solution.getValue("p"))){
                         keys.add(solution.getValue("p"));
                     }
-                } else {/*
+                } else {
                 // TODO Provide sensible headers for all data in just one csv
-                    String keyOfNextLevels = predicateOfIRI + "." + solution.getValue("p").toString();
-                    root.map.put(keyOfNextLevels, solution.getValue("s").toString());
-                    if(!keys.contains(keyOfNextLevels)) {
 
-                        keys.add(keyOfNextLevels);
+                    root.map.put(solution.getValue("p"), List.of(solution.getValue("o")));
+                    if(!keys.contains(solution.getValue("p"))) {
+
+                        keys.add(solution.getValue("p"));
                     }
-                    */
-                }
 
-                System.out.println(solution.getValue("p").toString() + " " + solution.getValue("s").toString());
-                if(solution.getValue("s").isIRI()){
-                    recursiveQueryForSubjects(conn, root, solution.getValue("s"), solution.getValue("p").toString());
+                }
+               System.out.println("keys size = " + keys.size());
+                //System.out.println(solution.getValue("p").toString() + " " + solution.getValue("o").toString());
+                if(solution.getValue("o").isIRI()){
+                    System.out.println("object is IRI, recursion starting ..." + solution.getValue("p").toString() + " " + solution.getValue("o").toString());
+                    recursiveQueryForSubjects(conn, root, solution.getValue("o"), solution.getValue("p").toString());
                 }
             }
         }
@@ -170,9 +184,9 @@ public class BasicQueryConverter implements IQueryParser{
     private String createQueryForSubjects(Value object) {
         SelectQuery selectQuery = Queries.SELECT();
         Iri iri = Rdf.iri(object.toString());
-        Variable s = SparqlBuilder.var("s"), p = SparqlBuilder.var("p");
-        selectQuery.select(s,p).where(iri.has(p, s));
-        System.out.println(selectQuery.getQueryString());
+        Variable o = SparqlBuilder.var("o"), p = SparqlBuilder.var("p");
+        selectQuery.select(o,p).where(iri.has(p, o));
+        System.out.println("createQueryForSubjects: "  + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 }

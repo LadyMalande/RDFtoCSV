@@ -35,12 +35,10 @@ public class FileWrite {
         }
     }
 
-    public static String saveCSFFileFromRows(String fileName, ArrayList<Value> keys, ArrayList<Row> rows, String delimiter){
+    public static String saveCSVFileFromRows(String fileName, ArrayList<Value> keys, ArrayList<Row> rows, String delimiter){
         StringBuilder forOutput = new StringBuilder();
-        //File f = FileWrite.makeFileByNameAndExtension("../" + fileName, "csv");
         File f = FileWrite.makeFileByNameAndExtension( fileName, "csv");
-
-
+        System.out.println("File f = " + f);
         StringBuilder sb1 = new StringBuilder();
         sb1.append("id" + delimiter);
         keys.forEach(key -> sb1.append(key + delimiter));
@@ -48,9 +46,11 @@ public class FileWrite {
         sb1.append("\n");
         FileWrite.writeToTheFile(f, sb1.toString());
         for(Row row : rows){
+            System.out.println();
             StringBuilder sb = new StringBuilder();
             sb.append(row.id).append(delimiter);
             for(Value key : keys){
+                //System.out.println("Number of keys: " + keys.size());
                 sb.append(row.map.get(key)).append(delimiter);
                 System.out.println("in entry set " + row.map.get(key) + ".");
 
@@ -58,19 +58,20 @@ public class FileWrite {
 
             sb.deleteCharAt(sb.length() - 1);
             sb.append("\n");
-            System.out.println("row: " + sb.toString() + ".");
+            System.out.println("row saveCSFFileFromRows 4 parameters: " + sb.toString() + ".");
             //FileWrite.writeTotheFile(f, sb.toString());
             forOutput.append(sb);
+            FileWrite.writeToTheFile(f, sb.toString());
         }
         System.out.println("Written rows from rows to the file " + forOutput.toString() + ".");
-        FileWrite.writeToTheFile(f, forOutput.toString());
+        //FileWrite.writeToTheFile(f, forOutput.toString());
         System.out.println("Written CSV from rows to the file " + f + ".");
         return forOutput.toString();
         //FileWrite.writeTotheFile(f, resultCSV);
 
     }
 
-    public static String saveCSFFileFromRows(String fileName, ArrayList<Value> keys, ArrayList<Row> rows, String delimiter, Metadata metadata){
+    public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata){
         StringBuilder forOutput = new StringBuilder();
         File f = FileWrite.makeFileByNameAndExtension( fileName, null);
 
