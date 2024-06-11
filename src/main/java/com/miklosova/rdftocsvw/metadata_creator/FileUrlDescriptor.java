@@ -1,4 +1,4 @@
-package com.miklosova.rdftocsvw.metadata;
+package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.miklosova.rdftocsvw.convertor.Row;
 import org.eclipse.rdf4j.model.Value;

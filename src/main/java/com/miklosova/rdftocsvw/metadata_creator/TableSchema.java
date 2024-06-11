@@ -1,4 +1,4 @@
-package com.miklosova.rdftocsvw.metadata;
+package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.miklosova.rdftocsvw.convertor.Row;
@@ -56,15 +56,27 @@ public class TableSchema {
     public void addTableSchemaMetadata() {
         // TODO process the IRIs
         this.primaryKey = createAboutUrl(this.keys.get(0));
-
-        this.rowTitles = new ArrayList<>();
-        this.rowTitles.add(primaryKey);
-
         this.columns = createColumns();
+        this.rowTitles = new ArrayList<>();
+        addRowTitles();
+
+
+    }
+
+    private void addRowTitles(){
+        this.columns.forEach(column -> {
+            if(column.getVirtual() == null || (column.getVirtual() != null && !column.getVirtual())){
+                this.rowTitles.add(column.getTitles());
+            }
+        });
+
     }
 
     private List<Column> createColumns() {
         List<Column> listOfColumns = new ArrayList<>();
+        listOfColumns.add(createIdColumnWithType());
+        listOfColumns.add(createVirtualTypeColumn());
+
         for(Map.Entry<Value, List<Value>> column : rows.get(0).map.entrySet()){
             Column newColumn = new Column(column);
             newColumn.createColumn();
@@ -75,8 +87,7 @@ public class TableSchema {
             }
 
         }
-        listOfColumns.add(createIdColumnWithType());
-        listOfColumns.add(createVirtualTypeColumn());
+
         return listOfColumns;
     }
 
@@ -131,10 +142,12 @@ public class TableSchema {
     }
 
     private String createAboutUrl(Value key0){
-        String theNameOfTheColumn = getLastSectionOfIri(key0);
-        String partBeforeLastSection = getPartBeforeLastSection(key0);
+        Value type = rows.get(0).type;
+        Value value = rows.get(0).id;
+        String theNameOfTheColumn = getLastSectionOfIri(type);
+        String partBeforeLastSection = getPartBeforeLastSection(type);
         // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-        // this.aboutUrl = partBeforeLastSection + "{" + theNameOfTheColumn + "}";
+        this.aboutUrl = partBeforeLastSection + "{" + theNameOfTheColumn + "}";
         return theNameOfTheColumn;
     }
 

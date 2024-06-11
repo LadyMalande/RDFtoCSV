@@ -1,6 +1,6 @@
 package com.miklosova.rdftocsvw.convertor;
 
-import com.miklosova.rdftocsvw.metadata.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
 import lombok.extern.java.Log;
@@ -201,6 +201,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
 
         FileWrite.saveCSVFileFromRows(newFileName, rows, metadata);
         fileNamesCreated.add(newFileName);
+        //FileWrite.saveCSFFileFromRows("RAW_" + newFileName , keys, rows, delimiter);
         // Increase the file number so that the next file has different name
         fileNumberX = fileNumberX+1;
         allRows.add(rows);

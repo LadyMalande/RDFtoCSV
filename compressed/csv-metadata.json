@@ -1,7 +1,7 @@
 {
   "METADATA_FILENAME" : "csv-metadata.json",
   "tables" : [ {
-    "url" : "newCSVOutput0.csv",
+    "url" : "outputCSV20.csv",
     "tableSchema" : {
       "columns" : [ {
         "titles" : "notation",
@@ -36,7 +36,7 @@
       "foreignKeys" : [ {
         "columnReference" : "inScheme",
         "reference" : {
-          "resource" : "newCSVOutput1.csv",
+          "resource" : "outputCSV21.csv",
           "columnReference" : "ConceptScheme"
         }
       } ],
@@ -44,7 +44,7 @@
       "rowTitles" : [ "type" ]
     }
   }, {
-    "url" : "newCSVOutput1.csv",
+    "url" : "outputCSV21.csv",
     "tableSchema" : {
       "columns" : [ {
         "titles" : "prefLabel (cs)",

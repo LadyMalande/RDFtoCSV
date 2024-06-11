@@ -1,9 +1,9 @@
 package com.miklosova.rdftocsvw.support;
 
 import com.miklosova.rdftocsvw.convertor.Row;
-import com.miklosova.rdftocsvw.metadata.Column;
-import com.miklosova.rdftocsvw.metadata.FileUrlDescriptor;
-import com.miklosova.rdftocsvw.metadata.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.Column;
+import com.miklosova.rdftocsvw.metadata_creator.FileUrlDescriptor;
+import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFHandlerException;

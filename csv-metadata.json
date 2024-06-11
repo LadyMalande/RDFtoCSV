@@ -1,9 +1,17 @@
 {
   "METADATA_FILENAME" : "csv-metadata.json",
   "tables" : [ {
-    "url" : "newCSVOutput0.csv",
+    "url" : "outputCSV30.csv",
     "tableSchema" : {
       "columns" : [ {
+        "titles" : "Concept",
+        "name" : "Concept",
+        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{Concept}"
+      }, {
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/2004/02/skos/core#Concept",
+        "virtual" : true
+      }, {
         "titles" : "notation",
         "name" : "notation",
         "propertyUrl" : "http://www.w3.org/2004/02/skos/core#notation"
@@ -24,29 +32,30 @@
         "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
         "datatype" : "langString",
         "lang" : "en"
-      }, {
-        "titles" : "Concept",
-        "name" : "Concept",
-        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{Concept}"
-      }, {
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://www.w3.org/2004/02/skos/core#Concept",
-        "virtual" : true
       } ],
       "foreignKeys" : [ {
         "columnReference" : "inScheme",
         "reference" : {
-          "resource" : "newCSVOutput1.csv",
+          "resource" : "outputCSV31.csv",
           "columnReference" : "ConceptScheme"
         }
       } ],
-      "primaryKey" : "type",
-      "rowTitles" : [ "type" ]
+      "primaryKey" : "Concept",
+      "aboutUrl" : "http://www.w3.org/2004/02/skos/core#{Concept}",
+      "rowTitles" : [ "Concept", "notation", "inScheme", "prefLabel (cs)", "prefLabel (en)" ]
     }
   }, {
-    "url" : "newCSVOutput1.csv",
+    "url" : "outputCSV31.csv",
     "tableSchema" : {
       "columns" : [ {
+        "titles" : "ConceptScheme",
+        "name" : "ConceptScheme",
+        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{ConceptScheme}"
+      }, {
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/2004/02/skos/core#ConceptScheme",
+        "virtual" : true
+      }, {
         "titles" : "prefLabel (cs)",
         "name" : "prefLabel",
         "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
@@ -58,17 +67,10 @@
         "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
         "datatype" : "langString",
         "lang" : "en"
-      }, {
-        "titles" : "ConceptScheme",
-        "name" : "ConceptScheme",
-        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{ConceptScheme}"
-      }, {
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://www.w3.org/2004/02/skos/core#ConceptScheme",
-        "virtual" : true
       } ],
-      "primaryKey" : "type",
-      "rowTitles" : [ "type" ]
+      "primaryKey" : "ConceptScheme",
+      "aboutUrl" : "http://www.w3.org/2004/02/skos/core#{ConceptScheme}",
+      "rowTitles" : [ "ConceptScheme", "prefLabel (cs)", "prefLabel (en)" ]
     }
   } ],
   "@context" : "http://www.w3.org/ns/csvw"

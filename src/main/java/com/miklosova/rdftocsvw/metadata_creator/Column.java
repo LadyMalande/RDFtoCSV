@@ -1,12 +1,10 @@
-package com.miklosova.rdftocsvw.metadata;
+package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.miklosova.rdftocsvw.convertor.Row;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

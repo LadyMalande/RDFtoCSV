@@ -1,7 +1,5 @@
-package com.miklosova.rdftocsvw.metadata;
+package com.miklosova.rdftocsvw.metadata_creator;
 
-import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 import static java.util.Map.entry;
 

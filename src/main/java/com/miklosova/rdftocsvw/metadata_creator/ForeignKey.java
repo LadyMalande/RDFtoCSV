@@ -1,4 +1,4 @@
-package com.miklosova.rdftocsvw.metadata;
+package com.miklosova.rdftocsvw.metadata_creator;
 
 public class ForeignKey {
     /**
