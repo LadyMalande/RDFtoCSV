@@ -6,9 +6,15 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.miklosova.rdftocsvw.convertor.Row;
+import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
+import ioinformarics.oss.jackson.module.jsonld.JsonldModule;
+import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldProperty;
+import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
+import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 
@@ -18,18 +24,47 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Conforming to the must have annotations for the Group of tables:
+ *  https://www.w3.org/TR/2015/REC-tabular-data-model-20151217/#dfn-group-of-tables
+ *  https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#table-groups - specifying only tables as REQUIRED PROPERTIES
+ *  "notes" annotation is left out as it is not mandatory and may depend heavily on the inside knowledge of the data tables at hand.
+ *
+ *  "@context": "http://www.w3.org/ns/csvw" included on basis of: https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#top-level-properties
+ */
 public class Metadata {
-    private final String METADATA_FILENAME = "csv-metadata.json";
-
     /**
      * Array of files tied to the metadata file
      */
     private List<FileUrlDescriptor> tables;
+    /**
+     * an identifier for this group of tables, or null if this is undefined.
+     */
+    private String id;
+
+
+    public void jsonldMetadata(){
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        objectMapper.registerModule(new JsonldModule());
+        JsonNode node = objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL).convertValue(this, JsonNode.class);
+        ObjectNode objectNode = ((ObjectNode)node).put("@context", "http://www.w3.org/ns/csvw");
+        String personJsonLd = null;
+        try {
+            personJsonLd = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        System.out.println(personJsonLd);
+    }
 
     public void finalizeMetadata(){
+        jsonldMetadata();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         JsonNode node = objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL).convertValue(this, JsonNode.class);
+        // Included because of https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#top-level-properties
         ObjectNode objectNode = ((ObjectNode)node).put("@context", "http://www.w3.org/ns/csvw");
         try {
             String updatedJsonStr = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
@@ -37,10 +72,11 @@ public class Metadata {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        FileWrite.deleteFile(METADATA_FILENAME);
+        String metadataFilename = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
+        FileWrite.deleteFile(metadataFilename);
 
         try {
-            objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(METADATA_FILENAME), objectNode);
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(metadataFilename), objectNode);
         } catch (IOException e) {
             e.printStackTrace();
         }

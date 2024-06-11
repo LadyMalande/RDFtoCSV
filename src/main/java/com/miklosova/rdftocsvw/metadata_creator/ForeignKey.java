@@ -1,5 +1,9 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
+/**
+ * This class is compliant to description by https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#schemas,
+ * in the part called "foreignKeys"
+ */
 public class ForeignKey {
     /**
      * The name of the column that is a foreign key in this file

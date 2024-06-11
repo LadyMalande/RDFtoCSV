@@ -3,6 +3,8 @@ package com.miklosova.rdftocsvw.support;
 import com.miklosova.rdftocsvw.convertor.ConversionService;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
+import com.miklosova.rdftocsvw.metadata_creator.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
 import com.miklosova.rdftocsvw.output_processor.ZipOutputProcessor;
 import org.apache.log4j.BasicConfigurator;
 import org.eclipse.rdf4j.repository.Repository;
@@ -16,10 +18,11 @@ public class Main {
         String RDFFileToRead = args[0];
         String delimiter = args[1];
         String CSVFileToWriteTo = args[2];
+        String conversionMethod = args[3];
         String methodChoice = "rdf4j";
-        String conversionMethod = "basicQuery";
         // for log4j
         BasicConfigurator.configure();
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, conversionMethod);
 
         // =========  Normal go through =====
 
@@ -37,6 +40,9 @@ public class Main {
         // TODO
         ConversionService cs = new ConversionService();
         PrefinishedOutput convertedToCSV = cs.convertByQuery(rc, db);
+
+        MetadataService ms = new MetadataService();
+        Metadata metadata = ms.createMetadata(convertedToCSV);
 
         db.shutDown();
         // Finalize the output to .zip

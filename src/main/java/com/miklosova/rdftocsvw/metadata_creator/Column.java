@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
@@ -8,7 +9,7 @@ import org.eclipse.rdf4j.model.Value;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
+@JsonldType("Column")
 public class Column {
     /**
      * Title for the column
@@ -32,13 +33,9 @@ public class Column {
      */
     private String datatype;
     /**
-     * Separator for the case that the cell contains multiple values
+     * A URI template property that MAY be used to indicate what a cell contains information about.
      */
-    private String separator;
-    /**
-     * Used for list of values to indicate that the order of the values when transforming should not be changed.
-     */
-    private Boolean ordered;
+    private String aboutUrl;
     /**
      * Denotes in which language the given column has the values. Helps with transforming the data back to JSON/RDF.
      */
@@ -81,10 +78,13 @@ public class Column {
             createPropertyUrl();
             createValueUrl();
             createDatatype();
-            //createSeparator();
-            //createOrdered();
+            createAboutUrl();
         }
 
+    }
+
+    private void createAboutUrl() {
+        // TODO createAboutUrl
     }
 
     private void createLang() {
@@ -94,14 +94,6 @@ public class Column {
             Optional<String> languageTag = literal.getLanguage();
             languageTag.ifPresent(s -> this.lang = s);
         }
-    }
-
-    private void createOrdered() {
-        // TODO createOrdered()
-    }
-
-    private void createSeparator() {
-        // TODO createSeparator()
     }
 
     private void createDatatype() {
@@ -151,13 +143,7 @@ public class Column {
         return datatype;
     }
 
-    public String getSeparator() {
-        return separator;
-    }
 
-    public Boolean getOrdered() {
-        return ordered;
-    }
 
     public Boolean getVirtual() {
         return virtual;

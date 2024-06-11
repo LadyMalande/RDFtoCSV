@@ -1,5 +1,4 @@
 {
-  "METADATA_FILENAME" : "csv-metadata.json",
   "tables" : [ {
     "url" : "outputCSV30.csv",
     "tableSchema" : {
@@ -7,10 +6,6 @@
         "titles" : "Concept",
         "name" : "Concept",
         "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{Concept}"
-      }, {
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://www.w3.org/2004/02/skos/core#Concept",
-        "virtual" : true
       }, {
         "titles" : "notation",
         "name" : "notation",
@@ -32,6 +27,10 @@
         "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
         "datatype" : "langString",
         "lang" : "en"
+      }, {
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/2004/02/skos/core#Concept",
+        "virtual" : true
       } ],
       "foreignKeys" : [ {
         "columnReference" : "inScheme",
@@ -52,10 +51,6 @@
         "name" : "ConceptScheme",
         "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{ConceptScheme}"
       }, {
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://www.w3.org/2004/02/skos/core#ConceptScheme",
-        "virtual" : true
-      }, {
         "titles" : "prefLabel (cs)",
         "name" : "prefLabel",
         "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
@@ -67,6 +62,10 @@
         "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
         "datatype" : "langString",
         "lang" : "en"
+      }, {
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/2004/02/skos/core#ConceptScheme",
+        "virtual" : true
       } ],
       "primaryKey" : "ConceptScheme",
       "aboutUrl" : "http://www.w3.org/2004/02/skos/core#{ConceptScheme}",

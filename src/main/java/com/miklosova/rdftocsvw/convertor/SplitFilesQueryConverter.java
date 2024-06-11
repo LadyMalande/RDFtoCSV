@@ -35,6 +35,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
     ArrayList<Row> rows;
     ArrayList<Value> keys;
     ArrayList<ArrayList<Row>> allRows;
+    ArrayList<ArrayList<Value>> allKeys;
     Metadata metadata;
 
     ArrayList<String> fileNamesCreated;
@@ -61,10 +62,10 @@ public class SplitFilesQueryConverter implements IQueryParser{
 
         String query = getCSVTableQueryForModel();
 
-        String queryResult = queryRDFModel(query);
+        PrefinishedOutput queryResult = queryRDFModel(query);
         //System.out.println("CSVFileTOWriteTo: " + CSVFileTOWriteTo + "delimiter: " + delimiter);
         //FileWrite.saveCSFFileFromRows(CSVFileTOWriteTo, keys, rows, delimiter, metadata);
-        return new PrefinishedOutput(queryResult);
+        return queryResult;
 
     }
 
@@ -102,9 +103,11 @@ public class SplitFilesQueryConverter implements IQueryParser{
     }
 
 
-    private String queryRDFModel(String queryString) {
+    private PrefinishedOutput<RowsAndKeys> queryRDFModel(String queryString) {
+        allKeys = new ArrayList<>();
         allRows = new ArrayList<>();
         rows = new ArrayList<>();
+        PrefinishedOutput<RowsAndKeys> gen = new PrefinishedOutput<RowsAndKeys>(new RowsAndKeys.RowsAndKeysFactory());
         // Query the data and pass the result as String
 
         // Query in rdf4j
@@ -155,8 +158,14 @@ public class SplitFilesQueryConverter implements IQueryParser{
                     result.close();
                 }
             }
-            metadata.addForeignKeys(allRows);
-            metadata.finalizeMetadata();
+
+            for(int i = 0; i < allRows.size(); i++){
+                gen.prefinishedOutput.rowsAndKeys.add(new RowAndKey(allKeys.get(i),allRows.get(i)));
+            }
+
+            System.out.print(gen.get());
+
+
         }
 
         // Verify the output in console
@@ -166,7 +175,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
         writeFilesToconfigFile();
         //saveCSVasFile("resultCSVPrimer");
         //return resultCSV;
-        return allRowsOfOutput;
+        return gen;
     }
 
     private void writeFilesToconfigFile() {
@@ -197,14 +206,16 @@ public class SplitFilesQueryConverter implements IQueryParser{
         System.out.println("Number of keys : " + keys.size());
         String newFileName = CSVFileTOWriteTo + fileNumberX + ".csv";
         // Write the rows with respective keys to the current file
-        metadata.addMetadata(newFileName, keys, rows);
+        // TODO put somewhere else
+                //metadata.addMetadata(newFileName, keys, rows);
 
-        FileWrite.saveCSVFileFromRows(newFileName, rows, metadata);
-        fileNamesCreated.add(newFileName);
+                //FileWrite.saveCSVFileFromRows(newFileName, rows, metadata);
+                //fileNamesCreated.add(newFileName);
         //FileWrite.saveCSFFileFromRows("RAW_" + newFileName , keys, rows, delimiter);
         // Increase the file number so that the next file has different name
         fileNumberX = fileNumberX+1;
         allRows.add(rows);
+        allKeys.add(keys);
     }
 
     private void deletePredicatesAndObjectsForSubject(RepositoryConnection conn, String root, String dominantType) {

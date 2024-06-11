@@ -2,13 +2,15 @@ package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.miklosova.rdftocsvw.convertor.Row;
+import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
+@JsonldType("Schema")
 public class TableSchema {
     /**
      * Array of column objects containing information about each column
@@ -55,6 +57,8 @@ public class TableSchema {
 
     public void addTableSchemaMetadata() {
         // TODO process the IRIs
+        // This only works for the tables that have different types of entities
+
         this.primaryKey = createAboutUrl(this.keys.get(0));
         this.columns = createColumns();
         this.rowTitles = new ArrayList<>();
@@ -72,10 +76,16 @@ public class TableSchema {
 
     }
 
+    /**
+     * Creates annotations for columns present in the data.
+     *
+     * The virtual columns are created the last as by specification of
+     * https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#columns - virtual
+     * @return List of Column objects annotating individual columns that should be present in the table.
+     */
     private List<Column> createColumns() {
         List<Column> listOfColumns = new ArrayList<>();
         listOfColumns.add(createIdColumnWithType());
-        listOfColumns.add(createVirtualTypeColumn());
 
         for(Map.Entry<Value, List<Value>> column : rows.get(0).map.entrySet()){
             Column newColumn = new Column(column);
@@ -87,6 +97,7 @@ public class TableSchema {
             }
 
         }
+        listOfColumns.add(createVirtualTypeColumn());
 
         return listOfColumns;
     }
