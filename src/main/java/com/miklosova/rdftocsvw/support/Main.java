@@ -32,42 +32,22 @@ public class Main {
         MethodService methodService = new MethodService();
         RepositoryConnection rc = methodService.processInput(RDFFileToRead, methodChoice, db);
         assert(rc != null);
-
-        // Save the intermediate data representation to a variable
-        // TODO
-
-        // Transform the data from the model to CSV
-        // TODO
+        // Convert the table to intermediate data for processing into metadata
         ConversionService cs = new ConversionService();
         PrefinishedOutput convertedToCSV = cs.convertByQuery(rc, db);
-
+        // Convert intermediate data into basic metadata
         MetadataService ms = new MetadataService();
         Metadata metadata = ms.createMetadata(convertedToCSV);
 
-        db.shutDown();
-        // Finalize the output to .zip
+        // Enrich metadata with online reachable data - disabled if offline
         // TODO
 
+        // Write data to CSV by the metadata prepared
+        db.shutDown();
+
+        // Finalize the output to .zip
         ZipOutputProcessor zop = new ZipOutputProcessor();
         zop.processCSVToOutput(convertedToCSV);
-
-
-        // =========  Normal go through END =====
-/*
-        CSVTableCreator ctc = new CSVTableCreator(delimiter, CSVFileToWriteTo, RDFFileToRead);
-        System.out.println(ctc.getCSVTableAsString());
-
-        ExampleMaker exm = new ExampleMaker();
-        exm.makeExample();
-
-        try {
-            fr.readRDF("typy-pracovních-vztahů.trig");
-
-        } catch (UnsupportedEncodingException e) {
-            System.out.println(e.toString());
-        }
-
- */
 
     }
 

@@ -2,9 +2,11 @@ package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -42,17 +44,20 @@ public class Metadata {
      */
     private String id;
 
+    private static final ObjectMapper SORTED_MAPPER = new ObjectMapper();
 
     public void jsonldMetadata(){
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-        objectMapper.registerModule(new JsonldModule());
-        JsonNode node = objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL).convertValue(this, JsonNode.class);
+        SORTED_MAPPER.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        SORTED_MAPPER.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+        SORTED_MAPPER.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        SORTED_MAPPER.registerModule(new JsonldModule());
+        JsonNode node = SORTED_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL).convertValue(this, JsonNode.class);
+
         ObjectNode objectNode = ((ObjectNode)node).put("@context", "http://www.w3.org/ns/csvw");
         String personJsonLd = null;
         try {
-            personJsonLd = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
+            personJsonLd = SORTED_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
