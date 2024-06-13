@@ -20,7 +20,7 @@ public class CSVTableCreatorTest {
     }
 
     @After
-    void tearDown() {
+    public void tearDown() {
     }
 
     @Test

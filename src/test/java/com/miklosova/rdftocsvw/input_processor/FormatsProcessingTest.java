@@ -91,7 +91,7 @@ public class FormatsProcessingTest {
     }
 
     @After
-    void tearDown() {
+    public void tearDown() {
     }
 
     private void setValuesFromTest(RepositoryConnection rc){

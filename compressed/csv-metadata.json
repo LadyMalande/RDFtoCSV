@@ -1,9 +1,12 @@
 {
-  "METADATA_FILENAME" : "csv-metadata.json",
   "tables" : [ {
-    "url" : "outputCSV20.csv",
+    "url" : "splitQuerynewCSVOutput0.csv",
     "tableSchema" : {
       "columns" : [ {
+        "titles" : "Concept",
+        "name" : "Concept",
+        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{Concept}"
+      }, {
         "titles" : "notation",
         "name" : "notation",
         "propertyUrl" : "http://www.w3.org/2004/02/skos/core#notation"
@@ -25,10 +28,6 @@
         "datatype" : "langString",
         "lang" : "en"
       }, {
-        "titles" : "Concept",
-        "name" : "Concept",
-        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{Concept}"
-      }, {
         "propertyUrl" : "rdf:type",
         "valueUrl" : "http://www.w3.org/2004/02/skos/core#Concept",
         "virtual" : true
@@ -36,17 +35,22 @@
       "foreignKeys" : [ {
         "columnReference" : "inScheme",
         "reference" : {
-          "resource" : "outputCSV21.csv",
+          "resource" : "splitQuerynewCSVOutput1.csv",
           "columnReference" : "ConceptScheme"
         }
       } ],
-      "primaryKey" : "type",
-      "rowTitles" : [ "type" ]
+      "primaryKey" : "Concept",
+      "aboutUrl" : "http://www.w3.org/2004/02/skos/core#{Concept}",
+      "rowTitles" : [ "Concept", "notation", "inScheme", "prefLabel (cs)", "prefLabel (en)" ]
     }
   }, {
-    "url" : "outputCSV21.csv",
+    "url" : "splitQuerynewCSVOutput1.csv",
     "tableSchema" : {
       "columns" : [ {
+        "titles" : "ConceptScheme",
+        "name" : "ConceptScheme",
+        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{ConceptScheme}"
+      }, {
         "titles" : "prefLabel (cs)",
         "name" : "prefLabel",
         "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
@@ -59,16 +63,13 @@
         "datatype" : "langString",
         "lang" : "en"
       }, {
-        "titles" : "ConceptScheme",
-        "name" : "ConceptScheme",
-        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{ConceptScheme}"
-      }, {
         "propertyUrl" : "rdf:type",
         "valueUrl" : "http://www.w3.org/2004/02/skos/core#ConceptScheme",
         "virtual" : true
       } ],
-      "primaryKey" : "type",
-      "rowTitles" : [ "type" ]
+      "primaryKey" : "ConceptScheme",
+      "aboutUrl" : "http://www.w3.org/2004/02/skos/core#{ConceptScheme}",
+      "rowTitles" : [ "ConceptScheme", "prefLabel (cs)", "prefLabel (en)" ]
     }
   } ],
   "@context" : "http://www.w3.org/ns/csvw"

@@ -2,6 +2,8 @@ package com.miklosova.rdftocsvw.support;
 
 import com.miklosova.rdftocsvw.convertor.ConversionService;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
+import com.miklosova.rdftocsvw.convertor.RowAndKey;
+import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
@@ -11,6 +13,8 @@ import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
+
+import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args){
@@ -34,20 +38,31 @@ public class Main {
         assert(rc != null);
         // Convert the table to intermediate data for processing into metadata
         ConversionService cs = new ConversionService();
-        PrefinishedOutput convertedToCSV = cs.convertByQuery(rc, db);
+        PrefinishedOutput prefinishedOutput = cs.convertByQuery(rc, db);
         // Convert intermediate data into basic metadata
         MetadataService ms = new MetadataService();
-        Metadata metadata = ms.createMetadata(convertedToCSV);
+        Metadata metadata = ms.createMetadata(prefinishedOutput);
 
         // Enrich metadata with online reachable data - disabled if offline
         // TODO
 
         // Write data to CSV by the metadata prepared
+
+        RowsAndKeys rnk = (RowsAndKeys) prefinishedOutput.getPrefinishedOutput();
+        int i = 0;
+        ArrayList<String> fileNamesCreated = new ArrayList<>();
+        for(RowAndKey rowAndKey : rnk.getRowsAndKeys()){
+            String newFileName = CSVFileToWriteTo + i + ".csv";
+            FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata);
+            fileNamesCreated.add(newFileName);
+            i++;
+        }
+        FileWrite.writeFilesToconfigFile(fileNamesCreated);
         db.shutDown();
 
         // Finalize the output to .zip
         ZipOutputProcessor zop = new ZipOutputProcessor();
-        zop.processCSVToOutput(convertedToCSV);
+        zop.processCSVToOutput(prefinishedOutput);
 
     }
 

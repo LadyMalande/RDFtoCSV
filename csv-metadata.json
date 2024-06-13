@@ -1,6 +1,6 @@
 {
   "tables" : [ {
-    "url" : "outputCSV30.csv",
+    "url" : "splitQuerynewCSVOutput0.csv",
     "tableSchema" : {
       "columns" : [ {
         "titles" : "Concept",
@@ -35,7 +35,7 @@
       "foreignKeys" : [ {
         "columnReference" : "inScheme",
         "reference" : {
-          "resource" : "outputCSV31.csv",
+          "resource" : "splitQuerynewCSVOutput1.csv",
           "columnReference" : "ConceptScheme"
         }
       } ],
@@ -44,7 +44,7 @@
       "rowTitles" : [ "Concept", "notation", "inScheme", "prefLabel (cs)", "prefLabel (en)" ]
     }
   }, {
-    "url" : "outputCSV31.csv",
+    "url" : "splitQuerynewCSVOutput1.csv",
     "tableSchema" : {
       "columns" : [ {
         "titles" : "ConceptScheme",

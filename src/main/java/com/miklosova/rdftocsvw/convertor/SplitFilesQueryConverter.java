@@ -172,17 +172,13 @@ public class SplitFilesQueryConverter implements IQueryParser{
 
         //System.out.println(resultString);
 
-        writeFilesToconfigFile();
+
         //saveCSVasFile("resultCSVPrimer");
         //return resultCSV;
         return gen;
     }
 
-    private void writeFilesToconfigFile() {
-        StringBuilder sb = new StringBuilder();
-        fileNamesCreated.forEach(fileName -> sb.append(fileName + ","));
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,sb.toString());
-    }
+
 
     private void recursiveQueryForFiles(RepositoryConnection conn, Value dominantType) {
         // Make new rows and keys for the current file

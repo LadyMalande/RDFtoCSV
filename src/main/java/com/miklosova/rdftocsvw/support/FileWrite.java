@@ -71,6 +71,12 @@ public class FileWrite {
 
     }
 
+    public static void writeFilesToconfigFile(ArrayList<String> fileNamesCreated) {
+        StringBuilder sb = new StringBuilder();
+        fileNamesCreated.forEach(fileName -> sb.append(fileName + ","));
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,sb.toString());
+    }
+
     public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata){
         StringBuilder forOutput = new StringBuilder();
         File f = FileWrite.makeFileByNameAndExtension( fileName, null);
