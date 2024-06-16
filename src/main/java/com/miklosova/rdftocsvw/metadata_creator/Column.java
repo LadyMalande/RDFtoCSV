@@ -50,6 +50,11 @@ public class Column {
      * }
      */
     private Boolean virtual;
+    /**
+     * True if given column is not for to RDF output writing. Usually true is for the columns which are also tied to virtual column subject.
+     * False is default if there is not suppressOutput.
+     */
+    private Boolean suppressOutput;
 
     private Map.Entry<Value, List<Value>> column;
 
@@ -79,7 +84,12 @@ public class Column {
             createValueUrl();
             createDatatype();
             createAboutUrl();
+            createSuppressOutput();
         }
+
+    }
+
+    private void createSuppressOutput() {
 
     }
 
@@ -102,6 +112,7 @@ public class Column {
             Literal literal = (Literal) valueFromThisColumn;
             IRI datatype = literal.getDatatype();
             String localname = datatype.getLocalName();
+            localname = (localname.equalsIgnoreCase("langString")) ? "string" : localname;
             this.datatype = (localname.equalsIgnoreCase("string")) ? null : localname;
         }
     }
@@ -112,7 +123,8 @@ public class Column {
             IRI iri = (IRI) valueFromThisColumn;
             String firstPart = iri.getNamespace();
             String lastPart = iri.getLocalName();
-            this.valueUrl = firstPart + "{" + lastPart + "}";
+            IRI iriOfColumnKey = (IRI) this.column.getKey();
+            this.valueUrl = firstPart + "{" + iriOfColumnKey.getLocalName() + "}";
         }
 
     }
@@ -152,7 +164,12 @@ public class Column {
     private void createName() {
         Value column = this.column.getKey();
         IRI columnKeyIRI = (IRI) column;
-        this.name = columnKeyIRI.getLocalName();
+        if(this.lang != null){
+            this.name = columnKeyIRI.getLocalName() + "_" + this.lang;
+        } else{
+            this.name = columnKeyIRI.getLocalName();
+        }
+
     }
 
     private String createTitles() {
@@ -186,6 +203,7 @@ public class Column {
         this.titles = typeIri.getLocalName();
         this.name = typeIri.getLocalName();
         this.valueUrl = valueIri.getNamespace() +  "{" + this.name + "}";
+        this.suppressOutput = true;
 
     }
 

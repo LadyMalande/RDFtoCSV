@@ -95,7 +95,8 @@ public class Metadata {
     }
 
     public void addMetadata(String newFileName, ArrayList<Value> keys, ArrayList<Row> rows) {
-        FileUrlDescriptor newTable = new FileUrlDescriptor(newFileName);
+        File filePath = new File(newFileName);
+        FileUrlDescriptor newTable = new FileUrlDescriptor(filePath.getName());
         this.tables.add(newTable);
         newTable.addTableMetadata(keys, rows);
         // TODO

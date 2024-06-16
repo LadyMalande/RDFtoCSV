@@ -35,22 +35,26 @@ public class ParsingService {
 
     public RepositoryConnection processInput(RepositoryConnection conn, File fileToRead) {
         String fileName = fileToRead.getName();
+        System.out.println("String fileName = fileToRead.getName();: " + fileName);
         inputGateway = new InputGateway();
         //processURI(fileName);
         processExtension(fileName);
 
         conn = inputGateway.processInput(conn, fileToRead);
-        System.out.println("Processed file: " + fileToRead.getAbsolutePath());
+        System.out.println("processInput: Processed file: " + fileToRead.getAbsolutePath());
         return conn;
     }
 
     private void processExtension(String fileName){
+        System.out.println("processExtension " + fileName);
+
         String[] splitName = fileName.split("\\.");
         String fileExtension = splitName[splitName.length - 1];
-
+        System.out.println("fileExtension " + fileExtension);
             switch (fileExtension) {
                 case "ttl":
                     inputGateway.setParsingMethod(new TurtleParser());
+                    System.out.println("turtle parser set ");
                     break;
                 case "brf":
                     inputGateway.setParsingMethod(new BinaryParser());

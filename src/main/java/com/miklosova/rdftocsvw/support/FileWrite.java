@@ -80,7 +80,7 @@ public class FileWrite {
     public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata){
         StringBuilder forOutput = new StringBuilder();
         File f = FileWrite.makeFileByNameAndExtension( fileName, null);
-
+    System.out.println("File f: " + f.getAbsolutePath());
         StringBuilder sb1 = new StringBuilder();
         List<Column> orderOfColumnKeys = addHeadersFromMetadata(fileName, metadata, sb1);
         FileWrite.writeToTheFile(f, sb1.toString());
@@ -182,8 +182,9 @@ public class FileWrite {
     private static List<Column> addHeadersFromMetadata(String fileName, Metadata metadata, StringBuilder sb1) {
         List<Column> orderOfColumns = new ArrayList<>();
         System.out.println("addHeadersFromMetadata fileName = " + fileName);
+        File fileObject = new File(fileName);
         metadata.getTables().forEach(tables -> System.out.println("tables = " + tables.getUrl()));
-        FileUrlDescriptor fud = metadata.getTables().stream().filter(tables -> tables.getUrl().equals(fileName)).findFirst().get();
+        FileUrlDescriptor fud = metadata.getTables().stream().filter(tables -> tables.getUrl().equals(fileObject.getName())).findFirst().get();
         Column firstColumn = fud.getTableSchema().getColumns().stream().filter(column -> column.getPropertyUrl() == null).findFirst().get();
         sb1.append(firstColumn.getTitles());
         sb1.append(",");
@@ -207,11 +208,14 @@ public class FileWrite {
             if(ext != null) {
                 newFile = new File(name + "." + ext);
             } else {
+                System.out.println("newFile: " + name);
+
                 newFile = new File(name);
+                System.out.println("newFile.getName(): " + newFile.getName());
             }
-            FileWrite.deleteFile(newFile.getName());
+            FileWrite.deleteFile(newFile.getAbsolutePath());
             if (newFile.createNewFile()) {
-                System.out.println("File created: " + newFile.getName());
+                System.out.println("File created: " + newFile);
             } else {
                 System.out.println("File already exists.");
 
@@ -242,7 +246,7 @@ public class FileWrite {
     public static void writeToTheFile(File file, Object something) {
         try {
 
-            FileWriter myWriter = new FileWriter(file.getName(),true);
+            FileWriter myWriter = new FileWriter(file,true);
 
             myWriter.write(something.toString());
 
@@ -257,7 +261,7 @@ public class FileWrite {
     public static void deleteFile(String fileName){
         File myObj = new File(fileName);
         if (myObj.delete()) {
-            System.out.println("Deleted the file: " + myObj.getName());
+            System.out.println("Deleted the file: " + myObj);
         } else {
             System.out.println("Failed to delete the file.");
         }

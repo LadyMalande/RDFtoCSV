@@ -9,6 +9,8 @@ public class ConfigurationManager {
     private static final String CONFIG_FILE_NAME = "./src/main/resources/app.config";
     public static final String INTERMEDIATE_FILE_NAMES = "app.filesInProgress";
     public static final String OUTPUT_ZIPFILE_NAME = "output.zipname";
+
+    public static final String INPUT_OUTPUT_FILENAME = "input.outputFileName";
     public static final String OUTPUT_METADATA_FILE_NAME = "output.metadataFileName";
     public static final String CONVERSION_METHOD = "conversion.method";
 

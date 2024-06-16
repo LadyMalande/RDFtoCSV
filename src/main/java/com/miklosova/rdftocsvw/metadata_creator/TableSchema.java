@@ -70,7 +70,7 @@ public class TableSchema {
     private void addRowTitles(){
         this.columns.forEach(column -> {
             if(column.getVirtual() == null || (column.getVirtual() != null && !column.getVirtual())){
-                this.rowTitles.add(column.getTitles());
+                this.rowTitles.add(column.getName());
             }
         });
 
@@ -155,10 +155,11 @@ public class TableSchema {
     private String createAboutUrl(Value key0){
         Value type = rows.get(0).type;
         Value value = rows.get(0).id;
+        IRI valueIri = (IRI) value;
         String theNameOfTheColumn = getLastSectionOfIri(type);
         String partBeforeLastSection = getPartBeforeLastSection(type);
         // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-        this.aboutUrl = partBeforeLastSection + "{" + theNameOfTheColumn + "}";
+        this.aboutUrl = valueIri.getNamespace() + "{" + theNameOfTheColumn + "}";
         return theNameOfTheColumn;
     }
 
