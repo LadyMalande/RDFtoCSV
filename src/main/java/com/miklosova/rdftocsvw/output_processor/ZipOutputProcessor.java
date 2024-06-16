@@ -62,7 +62,7 @@ public class ZipOutputProcessor implements IOutputProcessor{
         String[] listOfFiles = inputFilesInString.split(",");
 
         List<String> srcFiles = new ArrayList<String>(Arrays.asList(listOfFiles));
-        srcFiles.add(ConfigurationManager.METADATA_FILE_NAME);
+        srcFiles.add(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
 
         try {
 

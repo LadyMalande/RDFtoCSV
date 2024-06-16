@@ -30,10 +30,16 @@ public class Column {
     private String valueUrl;
     /**
      * datatype from the literal value. Helps with transforming the data back to JSON/RDF.
+     * By documentation: https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#built-in-datatypes
+     * Datatypes prefixed "with http://www.w3.org/2001/XMLSchema#".
+     * Only Built-in Datatypes are supported: anyAtomicType and its children, number, binary, datetime,
+     * any, xml, html, json.
      */
     private String datatype;
     /**
-     * A URI template property that MAY be used to indicate what a cell contains information about.
+     * A URI template property that MAY be used to indicate what a cell contains information about
+     * (subject of a triple of RDF). MAY be also defined on a tableSchema level to define aboutUrl
+     * for all the columns.
      */
     private String aboutUrl;
     /**

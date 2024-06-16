@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(Parameterized.class)
-public class fullProcessTest {
+public class FullProcessTest {
     private String nameForTest;
     private String filePath;
     private String filePathForImage;
@@ -46,7 +46,7 @@ public class fullProcessTest {
         });
     }
 
-    public fullProcessTest(String nameForTest, String filePath, String filePathForMetadata, String filePathForOutput, String filePathForImage, String filePathForTestRDFOutput, String methodName) {
+    public FullProcessTest(String nameForTest, String filePath, String filePathForMetadata, String filePathForOutput, String filePathForImage, String filePathForTestRDFOutput, String methodName) {
         this.nameForTest = nameForTest;
         this.filePath = filePath;
         this.filePathForMetadata = filePathForMetadata;

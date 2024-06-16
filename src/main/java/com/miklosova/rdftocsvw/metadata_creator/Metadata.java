@@ -79,7 +79,6 @@ public class Metadata {
         }
         String metadataFilename = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
         FileWrite.deleteFile(metadataFilename);
-
         try {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(metadataFilename), objectNode);
         } catch (IOException e) {
