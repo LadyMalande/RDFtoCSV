@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<TriX xmlns='http://www.w3.org/2004/03/trix/trix-1/'>
+	<graph>
+		<uri>http://example.org/myGraph</uri>
+		<triple>
+			<uri>http://example.org/myThesis</uri>
+			<uri>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</uri>
+			<uri>http://purl.org/dc/dcmitype/Text</uri>
+		</triple>
+		<triple>
+			<uri>http://example.org/myThesis</uri>
+			<uri>http://purl.org/dc/terms/creator</uri>
+			<uri>http://example.org/TerezaMiklóšová</uri>
+		</triple>
+		<triple>
+			<uri>http://example.org/myThesis</uri>
+			<uri>http://purl.org/dc/terms/title</uri>
+			<plainLiteral xml:lang='cs'>Automatický převod RDF dat do CSV</plainLiteral>
+		</triple>
+		<triple>
+			<uri>http://example.org/myThesis</uri>
+			<uri>http://purl.org/dc/terms/title</uri>
+			<plainLiteral xml:lang='en'>Automated transformation of RDF data to CSV</plainLiteral>
+		</triple>
+	</graph>
+	<graph>
+		<triple>
+			<uri>http://example.org/myGraph</uri>
+			<uri>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</uri>
+			<uri>http://www.w3.org/1999/02/22-rdf-syntax-ns#Graph</uri>
+		</triple>
+	</graph>
+</TriX>

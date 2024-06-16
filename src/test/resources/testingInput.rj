@@ -1,0 +1,48 @@
+{
+  "http://example.org/myGraph" : {
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" : [
+      {
+        "value" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#Graph",
+        "type" : "uri"
+      }
+    ]
+  },
+  "http://example.org/myThesis" : {
+    "http://purl.org/dc/terms/creator" : [
+      {
+        "value" : "http://example.org/TerezaMiklóšová",
+        "type" : "uri",
+        "graphs" : [
+          "http://example.org/myGraph"
+        ]
+      }
+    ],
+    "http://purl.org/dc/terms/title" : [
+      {
+        "value" : "Automatický převod RDF dat do CSV",
+        "type" : "literal",
+        "lang" : "cs",
+        "graphs" : [
+          "http://example.org/myGraph"
+        ]
+      },
+      {
+        "value" : "Automated transformation of RDF data to CSV",
+        "type" : "literal",
+        "lang" : "en",
+        "graphs" : [
+          "http://example.org/myGraph"
+        ]
+      }
+    ],
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" : [
+      {
+        "value" : "http://purl.org/dc/dcmitype/Text",
+        "type" : "uri",
+        "graphs" : [
+          "http://example.org/myGraph"
+        ]
+      }
+    ]
+  }
+}

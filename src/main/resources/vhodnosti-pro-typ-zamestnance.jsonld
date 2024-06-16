@@ -1,0 +1,78 @@
+{
+"@context": {
+    "id": "@id",
+    "type": "@type",
+    "@base": "https://data.mpsv.cz/zdroj/",
+    "pojem": "https://data.mpsv.cz/pojem/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "@language": "cs",
+    "ciselnik": "skos:ConceptScheme",
+    "polozka": "skos:Concept",
+    "polozky": {
+      "@reverse": "skos:inScheme",
+      "@container": "@set"
+    },
+    "kod": {
+      "@id": "skos:notation",
+      "@type": "xsd:string"
+    },
+    "nazev": {
+      "@id": "skos:prefLabel",
+      "@container": "@language"
+    }
+  },
+  "id": "ciselnik/VhodnostiProTypZamestnance",
+  "type": "ciselnik",
+  "polozky": [
+    {
+      "id": "VhodnostProTypZamestnance/absol",
+      "kod": "absol",
+      "nazev": {
+        "cs": "Absolventy"
+      }
+    },
+    {
+      "id": "VhodnostProTypZamestnance/mladi",
+      "kod": "mladi",
+      "nazev": {
+        "cs": "Mladistvé do 18 let"
+      }
+    },
+    {
+      "id": "VhodnostProTypZamestnance/OZP2",
+      "kod": "OZP2",
+      "nazev": {
+        "cs": "OZP s maximálně 2. stupněm invalidity"
+      }
+    },
+    {
+      "id": "VhodnostProTypZamestnance/OZP3",
+      "kod": "OZP3",
+      "nazev": {
+        "cs": "OZP s invaliditou 3. stupně (dříve TZP)"
+      }
+    },
+    {
+      "id": "VhodnostProTypZamestnance/vozik",
+      "kod": "vozik",
+      "nazev": {
+        "cs": "OZP na vozíku (bezbariérový přístup)"
+      }
+    },
+    {
+      "id": "VhodnostProTypZamestnance/zdravi",
+      "kod": "zdravi",
+      "nazev": {
+        "cs": "Zdravé osoby"
+      }
+    },
+    {
+      "id": "VhodnostProTypZamestnance/znevyhod",
+      "kod": "znevyhod",
+      "nazev": {
+        "cs": "Osoby zdravotně znevýhodněné"
+      }
+    }
+  ]
+}
