@@ -85,7 +85,8 @@ public class TableSchema {
      */
     private List<Column> createColumns() {
         List<Column> listOfColumns = new ArrayList<>();
-        listOfColumns.add(createIdColumnWithType());
+       // if(Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))) {
+            listOfColumns.add(createIdColumnWithType());
 
         for(Map.Entry<Value, List<Value>> column : rows.get(0).map.entrySet()){
             Column newColumn = new Column(column);
@@ -97,7 +98,10 @@ public class TableSchema {
             }
 
         }
-        listOfColumns.add(createVirtualTypeColumn());
+        if(Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))){
+            listOfColumns.add(createVirtualTypeColumn());
+        }
+
 
         return listOfColumns;
     }
@@ -156,10 +160,18 @@ public class TableSchema {
         Value type = rows.get(0).type;
         Value value = rows.get(0).id;
         IRI valueIri = (IRI) value;
-        String theNameOfTheColumn = getLastSectionOfIri(type);
-        String partBeforeLastSection = getPartBeforeLastSection(type);
-        // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-        this.aboutUrl = valueIri.getNamespace() + "{" + theNameOfTheColumn + "}";
+        String theNameOfTheColumn;
+        if(Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))){
+            theNameOfTheColumn = getLastSectionOfIri(type);
+            // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
+            this.aboutUrl = valueIri.getNamespace() + "{" + theNameOfTheColumn + "}";
+        } else{
+            theNameOfTheColumn = getLastSectionOfIri(value);
+            // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
+            this.aboutUrl = valueIri.getNamespace() + "{" + theNameOfTheColumn + "}";
+        }
+
+
         return theNameOfTheColumn;
     }
 

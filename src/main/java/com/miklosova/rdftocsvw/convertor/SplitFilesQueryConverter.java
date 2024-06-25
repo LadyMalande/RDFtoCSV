@@ -22,6 +22,7 @@ import org.eclipse.rdf4j.sparqlbuilder.core.query.ModifyQuery;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
+import org.jruby.RubyProcess;
 
 import java.util.*;
 
@@ -59,10 +60,17 @@ public class SplitFilesQueryConverter implements IQueryParser{
     @Override
     public PrefinishedOutput convertWithQuery(RepositoryConnection rc) {
         loadConfiguration();
+        PrefinishedOutput queryResult;
+        String query = getCSVTableQueryForModel(true);
+        try{
+            queryResult = queryRDFModel(query, true);
+        } catch(IndexOutOfBoundsException ex){
+        // TODO There are no rdf:type in the data
+            System.out.println("TODO there are no rdf:type");
+            query = getCSVTableQueryForModel(false);
+            queryResult = queryRDFModel(query, false);
+        }
 
-        String query = getCSVTableQueryForModel();
-
-        PrefinishedOutput queryResult = queryRDFModel(query);
         //System.out.println("CSVFileTOWriteTo: " + CSVFileTOWriteTo + "delimiter: " + delimiter);
         //FileWrite.saveCSFFileFromRows(CSVFileTOWriteTo, keys, rows, delimiter, metadata);
         return queryResult;
@@ -78,14 +86,19 @@ public class SplitFilesQueryConverter implements IQueryParser{
         System.out.println("READ delimiter from input.CSVFileTOWriteTo to: " + CSVFileTOWriteTo);
     }
 
-    private String getCSVTableQueryForModel() {
+    private String getCSVTableQueryForModel(boolean askForTypes) {
         Prefix skos = SparqlBuilder.prefix(SKOS.NS);
         // Create the query to get all data in CSV format
         SelectQuery selectQuery = Queries.SELECT();
 
         Variable o = SparqlBuilder.var("o"), s = SparqlBuilder.var("s"),
-                s_in = SparqlBuilder.var("s_in"),p_in = SparqlBuilder.var("p_in");
-        selectQuery.prefix(skos).select(s).where(s.isA(o).filterNotExists(s_in.has(p_in, s)));
+                s_in = SparqlBuilder.var("s_in"),p_in = SparqlBuilder.var("p_in"),
+                p = SparqlBuilder.var("p");;
+        if(askForTypes){
+            selectQuery.prefix(skos).select(s).where(s.isA(o).filterNotExists(s_in.has(p_in, s)));
+        } else{
+            selectQuery.prefix(skos).select(s).where(s.has(p, o).filterNotExists(s_in.has(p_in, s)));
+        }
         System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
@@ -103,7 +116,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
     }
 
 
-    private PrefinishedOutput<RowsAndKeys> queryRDFModel(String queryString) {
+    private PrefinishedOutput<RowsAndKeys> queryRDFModel(String queryString, boolean askForTypes) {
         allKeys = new ArrayList<>();
         allRows = new ArrayList<>();
         rows = new ArrayList<>();
@@ -132,17 +145,17 @@ public class SplitFilesQueryConverter implements IQueryParser{
                     //System.out.println(result.stream().count());
                     for (BindingSet solution : result) {
                         // ... and print out the value of the variable binding for ?s and ?n
-                        System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("predicate"));
+                        System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p_in"));
 
                         roots.add(solution.getValue("s"));
                     }
 
                     //countDominantPredicates(conn, roots);
-                    countDominantTypes(conn, roots);
+                    countDominantTypes(conn, roots, askForTypes);
                     Value dominantType = getDominantType();
                     //String dominantPredicate = getDominantPredicate();
 
-                    recursiveQueryForFiles(conn, dominantType);
+                    recursiveQueryForFiles(conn, dominantType, askForTypes);
 /*
                 // For all the found roots, make rows. Roots must have the same rdf:type
                 for (String root : roots) {
@@ -160,7 +173,9 @@ public class SplitFilesQueryConverter implements IQueryParser{
             }
 
             for(int i = 0; i < allRows.size(); i++){
+                System.out.println("Adding rowAndKey #: " + i);
                 gen.prefinishedOutput.rowsAndKeys.add(new RowAndKey(allKeys.get(i),allRows.get(i)));
+                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
             }
 
             System.out.print(gen.get());
@@ -180,18 +195,18 @@ public class SplitFilesQueryConverter implements IQueryParser{
 
 
 
-    private void recursiveQueryForFiles(RepositoryConnection conn, Value dominantType) {
+    private void recursiveQueryForFiles(RepositoryConnection conn, Value dominantType, boolean askForTypes) {
         // Make new rows and keys for the current file
         rows = new ArrayList<>();
         keys = new ArrayList<>();
 
 
-        System.out.println("Number of Roots : " + roots.size());
+        System.out.println("Number of Roots in recursiveQuery: " + roots.size());
         for (Value root : roots) {
             // new Row with the found subject as its id
             Row newRow = new Row(root, dominantType);
             // Query the model for individual rows lead by the roots and having the predicates as the headers in the file
-            queryForSubjects(conn, newRow, root, null, dominantType);
+            queryForSubjects(conn, newRow, root, null, dominantType, askForTypes);
             rows.add(newRow);
             //deletePredicatesAndObjectsForSubject(conn, root, dominantType);
 
@@ -241,8 +256,8 @@ public class SplitFilesQueryConverter implements IQueryParser{
         return selectQuery.getQueryString();
     }
 
-    private void queryForSubjects(RepositoryConnection conn, Row newRow, Value root, Object o, Value dominantType) {
-        String queryToGetAllPredicatesAndObjects = getQueryToGetObjectsForRoot(root, dominantType);
+    private void queryForSubjects(RepositoryConnection conn, Row newRow, Value root, Object o, Value dominantType, boolean askForTypes) {
+        String queryToGetAllPredicatesAndObjects = getQueryToGetObjectsForRoot(root, dominantType, askForTypes);
         TupleQuery query = conn.prepareTupleQuery(queryToGetAllPredicatesAndObjects);
         Value encloseInDoubleQuotes = null;
         try (TupleQueryResult result = query.evaluate()) {
@@ -292,30 +307,43 @@ public class SplitFilesQueryConverter implements IQueryParser{
 
     }
 
-    private String getQueryToGetObjectsForRoot(Value root, Value dominantType) {
+    private String getQueryToGetObjectsForRoot(Value root, Value dominantType, boolean askForTypes) {
         Prefix skos = SparqlBuilder.prefix(SKOS.NS);
         SelectQuery selectQuery = Queries.SELECT();
 
         Variable o = SparqlBuilder.var("o"), p = SparqlBuilder.var("p");
         Iri subjectIRI = iri(root.toString());
         Iri dominantTypeIRI = iri(dominantType.toString());
-        selectQuery.prefix(skos).select(p,o).where(subjectIRI.has(p,o).andIsA(dominantTypeIRI));
+        if(askForTypes){
+            selectQuery.prefix(skos).select(p,o).where(subjectIRI.has(p,o).andIsA(dominantTypeIRI));
+        } else{
+            selectQuery.prefix(skos).select(p,o).where(subjectIRI.has(p,o));
+        }
+
         System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
-    private void countDominantTypes(RepositoryConnection conn, ArrayList<Value> roots) {
+    private void countDominantTypes(RepositoryConnection conn, ArrayList<Value> roots, boolean askForTypes) {
         mapOfTypesAndTheirNumbers = new HashMap<>();
 
         System.out.println("Roots number "  + roots.size());
         for (Value root : roots) {
-            String queryForPredicates = getQueryForTypes(root);
+            String queryForPredicates = getQueryForTypes(root, askForTypes);
             TupleQuery query = conn.prepareTupleQuery(queryForPredicates);
 
             try (TupleQueryResult result = query.evaluate()) {
                 // we just iterate over all solutions in the result...
                 for (BindingSet solution : result) {
-                    Value key = solution.getValue("o");
+                    Value key;
+                    if(askForTypes){
+                        key = solution.getValue("o");
+                    } else{
+                        key = solution.getValue("p");
+                        System.out.println("Found dominant possibility predicates: " + key);
+
+                    }
+
 
                     if (mapOfTypesAndTheirNumbers.containsKey(key)) {
                         Integer oldValue = mapOfTypesAndTheirNumbers.get(key);
@@ -323,6 +351,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
                         mapOfTypesAndTheirNumbers.put(key, newValue);
                     } else {
                         mapOfTypesAndTheirNumbers.put(key, 1);
+                        System.out.println("Adding key for sorting predicates: " + key);
                     }
                 }
 
@@ -330,14 +359,19 @@ public class SplitFilesQueryConverter implements IQueryParser{
         }
     }
 
-    private String getQueryForTypes(Value root) {
+    private String getQueryForTypes(Value root, boolean askForTypes) {
         Prefix skos = SparqlBuilder.prefix(SKOS.NS);
         SelectQuery selectQuery = Queries.SELECT();
 
         SimpleValueFactory rdf = SimpleValueFactory.getInstance();
-        Variable o = SparqlBuilder.var("o");
+        Variable o = SparqlBuilder.var("o"),  p = SparqlBuilder.var("p");
         Iri subjectIRI = iri(root.toString());
-        selectQuery.prefix(skos).select(o).where(subjectIRI.isA(o));
+        if(askForTypes){
+            selectQuery.prefix(skos).select(o).where(subjectIRI.isA(o));
+        } else{
+            selectQuery.prefix(skos).select(p, o).where(subjectIRI.has(p, o));
+        }
+
         System.out.println("getQueryForTypes query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
@@ -350,8 +384,8 @@ public class SplitFilesQueryConverter implements IQueryParser{
         for(Map.Entry<Value, Integer> entry : sortedEnties){
             System.out.println(entry.getKey() + " : " + entry.getValue());
         }
+            dominantType = sortedEnties.get(0).getKey();
 
-        dominantType = sortedEnties.get(0).getKey();
         System.out.println("Chosen dominant type is " + dominantType);
 
         return dominantType;

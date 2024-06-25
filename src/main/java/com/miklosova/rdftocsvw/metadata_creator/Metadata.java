@@ -2,11 +2,9 @@ package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -14,9 +12,6 @@ import com.miklosova.rdftocsvw.convertor.Row;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
 import ioinformarics.oss.jackson.module.jsonld.JsonldModule;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldProperty;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 
@@ -38,7 +33,7 @@ public class Metadata {
     /**
      * Array of files tied to the metadata file
      */
-    private List<FileUrlDescriptor> tables;
+    private List<Table> tables;
     /**
      * an identifier for this group of tables, or null if this is undefined.
      */
@@ -95,13 +90,13 @@ public class Metadata {
 
     public void addMetadata(String newFileName, ArrayList<Value> keys, ArrayList<Row> rows) {
         File filePath = new File(newFileName);
-        FileUrlDescriptor newTable = new FileUrlDescriptor(filePath.getName());
+        Table newTable = new Table(filePath.getName());
         this.tables.add(newTable);
         newTable.addTableMetadata(keys, rows);
         // TODO
     }
 
-    public List<FileUrlDescriptor> getTables() {
+    public List<Table> getTables() {
         return tables;
     }
 
@@ -112,7 +107,7 @@ public class Metadata {
             IRI typeIri = (IRI) type;
             String typeLocalName = typeIri.getLocalName();
             String foreignKeyFile = null;
-            for(FileUrlDescriptor fileUrlDescriptor : tables){
+            for(Table fileUrlDescriptor : tables){
                 if(fileUrlDescriptor.getTableSchema().getColumns().stream().anyMatch(column -> {
                     if(column.getName() != null){
                         return column.getName().equals(typeLocalName);
@@ -137,7 +132,7 @@ public class Metadata {
             if(columnKeyValue != null){
                 TableSchema outcomingTableSchema;
                 // FIND the file in which the id is and the file in which the columnKeyValue is
-                for(FileUrlDescriptor fileDescriptor : tables){
+                for(Table fileDescriptor : tables){
                     Value finalColumnKeyValue = columnKeyValue;
                     if(fileDescriptor.getTableSchema().getColumns().stream().anyMatch(column -> {
                         if(column.getPropertyUrl() != null){

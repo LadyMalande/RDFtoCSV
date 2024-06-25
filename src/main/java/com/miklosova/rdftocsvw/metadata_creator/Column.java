@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
@@ -206,10 +207,19 @@ public class Column {
     public void addFirstColumn(Value type, Value value) {
         IRI typeIri = (IRI) type;
         IRI valueIri = (IRI) value;
-        this.titles = typeIri.getLocalName();
-        this.name = typeIri.getLocalName();
+
         this.valueUrl = valueIri.getNamespace() +  "{" + this.name + "}";
+        if(Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))){
+            this.titles = typeIri.getLocalName();
+            this.name = typeIri.getLocalName();
+
+        } else{
+            this.titles = "Subjekt";
+            this.name = "Subjekt";
+        }
         this.suppressOutput = true;
+
+
 
     }
 

@@ -2,7 +2,7 @@ package com.miklosova.rdftocsvw.support;
 
 import com.miklosova.rdftocsvw.convertor.Row;
 import com.miklosova.rdftocsvw.metadata_creator.Column;
-import com.miklosova.rdftocsvw.metadata_creator.FileUrlDescriptor;
+import com.miklosova.rdftocsvw.metadata_creator.Table;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -90,8 +90,14 @@ public class FileWrite {
             StringBuilder sb = new StringBuilder();
             appendIdByValuePattern(row, metadata, sb);
 
+            boolean firstColumn = true;
             for(Column column : orderOfColumnKeys){
-                appendColumnValueByKey(column, row, sb);
+                if(!Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES)) && firstColumn) {
+                    firstColumn = false;
+                } else{
+                    System.out.println("orderOfColumnKeys: " + column.getName());
+                    appendColumnValueByKey(column, row, sb);
+                }
             }
 
             sb.deleteCharAt(sb.length() - 1);
@@ -108,7 +114,11 @@ public class FileWrite {
 
     private static void appendColumnValueByKey(Column column, Row row, StringBuilder sb) {
         // Simple go through
-        List<Value> values = row.map.get(iri(column.getPropertyUrl()));
+        IRI iri2 = iri(column.getPropertyUrl());
+        if(iri2 == null){
+            iri2 = iri(column.getValueUrl());
+        }
+        List<Value> values = row.map.get(iri2);
         if(column.getLang() == null){
             // TODO if it is IRI, parse it by valueURL. If it is literal, just write down its Label.
             System.out.println("column.getPropertyUrl() = " + column.getPropertyUrl());
@@ -184,10 +194,16 @@ public class FileWrite {
         System.out.println("addHeadersFromMetadata fileName = " + fileName);
         File fileObject = new File(fileName);
         metadata.getTables().forEach(tables -> System.out.println("tables = " + tables.getUrl()));
-        FileUrlDescriptor fud = metadata.getTables().stream().filter(tables -> tables.getUrl().equals(fileObject.getName())).findFirst().get();
-        Column firstColumn = fud.getTableSchema().getColumns().stream().filter(column -> column.getPropertyUrl() == null).findFirst().get();
-        sb1.append(firstColumn.getTitles());
-        sb1.append(",");
+        Table fud = metadata.getTables().stream().filter(tables -> tables.getUrl().equals(fileObject.getName())).findFirst().get();
+        Column firstColumn = null;
+        if(Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))){
+
+            firstColumn = fud.getTableSchema().getColumns().stream().filter(column -> column.getPropertyUrl() == null).findFirst().get();
+            sb1.append(firstColumn.getTitles());
+            sb1.append(",");
+        }
+
+
         for(Column column : fud.getTableSchema().getColumns()){
             if(column != firstColumn && column.getVirtual() == null ){
                 sb1.append(column.getTitles());

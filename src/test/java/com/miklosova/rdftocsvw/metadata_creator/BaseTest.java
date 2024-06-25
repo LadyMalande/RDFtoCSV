@@ -35,7 +35,8 @@ public class BaseTest {
     private static final Logger LOGGER = Logger.getLogger( BaseTest.class.getName() );
 
     @BeforeEach
-    void createMetadata(String filePath, String filePathForMetadata){
+    void createMetadata(){
+        /*
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
         db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService();
@@ -50,6 +51,8 @@ public class BaseTest {
         Metadata metadata = ms.createMetadata(prefinishedOutput);
 
         this.testMetadata = metadata;
+
+         */
     }
 
     @After

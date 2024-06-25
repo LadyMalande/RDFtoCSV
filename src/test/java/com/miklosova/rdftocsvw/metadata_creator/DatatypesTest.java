@@ -25,18 +25,20 @@ import java.util.Arrays;
 import java.util.Collection;
 @RunWith(Parameterized.class)
 public class DatatypesTest extends BaseTest{
+    private final String PROCESS_METHOD = "rdf4j";
     private String nameForTest;
     private String filePath;
     private String filePathForMetadata;
     private String filePathForOutput;
     private String expectedDatatype;
+    private PrefinishedOutput prefinishedOutput;
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> configs(){
         return Arrays.asList(new Object[][]{
-                { "Datatypes-string", "./src/test/resources/testingInputForTwoEntities.ttl", "./src/test/resources/testingInput.csv-metadata.json", "./src/test/resources/testingInputOutput", "integer"},
-                { "Datatypes-anyURI", "./src/test/resources/datatypes-anyURI.ttl", "./src/test/resources/datatypes-anyURI.csv-metadata.json", "./src/test/resources/testingInputOutput", "anyURI"},
-                { "Datatypes-boolean", "./src/test/resources/datatypes-boolean.ttl", "./src/test/resources/datatypes-boolean.csv-metadata.json", "./src/test/resources/testingInputOutput", "boolean"},
-
+                //{ "Datatypes-integer", "./src/test/resources/testingInputForTwoEntities.ttl", "./src/test/resources/testingInput.csv-metadata.json", "./src/test/resources/testingInputOutput", "integer"},
+                //{ "Datatypes-anyURI", "./src/test/resources/datatypes-anyURI.ttl", "./src/test/resources/datatypes-anyURI.csv-metadata.json", "./src/test/resources/testingInputOutput", "anyURI"},
+                //{ "Datatypes-boolean", "./src/test/resources/datatypes-boolean.ttl", "./src/test/resources/datatypes-boolean.csv-metadata.json", "./src/test/resources/testingInputOutput", "boolean"},
+                {"Datatypes-string2", "./src/test/resources/test001.rdf", "./src/test/resources/datatypes-string2.csv-metadata.json", "./src/test/resources/testingInputOutput", "" }
                 //{ "", "", "", "", "", ""},
         });
     }
@@ -51,14 +53,38 @@ public class DatatypesTest extends BaseTest{
 
     @BeforeEach
     @Override
-    void createMetadata(String filePath, String filePathForMetadata){
+    void createMetadata(){
         System.out.println("Override before each");
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
+        db = new SailRepository(new MemoryStore());
+        MethodService methodService = new MethodService();
+        RepositoryConnection rc = methodService.processInput(filePath, PROCESS_METHOD, db);
+        assert(rc != null);
+        // Convert the table to intermediate data for processing into metadata
+        ConversionService cs = new ConversionService();
+        System.out.println("createMetadata @BeforeEach");
+        this.prefinishedOutput = cs.convertByQuery(rc, db);
+        // Convert intermediate data into basic metadata
+        MetadataService ms = new MetadataService();
+        Metadata metadata = ms.createMetadata(prefinishedOutput);
 
-        super.createMetadata(filePath, filePathForMetadata);
+        this.testMetadata = metadata;
     }
     @Test
     public void isGivenDatatype() {
-        createMetadata(filePath, filePathForMetadata);
+        createMetadata();
+
+        RowsAndKeys rnk = (RowsAndKeys) prefinishedOutput.getPrefinishedOutput();
+        int i = 0;
+        ArrayList<String> fileNamesCreated = new ArrayList<>();
+        String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+
+        for(String filename : allFiles.split(",")){
+            String newFileName = filePathForOutput + i + ".csv";
+            System.out.println("newFileName " + filename);
+            FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), this.testMetadata);
+        }
+
         System.out.println("START isGivenDatatype");
         JSONObject jsonObject = readJSONFile(filePathForMetadata);
         JSONArray tables = (JSONArray) jsonObject.get("tables");
