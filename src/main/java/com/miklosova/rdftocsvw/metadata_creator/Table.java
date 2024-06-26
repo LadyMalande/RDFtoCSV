@@ -2,11 +2,13 @@ package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.miklosova.rdftocsvw.convertor.Row;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.Value;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonldType("Table")
 public class Table {
     /**
      * Name for the file that is connected to the metadata

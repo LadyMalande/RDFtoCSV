@@ -1,8 +1,11 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
+import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
+
 /**
  * A transformation is a definition of how tabular data can be transformed into another format using a script or template.
  */
+@JsonldType("Template")
 public class Transformation {
     /**
      *

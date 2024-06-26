@@ -12,6 +12,7 @@ import com.miklosova.rdftocsvw.convertor.Row;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
 import ioinformarics.oss.jackson.module.jsonld.JsonldModule;
+import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 
@@ -29,6 +30,7 @@ import java.util.Map;
  *
  *  "@context": "http://www.w3.org/ns/csvw" included on basis of: https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#top-level-properties
  */
+@JsonldType("TableGroup")
 public class Metadata {
     /**
      * Array of files tied to the metadata file
