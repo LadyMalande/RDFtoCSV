@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.io.IOException;
 import java.util.*;
 
 @RunWith(Parameterized.class)
@@ -57,6 +58,8 @@ public class SameAsExampleInputProcessingTest {
                     valuesFromTurtle.add(solution.getValue("s"));
                 }
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -116,7 +119,7 @@ public class SameAsExampleInputProcessingTest {
     }
 
     @Test
-    public void test() {
+    public void test() throws IOException {
         prepareQuery();
         prepareConnectionAndResult();
         setUp();

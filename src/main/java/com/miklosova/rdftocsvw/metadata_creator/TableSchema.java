@@ -159,20 +159,25 @@ public class TableSchema {
     private String createAboutUrl(Value key0){
         Value type = rows.get(0).type;
         Value value = rows.get(0).id;
-        IRI valueIri = (IRI) value;
-        String theNameOfTheColumn;
-        if(Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))){
-            theNameOfTheColumn = getLastSectionOfIri(type);
-            // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-            this.aboutUrl = valueIri.getNamespace() + "{" + theNameOfTheColumn + "}";
-        } else{
-            theNameOfTheColumn = getLastSectionOfIri(value);
-            // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-            this.aboutUrl = valueIri.getNamespace() + "{" + theNameOfTheColumn + "}";
+        if(value.isBNode()){
+            return null;
+        } else {
+            IRI valueIri = (IRI) value;
+            String theNameOfTheColumn;
+            if (Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))) {
+                theNameOfTheColumn = getLastSectionOfIri(type);
+                // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
+                this.aboutUrl = valueIri.getNamespace() + "{" + theNameOfTheColumn + "}";
+            } else {
+                theNameOfTheColumn = getLastSectionOfIri(value);
+                // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
+                this.aboutUrl = valueIri.getNamespace() + "{" + theNameOfTheColumn + "}";
+            }
+            return theNameOfTheColumn;
         }
 
 
-        return theNameOfTheColumn;
+
     }
 
     private String getPartBeforeLastSection(Value key0) {

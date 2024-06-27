@@ -22,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -66,6 +67,8 @@ public class FormatsProcessingTest {
                     valuesFromTurtle.add(solution.getValue("s"));
                 }
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -113,7 +116,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsSameTrig() {
+    void csvIsSameTrig() throws IOException {
         String filePath = "src/test/resources/testingInput.trig";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -129,7 +132,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsSameHTML() {
+    void csvIsSameHTML() throws IOException {
         String filePath = "src/test/resources/testingInput.html";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -144,7 +147,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsSameJsonLD() {
+    void csvIsSameJsonLD() throws IOException {
         String filePath = "src/test/resources/testingInput.jsonld";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -159,7 +162,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsSameNq() {
+    void csvIsSameNq() throws IOException {
         String filePath = "src/test/resources/testingInput.nq";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -174,7 +177,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsSameNt() {
+    void csvIsSameNt() throws IOException {
         String filePath = "src/test/resources/testingInput.nt";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -189,7 +192,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsSameRDF() {
+    void csvIsSameRDF() throws IOException {
         String filePath = "src/test/resources/testingInput.rdf";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -204,7 +207,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromTurtle() {
+    void csvIsCreatedFromTurtle() throws IOException {
         String filePath = "src/test/resources/testingInput.ttl";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -219,7 +222,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromBrf() {
+    void csvIsCreatedFromBrf() throws IOException {
         String filePath = "src/test/resources/testingInput.brf";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -234,7 +237,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromNdjsonld() {
+    void csvIsCreatedFromNdjsonld() throws IOException {
         String filePath = "src/test/resources/testingInput.ndjsonld";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -248,7 +251,7 @@ public class FormatsProcessingTest {
     // HDT format writer/reader is not implemented in RDF4J due to licencing issues.
     @Test
     @Disabled
-    void csvIsCreatedFromHdt() {
+    void csvIsCreatedFromHdt() throws IOException {
         String filePath = "src/test/resources/testingInput.hdt";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -260,7 +263,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromN3() {
+    void csvIsCreatedFromN3() throws IOException {
         String filePath = "src/test/resources/testingInput.n3";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -272,7 +275,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromJsonl() {
+    void csvIsCreatedFromJsonl() throws IOException {
         String filePath = "src/test/resources/testingInput.jsonl";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -284,7 +287,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromNdjson() {
+    void csvIsCreatedFromNdjson() throws IOException {
         String filePath = "src/test/resources/testingInput.ndjson";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -296,7 +299,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromXhtml() {
+    void csvIsCreatedFromXhtml() throws IOException {
         String filePath = "src/test/resources/testingInput.xhtml";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -308,7 +311,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromRj() {
+    void csvIsCreatedFromRj() throws IOException {
         String filePath = "src/test/resources/testingInput.rj";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -320,7 +323,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromRdfs() {
+    void csvIsCreatedFromRdfs() throws IOException {
         String filePath = "src/test/resources/testingInput.rdfs";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -332,7 +335,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromOwl() {
+    void csvIsCreatedFromOwl() throws IOException {
         String filePath = "src/test/resources/testingInput.owl";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -344,7 +347,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromXml() {
+    void csvIsCreatedFromXml() throws IOException {
         String filePath = "src/test/resources/testingInput.xml";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -356,7 +359,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromTrigs() {
+    void csvIsCreatedFromTrigs() throws IOException {
         String filePath = "src/test/resources/testingInput.trigs";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -368,7 +371,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromTrix() {
+    void csvIsCreatedFromTrix() throws IOException {
         String filePath = "src/test/resources/testingInput.trix";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -380,7 +383,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromTtls() {
+    void csvIsCreatedFromTtls() throws IOException {
         String filePath = "src/test/resources/testingInput.ttls";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -394,7 +397,7 @@ public class FormatsProcessingTest {
 
     @Test
     @Disabled
-    void csvIsCreatedFromHTML() {
+    void csvIsCreatedFromHTML() throws IOException {
         String filePath = "src/test/resources/typy-tříděného-odpadu.html";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
@@ -406,7 +409,7 @@ public class FormatsProcessingTest {
     }
 
     @Test
-    void csvIsCreatedFromURI() {
+    void csvIsCreatedFromURI() throws IOException {
         String filePath = "https://gist.githubusercontent.com/kal/ee1260ceb462d8e0d5bb/raw/1364c2bb469af53323fdda508a6a579ea60af6e4/log_sample.ttl";
         System.out.println(filePath.toString());
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);

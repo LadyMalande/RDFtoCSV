@@ -1,9 +1,6 @@
 package com.miklosova.rdftocsvw.support;
 
-import com.miklosova.rdftocsvw.convertor.ConversionService;
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
-import com.miklosova.rdftocsvw.convertor.RowAndKey;
-import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
+import com.miklosova.rdftocsvw.convertor.*;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
@@ -12,19 +9,36 @@ import org.apache.log4j.BasicConfigurator;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args){
         ConfigurationManager.loadSettingsFromInputToConfigFile(args);
         String RDFFileToRead = args[0];
-        String delimiter = args[1];
-        String CSVFileToWriteTo = args[2];
-        String conversionMethod = args[3];
-        String methodChoice = "rdf4j";
+        System.out.println(RDFFileToRead);
+        RDFtoCSV rdFtoCSV;
+        if(args.length < 2){
+            rdFtoCSV = new RDFtoCSV(RDFFileToRead);
+        } else {
+            rdFtoCSV = new RDFtoCSV(RDFFileToRead);
+        }
+        try{
+            rdFtoCSV.convertToZip();
+        } catch(RDFParseException rdfParseException){
+            String newFileName = rdFtoCSV.getOutputFileName() + ".csv";
+            File f = new File(newFileName);
+            System.out.println(rdfParseException.getMessage());
+        } catch (IOException ex){
+            System.out.println(ex.getMessage());
+        }
+
         // for log4j
+        /*
         BasicConfigurator.configure();
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, conversionMethod);
 
@@ -63,6 +77,8 @@ public class Main {
         // Finalize the output to .zip
         ZipOutputProcessor zop = new ZipOutputProcessor();
         zop.processCSVToOutput(prefinishedOutput);
+
+         */
 
     }
 

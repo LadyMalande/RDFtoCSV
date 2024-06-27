@@ -1,8 +1,11 @@
 package com.miklosova.rdftocsvw.input_processor;
 
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.*;
+import org.eclipse.jetty.util.IO;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFParseException;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -33,7 +36,7 @@ public class ParsingService {
     private TurtlestarParser turtlestarParser;
     private TrigstarParser trigstarParser;
 
-    public RepositoryConnection processInput(RepositoryConnection conn, File fileToRead) {
+    public RepositoryConnection processInput(RepositoryConnection conn, File fileToRead) throws RDFParseException, IOException {
         String fileName = fileToRead.getName();
         System.out.println("String fileName = fileToRead.getName();: " + fileName);
         inputGateway = new InputGateway();

@@ -4,21 +4,18 @@ import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 
 import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class ZipOutputProcessor implements IOutputProcessor{
+public class ZipOutputProcessor implements IOutputProcessor<ZipOutputStream>{
     @Override
-    public FinalizedOutput processCSVToOutput(PrefinishedOutput prefinishedOutput) {
+    public FinalizedOutput<ZipOutputStream> processCSVToOutput(PrefinishedOutput<?> prefinishedOutput) {
         ZipOutputStream zippedOutput = zipMultipleFiles(prefinishedOutput);
 
-        return new FinalizedOutput(zippedOutput);
+        return new FinalizedOutput<>(zippedOutput);
     }
 
     private ZipOutputStream zipPrefinishedOutput(PrefinishedOutput prefinishedOutput){

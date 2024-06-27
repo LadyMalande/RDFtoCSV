@@ -5,7 +5,8 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
 
 import java.io.File;
+import java.io.IOException;
 
 public interface IInputParsingMethod {
-    public RepositoryConnection processInput(File fileToParse, Repository db);
+    public RepositoryConnection processInput(File fileToParse, Repository db) throws IOException;
 }

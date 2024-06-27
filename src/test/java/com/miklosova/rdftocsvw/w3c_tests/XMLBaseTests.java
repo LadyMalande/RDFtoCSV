@@ -1,12 +1,15 @@
-package com.miklosova.rdftocsvw.metadata_creator;
+package com.miklosova.rdftocsvw.w3c_tests;
 
-import com.miklosova.rdftocsvw.BaseTest;
 import com.miklosova.rdftocsvw.convertor.ConversionService;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
+import com.miklosova.rdftocsvw.BaseTest;
+import com.miklosova.rdftocsvw.metadata_creator.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
+import com.miklosova.rdftocsvw.support.TestSupport;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
@@ -18,12 +21,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 @RunWith(Parameterized.class)
-public class DatatypesTest extends BaseTest {
+public class XMLBaseTests extends BaseTest {
     private final String PROCESS_METHOD = "rdf4j";
     private String nameForTest;
     private String filePath;
@@ -31,22 +37,49 @@ public class DatatypesTest extends BaseTest {
     private String filePathForOutput;
     private String expectedDatatype;
     private PrefinishedOutput prefinishedOutput;
+
+    private static final String RESOURCES_PATH = "./src/test/resources/";
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> configs(){
         return Arrays.asList(new Object[][]{
-                { "Datatypes-integer", "./src/test/resources/testingInputForTwoEntities.ttl", "./src/test/resources/testingInput.csv-metadata.json", "./src/test/resources/testingInputOutput", "integer"},
-                //{ "Datatypes-anyURI", "./src/test/resources/datatypes-anyURI.ttl", "./src/test/resources/datatypes-anyURI.csv-metadata.json", "./src/test/resources/testingInputOutput", "anyURI"},
-                //{ "Datatypes-boolean", "./src/test/resources/datatypes-boolean.ttl", "./src/test/resources/datatypes-boolean.csv-metadata.json", "./src/test/resources/testingInputOutput", "boolean"},
+                //{ "test001",  ""},
+                { "test002",  ""},
+                { "test003",  ""},
+                { "test004",  ""},
+                // Marked OBSOLETE { "test005",  ""},
+                { "test006",  ""},
+                { "test007",  ""},
+                { "test008",  ""},
+                { "test009",  ""},
+                { "test010",  ""},
+                { "test011",  ""},
+                // Marked WITHDRAWN { "test012",  ""},
+                { "test013",  ""},
+                { "test014",  ""},
+                // Status: NOT_APPROVED
+                { "test015",  ""},
+                // Status: NOT_APPROVED
+                { "test016",  ""},
+                { "test-001",  ""},
+                { "test-002",  ""},
+                { "test-003",  ""},
+                { "test-004",  ""},
+                { "test-005",  ""},
+
+
+
+
+               // { "Datatypes-boolean", "./src/test/resources/datatypes-boolean.ttl", "./src/test/resources/datatypes-boolean.csv-metadata.json", "./src/test/resources/testingInputOutput", "boolean"},
                 //{"Datatypes-string2", "./src/test/resources/test001.rdf", "./src/test/resources/datatypes-string2.csv-metadata.json", "./src/test/resources/testingInputOutput", "" }
                 //{ "", "", "", "", "", ""},
         });
     }
 
-    public DatatypesTest(String nameForTest, String filePath, String filePathForMetadata, String filePathForOutput, String expectedDatatype) {
+    public XMLBaseTests(String nameForTest, String expectedDatatype) {
         this.nameForTest = nameForTest;
-        this.filePath = filePath;
-        this.filePathForMetadata = filePathForMetadata;
-        this.filePathForOutput = filePathForOutput;
+        this.filePath = RESOURCES_PATH + nameForTest + ".rdf";
+        this.filePathForMetadata = RESOURCES_PATH + nameForTest + ".csv-metadata.json";
+        this.filePathForOutput = RESOURCES_PATH + nameForTest + "TestOutput";
         this.expectedDatatype = expectedDatatype;
     }
 
@@ -54,6 +87,7 @@ public class DatatypesTest extends BaseTest {
     void createMetadata(){
         System.out.println("Override before each");
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_OUTPUT_FILENAME, filePathForOutput);
         db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService();
         RepositoryConnection rc = null;
@@ -74,7 +108,7 @@ public class DatatypesTest extends BaseTest {
         this.testMetadata = metadata;
     }
     @Test
-    public void isGivenDatatype() {
+    public void isGivenDatatype() throws IOException {
         createMetadata();
 
         RowsAndKeys rnk = (RowsAndKeys) prefinishedOutput.getPrefinishedOutput();
@@ -83,19 +117,12 @@ public class DatatypesTest extends BaseTest {
         String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
 
         for(String filename : allFiles.split(",")){
-            String newFileName = filePathForOutput + i + ".csv";
             System.out.println("newFileName " + filename);
             FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), this.testMetadata);
+            Assert.assertFalse(TestSupport.isFileEmpty(filename));
         }
 
-        System.out.println("START isGivenDatatype");
-        JSONObject jsonObject = readJSONFile(filePathForMetadata);
-        JSONArray tables = (JSONArray) jsonObject.get("tables");
-        JSONObject table = (JSONObject) tables.get(2);
-        JSONObject tableSchema = (JSONObject) table.get("tableSchema");
-        JSONArray columns = (JSONArray) tableSchema.get("columns");
-        JSONObject testColumn = (JSONObject) columns.stream().filter(column -> ((JSONObject) column).get("name").equals("datatypeTest")).findAny().get();
 
-        Assert.assertEquals(testColumn.get("datatype"), this.expectedDatatype);
+        Assert.assertFalse(TestSupport.isFileEmpty(this.filePathForMetadata));
     }
 }

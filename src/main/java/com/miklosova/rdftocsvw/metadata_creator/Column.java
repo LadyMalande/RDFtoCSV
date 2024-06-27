@@ -206,9 +206,14 @@ public class Column {
 
     public void addFirstColumn(Value type, Value value) {
         IRI typeIri = (IRI) type;
-        IRI valueIri = (IRI) value;
 
-        this.valueUrl = valueIri.getNamespace() +  "{" + this.name + "}";
+        if(value.isBNode()){
+
+        } else{
+            IRI valueIri = (IRI) value;
+            this.valueUrl = valueIri.getNamespace() +  "{" + this.name + "}";
+        }
+
         if(Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))){
             this.titles = typeIri.getLocalName();
             this.name = typeIri.getLocalName();

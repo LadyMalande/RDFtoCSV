@@ -31,9 +31,8 @@ import org.jruby.runtime.Block;
 import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
@@ -145,6 +144,24 @@ public class TestSupport {
         return testResultIsSubset(testResult, originalResult);
     }
 
+    public static boolean isFileEmpty(String fileName){
+        boolean isEmpty = true;
+
+        BufferedReader br;
+        String readLine;
+        try{
+            br = new BufferedReader(new java.io.FileReader(fileName));
+            readLine = br.readLine();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if(readLine != null){
+            isEmpty = false;
+        }
+        return isEmpty;
+    }
+
     private static boolean testResultIsSubset(ArrayList<BindingSet> testResult, ArrayList<BindingSet> originalResult) {
         System.out.println("in testResultIsSubset ");
         if(testResult.stream().count() == 0 ){
@@ -187,7 +204,12 @@ public class TestSupport {
         Repository db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService();
         System.out.println("connectToDbAndPrepareQuery " + filePath);
-        RepositoryConnection rc = methodService.processInput(filePath, methodName, db);
+        RepositoryConnection rc = null;
+        try {
+            rc = methodService.processInput(filePath, methodName, db);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         assert(rc != null);
         // Convert the table to intermediate data for processing into metadata
 

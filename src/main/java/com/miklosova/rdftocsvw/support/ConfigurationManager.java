@@ -5,6 +5,8 @@ import java.util.Properties;
 
 public class ConfigurationManager {
 
+    public static final String READ_METHOD = "converion.readMethod";
+    public static final String TABLE_METHOD = "conversion.tableMethod";
     private static final String CONFIG_FILE_NAME = "./src/main/resources/app.config";
     public static final String INTERMEDIATE_FILE_NAMES = "app.filesInProgress";
     public static final String OUTPUT_ZIPFILE_NAME = "output.zipname";
@@ -54,11 +56,21 @@ public class ConfigurationManager {
         }
 
         String RDFFileToRead = args[0];
-        String delimiter = args[1];
-        String CSVFileToWriteTo = args[2];
-        String conversionMethod = args[3];
-        prop.setProperty("input.delimiter", delimiter);
-        System.out.println("Set configuration of input.delimiter to: " + prop.getProperty("input.delimiter"));
+        String CSVFileToWriteTo = null;
+        String conversionMethod = null;
+        if(args.length == 2){
+            CSVFileToWriteTo = args[1];
+            
+        } else if(args.length == 3){
+            CSVFileToWriteTo = args[1];
+            conversionMethod = args[2];
+        } else{
+            
+        }
+        if(CSVFileToWriteTo == null){
+            CSVFileToWriteTo = "CSVfileToWriteTo";
+        }
+        conversionMethod = (conversionMethod == null) ? "splitQuery" : conversionMethod;
         prop.setProperty("input.outputFileName", CSVFileToWriteTo);
         System.out.println("Set configuration of input.outputFileName to: " + prop.getProperty("input.outputFileName"));
         prop.setProperty("conversion.method", conversionMethod);

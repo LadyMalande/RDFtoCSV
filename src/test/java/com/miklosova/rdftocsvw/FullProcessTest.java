@@ -20,6 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -61,7 +62,12 @@ public class FullProcessTest {
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_OUTPUT_FILENAME, filePathForOutput);
         Repository db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService();
-        RepositoryConnection rc = methodService.processInput(filePath, methodName, db);
+        RepositoryConnection rc = null;
+        try {
+            rc = methodService.processInput(filePath, methodName, db);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         assert(rc != null);
         // Convert the table to intermediate data for processing into metadata
         ConversionService cs = new ConversionService();

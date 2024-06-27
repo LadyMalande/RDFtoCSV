@@ -14,6 +14,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -86,12 +87,13 @@ public class FileWrite {
         FileWrite.writeToTheFile(f, sb1.toString());
         
         for(Row row : rows){
-            
+            System.out.println("rows number " + rows.size());
             StringBuilder sb = new StringBuilder();
             appendIdByValuePattern(row, metadata, sb);
-
+            System.out.println("orderOfColumnKeys number " + orderOfColumnKeys.size());
             boolean firstColumn = true;
             for(Column column : orderOfColumnKeys){
+                System.out.println("Columns by keys " + column.getName());
                 if(!Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES)) && firstColumn) {
                     firstColumn = false;
                 } else{
@@ -115,8 +117,18 @@ public class FileWrite {
     private static void appendColumnValueByKey(Column column, Row row, StringBuilder sb) {
         // Simple go through
         IRI iri2 = iri(column.getPropertyUrl());
+        System.out.println("Column  name= " + column.getName() );
+        System.out.println("Column  name= " + column.getTitles() );
+        System.out.println("Column  name= " + column.getLang() );
+        System.out.println("Column  name= " + column.getVirtual() );
+        System.out.println("Column  name= " + column.getDatatype() );
+        System.out.println("Column  entryset empty = " + row.map.entrySet().isEmpty() );
+        System.out.println("Column iri(column.getPropertyUrl()) = " + iri2 );
         if(iri2 == null){
             iri2 = iri(column.getValueUrl());
+        }
+        for(Map.Entry<Value, List<Value> > row2: row.map.entrySet()){
+            System.out.println(row2.getKey() + " val= " + row2.getValue().get(0));
         }
         List<Value> values = row.map.get(iri2);
         if(column.getLang() == null){
@@ -183,10 +195,16 @@ public class FileWrite {
     }
 
     private static void appendIdByValuePattern(Row row, Metadata metadata, StringBuilder sb) {
-        IRI iri = (IRI) row.id;
-        String value = iri.getLocalName();
-        sb.append(value);
-        sb.append(",");
+        if(row.id.isBNode()){
+            sb.append(row.id);
+            sb.append(",");
+        } else {
+            IRI iri = (IRI) row.id;
+            String value = iri.getLocalName();
+            sb.append(value);
+            sb.append(",");
+        }
+
     }
 
     private static List<Column> addHeadersFromMetadata(String fileName, Metadata metadata, StringBuilder sb1) {

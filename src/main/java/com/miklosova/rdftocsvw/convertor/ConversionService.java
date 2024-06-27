@@ -14,7 +14,7 @@ public class ConversionService {
     public PrefinishedOutput convertByQuery(RepositoryConnection rc, Repository db) {
 
         conversionGateway = new ConversionGateway();
-        processConversionType( db);
+        processConversionType(db);
         PrefinishedOutput convertedInput = conversionGateway.processInput(rc);
         System.out.println("Processed file: \n" + convertedInput);
         return convertedInput;

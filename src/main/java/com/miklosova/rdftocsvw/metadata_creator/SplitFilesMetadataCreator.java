@@ -27,6 +27,7 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
         this.allRows = new ArrayList<>();
         this.fileNumberX = 0;
         CSVFileTOWriteTo = ConfigurationManager.getVariableFromConfigFile("input.outputFileName");
+        System.out.println("CSVFileTOWriteTo = " + CSVFileTOWriteTo);
     }
 
     @Override
