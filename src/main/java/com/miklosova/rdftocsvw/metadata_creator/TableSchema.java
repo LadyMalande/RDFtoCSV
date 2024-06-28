@@ -171,7 +171,7 @@ public class TableSchema {
             } else {
                 theNameOfTheColumn = getLastSectionOfIri(value);
                 // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                this.aboutUrl = valueIri.getNamespace() + "{" + theNameOfTheColumn + "}";
+                this.aboutUrl = valueIri.getNamespace() + "{" + "Subjekt" + "}";
             }
             return theNameOfTheColumn;
         }

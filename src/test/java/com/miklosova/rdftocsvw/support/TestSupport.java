@@ -1,7 +1,11 @@
 package com.miklosova.rdftocsvw.support;
 
 import com.miklosova.rdftocsvw.convertor.ConversionService;
+import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
+import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
+import com.miklosova.rdftocsvw.metadata_creator.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
 import org.eclipse.rdf4j.query.BindingSet;
@@ -30,6 +34,7 @@ import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Block;
 import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
+import org.junit.Assert;
 
 import java.io.*;
 import java.io.FileReader;
@@ -162,6 +167,16 @@ public class TestSupport {
         return isEmpty;
     }
 
+    public static void writeToFile(PrefinishedOutput prefinishedOutput, Metadata metadata){
+        RowsAndKeys rnk = (RowsAndKeys) prefinishedOutput.getPrefinishedOutput();
+        String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+
+        for(String filename : allFiles.split(",")){
+            System.out.println("newFileName " + filename);
+            FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), metadata);
+        }
+    }
+
     private static boolean testResultIsSubset(ArrayList<BindingSet> testResult, ArrayList<BindingSet> originalResult) {
         System.out.println("in testResultIsSubset ");
         if(testResult.stream().count() == 0 ){
@@ -197,6 +212,33 @@ public class TestSupport {
             }
         }
         return true;
+    }
+
+    public static PrefinishedOutput<RowsAndKeys> createPrefinishedOutput(String filePath, String filePathForMetadata, String filePathForOutput, String PROCESS_METHOD, Repository db ){
+        System.out.println("Override before each");
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_OUTPUT_FILENAME, filePathForOutput);
+
+        MethodService methodService = new MethodService();
+        RepositoryConnection rc = null;
+        try {
+            rc = methodService.processInput(filePath, PROCESS_METHOD, db);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        assert(rc != null);
+        // Convert the table to intermediate data for processing into metadata
+        ConversionService cs = new ConversionService();
+        System.out.println("createMetadata @BeforeEach");
+        return cs.convertByQuery(rc, db);
+
+    }
+    public static Metadata createMetadata(PrefinishedOutput<RowsAndKeys> prefinishedOutput){
+
+        // Convert intermediate data into basic metadata
+        MetadataService ms = new MetadataService();
+
+        return ms.createMetadata(prefinishedOutput);
     }
 
     public static ArrayList<BindingSet> connectToDbAndPrepareQuery(String filePath, String methodName, String queryString){

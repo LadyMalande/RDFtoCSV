@@ -160,8 +160,10 @@ public class SplitFilesQueryConverter implements IQueryParser{
                     for (BindingSet solution : result) {
                         // ... and print out the value of the variable binding for ?s and ?n
                         System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p"));
-
-                        roots.add(solution.getValue("s"));
+                        System.out.println("?subject = " + solution.getValue("s") + " added to roots");
+                        if(!roots.contains(solution.getValue("s"))){
+                            roots.add(solution.getValue("s"));
+                        }
                     }
 
                     //countDominantPredicates(conn, roots);
@@ -171,6 +173,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
                     System.out.println("Before recursiveQueryForFiles(conn, dominantType, askForTypes)");
                     recursiveQueryForFiles(conn, dominantType, askForTypes);
                     System.out.println("After recursiveQueryForFiles(conn, dominantType, askForTypes)");
+
 /*
                 // For all the found roots, make rows. Roots must have the same rdf:type
                 for (String root : roots) {
@@ -187,6 +190,10 @@ public class SplitFilesQueryConverter implements IQueryParser{
                 }
             }
             System.out.println("allRows size #: " + allRows.size());
+            allKeys.forEach(k -> System.out.print("key: " + k + " "));
+            System.out.println();
+            allRows.forEach(k -> System.out.print("Row: " + k.get(0) + " "));
+            System.out.println();
             for(int i = 0; i < allRows.size(); i++){
                 System.out.println("Adding rowAndKey #: " + i);
                 gen.prefinishedOutput.rowsAndKeys.add(new RowAndKey(allKeys.get(i),allRows.get(i)));
@@ -322,6 +329,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
 
                     if(!keys.contains(solution.getValue("p"))){
                         keys.add(solution.getValue("p"));
+                        System.out.println("Key added from solution: " + solution.getValue("p").toString() );
                     }
 
                 System.out.println("BindingSet solution: result " + solution.getValue("p").toString() + " " + solution.getValue("o").toString());

@@ -118,18 +118,20 @@ public class FileWrite {
         // Simple go through
         IRI iri2 = iri(column.getPropertyUrl());
         System.out.println("Column  name= " + column.getName() );
-        System.out.println("Column  name= " + column.getTitles() );
-        System.out.println("Column  name= " + column.getLang() );
-        System.out.println("Column  name= " + column.getVirtual() );
-        System.out.println("Column  name= " + column.getDatatype() );
+        System.out.println("Column  titles= " + column.getTitles() );
+        System.out.println("Column  lang= " + column.getLang() );
+        System.out.println("Column  virtual= " + column.getVirtual() );
+        System.out.println("Column  datatype= " + column.getDatatype() );
         System.out.println("Column  entryset empty = " + row.map.entrySet().isEmpty() );
         System.out.println("Column iri(column.getPropertyUrl()) = " + iri2 );
         if(iri2 == null){
             iri2 = iri(column.getValueUrl());
         }
         for(Map.Entry<Value, List<Value> > row2: row.map.entrySet()){
-            System.out.println(row2.getKey() + " val= " + row2.getValue().get(0));
+            System.out.println(row2.getKey() + " val= " + row2.getValue().get(0)+ " row get value size " + row2.getValue().size());
         }
+        System.out.println(row.map);
+        System.out.println("iri2 = " + iri2);
         List<Value> values = row.map.get(iri2);
         if(column.getLang() == null){
             // TODO if it is IRI, parse it by valueURL. If it is literal, just write down its Label.
