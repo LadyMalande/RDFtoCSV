@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(Parameterized.class)
-public class RDFCoreDatatypes extends BaseTest {
+public class CSVWRDFTests extends BaseTest {
     private static final CharSequence EXCEPTION_MESSAGE = "OR 'NO TRIPLES FOUND'";
     private final String PROCESS_METHOD = "rdf4j";
     private String nameForTest;
@@ -38,27 +38,39 @@ public class RDFCoreDatatypes extends BaseTest {
 
     private String expectedException;
 
-    private static final String RESOURCES_PATH = "./src/test/resources/RDFCoreDatatypes/";
+    private static final String RESOURCES_PATH = "./src/test/resources/CSVWRDFTests/";
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> configs(){
+        Collection<Object[]> conf = new ArrayList<>();
+        for(int i = 1; i < 308; i++)
+        {
+            Object[] array = new Object[3];
+            String extra = "";
+            if(i < 10){
+                extra = "00";
+            } else if(i > 9 && i < 100){
+                extra = "0";
+            }
+            array[0] = "test" + extra + i + ".ttl";
+            conf.add(array);
+        }
+        return conf;
+        /*
         return Arrays.asList(new Object[][]{
 
                 //{ "empty",  "", new StringBuilder().append("RuntimeException").toString()},
-              /*
-               { "test001",  "", null},
-              { "test001.rdf",  "", null},
-              { "test002",  "", null},
-              { "test002.rdf",  "", null},
-
-               */
-              { "test002b",  "", null},
-              { "test003a",  "", null},
-              { "test003b",  "", null},
-              { "test004a",  "", null},
-              { "test004b",  "", null},
-              { "test004c",  "", null},
-              { "test005a",  "", null},
-              { "test005b",  "", null},
+                { "test001",  ""},
+              { "test001.rdf",  ""},
+              { "test002",  ""},
+              { "test002.rdf",  ""},
+              { "test002b",  ""},
+              { "test003a",  ""},
+              { "test003b",  ""},
+              { "test004a",  ""},
+              { "test004b",  ""},
+              { "test004c",  ""},
+              { "test005a",  ""},
+              { "test005b",  ""},
 
 
                 { "test006",  "", null},
@@ -72,14 +84,15 @@ public class RDFCoreDatatypes extends BaseTest {
                 { "test011a",  "", null},
                 { "test011b",  "", null},
         });
+*/
     }
 
-    public RDFCoreDatatypes(String nameForTest, String expectedDatatype, String expectedException) {
+    public CSVWRDFTests(String nameForTest, String expectedDatatype, String expectedException) {
         this.nameForTest = nameForTest;
         if(nameForTest.endsWith(".rdf")){
             this.filePath = RESOURCES_PATH + nameForTest;
         } else{
-            this.filePath = RESOURCES_PATH + nameForTest + ".nt";
+            this.filePath = RESOURCES_PATH + nameForTest;
         }
         this.filePathForMetadata = RESOURCES_PATH + nameForTest + ".csv-metadata.json";
         this.filePathForOutput = RESOURCES_PATH + nameForTest + "TestOutput";
@@ -99,7 +112,7 @@ public class RDFCoreDatatypes extends BaseTest {
             System.out.println("Expecting exception ");
             switch(expectedException){
                 case "RuntimeException" : Assert.assertThrows(RuntimeException.class, this::createPrefinishedOutputAndMetadata);
-                break;
+                    break;
                 case "RDFParseException" : Assert.assertThrows(RDFParseException.class, this::createPrefinishedOutputAndMetadata);
             }
             //Assert.assertTrue(exception.getMessage().contains(EXCEPTION_MESSAGE));
@@ -117,3 +130,4 @@ public class RDFCoreDatatypes extends BaseTest {
         }
     }
 }
+

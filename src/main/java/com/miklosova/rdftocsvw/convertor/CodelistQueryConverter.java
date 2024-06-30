@@ -132,11 +132,11 @@ public class CodelistQueryConverter implements IQueryParser{
         for(Row row : rows){
             ArrayList<Value> missingKeys = new ArrayList<>();
             for(Value key : keys){
-                if(!row.map.keySet().contains(key)){
+                if(!row.columns.keySet().contains(key)){
                     missingKeys.add(key);
                 }
             }
-            missingKeys.forEach(key -> row.map.put(key, null));
+            missingKeys.forEach(key -> row.columns.put(key, null));
         }
     }
 
@@ -149,13 +149,17 @@ public class CodelistQueryConverter implements IQueryParser{
 
                 System.out.println("recursiveQueryForSubjects p=" + solution.getValue("p") + " o=" + solution.getValue("o"));
                 if(root.id.equals(subject)){
-                    if(root.map.get(solution.getValue("p")) != null){
+                    if(root.columns.get(solution.getValue("p")) != null){
                         //List<Value> oldStringValue = root.map.get(solution.getBinding("p").getValue());
-                        List<Value> oldStringValue = new ArrayList<>(root.map.get(solution.getBinding("p").getValue()));
+                        List<Value> oldStringValue = new ArrayList<>(root.columns.get(solution.getBinding("p").getValue()).values);
                         oldStringValue.add(solution.getBinding("o").getValue());
-                        root.map.put(solution.getBinding("p").getValue(), oldStringValue );
+                        TypeIdAndValues oldTypeAndValues = root.columns.get(solution.getBinding("p").getValue());
+                        oldTypeAndValues.values = oldStringValue;
+                        root.columns.put(solution.getBinding("p").getValue(), oldTypeAndValues );
                     } else{
-                        root.map.put(solution.getValue("p"), new ArrayList<>(Arrays.asList(solution.getBinding("o").getValue())));
+                        TypeOfValue newType = (solution.getBinding("o").getValue().isIRI()) ? TypeOfValue.IRI :
+                                (solution.getBinding("o").getValue().isBNode()) ? TypeOfValue.BNODE : TypeOfValue.LITERAL;
+                        root.columns.put(solution.getValue("p"),new TypeIdAndValues( subject, newType, new ArrayList<>(Arrays.asList(solution.getBinding("o").getValue()))));
                     }
 
                     if(!keys.contains(solution.getValue("p"))){
@@ -163,8 +167,9 @@ public class CodelistQueryConverter implements IQueryParser{
                     }
                 } else {
                 // TODO Provide sensible headers for all data in just one csv
-
-                    root.map.put(solution.getValue("p"), List.of(solution.getValue("o")));
+                    TypeOfValue newType = (solution.getBinding("o").getValue().isIRI()) ? TypeOfValue.IRI :
+                            (solution.getBinding("o").getValue().isBNode()) ? TypeOfValue.BNODE : TypeOfValue.LITERAL;
+                    root.columns.put(solution.getValue("p"), new TypeIdAndValues(subject, newType, new ArrayList<>(Arrays.asList(solution.getBinding("o").getValue()))));
                     if(!keys.contains(solution.getValue("p"))) {
 
                         keys.add(solution.getValue("p"));

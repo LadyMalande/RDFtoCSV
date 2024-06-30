@@ -19,7 +19,6 @@ import org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 @Log
@@ -129,15 +128,16 @@ public class BasicQueryConverter implements IQueryParser{
         for(Row row : rows){
             ArrayList<Value> missingKeys = new ArrayList<>();
             for(Value key : keys){
-                if(!row.map.keySet().contains(key)){
+                if(!row.columns.keySet().contains(key)){
                     missingKeys.add(key);
                 }
             }
-            missingKeys.forEach(key -> row.map.put(key, null));
+            missingKeys.forEach(key -> row.columns.put(key, null));
         }
     }
 
     private void recursiveQueryForSubjects(RepositoryConnection conn,Row root, Value object,String predicateOfIRI){
+        /*
         String queryForSubjects = createQueryForSubjects(object);
         TupleQuery query = conn.prepareTupleQuery(queryForSubjects);
         try (TupleQueryResult result = query.evaluate()) {
@@ -156,15 +156,17 @@ public class BasicQueryConverter implements IQueryParser{
 
                         keys.add(keyOfNextLevels);
                     }
-                    */
-                }
 
+
+                }
+*//*
                 System.out.println(solution.getValue("p").toString() + " " + solution.getValue("s").toString());
                 if(solution.getValue("s").isIRI()){
                     recursiveQueryForSubjects(conn, root, solution.getValue("s"), solution.getValue("p").toString());
                 }
             }
         }
+                */
     }
 
     private String createQueryForSubjects(Value object) {

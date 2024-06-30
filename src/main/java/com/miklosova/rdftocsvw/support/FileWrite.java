@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.support;
 
 import com.miklosova.rdftocsvw.convertor.Row;
+import com.miklosova.rdftocsvw.convertor.TypeIdAndValues;
 import com.miklosova.rdftocsvw.metadata_creator.Column;
 import com.miklosova.rdftocsvw.metadata_creator.Table;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
@@ -52,8 +53,8 @@ public class FileWrite {
             sb.append(row.id).append(delimiter);
             for(Value key : keys){
                 //System.out.println("Number of keys: " + keys.size());
-                sb.append(row.map.get(key)).append(delimiter);
-                System.out.println("in entry set " + row.map.get(key) + ".");
+                sb.append(row.columns.get(key)).append(delimiter);
+                System.out.println("in entry set " + row.columns.get(key) + ".");
 
             }
 
@@ -122,24 +123,32 @@ public class FileWrite {
         System.out.println("Column  lang= " + column.getLang() );
         System.out.println("Column  virtual= " + column.getVirtual() );
         System.out.println("Column  datatype= " + column.getDatatype() );
-        System.out.println("Column  entryset empty = " + row.map.entrySet().isEmpty() );
+        System.out.println("Column  entryset empty = " + row.columns.entrySet().isEmpty() );
         System.out.println("Column iri(column.getPropertyUrl()) = " + iri2 );
         if(iri2 == null){
             iri2 = iri(column.getValueUrl());
         }
-        for(Map.Entry<Value, List<Value> > row2: row.map.entrySet()){
-            System.out.println(row2.getKey() + " val= " + row2.getValue().get(0)+ " row get value size " + row2.getValue().size());
+        for(Map.Entry<Value, TypeIdAndValues> row2: row.columns.entrySet()){
+            System.out.println(row2.getKey() + " val= " + row2.getValue().values.get(0)+ " row get value size " + row2.getValue().values.size());
         }
-        System.out.println(row.map);
+        System.out.println(row.columns);
         System.out.println("iri2 = " + iri2);
-        List<Value> values = row.map.get(iri2);
-        if(column.getLang() == null){
+        List<Value> values;
+        if(row.columns.get(iri2) == null){
+            values = null;
+        } else {
+             values = row.columns.get(iri2).values;
+        }
+        if (column.getLang() == null){
+
             // TODO if it is IRI, parse it by valueURL. If it is literal, just write down its Label.
             System.out.println("column.getPropertyUrl() = " + column.getPropertyUrl());
-            row.map.entrySet().forEach(entry -> System.out.println(entry.getKey() + ": " + entry.getValue()));
+            row.columns.entrySet().forEach(entry -> System.out.println(entry.getKey() + ": " + entry.getValue().values));
 
-            assert values != null;
-            if(values.get(0).isIRI()){
+            if(values == null){
+                // The Column is empty, put empty Value to the file
+                sb.append("");
+            } else if(values.get(0).isIRI()){
                 if(values.size() == 1){
                     IRI iri = (IRI) values.get(0);
                     sb.append(iri.getLocalName());
@@ -167,6 +176,21 @@ public class FileWrite {
                     sb.deleteCharAt(sb.length() - 1);
                     sb.append('"');
                 }
+            } else {
+                if(values.size() == 1){
+                    BNode bnode = (BNode) values.get(0);
+                    sb.append(bnode.getID());
+                } else{
+                    // There are multiple values from the language, we need to enclose them in " "
+                    sb.append('"');
+                    values.forEach(val -> {
+                        String strValue = ((BNode)val).getID();
+                        sb.append(strValue);
+                        sb.append(",");});
+                    sb.deleteCharAt(sb.length() - 1);
+                    sb.append('"');
+                }
+
             }
         }
         // Language versions split

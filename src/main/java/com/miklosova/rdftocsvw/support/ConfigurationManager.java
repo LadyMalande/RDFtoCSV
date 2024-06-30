@@ -17,6 +17,12 @@ public class ConfigurationManager {
     public static final String OUTPUT_METADATA_FILE_NAME = "output.metadataFileName";
     public static final String CONVERSION_METHOD = "conversion.method";
 
+    /**
+     * Default name for metadata file in case the metadata does not adhere to csv quivalent file name
+     * According to https://www.w3.org/TR/tabular-data-primer/#h-metadata
+     */
+    public static final String DEFAULT_METADATA_FILENAME = "csv-metadata.json";
+
     public static void saveVariableToConfigFile(String variableName, String value){
         Properties prop = new Properties();
         try (FileInputStream fis = new FileInputStream(CONFIG_FILE_NAME)) {
@@ -36,6 +42,11 @@ public class ConfigurationManager {
         }
     }
 
+    /**
+     * Get a parameter by its key from app.config file.
+     * @param variableName The name of the key to retrieve from the app.config map of parameters.
+     * @return
+     */
     public static String getVariableFromConfigFile(String variableName){
         Properties prop = new Properties();
         try (FileInputStream fis = new FileInputStream(CONFIG_FILE_NAME)) {
@@ -47,7 +58,14 @@ public class ConfigurationManager {
         return prop.getProperty(variableName);
     }
 
+    /**
+     * Set the configuration parameters in app.config
+     * Set defaults if none are provided
+     * Set parameters given in args if args are provided
+     * @param args Parameters provided in command line/parameters of conversion
+     */
     public static void loadSettingsFromInputToConfigFile(String[] args){
+        String metadataFileName = null;
         Properties prop = new Properties();
         try (FileInputStream fis = new FileInputStream(CONFIG_FILE_NAME)) {
             prop.load(fis);
@@ -64,6 +82,10 @@ public class ConfigurationManager {
         } else if(args.length == 3){
             CSVFileToWriteTo = args[1];
             conversionMethod = args[2];
+        } else if(args.length == 4){
+            CSVFileToWriteTo = args[1];
+            conversionMethod = args[2];
+            metadataFileName = args[3];
         } else{
             
         }
@@ -75,6 +97,14 @@ public class ConfigurationManager {
         System.out.println("Set configuration of input.outputFileName to: " + prop.getProperty("input.outputFileName"));
         prop.setProperty("conversion.method", conversionMethod);
         System.out.println("Set configuration of conversion.method to: " + prop.getProperty("conversion.method"));
+        prop.setProperty(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
+        prop.setProperty(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
+        prop.setProperty(ConfigurationManager.OUTPUT_ZIPFILE_NAME, "compressed.zip");
+        if(metadataFileName == null){
+            metadataFileName = DEFAULT_METADATA_FILENAME;
+        }
+        prop.setProperty(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, metadataFileName);
+
 
         //for(String fileNames : file.list()) System.out.println(fileNames);
         try {

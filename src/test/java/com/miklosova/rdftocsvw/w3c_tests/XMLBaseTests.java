@@ -38,7 +38,7 @@ public class XMLBaseTests extends BaseTest {
     private String expectedDatatype;
     private PrefinishedOutput prefinishedOutput;
 
-    private static final String RESOURCES_PATH = "./src/test/resources/";
+    private static final String RESOURCES_PATH = "./src/test/resources/XMLBaseTests/";
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> configs(){
         return Arrays.asList(new Object[][]{

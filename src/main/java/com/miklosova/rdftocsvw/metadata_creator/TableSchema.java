@@ -2,11 +2,14 @@ package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.miklosova.rdftocsvw.convertor.Row;
+import com.miklosova.rdftocsvw.convertor.TypeIdAndValues;
+import com.miklosova.rdftocsvw.convertor.TypeOfValue;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.util.Values;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -87,8 +90,9 @@ public class TableSchema {
         List<Column> listOfColumns = new ArrayList<>();
        // if(Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))) {
             listOfColumns.add(createIdColumnWithType());
+        List<Map.Entry<Value, TypeIdAndValues>> columns = getColumnsFromRows();
 
-        for(Map.Entry<Value, List<Value>> column : rows.get(0).map.entrySet()){
+        for(Map.Entry<Value, TypeIdAndValues> column : columns){
             Column newColumn = new Column(column);
             newColumn.createColumn();
             if(newColumn.getLang() !=  null){
@@ -106,25 +110,45 @@ public class TableSchema {
         return listOfColumns;
     }
 
-    private void enrichMetadataWithLangVariations(Map.Entry<Value, List<Value>> column, List<Column> listOfColumns) {
-        List<Map.Entry<Value, List<Value>>> langVariations = new ArrayList<>();
+    private List<Map.Entry<Value, TypeIdAndValues>> getColumnsFromRows() {
+        List<Map.Entry<Value, TypeIdAndValues>> columns = new ArrayList<>();
+        for(Value columnPredicate : keys) {
+            for (Row r : rows) {
+                for (Map.Entry<Value, TypeIdAndValues> entry : r.columns.entrySet()) {
+
+
+                    if (!columns.stream().anyMatch(p -> p.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())) && entry.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())) {
+                        System.out.println("added to columns in metadata: " + entry.getKey());
+                        columns.add(entry);
+                    }
+                }
+            }
+        }
+
+        return columns;
+    }
+
+    private void enrichMetadataWithLangVariations(Map.Entry<Value, TypeIdAndValues> column, List<Column> listOfColumns) {
+        List<Map.Entry<Value, TypeIdAndValues>> langVariations = new ArrayList<>();
         Set<String> langVariationsAdded = new HashSet<>();
-        for(Value literal : column.getValue()){
+        for(Value literal : column.getValue().values){
             Literal langTag = (Literal) literal;
             System.out.println("add " + langTag.getLanguage().get());
             langVariationsAdded.add(langTag.getLanguage().get());
         }
         for(String langVar : langVariationsAdded){
-            List<Value> newValue = new ArrayList<>();
+            Value newId = column.getValue().id;
+            TypeOfValue newType = column.getValue().type;
+            TypeIdAndValues newValue = new TypeIdAndValues(newId, newType, new ArrayList<>());
             System.out.println("langVar" + langVar);
-            newValue.add(column.getValue().stream().filter(obj -> obj.toString().substring(obj.toString().length() - 2, obj.toString().length()).contains(langVar))
+            newValue.values.add(column.getValue().values.stream().filter(obj -> obj.toString().substring(obj.toString().length() - 2, obj.toString().length()).contains(langVar))
                     .findFirst()
                     .get());
-            Map.Entry<Value, List<Value>> newEntry = new AbstractMap.SimpleEntry<Value, List<Value>>(column.getKey(), newValue);
+            Map.Entry<Value, TypeIdAndValues> newEntry = new AbstractMap.SimpleEntry<Value, TypeIdAndValues>(column.getKey(), newValue);
             langVariations.add(newEntry);
 
         }
-        for(Map.Entry<Value, List<Value>> lang : langVariations){
+        for(Map.Entry<Value, TypeIdAndValues> lang : langVariations){
             Column newColumn = new Column(lang);
             newColumn.createColumn();
             // Check whether the language variation is already in the data
@@ -165,13 +189,14 @@ public class TableSchema {
             IRI valueIri = (IRI) value;
             String theNameOfTheColumn;
             if (Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))) {
-                theNameOfTheColumn = getLastSectionOfIri(type);
+                theNameOfTheColumn = getLastSectionOfIri(value);
                 // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
                 this.aboutUrl = valueIri.getNamespace() + "{" + theNameOfTheColumn + "}";
             } else {
-                theNameOfTheColumn = getLastSectionOfIri(value);
+
                 // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
                 this.aboutUrl = valueIri.getNamespace() + "{" + "Subjekt" + "}";
+                theNameOfTheColumn = "Subjekt";
             }
             return theNameOfTheColumn;
         }

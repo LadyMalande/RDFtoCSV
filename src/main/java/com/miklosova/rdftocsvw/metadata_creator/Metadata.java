@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.miklosova.rdftocsvw.convertor.Row;
+import com.miklosova.rdftocsvw.convertor.TypeIdAndValues;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
 import ioinformarics.oss.jackson.module.jsonld.JsonldModule;
@@ -124,8 +125,8 @@ public class Metadata {
             Value columnKeyValue = null;
             for(ArrayList<Row> rows2 : allRows){
                 for(Row row : rows2){
-                    for(Map.Entry<Value, List<Value>> entry : row.map.entrySet()){
-                        if(entry.getValue().contains(id)){
+                    for(Map.Entry<Value, TypeIdAndValues> entry : row.columns.entrySet()){
+                        if(entry.getValue().values.contains(id)){
                             columnKeyValue = entry.getKey();
                         }
                     }

@@ -1,13 +1,14 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.miklosova.rdftocsvw.convertor.TypeIdAndValues;
+import com.miklosova.rdftocsvw.convertor.TypeOfValue;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 @JsonldType("Column")
@@ -63,14 +64,14 @@ public class Column {
      */
     private Boolean suppressOutput;
 
-    private Map.Entry<Value, List<Value>> column;
+    private Map.Entry<Value, TypeIdAndValues> column;
 
     @JsonIgnore
-    public Map.Entry<Value, List<Value>> getColumn() {
+    public Map.Entry<Value, TypeIdAndValues> getColumn() {
         return column;
     }
 
-    public void setColumn(Map.Entry<Value, List<Value>> column) {
+    public void setColumn(Map.Entry<Value, TypeIdAndValues> column) {
         this.column = column;
     }
 
@@ -78,7 +79,8 @@ public class Column {
         return lang;
     }
 
-    public Column(Map.Entry<Value, List<Value>> column) {
+    public Column(Map.Entry<Value, TypeIdAndValues> column) {
+        assert column != null;
         this.column = column;
     }
 
@@ -101,11 +103,26 @@ public class Column {
     }
 
     private void createAboutUrl() {
-        // TODO createAboutUrl
+        TypeOfValue type = column.getValue().type;
+        Value id = column.getValue().id;
+        Value value = column.getValue().values.get(0);
+        if(id.isBNode()){
+            this.aboutUrl = null;
+        } else {
+            IRI idIRI = (IRI) column.getValue().id;
+            String theNameOfTheColumn;
+            if (Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))) {
+                // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
+                this.aboutUrl = idIRI.getNamespace() + "{" + ((IRI)value).getLocalName() + "}";
+            } else {
+                // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
+                this.aboutUrl = idIRI.getNamespace() + "{" + "Subjekt" + "}";
+            }
+        }
     }
 
     private void createLang() {
-        Value valueFromThisColumn = this.column.getValue().get(0);
+        Value valueFromThisColumn = this.column.getValue().values.get(0);
         if(valueFromThisColumn.isLiteral()){
             Literal literal = (Literal) valueFromThisColumn;
             Optional<String> languageTag = literal.getLanguage();
@@ -114,7 +131,7 @@ public class Column {
     }
 
     private void createDatatype() {
-        Value valueFromThisColumn = this.column.getValue().get(0);
+        Value valueFromThisColumn = this.column.getValue().values.get(0);
         if(valueFromThisColumn.isLiteral()){
             Literal literal = (Literal) valueFromThisColumn;
             IRI datatype = literal.getDatatype();
@@ -125,13 +142,16 @@ public class Column {
     }
 
     private void createValueUrl() {
-        Value valueFromThisColumn = this.column.getValue().get(0);
+        Value valueFromThisColumn = this.column.getValue().values.get(0);
+        IRI iriOfColumnKey = (IRI) this.column.getKey();
         if(valueFromThisColumn.isIRI()){
             IRI iri = (IRI) valueFromThisColumn;
             String firstPart = iri.getNamespace();
             String lastPart = iri.getLocalName();
-            IRI iriOfColumnKey = (IRI) this.column.getKey();
+
             this.valueUrl = firstPart + "{" + iriOfColumnKey.getLocalName() + "}";
+        } else if(valueFromThisColumn.isBNode()){
+            this.valueUrl = "_:" + "{" +  iriOfColumnKey.getLocalName() + "}";
         }
 
     }
@@ -180,7 +200,7 @@ public class Column {
     }
 
     private String createTitles() {
-        Value valueFromThisColumn = this.column.getValue().get(0);
+        Value valueFromThisColumn = this.column.getValue().values.get(0);
         System.out.println("valueFromThisColumn from createTitles() = " + valueFromThisColumn.toString());
         Value column = this.column.getKey();
         IRI columnKeyIRI = (IRI) column;

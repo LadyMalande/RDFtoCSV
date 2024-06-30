@@ -214,8 +214,9 @@ public class TestSupport {
         return true;
     }
 
-    public static PrefinishedOutput<RowsAndKeys> createPrefinishedOutput(String filePath, String filePathForMetadata, String filePathForOutput, String PROCESS_METHOD, Repository db ){
+    public static PrefinishedOutput<RowsAndKeys> createPrefinishedOutput(String filePath, String filePathForMetadata, String filePathForOutput, String PROCESS_METHOD, Repository db , String[] args){
         System.out.println("Override before each");
+        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_OUTPUT_FILENAME, filePathForOutput);
 
@@ -242,6 +243,7 @@ public class TestSupport {
     }
 
     public static ArrayList<BindingSet> connectToDbAndPrepareQuery(String filePath, String methodName, String queryString){
+
         ArrayList<BindingSet> results = new ArrayList<>();
         Repository db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService();

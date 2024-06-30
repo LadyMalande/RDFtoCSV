@@ -6,7 +6,6 @@ import com.miklosova.rdftocsvw.convertor.RowAndKey;
 import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
-import org.jruby.RubyProcess;
 
 import java.util.ArrayList;
 
@@ -33,7 +32,21 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
     @Override
     public Metadata addMetadata(PrefinishedOutput<? extends Object> info) {
         RowsAndKeys rnk = (RowsAndKeys) info.getPrefinishedOutput();
+        System.out.println("getRowsAndKeys() size: " + rnk.getRowsAndKeys().size());
+        for(RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
+            System.out.println("key: " + rowAndKey.getKeys());
+            rowAndKey.getKeys().forEach(k -> System.out.print(k + " "));
+            System.out.println();
+            for(Row r: rowAndKey.getRows()){
+                System.out.println("id: " + r.id);
+                System.out.println("type: " + r.type);
+                r.columns.entrySet().stream().forEach(entry -> System.out.println( "Key of row:" + entry.getKey().toString()
+                        + " id:"+ entry.getValue().id + " type:" + entry.getValue().type + "columns:" + entry.getValue().values));
+            }
+
+        }
         for(RowAndKey rowAndKey : rnk.getRowsAndKeys()){
+
             String newFileName = CSVFileTOWriteTo + fileNumberX + ".csv";
             System.out.println("newFileName: " + newFileName);
             // Write the rows with respective keys to the current file

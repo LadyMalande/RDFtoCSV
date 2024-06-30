@@ -12,10 +12,8 @@ import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
-import org.jruby.RubyProcess;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.zip.ZipOutputStream;
 
 public class RDFtoCSV {
@@ -96,7 +94,7 @@ public class RDFtoCSV {
             System.out.println();
             rowAndKey.getRows().forEach(e -> System.out.print(e.id + ", "));
             System.out.println();
-            rowAndKey.getRows().forEach(e -> System.out.print(e.map.toString() + ", "));
+            rowAndKey.getRows().forEach(e -> System.out.print(e.columns.toString() + ", "));
             System.out.println();
             String newFileName = files[i];
             FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata);
@@ -137,7 +135,7 @@ public class RDFtoCSV {
         // Create a new Repository.
         db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService();
-        RepositoryConnection rc = methodService.processInput(fileName, readMethod, db);
+        rc = methodService.processInput(fileName, readMethod, db);
         assert(rc != null);
     }
 
