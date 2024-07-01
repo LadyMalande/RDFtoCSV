@@ -159,6 +159,7 @@ public class Column {
     private void createPropertyUrl() {
         Value column = this.column.getKey();
         IRI columnKeyIRI = (IRI) column;
+        System.out.println("CreatedColumn.PropertyUrl=" + columnKeyIRI.toString());
         this.propertyUrl = columnKeyIRI.toString();
     }
 

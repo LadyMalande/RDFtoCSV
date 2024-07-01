@@ -89,13 +89,15 @@ public class RDFtoCSV {
         String[] files = allFiles.split(",");
 
         for(RowAndKey rowAndKey : rnk.getRowsAndKeys()){
-            System.out.println("writeToCSV ");
+            /*System.out.println("writeToCSV ");
             rowAndKey.getKeys().forEach(e -> System.out.print(e + ", "));
             System.out.println();
             rowAndKey.getRows().forEach(e -> System.out.print(e.id + ", "));
             System.out.println();
             rowAndKey.getRows().forEach(e -> System.out.print(e.columns.toString() + ", "));
             System.out.println();
+
+             */
             String newFileName = files[i];
             FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata);
             i++;
@@ -106,7 +108,7 @@ public class RDFtoCSV {
 
 
         for(String filename : allFiles.split(",")){
-            System.out.println("rnk.getRowsAndKeys().get(1) " + rnk.getRowsAndKeys().get(1));
+            //System.out.println("rnk.getRowsAndKeys().get(1) " + rnk.getRowsAndKeys().get(1));
             FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), metadata);
         }
 
