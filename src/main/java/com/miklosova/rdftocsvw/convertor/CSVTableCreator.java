@@ -105,7 +105,7 @@ public class CSVTableCreator {
                 for (Value root : roots) {
                     Iri typeIri = iri("rdf:type");
                     Value typeValue = (IRI) typeIri;
-                    Row newRow = new Row(root, typeValue);
+                    Row newRow = new Row(root, typeValue, true);
                     // TODO
                     //recursiveQueryForSubjects(conn, newRow, root, null);
                     rows.add(newRow);

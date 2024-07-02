@@ -43,14 +43,16 @@ public class CodelistQueryConverter implements IQueryParser{
 
     @Override
     public PrefinishedOutput convertWithQuery(RepositoryConnection rc) {
-        loadConfiguration();
-        String query = getCSVTableQueryForModel();
+        //loadConfiguration();
+        //String query = getCSVTableQueryForModel();
 
-        String queryResult = queryRDFModel(query);
+        //String queryResult = queryRDFModel(query);
         FileWrite.saveCSVFileFromRows(CSVFileTOWriteTo, keys, rows, delimiter);
-        return new PrefinishedOutput(queryResult);
+        //return new PrefinishedOutput(queryResult);
+        return null;
 
     }
+    /*
 
     private void loadConfiguration(){
         Properties prop = new Properties();
@@ -147,7 +149,7 @@ public class CodelistQueryConverter implements IQueryParser{
             // we just iterate over all solutions in the result...
             for (BindingSet solution : result) {
 
-                System.out.println("recursiveQueryForSubjects p=" + solution.getValue("p") + " o=" + solution.getValue("o"));
+                //System.out.println("recursiveQueryForSubjects p=" + solution.getValue("p") + " o=" + solution.getValue("o"));
                 if(root.id.equals(subject)){
                     if(root.columns.get(solution.getValue("p")) != null){
                         //List<Value> oldStringValue = root.map.get(solution.getBinding("p").getValue());
@@ -194,4 +196,6 @@ public class CodelistQueryConverter implements IQueryParser{
         System.out.println("createQueryForSubjects: "  + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
+
+     */
 }

@@ -43,9 +43,10 @@ public class FileWrite {
         keys.forEach(key -> sb1.append(key + delimiter));
         sb1.deleteCharAt(sb1.length() - 1);
         sb1.append("\n");
+        sb1.append("\n");
         FileWrite.writeToTheFile(f, sb1.toString());
         for(Row row : rows){
-            System.out.println();
+            //System.out.println();
             StringBuilder sb = new StringBuilder();
             sb.append(row.id).append(delimiter);
             for(Value key : keys){
@@ -79,57 +80,60 @@ public class FileWrite {
     public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata){
         StringBuilder forOutput = new StringBuilder();
         File f = FileWrite.makeFileByNameAndExtension( fileName, null);
-    System.out.println("File f: " + f.getAbsolutePath());
+        //System.out.println("File f: " + f.getAbsolutePath());
         StringBuilder sb1 = new StringBuilder();
         List<Column> orderOfColumnKeys = addHeadersFromMetadata(fileName, metadata, sb1);
         FileWrite.writeToTheFile(f, sb1.toString());
         
         for(Row row : rows){
-            System.out.println("rows number " + rows.size());
+            //System.out.println("rows number " + rows.size());
             StringBuilder sb = new StringBuilder();
 
-            System.out.println("orderOfColumnKeys number " + orderOfColumnKeys.size());
+            //System.out.println("orderOfColumnKeys number " + orderOfColumnKeys.size());
             boolean firstColumn = true;
             List<Map.Entry<Value, TypeIdAndValues>> multivalues = row.columns.entrySet().stream()
                     .filter(entry -> entry.getValue().values.size() > 1)
                     .toList();;
-                    System.out.println("multivalues.size() " + multivalues.size());
+                    //System.out.println("multivalues.size() " + multivalues.size());
             List<Map<Value, Value>> combinations = generateCombinations(multivalues);
             combinations.forEach(combination -> {
                         for (Map.Entry<Value, Value> entry : combination.entrySet()) {
-                            System.out.print("k,v=" + entry.getKey().stringValue() + ": " + entry.getValue().stringValue());
+                            //System.out.print("k,v=" + entry.getKey().stringValue() + ": " + entry.getValue().stringValue());
 
                         //System.out.println(entry);
                     }
 
-                System.out.println();
+                //System.out.println();
             });
 
-            System.out.println("combinations:");
-            System.out.println("cize of combinations " + combinations.size());
+            //System.out.println("combinations:");
+            //System.out.println("cize of combinations " + combinations.size());
             int i = 0;
             if(!combinations.isEmpty()){
                 for(Map<Value,Value> combination : combinations){
-                    appendIdByValuePattern(row, metadata, sb);
-                    System.out.println("Combination #"  + i);
+                    appendIdByValuePattern(row, metadata, sb, orderOfColumnKeys.get(0));
+                    //System.out.println("Combination #"  + i);
                     i++;
                     firstColumn = true;
                     for(Column column : orderOfColumnKeys){
 
-                        System.out.println("Columns by keys " + column.getName());
+                        //System.out.println("Columns by keys " + column.getName());
                         if(!Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES)) && firstColumn) {
                             firstColumn = false;
                         } else{
                             if(combination.get((IRI)iri(column.getPropertyUrl())) != null){
                                 if(combination.get((IRI)iri(column.getPropertyUrl())).isIRI()){
-                                    sb.append(((IRI)combination.get((IRI)iri(column.getPropertyUrl()))).getLocalName());
-
+                                    if(column.getValueUrl().startsWith("{")){
+                                        sb.append(((IRI)combination.get(iri(column.getPropertyUrl()))).stringValue());
+                                    } else{
+                                        sb.append(((IRI)combination.get((IRI)iri(column.getPropertyUrl()))).getLocalName());
+                                    }
                                 } else if(combination.get((IRI)iri(column.getPropertyUrl())).isLiteral()){
                                     sb.append(safeLiteral((Literal)combination.get((IRI)iri(column.getPropertyUrl()))));
                                 }
                                 sb.append(",");
                             } else {
-                                System.out.println("orderOfColumnKeys: " + column.getName());
+                                //System.out.println("orderOfColumnKeys: " + column.getName());
                                 appendColumnValueByKey(column, row, sb, 0);
                             }
                         }
@@ -140,18 +144,18 @@ public class FileWrite {
 
                 forOutput.append(sb);
             } else {
-                appendIdByValuePattern(row, metadata, sb);
-                System.out.println("Combination #"  + i);
+                appendIdByValuePattern(row, metadata, sb, orderOfColumnKeys.get(0));
+                //System.out.println("Combination #"  + i);
                 i++;
                 firstColumn = true;
                 for(Column column : orderOfColumnKeys){
 
-                    System.out.println("Columns by keys " + column.getName());
+                    //System.out.println("Columns by keys " + column.getName());
                     if(!Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES)) && firstColumn) {
                         firstColumn = false;
                     } else{
 
-                        System.out.println("orderOfColumnKeys: " + column.getName());
+                        //System.out.println("orderOfColumnKeys: " + column.getName());
                         appendColumnValueByKey(column, row, sb, 0);
 
                     }
@@ -168,7 +172,7 @@ public class FileWrite {
         }
 
 
-        System.out.println("Written rows from rows to the file " + forOutput.toString() + ".");
+        //System.out.println("Written rows from rows to the file " + forOutput.toString() + ".");
         FileWrite.writeToTheFile(f, forOutput.toString());
         System.out.println("Written CSV from rows to the file " + f + ".");
         return forOutput.toString();
@@ -185,15 +189,15 @@ public class FileWrite {
     private static void generateCombinationsHelper(List<Map.Entry<Value, TypeIdAndValues>>  listOfLists, List<Map<Value,Value>> result, int depth, Map<Value,Value> current) {
         if (depth == listOfLists.size()) {
             result.add(new HashMap<>(current));
-            System.out.println("Result.add " + current);
+            //System.out.println("Result.add " + current);
             return;
         }
 
         Map.Entry<Value, TypeIdAndValues> currentList = listOfLists.get(depth);
         for (Value item : currentList.getValue().values) {
-            current.put(currentList.getKey(), (IRI)item);
+            current.put(currentList.getKey(), item);
             generateCombinationsHelper(listOfLists, result, depth + 1, current);
-            current.remove(currentList.getKey(), (IRI)item); // Backtrack
+            current.remove(currentList.getKey(), item); // Backtrack
         }
     }
 
@@ -230,8 +234,8 @@ public class FileWrite {
         if (column.getLang() == null){
 
             // TODO if it is IRI, parse it by valueURL. If it is literal, just write down its Label.
-            System.out.println("column.getPropertyUrl() = " + column.getPropertyUrl());
-            row.columns.entrySet().forEach(entry -> System.out.println(entry.getKey() + " is key to: " + entry.getValue().values));
+            //System.out.println("column.getPropertyUrl() = " + column.getPropertyUrl());
+            //row.columns.entrySet().forEach(entry -> System.out.println(entry.getKey() + " is key to: " + entry.getValue().values));
 
             if(values == null){
                 // The Column is empty, put empty Value to the file
@@ -239,7 +243,12 @@ public class FileWrite {
             } else if(values.get(0).isIRI()){
                 if(values.size() == 1){
                     IRI iri = (IRI) values.get(0);
-                    sb.append(iri.getLocalName());
+                    if(column.getValueUrl().startsWith("{")){
+                        sb.append(iri.stringValue());
+                    } else{
+                        sb.append(iri.getLocalName());
+                    }
+
                 } else{
                     // There are multiple values from the language, we need to enclose them in " "
                     sb.append('"');
@@ -269,7 +278,7 @@ public class FileWrite {
         }
         // Language versions split
         else {
-            System.out.println("column.getPropertyUrl() = " + column.getPropertyUrl());
+            //System.out.println("column.getPropertyUrl() = " + column.getPropertyUrl());
             //System.out.println(values);
             List<Value> languageVariations =  values;
             if(languageVariations == null){sb.append(","); return;}
@@ -302,17 +311,21 @@ public class FileWrite {
         }
     }
 
-    private static void appendIdByValuePattern(Row row, Metadata metadata, StringBuilder sb) {
-        if(row.id.isBNode()){
-            sb.append(row.id);
+    private static void appendIdByValuePattern(Row row, Metadata metadata, StringBuilder sb, Column column) {
+        if(column.getValueUrl().startsWith("{")){
+            sb.append(row.id.stringValue());
             sb.append(",");
-        } else {
-            IRI iri = (IRI) row.id;
-            String value = iri.getLocalName();
-            sb.append(value);
-            sb.append(",");
+        } else{
+            if(row.id.isBNode()){
+                sb.append(row.id);
+                sb.append(",");
+            } else {
+                IRI iri = (IRI) row.id;
+                String value = iri.getLocalName();
+                sb.append(value);
+                sb.append(",");
+            }
         }
-
     }
 
     private static List<Column> addHeadersFromMetadata(String fileName, Metadata metadata, StringBuilder sb1) {
@@ -335,7 +348,7 @@ public class FileWrite {
                 sb1.append(column.getTitles());
                 sb1.append(",");
                 orderOfColumns.add(column);
-                System.out.println("Added column to ordered columns: " + column.getTitles() + " " + column.getName() + " " + column.getVirtual() + " " + column.getPropertyUrl());
+                //System.out.println("Added column to ordered columns: " + column.getTitles() + " " + column.getName() + " " + column.getVirtual() + " " + column.getPropertyUrl());
             }
         }
         sb1.deleteCharAt(sb1.length() - 1);

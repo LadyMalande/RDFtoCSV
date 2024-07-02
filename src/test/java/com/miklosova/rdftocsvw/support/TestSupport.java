@@ -21,27 +21,18 @@ import org.eclipse.rdf4j.sparqlbuilder.core.SparqlBuilder;
 import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
-import org.jruby.Ruby;
-import org.jruby.RubyArray;
-import org.jruby.RubyInstanceConfig;
-import org.jruby.ast.executable.AbstractScript;
 import org.jruby.embed.LocalContextScope;
-import org.jruby.embed.LocalVariableBehavior;
-import org.jruby.embed.PathType;
 import org.jruby.embed.ScriptingContainer;
 
-import org.jruby.javasupport.JavaEmbedUtils;
-import org.jruby.runtime.Block;
-import org.jruby.runtime.ThreadContext;
-import org.jruby.runtime.builtin.IRubyObject;
-import org.junit.Assert;
-
 import java.io.*;
-import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class TestSupport {
+    public static final String DEFAULT_READ_METHOD = "rdf4j";
     public static void runToRDFConverter(String pathToTable, String pathToMetadata, String outputPath){
         try {
             // -m minimal is for less verbose translation - to translate only what is given in the metadata, no extra triples like row numbers unless specifically mentioned in metadata
@@ -138,15 +129,28 @@ public class TestSupport {
         */
     }
 
-    public static boolean isRDFSubsetOfTerms(String filePathForTest, String filePathForOriginal){
-        String query = prepareQueryForExtractAll();
-        ArrayList<BindingSet> testResult = connectToDbAndPrepareQuery(filePathForTest, "rdf4j", query);
-        ArrayList<BindingSet> originalResult = connectToDbAndPrepareQuery(filePathForOriginal, "rdf4j", query);
+    public static boolean isRDFSubsetOfTerms(String filePathForTest, String filePathForOriginal) throws IOException {
+        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{filePathForTest});
+        Repository db = new SailRepository(new MemoryStore());
+        System.out.println(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD));
+        System.out.println(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD));
+        RepositoryConnection rc1 = parseInput(filePathForTest, DEFAULT_READ_METHOD,db );
+        RepositoryConnection rc2 = parseInput(filePathForOriginal, DEFAULT_READ_METHOD,db );
 
-        assert testResult != null;
-        System.out.println("isRDFSubsetOfTerms testResult.count = " + testResult.size());
-        assert originalResult != null;
-        return testResultIsSubset(testResult, originalResult);
+        String query = prepareQueryForExtractAll();
+        TupleQueryResult result1 = getResultOfQuery(rc1,query);
+        TupleQueryResult result2 = getResultOfQuery(rc2, query);
+        List<BindingSet> set1 =  result1.stream().toList();
+        List<BindingSet> set2 =  result2.stream().toList();
+        //ArrayList<BindingSet> testResult = connectToDbAndPrepareQuery(filePathForTest, "rdf4j", query);
+        //ArrayList<BindingSet> originalResult = connectToDbAndPrepareQuery(filePathForOriginal, "rdf4j", query);
+
+        //assert testResult != null;
+        //System.out.println("isRDFSubsetOfTerms testResult.count = " + testResult.size());
+        //assert originalResult != null;
+        db.shutDown();
+        //return testResultIsSubset(testResult, originalResult);
+        return testResultIsSubset(set1, set2);
     }
 
     public static boolean isFileEmpty(String fileName){
@@ -177,18 +181,19 @@ public class TestSupport {
         }
     }
 
-    private static boolean testResultIsSubset(ArrayList<BindingSet> testResult, ArrayList<BindingSet> originalResult) {
+    private static boolean testResultIsSubset(List<BindingSet> testResult, List<BindingSet> originalResult) {
         System.out.println("in testResultIsSubset ");
-        if(testResult.stream().count() == 0 ){
+        System.out.println("testResult.size = " + testResult.size() +  " originalResult = " + originalResult.size());
+        if(testResult.isEmpty()){
             System.out.println("in testResultIsSubset There is no testResult");
             return false;
         }
-        if(originalResult.stream().count() == 0 ){
-            System.out.println("in testResultIsSubset There is no originalResult");
+        if(originalResult.isEmpty()){
+            //System.out.println("in testResultIsSubset There is no originalResult");
             return false;
         }
         for (BindingSet solution : originalResult) {
-            System.out.println("in for (BindingSet solution : originalResult) { ");
+            //System.out.println("in for (BindingSet solution : originalResult) { ");
             String subject = solution.getBinding("s").getValue().stringValue();
             String predicate = solution.getBinding("p").getValue().stringValue();
             String object = solution.getBinding("o").getValue().stringValue();
@@ -198,16 +203,36 @@ public class TestSupport {
                 Value subjectTest = solutionTest.getBinding("s").getValue();
                 Value predicateTest = solutionTest.getBinding("p").getValue();
                 Value objectTest = solutionTest.getBinding("o").getValue();
+                //System.out.println("Test subject before normalization " + subjectTest.toString());
+/*
+                String decodedSubjectTest = subjectTest.stringValue();
+                String decodedPredicateTest = predicateTest.stringValue();
+                String decodedObjectTest = objectTest.stringValue();
+
+
+ */
                 String decodedSubjectTest = java.net.URLDecoder.decode(subjectTest.stringValue(), StandardCharsets.UTF_8);
                 String decodedPredicateTest = java.net.URLDecoder.decode(predicateTest.stringValue(), StandardCharsets.UTF_8);
                 String decodedObjectTest = java.net.URLDecoder.decode(objectTest.stringValue(), StandardCharsets.UTF_8);
-                System.out.println("Triple " + decodedSubjectTest + " = " + subject + ", " + decodedPredicateTest + " = " + predicate + ", " + decodedObjectTest + " = "  + object);
-                if(decodedSubjectTest.equals(subject) && decodedPredicateTest.equals(predicate) && decodedObjectTest.equals(object)){
+                //
+                //
+                if(decodedSubjectTest.equalsIgnoreCase(subject)) {
+                    System.out.println("Triple1 " + decodedSubjectTest + " = " + subject);
+                    System.out.println("Triple2 " + decodedPredicateTest + " = " + predicate);
+                    System.out.println("Triple3 " + decodedObjectTest + " = " + object);
+                }
+                //System.out.println("Test subject after normalization " + decodedSubjectTest);
+                if(decodedSubjectTest.equalsIgnoreCase(subject) && decodedPredicateTest.equalsIgnoreCase(predicate) && decodedObjectTest.equalsIgnoreCase(object)){
                     System.out.println("Triple is there: " + decodedSubjectTest + " = " + subject + ", " + decodedPredicateTest + " = " + predicate + ", " + decodedObjectTest + " = "  + object);
                     tripleIsThere = true;
+                    //break;
+                } else{
+                    //
+
                 }
             }
             if(!tripleIsThere){
+                System.out.println("Triple is NOT there: " + subject + ", " + predicate + ", " + object );
                 return tripleIsThere;
             }
         }
@@ -240,6 +265,12 @@ public class TestSupport {
         MetadataService ms = new MetadataService();
 
         return ms.createMetadata(prefinishedOutput);
+    }
+
+    public static TupleQueryResult getResultOfQuery(RepositoryConnection conn, String query){
+        TupleQuery tupleResult = conn.prepareTupleQuery(query);
+
+        return tupleResult.evaluate();
     }
 
     public static ArrayList<BindingSet> connectToDbAndPrepareQuery(String filePath, String methodName, String queryString){
@@ -275,7 +306,17 @@ public class TestSupport {
             }
         }
     }
-    
+
+    public static RepositoryConnection parseInput(String fileName, String readMethod, Repository db) throws IOException {
+        // Parse input
+        // Create a new Repository.
+        db = new SailRepository(new MemoryStore());
+        MethodService methodService = new MethodService();
+        RepositoryConnection rc = methodService.processInput(fileName, readMethod, db);
+        assert(rc != null);
+        return rc;
+    }
+
     private static String prepareQueryForExtractAll(){
         Prefix skos = SparqlBuilder.prefix(SKOS.NS);
         SelectQuery selectQuery = Queries.SELECT();

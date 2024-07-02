@@ -21,6 +21,7 @@ import org.eclipse.rdf4j.sparqlbuilder.core.query.ModifyQuery;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
+import org.jruby.RubyProcess;
 
 import java.util.*;
 
@@ -133,7 +134,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
         TupleQuery query = rc.prepareTupleQuery("SELECT ?s ?p ?o WHERE { ?s ?p ?o .}");
         try (TupleQueryResult result = query.evaluate()) {
             for(BindingSet sol : result){
-                System.out.println("s: " + sol.getBinding("s") +" p: " + sol.getBinding("p")+" o: " + sol.getBinding("o") + " count: ");
+                //System.out.println("s: " + sol.getBinding("s") +" p: " + sol.getBinding("p")+" o: " + sol.getBinding("o") + " count: ");
             }
         }
     }
@@ -162,7 +163,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
             selectQuery.prefix(skos).select(s,o).where(s.has(p, o).filterNotExists(s_in.has(p_in, s)));
         }
 
-        System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
+        //System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
@@ -179,7 +180,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
             selectQuery.select(s,o).where(s.has(p, o));
         }
 
-        System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
+        //System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
@@ -191,7 +192,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
         Variable o = SparqlBuilder.var("o"), p = SparqlBuilder.var("p");
         Iri subjectIRI = iri(root);
         selectQuery.prefix(skos).select(p,o).where(subjectIRI.has(p,o));
-        System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
+        //System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
@@ -201,6 +202,8 @@ public class SplitFilesQueryConverter implements IQueryParser{
         allRows = new ArrayList<>();
         rows = new ArrayList<>();
         PrefinishedOutput<RowsAndKeys> gen = new PrefinishedOutput<RowsAndKeys>(new RowsAndKeys.RowsAndKeysFactory());
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
+        System.out.println("CONVERSION_HAS_RDF_TYPES at the beginning " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES));
         // Query the data and pass the result as String
 
         // Query in rdf4j
@@ -214,7 +217,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
 
                 @Override
                 public void statementRemoved(Statement removed) {
-                    System.out.println("removed: " + removed);
+                    //System.out.println("removed: " + removed);
                 }
 
                 @Override
@@ -226,13 +229,13 @@ public class SplitFilesQueryConverter implements IQueryParser{
             while(!conn.isEmpty()) {
 
                 TupleQuery query = conn.prepareTupleQuery(queryString);
-                System.out.println("query.getDataset()" + query.getDataset());
+                //System.out.println("query.getDataset()" + query.getDataset());
                 // A QueryResult is also an AutoCloseable resource, so make sure it gets closed when done.
                 try (TupleQueryResult result = query.evaluate()) {
                     // we just iterate over all solutions in the result...
-                    System.out.println();
-                    System.out.println(result == null);
-                    System.out.println("Binding names: " + result.getBindingNames());
+                    //System.out.println();
+                    //System.out.println(result == null);
+                    //System.out.println("Binding names: " + result.getBindingNames());
                     if (result == null) {
                         return null;
                     }
@@ -240,7 +243,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
                     //System.out.println(result.stream().count());
                     for (BindingSet solution : result) {
                         // ... and print out the value of the variable binding for ?s and ?n
-                        System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
+                        //System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
                         //System.out.println("?subject = " + solution.getValue("s") + " added to roots");
                         //System.out.println("?subject = " + solution.getValue("s") + " is a o=" + solution.getValue("o") + " added to roots");
                         if(!roots.contains(solution.getValue("s"))){
@@ -249,13 +252,13 @@ public class SplitFilesQueryConverter implements IQueryParser{
                     }
 
                     //countDominantPredicates(conn, roots);
-                    if(roots.size() == 0){
+                    if(roots.isEmpty()){
                         // NO ROOTS found, find different supplement roots
                         TupleQuery queryForSubstituteRoots = conn.prepareTupleQuery(getQueryForSubstituteRoots(askForTypes));
                         try (TupleQueryResult resultForSubstituteRoots = queryForSubstituteRoots.evaluate()) {
                             for (BindingSet solution : resultForSubstituteRoots) {
                                 // ... and print out the value of the variable binding for ?s and ?n
-                                System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
+                                //System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
                                 if(!roots.contains(solution.getValue("s"))){
                                     roots.add(solution.getValue("s"));
                                 }
@@ -265,10 +268,10 @@ public class SplitFilesQueryConverter implements IQueryParser{
                     countDominantTypes(conn, roots, askForTypes);
                     Value dominantType = getDominantType();
                     //String dominantPredicate = getDominantPredicate();
-                    System.out.println("Here begins creating of of file");
-                    System.out.println("Before recursiveQueryForFiles(conn, dominantType, askForTypes)");
+                    //System.out.println("Here begins creating of of file");
+                    //System.out.println("Before recursiveQueryForFiles(conn, dominantType, askForTypes)");
                     recursiveQueryForFiles(conn, dominantType, askForTypes);
-                    System.out.println("After recursiveQueryForFiles(conn, dominantType, askForTypes)");
+                    //System.out.println("After recursiveQueryForFiles(conn, dominantType, askForTypes)");
 
 /*
                 // For all the found roots, make rows. Roots must have the same rdf:type
@@ -285,18 +288,18 @@ public class SplitFilesQueryConverter implements IQueryParser{
                     result.close();
                 }
             }
-            System.out.println("allRows size #: " + allRows.size());
-            allKeys.forEach(k -> System.out.print("key: " + k + " "));
-            System.out.println();
-            allRows.forEach(k -> System.out.print("Row: " + k.get(0) + " "));
-            System.out.println();
+            //System.out.println("allRows size #: " + allRows.size());
+            //allKeys.forEach(k -> System.out.print("key: " + k + " "));
+            //System.out.println();
+            //allRows.forEach(k -> System.out.print("Row: " + k.get(0) + " "));
+            //System.out.println();
             for(int i = 0; i < allRows.size(); i++){
-                System.out.println("Adding rowAndKey #: " + i);
+                //System.out.println("Adding rowAndKey #: " + i);
                 gen.prefinishedOutput.rowsAndKeys.add(new RowAndKey(allKeys.get(i),allRows.get(i)));
                 ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
             }
 
-            System.out.print(gen.get());
+            //System.out.print(gen.get());
 
 
         }
@@ -304,15 +307,17 @@ public class SplitFilesQueryConverter implements IQueryParser{
         // Verify the output in console
 
         //System.out.println(resultString);
+
         int i = 0;
         for( RowAndKey rowsAndKey : gen.prefinishedOutput.rowsAndKeys) {
-            System.out.println("KEYS[" + i + "]:");
-            rowsAndKey.getKeys().forEach(k -> System.out.print(k + ", "));
-            System.out.println("ROWS[" + i + "]:");
-            rowsAndKey.getRows().forEach(r -> System.out.println("id=" + r.id + " type=" + r.type + " columns=" + r.columns));
-            System.out.println();
+            //System.out.println("KEYS[" + i + "]:");
+            //rowsAndKey.getKeys().forEach(k -> System.out.print(k + ", "));
+            //System.out.println("ROWS[" + i + "]:");
+            //rowsAndKey.getRows().forEach(r -> System.out.println("id=" + r.id + " type=" + r.type + " columns=" + r.columns));
+            //System.out.println();
             i++;
         }
+
 
 
         //saveCSVasFile("resultCSVPrimer");
@@ -328,11 +333,11 @@ public class SplitFilesQueryConverter implements IQueryParser{
         keys = new ArrayList<>();
 
 
-        System.out.println("Number of Roots in recursiveQuery: " + roots.size());
+        //System.out.println("Number of Roots in recursiveQuery: " + roots.size());
         for (Value root : roots) {
             // new Row with the found subject as its id
-            Row newRow = new Row(root, dominantType);
-            System.out.println("Number of Roots in recursiveQuery: " + roots.size() + " root: " + root.stringValue() );
+            Row newRow = new Row(root, dominantType, askForTypes);
+            //System.out.println("Number of Roots in recursiveQuery: " + roots.size() + " root: " + root.stringValue() );
             // Query the model for individual rows lead by the roots and having the predicates as the headers in the file
             queryForSubjects(conn, newRow, root, null, dominantType, askForTypes);
             rows.add(newRow);
@@ -341,8 +346,8 @@ public class SplitFilesQueryConverter implements IQueryParser{
         }
         // TODO augment keys
         //augmentMapsByMissingKeys();
-        System.out.println("Number of Rows : " + rows.size());
-        System.out.println("Number of keys : " + keys.size());
+        //System.out.println("Number of Rows : " + rows.size());
+        //System.out.println("Number of keys : " + keys.size());
         String newFileName = CSVFileTOWriteTo + fileNumberX + ".csv";
         // Write the rows with respective keys to the current file
         // TODO put somewhere else
@@ -361,21 +366,21 @@ public class SplitFilesQueryConverter implements IQueryParser{
         String queryToDeleteAllPredicatesAndObjects = getDeletePredicatesObjectsForRoot(root, dominantType, askForTypes);
         String delQuery = queryToDeleteAllPredicatesAndObjects.replace("DELETE { ?s ?p ?o . }", "DELETE ?s ?p ?o . ");
         String queryForWhatIsDeleted = queryToDeleteAllPredicatesAndObjects.replace("DELETE", "SELECT ?s ?p ?o ");
-        System.out.println("delQuery " + delQuery);
-        System.out.println("queryForWhatIsDeleted " + queryForWhatIsDeleted);
+        //System.out.println("delQuery " + delQuery);
+        //System.out.println("queryForWhatIsDeleted " + queryForWhatIsDeleted);
         try{
         TupleQueryResult result = conn.prepareTupleQuery(queryForWhatIsDeleted).evaluate();
-        result.stream().forEach(res -> System.out.println("s1=" +res.getBinding("s") + " p1=" + res.getBinding("p") + " o1=" + res.getBinding("o")));
+        //result.stream().forEach(res -> System.out.println("s1=" +res.getBinding("s") + " p1=" + res.getBinding("p") + " o1=" + res.getBinding("o")));
         conn.prepareUpdate(queryToDeleteAllPredicatesAndObjects).execute();
 
             TupleQueryResult result2 = conn.prepareTupleQuery(queryForWhatIsDeleted).evaluate();
-            result2.stream().forEach(res -> System.out.println("s=" +res.getBinding("s") + " p=" + res.getBinding("p") + " o=" + res.getBinding("o")));
+            //result2.stream().forEach(res -> System.out.println("s=" +res.getBinding("s") + " p=" + res.getBinding("p") + " o=" + res.getBinding("o")));
         } catch (QueryEvaluationException ex){
             ex.printStackTrace();
         }
 
 
-            System.out.println("deleted triples from conn... ");
+            //System.out.println("deleted triples from conn... ");
 
     }
 
@@ -398,13 +403,13 @@ public class SplitFilesQueryConverter implements IQueryParser{
         if(root.isBNode()){
             query = changeIRItoBNode(query);
         }
-        System.out.println("getDeletePredicatesObjectsForRoot query string\n" + query);
+        //System.out.println("getDeletePredicatesObjectsForRoot query string\n" + query);
         return query;
     }
 
     private void queryForSubjects(RepositoryConnection conn, Row newRow, Value root, Object o, Value dominantType, boolean askForTypes) {
         String queryToGetAllPredicatesAndObjects = getQueryToGetObjectsForRoot(root, dominantType, askForTypes);
-        System.out.println("queryToGetAllPredicatesAndObjects =  " + queryToGetAllPredicatesAndObjects);
+        //System.out.println("queryToGetAllPredicatesAndObjects =  " + queryToGetAllPredicatesAndObjects);
         TupleQuery query = conn.prepareTupleQuery(queryToGetAllPredicatesAndObjects);
         Value encloseInDoubleQuotes = null;
         Value predicateToDelete = null;
@@ -413,31 +418,33 @@ public class SplitFilesQueryConverter implements IQueryParser{
         try (TupleQueryResult result = query.evaluate()) {
             predicateToDelete = null;
             objectToDelete = null;
-            System.out.println("try (TupleQueryResult result = query.evaluate() " );
+            //System.out.println("try (TupleQueryResult result = query.evaluate() " );
             newRow.id = root;
 
             // we just iterate over all solutions in the result...
             for (BindingSet solution : result) {
                     // We found a root row
-                System.out.println("queryForSubjects solution.getBindingNames() =  " + solution.getBindingNames());
-                System.out.println("queryForSubjects solution.size() =  " + solution.size());
-                System.out.println("queryForSubjects solution.getBinding(\"o\").getValue() =  " + solution.getBinding("o").getValue().toString());
-                System.out.println("newRow.columns.containsKey(solution.getBinding(\"p\").getValue() =  " + newRow.columns.containsKey(solution.getBinding("p").getValue()));
-                if(newRow.columns.get(solution.getBinding("p")) != null){System.out.println(" newRow.columns.get(solution.getBinding(\"p\").getValue()).type == TypeOfValue.IRI =  " +  newRow.columns.get(solution.getBinding("p").getValue()).type );}
-                System.out.println("isIRI =  " + solution.getBinding("o").getValue().isIRI() + " isBNode = " + solution.getBinding("o").getValue().isBNode() + " isLiteral =" + solution.getBinding("o").getValue().isLiteral());
+                //System.out.println("queryForSubjects solution.getBindingNames() =  " + solution.getBindingNames());
+                //System.out.println("queryForSubjects solution.size() =  " + solution.size());
+                //System.out.println("queryForSubjects solution.getBinding(\"o\").getValue() =  " + solution.getBinding("o").getValue().toString());
+                //System.out.println("newRow.columns.containsKey(solution.getBinding(\"p\").getValue() =  " + newRow.columns.containsKey(solution.getBinding("p").getValue()));
+                if(newRow.columns.get(solution.getBinding("p")) != null){
+                    //System.out.println(" newRow.columns.get(solution.getBinding(\"p\").getValue()).type == TypeOfValue.IRI =  " +  newRow.columns.get(solution.getBinding("p").getValue()).type );
+                    }
+                //System.out.println("isIRI =  " + solution.getBinding("o").getValue().isIRI() + " isBNode = " + solution.getBinding("o").getValue().isBNode() + " isLiteral =" + solution.getBinding("o").getValue().isLiteral());
 
                 // Old value in the column have IRI objects and the new object is IRI
-                System.out.println("newRow.columns.keySet()");
+                //System.out.println("newRow.columns.keySet()");
                 for(Value p : newRow.columns.keySet()){
-                    System.out.println(p.toString());
+                    //System.out.println(p.toString());
                 }
                 if(newRow.columns.keySet().stream().anyMatch( key -> ((IRI)key).toString().equalsIgnoreCase(solution.getBinding("p").getValue().toString()))){
-                    System.out.println("KEY STRING MATCHES");
+                    //System.out.println("KEY STRING MATCHES");
                 } else{
-                    System.out.println("KEY STRING NOT MATCHES in keyset: ");
-                    newRow.columns.keySet().stream().forEach( key -> System.out.println(key.toString()));
-                    System.out.println( " key string in solution: " + solution.getBinding("p").getValue().toString());
-                    System.out.println();
+                    //System.out.println("KEY STRING NOT MATCHES in keyset: ");
+                    //newRow.columns.keySet().stream().forEach( key -> System.out.println(key.toString()));
+                    //System.out.println( " key string in solution: " + solution.getBinding("p").getValue().toString());
+                    //System.out.println();
                 }
                 if(newRow.columns.containsKey(solution.getBinding("p").getValue()) &&
                         newRow.columns.get(solution.getBinding("p").getValue()).type == TypeOfValue.IRI &&
@@ -448,7 +455,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
                     oldTypeIdAndValues.values = oldStringValue;
                     newRow.columns.put(solution.getBinding("p").getValue(), oldTypeIdAndValues);
                     encloseInDoubleQuotes = solution.getBinding("p").getValue();
-                    System.out.println("o Added to oldRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
+                    //System.out.println("o Added to oldRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
 
                 } else if(newRow.columns.containsKey(solution.getBinding("p").getValue()) &&
                         newRow.columns.get(solution.getBinding("p").getValue()).type == TypeOfValue.BNODE &&
@@ -459,7 +466,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
                         oldTypeIdAndValues.values = oldStringValue;
                         newRow.columns.put(solution.getBinding("p").getValue(), oldTypeIdAndValues);
                         encloseInDoubleQuotes = solution.getBinding("p").getValue();
-                    System.out.println("o Added to oldRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
+                    //System.out.println("o Added to oldRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
 
                 } else if(newRow.columns.containsKey(solution.getBinding("p").getValue()) &&
                         newRow.columns.get(solution.getBinding("p").getValue()).type == TypeOfValue.LITERAL &&
@@ -470,7 +477,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
                             oldTypeIdAndValues.values = oldStringValue;
                             newRow.columns.put(solution.getBinding("p").getValue(), oldTypeIdAndValues);
                             encloseInDoubleQuotes = solution.getBinding("p").getValue();
-                    System.out.println("o Added to oldRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
+                    //System.out.println("o Added to oldRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
 
                 }
                 else { // There is no such key (column) in the map
@@ -480,10 +487,10 @@ public class SplitFilesQueryConverter implements IQueryParser{
                     assert root != null;
                     newRow.columns.put(solution.getBinding("p").getValue(), new TypeIdAndValues(root, newType,
                             new ArrayList<>(Arrays.asList(solution.getBinding("o").getValue()))));
-                    System.out.println("o Added to newRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
+                    //System.out.println("o Added to newRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
                 //}
                     if(solution.getBinding("o").getValue().isBNode()){
-                        System.out.println("o is BNode with Value of = " + solution.getBinding("o").getValue());
+                        //System.out.println("o is BNode with Value of = " + solution.getBinding("o").getValue());
                     }
 
 
@@ -491,14 +498,14 @@ public class SplitFilesQueryConverter implements IQueryParser{
 
 
                     if(!keys.contains(solution.getValue("p"))){
-                        keys.forEach(k -> System.out.print("key: " + k));
+                        //keys.forEach(k -> System.out.print("key: " + k));
                         keys.add(solution.getValue("p"));
 
-                        System.out.println();
-                        System.out.println("Key added from solution: " + solution.getValue("p").toString() );
+                        //System.out.println();
+                        //System.out.println("Key added from solution: " + solution.getValue("p").toString() );
                     }
 
-                System.out.println("BindingSet solution: result " + solution.getValue("p").toString() + " " + solution.getValue("o").toString());
+                //System.out.println("BindingSet solution: result " + solution.getValue("p").toString() + " " + solution.getValue("o").toString());
 
                 Resource subject;
                 if(root.isBNode()){
@@ -512,7 +519,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
                 }
 
                 IRI predicate = Values.iri(solution.getValue("p").toString());
-                    System.out.println("Wanting to delete =  " + subject + ", " + predicate +  ", " + ""  + solution.getValue("o").toString());
+                    //System.out.println("Wanting to delete =  " + subject + ", " + predicate +  ", " + ""  + solution.getValue("o").toString());
                     if(subject.isBNode()){
                         /*
                         ModifyQuery selectQuery = Queries.DELETE();
@@ -572,7 +579,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
         if(root.isBNode()){
             query = changeIRItoBNode(query);
         }
-        System.out.println("getCSVTableQueryForModel query string\n" + query);
+        //System.out.println("getCSVTableQueryForModel query string\n" + query);
         return query;
     }
 
@@ -586,13 +593,13 @@ public class SplitFilesQueryConverter implements IQueryParser{
     private void countDominantTypes(RepositoryConnection conn, ArrayList<Value> roots, boolean askForTypes) {
         mapOfTypesAndTheirNumbers = new HashMap<>();
 
-        System.out.println("Roots number "  + roots.size());
+        //System.out.println("Roots number "  + roots.size());
         for (Value root : roots) {
             String queryForPredicates = getQueryForTypes(root, askForTypes);
             TupleQuery query = conn.prepareTupleQuery(queryForPredicates);
 
             try (TupleQueryResult result = query.evaluate()) {
-                System.out.println("Found dominant possibility predicates: " + query.evaluate().stream().count());
+                //System.out.println("Found dominant possibility predicates: " + query.evaluate().stream().count());
                 // we just iterate over all solutions in the result...
                 for (BindingSet solution : result) {
                     Value key;
@@ -600,7 +607,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
                         key = solution.getValue("o");
                     } else{
                         key = solution.getValue("p");
-                        System.out.println("Found dominant possibility predicates: " + key);
+                        //System.out.println("Found dominant possibility predicates: " + key);
 
                     }
 
@@ -609,10 +616,10 @@ public class SplitFilesQueryConverter implements IQueryParser{
                         Integer oldValue = mapOfTypesAndTheirNumbers.get(key);
                         Integer newValue = oldValue+1;
                         mapOfTypesAndTheirNumbers.put(key, newValue);
-                        System.out.println("Adding key for sorting predicates: " + key + " number= " + newValue);
+                        //System.out.println("Adding key for sorting predicates: " + key + " number= " + newValue);
                     } else {
                         mapOfTypesAndTheirNumbers.put(key, 1);
-                        System.out.println("Adding key for sorting predicates: " + key + " number=1");
+                        //System.out.println("Adding key for sorting predicates: " + key + " number=1");
                     }
                 }
 
@@ -640,21 +647,21 @@ public class SplitFilesQueryConverter implements IQueryParser{
         if(root.isBNode()){
             query = changeIRItoBNode(query);
         }
-        System.out.println("getQueryForTypes query string\n" + query);
+        //System.out.println("getQueryForTypes query string\n" + query);
         return query;
     }
 
     private Value getDominantType() {
         Value dominantType = null;
-        System.out.println("getDominantType");
+        //System.out.println("getDominantType");
 
         List<Map.Entry<Value, Integer>> sortedEnties = entriesSortedByValues(mapOfTypesAndTheirNumbers);
         for(Map.Entry<Value, Integer> entry : sortedEnties){
-            System.out.println(entry.getKey() + " : " + entry.getValue());
+            //System.out.println(entry.getKey() + " : " + entry.getValue());
         }
             dominantType = sortedEnties.get(0).getKey();
 
-        System.out.println("Chosen dominant type is " + dominantType);
+        //System.out.println("Chosen dominant type is " + dominantType);
 
         return dominantType;
     }
@@ -662,7 +669,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
     private void countDominantPredicates(RepositoryConnection conn, ArrayList<String> roots) {
         mapOfPredicatesAndTheirNumbers = new HashMap<>();
 
-        System.out.println("Roots number "  + roots.size());
+        //System.out.println("Roots number "  + roots.size());
         for (String root : roots) {
             String queryForPredicates = getQueryForRoot(root);
             TupleQuery query = conn.prepareTupleQuery(queryForPredicates);
@@ -704,15 +711,15 @@ public class SplitFilesQueryConverter implements IQueryParser{
 
     private String getDominantPredicate(){
         String dominantPredicate = null;
-        System.out.println("getDominantPredicate");
+        //System.out.println("getDominantPredicate");
 
         List<Map.Entry<String, Integer>> sortedEnties = entriesSortedByValues(mapOfPredicatesAndTheirNumbers);
         for(Map.Entry<String, Integer> entry : sortedEnties){
-            System.out.println(entry.getKey() + " : " + entry.getValue());
+            //System.out.println(entry.getKey() + " : " + entry.getValue());
         }
 
         dominantPredicate = sortedEnties.get(0).getKey();
-        System.out.println("Chosen dominant predicate is " + dominantPredicate);
+        //System.out.println("Chosen dominant predicate is " + dominantPredicate);
 
         return dominantPredicate;
     }
@@ -765,7 +772,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
 
                 }
 
-                System.out.println("BindingSet solution: result " + solution.getValue("p").toString() + " " + solution.getValue("s").toString());
+                //System.out.println("BindingSet solution: result " + solution.getValue("p").toString() + " " + solution.getValue("s").toString());
                 if(solution.getValue("s").isIRI()){
                     recursiveQueryForSubjects(conn, row, solution.getValue("s").toString(), solution.getValue("p").toString());
                 }
@@ -778,7 +785,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
         Iri iri = iri(object);
         Variable s = SparqlBuilder.var("s"), p = SparqlBuilder.var("p");
         selectQuery.select(s,p).where(iri.has(p, s));
-        System.out.println(selectQuery.getQueryString());
+        //System.out.println(selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 }

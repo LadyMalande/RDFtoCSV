@@ -38,10 +38,10 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
             rowAndKey.getKeys().forEach(k -> System.out.print(k + " "));
             System.out.println();
             for(Row r: rowAndKey.getRows()){
-                System.out.println("id: " + r.id);
-                System.out.println("type: " + r.type);
-                r.columns.entrySet().stream().forEach(entry -> System.out.println( "Key of row:" + entry.getKey().toString()
-                        + " id:"+ entry.getValue().id + " type:" + entry.getValue().type + "columns:" + entry.getValue().values));
+                //System.out.println("id: " + r.id);
+                //System.out.println("type: " + r.type);
+                //r.columns.entrySet().stream().forEach(entry -> System.out.println( "Key of row:" + entry.getKey().toString()
+                //        + " id:"+ entry.getValue().id + " type:" + entry.getValue().type + "columns:" + entry.getValue().values));
             }
 
         }
@@ -50,6 +50,7 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
             String newFileName = CSVFileTOWriteTo + fileNumberX + ".csv";
             System.out.println("newFileName: " + newFileName);
             // Write the rows with respective keys to the current file
+            //rowAndKey.getKeys().forEach(k -> System.out.println("Key " + k));
             metadata.addMetadata(newFileName, rowAndKey.getKeys(), rowAndKey.getRows());
             fileNumberX = fileNumberX + 1;
             allRows.add(rowAndKey.getRows());

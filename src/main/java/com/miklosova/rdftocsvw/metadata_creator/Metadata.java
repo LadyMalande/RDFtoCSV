@@ -7,11 +7,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.miklosova.rdftocsvw.convertor.Row;
 import com.miklosova.rdftocsvw.convertor.TypeIdAndValues;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
+import com.miklosova.rdftocsvw.support.JsonUtil;
 import ioinformarics.oss.jackson.module.jsonld.JsonldModule;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
@@ -19,6 +21,7 @@ import org.eclipse.rdf4j.model.Value;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -44,15 +47,19 @@ public class Metadata {
 
     private static final ObjectMapper SORTED_MAPPER = new ObjectMapper();
 
-    public void jsonldMetadata(){
+    public String jsonldMetadata(){
         ObjectMapper objectMapper = new ObjectMapper();
         SORTED_MAPPER.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        SORTED_MAPPER.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+        SORTED_MAPPER.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, false);
         SORTED_MAPPER.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         SORTED_MAPPER.registerModule(new JsonldModule());
+
+/*
         JsonNode node = SORTED_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL).convertValue(this, JsonNode.class);
 
         ObjectNode objectNode = ((ObjectNode)node).put("@context", "http://www.w3.org/ns/csvw");
+
+
         String personJsonLd = null;
         try {
             personJsonLd = SORTED_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
@@ -60,10 +67,23 @@ public class Metadata {
             e.printStackTrace();
         }
         System.out.println(personJsonLd);
+
+ */
+        String jsonWithContext = null;
+        try {
+            jsonWithContext = JsonUtil.serializeWithContext(this);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Print the resulting JSON
+        System.out.println(jsonWithContext);
+        return jsonWithContext;
     }
 
     public void finalizeMetadata(){
-        jsonldMetadata();
+        String json = jsonldMetadata();
+        /*
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         JsonNode node = objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL).convertValue(this, JsonNode.class);
@@ -75,6 +95,8 @@ public class Metadata {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
+
         String metadataFilename = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
         FileWrite.deleteFile(metadataFilename);
         try {
@@ -82,6 +104,8 @@ public class Metadata {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
+
         // Transform JSON object to serialization
 
         // Write json to file
@@ -107,12 +131,15 @@ public class Metadata {
         for(ArrayList<Row> rows : allRows){
             Value id = rows.get(0).id;
             Value type = rows.get(0).type;
+            //System.out.println("Type in addForeignKeys: " + type.stringValue());
             IRI typeIri = (IRI) type;
             String typeLocalName = typeIri.getLocalName();
             String foreignKeyFile = null;
             for(Table fileUrlDescriptor : tables){
                 if(fileUrlDescriptor.getTableSchema().getColumns().stream().anyMatch(column -> {
                     if(column.getName() != null){
+                        //System.out.println("Foreign key match? column.getName=" + column.getName() + " typeLocalName=" + typeLocalName);
+                        //System.out.println("Foreign key match? equals?=" + column.getName().equals(typeLocalName));
                         return column.getName().equals(typeLocalName);
                     } else{
                         return false;

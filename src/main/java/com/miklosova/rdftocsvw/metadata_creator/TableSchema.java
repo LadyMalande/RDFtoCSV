@@ -5,6 +5,7 @@ import com.miklosova.rdftocsvw.convertor.Row;
 import com.miklosova.rdftocsvw.convertor.TypeIdAndValues;
 import com.miklosova.rdftocsvw.convertor.TypeOfValue;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.ConnectionChecker;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
@@ -63,7 +64,9 @@ public class TableSchema {
         // This only works for the tables that have different types of entities
 
         this.primaryKey = createAboutUrl(this.keys.get(0));
-        this.columns = createColumns();
+        //System.out.println("columns");
+        //rows.get(0).columns.entrySet().forEach( column -> System.out.println(column.getKey()));
+        this.columns = createColumns(this.rows);
         this.rowTitles = new ArrayList<>();
         addRowTitles();
 
@@ -71,11 +74,30 @@ public class TableSchema {
     }
 
     private void addRowTitles(){
-        this.columns.forEach(column -> {
-            if(column.getVirtual() == null || (column.getVirtual() != null && !column.getVirtual())){
-                this.rowTitles.add(column.getName());
-            }
-        });
+        if(ConnectionChecker.checkConnection()){
+            this.columns.forEach(column -> {
+                if ((column.getVirtual() == null) || (column.getVirtual() != null && !column.getVirtual())
+                ) {
+                    if((column.getSuppressOutput() == null)){
+                        Dereferencer dereferencer = new Dereferencer(column.getPropertyUrl());
+                        //System.out.println("Dereference = " + column.getName());
+                        try {
+                            this.rowTitles.add(dereferencer.getTitle());
+                        } catch(NullPointerException noElement){
+                            this.rowTitles.add(column.getName());
+                        }
+                    }
+
+                }
+            });
+
+        } else {
+            this.columns.forEach(column -> {
+                if (column.getVirtual() == null || (column.getVirtual() != null && !column.getVirtual())) {
+                    this.rowTitles.add(column.getName());
+                }
+            });
+        }
 
     }
 
@@ -86,28 +108,69 @@ public class TableSchema {
      * https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#columns - virtual
      * @return List of Column objects annotating individual columns that should be present in the table.
      */
-    private List<Column> createColumns() {
+    private List<Column> createColumns(List<Row> rows) {
         List<Column> listOfColumns = new ArrayList<>();
        // if(Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))) {
             listOfColumns.add(createIdColumnWithType());
         List<Map.Entry<Value, TypeIdAndValues>> columns = getColumnsFromRows();
 
+
+
         for(Map.Entry<Value, TypeIdAndValues> column : columns){
-            Column newColumn = new Column(column);
-            newColumn.createColumn();
-            if(newColumn.getLang() !=  null){
-                enrichMetadataWithLangVariations(column, listOfColumns);
-            } else{
-                listOfColumns.add(newColumn);
-            }
+                //System.out.println("Column " + column.getKey());
+                boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, column.getKey());
+                Column newColumn = new Column(column, namespaceIsTheSame);
+                boolean subjectNamespaceIsTheSame = isNamespaceTheSameForAllSubjects(rows, column.getKey());
+                newColumn.createColumn(rows.get(0), subjectNamespaceIsTheSame);
+                if (newColumn.getLang() != null) {
+                    //System.out.println("Column lang not null");
+                    enrichMetadataWithLangVariations(column, listOfColumns, rows.get(0));
+                } else {
+                    listOfColumns.add(newColumn);
+                }
+
 
         }
-        if(Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))){
-            listOfColumns.add(createVirtualTypeColumn());
+        if(rows.get(0).isRdfType){
+            listOfColumns.add(createVirtualTypeColumn(rows.get(0).id));
         }
 
 
         return listOfColumns;
+    }
+
+    private boolean isNamespaceTheSameForAllRows(List<Row> rows, Value columnPredicate) {
+        if(columnPredicate.stringValue().equalsIgnoreCase(rows.get(0).type.stringValue())){
+            return isNamespaceTheSameForAllPrimary(rows);
+        }
+        //System.out.println("predicateOfColumn ="+ columnPredicate.stringValue());
+        if(rows.get(0).columns != null) {
+            if(rows.get(0).columns.get(columnPredicate) != null) {
+                if (rows.get(0).columns.get(columnPredicate).type == TypeOfValue.LITERAL) {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+        //rows.forEach(row -> row.columns.entrySet().forEach(column -> System.out.println(column.getKey())));
+        List<Row> hasIRI = rows.stream().filter(row -> {
+            if(row.columns.get(columnPredicate) != null) {
+                return row.columns.get(columnPredicate).values.get(0).isIRI();
+            } else {return false;}
+        }).toList();
+        final String namespace = ((IRI)hasIRI.get(0).columns.get(columnPredicate).values.get(0)).getNamespace();
+        for(Row row : rows){
+            if(!row.columns.entrySet().stream().filter(column -> column.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())).allMatch(entry ->
+                    entry.getValue().values.stream().allMatch(
+                            value -> {
+                                return ((IRI)value).getNamespace().equalsIgnoreCase(namespace);
+                            }))){
+                return false;
+            }
+        }
+        return true;
+
     }
 
     private List<Map.Entry<Value, TypeIdAndValues>> getColumnsFromRows() {
@@ -118,7 +181,7 @@ public class TableSchema {
 
 
                     if (!columns.stream().anyMatch(p -> p.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())) && entry.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())) {
-                        System.out.println("added to columns in metadata: " + entry.getKey());
+                        //System.out.println("added to columns in metadata: " + entry.getKey());
                         columns.add(entry);
                     }
                 }
@@ -128,74 +191,109 @@ public class TableSchema {
         return columns;
     }
 
-    private void enrichMetadataWithLangVariations(Map.Entry<Value, TypeIdAndValues> column, List<Column> listOfColumns) {
+    private void enrichMetadataWithLangVariations(Map.Entry<Value, TypeIdAndValues> column, List<Column> listOfColumns, Row row) {
         List<Map.Entry<Value, TypeIdAndValues>> langVariations = new ArrayList<>();
         Set<String> langVariationsAdded = new HashSet<>();
         for(Value literal : column.getValue().values){
             Literal langTag = (Literal) literal;
-            System.out.println("add " + langTag.getLanguage().get());
+            //System.out.println("add " + langTag.getLanguage().get());
             langVariationsAdded.add(langTag.getLanguage().get());
         }
         for(String langVar : langVariationsAdded){
             Value newId = column.getValue().id;
             TypeOfValue newType = column.getValue().type;
             TypeIdAndValues newValue = new TypeIdAndValues(newId, newType, new ArrayList<>());
-            System.out.println("langVar" + langVar);
-            newValue.values.add(column.getValue().values.stream().filter(obj -> obj.toString().substring(obj.toString().length() - 2, obj.toString().length()).contains(langVar))
-                    .findFirst()
-                    .get());
+            //System.out.println("langVar " + langVar);
+            newValue.values.addAll(column.getValue().values.stream().filter(obj -> obj.toString().substring(obj.toString().length() - 2, obj.toString().length()).contains(langVar))
+                    .toList());
             Map.Entry<Value, TypeIdAndValues> newEntry = new AbstractMap.SimpleEntry<Value, TypeIdAndValues>(column.getKey(), newValue);
             langVariations.add(newEntry);
 
         }
         for(Map.Entry<Value, TypeIdAndValues> lang : langVariations){
-            Column newColumn = new Column(lang);
-            newColumn.createColumn();
+            System.out.println("Adding lang variation ");
+            Column newColumn = new Column(lang, false);
+            newColumn.createColumn(row, isNamespaceTheSameForAllSubjects(rows,lang.getKey()));
             // Check whether the language variation is already in the data
-
+/*
             if(listOfColumns.stream()
                     .filter(item -> item.getLang() != null)
-                    .collect(Collectors.toList()).stream().filter(item -> item.getLang().contains(newColumn.getLang())).collect(Collectors.toList()).isEmpty()){
+                    .collect(Collectors.toList()).stream()
+                    .filter(item -> item.getLang()
+                            .contains(newColumn.getLang()))
+                    .collect(Collectors.toList()).isEmpty()){
                 listOfColumns.add(newColumn);
             }
+
+ */
+            listOfColumns.add(newColumn);
 
         }
     }
 
-    private Column createVirtualTypeColumn() {
+    private Column createVirtualTypeColumn(Value id) {
         Value type = rows.get(0).type;
         Value value = rows.get(0).id;
-
-        Column newColumn = new Column(null);
-        newColumn.addVirtualTypeColumn(type, value);
+        boolean namespaceIsTheSame = isNamespaceTheSameForAllPrimary(rows);
+        Column newColumn = new Column(null, namespaceIsTheSame);
+        newColumn.addVirtualTypeColumn(type, value, id);
         return newColumn;
     }
 
     private Column createIdColumnWithType() {
         Value type = rows.get(0).type;
         Value value = rows.get(0).id;
-
-        Column newColumn = new Column(null);
-        newColumn.addFirstColumn(type, value);
+        boolean isRdfType = rows.get(0).isRdfType;
+        boolean namespaceIsTheSame = isNamespaceTheSameForAllPrimary(rows);
+        Column newColumn = new Column(null, namespaceIsTheSame);
+        newColumn.addFirstColumn(type, value, isRdfType, namespaceIsTheSame);
         return newColumn;
+    }
+
+    public static boolean isNamespaceTheSameForAllSubjects(List<Row> rows, Value type) {
+        List<Row> nonnulls = rows.stream().filter(row -> row.columns.get(type) != null).toList();
+        //System.out.println("the same subjects " + type.stringValue());
+        if(nonnulls.size() < rows.size()){
+            return false;
+        }
+        final String namespace = ((IRI)nonnulls.get(0).columns.get(type).id).getNamespace();
+
+        return rows.stream().allMatch(row -> {
+            /*
+            System.out.println("nanespace=" + namespace + " "
+                    + ((IRI) (row.columns).get(type).id).getNamespace()
+                    + " equals? " + ((IRI) (row.columns).get(type).id).getNamespace().equalsIgnoreCase(namespace));
+
+             */
+                    return ((IRI) (row.columns).get(type).id).getNamespace().equalsIgnoreCase(namespace);
+        }
+                );
+    }
+
+    public static boolean isNamespaceTheSameForAllPrimary(List<Row> rows) {
+
+        final String namespace = ((IRI)rows.get(0).id).getNamespace();
+        return rows.stream().allMatch(row ->
+                ((IRI) (row.id)).getNamespace().equalsIgnoreCase(namespace));
     }
 
     private String createAboutUrl(Value key0){
         Value type = rows.get(0).type;
         Value value = rows.get(0).id;
+        boolean isRdfType = rows.get(0).isRdfType;
         if(value.isBNode()){
             return null;
         } else {
             IRI valueIri = (IRI) value;
             String theNameOfTheColumn;
-            if (Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))) {
-                theNameOfTheColumn = getLastSectionOfIri(value);
+            if (isRdfType) {
+                theNameOfTheColumn = getLastSectionOfIri(type);
                 // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                this.aboutUrl = valueIri.getNamespace() + "{" + theNameOfTheColumn + "}";
+                this.aboutUrl = valueIri.getNamespace() + "{+" + theNameOfTheColumn + "}";
             } else {
 
                 // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                this.aboutUrl = valueIri.getNamespace() + "{" + "Subjekt" + "}";
+                this.aboutUrl = valueIri.getNamespace() + "{+" + "Subjekt" + "}";
                 theNameOfTheColumn = "Subjekt";
             }
             return theNameOfTheColumn;

@@ -54,7 +54,7 @@ public class ConfigurationManager {
         } catch (FileNotFoundException ex) {
         } catch (IOException ex) {
         }
-        System.out.println("Get configuration of "+ variableName +" : " + prop.getProperty(variableName));
+        //System.out.println("Get configuration of "+ variableName +" : " + prop.getProperty(variableName));
         return prop.getProperty(variableName);
     }
 
@@ -77,13 +77,13 @@ public class ConfigurationManager {
         String CSVFileToWriteTo = null;
         String conversionMethod = null;
         if(args.length == 2){
-            CSVFileToWriteTo = args[1];
+            conversionMethod = args[1];
             
         } else if(args.length == 3){
-            CSVFileToWriteTo = args[1];
+            conversionMethod = args[1];
             conversionMethod = args[2];
         } else if(args.length == 4){
-            CSVFileToWriteTo = args[1];
+            conversionMethod = args[1];
             conversionMethod = args[2];
             metadataFileName = args[3];
         } else{
@@ -100,6 +100,7 @@ public class ConfigurationManager {
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
         prop.setProperty(ConfigurationManager.OUTPUT_ZIPFILE_NAME, "compressed.zip");
+        prop.setProperty(ConfigurationManager.READ_METHOD, "rdf4j");
         if(metadataFileName == null){
             metadataFileName = DEFAULT_METADATA_FILENAME;
         }

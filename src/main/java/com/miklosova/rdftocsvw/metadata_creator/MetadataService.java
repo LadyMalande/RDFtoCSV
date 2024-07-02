@@ -23,7 +23,7 @@ public class MetadataService {
 
         switch (conversionChoice) {
             case "basicQuery":
-                metadataGateway.setMetadataCreator(new BasicQueryMetadataCreator(data));
+                metadataGateway.setMetadataCreator(new SplitFilesMetadataCreator(data));
                 break;
             case "splitQuery":
                 metadataGateway.setMetadataCreator(new SplitFilesMetadataCreator(data));

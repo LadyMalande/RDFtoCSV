@@ -83,7 +83,7 @@ public class RDFtoCSV {
 
     private void writeToCSV(PrefinishedOutput po, Metadata metadata) {
         RowsAndKeys rnk = (RowsAndKeys) po.getPrefinishedOutput();
-        System.out.println("rnk size " + rnk.getRowsAndKeys().size());
+        //System.out.println("rnk size " + rnk.getRowsAndKeys().size());
         int i = 0;
         String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
         String[] files = allFiles.split(",");
@@ -101,15 +101,6 @@ public class RDFtoCSV {
             String newFileName = files[i];
             FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata);
             i++;
-        }
-
-
-
-
-
-        for(String filename : allFiles.split(",")){
-            //System.out.println("rnk.getRowsAndKeys().get(1) " + rnk.getRowsAndKeys().get(1));
-            FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), metadata);
         }
 
         db.shutDown();
@@ -132,7 +123,7 @@ public class RDFtoCSV {
         return cs.convertByQuery(rc, db);
     }
 
-    private void parseInput() throws IOException {
+    public void parseInput() throws IOException {
         // Parse input
         // Create a new Repository.
         db = new SailRepository(new MemoryStore());
@@ -141,10 +132,11 @@ public class RDFtoCSV {
         assert(rc != null);
     }
 
-    private void configure() {
+    public void configure() {
         BasicConfigurator.configure();
 
-        method = (method != null) ? method : DEFAULT_METHOD;
+        String m = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD);
+        method = (m != null) ? m : DEFAULT_METHOD;
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, method);
 
         tableMethod = (tableMethod != null) ? tableMethod : DEFAULT_TABLE_METHOD;
