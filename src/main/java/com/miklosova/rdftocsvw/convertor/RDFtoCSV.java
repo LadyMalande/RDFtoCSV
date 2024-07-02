@@ -79,13 +79,13 @@ public class RDFtoCSV {
     }
 
     private void writeToCSV(PrefinishedOutput po, Metadata metadata) {
-        RowsAndKeys rnk = (RowsAndKeys) po.getPrefinishedOutput();
-        //System.out.println("rnk size " + rnk.getRowsAndKeys().size());
-        int i = 0;
         String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
         String[] files = allFiles.split(",");
+        try {
+            RowsAndKeys rnk = (RowsAndKeys) po.getPrefinishedOutput();
+            int i = 0;
 
-        for(RowAndKey rowAndKey : rnk.getRowsAndKeys()){
+            for(RowAndKey rowAndKey : rnk.getRowsAndKeys()){
             /*System.out.println("writeToCSV ");
             rowAndKey.getKeys().forEach(e -> System.out.print(e + ", "));
             System.out.println();
@@ -95,10 +95,17 @@ public class RDFtoCSV {
             System.out.println();
 
              */
-            String newFileName = files[i];
-            FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata);
-            i++;
+                String newFileName = files[i];
+                FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata);
+                i++;
+            }
+        }catch(ClassCastException ex){
+            RowAndKey rnk = (RowAndKey) po.getPrefinishedOutput();
+            String newFileName = files[0];
+            FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata);
         }
+        //System.out.println("rnk size " + rnk.getRowsAndKeys().size());
+
 
         db.shutDown();
     }

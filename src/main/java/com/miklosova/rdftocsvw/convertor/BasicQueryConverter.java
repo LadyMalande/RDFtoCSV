@@ -112,6 +112,7 @@ public class BasicQueryConverter implements IQueryParser{
         loadConfiguration();
         changeBNodesForIri(rc);
         deleteBlankNodes(rc);
+        rows = new ArrayList<>();
         PrefinishedOutput queryResult;
         String query = getCSVTableQueryForModel(true);
         try{
@@ -197,9 +198,9 @@ public class BasicQueryConverter implements IQueryParser{
     }
 
 
-    private PrefinishedOutput<RowsAndKeys> queryRDFModel(String queryString, boolean askForTypes) {
-        rows = new ArrayList<>();
-        PrefinishedOutput<RowsAndKeys> gen = new PrefinishedOutput<RowsAndKeys>(new RowsAndKeys.RowsAndKeysFactory());
+    private PrefinishedOutput<RowAndKey> queryRDFModel(String queryString, boolean askForTypes) {
+
+        PrefinishedOutput<RowAndKey> gen = new PrefinishedOutput<RowAndKey>(new RowAndKey.RowAndKeyFactory());
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
         System.out.println("CONVERSION_HAS_RDF_TYPES at the beginning " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES));
         // Query the data and pass the result as String
@@ -248,6 +249,9 @@ public class BasicQueryConverter implements IQueryParser{
                             roots.add(solution.getValue("s"));
                             System.out.println("Root: " + solution.getValue("s"));
                         }
+                        Row newRow = new Row(solution.getValue("s"),solution.getValue("o"),askForTypes);
+                        queryForSubjects(conn, newRow, solution.getValue("s"), solution.getValue("s"), null, askForTypes);
+                        rows.add(newRow);
                     }
 
                     //countDominantPredicates(conn, roots);
@@ -272,20 +276,23 @@ public class BasicQueryConverter implements IQueryParser{
 
                     //System.out.println("After recursiveQueryForFiles(conn, dominantType, askForTypes)");
 
+/*
+                    // For all the found roots, make rows. Roots must have the same rdf:type
+                    for (Value root : roots) {
+                        // new Row with the found subject as its id
+                        Row newRow = new Row(root,solution.getValue("o"),askForTypes);
+                        queryForSubjects(conn, newRow, root, root, dominantType, askForTypes);
+                        rows.add(newRow);
 
-                // For all the found roots, make rows. Roots must have the same rdf:type
-                for (Value root : roots) {
-                    // new Row with the found subject as its id
-                    Row newRow = new Row(root,askForTypes);
-                    recursiveQueryForFiles(conn, dominantType, askForTypes);
-                    rows.add(newRow);
+                    }
 
-                }
+ */
 
 
-                    resultCSV = result.toString();
+                    //resultCSV = result.toString();
                     result.close();
                 }
+                queryString = getCSVTableQueryForModel(true);
             }
             //System.out.println("allRows size #: " + allRows.size());
             //allKeys.forEach(k -> System.out.print("key: " + k + " "));
@@ -294,7 +301,7 @@ public class BasicQueryConverter implements IQueryParser{
             //System.out.println();
 
                 //System.out.println("Adding rowAndKey #: " + i);
-                gen.prefinishedOutput.rowsAndKeys.add(new RowAndKey(keys,rows));
+
                 ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
 
 
@@ -306,7 +313,10 @@ public class BasicQueryConverter implements IQueryParser{
         // Verify the output in console
 
         //System.out.println(resultString);
+        gen.prefinishedOutput.rows.addAll(rows);
+        gen.prefinishedOutput.keys.addAll(keys);
 
+      /*
         int i = 0;
         for( RowAndKey rowsAndKey : gen.prefinishedOutput.rowsAndKeys) {
             //System.out.println("KEYS[" + i + "]:");
@@ -316,7 +326,7 @@ public class BasicQueryConverter implements IQueryParser{
             //System.out.println();
             i++;
         }
-
+*/
 
 
         //saveCSVasFile("resultCSVPrimer");
@@ -390,8 +400,8 @@ public class BasicQueryConverter implements IQueryParser{
         return query;
     }
 
-    private void queryForSubjects(RepositoryConnection conn, Row newRow, Value root, Object o, Value dominantType, boolean askForTypes) {
-        String queryToGetAllPredicatesAndObjects = getQueryToGetObjectsForRoot(root, dominantType, askForTypes);
+    private void queryForSubjects(RepositoryConnection conn, Row newRow, Value root, Value subject, Value dominantType, boolean askForTypes) {
+        String queryToGetAllPredicatesAndObjects = getQueryToGetObjectsForRoot(subject, dominantType, askForTypes);
         //System.out.println("queryToGetAllPredicatesAndObjects =  " + queryToGetAllPredicatesAndObjects);
         TupleQuery query = conn.prepareTupleQuery(queryToGetAllPredicatesAndObjects);
         Value encloseInDoubleQuotes = null;
@@ -402,7 +412,7 @@ public class BasicQueryConverter implements IQueryParser{
             predicateToDelete = null;
             objectToDelete = null;
             //System.out.println("try (TupleQueryResult result = query.evaluate() " );
-            newRow.id = root;
+            //newRow.id = root;
 
             // we just iterate over all solutions in the result...
             for (BindingSet solution : result) {
@@ -411,6 +421,7 @@ public class BasicQueryConverter implements IQueryParser{
                 //System.out.println("queryForSubjects solution.size() =  " + solution.size());
                 //System.out.println("queryForSubjects solution.getBinding(\"o\").getValue() =  " + solution.getBinding("o").getValue().toString());
                 //System.out.println("newRow.columns.containsKey(solution.getBinding(\"p\").getValue() =  " + newRow.columns.containsKey(solution.getBinding("p").getValue()));
+                /*
                 if(newRow.columns.get(solution.getBinding("p")) != null){
                     //System.out.println(" newRow.columns.get(solution.getBinding(\"p\").getValue()).type == TypeOfValue.IRI =  " +  newRow.columns.get(solution.getBinding("p").getValue()).type );
                 }
@@ -418,6 +429,7 @@ public class BasicQueryConverter implements IQueryParser{
 
                 // Old value in the column have IRI objects and the new object is IRI
                 //System.out.println("newRow.columns.keySet()");
+
                 for(Value p : newRow.columns.keySet()){
                     //System.out.println(p.toString());
                 }
@@ -429,20 +441,11 @@ public class BasicQueryConverter implements IQueryParser{
                     //System.out.println( " key string in solution: " + solution.getBinding("p").getValue().toString());
                     //System.out.println();
                 }
+
+                 */
                 if(newRow.columns.containsKey(solution.getBinding("p").getValue()) &&
                         newRow.columns.get(solution.getBinding("p").getValue()).type == TypeOfValue.IRI &&
                         solution.getBinding("o").getValue().isIRI()){
-                    List<Value> oldStringValue = newRow.columns.get(solution.getBinding("p").getValue()).values;
-                    oldStringValue.add(solution.getBinding("o").getValue());
-                    TypeIdAndValues oldTypeIdAndValues =  newRow.columns.get(solution.getBinding("p").getValue());
-                    oldTypeIdAndValues.values = oldStringValue;
-                    newRow.columns.put(solution.getBinding("p").getValue(), oldTypeIdAndValues);
-                    encloseInDoubleQuotes = solution.getBinding("p").getValue();
-                    //System.out.println("o Added to oldRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
-
-                } else if(newRow.columns.containsKey(solution.getBinding("p").getValue()) &&
-                        newRow.columns.get(solution.getBinding("p").getValue()).type == TypeOfValue.BNODE &&
-                        solution.getBinding("o").getValue().isBNode()){
                     List<Value> oldStringValue = newRow.columns.get(solution.getBinding("p").getValue()).values;
                     oldStringValue.add(solution.getBinding("o").getValue());
                     TypeIdAndValues oldTypeIdAndValues =  newRow.columns.get(solution.getBinding("p").getValue());
@@ -479,72 +482,29 @@ public class BasicQueryConverter implements IQueryParser{
 
                 }
 
-
                 if(!keys.contains(solution.getValue("p"))){
                     //keys.forEach(k -> System.out.print("key: " + k));
                     keys.add(solution.getValue("p"));
-
                     //System.out.println();
                     //System.out.println("Key added from solution: " + solution.getValue("p").toString() );
                 }
 
+                if(solution.getValue("o") != null && solution.getValue("o").isIRI()){
+                    queryForSubjects(conn, newRow, root, solution.getValue("o"), dominantType, askForTypes);
+                }
                 //System.out.println("BindingSet solution: result " + solution.getValue("p").toString() + " " + solution.getValue("o").toString());
 
-                Resource subject;
-                if(root.isBNode()){
-                    SimpleValueFactory vf = SimpleValueFactory.getInstance();
-                    BNode rooty = (BNode)root;
-                    // Create a blank node with a specific identifier
-                    BNode bnode = vf.createBNode(rooty.getID());
-                    subject = bnode;
-                } else{
-                    subject = Values.iri(root.toString());
-                }
-
+                // Delete the triple from the storage
+                Resource subjectToDelete = Values.iri(subject.toString());
                 IRI predicate = Values.iri(solution.getValue("p").toString());
                 //System.out.println("Wanting to delete =  " + subject + ", " + predicate +  ", " + ""  + solution.getValue("o").toString());
-                if(subject.isBNode()){
-                        /*
-                        ModifyQuery selectQuery = Queries.DELETE();
-                        String del;
-                        Variable o2 = SparqlBuilder.var("o2"), p2 = SparqlBuilder.var("p2");
-                            del = selectQuery.delete(o2.has(p2, solution.getValue("o"))).where(o2.has(p2,solution.getValue("o"))).getQueryString();
-                        System.out.println("del =  " + del);
-                        Update deleteQuery = conn.prepareUpdate(del);
-                        deleteQuery.execute();
-
-                         */
-                            /*
-                            String object = (solution.getValue("o").isIRI()) ? "<" + solution.getValue("o").toString() + ">" :
-                                solution.getValue("o").toString();
-                        Update deleteQuery = conn.prepareUpdate("DELETE { ?o  <" + solution.getValue("p").toString() +
-                                ">  " + object +
-                                " .} WHERE {?o  <" + solution.getValue("p").toString()
-                                + ">  " + object + "  .\n" +
-                                "        FILTER (isBlank(?o))}");
-                        deleteQuery.execute();
-
-                         */
-
-                    conn.remove(null,predicate, solution.getValue("o"));
-                }
-                conn.remove(subject,predicate, solution.getValue("o"));
+                conn.remove(subjectToDelete,predicate, solution.getValue("o"));
 
             }
         } catch(QueryEvaluationException ex){
             System.out.println("QueryEvaluationException");
             ex.printStackTrace();
         }
-        if(encloseInDoubleQuotes != null){
-            // TODO for lists
-            /*
-            Value oldStringValue = newRow.map.get(encloseInDoubleQuotes);
-            String newStringValue = "\"" + oldStringValue.toString() + "\"";
-            newRow.map.put(encloseInDoubleQuotes,newStringValue);
-            */
-        }
-
-
     }
 
     private String getQueryToGetObjectsForRoot(Value root, Value dominantType, boolean askForTypes) {
@@ -553,9 +513,9 @@ public class BasicQueryConverter implements IQueryParser{
         String query;
         Variable o = SparqlBuilder.var("o"), p = SparqlBuilder.var("p");
         Iri subjectIRI = iri(root.toString());
-        Iri dominantTypeIRI = iri(dominantType.toString());
+        //Iri dominantTypeIRI = iri(dominantType.toString());
         if(askForTypes){
-            query = selectQuery.prefix(skos).select(p,o).where(subjectIRI.has(p,o).andIsA(dominantTypeIRI)).getQueryString();
+            query = selectQuery.prefix(skos).select(p,o).where(subjectIRI.has(p,o)).getQueryString(); //andIsA(dominantTypeIRI)).getQueryString();
         } else{
             query = selectQuery.prefix(skos).select(p,o).where(subjectIRI.has(p,o)).getQueryString();
         }
