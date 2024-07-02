@@ -47,24 +47,6 @@ public class RDFAssetManager {
         String extension = name.substring(i+1);
         RDFFormat format = loaders.get(extension);
         return (T) format;
-        /*
-
-
-        if (loader == null)
-            throw new RuntimeException("No loader registered for \"." + extension + "\" files");
-        try
-        {
-            return (T) loader.load(name);
-        }
-        catch(ClassCastException e)
-        {
-            throw new RuntimeException("\"" + name + "\" could not be loaded as the expected type");
-        }
-        catch(Exception e)
-        {
-            throw new RuntimeException("Failed to load " + name, e);
-        }
-         */
 
     }
 }

@@ -67,11 +67,8 @@ public class MethodService {
 
     }
 
-    private void processMethodChoice(String fileName){
-        String[] splitName = fileName.split("\\.");
-        String fileExtension = splitName[splitName.length - 1];
-
-        switch (fileExtension) {
+    private void processMethodChoice(String methodChoice){
+        switch (methodChoice) {
             case "rdf4j":
                 methodGateway.setParsingMethod(new RDF4JMethod());
                 break;

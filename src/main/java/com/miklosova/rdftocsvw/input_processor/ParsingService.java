@@ -41,16 +41,8 @@ public class ParsingService {
         String fileName = fileToRead.getName();
         System.out.println("String fileName = fileToRead.getName();: " + fileName);
         inputGateway = new InputGateway();
-       /* try{
-            String newFileName = processURI(fileName);
-            fileToRead = new File(newFileName);
-        } catch(IOException ex){
-            //processExtension(fileName);
-        }
 
-        */
         processExtension(fileName);
-
 
         conn = inputGateway.processInput(conn, fileToRead);
         System.out.println("processInput: Processed file: " + fileToRead.getAbsolutePath());

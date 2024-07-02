@@ -235,7 +235,9 @@ public class TableSchema {
         Value type = rows.get(0).type;
         Value value = rows.get(0).id;
         boolean namespaceIsTheSame = isNamespaceTheSameForAllPrimary(rows);
-        Column newColumn = new Column(null, namespaceIsTheSame);
+        Row row = new Row(null, true);
+        row.columns = new HashMap<>();
+        Column newColumn = new Column( null, namespaceIsTheSame);
         newColumn.addVirtualTypeColumn(type, value, id);
         return newColumn;
     }

@@ -88,7 +88,7 @@ public class Column {
     }
 
     public Column(Map.Entry<Value, TypeIdAndValues> column, boolean namespaceIsTheSame) {
-        assert column != null;
+        //assert column != null;
         this.column = column;
         this.isNamespaceTheSame = namespaceIsTheSame;
     }

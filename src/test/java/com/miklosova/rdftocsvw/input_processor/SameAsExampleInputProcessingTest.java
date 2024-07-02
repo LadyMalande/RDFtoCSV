@@ -101,10 +101,13 @@ public class SameAsExampleInputProcessingTest {
                 { "TURTLE-RDF", "src/test/resources/testingInput.ttl", "src/test/resources/testingInput.rdf"},
                 { "NQ-NT", "src/test/resources/testingInput.nq", "src/test/resources/testingInput.nt"},
                 { "TURTLE-NT", "src/test/resources/testingInput.ttl", "src/test/resources/testingInput.nt"},
-                { "TURTLE-HTML", "src/test/resources/testingInput.ttl", "src/test/resources/testingInput.html"},
+
                 { "N3-TRIGS", "src/test/resources/testingInput.n3", "src/test/resources/testingInput.trigs"},
                 { "NDJSONLD-TURTLESTAR", "src/test/resources/testingInput.ndjsonld", "src/test/resources/testingInput.ttls"},
-                { "BRF-HDT", "src/test/resources/testingInput.brf", "src/test/resources/testingInput.hdt"},
+                // Neither of formats have not been parsed successfully with rdf4j. Removing the test from parameters.
+                //{ "BRF-HDT", "src/test/resources/testingInput.brf", "src/test/resources/testingInput.hdt"},
+                // As of July 2024, .html parsing is not supported by rdf4j. Removing the test from parameters.
+                //{ "TURTLE-HTML", "src/test/resources/testingInput.ttl", "src/test/resources/testingInput.html"},
                 { "RJ-OWL", "src/test/resources/testingInput.rj", "src/test/resources/testingInput.owl"},
                 { "JSONL-NDJSON", "src/test/resources/testingInput.jsonl", "src/test/resources/testingInput.ndjson"},
                 { "JSONLD-RDFS", "src/test/resources/testingInput.jsonld" ,"src/test/resources/testingInput.rdfs" },

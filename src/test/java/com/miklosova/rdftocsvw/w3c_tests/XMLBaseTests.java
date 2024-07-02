@@ -42,7 +42,7 @@ public class XMLBaseTests extends BaseTest {
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> configs(){
         return Arrays.asList(new Object[][]{
-                //{ "test001",  ""},
+                { "test001",  ""},
                 { "test002",  ""},
                 { "test003",  ""},
                 { "test004",  ""},
@@ -108,7 +108,7 @@ public class XMLBaseTests extends BaseTest {
         this.testMetadata = metadata;
     }
     @Test
-    public void isGivenDatatype() throws IOException {
+    public void csvFileIsCreated() throws IOException {
         createMetadata();
 
         RowsAndKeys rnk = (RowsAndKeys) prefinishedOutput.getPrefinishedOutput();

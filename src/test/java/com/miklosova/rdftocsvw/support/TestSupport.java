@@ -6,7 +6,9 @@ import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
+import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.impl.LinkedHashModel;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
@@ -15,6 +17,8 @@ import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.rio.*;
+import org.eclipse.rdf4j.rio.helpers.StatementCollector;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.eclipse.rdf4j.sparqlbuilder.core.Prefix;
 import org.eclipse.rdf4j.sparqlbuilder.core.SparqlBuilder;
@@ -308,13 +312,30 @@ public class TestSupport {
     }
 
     public static RepositoryConnection parseInput(String fileName, String readMethod, Repository db) throws IOException {
-        // Parse input
-        // Create a new Repository.
         db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService();
         RepositoryConnection rc = methodService.processInput(fileName, readMethod, db);
         assert(rc != null);
         return rc;
+
+
+    }
+
+    public static Model parseInputByRio(String fileName) throws IOException {
+
+        InputStream inputStream = new FileInputStream(new File(fileName));
+        Model results = Rio.parse(inputStream, "", RDFFormat.TURTLE);
+        return results;
+    }
+    public static void createSerialization(String filename, RDFFormat format, Model model) throws IOException {
+        FileOutputStream out = new FileOutputStream("./src/test/resources/typy-pracovních-vztahů_soubory/testingInput.brf");
+        try {
+            Rio.write(model, out, RDFFormat.BINARY);
+        }
+        finally {
+            out.close();
+        }
+
     }
 
     private static String prepareQueryForExtractAll(){

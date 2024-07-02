@@ -17,27 +17,6 @@ public class BaseTest {
     public Repository db;
     private static final Logger LOGGER = Logger.getLogger( BaseTest.class.getName() );
 
-    @BeforeEach
-    void createMetadata(){
-        /*
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
-        db = new SailRepository(new MemoryStore());
-        MethodService methodService = new MethodService();
-        RepositoryConnection rc = methodService.processInput(filePath, PROCESS_METHOD, db);
-        assert(rc != null);
-        // Convert the table to intermediate data for processing into metadata
-        ConversionService cs = new ConversionService();
-        System.out.println("createMetadata @BeforeEach");
-        PrefinishedOutput prefinishedOutput = cs.convertByQuery(rc, db);
-        // Convert intermediate data into basic metadata
-        MetadataService ms = new MetadataService();
-        Metadata metadata = ms.createMetadata(prefinishedOutput);
-
-        this.testMetadata = metadata;
-
-         */
-    }
-
     @After
     public void tearDown() {
         db.shutDown();

@@ -53,6 +53,7 @@ public class DatatypesTest extends BaseTest {
     @BeforeEach
     void createMetadata(){
         System.out.println("Override before each");
+        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{filePath});
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
         db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService();

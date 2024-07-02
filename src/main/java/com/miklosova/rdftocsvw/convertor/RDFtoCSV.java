@@ -59,10 +59,7 @@ public class RDFtoCSV {
     public FinalizedOutput<ZipOutputStream> convertToZip() throws IOException {
         this.configure();
 
-
         parseInput();
-
-
 
         PrefinishedOutput po = convertData();
 
