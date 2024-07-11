@@ -1,4 +1,4 @@
-@prefix : <tree-ops-ext.csv#> .
+@prefix : <file://tree-ops-ext.csv#> .
 @prefix csvw: <http://www.w3.org/ns/csvw#> .
 @prefix dc: <http://purl.org/dc/terms/> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
@@ -9,7 +9,7 @@
 
 <http://example.org/tree-ops-ext#gid-1> :dbh 11;
    :inventory_date "2010-10-18"^^xsd:date;
-   :kml "<Point><coordinates>-122.156485,37.440963</coordinates></Point>"^^rdf:XMLLiteral;
+   :kml "<file://Point><file://coordinates>-122.156485,37.440963<file:///coordinates><file:///Point>"^^rdf:XMLLiteral;
    :on_street "ADDISON AV";
    :protected false;
    :species "Celtis australis";
@@ -17,7 +17,7 @@
 
 <http://example.org/tree-ops-ext#gid-2> :dbh 11;
    :inventory_date "2010-06-02"^^xsd:date;
-   :kml "<Point><coordinates>-122.156749,37.440958</coordinates></Point>"^^rdf:XMLLiteral;
+   :kml "<file://Point><file://coordinates>-122.156749,37.440958<file:///coordinates><file:///Point>"^^rdf:XMLLiteral;
    :on_street "EMERSON ST";
    :protected false;
    :species "Liquidambar styraciflua";
@@ -33,7 +33,7 @@
      "beware of BEES"^^xsd:normalizedString;
    :dbh 29;
    :inventory_date "2010-06-01"^^xsd:date;
-   :kml "<Point><coordinates>-122.156299,37.441151</coordinates></Point>"^^rdf:XMLLiteral;
+   :kml "<file://Point><file://coordinates>-122.156299,37.441151<file:///coordinates><file:///Point>"^^rdf:XMLLiteral;
    :on_street "ADDISON AV";
    :protected true;
    :species "Robinia pseudoacacia";
@@ -63,19 +63,19 @@
       a csvw:Row;
      csvw:describes <http://example.org/tree-ops-ext#gid-1>;
      csvw:rownum 1;
-     csvw:url <tree-ops-ext.csv#row=2>
+     csvw:url <file://tree-ops-ext.csv#row=2>
    ],  [
       a csvw:Row;
      csvw:describes <http://example.org/tree-ops-ext#gid-2>;
      csvw:rownum 2;
-     csvw:url <tree-ops-ext.csv#row=3>
+     csvw:url <file://tree-ops-ext.csv#row=3>
    ],  [
       a csvw:Row;
      csvw:describes <http://example.org/tree-ops-ext#gid-6>;
      csvw:rownum 3;
-     csvw:url <tree-ops-ext.csv#row=4>
+     csvw:url <file://tree-ops-ext.csv#row=4>
    ];
-   csvw:url <tree-ops-ext.csv> .
+   csvw:url <file://tree-ops-ext.csv> .
 
  [
     a csvw:TableGroup;

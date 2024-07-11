@@ -34,6 +34,7 @@ public class FileWrite {
         }
     }
 
+    /*
     public static String saveCSVFileFromRows(String fileName, ArrayList<Value> keys, ArrayList<Row> rows, String delimiter){
         StringBuilder forOutput = new StringBuilder();
         File f = FileWrite.makeFileByNameAndExtension( fileName, "csv");
@@ -71,6 +72,8 @@ public class FileWrite {
 
     }
 
+     */
+
     public static void writeFilesToconfigFile(ArrayList<String> fileNamesCreated) {
         StringBuilder sb = new StringBuilder();
         fileNamesCreated.forEach(fileName -> sb.append(fileName + ","));
@@ -78,6 +81,7 @@ public class FileWrite {
     }
 
     public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata){
+        //System.out.println("saveCSVFileFromRows beginning");
         StringBuilder forOutput = new StringBuilder();
         File f = FileWrite.makeFileByNameAndExtension( fileName, null);
         //System.out.println("File f: " + f.getAbsolutePath());
@@ -111,6 +115,8 @@ public class FileWrite {
             int i = 0;
             if(!combinations.isEmpty()){
                 for(Map<Value,Value> combination : combinations){
+                    //System.out.println("Combinations size: " + combinations.size());
+                    //System.out.println("Combination: " + combination.entrySet());
                     appendIdByValuePattern(row, metadata, sb, orderOfColumnKeys.get(0));
                     //System.out.println("Combination #"  + i);
                     i++;
@@ -141,7 +147,7 @@ public class FileWrite {
                     sb.deleteCharAt(sb.length() - 1);
                     sb.append("\n");
                 }
-
+                //System.out.println("forOutput : " + forOutput.toString());
                 forOutput.append(sb);
             } else {
                 appendIdByValuePattern(row, metadata, sb, orderOfColumnKeys.get(0));
@@ -160,21 +166,23 @@ public class FileWrite {
 
                     }
                 }
+                sb.deleteCharAt(sb.length() - 1);
+                sb.append("\n");
+                //System.out.println("row: " + sb.toString() + ".");
+                forOutput.append(sb);
             }
 
 
 
 
-            sb.deleteCharAt(sb.length() - 1);
-            sb.append("\n");
-            //System.out.println("row: " + sb.toString() + ".");
-            forOutput.append(sb);
+
         }
 
 
         //System.out.println("Written rows from rows to the file " + forOutput.toString() + ".");
         FileWrite.writeToTheFile(f, forOutput.toString());
         System.out.println("Written CSV from rows to the file " + f + ".");
+        //System.out.println("saveCSVFileFromRows end");
         return forOutput.toString();
 
     }

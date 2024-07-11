@@ -1,4 +1,4 @@
-@prefix : <tree-ops.csv#> .
+@prefix : <file://tree-ops.csv#> .
 @prefix csvw: <http://www.w3.org/ns/csvw#> .
 @prefix dc: <http://purl.org/dc/terms/> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
@@ -36,13 +36,13 @@
         a csvw:Row;
         csvw:describes :gid-1;
         csvw:rownum 1;
-        csvw:url <tree-ops.csv#row=2>
+        csvw:url <file://tree-ops.csv#row=2>
       ],  [
         a csvw:Row;
         csvw:describes :gid-2;
         csvw:rownum 2;
-        csvw:url <tree-ops.csv#row=3>
+        csvw:url <file://tree-ops.csv#row=3>
       ];
-      csvw:url <tree-ops.csv>
+      csvw:url <file://tree-ops.csv>
     ]
  ] .

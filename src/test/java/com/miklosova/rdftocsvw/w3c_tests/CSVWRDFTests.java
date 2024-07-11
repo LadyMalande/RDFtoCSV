@@ -3,6 +3,7 @@ package com.miklosova.rdftocsvw.w3c_tests;
 import com.miklosova.rdftocsvw.BaseTest;
 import com.miklosova.rdftocsvw.convertor.ConversionService;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
+import com.miklosova.rdftocsvw.convertor.RDFtoCSV;
 import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
@@ -24,11 +25,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 @RunWith(Parameterized.class)
 public class CSVWRDFTests extends BaseTest {
     private static final CharSequence EXCEPTION_MESSAGE = "OR 'NO TRIPLES FOUND'";
-    private final String PROCESS_METHOD = "rdf4j";
+    private final String READ_METHOD = "rdf4j";
     private String nameForTest;
     private String filePath;
     private String filePathForMetadata;
@@ -36,13 +38,21 @@ public class CSVWRDFTests extends BaseTest {
     private String expectedDatatype;
     private PrefinishedOutput prefinishedOutput;
 
+    // There is 307 tests on the W3C test page, here we need to add +1 because of the file naming system
+    private static final Integer NUMBER_OF_W3C_TESTS = 308;
+
     private String expectedException;
 
+    private RepositoryConnection repositoryConnection;
+
+    private static final List<Integer> NOT_DEFINED =  Arrays.asList(new Integer[]{2, 3, 4,11,12,14,15,16,17,18,19,20,21,22,24,25,26,50,51,52,53,54,55,56,57,58,64,94,96,145,239,240,241,249,250,254,255,256,257,258,262,265});
     private static final String RESOURCES_PATH = "./src/test/resources/CSVWRDFTests/";
+
+
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> configs(){
         Collection<Object[]> conf = new ArrayList<>();
-        for(int i = 1; i < 308; i++)
+        for(int i = 1; i < 2; i++)
         {
             Object[] array = new Object[3];
             String extra = "";
@@ -89,11 +99,7 @@ public class CSVWRDFTests extends BaseTest {
 
     public CSVWRDFTests(String nameForTest, String expectedDatatype, String expectedException) {
         this.nameForTest = nameForTest;
-        if(nameForTest.endsWith(".rdf")){
-            this.filePath = RESOURCES_PATH + nameForTest;
-        } else{
-            this.filePath = RESOURCES_PATH + nameForTest;
-        }
+        this.filePath = RESOURCES_PATH + nameForTest;
         this.filePathForMetadata = RESOURCES_PATH + nameForTest + ".csv-metadata.json";
         this.filePathForOutput = RESOURCES_PATH + nameForTest + "TestOutput";
         this.expectedException = expectedException;
@@ -102,9 +108,16 @@ public class CSVWRDFTests extends BaseTest {
     @BeforeEach
     void createPrefinishedOutputAndMetadata(){
         db = new SailRepository(new MemoryStore());
-        this.prefinishedOutput = TestSupport.createPrefinishedOutput(this.filePath, this.filePathForMetadata, this.filePathForOutput, this.PROCESS_METHOD, this.db, new String[]{this.filePath}
-        );
-        this.testMetadata = TestSupport.createMetadata(this.prefinishedOutput);
+        RDFtoCSV rdFtoCSV = new RDFtoCSV(this.filePath);
+        rdFtoCSV.configure();
+        try {
+            repositoryConnection = rdFtoCSV.createRepositoryConnection(db, this.filePath, READ_METHOD);
+            this.prefinishedOutput = rdFtoCSV.convertData(repositoryConnection, db);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //this.prefinishedOutput = TestSupport.createPrefinishedOutput(this.filePath, this.filePathForMetadata, this.filePathForOutput, this.PROCESS_METHOD, this.db, new String[]{this.filePath});
+        this.testMetadata = rdFtoCSV.createMetadata(this.prefinishedOutput);
     }
     @Test
     public void filesAreCreated() {

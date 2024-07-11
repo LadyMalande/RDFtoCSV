@@ -1,4 +1,4 @@
-@prefix : <tree-ops.csv#> .
+@prefix : <file://tree-ops.csv#> .
 @prefix csvw: <http://www.w3.org/ns/csvw#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
@@ -17,7 +17,7 @@
           :trim_cycle "Large Tree Routine Prune"
         ];
         csvw:rownum 1;
-        csvw:url <tree-ops.csv#row=2>
+        csvw:url <file://tree-ops.csv#row=2>
       ],  [
         a csvw:Row;
         csvw:describes [
@@ -28,8 +28,8 @@
           :trim_cycle "Large Tree Routine Prune"
         ];
         csvw:rownum 2;
-        csvw:url <tree-ops.csv#row=3>
+        csvw:url <file://tree-ops.csv#row=3>
       ];
-      csvw:url <tree-ops.csv>
+      csvw:url <file://tree-ops.csv>
     ]
  ] .

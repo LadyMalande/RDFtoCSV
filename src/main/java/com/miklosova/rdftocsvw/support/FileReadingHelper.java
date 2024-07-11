@@ -8,9 +8,9 @@ import org.eclipse.rdf4j.rio.Rio;
 
 import java.io.*;
 import java.util.Scanner;
-public class FileReader {
+public class FileReadingHelper {
 
-    public FileReader() {
+    public FileReadingHelper() {
     }
 
     public File readFile(String filename){
@@ -34,7 +34,7 @@ public class FileReader {
     public Model readRDF(String resource) throws UnsupportedEncodingException {
         String filename = "typy-pracovních-vztahů.nt";
         // read the file 'example-data-artists.ttl' as an InputStream.
-        InputStream input = FileReader.class.getResourceAsStream("/" + resource);
+        InputStream input = FileReadingHelper.class.getResourceAsStream("/" + resource);
 
         // Rio also accepts a java.io.Reader as input for the parser.
         RDFFormat format = getFileFormatFromExtension(resource);

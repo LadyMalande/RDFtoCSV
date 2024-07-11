@@ -11,6 +11,7 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.util.Values;
+import org.jruby.RubyProcess;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -140,20 +141,27 @@ public class TableSchema {
     }
 
     private boolean isNamespaceTheSameForAllRows(List<Row> rows, Value columnPredicate) {
+        System.out.println("Column predicate = " + columnPredicate.stringValue());
         if(columnPredicate.stringValue().equalsIgnoreCase(rows.get(0).type.stringValue())){
             return isNamespaceTheSameForAllPrimary(rows);
         }
         //System.out.println("predicateOfColumn ="+ columnPredicate.stringValue());
         if(rows.get(0).columns != null) {
+            System.out.println("rows.get(0).columns != null  true");
             if(rows.get(0).columns.get(columnPredicate) != null) {
+                System.out.println("rows.get(0).columns.get(columnPredicate) != null true");
                 if (rows.get(0).columns.get(columnPredicate).type == TypeOfValue.LITERAL) {
+                    System.out.println("rows.get(0).columns.get(columnPredicate).type = " + rows.get(0).columns.get(columnPredicate).type);
                     return false;
                 }
+            } else{
+                return false;
             }
         } else {
             return false;
         }
-        //rows.forEach(row -> row.columns.entrySet().forEach(column -> System.out.println(column.getKey())));
+        rows.forEach(row -> row.columns.entrySet().forEach(column -> System.out.println(column.getKey() + " values: " + column.getValue().values)));
+
         List<Row> hasIRI = rows.stream().filter(row -> {
             if(row.columns.get(columnPredicate) != null) {
                 return row.columns.get(columnPredicate).values.get(0).isIRI();
@@ -286,6 +294,10 @@ public class TableSchema {
         if(value.isBNode()){
             return null;
         } else {
+            if(value.isIRI() && value.stringValue().startsWith("https://blank_Nodes_IRI")){
+                this.aboutUrl = null;
+                return null;
+            }
             IRI valueIri = (IRI) value;
             String theNameOfTheColumn;
             if (isRdfType) {

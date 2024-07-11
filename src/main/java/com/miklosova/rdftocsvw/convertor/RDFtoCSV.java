@@ -12,6 +12,7 @@ import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
+import org.jruby.RubyProcess;
 
 import java.io.IOException;
 import java.util.zip.ZipOutputStream;
@@ -31,6 +32,8 @@ public class RDFtoCSV {
     private String outputFileName;
     private String tableMethod;
     private String readMethod;
+    private String filePathForOutput;
+    private String metadataFilename;
 
     public final String DEFAULT_OUTPUT_FILE_NAME = "tabularDataOutput";
 
@@ -42,6 +45,8 @@ public class RDFtoCSV {
     public RDFtoCSV(String fileName) {
         this.fileName = fileName;
         System.out.println("this.filename" + this.fileName);
+        this.metadataFilename = this.fileName + ".csv-metadata.json";
+        this.filePathForOutput = this.fileName + "TestOutput";
     }
 
 
@@ -95,13 +100,17 @@ public class RDFtoCSV {
             System.out.println();
 
              */
+                System.out.println("FileWrite for i= " + i + " rowAndKey = " + rowAndKey.getKeys() + " getRows= " + rowAndKey.getRows());
                 String newFileName = files[i];
                 FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata);
                 i++;
             }
         }catch(ClassCastException ex){
             RowAndKey rnk = (RowAndKey) po.getPrefinishedOutput();
+
+
             String newFileName = files[0];
+            System.out.println("ClassCastException FileWrite for newfilename= " + newFileName + " rowAndKey = ");
             FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata);
         }
         //System.out.println("rnk size " + rnk.getRowsAndKeys().size());
@@ -115,7 +124,7 @@ public class RDFtoCSV {
         return zop.processCSVToOutput(po);
     }
 
-    private Metadata createMetadata(PrefinishedOutput po) {
+    public Metadata createMetadata(PrefinishedOutput po) {
         // Convert intermediate data into basic metadata
         MetadataService ms = new MetadataService();
         return ms.createMetadata(po);
@@ -127,6 +136,12 @@ public class RDFtoCSV {
         return cs.convertByQuery(rc, db);
     }
 
+    public PrefinishedOutput convertData(RepositoryConnection repositoryConnection, Repository repository) {
+        // Convert the table to intermediate data for processing into metadata
+        ConversionService cs = new ConversionService();
+        return cs.convertByQuery(repositoryConnection, repository);
+    }
+
     public void parseInput() throws IOException {
         // Parse input
         // Create a new Repository.
@@ -134,6 +149,15 @@ public class RDFtoCSV {
         MethodService methodService = new MethodService();
         rc = methodService.processInput(fileName, readMethod, db);
         assert(rc != null);
+    }
+
+    public RepositoryConnection createRepositoryConnection(Repository repository, String filename, String readMethod) throws IOException {
+        // Parse input
+        // Create a new Repository.
+        MethodService methodService = new MethodService();
+        RepositoryConnection repositoryConnection = methodService.processInput(filename, readMethod, repository);
+        assert(repositoryConnection != null);
+        return repositoryConnection;
     }
 
     public void configure() {
@@ -148,5 +172,9 @@ public class RDFtoCSV {
 
         readMethod = (readMethod != null) ? readMethod : DEFAULT_READ_METHOD;
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.READ_METHOD, readMethod);
+
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, metadataFilename);
+
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, filePathForOutput);
     }
 }
