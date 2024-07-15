@@ -1,0 +1,10 @@
+{
+	"@context" : "http://www.w3.org/ns/csvw",
+  "tables" : [ {
+    "url" : "splitQuerynewCSVOutput0.csv"
+  }, {
+    "url" : "splitQuerynewCSVOutput1.csv"
+    }
+   ]
+
+}

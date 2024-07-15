@@ -1,0 +1,7 @@
+Subjekt,FamilyName,Surname,childFoaf,childName,foaf_id
+3,Simpson,Homer,http://example/bart,Bart,http://example/homer
+5,Simpson,Homer,http://example/lisa,Lisa,http://example/homer
+7,Simpson,Homer,http://example/maggie,Maggie,http://example/homer
+9,Simpson,Marge,http://example/bart,Bart,http://example/marge
+11,Simpson,Marge,http://example/lisa,Lisa,http://example/marge
+13,Simpson,Marge,http://example/maggie,Maggie,http://example/marge

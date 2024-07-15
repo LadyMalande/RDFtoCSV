@@ -1,0 +1,54 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test213.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "maxExclusive",
+        "name" : "maxExclusive",
+        "propertyUrl" : "file://test213.csv#maxExclusive",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "maxInclusive",
+        "name" : "maxInclusive",
+        "propertyUrl" : "file://test213.csv#maxInclusive"
+      }, {
+        "@type" : "Column",
+        "titles" : "maximum",
+        "name" : "maximum",
+        "propertyUrl" : "file://test213.csv#maximum",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "minExclusive",
+        "name" : "minExclusive",
+        "propertyUrl" : "file://test213.csv#minExclusive",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "minInclusive",
+        "name" : "minInclusive",
+        "propertyUrl" : "file://test213.csv#minInclusive",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "minimum",
+        "name" : "minimum",
+        "propertyUrl" : "file://test213.csv#minimum",
+        "datatype" : "date"
+      } ],
+      "rowTitles" : [ null, null, null, null, null, null ]
+    }
+  } ]
+}

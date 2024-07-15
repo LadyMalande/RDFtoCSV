@@ -1,0 +1,115 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test188.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "M%2Dd%2Dyyyy",
+        "name" : "M%2Dd%2Dyyyy",
+        "propertyUrl" : "file://test188.csv#M%2Dd%2Dyyyy",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "M%2Fd%2Fyyyy",
+        "name" : "M%2Fd%2Fyyyy",
+        "propertyUrl" : "file://test188.csv#M%2Fd%2Fyyyy",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "M.d.yyyy",
+        "name" : "M.d.yyyy",
+        "propertyUrl" : "file://test188.csv#M.d.yyyy",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "MM%2Ddd%2Dyyyy",
+        "name" : "MM%2Ddd%2Dyyyy",
+        "propertyUrl" : "file://test188.csv#MM%2Ddd%2Dyyyy",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "MM%2Fdd%2Fyyyy",
+        "name" : "MM%2Fdd%2Fyyyy",
+        "propertyUrl" : "file://test188.csv#MM%2Fdd%2Fyyyy",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "MM.dd.yyyy",
+        "name" : "MM.dd.yyyy",
+        "propertyUrl" : "file://test188.csv#MM.dd.yyyy",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "d%2DM%2Dyyyy",
+        "name" : "d%2DM%2Dyyyy",
+        "propertyUrl" : "file://test188.csv#d%2DM%2Dyyyy",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "d%2FM%2Fyyyy",
+        "name" : "d%2FM%2Fyyyy",
+        "propertyUrl" : "file://test188.csv#d%2FM%2Fyyyy",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "d.M.yyyy",
+        "name" : "d.M.yyyy",
+        "propertyUrl" : "file://test188.csv#d.M.yyyy",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "dd%2DMM%2Dyyyy",
+        "name" : "dd%2DMM%2Dyyyy",
+        "propertyUrl" : "file://test188.csv#dd%2DMM%2Dyyyy",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "dd%2FMM%2Fyyyy",
+        "name" : "dd%2FMM%2Fyyyy",
+        "propertyUrl" : "file://test188.csv#dd%2FMM%2Fyyyy",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "dd.MM.yyyy",
+        "name" : "dd.MM.yyyy",
+        "propertyUrl" : "file://test188.csv#dd.MM.yyyy",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "dd.MM.yyyy%20XXX",
+        "name" : "dd.MM.yyyy%20XXX",
+        "propertyUrl" : "file://test188.csv#dd.MM.yyyy%20XXX",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyy%2DMM%2Ddd",
+        "name" : "yyyy%2DMM%2Ddd",
+        "propertyUrl" : "file://test188.csv#yyyy%2DMM%2Ddd",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyy%2DMM%2DddX",
+        "name" : "yyyy%2DMM%2DddX",
+        "propertyUrl" : "file://test188.csv#yyyy%2DMM%2DddX",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyyMMdd",
+        "name" : "yyyyMMdd",
+        "propertyUrl" : "file://test188.csv#yyyyMMdd",
+        "datatype" : "date"
+      } ],
+      "rowTitles" : [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+    }
+  } ]
+}

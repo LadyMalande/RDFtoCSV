@@ -1,0 +1,22 @@
+{
+  "tables" : [ {
+    "url" : "test299.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "columns" : [ {
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "titles" : "%230.0",
+        "name" : "%230.0",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test299.csv#%230.0",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{Subjekt}"
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "https://blank_Nodes_IRI.org/{Subjekt}",
+      "rowTitles" : [ "Subjekt", "%230.0" ]
+    }
+  } ],
+  "@context" : "http://www.w3.org/ns/csvw"
+}

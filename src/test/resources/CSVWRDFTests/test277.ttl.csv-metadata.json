@@ -1,0 +1,52 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test277.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "GID",
+        "name" : "GID",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/tree-ops.csv#GID",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "inventory_date",
+        "name" : "inventory_date",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/tree-ops.csv#inventory_date",
+        "datatype" : "date",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "on_street",
+        "name" : "on_street",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/tree-ops.csv#on_street",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "species",
+        "name" : "species",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/tree-ops.csv#species",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "trim_cycle",
+        "name" : "trim_cycle",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/tree-ops.csv#trim_cycle",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+      "rowTitles" : [ "GID", "inventory_date", "on_street", "species", "trim_cycle" ]
+    }
+  } ]
+}

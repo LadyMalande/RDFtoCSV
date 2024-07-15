@@ -1,0 +1,71 @@
+{
+  "tables" : [ {
+    "url" : "test284.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "columns" : [ {
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "titles" : "%23%23%230.%23%23%23%23%23",
+        "name" : "%23%23%230.%23%23%23%23%23",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test284.csv#%23%23%230.%23%23%23%23%23",
+        "datatype" : "decimal",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{Subjekt}"
+      }, {
+        "titles" : "%23%23%230.0000%23",
+        "name" : "%23%23%230.0000%23",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test284.csv#%23%23%230.0000%23",
+        "datatype" : "decimal",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{Subjekt}"
+      }, {
+        "titles" : "%23%2C%23%23%2C%23%230",
+        "name" : "%23%2C%23%23%2C%23%230",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test284.csv#%23%2C%23%23%2C%23%230",
+        "datatype" : "integer",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{Subjekt}"
+      }, {
+        "titles" : "%23%2C%23%23%2C%2300",
+        "name" : "%23%2C%23%23%2C%2300",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test284.csv#%23%2C%23%23%2C%2300",
+        "datatype" : "integer",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{Subjekt}"
+      }, {
+        "titles" : "%23%2C%23%23%2C000",
+        "name" : "%23%2C%23%23%2C000",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test284.csv#%23%2C%23%23%2C000",
+        "datatype" : "integer",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{Subjekt}"
+      }, {
+        "titles" : "%23%2C%230%2C000",
+        "name" : "%23%2C%230%2C000",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test284.csv#%23%2C%230%2C000",
+        "datatype" : "integer",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{Subjekt}"
+      }, {
+        "titles" : "%23%2C00%2C000",
+        "name" : "%23%2C00%2C000",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test284.csv#%23%2C00%2C000",
+        "datatype" : "integer",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{Subjekt}"
+      }, {
+        "titles" : "0%2C00%2C000",
+        "name" : "0%2C00%2C000",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test284.csv#0%2C00%2C000",
+        "datatype" : "integer",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{Subjekt}"
+      }, {
+        "titles" : "00000.0000",
+        "name" : "00000.0000",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test284.csv#00000.0000",
+        "datatype" : "decimal",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{Subjekt}"
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "https://blank_Nodes_IRI.org/{Subjekt}",
+      "rowTitles" : [ "Subjekt", "%23%23%230.%23%23%23%23%23", "%23%23%230.0000%23", "%23%2C%23%23%2C%23%230", "%23%2C%23%23%2C%2300", "%23%2C%23%23%2C000", "%23%2C%230%2C000", "%23%2C00%2C000", "0%2C00%2C000", "00000.0000" ]
+    }
+  } ],
+  "@context" : "http://www.w3.org/ns/csvw"
+}

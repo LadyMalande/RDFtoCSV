@@ -1,0 +1,6 @@
+Concept,notation,inScheme,prefLabel (cs),prefLabel (en)
+dpč,dpč,#blankNodeValue#_:typy-pracovních-vztahů,Dohoda o pracovní činnosti,Agreement to Perform Work
+dpp,_blankNode26,typy-pracovních-vztahů,Dohoda o provedení práce,Agreement to Complete a Job
+plný-úvazek,<_blankNodeplný-úvazek>,typy-pracovních-vztahů,Pracovní poměr - plný úvazek,Full time employment
+zkrácený-úvazek,zkrácený-úvazek,typy-pracovních-vztahů,Pracovní poměr - zkrácený úvazek,xx
+služební-poměr,služební-poměr,typy-pracovních-vztahů,,Civil service employment

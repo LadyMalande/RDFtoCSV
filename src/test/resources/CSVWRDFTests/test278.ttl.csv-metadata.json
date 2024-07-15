@@ -1,0 +1,51 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test278.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "GID",
+        "name" : "GID",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/tree-ops.csv#GID",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.2",
+        "name" : "_col.2",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/tree-ops.csv#_col.2",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.3",
+        "name" : "_col.3",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/tree-ops.csv#_col.3",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.4",
+        "name" : "_col.4",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/tree-ops.csv#_col.4",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.5",
+        "name" : "_col.5",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/tree-ops.csv#_col.5",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+      "rowTitles" : [ "GID", "_col.2", "_col.3", "_col.4", "_col.5" ]
+    }
+  } ]
+}

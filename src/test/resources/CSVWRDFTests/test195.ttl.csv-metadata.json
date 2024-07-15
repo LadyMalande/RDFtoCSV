@@ -1,0 +1,37 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test195.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "NMTOKEN",
+        "name" : "NMTOKEN",
+        "propertyUrl" : "file://test195.csv#NMTOKEN",
+        "datatype" : "NMTOKEN"
+      }, {
+        "@type" : "Column",
+        "titles" : "base64Binary",
+        "name" : "base64Binary",
+        "propertyUrl" : "file://test195.csv#base64Binary",
+        "datatype" : "base64Binary"
+      }, {
+        "@type" : "Column",
+        "titles" : "hexBinary",
+        "name" : "hexBinary",
+        "propertyUrl" : "file://test195.csv#hexBinary",
+        "datatype" : "hexBinary"
+      } ],
+      "rowTitles" : [ null, null, null ]
+    }
+  } ]
+}

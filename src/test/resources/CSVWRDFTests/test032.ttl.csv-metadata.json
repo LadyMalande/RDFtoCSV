@@ -1,0 +1,286 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test032.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "TableGroup",
+        "name" : "TableGroup",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "table",
+        "name" : "table",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#table",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+table}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#TableGroup",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "table",
+        "reference" : {
+          "resource" : "test032.ttlTestOutput1.csv",
+          "columnReference" : "Table"
+        }
+      } ],
+      "rowTitles" : [ "type", "table" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "test032.ttlTestOutput1.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Table",
+        "name" : "Table",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Table}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "url",
+        "name" : "url",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://{+url}"
+      }, {
+        "@type" : "Column",
+        "titles" : "row",
+        "name" : "row",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#row",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+row}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#Table",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Table}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "row",
+        "reference" : {
+          "resource" : "test032.ttlTestOutput2.csv",
+          "columnReference" : "Row"
+        }
+      } ],
+      "rowTitles" : [ "type", "url", "row" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "test032.ttlTestOutput2.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Row",
+        "name" : "Row",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Row}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "rownum",
+        "name" : "rownum",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "url",
+        "name" : "url",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://events-listing.csv#{+url}"
+      }, {
+        "@type" : "Column",
+        "titles" : "describes",
+        "name" : "describes",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "file://events-listing.csv#{+describes}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#Row",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Row}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "describes",
+        "reference" : {
+          "resource" : "test032.ttlTestOutput3.csv",
+          "columnReference" : "MusicEvent"
+        }
+      } ],
+      "rowTitles" : [ "type", "rownum", "url", "describes" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "test032.ttlTestOutput3.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "MusicEvent",
+        "name" : "MusicEvent",
+        "valueUrl" : "file://events-listing.csv#{+MusicEvent}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://schema.org/{+type}",
+        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://schema.org/name",
+        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
+      }, {
+        "@type" : "Column",
+        "titles" : "startDate",
+        "name" : "startDate",
+        "propertyUrl" : "http://schema.org/startDate",
+        "datatype" : "dateTime",
+        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
+      }, {
+        "@type" : "Column",
+        "titles" : "location",
+        "name" : "location",
+        "propertyUrl" : "http://schema.org/location",
+        "valueUrl" : "file://events-listing.csv#{+location}",
+        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
+      }, {
+        "@type" : "Column",
+        "titles" : "offers",
+        "name" : "offers",
+        "propertyUrl" : "http://schema.org/offers",
+        "valueUrl" : "file://events-listing.csv#{+offers}",
+        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://schema.org/MusicEvent",
+        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "location",
+        "reference" : {
+          "resource" : "test032.ttlTestOutput4.csv",
+          "columnReference" : "Place"
+        }
+      }, {
+        "columnReference" : "offers",
+        "reference" : {
+          "resource" : "test032.ttlTestOutput5.csv",
+          "columnReference" : "Offer"
+        }
+      } ],
+      "primaryKey" : "MusicEvent",
+      "aboutUrl" : "file://events-listing.csv#{+MusicEvent}",
+      "rowTitles" : [ "type", "name", "startDate", "location", "offers" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "test032.ttlTestOutput4.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Place",
+        "name" : "Place",
+        "valueUrl" : "file://events-listing.csv#{+Place}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://schema.org/{+type}",
+        "aboutUrl" : "{+Place}"
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://schema.org/name",
+        "aboutUrl" : "{+Place}"
+      }, {
+        "@type" : "Column",
+        "titles" : "address",
+        "name" : "address",
+        "propertyUrl" : "http://schema.org/address",
+        "aboutUrl" : "{+Place}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://schema.org/Place",
+        "aboutUrl" : "file://events-listing.csv#{+Place}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Place",
+      "aboutUrl" : "file://events-listing.csv#{+Place}",
+      "rowTitles" : [ "type", "name", "address" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "test032.ttlTestOutput5.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Offer",
+        "name" : "Offer",
+        "valueUrl" : "file://events-listing.csv#{+Offer}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://schema.org/{+type}",
+        "aboutUrl" : "file://events-listing.csv#{+Offer}"
+      }, {
+        "@type" : "Column",
+        "titles" : "url",
+        "name" : "url",
+        "propertyUrl" : "http://schema.org/url",
+        "datatype" : "anyURI",
+        "aboutUrl" : "file://events-listing.csv#{+Offer}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://schema.org/Offer",
+        "aboutUrl" : "file://events-listing.csv#{+Offer}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Offer",
+      "aboutUrl" : "file://events-listing.csv#{+Offer}",
+      "rowTitles" : [ "type", "url" ]
+    }
+  } ]
+}

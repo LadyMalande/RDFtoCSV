@@ -1,0 +1,87 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test036.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "dbh",
+        "name" : "dbh",
+        "propertyUrl" : "file://tree-ops-ext.csv#dbh",
+        "datatype" : "integer",
+        "aboutUrl" : "{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "inventory_date",
+        "name" : "inventory_date",
+        "propertyUrl" : "file://tree-ops-ext.csv#inventory_date",
+        "datatype" : "date",
+        "aboutUrl" : "{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "kml",
+        "name" : "kml",
+        "propertyUrl" : "file://tree-ops-ext.csv#kml",
+        "datatype" : "XMLLiteral",
+        "aboutUrl" : "{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "on_street",
+        "name" : "on_street",
+        "propertyUrl" : "file://tree-ops-ext.csv#on_street",
+        "aboutUrl" : "{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "protected",
+        "name" : "protected",
+        "propertyUrl" : "file://tree-ops-ext.csv#protected",
+        "datatype" : "boolean",
+        "aboutUrl" : "{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "species",
+        "name" : "species",
+        "propertyUrl" : "file://tree-ops-ext.csv#species",
+        "aboutUrl" : "{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "trim_cycle (null)",
+        "name" : "trim_cycle_en",
+        "propertyUrl" : "file://tree-ops-ext.csv#trim_cycle",
+        "aboutUrl" : "{+Subjekt}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "comments",
+        "name" : "comments",
+        "propertyUrl" : "file://tree-ops-ext.csv#comments",
+        "datatype" : "normalizedString",
+        "aboutUrl" : "{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "name (null)",
+        "name" : "name_en",
+        "propertyUrl" : "http://schema.org/name",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "url",
+        "name" : "url",
+        "propertyUrl" : "http://schema.org/url",
+        "valueUrl" : "{+url}"
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "http://example.org/tree-ops-ext#{+Subjekt}",
+      "rowTitles" : [ null, null, null, null, null, null, null, null, "name_en", "url" ]
+    }
+  } ]
+}

@@ -1,0 +1,49 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test148.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "GID (null)",
+        "name" : "GID_de",
+        "propertyUrl" : "file://tree-ops.csv#GID",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "Inventory%20Date (null)",
+        "name" : "Inventory%20Date_de",
+        "propertyUrl" : "file://tree-ops.csv#Inventory%20Date",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "Species (null)",
+        "name" : "Species_de",
+        "propertyUrl" : "file://tree-ops.csv#Species",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "Trim%20Cycle (null)",
+        "name" : "Trim%20Cycle_de",
+        "propertyUrl" : "file://tree-ops.csv#Trim%20Cycle",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.2 (null)",
+        "name" : "_col.2_de",
+        "propertyUrl" : "file://tree-ops.csv#_col.2",
+        "lang" : "de"
+      } ],
+      "rowTitles" : [ null, null, null, null, null ]
+    }
+  } ]
+}

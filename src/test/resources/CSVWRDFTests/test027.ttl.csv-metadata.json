@@ -1,0 +1,52 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test027.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "file://tree-ops.csv#{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "GID",
+        "name" : "GID",
+        "propertyUrl" : "file://tree-ops.csv#GID",
+        "aboutUrl" : "file://tree-ops.csv#{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "inventory_date",
+        "name" : "inventory_date",
+        "propertyUrl" : "file://tree-ops.csv#inventory_date",
+        "datatype" : "date",
+        "aboutUrl" : "file://tree-ops.csv#{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "on_street",
+        "name" : "on_street",
+        "propertyUrl" : "file://tree-ops.csv#on_street",
+        "aboutUrl" : "file://tree-ops.csv#{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "species",
+        "name" : "species",
+        "propertyUrl" : "file://tree-ops.csv#species",
+        "aboutUrl" : "file://tree-ops.csv#{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "trim_cycle",
+        "name" : "trim_cycle",
+        "propertyUrl" : "file://tree-ops.csv#trim_cycle",
+        "aboutUrl" : "file://tree-ops.csv#{+Subjekt}"
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "file://tree-ops.csv#{+Subjekt}",
+      "rowTitles" : [ null, null, null, null, null ]
+    }
+  } ]
+}

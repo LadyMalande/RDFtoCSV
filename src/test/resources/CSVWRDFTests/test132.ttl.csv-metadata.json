@@ -1,0 +1,44 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test132.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "GID",
+        "name" : "GID",
+        "propertyUrl" : "file://tree-ops.csv#GID"
+      }, {
+        "@type" : "Column",
+        "titles" : "Inventory%20Date",
+        "name" : "Inventory%20Date",
+        "propertyUrl" : "file://tree-ops.csv#Inventory%20Date"
+      }, {
+        "@type" : "Column",
+        "titles" : "On%20Street",
+        "name" : "On%20Street",
+        "propertyUrl" : "file://tree-ops.csv#On%20Street"
+      }, {
+        "@type" : "Column",
+        "titles" : "Species",
+        "name" : "Species",
+        "propertyUrl" : "file://tree-ops.csv#Species"
+      }, {
+        "@type" : "Column",
+        "titles" : "Trim%20Cycle",
+        "name" : "Trim%20Cycle",
+        "propertyUrl" : "file://tree-ops.csv#Trim%20Cycle"
+      } ],
+      "rowTitles" : [ null, null, null, null, null ]
+    }
+  } ]
+}

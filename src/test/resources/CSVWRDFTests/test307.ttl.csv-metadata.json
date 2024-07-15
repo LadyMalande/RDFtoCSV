@@ -1,0 +1,161 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test307.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "file://test307.csv#{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "value",
+        "name" : "value",
+        "propertyUrl" : "file://test307.csv#value",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+value}",
+        "aboutUrl" : "file://test307.csv#{+Subjekt}"
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "value",
+        "reference" : {
+          "resource" : "test307.ttlTestOutput3.csv",
+          "columnReference" : "rest"
+        }
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "file://test307.csv#{+Subjekt}",
+      "rowTitles" : [ null ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "test307.ttlTestOutput1.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "first",
+        "name" : "first",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "rest",
+        "name" : "rest",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+rest}",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "rest",
+        "reference" : {
+          "resource" : "test307.ttlTestOutput3.csv",
+          "columnReference" : "rest"
+        }
+      }, {
+        "columnReference" : "rest",
+        "reference" : {
+          "resource" : "test307.ttlTestOutput3.csv",
+          "columnReference" : "rest"
+        }
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+      "rowTitles" : [ "first", "rest" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "test307.ttlTestOutput2.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "first",
+        "name" : "first",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "rest",
+        "name" : "rest",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+rest}",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "rest",
+        "reference" : {
+          "resource" : "test307.ttlTestOutput3.csv",
+          "columnReference" : "rest"
+        }
+      }, {
+        "columnReference" : "rest",
+        "reference" : {
+          "resource" : "test307.ttlTestOutput3.csv",
+          "columnReference" : "rest"
+        }
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+      "rowTitles" : [ "first", "rest" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "test307.ttlTestOutput3.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "first",
+        "name" : "first",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "rest",
+        "name" : "rest",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+rest}",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "rest",
+        "reference" : {
+          "resource" : "test307.ttlTestOutput3.csv",
+          "columnReference" : "rest"
+        }
+      }, {
+        "columnReference" : "rest",
+        "reference" : {
+          "resource" : "test307.ttlTestOutput3.csv",
+          "columnReference" : "rest"
+        }
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+      "rowTitles" : [ "first", "rest" ]
+    }
+  } ]
+}
