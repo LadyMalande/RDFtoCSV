@@ -1,0 +1,25 @@
+Subjekt,FamilyName,Surname,child_id,id
+3,Simpson,Homer,3,1
+3,Simpson,Homer,3,1
+5,Simpson,Homer,4,1
+5,Simpson,Homer,4,1
+7,Simpson,Homer,5,1
+7,Simpson,Homer,5,1
+9,Simpson,Marge,3,2
+9,Simpson,Marge,3,2
+11,Simpson,Marge,4,2
+11,Simpson,Marge,4,2
+13,Simpson,Marge,5,2
+13,Simpson,Marge,5,2
+15,Simpson,Bart,,3
+15,Simpson,Bart,,3
+17,Simpson,Lisa,,4
+17,Simpson,Lisa,,4
+19,Simpson,Maggie,,5
+19,Simpson,Maggie,,5
+21,Flanders,Ned,,6
+21,Flanders,Ned,,6
+23,the Clown,Krusty,,7
+23,the Clown,Krusty,,7
+25,Smithers,Waylon,,8
+25,Smithers,Waylon,,8

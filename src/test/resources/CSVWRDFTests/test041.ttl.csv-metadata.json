@@ -1,0 +1,81 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test041.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "aboutUrl",
+        "name" : "aboutUrl",
+        "propertyUrl" : "file://test041.csv#aboutUrl",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "datatype",
+        "name" : "datatype",
+        "propertyUrl" : "file://test041.csv#datatype",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "default",
+        "name" : "default",
+        "propertyUrl" : "file://test041.csv#default",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "lang",
+        "name" : "lang",
+        "propertyUrl" : "file://test041.csv#lang",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "null",
+        "name" : "null",
+        "propertyUrl" : "file://test041.csv#null",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "ordered",
+        "name" : "ordered",
+        "propertyUrl" : "file://test041.csv#ordered",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "propertyUrl",
+        "name" : "propertyUrl",
+        "propertyUrl" : "file://test041.csv#propertyUrl",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "separator",
+        "name" : "separator",
+        "propertyUrl" : "file://test041.csv#separator",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "textDirection",
+        "name" : "textDirection",
+        "propertyUrl" : "file://test041.csv#textDirection",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "valueUrl",
+        "name" : "valueUrl",
+        "propertyUrl" : "file://test041.csv#valueUrl",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+      "rowTitles" : [ null, null, null, null, null, null, null, null, null, null ]
+    }
+  } ]
+}

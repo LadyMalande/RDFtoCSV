@@ -1,0 +1,81 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test047.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "file://{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "aboutUrl",
+        "name" : "aboutUrl",
+        "propertyUrl" : "file://test047.csv#aboutUrl",
+        "aboutUrl" : "file://{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "datatype",
+        "name" : "datatype",
+        "propertyUrl" : "file://test047.csv#datatype",
+        "aboutUrl" : "file://{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "default",
+        "name" : "default",
+        "propertyUrl" : "file://test047.csv#default",
+        "aboutUrl" : "file://{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "lang",
+        "name" : "lang",
+        "propertyUrl" : "file://test047.csv#lang",
+        "aboutUrl" : "file://{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "null",
+        "name" : "null",
+        "propertyUrl" : "file://test047.csv#null",
+        "aboutUrl" : "file://{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "ordered",
+        "name" : "ordered",
+        "propertyUrl" : "file://test047.csv#ordered",
+        "aboutUrl" : "file://{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "propertyUrl",
+        "name" : "propertyUrl",
+        "propertyUrl" : "file://test047.csv#propertyUrl",
+        "aboutUrl" : "file://{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "separator",
+        "name" : "separator",
+        "propertyUrl" : "file://test047.csv#separator",
+        "aboutUrl" : "file://{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "textDirection",
+        "name" : "textDirection",
+        "propertyUrl" : "file://test047.csv#textDirection",
+        "aboutUrl" : "file://{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "valueUrl",
+        "name" : "valueUrl",
+        "propertyUrl" : "file://test047.csv#valueUrl",
+        "aboutUrl" : "file://{+Subjekt}"
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "file://{+Subjekt}",
+      "rowTitles" : [ null, null, null, null, null, null, null, null, null, null ]
+    }
+  } ]
+}

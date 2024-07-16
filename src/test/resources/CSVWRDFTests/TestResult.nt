@@ -1,0 +1,16 @@
+<https://blank_Nodes_IRI.org/3> <file://test001.csv#FamilyName> "Simpson" .
+<https://blank_Nodes_IRI.org/3> <file://test001.csv#Surname> "Homer" .
+<https://blank_Nodes_IRI.org/5> <file://test001.csv#FamilyName> "Simpson" .
+<https://blank_Nodes_IRI.org/5> <file://test001.csv#Surname> "Marge" .
+<https://blank_Nodes_IRI.org/7> <file://test001.csv#FamilyName> "Simpson" .
+<https://blank_Nodes_IRI.org/7> <file://test001.csv#Surname> "Bart" .
+<https://blank_Nodes_IRI.org/9> <file://test001.csv#FamilyName> "Simpson" .
+<https://blank_Nodes_IRI.org/9> <file://test001.csv#Surname> "Lisa" .
+<https://blank_Nodes_IRI.org/11> <file://test001.csv#FamilyName> "Simpson" .
+<https://blank_Nodes_IRI.org/11> <file://test001.csv#Surname> "Maggie" .
+<https://blank_Nodes_IRI.org/13> <file://test001.csv#FamilyName> "Flanders" .
+<https://blank_Nodes_IRI.org/13> <file://test001.csv#Surname> "Ned" .
+<https://blank_Nodes_IRI.org/15> <file://test001.csv#FamilyName> "the Clown" .
+<https://blank_Nodes_IRI.org/15> <file://test001.csv#Surname> "Krusty" .
+<https://blank_Nodes_IRI.org/17> <file://test001.csv#FamilyName> "Smithers" .
+<https://blank_Nodes_IRI.org/17> <file://test001.csv#Surname> "Waylon" .
