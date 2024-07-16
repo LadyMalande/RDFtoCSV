@@ -1,4 +1,4 @@
-@prefix : <tree-ops.csv#> .
+@prefix : <file://tree-ops.csv#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 :gid-1 :GID "1";

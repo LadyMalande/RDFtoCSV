@@ -13,17 +13,12 @@ import com.miklosova.rdftocsvw.support.TestSupport;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,7 +82,7 @@ public class XMLBaseTests extends BaseTest {
     void createMetadata(){
         System.out.println("Override before each");
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_OUTPUT_FILENAME, filePathForOutput);
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, filePathForOutput);
         db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService();
         RepositoryConnection rc = null;

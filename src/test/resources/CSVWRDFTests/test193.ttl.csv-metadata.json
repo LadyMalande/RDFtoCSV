@@ -1,0 +1,37 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test193.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "dayTimeDuration",
+        "name" : "dayTimeDuration",
+        "propertyUrl" : "file://test193.csv#dayTimeDuration",
+        "datatype" : "dayTimeDuration"
+      }, {
+        "@type" : "Column",
+        "titles" : "duration",
+        "name" : "duration",
+        "propertyUrl" : "file://test193.csv#duration",
+        "datatype" : "duration"
+      }, {
+        "@type" : "Column",
+        "titles" : "yearMonthDuration",
+        "name" : "yearMonthDuration",
+        "propertyUrl" : "file://test193.csv#yearMonthDuration",
+        "datatype" : "yearMonthDuration"
+      } ],
+      "rowTitles" : [ null, null, null ]
+    }
+  } ]
+}

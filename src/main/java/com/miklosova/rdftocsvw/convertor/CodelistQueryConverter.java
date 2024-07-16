@@ -47,11 +47,13 @@ public class CodelistQueryConverter implements IQueryParser{
         //String query = getCSVTableQueryForModel();
 
         //String queryResult = queryRDFModel(query);
-        FileWrite.saveCSVFileFromRows(CSVFileTOWriteTo, keys, rows, delimiter);
+        //FileWrite.saveCSVFileFromRows(CSVFileTOWriteTo, keys, rows, delimiter);
         //return new PrefinishedOutput(queryResult);
         return null;
 
     }
+
+
     /*
 
     private void loadConfiguration(){

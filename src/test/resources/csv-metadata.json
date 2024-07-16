@@ -1,4 +1,5 @@
 {
+"@context" : "http://www.w3.org/ns/csvw",
   "tables" : [ {
     "url" : "splitQueryTest0.csv",
     "tableSchema" : {
@@ -29,46 +30,12 @@
       }, {
         "propertyUrl" : "rdf:type",
         "valueUrl" : "http://www.w3.org/2004/02/skos/core#Concept",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{Concept}",
         "virtual" : true
-      } ],
-      "foreignKeys" : [ {
-        "columnReference" : "inScheme",
-        "reference" : {
-          "resource" : "splitQueryTest1.csv",
-          "columnReference" : "ConceptScheme"
-        }
       } ],
       "primaryKey" : "Concept",
       "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{Concept}",
       "rowTitles" : [ "Concept", "notation", "inScheme", "prefLabel_cs", "prefLabel_en" ]
     }
-  }, {
-    "url" : "splitQueryTest1.csv",
-    "tableSchema" : {
-      "columns" : [ {
-        "titles" : "ConceptScheme",
-        "name" : "ConceptScheme",
-        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{ConceptScheme}",
-        "suppressOutput" : true
-      }, {
-        "titles" : "prefLabel (cs)",
-        "name" : "prefLabel_cs",
-        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
-        "lang" : "cs"
-      }, {
-        "titles" : "prefLabel (en)",
-        "name" : "prefLabel_en",
-        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
-        "lang" : "en"
-      }, {
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://www.w3.org/2004/02/skos/core#ConceptScheme",
-        "virtual" : true
-      } ],
-      "primaryKey" : "ConceptScheme",
-      "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{ConceptScheme}",
-      "rowTitles" : [ "ConceptScheme", "prefLabel_cs", "prefLabel_en" ]
-    }
-  } ],
-  "@context" : "http://www.w3.org/ns/csvw"
+  } ]
 }

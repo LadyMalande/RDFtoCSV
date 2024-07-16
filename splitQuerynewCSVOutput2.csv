@@ -1,0 +1,6 @@
+Concept,notation,inScheme,prefLabel,prefLabel
+https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dpč,dpč,https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů,Dohoda o pracovní činnosti,'Agreement to Perform Work'
+https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dpp,"dpp",https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů,Dohoda o provedení práce,Agreement to Complete a Job
+https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/plný-úvazek,plný-úvazek,typy-pracovních-vztahů,Pracovní poměr - plný úvazek,Full time employment
+zkrácený-úvazek,zkrácený-úvazek,typy-pracovních-vztahů,Pracovní poměr - zkrácený úvazek,Part time employment
+služební-poměr,služební-poměr,typy-pracovních-vztahů,Služební poměr,Civil service employment

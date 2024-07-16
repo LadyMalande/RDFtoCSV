@@ -16,36 +16,29 @@
         "@type" : "Column",
         "titles" : "FamilyName",
         "name" : "FamilyName",
-        "propertyUrl" : "file://test007.csv#FamilyName",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+        "propertyUrl" : "file://test007.csv#FamilyName"
       }, {
         "@type" : "Column",
         "titles" : "Surname",
         "name" : "Surname",
-        "propertyUrl" : "file://test007.csv#Surname",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+        "propertyUrl" : "file://test007.csv#Surname"
       }, {
         "@type" : "Column",
         "titles" : "childFoaf",
         "name" : "childFoaf",
-        "propertyUrl" : "file://test007.csv#childFoaf",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+        "propertyUrl" : "file://test007.csv#childFoaf"
       }, {
         "@type" : "Column",
         "titles" : "childName",
         "name" : "childName",
-        "propertyUrl" : "file://test007.csv#childName",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+        "propertyUrl" : "file://test007.csv#childName"
       }, {
         "@type" : "Column",
         "titles" : "foaf_id",
         "name" : "foaf_id",
-        "propertyUrl" : "file://test007.csv#foaf_id",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+        "propertyUrl" : "file://test007.csv#foaf_id"
       } ],
-      "primaryKey" : "Subjekt",
-      "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-      "rowTitles" : [ "Subjekt", "FamilyName", "Surname", "childFoaf", "childName", "foaf_id" ]
+      "rowTitles" : [ null, null, null, null, null ]
     }
   } ]
 }

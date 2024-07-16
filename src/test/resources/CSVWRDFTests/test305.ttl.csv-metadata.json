@@ -1,0 +1,27 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test305.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "file://test305.csv#{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "value",
+        "name" : "value",
+        "propertyUrl" : "file://test305.csv#value",
+        "aboutUrl" : "file://test305.csv#{+Subjekt}"
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "file://test305.csv#{+Subjekt}",
+      "rowTitles" : [ null ]
+    }
+  } ]
+}

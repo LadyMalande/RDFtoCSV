@@ -121,22 +121,26 @@ public class Column {
             this.aboutUrl = null;
         } else {
             IRI idIRI = (IRI) column.getValue().id;
-            String theNameOfTheColumn;
-            if(isSubjectTheSame) {
-                if (isRdfType) {
-                    // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                    this.aboutUrl = idIRI.getNamespace() + "{+" + ((IRI) row.type).getLocalName() + "}";
+            if(idIRI.stringValue().startsWith("https://blank_Nodes_IRI")){
+                // Subject is a blank node, put no aboutUrl
+                this.aboutUrl = null;
+            } else {
+                if (isSubjectTheSame) {
+                    if (isRdfType) {
+                        // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
+                        this.aboutUrl = idIRI.getNamespace() + "{+" + ((IRI) row.type).getLocalName() + "}";
+                    } else {
+                        // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
+                        this.aboutUrl = idIRI.getNamespace() + "{+" + "Subjekt" + "}";
+                    }
                 } else {
-                    // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                    this.aboutUrl = idIRI.getNamespace() + "{+" + "Subjekt" + "}";
-                }
-            } else{
-                if (isRdfType) {
-                    // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                    this.aboutUrl = "{+" + ((IRI) row.type).getLocalName() + "}";
-                } else {
-                    // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                    this.aboutUrl = "{+" + "Subjekt" + "}";
+                    if (isRdfType) {
+                        // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
+                        this.aboutUrl = "{+" + ((IRI) row.type).getLocalName() + "}";
+                    } else {
+                        // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
+                        this.aboutUrl = "{+" + "Subjekt" + "}";
+                    }
                 }
             }
         }

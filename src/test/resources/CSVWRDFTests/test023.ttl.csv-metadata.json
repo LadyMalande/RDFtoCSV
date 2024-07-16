@@ -1,0 +1,44 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test023.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.1",
+        "name" : "_col.1",
+        "propertyUrl" : "file://tree-ops.csv#_col.1"
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.2",
+        "name" : "_col.2",
+        "propertyUrl" : "file://tree-ops.csv#_col.2"
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.3",
+        "name" : "_col.3",
+        "propertyUrl" : "file://tree-ops.csv#_col.3"
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.4",
+        "name" : "_col.4",
+        "propertyUrl" : "file://tree-ops.csv#_col.4"
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.5",
+        "name" : "_col.5",
+        "propertyUrl" : "file://tree-ops.csv#_col.5"
+      } ],
+      "rowTitles" : [ null, null, null, null, null ]
+    }
+  } ]
+}

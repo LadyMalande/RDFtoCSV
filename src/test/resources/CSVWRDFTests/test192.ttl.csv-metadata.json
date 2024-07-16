@@ -1,0 +1,64 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test192.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "d%2DM%2Dyyyy%20HHmm",
+        "name" : "d%2DM%2Dyyyy%20HHmm",
+        "propertyUrl" : "file://test192.csv#d%2DM%2Dyyyy%20HHmm"
+      }, {
+        "@type" : "Column",
+        "titles" : "d%2DM%2Dyyyy%20HHmm%20X",
+        "name" : "d%2DM%2Dyyyy%20HHmm%20X",
+        "propertyUrl" : "file://test192.csv#d%2DM%2Dyyyy%20HHmm%20X"
+      }, {
+        "@type" : "Column",
+        "titles" : "dd%2DMM%2Dyyyy%20HH%3Amm",
+        "name" : "dd%2DMM%2Dyyyy%20HH%3Amm",
+        "propertyUrl" : "file://test192.csv#dd%2DMM%2Dyyyy%20HH%3Amm"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass",
+        "name" : "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass",
+        "propertyUrl" : "file://test192.csv#yyyy%2DMM%2Ddd%20HH%3Amm%3Ass"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass%20X",
+        "name" : "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass%20X",
+        "propertyUrl" : "file://test192.csv#yyyy%2DMM%2Ddd%20HH%3Amm%3Ass%20X"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyy%2DMM%2DddTHH%3Amm",
+        "name" : "yyyy%2DMM%2DddTHH%3Amm",
+        "propertyUrl" : "file://test192.csv#yyyy%2DMM%2DddTHH%3Amm"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyy%2DMM%2DddTHH%3Amm%3Ass",
+        "name" : "yyyy%2DMM%2DddTHH%3Amm%3Ass",
+        "propertyUrl" : "file://test192.csv#yyyy%2DMM%2DddTHH%3Amm%3Ass"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyy%2DMM%2DddTHH%3Amm%3AssXXX",
+        "name" : "yyyy%2DMM%2DddTHH%3Amm%3AssXXX",
+        "propertyUrl" : "file://test192.csv#yyyy%2DMM%2DddTHH%3Amm%3AssXXX"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyyMMdd%20HHmmss",
+        "name" : "yyyyMMdd%20HHmmss",
+        "propertyUrl" : "file://test192.csv#yyyyMMdd%20HHmmss"
+      } ],
+      "rowTitles" : [ null, null, null, null, null, null, null, null, null ]
+    }
+  } ]
+}

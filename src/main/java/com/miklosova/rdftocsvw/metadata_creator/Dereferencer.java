@@ -66,7 +66,7 @@ public class Dereferencer {
             throw ex;
         } catch (IOException e) {
             System.out.println("IOException in Dereferencer.");
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return null;
     }

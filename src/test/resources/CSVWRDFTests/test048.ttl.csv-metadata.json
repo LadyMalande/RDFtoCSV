@@ -16,11 +16,8 @@
         "@type" : "Column",
         "titles" : "test048.csv",
         "name" : "test048.csv",
-        "propertyUrl" : "file://test048.csv",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+        "propertyUrl" : "file://test048.csv"
       } ],
-      "primaryKey" : "Subjekt",
-      "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
       "rowTitles" : [ null ]
     }
   } ]

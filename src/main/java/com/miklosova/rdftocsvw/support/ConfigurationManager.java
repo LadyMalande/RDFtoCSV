@@ -13,7 +13,7 @@ public class ConfigurationManager {
 
     public static final String CONVERSION_HAS_BLANK_NODES = "conversion.containsBlankNodes";
     public static final String CONVERSION_HAS_RDF_TYPES = "conversion.hasRDFType";
-    public static final String INPUT_OUTPUT_FILENAME = "input.outputFileName";
+    public static final String OUTPUT_FILENAME = "input.outputFileName";
     public static final String OUTPUT_METADATA_FILE_NAME = "output.metadataFileName";
     public static final String CONVERSION_METHOD = "conversion.method";
 

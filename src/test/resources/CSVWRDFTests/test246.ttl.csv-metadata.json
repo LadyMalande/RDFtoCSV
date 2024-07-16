@@ -1,0 +1,35 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test246.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyy%2DMM%2DddTHH%3Amm%3Ass.S",
+        "name" : "yyyy%2DMM%2DddTHH%3Amm%3Ass.S",
+        "propertyUrl" : "file://test246.csv#yyyy%2DMM%2DddTHH%3Amm%3Ass.S",
+        "datatype" : "dateTime",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyy%2DMM%2DddTHH%3Amm%3Ass.SS",
+        "name" : "yyyy%2DMM%2DddTHH%3Amm%3Ass.SS",
+        "propertyUrl" : "file://test246.csv#yyyy%2DMM%2DddTHH%3Amm%3Ass.SS",
+        "datatype" : "dateTime",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+      "rowTitles" : [ null, null ]
+    }
+  } ]
+}

@@ -1,0 +1,27 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test279.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "duration",
+        "name" : "duration",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test279.csv#duration",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+      } ],
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+      "rowTitles" : [ "duration" ]
+    }
+  } ]
+}

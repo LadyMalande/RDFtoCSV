@@ -1,0 +1,27 @@
+{
+  "tables" : [ {
+    "url" : "test008aTestOutput0.csv",
+    "tableSchema" : {
+      "columns" : [ {
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "http://example.org/{Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "titles" : "b",
+        "name" : "b",
+        "propertyUrl" : "http://example.org/b",
+        "aboutUrl" : "http://example.org/{Subjekt}"
+      }, {
+        "titles" : "d",
+        "name" : "d",
+        "propertyUrl" : "http://example.org/d",
+        "aboutUrl" : "http://example.org/{Subjekt}"
+      } ],
+      "primaryKey" : "a",
+      "aboutUrl" : "http://example.org/{Subjekt}",
+      "rowTitles" : [ "Subjekt", "b", "d" ]
+    }
+  } ],
+  "@context" : "http://www.w3.org/ns/csvw"
+}

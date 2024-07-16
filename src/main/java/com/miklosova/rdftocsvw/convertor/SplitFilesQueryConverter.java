@@ -101,6 +101,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
             if(statement != null){
                 rc.add(statement);
             }
+            System.out.println(statement.getSubject() + " " + statement.getPredicate() + " " + statement.getObject());
             System.out.println(st);
             counter = counter +1;
         }
@@ -133,8 +134,9 @@ public class SplitFilesQueryConverter implements IQueryParser{
         deleteQuery.execute();
         TupleQuery query = rc.prepareTupleQuery("SELECT ?s ?p ?o WHERE { ?s ?p ?o .}");
         try (TupleQueryResult result = query.evaluate()) {
+            System.out.println("Remaining triples");
             for(BindingSet sol : result){
-                //System.out.println("s: " + sol.getBinding("s") +" p: " + sol.getBinding("p")+" o: " + sol.getBinding("o") + " count: ");
+                System.out.println("s: " + sol.getBinding("s") +" p: " + sol.getBinding("p")+" o: " + sol.getBinding("o") + " count: ");
             }
         }
     }
@@ -217,7 +219,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
 
                 @Override
                 public void statementRemoved(Statement removed) {
-                    //System.out.println("removed: " + removed);
+                    System.out.println("removed: " + removed);
                 }
 
                 @Override
@@ -247,6 +249,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
                         //System.out.println("?subject = " + solution.getValue("s") + " added to roots");
                         //System.out.println("?subject = " + solution.getValue("s") + " is a o=" + solution.getValue("o") + " added to roots");
                         if(!roots.contains(solution.getValue("s"))){
+                            System.out.println("root " +solution.getValue("s"));
                             roots.add(solution.getValue("s"));
                         }
                     }
@@ -272,7 +275,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
                     //System.out.println("Before recursiveQueryForFiles(conn, dominantType, askForTypes)");
                     recursiveQueryForFiles(conn, dominantType, askForTypes);
                     //System.out.println("After recursiveQueryForFiles(conn, dominantType, askForTypes)");
-
+                System.out.println("Number of rows = " + allRows.size());
 /*
                 // For all the found roots, make rows. Roots must have the same rdf:type
                 for (String root : roots) {
@@ -337,7 +340,8 @@ public class SplitFilesQueryConverter implements IQueryParser{
         for (Value root : roots) {
             // new Row with the found subject as its id
             Row newRow = new Row(root, dominantType, askForTypes);
-            //System.out.println("Number of Roots in recursiveQuery: " + roots.size() + " root: " + root.stringValue() );
+
+            System.out.println("Number of Roots in recursiveQuery: " + roots.size() + " root: " + root.stringValue() );
             // Query the model for individual rows lead by the roots and having the predicates as the headers in the file
             queryForSubjects(conn, newRow, root, null, dominantType, askForTypes);
             rows.add(newRow);
@@ -348,7 +352,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
         //augmentMapsByMissingKeys();
         //System.out.println("Number of Rows : " + rows.size());
         //System.out.println("Number of keys : " + keys.size());
-        String newFileName = CSVFileTOWriteTo + fileNumberX + ".csv";
+
         // Write the rows with respective keys to the current file
         // TODO put somewhere else
                 //metadata.addMetadata(newFileName, keys, rows);
@@ -357,7 +361,11 @@ public class SplitFilesQueryConverter implements IQueryParser{
                 //fileNamesCreated.add(newFileName);
         //FileWrite.saveCSFFileFromRows("RAW_" + newFileName , keys, rows, delimiter);
         // Increase the file number so that the next file has different name
-        fileNumberX = fileNumberX+1;
+        System.out.println("Row : " );
+
+
+        rows.forEach(r -> System.out.println("id´=" + r.id + " row.type=" + r.type.stringValue() + " " +r.columns));
+        System.out.println(" allRows size  " + allRows.size());
         allRows.add(rows);
         allKeys.add(keys);
     }

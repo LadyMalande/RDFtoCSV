@@ -16,18 +16,14 @@
         "@type" : "Column",
         "titles" : "country",
         "name" : "country",
-        "propertyUrl" : "file://test010.csv#country",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+        "propertyUrl" : "file://test010.csv#country"
       }, {
         "@type" : "Column",
         "titles" : "name",
         "name" : "name",
-        "propertyUrl" : "file://test010.csv#name",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+        "propertyUrl" : "file://test010.csv#name"
       } ],
-      "primaryKey" : "Subjekt",
-      "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-      "rowTitles" : [ "Subjekt", "country", "name" ]
+      "rowTitles" : [ null, null ]
     }
   } ]
 }

@@ -1,0 +1,38 @@
+{
+  "tables" : [ {
+    "url" : "test002bTestOutput0.csv",
+    "tableSchema" : {
+      "columns" : [ {
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "http://example.org/{Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "titles" : "bar",
+        "name" : "bar",
+        "propertyUrl" : "http://example.org/bar",
+        "valueUrl" : "_:{bar}"
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "bar",
+        "reference" : {
+          "columnReference" : "type"
+        }
+      } ],
+      "primaryKey" : "foo",
+      "aboutUrl" : "http://example.org/{Subjekt}",
+      "rowTitles" : [ "Subjekt", "bar" ]
+    }
+  }, {
+    "url" : "test002bTestOutput1.csv",
+    "tableSchema" : {
+      "columns" : [ {
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "suppressOutput" : true
+      } ],
+      "rowTitles" : [ "Subjekt" ]
+    }
+  } ],
+  "@context" : "http://www.w3.org/ns/csvw"
+}

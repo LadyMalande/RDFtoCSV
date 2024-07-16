@@ -1,0 +1,27 @@
+{
+  "tables" : [ {
+    "url" : "test001.rdfTestOutput0.csv",
+    "tableSchema" : {
+      "columns" : [ {
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "http://example.org/{Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "titles" : "bar",
+        "name" : "bar",
+        "propertyUrl" : "http://example.org/bar",
+        "datatype" : "integer"
+      }, {
+        "titles" : "baz",
+        "name" : "baz",
+        "propertyUrl" : "http://example.org/baz",
+        "datatype" : "integer"
+      } ],
+      "primaryKey" : "foo",
+      "aboutUrl" : "http://example.org/{Subjekt}",
+      "rowTitles" : [ "Subjekt", "bar", "baz" ]
+    }
+  } ],
+  "@context" : "http://www.w3.org/ns/csvw"
+}

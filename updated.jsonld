@@ -1,0 +1,735 @@
+message{
+updatedmessage2 {
+{
+message{
+updatedmessage2 {
+{
+{
+message  "@context": {
+updatedmessage2   "@context": {
+  "@context": {
+message  "@context": {
+updatedmessage2   "@context": {
+  "@context": {
+  "@context": {
+message    "skos": "http://www.w3.org/2004/02/skos/core#"
+updatedmessage2     "skos": "http://www.w3.org/2004/02/skos/core#"
+    "skos": "http://www.w3.org/2004/02/skos/core#"
+message    "skos": "http://www.w3.org/2004/02/skos/core#"
+updatedmessage2     "skos": "http://www.w3.org/2004/02/skos/core#"
+    "skos": "http://www.w3.org/2004/02/skos/core#"
+    "skos": "http://www.w3.org/2004/02/skos/core#"
+message  },
+updatedmessage2   },
+  },
+message  },
+updatedmessage2   },
+  },
+  },
+message  "@graph": [
+updatedmessage2   "@graph": [
+  "@graph": [
+message  "@graph": [
+updatedmessage2   "@graph": [
+  "@graph": [
+  "@graph": [
+message    {
+updatedmessage2     {
+    {
+message    {
+updatedmessage2     {
+    {
+    {
+message      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dp%C4%8D",
+updatedmessage2       "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dp%C4%8D",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dp%C4%8D",
+message      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dp%C4%8D",
+updatedmessage2       "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dp%C4%8D",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dp%C4%8D",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dp%C4%8D",
+message      "skos:notation": "dpč",
+updatedmessage2       "skos:notation": "dpč",
+      "skos:notation": "dpč",
+message      "skos:notation": "dpč",
+updatedmessage2       "skos:notation": "dpč",
+      "skos:notation": "dpč",
+      "skos:notation": "dpč",
+message      "skos:inScheme": {
+updatedmessage2       "skos:inScheme": {
+      "skos:inScheme": {
+message      "skos:inScheme": {
+updatedmessage2       "skos:inScheme": {
+      "skos:inScheme": {
+      "skos:inScheme": {
+message        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/%23blankNodeValue%23_%3Atypy-pracovn%C3%ADch-vztah%C5%AF"
+updatedmessage2         "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/%23blankNodeValue%23_:typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "_:typy-pracovn%C3%ADch-vztah%C5%AF"
+message        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/%23blankNodeValue%23_%3Atypy-pracovn%C3%ADch-vztah%C5%AF"
+updatedmessage2         "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/%23blankNodeValue%23_:typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "_:typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "_:typy-pracovn%C3%ADch-vztah%C5%AF"
+message      },
+updatedmessage2       },
+      },
+message      },
+updatedmessage2       },
+      },
+      },
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+      "skos:prefLabel": {
+message        "@language": "cs",
+updatedmessage2         "@language": "cs",
+        "@language": "cs",
+message        "@language": "cs",
+updatedmessage2         "@language": "cs",
+        "@language": "cs",
+        "@language": "cs",
+message        "@value": "Dohoda o pracovní činnosti"
+updatedmessage2         "@value": "Dohoda o pracovní činnosti"
+        "@value": "Dohoda o pracovní činnosti"
+message        "@value": "Dohoda o pracovní činnosti"
+updatedmessage2         "@value": "Dohoda o pracovní činnosti"
+        "@value": "Dohoda o pracovní činnosti"
+        "@value": "Dohoda o pracovní činnosti"
+message      },
+updatedmessage2       },
+      },
+message      },
+updatedmessage2       },
+      },
+      },
+message      "@type": "skos:Concept"
+updatedmessage2       "@type": "skos:Concept"
+      "@type": "skos:Concept"
+message      "@type": "skos:Concept"
+updatedmessage2       "@type": "skos:Concept"
+      "@type": "skos:Concept"
+      "@type": "skos:Concept"
+message    },
+updatedmessage2     },
+    },
+message    },
+updatedmessage2     },
+    },
+    },
+message    {
+updatedmessage2     {
+    {
+message    {
+updatedmessage2     {
+    {
+    {
+message      "@id": "_:g455860",
+updatedmessage2       "@id": "_:g455860",
+      "@id": "_:g455860",
+message      "@id": "_:g455860",
+updatedmessage2       "@id": "_:g455860",
+      "@id": "_:g455860",
+      "@id": "_:g455860",
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+      "skos:prefLabel": {
+message        "@language": "en",
+updatedmessage2         "@language": "en",
+        "@language": "en",
+message        "@language": "en",
+updatedmessage2         "@language": "en",
+        "@language": "en",
+        "@language": "en",
+message        "@value": "Agreement to Perform Work"
+updatedmessage2         "@value": "Agreement to Perform Work"
+        "@value": "Agreement to Perform Work"
+message        "@value": "Agreement to Perform Work"
+updatedmessage2         "@value": "Agreement to Perform Work"
+        "@value": "Agreement to Perform Work"
+        "@value": "Agreement to Perform Work"
+message      }
+updatedmessage2       }
+      }
+message      }
+updatedmessage2       }
+      }
+      }
+message    },
+updatedmessage2     },
+    },
+message    },
+updatedmessage2     },
+    },
+    },
+message    {
+updatedmessage2     {
+    {
+message    {
+updatedmessage2     {
+    {
+    {
+message      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dpp",
+updatedmessage2       "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dpp",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dpp",
+message      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dpp",
+updatedmessage2       "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dpp",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dpp",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dpp",
+message      "skos:notation": "_blankNode26",
+updatedmessage2       "skos:notation": "_blankNode26",
+      "skos:notation": "_blankNode26",
+message      "skos:notation": "_blankNode26",
+updatedmessage2       "skos:notation": "_blankNode26",
+      "skos:notation": "_blankNode26",
+      "skos:notation": "_blankNode26",
+message      "skos:inScheme": {
+updatedmessage2       "skos:inScheme": {
+      "skos:inScheme": {
+message      "skos:inScheme": {
+updatedmessage2       "skos:inScheme": {
+      "skos:inScheme": {
+      "skos:inScheme": {
+message        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+updatedmessage2         "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+message        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+updatedmessage2         "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+message      },
+updatedmessage2       },
+      },
+message      },
+updatedmessage2       },
+      },
+      },
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+      "skos:prefLabel": {
+message        "@language": "cs",
+updatedmessage2         "@language": "cs",
+        "@language": "cs",
+message        "@language": "cs",
+updatedmessage2         "@language": "cs",
+        "@language": "cs",
+        "@language": "cs",
+message        "@value": "Dohoda o provedení práce"
+updatedmessage2         "@value": "Dohoda o provedení práce"
+        "@value": "Dohoda o provedení práce"
+message        "@value": "Dohoda o provedení práce"
+updatedmessage2         "@value": "Dohoda o provedení práce"
+        "@value": "Dohoda o provedení práce"
+        "@value": "Dohoda o provedení práce"
+message      },
+updatedmessage2       },
+      },
+message      },
+updatedmessage2       },
+      },
+      },
+message      "@type": "skos:Concept"
+updatedmessage2       "@type": "skos:Concept"
+      "@type": "skos:Concept"
+message      "@type": "skos:Concept"
+updatedmessage2       "@type": "skos:Concept"
+      "@type": "skos:Concept"
+      "@type": "skos:Concept"
+message    },
+updatedmessage2     },
+    },
+message    },
+updatedmessage2     },
+    },
+    },
+message    {
+updatedmessage2     {
+    {
+message    {
+updatedmessage2     {
+    {
+    {
+message      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF",
+updatedmessage2       "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF",
+message      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF",
+updatedmessage2       "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF",
+message      "skos:prefLabel": [
+updatedmessage2       "skos:prefLabel": [
+      "skos:prefLabel": [
+message      "skos:prefLabel": [
+updatedmessage2       "skos:prefLabel": [
+      "skos:prefLabel": [
+      "skos:prefLabel": [
+message        {
+updatedmessage2         {
+        {
+message        {
+updatedmessage2         {
+        {
+        {
+message          "@language": "cs",
+updatedmessage2           "@language": "cs",
+          "@language": "cs",
+message          "@language": "cs",
+updatedmessage2           "@language": "cs",
+          "@language": "cs",
+          "@language": "cs",
+message          "@value": "Typy pracovních vztahů"
+updatedmessage2           "@value": "Typy pracovních vztahů"
+          "@value": "Typy pracovních vztahů"
+message          "@value": "Typy pracovních vztahů"
+updatedmessage2           "@value": "Typy pracovních vztahů"
+          "@value": "Typy pracovních vztahů"
+          "@value": "Typy pracovních vztahů"
+message        },
+updatedmessage2         },
+        },
+message        },
+updatedmessage2         },
+        },
+        },
+message        {
+updatedmessage2         {
+        {
+message        {
+updatedmessage2         {
+        {
+        {
+message          "@language": "en",
+updatedmessage2           "@language": "en",
+          "@language": "en",
+message          "@language": "en",
+updatedmessage2           "@language": "en",
+          "@language": "en",
+          "@language": "en",
+message          "@value": "Employment relation types"
+updatedmessage2           "@value": "Employment relation types"
+          "@value": "Employment relation types"
+message          "@value": "Employment relation types"
+updatedmessage2           "@value": "Employment relation types"
+          "@value": "Employment relation types"
+          "@value": "Employment relation types"
+message        }
+updatedmessage2         }
+        }
+message        }
+updatedmessage2         }
+        }
+        }
+message      ],
+updatedmessage2       ],
+      ],
+message      ],
+updatedmessage2       ],
+      ],
+      ],
+message      "@type": "skos:ConceptScheme"
+updatedmessage2       "@type": "skos:ConceptScheme"
+      "@type": "skos:ConceptScheme"
+message      "@type": "skos:ConceptScheme"
+updatedmessage2       "@type": "skos:ConceptScheme"
+      "@type": "skos:ConceptScheme"
+      "@type": "skos:ConceptScheme"
+message    },
+updatedmessage2     },
+    },
+message    },
+updatedmessage2     },
+    },
+    },
+message    {
+updatedmessage2     {
+    {
+message    {
+updatedmessage2     {
+    {
+    {
+message      "@id": "_:g455900",
+updatedmessage2       "@id": "_:g455900",
+      "@id": "_:g455900",
+message      "@id": "_:g455900",
+updatedmessage2       "@id": "_:g455900",
+      "@id": "_:g455900",
+      "@id": "_:g455900",
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+      "skos:prefLabel": {
+message        "@language": "en",
+updatedmessage2         "@language": "en",
+        "@language": "en",
+message        "@language": "en",
+updatedmessage2         "@language": "en",
+        "@language": "en",
+        "@language": "en",
+message        "@value": "Agreement to Complete a Job"
+updatedmessage2         "@value": "Agreement to Complete a Job"
+        "@value": "Agreement to Complete a Job"
+message        "@value": "Agreement to Complete a Job"
+updatedmessage2         "@value": "Agreement to Complete a Job"
+        "@value": "Agreement to Complete a Job"
+        "@value": "Agreement to Complete a Job"
+message      }
+updatedmessage2       }
+      }
+message      }
+updatedmessage2       }
+      }
+      }
+message    },
+updatedmessage2     },
+    },
+message    },
+updatedmessage2     },
+    },
+    },
+message    {
+updatedmessage2     {
+    {
+message    {
+updatedmessage2     {
+    {
+    {
+message      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/pln%C3%BD-%C3%BAvazek",
+updatedmessage2       "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/pln%C3%BD-%C3%BAvazek",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/pln%C3%BD-%C3%BAvazek",
+message      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/pln%C3%BD-%C3%BAvazek",
+updatedmessage2       "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/pln%C3%BD-%C3%BAvazek",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/pln%C3%BD-%C3%BAvazek",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/pln%C3%BD-%C3%BAvazek",
+message      "skos:notation": "<_blankNodeplný-úvazek>",
+updatedmessage2       "skos:notation": "<_blankNodeplný-úvazek>",
+      "skos:notation": "<_blankNodeplný-úvazek>",
+message      "skos:notation": "<_blankNodeplný-úvazek>",
+updatedmessage2       "skos:notation": "<_blankNodeplný-úvazek>",
+      "skos:notation": "<_blankNodeplný-úvazek>",
+      "skos:notation": "<_blankNodeplný-úvazek>",
+message      "skos:inScheme": {
+updatedmessage2       "skos:inScheme": {
+      "skos:inScheme": {
+message      "skos:inScheme": {
+updatedmessage2       "skos:inScheme": {
+      "skos:inScheme": {
+      "skos:inScheme": {
+message        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+updatedmessage2         "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+message        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+updatedmessage2         "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+message      },
+updatedmessage2       },
+      },
+message      },
+updatedmessage2       },
+      },
+      },
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+      "skos:prefLabel": {
+message        "@language": "cs",
+updatedmessage2         "@language": "cs",
+        "@language": "cs",
+message        "@language": "cs",
+updatedmessage2         "@language": "cs",
+        "@language": "cs",
+        "@language": "cs",
+message        "@value": "Pracovní poměr - plný úvazek"
+updatedmessage2         "@value": "Pracovní poměr - plný úvazek"
+        "@value": "Pracovní poměr - plný úvazek"
+message        "@value": "Pracovní poměr - plný úvazek"
+updatedmessage2         "@value": "Pracovní poměr - plný úvazek"
+        "@value": "Pracovní poměr - plný úvazek"
+        "@value": "Pracovní poměr - plný úvazek"
+message      },
+updatedmessage2       },
+      },
+message      },
+updatedmessage2       },
+      },
+      },
+message      "@type": "skos:Concept"
+updatedmessage2       "@type": "skos:Concept"
+      "@type": "skos:Concept"
+message      "@type": "skos:Concept"
+updatedmessage2       "@type": "skos:Concept"
+      "@type": "skos:Concept"
+      "@type": "skos:Concept"
+message    },
+updatedmessage2     },
+    },
+message    },
+updatedmessage2     },
+    },
+    },
+message    {
+updatedmessage2     {
+    {
+message    {
+updatedmessage2     {
+    {
+    {
+message      "@id": "_:g455940",
+updatedmessage2       "@id": "_:g455940",
+      "@id": "_:g455940",
+message      "@id": "_:g455940",
+updatedmessage2       "@id": "_:g455940",
+      "@id": "_:g455940",
+      "@id": "_:g455940",
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+      "skos:prefLabel": {
+message        "@language": "en",
+updatedmessage2         "@language": "en",
+        "@language": "en",
+message        "@language": "en",
+updatedmessage2         "@language": "en",
+        "@language": "en",
+        "@language": "en",
+message        "@value": "Full time employment"
+updatedmessage2         "@value": "Full time employment"
+        "@value": "Full time employment"
+message        "@value": "Full time employment"
+updatedmessage2         "@value": "Full time employment"
+        "@value": "Full time employment"
+        "@value": "Full time employment"
+message      }
+updatedmessage2       }
+      }
+message      }
+updatedmessage2       }
+      }
+      }
+message    },
+updatedmessage2     },
+    },
+message    },
+updatedmessage2     },
+    },
+    },
+message    {
+updatedmessage2     {
+    {
+message    {
+updatedmessage2     {
+    {
+    {
+message      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/zkr%C3%A1cen%C3%BD-%C3%BAvazek",
+updatedmessage2       "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/zkr%C3%A1cen%C3%BD-%C3%BAvazek",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/zkr%C3%A1cen%C3%BD-%C3%BAvazek",
+message      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/zkr%C3%A1cen%C3%BD-%C3%BAvazek",
+updatedmessage2       "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/zkr%C3%A1cen%C3%BD-%C3%BAvazek",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/zkr%C3%A1cen%C3%BD-%C3%BAvazek",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/zkr%C3%A1cen%C3%BD-%C3%BAvazek",
+message      "skos:notation": "zkrácený-úvazek",
+updatedmessage2       "skos:notation": "zkrácený-úvazek",
+      "skos:notation": "zkrácený-úvazek",
+message      "skos:notation": "zkrácený-úvazek",
+updatedmessage2       "skos:notation": "zkrácený-úvazek",
+      "skos:notation": "zkrácený-úvazek",
+      "skos:notation": "zkrácený-úvazek",
+message      "skos:inScheme": {
+updatedmessage2       "skos:inScheme": {
+      "skos:inScheme": {
+message      "skos:inScheme": {
+updatedmessage2       "skos:inScheme": {
+      "skos:inScheme": {
+      "skos:inScheme": {
+message        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+updatedmessage2         "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+message        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+updatedmessage2         "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+message      },
+updatedmessage2       },
+      },
+message      },
+updatedmessage2       },
+      },
+      },
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+      "skos:prefLabel": {
+message        "@language": "cs",
+updatedmessage2         "@language": "cs",
+        "@language": "cs",
+message        "@language": "cs",
+updatedmessage2         "@language": "cs",
+        "@language": "cs",
+        "@language": "cs",
+message        "@value": "Pracovní poměr - zkrácený úvazek"
+updatedmessage2         "@value": "Pracovní poměr - zkrácený úvazek"
+        "@value": "Pracovní poměr - zkrácený úvazek"
+message        "@value": "Pracovní poměr - zkrácený úvazek"
+updatedmessage2         "@value": "Pracovní poměr - zkrácený úvazek"
+        "@value": "Pracovní poměr - zkrácený úvazek"
+        "@value": "Pracovní poměr - zkrácený úvazek"
+message      },
+updatedmessage2       },
+      },
+message      },
+updatedmessage2       },
+      },
+      },
+message      "@type": "skos:Concept"
+updatedmessage2       "@type": "skos:Concept"
+      "@type": "skos:Concept"
+message      "@type": "skos:Concept"
+updatedmessage2       "@type": "skos:Concept"
+      "@type": "skos:Concept"
+      "@type": "skos:Concept"
+message    },
+updatedmessage2     },
+    },
+message    },
+updatedmessage2     },
+    },
+    },
+message    {
+updatedmessage2     {
+    {
+message    {
+updatedmessage2     {
+    {
+    {
+message      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/slu%C5%BEebn%C3%AD-pom%C4%9Br",
+updatedmessage2       "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/slu%C5%BEebn%C3%AD-pom%C4%9Br",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/slu%C5%BEebn%C3%AD-pom%C4%9Br",
+message      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/slu%C5%BEebn%C3%AD-pom%C4%9Br",
+updatedmessage2       "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/slu%C5%BEebn%C3%AD-pom%C4%9Br",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/slu%C5%BEebn%C3%AD-pom%C4%9Br",
+      "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/slu%C5%BEebn%C3%AD-pom%C4%9Br",
+message      "skos:notation": "služební-poměr",
+updatedmessage2       "skos:notation": "služební-poměr",
+      "skos:notation": "služební-poměr",
+message      "skos:notation": "služební-poměr",
+updatedmessage2       "skos:notation": "služební-poměr",
+      "skos:notation": "služební-poměr",
+      "skos:notation": "služební-poměr",
+message      "skos:inScheme": {
+updatedmessage2       "skos:inScheme": {
+      "skos:inScheme": {
+message      "skos:inScheme": {
+updatedmessage2       "skos:inScheme": {
+      "skos:inScheme": {
+      "skos:inScheme": {
+message        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+updatedmessage2         "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+message        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+updatedmessage2         "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+        "@id": "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF"
+message      },
+updatedmessage2       },
+      },
+message      },
+updatedmessage2       },
+      },
+      },
+message      "@type": "skos:Concept"
+updatedmessage2       "@type": "skos:Concept"
+      "@type": "skos:Concept"
+message      "@type": "skos:Concept"
+updatedmessage2       "@type": "skos:Concept"
+      "@type": "skos:Concept"
+      "@type": "skos:Concept"
+message    },
+updatedmessage2     },
+    },
+message    },
+updatedmessage2     },
+    },
+    },
+message    {
+updatedmessage2     {
+    {
+message    {
+updatedmessage2     {
+    {
+    {
+message      "@id": "_:g456020",
+updatedmessage2       "@id": "_:g456020",
+      "@id": "_:g456020",
+message      "@id": "_:g456020",
+updatedmessage2       "@id": "_:g456020",
+      "@id": "_:g456020",
+      "@id": "_:g456020",
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+message      "skos:prefLabel": {
+updatedmessage2       "skos:prefLabel": {
+      "skos:prefLabel": {
+      "skos:prefLabel": {
+message        "@language": "en",
+updatedmessage2         "@language": "en",
+        "@language": "en",
+message        "@language": "en",
+updatedmessage2         "@language": "en",
+        "@language": "en",
+        "@language": "en",
+message        "@value": "Civil service employment"
+updatedmessage2         "@value": "Civil service employment"
+        "@value": "Civil service employment"
+message        "@value": "Civil service employment"
+updatedmessage2         "@value": "Civil service employment"
+        "@value": "Civil service employment"
+        "@value": "Civil service employment"
+message      }
+updatedmessage2       }
+      }
+message      }
+updatedmessage2       }
+      }
+      }
+message    }
+updatedmessage2     }
+    }
+message    }
+updatedmessage2     }
+    }
+    }
+message  ]
+updatedmessage2   ]
+  ]
+message  ]
+updatedmessage2   ]
+  ]
+  ]
+message}
+updatedmessage2 }
+}
+message}
+updatedmessage2 }
+}
+}

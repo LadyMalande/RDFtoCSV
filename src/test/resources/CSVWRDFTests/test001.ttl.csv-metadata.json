@@ -16,18 +16,14 @@
         "@type" : "Column",
         "titles" : "FamilyName",
         "name" : "FamilyName",
-        "propertyUrl" : "file://test001.csv#FamilyName",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+        "propertyUrl" : "file://test001.csv#FamilyName"
       }, {
         "@type" : "Column",
         "titles" : "Surname",
         "name" : "Surname",
-        "propertyUrl" : "file://test001.csv#Surname",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+        "propertyUrl" : "file://test001.csv#Surname"
       } ],
-      "primaryKey" : "Subjekt",
-      "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-      "rowTitles" : [ "Subjekt", "FamilyName", "Surname" ]
+      "rowTitles" : [ null, null ]
     }
   } ]
 }
