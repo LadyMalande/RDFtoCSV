@@ -31,6 +31,7 @@ public class Dereferencer {
 
     public String getTitle() {
         try {
+            // dereference for skos
             // Fetch the HTML page
             Document doc = Jsoup.connect(this.url).get();
             IRI iri = iri(this.url);

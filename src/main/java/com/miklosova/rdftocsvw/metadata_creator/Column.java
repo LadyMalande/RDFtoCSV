@@ -72,6 +72,20 @@ public class Column {
      */
     private Boolean suppressOutput;
 
+    public String getSeparator() {
+        return separator;
+    }
+
+    public void setSeparator(String separator) {
+        this.separator = separator;
+    }
+
+    /**
+     * Separator that is used in case the column contains multiple values enclosed in ""
+     * When converting csvw back to rdf it gets split to separate objects
+     */
+    private String separator;
+
     private Map.Entry<Value, TypeIdAndValues> column;
 
     @JsonIgnore
@@ -255,7 +269,7 @@ public class Column {
                     //System.out.println("valueFromThisColumn from createTitles() isLiteral = " + this.titles);
                     return (langTag == null) ? this.titles : this.titles + " (" + langTag + ")";
                 } else {
-                    return (langTag == null) ? columnKeyIRI.getLocalName() : columnKeyIRI.getLocalName() + " (" + this.titles + ")";
+                    return (langTag == null) ? columnKeyIRI.getLocalName() : columnKeyIRI.getLocalName() + " (" + langTag + ")";
                 }
 
         } else {

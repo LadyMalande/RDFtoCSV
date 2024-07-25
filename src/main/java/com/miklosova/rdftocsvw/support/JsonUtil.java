@@ -17,7 +17,7 @@ public class JsonUtil {
     private static final String CONTEXT_KEY = "@context";
     private static final String CONTEXT_VALUE = "http://www.w3.org/ns/csvw";
 
-    public static String serializeWithContext(Object obj) throws JsonProcessingException {
+    public static ObjectNode serializeWithContext(Object obj) throws JsonProcessingException {
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -34,6 +34,12 @@ public class JsonUtil {
         // Add all original fields from the serialized object
         resultNode.setAll(jsonObject);
 
+
+        return resultNode;
+
+    }
+
+    public static void writeJsonToFile(ObjectNode resultNode){
         // Serialize the final object to a JSON string
 
         String metadataFilename = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
@@ -43,7 +49,21 @@ public class JsonUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-        return mapper.writeValueAsString(resultNode);
+    public static String serializeAndWriteToFile(Object obj){
+        ObjectNode resultNode = null;
+        try {
+            resultNode = serializeWithContext(obj);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        writeJsonToFile(resultNode);
+        try {
+            return mapper.writeValueAsString(resultNode);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

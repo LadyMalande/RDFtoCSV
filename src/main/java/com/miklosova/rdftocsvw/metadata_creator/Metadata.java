@@ -70,50 +70,19 @@ public class Metadata {
 
  */
         String jsonWithContext = null;
-        try {
-            jsonWithContext = JsonUtil.serializeWithContext(this);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+
+        jsonWithContext = JsonUtil.serializeAndWriteToFile(this);
+
 
         // Print the resulting JSON
         System.out.println(jsonWithContext);
         return jsonWithContext;
     }
 
-    public void finalizeMetadata(){
-        String json = jsonldMetadata();
-        /*
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-        JsonNode node = objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL).convertValue(this, JsonNode.class);
-        // Included because of https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#top-level-properties
-        ObjectNode objectNode = ((ObjectNode)node).put("@context", "http://www.w3.org/ns/csvw");
-        try {
-            String updatedJsonStr = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
-            System.out.println(updatedJsonStr);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-
-        String metadataFilename = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
-        FileWrite.deleteFile(metadataFilename);
-        try {
-            objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(metadataFilename), objectNode);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
-
-        // Transform JSON object to serialization
-
-        // Write json to file
-    }
-
     public Metadata() {
         this.tables = new ArrayList<>();
     }
+
 
     public void addMetadata(String newFileName, ArrayList<Value> keys, ArrayList<Row> rows) {
         File filePath = new File(newFileName);

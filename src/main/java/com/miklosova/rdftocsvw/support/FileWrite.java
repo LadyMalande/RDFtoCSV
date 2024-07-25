@@ -1,7 +1,10 @@
 package com.miklosova.rdftocsvw.support;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.miklosova.rdftocsvw.convertor.Row;
 import com.miklosova.rdftocsvw.convertor.TypeIdAndValues;
+import com.miklosova.rdftocsvw.convertor.TypeOfValue;
 import com.miklosova.rdftocsvw.metadata_creator.Column;
 import com.miklosova.rdftocsvw.metadata_creator.Table;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
@@ -81,6 +84,12 @@ public class FileWrite {
     }
 
     public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata){
+        ObjectNode originalMetadataJSON = null;
+        try {
+            originalMetadataJSON = JsonUtil.serializeWithContext(metadata);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         //System.out.println("saveCSVFileFromRows beginning");
         StringBuilder forOutput = new StringBuilder();
         File f = FileWrite.makeFileByNameAndExtension( fileName, null);
@@ -90,21 +99,22 @@ public class FileWrite {
         FileWrite.writeToTheFile(f, sb1.toString());
         
         for(Row row : rows){
-            //System.out.println("rows number " + rows.size());
+            System.out.println("rows number " + rows.size());
             StringBuilder sb = new StringBuilder();
 
             //System.out.println("orderOfColumnKeys number " + orderOfColumnKeys.size());
             boolean firstColumn = true;
             List<Map.Entry<Value, TypeIdAndValues>> multivalues = row.columns.entrySet().stream()
-                    .filter(entry -> entry.getValue().values.size() > 1)
+                    .filter(entry -> (entry.getValue().values.size() > 1 && entry.getValue().type.equals(TypeOfValue.LITERAL) && entry.getValue().values.get(0).isLiteral() && ((Literal)entry.getValue().values.get(0)).getLanguage().isPresent() && literalHasDifferentLanguageTags(entry.getValue().values) && !allLanguagesAreUnique(entry.getValue().values) ))
                     .toList();;
                     //System.out.println("multivalues.size() " + multivalues.size());
+            multivalues.forEach(multivalue -> System.out.print("multivalue: " + multivalue.getValue().values + ", "));
             List<Map<Value, Value>> combinations = generateCombinations(multivalues);
             combinations.forEach(combination -> {
                         for (Map.Entry<Value, Value> entry : combination.entrySet()) {
                             //System.out.print("k,v=" + entry.getKey().stringValue() + ": " + entry.getValue().stringValue());
 
-                        //System.out.println(entry);
+                        System.out.println(entry);
                     }
 
                 //System.out.println();
@@ -135,6 +145,7 @@ public class FileWrite {
                                         sb.append(((IRI)combination.get((IRI)iri(column.getPropertyUrl()))).getLocalName());
                                     }
                                 } else if(combination.get((IRI)iri(column.getPropertyUrl())).isLiteral()){
+                                    System.out.println("appending literal " + safeLiteral((Literal)combination.get((IRI)iri(column.getPropertyUrl()))));
                                     sb.append(safeLiteral((Literal)combination.get((IRI)iri(column.getPropertyUrl()))));
                                 }
                                 sb.append(",");
@@ -180,6 +191,19 @@ public class FileWrite {
 
 
         //System.out.println("Written rows from rows to the file " + forOutput.toString() + ".");
+        ObjectNode metadataNow = null;
+        try {
+            metadataNow = JsonUtil.serializeWithContext(metadata);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Original metadata:\n" + originalMetadataJSON);
+        System.out.println("New metadata:\n" + metadataNow);
+        if(originalMetadataJSON != metadataNow){
+            System.out.println("Rewriting metadata file");
+            JsonUtil.serializeAndWriteToFile(metadata);
+
+        }
         FileWrite.writeToTheFile(f, forOutput.toString());
         System.out.println("Written CSV from rows to the file " + f + ".");
         //System.out.println("saveCSVFileFromRows end");
@@ -187,11 +211,52 @@ public class FileWrite {
 
     }
 
+    private static boolean allLanguagesAreUnique(List<Value> values) {
+        ArrayList<String> languageTags = new ArrayList<>();
+        for(Value v : values){
+            Literal l = (Literal) v;
+            if(!languageTags.contains(l.getLanguage().toString())){
+                languageTags.add(l.getLanguage().toString());
+            }
+        }
+        if(languageTags.size() == values.size()){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private static boolean literalHasDifferentLanguageTags(List<Value> values) {
+        ArrayList<String> languageTags = new ArrayList<>();
+        for(Value v : values){
+            Literal l = (Literal) v;
+            if(!languageTags.contains(l.getLanguage().toString())){
+                languageTags.add(l.getLanguage().toString());
+            }
+        }
+        if(languageTags.size() > 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static List<Map<Value,Value>> generateCombinations(List<Map.Entry<Value, TypeIdAndValues>> listOfLists) {
         // Map of predicatesOfColumns and Values in the Column
         List<Map<Value,Value>> resultingRowOfFormerMultivalues = new ArrayList<>();
-        generateCombinationsHelper(listOfLists, resultingRowOfFormerMultivalues, 0, new HashMap<Value,Value>());
+        if(!listOfLists.isEmpty() && listOfLists.get(0).getValue().values.get(0).isLiteral() && ((Literal)listOfLists.get(0).getValue().values.get(0)).getLanguage().isPresent()){
+            Integer maxDepth = getMaxDepthForDifferentLanguageTags(listOfLists);
+            //generateCombinationsHelper(maxDepth, resultingRowOfFormerMultivalues, 0, new HashMap<Value,Value>());
+
+        } else{
+            generateCombinationsHelper(listOfLists, resultingRowOfFormerMultivalues, 0, new HashMap<Value,Value>());
+
+        }
         return resultingRowOfFormerMultivalues;
+    }
+
+    private static Integer getMaxDepthForDifferentLanguageTags(List<Map.Entry<Value, TypeIdAndValues>> listOfLists) {
+        return 0;
     }
 
     private static void generateCombinationsHelper(List<Map.Entry<Value, TypeIdAndValues>>  listOfLists, List<Map<Value,Value>> result, int depth, Map<Value,Value> current) {
@@ -266,6 +331,7 @@ public class FileWrite {
                         sb.append(",");});
                     sb.deleteCharAt(sb.length() - 1);
                     sb.append('"');
+                    column.setSeparator(",");
                 }
             } else if(values.get(0).isLiteral()){
                 if(values.size() == 1){
@@ -281,6 +347,7 @@ public class FileWrite {
                         sb.append(",");});
                     sb.deleteCharAt(sb.length() - 1);
                     sb.append('"');
+                    column.setSeparator(",");
                 }
             }
         }
@@ -292,19 +359,27 @@ public class FileWrite {
             if(languageVariations == null){sb.append(","); return;}
             List<Value> valuesByLang = languageVariations.stream().filter(val -> ((Literal)val).getLanguage().get().equals(column.getLang())).collect(Collectors.toList());
             // There is only one value of this language
-            if(valuesByLang.size() == 1){
-                Value val = valuesByLang.get(0);
-                sb.append(safeLiteral((Literal)val));
-            } else {
-                // There are multiple values from the language, we need to enclose them in " "
-                sb.append('"');
-                valuesByLang.forEach(val -> {
-                    String strValue = ((Literal)val).getLabel();
-                    sb.append(strValue);
-                    sb.append(",");});
-                sb.deleteCharAt(sb.length() - 1);
-                sb.append('"');
+            if(!valuesByLang.isEmpty()){
+                if(valuesByLang.size() == 1){
+                    Value val = valuesByLang.get(0);
+                    sb.append(safeLiteral((Literal)val));
+                } else {
+                    System.out.println();
+                    System.out.println(column.getPropertyUrl() + " " + column.getLang() + " column.separator=" + column.getSeparator());
+                    // There are multiple values from the language, we need to enclose them in " "
+                    sb.append('"');
+                    valuesByLang.forEach(val -> {
+                        String strValue = ((Literal)val).getLabel();
+                        System.out.println("Literal value multivalue: " + strValue);
+                        sb.append(strValue);
+                        sb.append(",");});
+                    sb.deleteCharAt(sb.length() - 1);
+                    sb.append('"');
+                    column.setSeparator(",");
+                    System.out.println(column.getPropertyUrl() + " " + column.getLang() + " column.separator=" + column.getSeparator());
+                }
             }
+
 
         }
 

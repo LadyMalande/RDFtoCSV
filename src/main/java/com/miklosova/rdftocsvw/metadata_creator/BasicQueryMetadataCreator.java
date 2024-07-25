@@ -55,7 +55,7 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
         FileWrite.writeFilesToconfigFile(allFileNames);
 
         metadata.addForeignKeys(allRows);
-        metadata.finalizeMetadata();
+        metadata.jsonldMetadata();
         return metadata;
     }
 }

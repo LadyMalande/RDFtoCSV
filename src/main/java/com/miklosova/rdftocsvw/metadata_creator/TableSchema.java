@@ -95,6 +95,7 @@ public class TableSchema {
         } else {
             this.columns.forEach(column -> {
                 if (column.getVirtual() == null || (column.getVirtual() != null && !column.getVirtual())) {
+                    System.out.println("column name: " + column.getName() + " column title: " + column.getTitles());
                     this.rowTitles.add(column.getName());
                 }
             });
@@ -119,13 +120,15 @@ public class TableSchema {
 
         for(Map.Entry<Value, TypeIdAndValues> column : columns){
                 //System.out.println("Column " + column.getKey());
-                boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, column.getKey());
+                boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, column.getKey(), null);
                 Column newColumn = new Column(column, namespaceIsTheSame);
-                boolean subjectNamespaceIsTheSame = isNamespaceTheSameForAllSubjects(rows, column.getKey());
+                System.out.println("isNamespaceTheSameForAllRows " + namespaceIsTheSame + " for column " + column.getKey());
+                boolean subjectNamespaceIsTheSame = isNamespaceTheSameForAllSubjects(rows, column.getKey(), null);
+                System.out.println("isNamespaceTheSameForAllSubjects " + subjectNamespaceIsTheSame + " for column " + column.getKey());
                 newColumn.createColumn(rows.get(0), subjectNamespaceIsTheSame);
                 if (newColumn.getLang() != null) {
-                    //System.out.println("Column lang not null");
-                    enrichMetadataWithLangVariations(column, listOfColumns, rows.get(0));
+                    System.out.println("Column lang not null " + newColumn.getLang());
+                    enrichMetadataWithLangVariations(column, listOfColumns, rows);
                 } else {
                     listOfColumns.add(newColumn);
                 }
@@ -140,7 +143,7 @@ public class TableSchema {
         return listOfColumns;
     }
 
-    private boolean isNamespaceTheSameForAllRows(List<Row> rows, Value columnPredicate) {
+    private boolean isNamespaceTheSameForAllRows(List<Row> rows, Value columnPredicate, String lang) {
         System.out.println("Column predicate = " + columnPredicate.stringValue());
         if(columnPredicate.stringValue().equalsIgnoreCase(rows.get(0).type.stringValue())){
             return isNamespaceTheSameForAllPrimary(rows);
@@ -160,7 +163,7 @@ public class TableSchema {
         } else {
             return false;
         }
-        rows.forEach(row -> row.columns.entrySet().forEach(column -> System.out.println(column.getKey() + " values: " + column.getValue().values)));
+        rows.forEach(row -> row.columns.entrySet().forEach(column -> {if(column.getKey().equals(columnPredicate)){System.out.println(column.getKey() + " values: " + column.getValue().values + " id: " + column.getValue().id.toString());}}));
 
         List<Row> hasIRI = rows.stream().filter(row -> {
             if(row.columns.get(columnPredicate) != null) {
@@ -199,44 +202,80 @@ public class TableSchema {
         return columns;
     }
 
-    private void enrichMetadataWithLangVariations(Map.Entry<Value, TypeIdAndValues> column, List<Column> listOfColumns, Row row) {
-        List<Map.Entry<Value, TypeIdAndValues>> langVariations = new ArrayList<>();
+    private void enrichMetadataWithLangVariations(Map.Entry<Value, TypeIdAndValues> column, List<Column> listOfColumns, List<Row> rows) {
+        Map<String,Map.Entry<Value, TypeIdAndValues>> langVariations = new HashMap<>();
         Set<String> langVariationsAdded = new HashSet<>();
-        for(Value literal : column.getValue().values){
-            Literal langTag = (Literal) literal;
-            //System.out.println("add " + langTag.getLanguage().get());
-            langVariationsAdded.add(langTag.getLanguage().get());
+        List<Row> rowsWithLangVariation = rows.stream().filter(row -> row.columns.get(column.getKey()) != null).toList();
+
+        for(Row row : rowsWithLangVariation){
+            TypeIdAndValues rowToExtractLanguages = row.columns.get(column.getKey());
+            for(Value literal : rowToExtractLanguages.values){
+                Literal langTag = (Literal) literal;
+
+                if(!langVariationsAdded.contains(langTag.getLanguage().get())){
+                    langVariationsAdded.add(langTag.getLanguage().get());
+                    System.out.println("add language " + langTag.getLanguage().get());
+                }
+            }
         }
+        Map<String, Row> rowsByLangOccurance = new HashMap<>();
         for(String langVar : langVariationsAdded){
-            Value newId = column.getValue().id;
-            TypeOfValue newType = column.getValue().type;
+            System.out.println("Trying to add langVariation of " + langVar);
+            List<Row> newID = rowsWithLangVariation.stream().filter(row ->
+            {
+                for(Value v : row.columns.get(column.getKey()).values){
+                    //System.out.println("Match for langVariation row id: " + row.id + " for language " + langVar + " value: " + ((Literal)v).getLabel() + " lang: " + ((Literal)v).getLanguage());
+                    if( ((Literal)v).getLanguage().get().equals(langVar)){
+                        System.out.println("Match for langVariation row id: " + row.id + " for language " + langVar  + " value: " + ((Literal)v).getLabel() + " lang: " + ((Literal)v).getLanguage());
+                        return true;
+                    }
+                }
+
+
+                System.out.println("NO Match for langVariation row id: " + row.id + " for language " + langVar + " value: ") ;
+                return false;
+            }
+            ).toList();
+            System.out.println("newID is empty " + newID.isEmpty());
+            rowsByLangOccurance.put(langVar, newID.get(0));
+            Value newId = newID.get(0).columns.get(column.getKey()).id;
+            TypeOfValue newType = newID.get(0).columns.get(column.getKey()).type;
+            //Value newId = column.getValue().id;
+            //TypeOfValue newType = column.getValue().type;
             TypeIdAndValues newValue = new TypeIdAndValues(newId, newType, new ArrayList<>());
             //System.out.println("langVar " + langVar);
-            newValue.values.addAll(column.getValue().values.stream().filter(obj -> obj.toString().substring(obj.toString().length() - 2, obj.toString().length()).contains(langVar))
+            newValue.values.addAll(newID.get(0).columns.get(column.getKey()).values.stream().filter(obj -> obj.toString().substring(obj.toString().length() - 2, obj.toString().length()).contains(langVar))
                     .toList());
             Map.Entry<Value, TypeIdAndValues> newEntry = new AbstractMap.SimpleEntry<Value, TypeIdAndValues>(column.getKey(), newValue);
-            langVariations.add(newEntry);
+            newValue.values.forEach(v -> System.out.println("new value from lang Variation " + langVar + " " + v));
+            langVariations.put(langVar,newEntry);
 
         }
-        for(Map.Entry<Value, TypeIdAndValues> lang : langVariations){
-            System.out.println("Adding lang variation ");
-            Column newColumn = new Column(lang, false);
-            newColumn.createColumn(row, isNamespaceTheSameForAllSubjects(rows,lang.getKey()));
-            // Check whether the language variation is already in the data
-/*
-            if(listOfColumns.stream()
-                    .filter(item -> item.getLang() != null)
-                    .collect(Collectors.toList()).stream()
-                    .filter(item -> item.getLang()
-                            .contains(newColumn.getLang()))
-                    .collect(Collectors.toList()).isEmpty()){
-                listOfColumns.add(newColumn);
-            }
+        rowsByLangOccurance.forEach((k,v) -> System.out.println(k + ": " + v));
+        langVariations.forEach((k,v) -> System.out.println(k + ": " + v));
+        for(Map.Entry<String, Row> entry : rowsByLangOccurance.entrySet()){
+            System.out.println("Adding lang variation " + langVariations.get(entry.getKey()).getValue().values + " key:" + entry.getKey() + " value:" + entry.getValue());
+            boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, langVariations.get(entry.getKey()).getKey(),null);
 
- */
+            Column newColumn = new Column(langVariations.get(entry.getKey()), namespaceIsTheSame);
+            newColumn.createColumn(entry.getValue(), isNamespaceTheSameForAllSubjects(rows,langVariations.get(entry.getKey()).getKey(),null));
+
+            listOfColumns.add(newColumn);
+        }
+        /*
+        for(Map.Entry<Value, TypeIdAndValues> lang : langVariations){
+
+            System.out.println("Adding lang variation " + lang.getValue().values);
+            boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, lang.getKey());
+            Column newColumn = new Column(lang, namespaceIsTheSame);
+            rowWithGivenLang =
+            newColumn.createColumn(lang, isNamespaceTheSameForAllSubjects(rows,lang.getKey()));
+            // Check whether the language variation is already in the data
+
             listOfColumns.add(newColumn);
 
         }
+        */
     }
 
     private Column createVirtualTypeColumn(Value id) {
@@ -260,21 +299,19 @@ public class TableSchema {
         return newColumn;
     }
 
-    public static boolean isNamespaceTheSameForAllSubjects(List<Row> rows, Value type) {
+    public static boolean isNamespaceTheSameForAllSubjects(List<Row> rows, Value type, String lang) {
         List<Row> nonnulls = rows.stream().filter(row -> row.columns.get(type) != null).toList();
-        //System.out.println("the same subjects " + type.stringValue());
-        if(nonnulls.size() < rows.size()){
-            return false;
-        }
+        System.out.println("the same subjects predicate: " + type.stringValue());
+
         final String namespace = ((IRI)nonnulls.get(0).columns.get(type).id).getNamespace();
 
-        return rows.stream().allMatch(row -> {
-            /*
-            System.out.println("nanespace=" + namespace + " "
-                    + ((IRI) (row.columns).get(type).id).getNamespace()
-                    + " equals? " + ((IRI) (row.columns).get(type).id).getNamespace().equalsIgnoreCase(namespace));
+        return nonnulls.stream().allMatch(row -> {
 
-             */
+            System.out.println("namespace=" + namespace + " "
+                    + ((IRI) (row.columns).get(type).id).getNamespace()
+                    + " from " + (row.columns).get(type).id.toString() + " equals? " + ((IRI) (row.columns).get(type).id).getNamespace().equalsIgnoreCase(namespace));
+
+
                     return ((IRI) (row.columns).get(type).id).getNamespace().equalsIgnoreCase(namespace);
         }
                 );
