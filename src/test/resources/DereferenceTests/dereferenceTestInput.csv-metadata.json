@@ -28,6 +28,49 @@
         "aboutUrl" : "http://example.org/{+Text}"
       }, {
         "@type" : "Column",
+        "titles" : "Publisher",
+        "name" : "publisher",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/publisher",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Given name",
+        "name" : "givenName",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/givenName",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Usage Note",
+        "name" : "usageNote",
+        "propertyUrl" : "http://purl.org/vocab/vann/usageNote",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Distribution",
+        "name" : "Distribution",
+        "propertyUrl" : "http://creativecommons.org/ns#Distribution",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "moreinfo",
+        "name" : "moreinfo",
+        "propertyUrl" : "http://www.w3.org/2003/06/sw-vocab-status/ns#moreinfo",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Encrypted by",
+        "name" : "encrypter",
+        "propertyUrl" : "http://xmlns.com/wot/0.1/encrypter",
+        "valueUrl" : "http://example.org/{+encrypter}",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "scope note",
+        "name" : "scopeNote",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#scopeNote",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
         "titles" : "Title (cs)",
         "name" : "title_cs",
         "propertyUrl" : "http://purl.org/dc/terms/title",
@@ -40,6 +83,13 @@
         "propertyUrl" : "http://purl.org/dc/terms/title",
         "aboutUrl" : "http://example.org/{+Text}",
         "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (pl)",
+        "name" : "title_pl",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "http://example.org/{+Text}",
+        "lang" : "pl"
       }, {
         "@type" : "Column",
         "propertyUrl" : "rdf:type",
@@ -49,68 +99,11 @@
       } ],
       "primaryKey" : "Text",
       "aboutUrl" : "http://example.org/{+Text}",
-      "rowTitles" : [ "Text", "type", "Creator", "Title", "Title" ]
+      "rowTitles" : [ "Text", "type", "Creator", "Publisher", "Given name", "Usage Note", "Distribution", "moreinfo", "Encrypted by", "scope note", "Title", "Title", "Title" ]
     }
   }, {
     "@type" : "Table",
     "url" : "CSVfileToWriteTo1.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Software",
-        "name" : "Software",
-        "valueUrl" : "http://example.org/{+Software}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://purl.org/dc/dcmitype/{+type}",
-        "aboutUrl" : "http://example.org/{+Software}"
-      }, {
-        "@type" : "Column",
-        "titles" : "Creator",
-        "name" : "creator",
-        "propertyUrl" : "http://purl.org/dc/terms/creator",
-        "valueUrl" : "http://example.org/{+creator}",
-        "aboutUrl" : "http://example.org/{+Software}"
-      }, {
-        "@type" : "Column",
-        "titles" : "Title (cs)",
-        "name" : "title_cs",
-        "propertyUrl" : "http://purl.org/dc/terms/title",
-        "aboutUrl" : "http://example.org/{+Software}",
-        "lang" : "cs"
-      }, {
-        "@type" : "Column",
-        "titles" : "Title (en)",
-        "name" : "title_en",
-        "propertyUrl" : "http://purl.org/dc/terms/title",
-        "aboutUrl" : "http://example.org/{+Software}",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "datatypeTest",
-        "name" : "datatypeTest",
-        "propertyUrl" : "http://example.org/datatypeTest",
-        "datatype" : "integer",
-        "aboutUrl" : "http://example.org/{+Software}"
-      }, {
-        "@type" : "Column",
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://purl.org/dc/dcmitype/Software",
-        "aboutUrl" : "http://example.org/{+Software}",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Software",
-      "aboutUrl" : "http://example.org/{+Software}",
-      "rowTitles" : [ "Software", "type", "Creator", "Title", "Title", "datatypeTest" ]
-    }
-  }, {
-    "@type" : "Table",
-    "url" : "CSVfileToWriteTo2.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {

@@ -12,6 +12,7 @@ import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.util.Values;
 import org.jruby.RubyProcess;
+import org.jsoup.helper.ValidationException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -76,19 +77,28 @@ public class TableSchema {
 
     private void addRowTitles(){
         if(ConnectionChecker.checkConnection()){
+
             this.columns.forEach(column -> {
-                if ((column.getVirtual() == null) || (column.getVirtual() != null && !column.getVirtual())
-                ) {
-                    if((column.getSuppressOutput() == null)){
-                        Dereferencer dereferencer = new Dereferencer(column.getPropertyUrl());
-                        //System.out.println("Dereference = " + column.getName());
-                        try {
-                            this.rowTitles.add(dereferencer.getTitle());
-                        } catch(NullPointerException noElement){
-                            this.rowTitles.add(column.getName());
-                        }
+                System.out.println("col: " + " " + column.getName() + ", column title: " + column.getTitles() + " column.virtual: " + column.getVirtual());
+
+                if ((column.getVirtual() == null) || (column.getVirtual() != null && !column.getVirtual())) {
+                    System.out.println("(column.getVirtual() == null)");
+
+                    System.out.println("(column.getSuppressOutput() != null)");
+                    Dereferencer dereferencer = new Dereferencer(column.getPropertyUrl());
+                    //System.out.println("Dereference = " + column.getName());
+                    /*
+                    try {
+                        this.rowTitles.add(dereferencer.getTitle());
+                        System.out.println("dereferencer.getTitle(): " + dereferencer.getTitle());
+
+                    } catch(NullPointerException | ValidationException noElement){
+                        System.out.println("Row name in create rowTitles: " + column.getName() + ", column title: " + column.getTitles());
+                        this.rowTitles.add(column.getName());
                     }
 
+                     */
+                    this.rowTitles.add(column.getName());
                 }
             });
 

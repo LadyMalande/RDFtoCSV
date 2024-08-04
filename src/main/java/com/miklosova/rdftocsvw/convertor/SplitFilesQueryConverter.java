@@ -100,9 +100,10 @@ public class SplitFilesQueryConverter implements IQueryParser{
             }
             if(statement != null){
                 rc.add(statement);
-            }
+
             System.out.println(statement.getSubject() + " " + statement.getPredicate() + " " + statement.getObject());
             System.out.println(st);
+            }
             counter = counter +1;
         }
         System.out.println("Count " + counter);
@@ -231,7 +232,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
             while(!conn.isEmpty()) {
 
                 TupleQuery query = conn.prepareTupleQuery(queryString);
-                //System.out.println("query.getDataset()" + query.getDataset());
+                System.out.println("Write out queryString " + queryString);
                 // A QueryResult is also an AutoCloseable resource, so make sure it gets closed when done.
                 try (TupleQueryResult result = query.evaluate()) {
                     // we just iterate over all solutions in the result...
@@ -246,7 +247,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
                     for (BindingSet solution : result) {
                         // ... and print out the value of the variable binding for ?s and ?n
                         //System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
-                        //System.out.println("?subject = " + solution.getValue("s") + " added to roots");
+                        System.out.println("?subject = " + solution.getValue("s") + " added to roots");
                         //System.out.println("?subject = " + solution.getValue("s") + " is a o=" + solution.getValue("o") + " added to roots");
                         if(!roots.contains(solution.getValue("s"))){
                             System.out.println("root " +solution.getValue("s"));

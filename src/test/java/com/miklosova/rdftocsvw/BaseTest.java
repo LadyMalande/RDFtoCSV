@@ -19,7 +19,10 @@ public class BaseTest {
 
     @After
     public void tearDown() {
-        db.shutDown();
+        if(db != null){
+            db.shutDown();
+        }
+
     }
 
     public JSONObject readJSONFile(String path){

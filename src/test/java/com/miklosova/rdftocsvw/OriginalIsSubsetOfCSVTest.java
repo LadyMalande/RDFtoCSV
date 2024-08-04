@@ -34,7 +34,6 @@ public class OriginalIsSubsetOfCSVTest {
         public static Collection<Object[]> configs(){
             return Arrays.asList(new Object[][]{
                     { "SplitQuerySmallDataset", "./src/test/resources/OriginalIsSubsetOfCSV/nace-cz1.trig", "./src/test/resources/OriginalIsSubsetOfCSV/idOutuput.ttl"},
-                    //{ "", "", "", "", "", ""},
             });
         }
 

@@ -26,6 +26,7 @@ public class TurtleParser implements IRDF4JParsingMethod {
             InputStream targetStream = null;
             try {
                 targetStream = new FileInputStream(path.toFile());
+                System.out.println("path.toFile(): " + path.toFile());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }

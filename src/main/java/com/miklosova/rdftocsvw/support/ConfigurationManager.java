@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.support;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class ConfigurationManager {
@@ -24,18 +25,22 @@ public class ConfigurationManager {
     public static final String DEFAULT_METADATA_FILENAME = "csv-metadata.json";
 
     public static void saveVariableToConfigFile(String variableName, String value){
+        String newStringValue = new String(value.getBytes(), StandardCharsets.UTF_8);
+        System.out.println("new String value with encoding: " + newStringValue );
         Properties prop = new Properties();
         try (FileInputStream fis = new FileInputStream(CONFIG_FILE_NAME)) {
             prop.load(fis);
         } catch (FileNotFoundException ex) {
         } catch (IOException ex) {
         }
-        prop.setProperty(variableName, value);
+        prop.setProperty(variableName, newStringValue);
         System.out.println("Set configuration of "+ variableName +" to: " + prop.getProperty(variableName));
 
         //for(String fileNames : file.list()) System.out.println(fileNames);
         try {
-            PrintWriter pw = new PrintWriter(CONFIG_FILE_NAME);
+            PrintWriter pw = new PrintWriter(new OutputStreamWriter(
+                    new FileOutputStream(CONFIG_FILE_NAME), StandardCharsets.UTF_8), true);
+            //PrintWriter pw = new PrintWriter(CONFIG_FILE_NAME);
             prop.store(pw, null);
         } catch (IOException e) {
             e.printStackTrace();
