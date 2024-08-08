@@ -8,10 +8,34 @@
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "titles" : "TableGroup",
+        "name" : "TableGroup",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
         "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "table",
+        "name" : "table",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#table",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+table}"
+      }, {
+        "@type" : "Column",
+        "titles" : "row",
+        "name" : "row",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#row",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+row}"
+      }, {
+        "@type" : "Column",
+        "titles" : "describes",
+        "name" : "describes",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes}"
       }, {
         "@type" : "Column",
         "titles" : "FamilyName",
@@ -22,8 +46,26 @@
         "titles" : "Surname",
         "name" : "Surname",
         "propertyUrl" : "file://test001.csv#Surname"
+      }, {
+        "@type" : "Column",
+        "titles" : "rownum",
+        "name" : "rownum",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "url",
+        "name" : "url",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "{+url}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#TableGroup",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
+        "virtual" : true
       } ],
-      "rowTitles" : [ null, null ]
+      "rowTitles" : [ "TableGroup", "type", "table", "row", "describes", "FamilyName", "Surname", "rownum", "url" ]
     }
   } ]
 }

@@ -78,6 +78,7 @@ public class FileWrite {
      */
 
     public static void writeFilesToconfigFile(ArrayList<String> fileNamesCreated) {
+        System.out.println("fileNamesCreated[0]  = " + fileNamesCreated.get(0));
         StringBuilder sb = new StringBuilder();
         fileNamesCreated.forEach(fileName -> sb.append(fileName + ","));
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,sb.toString());

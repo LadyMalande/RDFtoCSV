@@ -53,59 +53,9 @@
         "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{+Concept}",
         "virtual" : true
       } ],
-      "foreignKeys" : [ {
-        "columnReference" : "inScheme",
-        "reference" : {
-          "resource" : "typy-pracovnÃÂÃÂÃÂÃÂ­ch-vztahÃÂÃÂÃÂÃÂ¯.ttlTestOutput1.csv",
-          "columnReference" : "ConceptScheme"
-        }
-      } ],
       "primaryKey" : "Concept",
       "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{+Concept}",
       "rowTitles" : [ "Concept", "type", "inScheme", "prefLabel_cs", "prefLabel_en", "notation" ]
-    }
-  }, {
-    "@type" : "Table",
-    "url" : "typy-pracovnÃÂÃÂÃÂÃÂ­ch-vztahÃÂÃÂÃÂÃÂ¯.ttlTestOutput1.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "ConceptScheme",
-        "name" : "ConceptScheme",
-        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+ConceptScheme}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/2004/02/skos/core#{+type}",
-        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+ConceptScheme}"
-      }, {
-        "@type" : "Column",
-        "titles" : "preferred label (cs)",
-        "name" : "prefLabel_cs",
-        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
-        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+ConceptScheme}",
-        "lang" : "cs"
-      }, {
-        "@type" : "Column",
-        "titles" : "preferred label (en)",
-        "name" : "prefLabel_en",
-        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
-        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+ConceptScheme}",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://www.w3.org/2004/02/skos/core#ConceptScheme",
-        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+ConceptScheme}",
-        "virtual" : true
-      } ],
-      "primaryKey" : "ConceptScheme",
-      "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+ConceptScheme}",
-      "rowTitles" : [ "ConceptScheme", "type", "prefLabel_cs", "prefLabel_en" ]
     }
   } ]
 }
