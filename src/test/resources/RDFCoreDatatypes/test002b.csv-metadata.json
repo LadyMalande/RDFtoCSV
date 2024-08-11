@@ -1,38 +1,28 @@
 {
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
   "tables" : [ {
+    "@type" : "Table",
     "url" : "test002bTestOutput0.csv",
     "tableSchema" : {
+      "@type" : "Schema",
       "columns" : [ {
+        "@type" : "Column",
         "titles" : "Subjekt",
         "name" : "Subjekt",
-        "valueUrl" : "http://example.org/{Subjekt}",
+        "valueUrl" : "http://example.org/{+Subjekt}",
         "suppressOutput" : true
       }, {
+        "@type" : "Column",
         "titles" : "bar",
         "name" : "bar",
         "propertyUrl" : "http://example.org/bar",
-        "valueUrl" : "_:{bar}"
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+bar}",
+        "aboutUrl" : "http://example.org/{+Subjekt}"
       } ],
-      "foreignKeys" : [ {
-        "columnReference" : "bar",
-        "reference" : {
-          "columnReference" : "type"
-        }
-      } ],
-      "primaryKey" : "foo",
-      "aboutUrl" : "http://example.org/{Subjekt}",
+      "primaryKey" : "Subjekt",
+      "aboutUrl" : "http://example.org/{+Subjekt}",
       "rowTitles" : [ "Subjekt", "bar" ]
     }
-  }, {
-    "url" : "test002bTestOutput1.csv",
-    "tableSchema" : {
-      "columns" : [ {
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "suppressOutput" : true
-      } ],
-      "rowTitles" : [ "Subjekt" ]
-    }
-  } ],
-  "@context" : "http://www.w3.org/ns/csvw"
+  } ]
 }

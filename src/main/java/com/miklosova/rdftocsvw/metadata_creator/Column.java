@@ -10,9 +10,12 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 import java.util.Map;
 import java.util.Optional;
+@SuppressWarnings("SpellCheckingInspection")
 @JsonldType("Column")
 public class Column {
     @JsonIgnore
@@ -88,10 +91,18 @@ public class Column {
 
     private Map.Entry<Value, TypeIdAndValues> column;
 
+    private Value originalColumnKey;
+
     @JsonIgnore
     public Map.Entry<Value, TypeIdAndValues> getColumn() {
         return column;
     }
+
+    @JsonIgnore
+    public Value getOriginalColumnKey() {
+        return originalColumnKey;
+    }
+
 
     public void setColumn(Map.Entry<Value, TypeIdAndValues> column) {
         this.column = column;
@@ -105,6 +116,12 @@ public class Column {
         //assert column != null;
         this.column = column;
         this.isNamespaceTheSame = namespaceIsTheSame;
+        if(column != null){
+            this.originalColumnKey = column.getKey();
+
+            System.out.println("original column key = " + originalColumnKey);
+        }
+
     }
 
     public void createColumn(Row row, boolean isSubjectTheSame) {
@@ -131,6 +148,29 @@ public class Column {
         TypeOfValue type = column.getValue().type;
         Value id = column.getValue().id;
         Value value = column.getValue().values.get(0);
+
+        Value valueForAboutUrlPattern = row.type;
+
+        if(this.name.contains("_MULTILEVEL_")){
+            System.out.println("making different aboutUrl for _MULTILEVEL_ column ");
+            // Regex pattern
+            String regex = id.stringValue();
+            System.out.println("regex = " + regex);
+
+            for (Map.Entry<Value, TypeIdAndValues> entry : row.columns.entrySet()) {
+                for(Value valueFromMap : entry.getValue().values) {
+                    System.out.println("Matching value = " + valueFromMap + " with regex ");
+                    if (valueFromMap.stringValue().matches(regex)) {
+                        System.out.println("Found matching value: " + valueFromMap.stringValue());
+                        valueForAboutUrlPattern = entry.getKey();
+                        // Optionally break out of the loop if you only want the first match
+                        break;
+                    }
+                }
+            }
+        }
+
+
         if(id.isBNode()){
             this.aboutUrl = null;
         } else {
@@ -142,7 +182,7 @@ public class Column {
                 if (isSubjectTheSame) {
                     if (isRdfType) {
                         // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                        this.aboutUrl = idIRI.getNamespace() + "{+" + ((IRI) row.type).getLocalName() + "}";
+                        this.aboutUrl = idIRI.getNamespace() + "{+" + createSafeName(((IRI) valueForAboutUrlPattern).getLocalName()) + "}";
                     } else {
                         // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
                         this.aboutUrl = idIRI.getNamespace() + "{+" + "Subjekt" + "}";
@@ -150,7 +190,7 @@ public class Column {
                 } else {
                     if (isRdfType) {
                         // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                        this.aboutUrl = "{+" + ((IRI) row.type).getLocalName() + "}";
+                        this.aboutUrl = "{+" + createSafeName(((IRI) valueForAboutUrlPattern).getLocalName()) + "}";
                     } else {
                         // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
                         this.aboutUrl = "{+" + "Subjekt" + "}";
@@ -183,18 +223,19 @@ public class Column {
     private void createValueUrl() {
         Value valueFromThisColumn = this.column.getValue().values.get(0);
         IRI iriOfColumnKey = (IRI) this.column.getKey();
+        String safeNameOfTheColumn = createSafeName(iriOfColumnKey.getLocalName());
         if(valueFromThisColumn.isIRI()){
             IRI iri = (IRI) valueFromThisColumn;
             String firstPart = iri.getNamespace();
             String lastPart = iri.getLocalName();
             if(isNamespaceTheSame){
-                this.valueUrl = firstPart + "{+" + iriOfColumnKey.getLocalName() + "}";
+                this.valueUrl = firstPart + "{+" + safeNameOfTheColumn + "}";
             } else {
-                this.valueUrl = "{+" + iriOfColumnKey.getLocalName() + "}";
+                this.valueUrl = "{+" + safeNameOfTheColumn + "}";
             }
 
         } else if(valueFromThisColumn.isBNode()){
-            this.valueUrl = "_:" + "{+" +  iriOfColumnKey.getLocalName() + "}";
+            this.valueUrl = "_:" + "{+" +  safeNameOfTheColumn + "}";
         }
 
     }
@@ -202,8 +243,12 @@ public class Column {
     private void createPropertyUrl() {
         Value column = this.column.getKey();
         IRI columnKeyIRI = (IRI) column;
+        String iri = columnKeyIRI.toString();
+        String delimiter = "_MULTILEVEL_";
+        int delimiterIndex = iri.indexOf(delimiter);
+        String fixedPropertyUrl = (delimiterIndex != -1) ? iri.substring(0, delimiterIndex) : iri;
         //System.out.println("CreatedColumn.PropertyUrl=" + columnKeyIRI.toString());
-        this.propertyUrl = columnKeyIRI.toString();
+        this.propertyUrl = fixedPropertyUrl;
     }
 
     public String getTitles() {
@@ -235,12 +280,21 @@ public class Column {
     private void createName() {
         Value column = this.column.getKey();
         IRI columnKeyIRI = (IRI) column;
+        // Create name without - and nonascii characters
+        String safeName = createSafeName(columnKeyIRI.getLocalName());
         if(this.lang != null){
-            this.name = columnKeyIRI.getLocalName() + "_" + this.lang;
+            this.name = safeName + "_" + this.lang;
         } else{
-            this.name = columnKeyIRI.getLocalName();
+            this.name = safeName;
         }
 
+    }
+
+    public static String createSafeName(String localName) {
+        // Replace all non-ASCII characters and hyphens
+        String safeName = localName.replaceAll("[^\\x00-\\x7F-]", "").replace("-", "");
+        System.out.println("transformed localName to safe name: " + localName + " > " + safeName);
+        return safeName;
     }
 
     private String createTitles() {
@@ -248,8 +302,17 @@ public class Column {
         //System.out.println("valueFromThisColumn from createTitles() = " + valueFromThisColumn.toString());
         Value column = this.column.getKey();
         IRI columnKeyIRI = (IRI) column;
+        ValueFactory vf = SimpleValueFactory.getInstance();
+        IRI propertyUrlIRI = vf.createIRI(this.getPropertyUrl());
 
         this.titles = null;
+
+        String delimiter = "_MULTILEVEL_";
+        int delimiterIndex = columnKeyIRI.stringValue().indexOf(delimiter);
+        System.out.println("The delimiterIndex is " + delimiterIndex + " for iri " + columnKeyIRI.stringValue());
+        String prependix = (delimiterIndex != -1) ? columnKeyIRI.stringValue().substring(delimiterIndex + delimiter.length()) + "_" : "";
+        System.out.println("prependix==" + prependix);
+
         if(ConnectionChecker.checkConnection()){
             Dereferencer dereferencer = new Dereferencer(this.getPropertyUrl());
             try {
@@ -267,13 +330,13 @@ public class Column {
             }
                 if(this.titles != null) {
                     //System.out.println("valueFromThisColumn from createTitles() isLiteral = " + this.titles);
-                    return (langTag == null) ? this.titles : this.titles + " (" + langTag + ")";
+                    return (langTag == null) ? prependix + this.titles : prependix + this.titles + " (" + langTag + ")";
                 } else {
-                    return (langTag == null) ? columnKeyIRI.getLocalName() : columnKeyIRI.getLocalName() + " (" + langTag + ")";
+                    return (langTag == null) ? prependix + propertyUrlIRI.getLocalName() : prependix + propertyUrlIRI.getLocalName() + " (" + langTag + ")";
                 }
 
         } else {
-            return (this.titles == null) ? columnKeyIRI.getLocalName() : this.titles;
+            return (this.titles == null) ? prependix + propertyUrlIRI.getLocalName() : prependix + this.titles;
         }
 
 

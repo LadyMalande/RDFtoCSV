@@ -116,7 +116,9 @@ public class BasicQueryConverter implements IQueryParser{
         PrefinishedOutput queryResult;
         String query = getCSVTableQueryForModel(true);
         try{
+            System.out.println("Query at top level in convertWithQuery\n" + query.toString());
             queryResult = queryRDFModel(query, true);
+
         } catch(IndexOutOfBoundsException ex){
             query = getCSVTableQueryForModel(false);
             queryResult = queryRDFModel(query, false);
@@ -244,13 +246,14 @@ public class BasicQueryConverter implements IQueryParser{
                         // ... and print out the value of the variable binding for ?s and ?n
                         //System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
                         //System.out.println("?subject = " + solution.getValue("s") + " added to roots");
-                        //System.out.println("?subject = " + solution.getValue("s") + " is a o=" + solution.getValue("o") + " added to roots");
+                        System.out.println("?subject = " + solution.getValue("s") + " is a o=" + solution.getValue("o") + " added to roots");
                         if(!roots.contains(solution.getValue("s"))){
                             roots.add(solution.getValue("s"));
                             System.out.println("Root: " + solution.getValue("s"));
                         }
                         Row newRow = new Row(solution.getValue("s"),solution.getValue("o"),askForTypes);
-                        queryForSubjects(conn, newRow, solution.getValue("s"), solution.getValue("s"), null, askForTypes);
+                        queryForSubjects(conn, newRow, solution.getValue("s"), solution.getValue("s"), null, askForTypes, 0);
+                        System.out.println();
                         rows.add(newRow);
                     }
 
@@ -297,7 +300,7 @@ public class BasicQueryConverter implements IQueryParser{
             //System.out.println("allRows size #: " + allRows.size());
             //allKeys.forEach(k -> System.out.print("key: " + k + " "));
             //System.out.println();
-            //allRows.forEach(k -> System.out.print("Row: " + k.get(0) + " "));
+            rows.forEach(k -> System.out.println("Row: " + k.id.stringValue() + " " + k.columns.entrySet()));
             //System.out.println();
 
                 //System.out.println("Adding rowAndKey #: " + i);
@@ -334,49 +337,6 @@ public class BasicQueryConverter implements IQueryParser{
         return gen;
     }
 
-
-
-    private void recursiveQueryForFiles(RepositoryConnection conn, Value dominantType, boolean askForTypes) {
-        // Make new rows and keys for the current file
-        rows = new ArrayList<>();
-        keys = new ArrayList<>();
-
-        //System.out.println("Number of Roots in recursiveQuery: " + roots.size());
-        for (Value root : roots) {
-            // new Row with the found subject as its id
-            Row newRow = new Row(root, dominantType, askForTypes);
-            //System.out.println("Number of Roots in recursiveQuery: " + roots.size() + " root: " + root.stringValue() );
-            // Query the model for individual rows lead by the roots and having the predicates as the headers in the file
-            // TODO recursive Query for Subjects
-            queryForSubjects(conn, newRow, root, null, dominantType, askForTypes);
-            rows.add(newRow);
-        }
-        // TODO augment keys
-        //augmentMapsByMissingKeys();
-    }
-
-    private void deletePredicatesAndObjectsForSubject(RepositoryConnection conn, Value root, Value dominantType, boolean askForTypes) {
-        String queryToDeleteAllPredicatesAndObjects = getDeletePredicatesObjectsForRoot(root, dominantType, askForTypes);
-        String delQuery = queryToDeleteAllPredicatesAndObjects.replace("DELETE { ?s ?p ?o . }", "DELETE ?s ?p ?o . ");
-        String queryForWhatIsDeleted = queryToDeleteAllPredicatesAndObjects.replace("DELETE", "SELECT ?s ?p ?o ");
-        //System.out.println("delQuery " + delQuery);
-        //System.out.println("queryForWhatIsDeleted " + queryForWhatIsDeleted);
-        try{
-            TupleQueryResult result = conn.prepareTupleQuery(queryForWhatIsDeleted).evaluate();
-            //result.stream().forEach(res -> System.out.println("s1=" +res.getBinding("s") + " p1=" + res.getBinding("p") + " o1=" + res.getBinding("o")));
-            conn.prepareUpdate(queryToDeleteAllPredicatesAndObjects).execute();
-
-            TupleQueryResult result2 = conn.prepareTupleQuery(queryForWhatIsDeleted).evaluate();
-            //result2.stream().forEach(res -> System.out.println("s=" +res.getBinding("s") + " p=" + res.getBinding("p") + " o=" + res.getBinding("o")));
-        } catch (QueryEvaluationException ex){
-            ex.printStackTrace();
-        }
-
-
-        //System.out.println("deleted triples from conn... ");
-
-    }
-
     private String getDeletePredicatesObjectsForRoot(Value root, Value dominantType, boolean askForTypes) {
         Prefix skos = SparqlBuilder.prefix(SKOS.NS);
 
@@ -400,7 +360,7 @@ public class BasicQueryConverter implements IQueryParser{
         return query;
     }
 
-    private void queryForSubjects(RepositoryConnection conn, Row newRow, Value root, Value subject, Value dominantType, boolean askForTypes) {
+    private void queryForSubjects(RepositoryConnection conn, Row newRow, Value root, Value subject, Value dominantType, boolean askForTypes, int level) {
         String queryToGetAllPredicatesAndObjects = getQueryToGetObjectsForRoot(subject, dominantType, askForTypes);
         //System.out.println("queryToGetAllPredicatesAndObjects =  " + queryToGetAllPredicatesAndObjects);
         TupleQuery query = conn.prepareTupleQuery(queryToGetAllPredicatesAndObjects);
@@ -420,7 +380,7 @@ public class BasicQueryConverter implements IQueryParser{
                 //System.out.println("queryForSubjects solution.getBindingNames() =  " + solution.getBindingNames());
                 //System.out.println("queryForSubjects solution.size() =  " + solution.size());
                 //System.out.println("queryForSubjects solution.getBinding(\"o\").getValue() =  " + solution.getBinding("o").getValue().toString());
-                //System.out.println("newRow.columns.containsKey(solution.getBinding(\"p\").getValue() =  " + newRow.columns.containsKey(solution.getBinding("p").getValue()));
+                System.out.println("newRow.columns.containsKey(solution.getBinding(\"p\").getValue() =  " + newRow.columns.containsKey(solution.getBinding("p").getValue()));
                 /*
                 if(newRow.columns.get(solution.getBinding("p")) != null){
                     //System.out.println(" newRow.columns.get(solution.getBinding(\"p\").getValue()).type == TypeOfValue.IRI =  " +  newRow.columns.get(solution.getBinding("p").getValue()).type );
@@ -443,27 +403,38 @@ public class BasicQueryConverter implements IQueryParser{
                 }
 
                  */
-                if(newRow.columns.containsKey(solution.getBinding("p").getValue()) &&
-                        newRow.columns.get(solution.getBinding("p").getValue()).type == TypeOfValue.IRI &&
-                        solution.getBinding("o").getValue().isIRI()){
-                    List<Value> oldStringValue = newRow.columns.get(solution.getBinding("p").getValue()).values;
-                    oldStringValue.add(solution.getBinding("o").getValue());
-                    TypeIdAndValues oldTypeIdAndValues =  newRow.columns.get(solution.getBinding("p").getValue());
-                    oldTypeIdAndValues.values = oldStringValue;
-                    newRow.columns.put(solution.getBinding("p").getValue(), oldTypeIdAndValues);
-                    encloseInDoubleQuotes = solution.getBinding("p").getValue();
-                    //System.out.println("o Added to oldRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
+                Value keyForColumnsMap = solution.getBinding("p").getValue();
+                if(level != 0){
+                    ValueFactory valueFactory = SimpleValueFactory.getInstance();
 
-                } else if(newRow.columns.containsKey(solution.getBinding("p").getValue()) &&
-                        newRow.columns.get(solution.getBinding("p").getValue()).type == TypeOfValue.LITERAL &&
-                        solution.getBinding("o").getValue().isLiteral()){
-                    List<Value> oldStringValue = newRow.columns.get(solution.getBinding("p").getValue()).values;
+                    // Create a new IRI
+
+                    String newValueForMap = solution.getBinding("p").getValue().stringValue() + "_MULTILEVEL_" + ((IRI)subject).getLocalName();
+                    System.out.println("newValueForMap" +newValueForMap);
+                    IRI iri = valueFactory.createIRI(newValueForMap);
+                    keyForColumnsMap = iri;
+                }
+                if(newRow.columns.containsKey(keyForColumnsMap) &&
+                        newRow.columns.get(keyForColumnsMap).type == TypeOfValue.IRI &&
+                        solution.getBinding("o").getValue().isIRI()){
+                    List<Value> oldStringValue = newRow.columns.get(keyForColumnsMap).values;
                     oldStringValue.add(solution.getBinding("o").getValue());
-                    TypeIdAndValues oldTypeIdAndValues =  newRow.columns.get(solution.getBinding("p").getValue());
+                    TypeIdAndValues oldTypeIdAndValues =  newRow.columns.get(keyForColumnsMap);
                     oldTypeIdAndValues.values = oldStringValue;
-                    newRow.columns.put(solution.getBinding("p").getValue(), oldTypeIdAndValues);
+                    newRow.columns.put(keyForColumnsMap, oldTypeIdAndValues);
                     encloseInDoubleQuotes = solution.getBinding("p").getValue();
-                    //System.out.println("o Added to oldRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
+                    System.out.println("IRI already in the map o Added to oldRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
+
+                } else if(newRow.columns.containsKey(keyForColumnsMap) &&
+                        newRow.columns.get(keyForColumnsMap).type == TypeOfValue.LITERAL &&
+                        solution.getBinding("o").getValue().isLiteral()){
+                    List<Value> oldStringValue = newRow.columns.get(keyForColumnsMap).values;
+                    oldStringValue.add(solution.getBinding("o").getValue());
+                    TypeIdAndValues oldTypeIdAndValues =  newRow.columns.get(keyForColumnsMap);
+                    oldTypeIdAndValues.values = oldStringValue;
+                    newRow.columns.put(keyForColumnsMap, oldTypeIdAndValues);
+                    encloseInDoubleQuotes = solution.getBinding("p").getValue();
+                    System.out.println("LITERAL already in the map o Added to oldRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
 
                 }
                 else { // There is no such key (column) in the map
@@ -471,9 +442,9 @@ public class BasicQueryConverter implements IQueryParser{
                     TypeOfValue newType = (solution.getBinding("o").getValue().isIRI()) ? TypeOfValue.IRI :
                             (solution.getBinding("o").getValue().isBNode()) ? TypeOfValue.BNODE : TypeOfValue.LITERAL;
                     assert root != null;
-                    newRow.columns.put(solution.getBinding("p").getValue(), new TypeIdAndValues(root, newType,
+                    newRow.columns.put(keyForColumnsMap, new TypeIdAndValues(subject, newType,
                             new ArrayList<>(Arrays.asList(solution.getBinding("o").getValue()))));
-                    //System.out.println("o Added to newRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
+                    System.out.println("There is no such key in columns map o Added to newRow.columns predicate = " + keyForColumnsMap + "  Value of = " + solution.getBinding("o").getValue());
                     //}
                     if(solution.getBinding("o").getValue().isBNode()){
                         //System.out.println("o is BNode with Value of = " + solution.getBinding("o").getValue());
@@ -482,29 +453,57 @@ public class BasicQueryConverter implements IQueryParser{
 
                 }
 
-                if(!keys.contains(solution.getValue("p"))){
-                    //keys.forEach(k -> System.out.print("key: " + k));
-                    keys.add(solution.getValue("p"));
+                if(!keys.contains(keyForColumnsMap)){
+                    keys.forEach(k -> System.out.print("key: " + k));
+                    keys.add(keyForColumnsMap);
                     //System.out.println();
                     //System.out.println("Key added from solution: " + solution.getValue("p").toString() );
                 }
 
                 if(solution.getValue("o") != null && solution.getValue("o").isIRI()){
-                    queryForSubjects(conn, newRow, root, solution.getValue("o"), dominantType, askForTypes);
+                    System.out.println("Querying with queryForSubjects for o=" + solution.getValue("o").stringValue());
+                    queryForSubjects(conn, newRow, root, solution.getValue("o"), dominantType, askForTypes, level + 1);
                 }
                 //System.out.println("BindingSet solution: result " + solution.getValue("p").toString() + " " + solution.getValue("o").toString());
 
                 // Delete the triple from the storage
                 Resource subjectToDelete = Values.iri(subject.toString());
                 IRI predicate = Values.iri(solution.getValue("p").toString());
-                //System.out.println("Wanting to delete =  " + subject + ", " + predicate +  ", " + ""  + solution.getValue("o").toString());
-                conn.remove(subjectToDelete,predicate, solution.getValue("o"));
+                System.out.println("Wanting to delete =  " + subject + ", " + predicate +  ", " + ""  + solution.getValue("o").toString());
+                if(subjectIsInOnlyOneTripleAsObject(conn, subjectToDelete)){
+                    conn.remove(subjectToDelete,predicate, solution.getValue("o"));
+                }
+
 
             }
         } catch(QueryEvaluationException ex){
             System.out.println("QueryEvaluationException");
             ex.printStackTrace();
         }
+    }
+
+    private boolean subjectIsInOnlyOneTripleAsObject(RepositoryConnection conn, Resource subjectToDelete) {
+        SelectQuery selectQuery = Queries.SELECT();
+
+        SimpleValueFactory rdf = SimpleValueFactory.getInstance();
+        Variable o = SparqlBuilder.var("o"), p = SparqlBuilder.var("p");
+        String selectQueryString = """
+                ASK {
+                  {
+                    SELECT (COUNT(?s) AS ?count)
+                    WHERE {
+                      ?s ?p <%s> .
+                    }
+                    HAVING (?count <= 1)
+                  }
+                }""".formatted(subjectToDelete.toString());
+        System.out.println("query to ASK \n" + selectQueryString);
+
+        BooleanQuery query = conn.prepareBooleanQuery(selectQueryString);
+
+        System.out.println("Result of the ASK: " + query.evaluate());
+
+        return query.evaluate();
     }
 
     private String getQueryToGetObjectsForRoot(Value root, Value dominantType, boolean askForTypes) {

@@ -9,6 +9,7 @@ import com.miklosova.rdftocsvw.metadata_creator.Column;
 import com.miklosova.rdftocsvw.metadata_creator.Table;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import org.eclipse.rdf4j.model.*;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFHandlerException;
 import org.eclipse.rdf4j.rio.RDFWriter;
@@ -132,38 +133,50 @@ public class FileWrite {
                     //System.out.println("Combination #"  + i);
                     i++;
                     firstColumn = true;
+
+                    ValueFactory vf = SimpleValueFactory.getInstance();
+
+
                     for(Column column : orderOfColumnKeys){
+
+                        String multilevelPropertyUrl = "";
+                        if(column.getPropertyUrl() != null){
+                            IRI propertyUrlIRI = vf.createIRI(column.getPropertyUrl());
+                            multilevelPropertyUrl = (column.getLang() != null) ? column.getOriginalColumnKey().stringValue() : column.getOriginalColumnKey().stringValue();
+                            System.out.println("multilevelPropertyUrl = " + multilevelPropertyUrl );
+                        }
+
 
                         //System.out.println("Columns by keys " + column.getName());
                         if(!Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES)) && firstColumn) {
                             firstColumn = false;
                         } else{
-                            if(combination.get((IRI)iri(column.getPropertyUrl())) != null){
-                                if(combination.get((IRI)iri(column.getPropertyUrl())).isIRI()){
+                            if(combination.get((IRI)iri(multilevelPropertyUrl)) != null){
+                                if(combination.get((IRI)iri(multilevelPropertyUrl)).isIRI()){
                                     if(column.getValueUrl().startsWith("{")){
-                                        sb.append(((IRI)combination.get(iri(column.getPropertyUrl()))).stringValue());
+                                        sb.append(((IRI)combination.get(iri(multilevelPropertyUrl))).stringValue());
                                     } else{
-                                        sb.append(((IRI)combination.get((IRI)iri(column.getPropertyUrl()))).getLocalName());
+                                        sb.append(((IRI)combination.get((IRI)iri(multilevelPropertyUrl))).getLocalName());
                                     }
-                                } else if(combination.get((IRI)iri(column.getPropertyUrl())).isLiteral()){
-                                    System.out.println("appending literal " + safeLiteral((Literal)combination.get((IRI)iri(column.getPropertyUrl()))));
-                                    sb.append(safeLiteral((Literal)combination.get((IRI)iri(column.getPropertyUrl()))));
+                                } else if(combination.get((IRI)iri(multilevelPropertyUrl)).isLiteral()){
+                                    System.out.println("appending literal " + safeLiteral((Literal)combination.get((IRI)iri(multilevelPropertyUrl))));
+                                    sb.append(safeLiteral((Literal)combination.get((IRI)iri(multilevelPropertyUrl))));
                                 }
                                 sb.append(",");
                             } else {
-                                //System.out.println("orderOfColumnKeys: " + column.getName());
-                                appendColumnValueByKey(column, row, sb, 0);
+                                System.out.println("orderOfColumnKeys: " + column.getName());
+                                appendColumnValueByKey(column, row, sb, 0, multilevelPropertyUrl);
                             }
                         }
                     }
                     sb.deleteCharAt(sb.length() - 1);
                     sb.append("\n");
                 }
-                //System.out.println("forOutput : " + forOutput.toString());
+                System.out.println("forOutput : " + forOutput.toString());
                 forOutput.append(sb);
             } else {
                 appendIdByValuePattern(row, metadata, sb, orderOfColumnKeys.get(0));
-                //System.out.println("Combination #"  + i);
+                System.out.println("Combination #"  + i);
                 i++;
                 firstColumn = true;
                 for(Column column : orderOfColumnKeys){
@@ -174,7 +187,12 @@ public class FileWrite {
                     } else{
 
                         //System.out.println("orderOfColumnKeys: " + column.getName());
-                        appendColumnValueByKey(column, row, sb, 0);
+                        ValueFactory vf = SimpleValueFactory.getInstance();
+                        IRI propertyUrlIRI = vf.createIRI(column.getPropertyUrl());
+                        String multilevelPropertyUrl = propertyUrlIRI.getNamespace() + column.getName();
+
+
+                        appendColumnValueByKey(column, row, sb, 0, multilevelPropertyUrl);
 
                     }
                 }
@@ -275,7 +293,7 @@ public class FileWrite {
         }
     }
 
-    private static void appendColumnValueByKey(Column column, Row row, StringBuilder sb, int i) {
+    private static void appendColumnValueByKey(Column column, Row row, StringBuilder sb, int i, String multilevelPropertyUrl) {
         // Simple go through
         IRI iri2;
         /*
@@ -288,12 +306,12 @@ public class FileWrite {
 
          */
         try{
-            iri2 = iri(column.getPropertyUrl());
+            iri2 = iri(multilevelPropertyUrl);
             //System.out.println("Column iri(column.getPropertyUrl()) = " + iri2 );
         } catch(NullPointerException ex){
             iri2 = iri(column.getValueUrl());
         }
-
+        System.out.println("iri2 = "  + iri2.stringValue());
         for(Map.Entry<Value, TypeIdAndValues> row2: row.columns.entrySet()){
             //System.out.println(row2.getKey() + " val= " + row2.getValue().values.get(0)+ " row get value size " + row2.getValue().values.size());
         }
@@ -303,7 +321,9 @@ public class FileWrite {
         if(row.columns.get(iri2) == null){
             values = null;
         } else {
-             values = row.columns.get(iri2).values;
+
+            values = row.columns.get(iri2).values;
+            System.out.println("row.columns.get(iri2) == null "  + values);
         }
         if (column.getLang() == null){
 
@@ -366,7 +386,7 @@ public class FileWrite {
                     sb.append(safeLiteral((Literal)val));
                 } else {
                     System.out.println();
-                    System.out.println(column.getPropertyUrl() + " " + column.getLang() + " column.separator=" + column.getSeparator());
+                    System.out.println(multilevelPropertyUrl + " " + column.getLang() + " column.separator=" + column.getSeparator());
                     // There are multiple values from the language, we need to enclose them in " "
                     sb.append('"');
                     valuesByLang.forEach(val -> {
@@ -377,7 +397,7 @@ public class FileWrite {
                     sb.deleteCharAt(sb.length() - 1);
                     sb.append('"');
                     column.setSeparator(",");
-                    System.out.println(column.getPropertyUrl() + " " + column.getLang() + " column.separator=" + column.getSeparator());
+                    System.out.println(multilevelPropertyUrl + " " + column.getLang() + " column.separator=" + column.getSeparator());
                 }
             }
 

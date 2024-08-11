@@ -197,13 +197,17 @@ public class TableSchema {
     private List<Map.Entry<Value, TypeIdAndValues>> getColumnsFromRows() {
         List<Map.Entry<Value, TypeIdAndValues>> columns = new ArrayList<>();
         for(Value columnPredicate : keys) {
+            System.out.println("Trying to add column for columnPredicate from keys= " + columnPredicate.stringValue());
             for (Row r : rows) {
                 for (Map.Entry<Value, TypeIdAndValues> entry : r.columns.entrySet()) {
 
 
                     if (!columns.stream().anyMatch(p -> p.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())) && entry.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())) {
-                        //System.out.println("added to columns in metadata: " + entry.getKey());
+                        System.out.println("added to columns in metadata: " + entry.getKey());
                         columns.add(entry);
+                    }
+                    else{
+                        System.out.println("NOT added to columns in metadata: " + entry.getKey());
                     }
                 }
             }
@@ -350,11 +354,11 @@ public class TableSchema {
             if (isRdfType) {
                 theNameOfTheColumn = getLastSectionOfIri(type);
                 // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                this.aboutUrl = valueIri.getNamespace() + "{+" + theNameOfTheColumn + "}";
+                //this.aboutUrl = valueIri.getNamespace() + "{+" + theNameOfTheColumn + "}";
             } else {
 
                 // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                this.aboutUrl = valueIri.getNamespace() + "{+" + "Subjekt" + "}";
+                //this.aboutUrl = valueIri.getNamespace() + "{+" + "Subjekt" + "}";
                 theNameOfTheColumn = "Subjekt";
             }
             return theNameOfTheColumn;

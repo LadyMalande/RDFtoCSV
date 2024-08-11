@@ -99,7 +99,7 @@
       } ],
       "primaryKey" : "Text",
       "aboutUrl" : "http://example.org/{+Text}",
-      "rowTitles" : [ "Text", "type", "Creator", "Publisher", "Given name", "Usage Note", "Distribution", "moreinfo", "Encrypted by", "scope note", "Title", "Title", "Title" ]
+      "rowTitles" : [ "Text", "type", "creator", "publisher", "givenName", "usageNote", "Distribution", "moreinfo", "encrypter", "scopeNote", "title_cs", "title_en", "title_pl" ]
     }
   }, {
     "@type" : "Table",

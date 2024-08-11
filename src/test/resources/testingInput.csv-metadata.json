@@ -49,7 +49,7 @@
       } ],
       "primaryKey" : "Text",
       "aboutUrl" : "http://example.org/{+Text}",
-      "rowTitles" : [ "Text", "type", "Creator", "Title", "Title" ]
+      "rowTitles" : [ "Text", "type", "creator", "title_cs", "title_en" ]
     }
   }, {
     "@type" : "Table",
@@ -106,7 +106,7 @@
       } ],
       "primaryKey" : "Software",
       "aboutUrl" : "http://example.org/{+Software}",
-      "rowTitles" : [ "Software", "type", "Creator", "Title", "Title", "datatypeTest" ]
+      "rowTitles" : [ "Software", "type", "creator", "title_cs", "title_en", "datatypeTest" ]
     }
   }, {
     "@type" : "Table",

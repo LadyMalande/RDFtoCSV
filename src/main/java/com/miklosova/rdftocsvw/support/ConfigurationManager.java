@@ -26,7 +26,7 @@ public class ConfigurationManager {
     public static final String DEFAULT_METADATA_FILENAME = "csv-metadata.json";
 
     public static void saveVariableToConfigFile(String variableName, String value){
-        System.out.println("new String value with encoding for variable(" + variableName + "): " + value );
+        //System.out.println("new String value with encoding for variable(" + variableName + "): " + value );
         Properties prop = new Properties();
         try (FileInputStream fis = new FileInputStream(CONFIG_FILE_NAME)) {
             prop.load(new InputStreamReader(fis, Charset.forName("UTF-8")));
@@ -34,7 +34,7 @@ public class ConfigurationManager {
         } catch (IOException ex) {
         }
         prop.setProperty(variableName, value);
-        System.out.println("Set configuration of "+ variableName +" to: " + prop.getProperty(variableName));
+        //System.out.println("Set configuration of "+ variableName +" to: " + prop.getProperty(variableName));
 
         //for(String fileNames : file.list()) System.out.println(fileNames);
         try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(
@@ -99,9 +99,9 @@ public class ConfigurationManager {
         }
         conversionMethod = (conversionMethod == null) ? "splitQuery" : conversionMethod;
         prop.setProperty("input.outputFileName", CSVFileToWriteTo);
-        System.out.println("Set configuration of input.outputFileName to: " + prop.getProperty("input.outputFileName"));
+        //System.out.println("Set configuration of input.outputFileName to: " + prop.getProperty("input.outputFileName"));
         prop.setProperty("conversion.method", conversionMethod);
-        System.out.println("Set configuration of conversion.method to: " + prop.getProperty("conversion.method"));
+        //System.out.println("Set configuration of conversion.method to: " + prop.getProperty("conversion.method"));
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
         prop.setProperty(ConfigurationManager.OUTPUT_ZIPFILE_NAME, "compressed.zip");

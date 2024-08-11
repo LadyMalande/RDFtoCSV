@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "typy-pracovnÃÂÃÂÃÂÃÂ­ch-vztahÃÂÃÂÃÂÃÂ¯.ttlTestOutput0.csv",
+    "url" : "typy-pracovních-vztahů.ttlTestOutput0.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -26,6 +26,27 @@
         "propertyUrl" : "http://www.w3.org/2004/02/skos/core#inScheme",
         "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+inScheme}",
         "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{+Concept}"
+      }, {
+        "@type" : "Column",
+        "titles" : "typy-pracovních-vztahů_type",
+        "name" : "type_MULTILEVEL_typypracovnchvztah",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/2004/02/skos/core#{+type_MULTILEVEL_typypracovnchvztah}",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+inScheme}"
+      }, {
+        "@type" : "Column",
+        "titles" : "typy-pracovních-vztahů_preferred label (cs)",
+        "name" : "prefLabel_MULTILEVEL_typypracovnchvztah_cs",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+inScheme}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "typy-pracovních-vztahů_preferred label (en)",
+        "name" : "prefLabel_MULTILEVEL_typypracovnchvztah_en",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+inScheme}",
+        "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "preferred label (cs)",
@@ -54,8 +75,7 @@
         "virtual" : true
       } ],
       "primaryKey" : "Concept",
-      "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{+Concept}",
-      "rowTitles" : [ "Concept", "type", "inScheme", "prefLabel_cs", "prefLabel_en", "notation" ]
+      "rowTitles" : [ "Concept", "type", "inScheme", "type_MULTILEVEL_typypracovnchvztah", "prefLabel_MULTILEVEL_typypracovnchvztah_cs", "prefLabel_MULTILEVEL_typypracovnchvztah_en", "prefLabel_cs", "prefLabel_en", "notation" ]
     }
   } ]
 }

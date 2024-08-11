@@ -51,7 +51,6 @@ public class Table {
 
     public Table(String url){
         this.url = url;
-
     }
 
     public void addTableMetadata(ArrayList<Value> keys, ArrayList<Row> rows) {
