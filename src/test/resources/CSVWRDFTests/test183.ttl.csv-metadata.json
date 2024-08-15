@@ -8,24 +8,203 @@
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "titles" : "TableGroup",
+        "name" : "TableGroup",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "boolean",
-        "name" : "boolean",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "table",
+        "name" : "table",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#table",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+table}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_type",
+        "name" : "type_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_1}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_label",
+        "name" : "label_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#label"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_comment",
+        "name" : "comment_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#comment"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_row",
+        "name" : "row_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#row",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+row_MULTILEVEL_1}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "2_type",
+        "name" : "type_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_describes",
+        "name" : "describes_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "3_boolean",
+        "name" : "boolean_MULTILEVEL_3",
         "propertyUrl" : "file://test183.csv#boolean",
         "datatype" : "boolean"
       }, {
         "@type" : "Column",
-        "titles" : "boolean1",
-        "name" : "boolean1",
+        "titles" : "3_boolean1",
+        "name" : "boolean1_MULTILEVEL_3",
         "propertyUrl" : "file://test183.csv#boolean1",
         "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_rownum",
+        "name" : "rownum_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_url",
+        "name" : "url_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://test183.csv#{+url_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_type",
+        "name" : "type_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_4}"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_describes",
+        "name" : "describes_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_4}"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_boolean",
+        "name" : "boolean_MULTILEVEL_5",
+        "propertyUrl" : "file://test183.csv#boolean",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_boolean1",
+        "name" : "boolean1_MULTILEVEL_5",
+        "propertyUrl" : "file://test183.csv#boolean1",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_rownum",
+        "name" : "rownum_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_url",
+        "name" : "url_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://test183.csv#{+url_MULTILEVEL_4}"
+      }, {
+        "@type" : "Column",
+        "titles" : "6_type",
+        "name" : "type_MULTILEVEL_6",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_6}"
+      }, {
+        "@type" : "Column",
+        "titles" : "6_describes",
+        "name" : "describes_MULTILEVEL_6",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_6}"
+      }, {
+        "@type" : "Column",
+        "titles" : "7_boolean",
+        "name" : "boolean_MULTILEVEL_7",
+        "propertyUrl" : "file://test183.csv#boolean",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "7_boolean1",
+        "name" : "boolean1_MULTILEVEL_7",
+        "propertyUrl" : "file://test183.csv#boolean1",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "6_rownum",
+        "name" : "rownum_MULTILEVEL_6",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "6_url",
+        "name" : "url_MULTILEVEL_6",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://test183.csv#{+url_MULTILEVEL_6}"
+      }, {
+        "@type" : "Column",
+        "titles" : "8_type",
+        "name" : "type_MULTILEVEL_8",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_8}"
+      }, {
+        "@type" : "Column",
+        "titles" : "8_describes",
+        "name" : "describes_MULTILEVEL_8",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_8}"
+      }, {
+        "@type" : "Column",
+        "titles" : "9_boolean",
+        "name" : "boolean_MULTILEVEL_9",
+        "propertyUrl" : "file://test183.csv#boolean",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "9_boolean1",
+        "name" : "boolean1_MULTILEVEL_9",
+        "propertyUrl" : "file://test183.csv#boolean1",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "8_rownum",
+        "name" : "rownum_MULTILEVEL_8",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "8_url",
+        "name" : "url_MULTILEVEL_8",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://test183.csv#{+url_MULTILEVEL_8}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_url",
+        "name" : "url_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://{+url_MULTILEVEL_1}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#TableGroup",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
+        "virtual" : true
       } ],
-      "rowTitles" : [ null, null ]
+      "rowTitles" : [ "TableGroup", "type", "table", "type_MULTILEVEL_1", "label_MULTILEVEL_1", "comment_MULTILEVEL_1", "row_MULTILEVEL_1", "type_MULTILEVEL_2", "describes_MULTILEVEL_2", "boolean_MULTILEVEL_3", "boolean1_MULTILEVEL_3", "rownum_MULTILEVEL_2", "url_MULTILEVEL_2", "type_MULTILEVEL_4", "describes_MULTILEVEL_4", "boolean_MULTILEVEL_5", "boolean1_MULTILEVEL_5", "rownum_MULTILEVEL_4", "url_MULTILEVEL_4", "type_MULTILEVEL_6", "describes_MULTILEVEL_6", "boolean_MULTILEVEL_7", "boolean1_MULTILEVEL_7", "rownum_MULTILEVEL_6", "url_MULTILEVEL_6", "type_MULTILEVEL_8", "describes_MULTILEVEL_8", "boolean_MULTILEVEL_9", "boolean1_MULTILEVEL_9", "rownum_MULTILEVEL_8", "url_MULTILEVEL_8", "url_MULTILEVEL_1" ]
     }
   } ]
 }

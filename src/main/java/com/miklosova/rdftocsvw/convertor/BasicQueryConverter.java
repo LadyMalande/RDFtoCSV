@@ -166,7 +166,7 @@ public class BasicQueryConverter implements IQueryParser{
             selectQuery.prefix(skos).select(s,o).where(s.has(p, o).filterNotExists(s_in.has(p_in, s)));
         }
 
-        //System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
+        System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
@@ -183,7 +183,7 @@ public class BasicQueryConverter implements IQueryParser{
             selectQuery.select(s,o).where(s.has(p, o));
         }
 
-        //System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
+        System.out.println("getQueryForSubstituteRoots query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
@@ -256,23 +256,32 @@ public class BasicQueryConverter implements IQueryParser{
                         System.out.println();
                         rows.add(newRow);
                     }
-
+                    System.out.println("After loop with results of query " + queryString);
                     //countDominantPredicates(conn, roots);
                     if(roots.isEmpty()){
+                        System.out.println("Roots is empty");
                         // NO ROOTS found, find different supplement roots
                         TupleQuery queryForSubstituteRoots = conn.prepareTupleQuery(getQueryForSubstituteRoots(askForTypes));
                         try (TupleQueryResult resultForSubstituteRoots = queryForSubstituteRoots.evaluate()) {
-                            for (BindingSet solution : resultForSubstituteRoots) {
-                                // ... and print out the value of the variable binding for ?s and ?n
-                                //System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
-                                if(!roots.contains(solution.getValue("s"))){
-                                    roots.add(solution.getValue("s"));
+                            if(resultForSubstituteRoots.hasNext()){
+                                for (BindingSet solution : resultForSubstituteRoots) {
+                                    // ... and print out the value of the variable binding for ?s and ?n
+                                    //System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
+                                    if(!roots.contains(solution.getValue("s"))){
+                                        roots.add(solution.getValue("s"));
+                                    }
                                 }
+                            } else{
+                                queryForSubstituteRoots = conn.prepareTupleQuery(getQueryForSubstituteRoots(askForTypes));
+                                try (TupleQueryResult resultForSubstituteRoots2 = queryForSubstituteRoots.evaluate()) {
+                                }
+
                             }
+
                         }
                     }
                     countDominantTypes(conn, roots, askForTypes);
-                    Value dominantType = getDominantType();
+                    //Value dominantType = getDominantType();
                     //String dominantPredicate = getDominantPredicate();
                     //System.out.println("Here begins creating of of file");
                     //System.out.println("Before recursiveQueryForFiles(conn, dominantType, askForTypes)");
@@ -599,7 +608,7 @@ public class BasicQueryConverter implements IQueryParser{
 
         List<Map.Entry<Value, Integer>> sortedEnties = entriesSortedByValues(mapOfTypesAndTheirNumbers);
         for(Map.Entry<Value, Integer> entry : sortedEnties){
-            //System.out.println(entry.getKey() + " : " + entry.getValue());
+            System.out.println(entry.getKey() + " : " + entry.getValue());
         }
         dominantType = sortedEnties.get(0).getKey();
 

@@ -8,108 +8,178 @@
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "titles" : "TableGroup",
+        "name" : "TableGroup",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "M%2Dd%2Dyyyy",
-        "name" : "M%2Dd%2Dyyyy",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "table",
+        "name" : "table",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#table",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+table}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_type",
+        "name" : "type_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_1}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_label",
+        "name" : "label_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#label"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_comment",
+        "name" : "comment_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#comment"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_row",
+        "name" : "row_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#row",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+row_MULTILEVEL_1}"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_type",
+        "name" : "type_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_describes",
+        "name" : "describes_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "3_M%2Dd%2Dyyyy",
+        "name" : "M%2Dd%2Dyyyy_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#M%2Dd%2Dyyyy",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "M%2Fd%2Fyyyy",
-        "name" : "M%2Fd%2Fyyyy",
+        "titles" : "3_M%2Fd%2Fyyyy",
+        "name" : "M%2Fd%2Fyyyy_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#M%2Fd%2Fyyyy",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "M.d.yyyy",
-        "name" : "M.d.yyyy",
+        "titles" : "3_M.d.yyyy",
+        "name" : "M.d.yyyy_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#M.d.yyyy",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "MM%2Ddd%2Dyyyy",
-        "name" : "MM%2Ddd%2Dyyyy",
+        "titles" : "3_MM%2Ddd%2Dyyyy",
+        "name" : "MM%2Ddd%2Dyyyy_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#MM%2Ddd%2Dyyyy",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "MM%2Fdd%2Fyyyy",
-        "name" : "MM%2Fdd%2Fyyyy",
+        "titles" : "3_MM%2Fdd%2Fyyyy",
+        "name" : "MM%2Fdd%2Fyyyy_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#MM%2Fdd%2Fyyyy",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "MM.dd.yyyy",
-        "name" : "MM.dd.yyyy",
+        "titles" : "3_MM.dd.yyyy",
+        "name" : "MM.dd.yyyy_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#MM.dd.yyyy",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "d%2DM%2Dyyyy",
-        "name" : "d%2DM%2Dyyyy",
+        "titles" : "3_d%2DM%2Dyyyy",
+        "name" : "d%2DM%2Dyyyy_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#d%2DM%2Dyyyy",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "d%2FM%2Fyyyy",
-        "name" : "d%2FM%2Fyyyy",
+        "titles" : "3_d%2FM%2Fyyyy",
+        "name" : "d%2FM%2Fyyyy_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#d%2FM%2Fyyyy",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "d.M.yyyy",
-        "name" : "d.M.yyyy",
+        "titles" : "3_d.M.yyyy",
+        "name" : "d.M.yyyy_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#d.M.yyyy",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "dd%2DMM%2Dyyyy",
-        "name" : "dd%2DMM%2Dyyyy",
+        "titles" : "3_dd%2DMM%2Dyyyy",
+        "name" : "dd%2DMM%2Dyyyy_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#dd%2DMM%2Dyyyy",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "dd%2FMM%2Fyyyy",
-        "name" : "dd%2FMM%2Fyyyy",
+        "titles" : "3_dd%2FMM%2Fyyyy",
+        "name" : "dd%2FMM%2Fyyyy_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#dd%2FMM%2Fyyyy",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "dd.MM.yyyy",
-        "name" : "dd.MM.yyyy",
+        "titles" : "3_dd.MM.yyyy",
+        "name" : "dd.MM.yyyy_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#dd.MM.yyyy",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "dd.MM.yyyy%20XXX",
-        "name" : "dd.MM.yyyy%20XXX",
+        "titles" : "3_dd.MM.yyyy%20XXX",
+        "name" : "dd.MM.yyyy%20XXX_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#dd.MM.yyyy%20XXX",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "yyyy%2DMM%2Ddd",
-        "name" : "yyyy%2DMM%2Ddd",
+        "titles" : "3_yyyy%2DMM%2Ddd",
+        "name" : "yyyy%2DMM%2Ddd_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#yyyy%2DMM%2Ddd",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "yyyy%2DMM%2DddX",
-        "name" : "yyyy%2DMM%2DddX",
+        "titles" : "3_yyyy%2DMM%2DddX",
+        "name" : "yyyy%2DMM%2DddX_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#yyyy%2DMM%2DddX",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "yyyyMMdd",
-        "name" : "yyyyMMdd",
+        "titles" : "3_yyyyMMdd",
+        "name" : "yyyyMMdd_MULTILEVEL_3",
         "propertyUrl" : "file://test188.csv#yyyyMMdd",
         "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_rownum",
+        "name" : "rownum_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_url",
+        "name" : "url_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://test188.csv#{+url_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_url",
+        "name" : "url_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://{+url_MULTILEVEL_1}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#TableGroup",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
+        "virtual" : true
       } ],
-      "rowTitles" : [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      "rowTitles" : [ "TableGroup", "type", "table", "type_MULTILEVEL_1", "label_MULTILEVEL_1", "comment_MULTILEVEL_1", "row_MULTILEVEL_1", "type_MULTILEVEL_2", "describes_MULTILEVEL_2", "M%2Dd%2Dyyyy_MULTILEVEL_3", "M%2Fd%2Fyyyy_MULTILEVEL_3", "M.d.yyyy_MULTILEVEL_3", "MM%2Ddd%2Dyyyy_MULTILEVEL_3", "MM%2Fdd%2Fyyyy_MULTILEVEL_3", "MM.dd.yyyy_MULTILEVEL_3", "d%2DM%2Dyyyy_MULTILEVEL_3", "d%2FM%2Fyyyy_MULTILEVEL_3", "d.M.yyyy_MULTILEVEL_3", "dd%2DMM%2Dyyyy_MULTILEVEL_3", "dd%2FMM%2Fyyyy_MULTILEVEL_3", "dd.MM.yyyy_MULTILEVEL_3", "dd.MM.yyyy%20XXX_MULTILEVEL_3", "yyyy%2DMM%2Ddd_MULTILEVEL_3", "yyyy%2DMM%2DddX_MULTILEVEL_3", "yyyyMMdd_MULTILEVEL_3", "rownum_MULTILEVEL_2", "url_MULTILEVEL_2", "url_MULTILEVEL_1" ]
     }
   } ]
 }

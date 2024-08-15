@@ -1,2 +1,2 @@
-Subjekt,duration
-3,Foo
+TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_duration,2_rownum,2_url,1_url
+0,TableGroup,1,Table,duration not matching xsd pattern,Value MUST be a valid xsd:duration.,2,Row,3,Foo,1,row=2,test279.csv

@@ -1,5 +1,2 @@
-Subjekt,country,name
-3,AD,Andorra
-5,AF,Afghanistan
-7,AI,Anguilla
-9,AL,Albania
+TableGroup,type,table,1_type,1_row,2_type,2_describes,3_country,3_name,2_rownum,2_url,4_type,4_describes,5_country,5_name,4_rownum,4_url,6_type,6_describes,7_country,7_name,6_rownum,6_url,8_type,8_describes,9_country,9_name,8_rownum,8_url,1_url
+0,TableGroup,1,Table,"2,4,6,8",Row,3,AD,Andorra,1,row=2,Row,5,AF,Afghanistan,2,row=3,Row,7,AI,Anguilla,3,row=4,Row,9,AL,Albania,4,row=5,test010.csv

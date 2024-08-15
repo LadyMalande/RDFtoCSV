@@ -1,5 +1,2 @@
-Subjekt,%23%230,%23%2C%23%23%2C%2300,%23%2C%2300,%230.%23,%230.0,%230.0%23,%230.0%23%2C%23
-3,1,12,12,1,1.2,1.2,12.3
-5,12,123,123,1.2,12.3,1.23,12.34
-7,123,1234,1234,1234.5,1234.5,12.3,12.245
-9,1234,1234567,1234567,1234.5,1234.5,12.34,12.245
+TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_%23%230,3_%23%2C%23%23%2C%2300,3_%23%2C%2300,3_%230.%23,3_%230.0,3_%230.0%23,3_%230.0%23%2C%23,2_rownum,2_url,4_type,4_describes,5_%23%230,5_%23%2C%23%23%2C%2300,5_%23%2C%2300,5_%230.%23,5_%230.0,5_%230.0%23,5_%230.0%23%2C%23,4_rownum,4_url,6_type,6_describes,7_%23%230,7_%23%2C%23%23%2C%2300,7_%23%2C%2300,7_%230.%23,7_%230.0,7_%230.0%23,7_%230.0%23%2C%23,6_rownum,6_url,8_type,8_describes,9_%23%230,9_%23%2C%23%23%2C%2300,9_%23%2C%2300,9_%230.%23,9_%230.0,9_%230.0%23,9_%230.0%23%2C%23,8_rownum,8_url,1_url
+0,TableGroup,1,Table,valid number patterns,"A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols `0`, `#`, the specified decimalChar (or `.` if unspecified), the specified groupChar (or `,` if unspecified), `E`, `+`, `%` and `&permil;`.","2,4,6,8",Row,3,1,12,12,1,1.2,1.2,12.3,1,row=2,Row,5,12,123,123,1.2,12.3,1.23,12.34,2,row=3,Row,7,123,1234,1234,1234.5,1234.5,12.3,12.245,3,row=4,Row,9,1234,1234567,1234567,1234.5,1234.5,12.34,12.245,4,row=5,test282.csv

@@ -52,18 +52,26 @@ public class CSVWValidatorTests extends BaseTest {
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> configs(){
         Collection<Object[]> conf = new ArrayList<>();
-        for(int i = 1; i < 2; i++)
+        /*
+        for(int i = 1; i < NUMBER_OF_W3C_TESTS; i++)
         {
-            Object[] array = new Object[3];
-            String extra = "";
-            if(i < 10){
-                extra = "00";
-            } else if(i > 9 && i < 100){
-                extra = "0";
+            if(!NOT_DEFINED.contains(i)) {
+                Object[] array = new Object[3];
+                String extra = "";
+                if (i < 10) {
+                    extra = "00";
+                } else if (i > 9 && i < 100) {
+                    extra = "0";
+                }
+                array[0] = "test" + extra + i + ".ttl";
+                conf.add(array);
             }
-            array[0] = "test" + extra + i + ".ttl";
-            conf.add(array);
         }
+
+         */
+        Object[] array = new Object[3];
+        array[0] = "test027.ttl";
+        conf.add(array);
         return conf;
 
     }

@@ -1,6 +1,2 @@
-Subjekt,Family%20Name,Surname
-3,Simpson,Homer
-5,Simpson,Marge
-7,Simpson,Bart
-9,Simpson,Lisa
-11,Simpson,Maggie
+TableGroup,type,comment,table,1_type,1_row,2_type,2_describes,3_Family%20Name,3_Surname,2_rownum,2_url,4_type,4_describes,5_Family%20Name,5_Surname,4_rownum,4_url,6_type,6_describes,7_Family%20Name,7_Surname,6_rownum,6_url,8_type,8_describes,9_Family%20Name,9_Surname,8_rownum,8_url,10_type,10_describes,11_Family%20Name,11_Surname,10_rownum,10_url,1_url
+0,TableGroup,"if TM is not compatible with EM validators MUST raise an error, other processors MUST generate a warning and continue processing",1,Table,"2,4,6,8,10",Row,3,Simpson,Homer,1,row=2,Row,5,Simpson,Marge,2,row=3,Row,7,Simpson,Bart,3,row=4,Row,9,Simpson,Lisa,4,row=5,Row,11,Simpson,Maggie,5,row=6,test127.csv

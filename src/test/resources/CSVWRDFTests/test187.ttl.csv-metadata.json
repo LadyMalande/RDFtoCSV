@@ -8,66 +8,293 @@
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "titles" : "TableGroup",
+        "name" : "TableGroup",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "date",
-        "name" : "date",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "table",
+        "name" : "table",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#table",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+table}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_type",
+        "name" : "type_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_1}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_label",
+        "name" : "label_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#label"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_comment",
+        "name" : "comment_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#comment"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_row",
+        "name" : "row_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#row",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+row_MULTILEVEL_1}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "2_type",
+        "name" : "type_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_describes",
+        "name" : "describes_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "3_date",
+        "name" : "date_MULTILEVEL_3",
         "propertyUrl" : "file://test187.csv#date",
         "datatype" : "date"
       }, {
         "@type" : "Column",
-        "titles" : "datetime",
-        "name" : "datetime",
-        "propertyUrl" : "file://test187.csv#datetime",
+        "titles" : "3_dateTime",
+        "name" : "dateTime_MULTILEVEL_3",
+        "propertyUrl" : "file://test187.csv#dateTime",
         "datatype" : "dateTime"
       }, {
         "@type" : "Column",
-        "titles" : "dateTimeStamp",
-        "name" : "dateTimeStamp",
+        "titles" : "3_dateTimeStamp",
+        "name" : "dateTimeStamp_MULTILEVEL_3",
         "propertyUrl" : "file://test187.csv#dateTimeStamp",
         "datatype" : "dateTimeStamp"
       }, {
         "@type" : "Column",
-        "titles" : "gDay",
-        "name" : "gDay",
+        "titles" : "3_gDay",
+        "name" : "gDay_MULTILEVEL_3",
         "propertyUrl" : "file://test187.csv#gDay",
         "datatype" : "gDay"
       }, {
         "@type" : "Column",
-        "titles" : "gMonth",
-        "name" : "gMonth",
+        "titles" : "3_gMonth",
+        "name" : "gMonth_MULTILEVEL_3",
         "propertyUrl" : "file://test187.csv#gMonth",
         "datatype" : "gMonth"
       }, {
         "@type" : "Column",
-        "titles" : "gMonthDay",
-        "name" : "gMonthDay",
+        "titles" : "3_gMonthDay",
+        "name" : "gMonthDay_MULTILEVEL_3",
         "propertyUrl" : "file://test187.csv#gMonthDay",
         "datatype" : "gMonthDay"
       }, {
         "@type" : "Column",
-        "titles" : "gYear",
-        "name" : "gYear",
+        "titles" : "3_gYear",
+        "name" : "gYear_MULTILEVEL_3",
         "propertyUrl" : "file://test187.csv#gYear",
         "datatype" : "gYear"
       }, {
         "@type" : "Column",
-        "titles" : "gYearMonth",
-        "name" : "gYearMonth",
+        "titles" : "3_gYearMonth",
+        "name" : "gYearMonth_MULTILEVEL_3",
         "propertyUrl" : "file://test187.csv#gYearMonth",
         "datatype" : "gYearMonth"
       }, {
         "@type" : "Column",
-        "titles" : "time",
-        "name" : "time",
+        "titles" : "3_time",
+        "name" : "time_MULTILEVEL_3",
         "propertyUrl" : "file://test187.csv#time",
         "datatype" : "time"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_rownum",
+        "name" : "rownum_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_url",
+        "name" : "url_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://test187.csv#{+url_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_type",
+        "name" : "type_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_4}"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_describes",
+        "name" : "describes_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_4}"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_date",
+        "name" : "date_MULTILEVEL_5",
+        "propertyUrl" : "file://test187.csv#date",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_dateTime",
+        "name" : "dateTime_MULTILEVEL_5",
+        "propertyUrl" : "file://test187.csv#dateTime",
+        "datatype" : "dateTime"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_dateTimeStamp",
+        "name" : "dateTimeStamp_MULTILEVEL_5",
+        "propertyUrl" : "file://test187.csv#dateTimeStamp",
+        "datatype" : "dateTimeStamp"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_gDay",
+        "name" : "gDay_MULTILEVEL_5",
+        "propertyUrl" : "file://test187.csv#gDay",
+        "datatype" : "gDay"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_gMonth",
+        "name" : "gMonth_MULTILEVEL_5",
+        "propertyUrl" : "file://test187.csv#gMonth",
+        "datatype" : "gMonth"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_gMonthDay",
+        "name" : "gMonthDay_MULTILEVEL_5",
+        "propertyUrl" : "file://test187.csv#gMonthDay",
+        "datatype" : "gMonthDay"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_gYear",
+        "name" : "gYear_MULTILEVEL_5",
+        "propertyUrl" : "file://test187.csv#gYear",
+        "datatype" : "gYear"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_gYearMonth",
+        "name" : "gYearMonth_MULTILEVEL_5",
+        "propertyUrl" : "file://test187.csv#gYearMonth",
+        "datatype" : "gYearMonth"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_time",
+        "name" : "time_MULTILEVEL_5",
+        "propertyUrl" : "file://test187.csv#time",
+        "datatype" : "time"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_rownum",
+        "name" : "rownum_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_url",
+        "name" : "url_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://test187.csv#{+url_MULTILEVEL_4}"
+      }, {
+        "@type" : "Column",
+        "titles" : "6_type",
+        "name" : "type_MULTILEVEL_6",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_6}"
+      }, {
+        "@type" : "Column",
+        "titles" : "6_describes",
+        "name" : "describes_MULTILEVEL_6",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_6}"
+      }, {
+        "@type" : "Column",
+        "titles" : "7_date",
+        "name" : "date_MULTILEVEL_7",
+        "propertyUrl" : "file://test187.csv#date",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "7_dateTime",
+        "name" : "dateTime_MULTILEVEL_7",
+        "propertyUrl" : "file://test187.csv#dateTime",
+        "datatype" : "dateTime"
+      }, {
+        "@type" : "Column",
+        "titles" : "7_dateTimeStamp",
+        "name" : "dateTimeStamp_MULTILEVEL_7",
+        "propertyUrl" : "file://test187.csv#dateTimeStamp",
+        "datatype" : "dateTimeStamp"
+      }, {
+        "@type" : "Column",
+        "titles" : "7_gDay",
+        "name" : "gDay_MULTILEVEL_7",
+        "propertyUrl" : "file://test187.csv#gDay",
+        "datatype" : "gDay"
+      }, {
+        "@type" : "Column",
+        "titles" : "7_gMonth",
+        "name" : "gMonth_MULTILEVEL_7",
+        "propertyUrl" : "file://test187.csv#gMonth",
+        "datatype" : "gMonth"
+      }, {
+        "@type" : "Column",
+        "titles" : "7_gMonthDay",
+        "name" : "gMonthDay_MULTILEVEL_7",
+        "propertyUrl" : "file://test187.csv#gMonthDay",
+        "datatype" : "gMonthDay"
+      }, {
+        "@type" : "Column",
+        "titles" : "7_gYear",
+        "name" : "gYear_MULTILEVEL_7",
+        "propertyUrl" : "file://test187.csv#gYear",
+        "datatype" : "gYear"
+      }, {
+        "@type" : "Column",
+        "titles" : "7_gYearMonth",
+        "name" : "gYearMonth_MULTILEVEL_7",
+        "propertyUrl" : "file://test187.csv#gYearMonth",
+        "datatype" : "gYearMonth"
+      }, {
+        "@type" : "Column",
+        "titles" : "7_time",
+        "name" : "time_MULTILEVEL_7",
+        "propertyUrl" : "file://test187.csv#time",
+        "datatype" : "time"
+      }, {
+        "@type" : "Column",
+        "titles" : "6_rownum",
+        "name" : "rownum_MULTILEVEL_6",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "6_url",
+        "name" : "url_MULTILEVEL_6",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://test187.csv#{+url_MULTILEVEL_6}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_url",
+        "name" : "url_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://{+url_MULTILEVEL_1}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#TableGroup",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
+        "virtual" : true
       } ],
-      "rowTitles" : [ null, null, null, null, null, null, null, null, null ]
+      "rowTitles" : [ "TableGroup", "type", "table", "type_MULTILEVEL_1", "label_MULTILEVEL_1", "comment_MULTILEVEL_1", "row_MULTILEVEL_1", "type_MULTILEVEL_2", "describes_MULTILEVEL_2", "date_MULTILEVEL_3", "dateTime_MULTILEVEL_3", "dateTimeStamp_MULTILEVEL_3", "gDay_MULTILEVEL_3", "gMonth_MULTILEVEL_3", "gMonthDay_MULTILEVEL_3", "gYear_MULTILEVEL_3", "gYearMonth_MULTILEVEL_3", "time_MULTILEVEL_3", "rownum_MULTILEVEL_2", "url_MULTILEVEL_2", "type_MULTILEVEL_4", "describes_MULTILEVEL_4", "date_MULTILEVEL_5", "dateTime_MULTILEVEL_5", "dateTimeStamp_MULTILEVEL_5", "gDay_MULTILEVEL_5", "gMonth_MULTILEVEL_5", "gMonthDay_MULTILEVEL_5", "gYear_MULTILEVEL_5", "gYearMonth_MULTILEVEL_5", "time_MULTILEVEL_5", "rownum_MULTILEVEL_4", "url_MULTILEVEL_4", "type_MULTILEVEL_6", "describes_MULTILEVEL_6", "date_MULTILEVEL_7", "dateTime_MULTILEVEL_7", "dateTimeStamp_MULTILEVEL_7", "gDay_MULTILEVEL_7", "gMonth_MULTILEVEL_7", "gMonthDay_MULTILEVEL_7", "gYear_MULTILEVEL_7", "gYearMonth_MULTILEVEL_7", "time_MULTILEVEL_7", "rownum_MULTILEVEL_6", "url_MULTILEVEL_6", "url_MULTILEVEL_1" ]
     }
   } ]
 }

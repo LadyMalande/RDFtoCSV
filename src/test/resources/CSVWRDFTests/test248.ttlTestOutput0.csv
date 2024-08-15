@@ -1,3 +1,2 @@
-Subjekt,characters,codepoints,description,nfc
-3,Å,212B,a-with-ring,00C5
-5,ḍ̇,1E0B 0323,combining marks,1E0D 0307
+TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_characters,3_codepoints,3_description,3_nfc,2_rownum,2_url,4_type,4_describes,5_characters,5_codepoints,5_description,5_nfc,4_rownum,4_url,1_url
+0,TableGroup,1,Table,Unicode in non-Normalized form,No Unicode normalization (as specified in [[UAX15]]) is applied to these string values.,"2,4",Row,3,Å,212B,a-with-ring,00C5,1,row=2,Row,5,ḍ̇,1E0B 0323,combining marks,1E0D 0307,2,row=3,test248.csv

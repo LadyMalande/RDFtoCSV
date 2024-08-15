@@ -8,42 +8,167 @@
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "titles" : "TableGroup",
+        "name" : "TableGroup",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "GID (null)",
-        "name" : "GID_de",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "table",
+        "name" : "table",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#table",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+table}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_type",
+        "name" : "type_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_1}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_label",
+        "name" : "label_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#label"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_comment",
+        "name" : "comment_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#comment"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_row",
+        "name" : "row_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#row",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+row_MULTILEVEL_1}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "2_type",
+        "name" : "type_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_describes",
+        "name" : "describes_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "3_GID (de)",
+        "name" : "GID_MULTILEVEL_3_de",
         "propertyUrl" : "file://tree-ops.csv#GID",
         "lang" : "de"
       }, {
         "@type" : "Column",
-        "titles" : "Inventory%20Date (null)",
-        "name" : "Inventory%20Date_de",
+        "titles" : "3_Inventory%20Date (de)",
+        "name" : "Inventory%20Date_MULTILEVEL_3_de",
         "propertyUrl" : "file://tree-ops.csv#Inventory%20Date",
         "lang" : "de"
       }, {
         "@type" : "Column",
-        "titles" : "Species (null)",
-        "name" : "Species_de",
+        "titles" : "3_Species (de)",
+        "name" : "Species_MULTILEVEL_3_de",
         "propertyUrl" : "file://tree-ops.csv#Species",
         "lang" : "de"
       }, {
         "@type" : "Column",
-        "titles" : "Trim%20Cycle (null)",
-        "name" : "Trim%20Cycle_de",
+        "titles" : "3_Trim%20Cycle (de)",
+        "name" : "Trim%20Cycle_MULTILEVEL_3_de",
         "propertyUrl" : "file://tree-ops.csv#Trim%20Cycle",
         "lang" : "de"
       }, {
         "@type" : "Column",
-        "titles" : "_col.2 (null)",
-        "name" : "_col.2_de",
+        "titles" : "3__col.2 (de)",
+        "name" : "_col.2_MULTILEVEL_3_de",
         "propertyUrl" : "file://tree-ops.csv#_col.2",
         "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_rownum",
+        "name" : "rownum_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_url",
+        "name" : "url_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://tree-ops.csv#{+url_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_type",
+        "name" : "type_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_4}"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_describes",
+        "name" : "describes_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_4}"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_GID (de)",
+        "name" : "GID_MULTILEVEL_5_de",
+        "propertyUrl" : "file://tree-ops.csv#GID",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_Inventory%20Date (de)",
+        "name" : "Inventory%20Date_MULTILEVEL_5_de",
+        "propertyUrl" : "file://tree-ops.csv#Inventory%20Date",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_Species (de)",
+        "name" : "Species_MULTILEVEL_5_de",
+        "propertyUrl" : "file://tree-ops.csv#Species",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_Trim%20Cycle (de)",
+        "name" : "Trim%20Cycle_MULTILEVEL_5_de",
+        "propertyUrl" : "file://tree-ops.csv#Trim%20Cycle",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "5__col.2 (de)",
+        "name" : "_col.2_MULTILEVEL_5_de",
+        "propertyUrl" : "file://tree-ops.csv#_col.2",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_rownum",
+        "name" : "rownum_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_url",
+        "name" : "url_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://tree-ops.csv#{+url_MULTILEVEL_4}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_url",
+        "name" : "url_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://{+url_MULTILEVEL_1}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#TableGroup",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
+        "virtual" : true
       } ],
-      "rowTitles" : [ null, null, null, null, null ]
+      "rowTitles" : [ "TableGroup", "type", "table", "type_MULTILEVEL_1", "label_MULTILEVEL_1", "comment_MULTILEVEL_1", "row_MULTILEVEL_1", "type_MULTILEVEL_2", "describes_MULTILEVEL_2", "GID_MULTILEVEL_3_de", "Inventory%20Date_MULTILEVEL_3_de", "Species_MULTILEVEL_3_de", "Trim%20Cycle_MULTILEVEL_3_de", "_col.2_MULTILEVEL_3_de", "rownum_MULTILEVEL_2", "url_MULTILEVEL_2", "type_MULTILEVEL_4", "describes_MULTILEVEL_4", "GID_MULTILEVEL_5_de", "Inventory%20Date_MULTILEVEL_5_de", "Species_MULTILEVEL_5_de", "Trim%20Cycle_MULTILEVEL_5_de", "_col.2_MULTILEVEL_5_de", "rownum_MULTILEVEL_4", "url_MULTILEVEL_4", "url_MULTILEVEL_1" ]
     }
   } ]
 }

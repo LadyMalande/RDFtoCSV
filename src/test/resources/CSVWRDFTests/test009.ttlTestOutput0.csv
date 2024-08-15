@@ -1,4 +1,2 @@
-Subjekt,GID,Inventory%20Date,On%20Street,Species,Trim%20Cycle
-3,1,10/18/2010,ADDISON AV,Celtis australis,Large Tree Routine Prune
-5,2,6/2/2010,EMERSON ST,Liquidambar styraciflua,Large Tree Routine Prune
-7,3,6/2/2010,EMERSON ST,Liquidambar styraciflua,Large Tree Routine Prune
+TableGroup,type,table,1_type,1_row,2_type,2_describes,3_GID,3_Inventory%20Date,3_On%20Street,3_Species,3_Trim%20Cycle,2_rownum,2_url,4_type,4_describes,5_GID,5_Inventory%20Date,5_On%20Street,5_Species,5_Trim%20Cycle,4_rownum,4_url,6_type,6_describes,7_GID,7_Inventory%20Date,7_On%20Street,7_Species,7_Trim%20Cycle,6_rownum,6_url,1_url
+0,TableGroup,1,Table,"2,4,6",Row,3,1,10/18/2010,ADDISON AV,Celtis australis,Large Tree Routine Prune,1,row=2,Row,5,2,6/2/2010,EMERSON ST,Liquidambar styraciflua,Large Tree Routine Prune,2,row=3,Row,7,3,6/2/2010,EMERSON ST,Liquidambar styraciflua,Large Tree Routine Prune,3,row=4,test009.csv

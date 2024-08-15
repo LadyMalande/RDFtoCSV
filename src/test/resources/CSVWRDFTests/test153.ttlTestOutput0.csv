@@ -1,2 +1,2 @@
-Subjekt,string1
-3,AaAaA
+TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_string1,2_rownum,2_url,1_url
+0,TableGroup,1,Table,string format (bad format string),"If the datatype base is not numeric, boolean, a date/time type, or a duration type, the datatype format annotation provides a regular expression for the string values.",2,Row,3,AaAaA,1,row=2,test153.csv

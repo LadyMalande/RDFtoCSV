@@ -1,4 +1,2 @@
-Subjekt,list
-3,a
-3,bb
-3,ccc
+TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_list,2_rownum,2_url,1_url
+0,TableGroup,1,Table,failing minLength with separator,"If the value is a list, the constraint applies to each element of the list.",2,Row,3,"a,bb,ccc",1,row=2,test230.csv

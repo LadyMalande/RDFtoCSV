@@ -1,9 +1,2 @@
-Subjekt,FamilyName,Surname
-3,Simpson,Homer
-5,Simpson,Marge
-7,Simpson,Bart
-9,Simpson,Lisa
-11,Simpson,Maggie
-13,Flanders,Ned
-15,the Clown,Krusty
-17,Smithers,Waylon
+TableGroup,type,table,1_type,1_row,2_type,2_describes,3_FamilyName,3_Surname,2_rownum,2_url,4_type,4_describes,5_FamilyName,5_Surname,4_rownum,4_url,6_type,6_describes,7_FamilyName,7_Surname,6_rownum,6_url,8_type,8_describes,9_FamilyName,9_Surname,8_rownum,8_url,10_type,10_describes,11_FamilyName,11_Surname,10_rownum,10_url,12_type,12_describes,13_FamilyName,13_Surname,12_rownum,12_url,14_type,14_describes,15_FamilyName,15_Surname,14_rownum,14_url,16_type,16_describes,17_FamilyName,17_Surname,16_rownum,16_url,1_url
+0,TableGroup,1,Table,"2,4,6,8,10,12,14,16",Row,3,Simpson,Homer,1,row=2,Row,5,Simpson,Marge,2,row=3,Row,7,Simpson,Bart,3,row=4,Row,9,Simpson,Lisa,4,row=5,Row,11,Simpson,Maggie,5,row=6,Row,13,Flanders,Ned,6,row=7,Row,15,the Clown,Krusty,7,row=8,Row,17,Smithers,Waylon,8,row=9,test001.csv

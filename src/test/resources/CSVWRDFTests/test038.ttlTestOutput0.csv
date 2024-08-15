@@ -1,2 +1,2 @@
-Subjekt,col=aboutUrl,col=datatype,col=default,col=lang (null),col=null,col=ordered,col=propertyUrl,col=separator,col=textDirection,col=valueUrl
-modelrow=1,about,string,def,en,empty,true,prop,-,ltr,about
+TableGroup,type,table,1_type,1_row,2_type,2_describes,modelrow=1_col=aboutUrl,modelrow=1_col=datatype,modelrow=1_col=default,modelrow=1_col=lang (en),modelrow=1_col=null,modelrow=1_col=ordered,modelrow=1_col=propertyUrl,modelrow=1_col=separator,modelrow=1_col=textDirection,modelrow=1_col=valueUrl,2_rownum,2_url,1_url
+0,TableGroup,1,Table,2,Row,modelrow=1,about,string,def,en,empty,true,prop,-,ltr,about,1,row=2,test038.csv

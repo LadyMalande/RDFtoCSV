@@ -1,4 +1,2 @@
-Subjekt,%25000,%2B0,%2D0,%E2%80%B0000,000%25,000%E2%80%B0,000.0%25
-3,1.23,+1,-1,0.123,1.23,0.123,1.234
-5,1.23,+1,-1,0.123,1.23,0.123,1.234
-7,-1.23,+1,-1,-0.123,-1.23,-0.123,-1.234
+TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_%25000,3_%2B0,3_%2D0,3_%E2%80%B0000,3_000%25,3_000%E2%80%B0,3_000.0%25,2_rownum,2_url,4_type,4_describes,5_%25000,5_%2B0,5_%2D0,5_%E2%80%B0000,5_000%25,5_000%E2%80%B0,5_000.0%25,4_rownum,4_url,6_type,6_describes,7_%25000,7_%2B0,7_%2D0,7_%E2%80%B0000,7_000%25,7_000%E2%80%B0,7_000.0%25,6_rownum,6_url,1_url
+0,TableGroup,1,Table,valid number patterns (signs and percent/permille),"A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols `0`, `#`, the specified decimalChar (or `.` if unspecified), the specified groupChar (or `,` if unspecified), `E`, `+`, `%` and `&permil;`.","2,4,6",Row,3,1.23,+1,-1,0.123,1.23,0.123,1.234,1,row=2,Row,5,1.23,+1,-1,0.123,1.23,0.123,1.234,2,row=3,Row,7,-1.23,+1,-1,-0.123,-1.23,-0.123,-1.234,3,row=4,test283.csv

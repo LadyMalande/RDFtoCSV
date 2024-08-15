@@ -1,11 +1,2 @@
-Subjekt,test048.csv
-3,empty
-3,en
-3,ltr
-3,-
-3,true
-3,def
-3,string
-3,about
-3,prop
-3,value
+TableGroup,type,table,1_type,1_row,2_type,2_describes,3_test048.csv,2_rownum,2_url,1_url
+0,TableGroup,1,Table,2,Row,3,"empty,en,ltr,-,true,def,string,about,prop,value",1,row=2,test048.csv

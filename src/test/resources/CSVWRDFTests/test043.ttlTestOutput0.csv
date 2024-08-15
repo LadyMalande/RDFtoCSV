@@ -1,2 +1,2 @@
-Subjekt,aboutUrl,datatype,default,lang,null,ordered,propertyUrl,separator,textDirection,valueUrl
-3,about,string,def,en,empty,true,prop,-,ltr,value
+TableGroup,type,table,1_type,1_row,2_type,2_describes,3_aboutUrl,3_datatype,3_default,3_lang,3_null,3_ordered,3_propertyUrl,3_separator,3_textDirection,3_valueUrl,2_rownum,2_url,1_url
+0,TableGroup,1,Table,2,Row,3,about,string,def,en,empty,true,prop,-,ltr,value,1,row=2,test043.csv

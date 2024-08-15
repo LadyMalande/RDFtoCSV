@@ -8,38 +8,147 @@
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "titles" : "TableGroup",
+        "name" : "TableGroup",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "characters",
-        "name" : "characters",
-        "propertyUrl" : "file://test248.csv#characters",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
       }, {
         "@type" : "Column",
-        "titles" : "codepoints",
-        "name" : "codepoints",
-        "propertyUrl" : "file://test248.csv#codepoints",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+        "titles" : "table",
+        "name" : "table",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#table",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+table}"
       }, {
         "@type" : "Column",
-        "titles" : "description",
-        "name" : "description",
-        "propertyUrl" : "file://test248.csv#description",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+        "titles" : "1_type",
+        "name" : "type_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_1}"
       }, {
         "@type" : "Column",
-        "titles" : "nfc",
-        "name" : "nfc",
-        "propertyUrl" : "file://test248.csv#nfc",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}"
+        "titles" : "1_label",
+        "name" : "label_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#label"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_comment",
+        "name" : "comment_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#comment"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_row",
+        "name" : "row_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#row",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+row_MULTILEVEL_1}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "2_type",
+        "name" : "type_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_describes",
+        "name" : "describes_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "3_characters",
+        "name" : "characters_MULTILEVEL_3",
+        "propertyUrl" : "file://test248.csv#characters"
+      }, {
+        "@type" : "Column",
+        "titles" : "3_codepoints",
+        "name" : "codepoints_MULTILEVEL_3",
+        "propertyUrl" : "file://test248.csv#codepoints"
+      }, {
+        "@type" : "Column",
+        "titles" : "3_description",
+        "name" : "description_MULTILEVEL_3",
+        "propertyUrl" : "file://test248.csv#description"
+      }, {
+        "@type" : "Column",
+        "titles" : "3_nfc",
+        "name" : "nfc_MULTILEVEL_3",
+        "propertyUrl" : "file://test248.csv#nfc"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_rownum",
+        "name" : "rownum_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_url",
+        "name" : "url_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://test248.csv#{+url_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_type",
+        "name" : "type_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_4}"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_describes",
+        "name" : "describes_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_4}"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_characters",
+        "name" : "characters_MULTILEVEL_5",
+        "propertyUrl" : "file://test248.csv#characters"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_codepoints",
+        "name" : "codepoints_MULTILEVEL_5",
+        "propertyUrl" : "file://test248.csv#codepoints"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_description",
+        "name" : "description_MULTILEVEL_5",
+        "propertyUrl" : "file://test248.csv#description"
+      }, {
+        "@type" : "Column",
+        "titles" : "5_nfc",
+        "name" : "nfc_MULTILEVEL_5",
+        "propertyUrl" : "file://test248.csv#nfc"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_rownum",
+        "name" : "rownum_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "4_url",
+        "name" : "url_MULTILEVEL_4",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://test248.csv#{+url_MULTILEVEL_4}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_url",
+        "name" : "url_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://{+url_MULTILEVEL_1}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#TableGroup",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
+        "virtual" : true
       } ],
-      "primaryKey" : "Subjekt",
-      "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-      "rowTitles" : [ null, null, null, null ]
+      "rowTitles" : [ "TableGroup", "type", "table", "type_MULTILEVEL_1", "label_MULTILEVEL_1", "comment_MULTILEVEL_1", "row_MULTILEVEL_1", "type_MULTILEVEL_2", "describes_MULTILEVEL_2", "characters_MULTILEVEL_3", "codepoints_MULTILEVEL_3", "description_MULTILEVEL_3", "nfc_MULTILEVEL_3", "rownum_MULTILEVEL_2", "url_MULTILEVEL_2", "type_MULTILEVEL_4", "describes_MULTILEVEL_4", "characters_MULTILEVEL_5", "codepoints_MULTILEVEL_5", "description_MULTILEVEL_5", "nfc_MULTILEVEL_5", "rownum_MULTILEVEL_4", "url_MULTILEVEL_4", "url_MULTILEVEL_1" ]
     }
   } ]
 }

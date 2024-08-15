@@ -1,2 +1,2 @@
-Subjekt,decimal
-3,123456.789
+TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_decimal,2_rownum,2_url,1_url
+0,TableGroup,1,Table,decimal with implicit groupChar,"When parsing the string value of a cell against this format specification, implementations MUST recognise and parse numbers.",2,Row,3,123456.789,1,row=2,test168.csv

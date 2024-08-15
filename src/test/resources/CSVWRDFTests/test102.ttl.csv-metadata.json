@@ -8,37 +8,156 @@
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "titles" : "TableGroup",
+        "name" : "TableGroup",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "GID",
-        "name" : "GID",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "table",
+        "name" : "table",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#table",
+        "valueUrl" : "file://{+table}"
+      }, {
+        "@type" : "Column",
+        "titles" : "test102-metadata.json_type",
+        "name" : "type_MULTILEVEL_test102metadata.json",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_test102metadata.json}",
+        "aboutUrl" : "file://{+table}"
+      }, {
+        "@type" : "Column",
+        "titles" : "test102-metadata.json_comment",
+        "name" : "comment_MULTILEVEL_test102metadata.json",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#comment",
+        "aboutUrl" : "file://{+table}"
+      }, {
+        "@type" : "Column",
+        "titles" : "test102-metadata.json_url",
+        "name" : "url_MULTILEVEL_test102metadata.json",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://{+url_MULTILEVEL_test102metadata.json}",
+        "aboutUrl" : "file://{+table}"
+      }, {
+        "@type" : "Column",
+        "titles" : "test102-metadata.json_row",
+        "name" : "row_MULTILEVEL_test102metadata.json",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#row",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+row_MULTILEVEL_test102metadata.json}",
+        "aboutUrl" : "file://{+table}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "0_type",
+        "name" : "type_MULTILEVEL_0",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_0}"
+      }, {
+        "@type" : "Column",
+        "titles" : "0_describes",
+        "name" : "describes_MULTILEVEL_0",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_0}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_GID",
+        "name" : "GID_MULTILEVEL_1",
         "propertyUrl" : "file://tree-ops.csv#GID"
       }, {
         "@type" : "Column",
-        "titles" : "inventory_date",
-        "name" : "inventory_date",
+        "titles" : "1_inventory_date",
+        "name" : "inventory_date_MULTILEVEL_1",
         "propertyUrl" : "file://tree-ops.csv#inventory_date"
       }, {
         "@type" : "Column",
-        "titles" : "on_street",
-        "name" : "on_street",
+        "titles" : "1_on_street",
+        "name" : "on_street_MULTILEVEL_1",
         "propertyUrl" : "file://tree-ops.csv#on_street"
       }, {
         "@type" : "Column",
-        "titles" : "species",
-        "name" : "species",
+        "titles" : "1_species",
+        "name" : "species_MULTILEVEL_1",
         "propertyUrl" : "file://tree-ops.csv#species"
       }, {
         "@type" : "Column",
-        "titles" : "trim_cycle",
-        "name" : "trim_cycle",
+        "titles" : "1_trim_cycle",
+        "name" : "trim_cycle_MULTILEVEL_1",
         "propertyUrl" : "file://tree-ops.csv#trim_cycle"
+      }, {
+        "@type" : "Column",
+        "titles" : "0_rownum",
+        "name" : "rownum_MULTILEVEL_0",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "0_url",
+        "name" : "url_MULTILEVEL_0",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://tree-ops.csv#{+url_MULTILEVEL_0}"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_type",
+        "name" : "type_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_describes",
+        "name" : "describes_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "3_GID",
+        "name" : "GID_MULTILEVEL_3",
+        "propertyUrl" : "file://tree-ops.csv#GID"
+      }, {
+        "@type" : "Column",
+        "titles" : "3_inventory_date",
+        "name" : "inventory_date_MULTILEVEL_3",
+        "propertyUrl" : "file://tree-ops.csv#inventory_date"
+      }, {
+        "@type" : "Column",
+        "titles" : "3_on_street",
+        "name" : "on_street_MULTILEVEL_3",
+        "propertyUrl" : "file://tree-ops.csv#on_street"
+      }, {
+        "@type" : "Column",
+        "titles" : "3_species",
+        "name" : "species_MULTILEVEL_3",
+        "propertyUrl" : "file://tree-ops.csv#species"
+      }, {
+        "@type" : "Column",
+        "titles" : "3_trim_cycle",
+        "name" : "trim_cycle_MULTILEVEL_3",
+        "propertyUrl" : "file://tree-ops.csv#trim_cycle"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_rownum",
+        "name" : "rownum_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_url",
+        "name" : "url_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://tree-ops.csv#{+url_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#TableGroup",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
+        "virtual" : true
       } ],
-      "rowTitles" : [ null, null, null, null, null ]
+      "rowTitles" : [ "TableGroup", "type", "table", "type_MULTILEVEL_test102metadata.json", "comment_MULTILEVEL_test102metadata.json", "url_MULTILEVEL_test102metadata.json", "row_MULTILEVEL_test102metadata.json", "type_MULTILEVEL_0", "describes_MULTILEVEL_0", "GID_MULTILEVEL_1", "inventory_date_MULTILEVEL_1", "on_street_MULTILEVEL_1", "species_MULTILEVEL_1", "trim_cycle_MULTILEVEL_1", "rownum_MULTILEVEL_0", "url_MULTILEVEL_0", "type_MULTILEVEL_2", "describes_MULTILEVEL_2", "GID_MULTILEVEL_3", "inventory_date_MULTILEVEL_3", "on_street_MULTILEVEL_3", "species_MULTILEVEL_3", "trim_cycle_MULTILEVEL_3", "rownum_MULTILEVEL_2", "url_MULTILEVEL_2" ]
     }
   } ]
 }

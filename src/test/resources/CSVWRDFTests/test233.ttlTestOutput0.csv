@@ -1,4 +1,2 @@
-Subjekt,PK1,PK2
-3,foo,bar
-5,foo,baz
-7,baz,bar
+TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_PK1,3_PK2,2_rownum,2_url,4_type,4_describes,5_PK1,5_PK2,4_rownum,4_url,6_type,6_describes,7_PK1,7_PK2,6_rownum,6_url,1_url
+0,TableGroup,1,Table,multiple column primaryKey success,"As defined in [tabular-data-model], validators must check that each row has a unique combination of values of cells in the indicated columns.","2,4,6",Row,3,foo,bar,1,row=2,Row,5,foo,baz,2,row=3,Row,7,baz,bar,3,row=4,test233.csv

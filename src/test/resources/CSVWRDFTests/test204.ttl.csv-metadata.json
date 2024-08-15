@@ -8,47 +8,117 @@
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "titles" : "TableGroup",
+        "name" : "TableGroup",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "maxExclusive",
-        "name" : "maxExclusive",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "table",
+        "name" : "table",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#table",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+table}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_type",
+        "name" : "type_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_1}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_label",
+        "name" : "label_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#label"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_comment",
+        "name" : "comment_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#comment"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_row",
+        "name" : "row_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#row",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+row_MULTILEVEL_1}"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_type",
+        "name" : "type_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_describes",
+        "name" : "describes_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "3_maxExclusive",
+        "name" : "maxExclusive_MULTILEVEL_3",
         "propertyUrl" : "file://test204.csv#maxExclusive",
         "datatype" : "float"
       }, {
         "@type" : "Column",
-        "titles" : "maxInclusive",
-        "name" : "maxInclusive",
+        "titles" : "3_maxInclusive",
+        "name" : "maxInclusive_MULTILEVEL_3",
         "propertyUrl" : "file://test204.csv#maxInclusive",
         "datatype" : "float"
       }, {
         "@type" : "Column",
-        "titles" : "maximum",
-        "name" : "maximum",
+        "titles" : "3_maximum",
+        "name" : "maximum_MULTILEVEL_3",
         "propertyUrl" : "file://test204.csv#maximum"
       }, {
         "@type" : "Column",
-        "titles" : "minExclusive",
-        "name" : "minExclusive",
+        "titles" : "3_minExclusive",
+        "name" : "minExclusive_MULTILEVEL_3",
         "propertyUrl" : "file://test204.csv#minExclusive",
         "datatype" : "float"
       }, {
         "@type" : "Column",
-        "titles" : "minInclusive",
-        "name" : "minInclusive",
+        "titles" : "3_minInclusive",
+        "name" : "minInclusive_MULTILEVEL_3",
         "propertyUrl" : "file://test204.csv#minInclusive",
         "datatype" : "float"
       }, {
         "@type" : "Column",
-        "titles" : "minimum",
-        "name" : "minimum",
+        "titles" : "3_minimum",
+        "name" : "minimum_MULTILEVEL_3",
         "propertyUrl" : "file://test204.csv#minimum",
         "datatype" : "float"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_rownum",
+        "name" : "rownum_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "2_url",
+        "name" : "url_MULTILEVEL_2",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://test204.csv#{+url_MULTILEVEL_2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "1_url",
+        "name" : "url_MULTILEVEL_1",
+        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
+        "valueUrl" : "file://{+url_MULTILEVEL_1}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/ns/csvw#TableGroup",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
+        "virtual" : true
       } ],
-      "rowTitles" : [ null, null, null, null, null, null ]
+      "rowTitles" : [ "TableGroup", "type", "table", "type_MULTILEVEL_1", "label_MULTILEVEL_1", "comment_MULTILEVEL_1", "row_MULTILEVEL_1", "type_MULTILEVEL_2", "describes_MULTILEVEL_2", "maxExclusive_MULTILEVEL_3", "maxInclusive_MULTILEVEL_3", "maximum_MULTILEVEL_3", "minExclusive_MULTILEVEL_3", "minInclusive_MULTILEVEL_3", "minimum_MULTILEVEL_3", "rownum_MULTILEVEL_2", "url_MULTILEVEL_2", "url_MULTILEVEL_1" ]
     }
   } ]
 }

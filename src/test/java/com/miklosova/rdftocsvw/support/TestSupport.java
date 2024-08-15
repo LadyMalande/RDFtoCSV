@@ -2,6 +2,7 @@ package com.miklosova.rdftocsvw.support;
 
 import com.miklosova.rdftocsvw.convertor.ConversionService;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
+import com.miklosova.rdftocsvw.convertor.RowAndKey;
 import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
@@ -172,13 +173,22 @@ public class TestSupport {
     }
 
     public static void writeToFile(PrefinishedOutput prefinishedOutput, Metadata metadata){
-        RowsAndKeys rnk = (RowsAndKeys) prefinishedOutput.getPrefinishedOutput();
         String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+        try {
+            RowsAndKeys rnk = (RowsAndKeys) prefinishedOutput.getPrefinishedOutput();
 
-        for(String filename : allFiles.split(",")){
+            for(String filename : allFiles.split(",")){
+                System.out.println("newFileName " + filename);
+                FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), metadata);
+            }
+        } catch(ClassCastException ex){
+            RowAndKey rnk = (RowAndKey) prefinishedOutput.getPrefinishedOutput();
+            String filename = allFiles.split(",")[0];
             System.out.println("newFileName " + filename);
-            FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), metadata);
+            FileWrite.saveCSVFileFromRows(filename, rnk.getRows(), metadata);
         }
+
+
     }
 
     private static boolean testResultIsSubset(List<BindingSet> testResult, List<BindingSet> originalResult) {

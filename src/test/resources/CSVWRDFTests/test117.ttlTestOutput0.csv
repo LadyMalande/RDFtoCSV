@@ -1,4 +1,2 @@
-Subjekt,countryCode,latitude,longitude,name
-3,AD,42.546245,1.601554,Andorra
-5,AE,23.424076,53.847818,United Arab Emirates
-7,AF,33.93911,67.709953,Afghanistan
+TableGroup,type,table,1_type,1_row,2_type,2_describes,3_countryCode,3_latitude,3_longitude,3_name,2_rownum,2_url,4_type,4_describes,5_countryCode,5_latitude,5_longitude,5_name,4_rownum,4_url,6_type,6_describes,7_countryCode,7_latitude,7_longitude,7_name,6_rownum,6_url,1_url
+0,TableGroup,1,Table,"2,4,6",Row,3,AD,42.546245,1.601554,Andorra,1,row=2,Row,5,AE,23.424076,53.847818,United Arab Emirates,2,row=3,Row,7,AF,33.93911,67.709953,Afghanistan,3,row=4,test117.csv
