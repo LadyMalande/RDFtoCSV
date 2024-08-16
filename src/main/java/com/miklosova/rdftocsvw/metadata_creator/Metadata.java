@@ -17,6 +17,7 @@ import com.miklosova.rdftocsvw.support.JsonUtil;
 import ioinformarics.oss.jackson.module.jsonld.JsonldModule;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 
 import java.io.File;
@@ -100,16 +101,24 @@ public class Metadata {
         for(ArrayList<Row> rows : allRows){
             Value id = rows.get(0).id;
             Value type = rows.get(0).type;
-            //System.out.println("Type in addForeignKeys: " + type.stringValue());
-            IRI typeIri = (IRI) type;
-            String typeLocalName = typeIri.getLocalName();
+            System.out.println("Type in addForeignKeys: " + type.stringValue());
+            String typeLocalName = null;
+            try {
+                IRI typeIri = (IRI) type;
+                typeLocalName = typeIri.getLocalName();
+            } catch(ClassCastException ex){
+                // The type is literal
+                Literal literal = (Literal) type;
+                typeLocalName = type.stringValue();
+            }
             String foreignKeyFile = null;
             for(Table fileUrlDescriptor : tables){
+                String finalTypeLocalName = typeLocalName;
                 if(fileUrlDescriptor.getTableSchema().getColumns().stream().anyMatch(column -> {
                     if(column.getName() != null){
                         //System.out.println("Foreign key match? column.getName=" + column.getName() + " typeLocalName=" + typeLocalName);
                         //System.out.println("Foreign key match? equals?=" + column.getName().equals(typeLocalName));
-                        return column.getName().equals(typeLocalName);
+                        return column.getName().equals(finalTypeLocalName);
                     } else{
                         return false;
                     }

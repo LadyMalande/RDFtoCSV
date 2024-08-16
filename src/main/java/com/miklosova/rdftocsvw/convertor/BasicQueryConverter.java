@@ -170,6 +170,23 @@ public class BasicQueryConverter implements IQueryParser{
         return selectQuery.getQueryString();
     }
 
+    public String getQueryForRoot(boolean askForTypes){
+        // Create the query to get all data in CSV format
+        SelectQuery selectQuery = Queries.SELECT();
+
+        Variable o = SparqlBuilder.var("o"), s = SparqlBuilder.var("s"),
+                p = SparqlBuilder.var("p");;
+
+        if(askForTypes){
+            selectQuery.select(s,o).where(s.isA(o));
+        } else{
+            selectQuery.select(s,o).where(s.has(p, o));
+        }
+
+        System.out.println("getQueryForSubstituteRoots query string\n" + selectQuery.getQueryString());
+        return selectQuery.getQueryString();
+    }
+
     public String getQueryForSubstituteRoots(boolean askForTypes){
         // Create the query to get all data in CSV format
         SelectQuery selectQuery = Queries.SELECT();
@@ -254,7 +271,17 @@ public class BasicQueryConverter implements IQueryParser{
                         Row newRow = new Row(solution.getValue("s"),solution.getValue("o"),askForTypes);
                         queryForSubjects(conn, newRow, solution.getValue("s"), solution.getValue("s"), null, askForTypes, 0);
                         System.out.println();
-                        rows.add(newRow);
+                        System.out.println("askForTypes=" + askForTypes);
+                        System.out.println("new Row is: " + newRow.id.stringValue() +
+                                " type: " + newRow.type.stringValue() +
+                                " isRdfType=" + newRow.isRdfType +
+                                " newRow columns " + newRow.columns.entrySet());
+                        if(rows.stream().anyMatch(row -> row.id.equals(newRow.id))){
+                            // a row with the same id is already present in the data, dont create new one
+                        } else {
+                            rows.add(newRow);
+                        }
+
                     }
                     System.out.println("After loop with results of query " + queryString);
                     //countDominantPredicates(conn, roots);
@@ -268,19 +295,18 @@ public class BasicQueryConverter implements IQueryParser{
                                     // ... and print out the value of the variable binding for ?s and ?n
                                     //System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
                                     if(!roots.contains(solution.getValue("s"))){
+                                        System.out.println("Adding to roots in substituteRoots ?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
                                         roots.add(solution.getValue("s"));
                                     }
                                 }
                             } else{
-                                queryForSubstituteRoots = conn.prepareTupleQuery(getQueryForSubstituteRoots(askForTypes));
-                                try (TupleQueryResult resultForSubstituteRoots2 = queryForSubstituteRoots.evaluate()) {
-                                }
+                                throw new IndexOutOfBoundsException();
 
                             }
 
                         }
                     }
-                    countDominantTypes(conn, roots, askForTypes);
+                    //countDominantTypes(conn, roots, askForTypes);
                     //Value dominantType = getDominantType();
                     //String dominantPredicate = getDominantPredicate();
                     //System.out.println("Here begins creating of of file");

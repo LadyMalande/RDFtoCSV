@@ -45,8 +45,7 @@
         "aboutUrl" : "file://tree-ops.csv#{+Subjekt}"
       } ],
       "primaryKey" : "Subjekt",
-      "aboutUrl" : "file://tree-ops.csv#{+Subjekt}",
-      "rowTitles" : [ null, null, null, null, null ]
+      "rowTitles" : [ "Subjekt", "GID", "inventory_date", "on_street", "species", "trim_cycle" ]
     }
   } ]
 }

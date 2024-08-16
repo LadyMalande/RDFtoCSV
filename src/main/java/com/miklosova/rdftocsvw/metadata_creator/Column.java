@@ -347,9 +347,10 @@ public class Column {
     }
 
     public void addFirstColumn(Value type, Value value, boolean isRdfType, boolean isNamespaceTheSame) {
-        IRI typeIri = (IRI) type;
         //System.out.println("addFirstColumn is typeIri string value " + typeIri.stringValue());
         if(isRdfType){
+            IRI typeIri = (IRI) type;
+
             //System.out.println("CONVERSION_HAS_RDF_TYPES is " + true);
             this.titles = typeIri.getLocalName();
             this.name = typeIri.getLocalName();
