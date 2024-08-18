@@ -1,0 +1,73 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test097.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "latitude",
+        "name" : "latitude",
+        "propertyUrl" : "http://schema.org/latitude",
+        "datatype" : "double"
+      }, {
+        "@type" : "Column",
+        "titles" : "longitude",
+        "name" : "longitude",
+        "propertyUrl" : "http://schema.org/longitude",
+        "datatype" : "double"
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://schema.org/name"
+      }, {
+        "@type" : "Column",
+        "titles" : "countryCode",
+        "name" : "countryCode",
+        "propertyUrl" : "http://www.geonames.org/ontology#countryCode"
+      } ],
+      "rowTitles" : [ "Subjekt", "latitude", "longitude", "name", "countryCode" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "test097.ttlTestOutput1.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "countryRef",
+        "name" : "countryRef",
+        "propertyUrl" : "file://country_slice.csv#countryRef",
+        "valueUrl" : "http://example.org/countries.csv#{+countryRef}"
+      }, {
+        "@type" : "Column",
+        "titles" : "population",
+        "name" : "population",
+        "propertyUrl" : "file://country_slice.csv#population",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "year",
+        "name" : "year",
+        "propertyUrl" : "file://country_slice.csv#year",
+        "datatype" : "gYear"
+      } ],
+      "rowTitles" : [ "Subjekt", "countryRef", "population", "year" ]
+    }
+  } ]
+}

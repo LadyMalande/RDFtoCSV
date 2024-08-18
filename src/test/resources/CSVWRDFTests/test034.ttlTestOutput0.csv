@@ -1,2 +1,5 @@
-TableGroup,type,table,1_type,1_url,1_row,2_type,2_rownum,2_url,2_describes,90115_Identifier,90115_heldBy,1_name,90115_grade,90115_job,90115_reportsTo,90334_identifier,90334_heldBy,2_name,90334_grade,90334_job,90334_profession,90334_postIn,90115_profession,90115_postIn,3_type,3_rownum,3_url,3_describes,4_type,4_url,4_row,5_type,5_rownum,5_url,5_describes,6_reportsTo,6_grade,6_min_pay,6_max_pay,6_job,6_number_of_posts,6_profession,6_postIn,7_type,7_rownum,7_url,7_describes,8_reportsTo,8_grade,8_min_pay,8_max_pay,8_job,8_number_of_posts,8_profession,8_postIn
-0,TableGroup,"1,4",Table,senior-roles.csv,"2,3",Row,1,row=2,"90115,1","90115,90115,90115","1,1,1","Steve Egan,Steve Egan,Steve Egan","SCS1A,SCS1A,SCS1A","Deputy Chief Executive,Deputy Chief Executive,Deputy Chief Executive","90334,90334,90334","90334,90334,90334","2,2,2","Sir Alan Langlands,Sir Alan Langlands,Sir Alan Langlands,Sir Alan Langlands","SCS4,SCS4,SCS4","Chief Executive,Chief Executive,Chief Executive","Policy,Policy,Policy","hefce.ac.uk,hefce.ac.uk,hefce.ac.uk","Finance,Finance,Finance","hefce.ac.uk,hefce.ac.uk,hefce.ac.uk",Row,2,row=3,"90334,2",Table,junior-roles.csv,"5,7",Row,1,row=2,6,90115,4,17426,20002,Administrator,8.67,Operational Delivery,hefce.ac.uk,Row,2,row=3,8,90115,5,19546,22478,Administrator,0.5,Operational Delivery,hefce.ac.uk
+Subjekt,Identifier,heldBy,grade,job,reportsTo,profession,postIn,name
+2,90115,1,SCS1A,Deputy Chief Executive,90334,Finance,hefce.ac.uk,
+2,,,,,,,,Steve Egan
+3,90334,2,SCS4,Chief Executive,,Policy,hefce.ac.uk,
+3,,,,,,,,Sir Alan Langlands

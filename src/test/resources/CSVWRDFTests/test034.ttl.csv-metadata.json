@@ -8,367 +8,114 @@
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "TableGroup",
-        "name" : "TableGroup",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
+        "titles" : "Identifier",
+        "name" : "identifier",
+        "propertyUrl" : "http://purl.org/dc/terms/identifier"
       }, {
         "@type" : "Column",
-        "titles" : "table",
-        "name" : "table",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#table",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+table}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "1_type",
-        "name" : "type_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_1}"
-      }, {
-        "@type" : "Column",
-        "titles" : "1_url",
-        "name" : "url_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://{+url_MULTILEVEL_1}"
-      }, {
-        "@type" : "Column",
-        "titles" : "1_row",
-        "name" : "row_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#row",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+row_MULTILEVEL_1}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "2_type",
-        "name" : "type_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_2}"
-      }, {
-        "@type" : "Column",
-        "titles" : "2_rownum",
-        "name" : "rownum_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "2_url",
-        "name" : "url_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://senior-roles.csv#{+url_MULTILEVEL_2}"
-      }, {
-        "@type" : "Column",
-        "titles" : "2_describes",
-        "name" : "describes_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
-        "valueUrl" : "{+describes_MULTILEVEL_2}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "90115_Identifier",
-        "name" : "identifier_MULTILEVEL_90115",
-        "propertyUrl" : "http://purl.org/dc/terms/identifier",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_6}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "90115_heldBy",
-        "name" : "heldBy_MULTILEVEL_90115",
+        "titles" : "heldBy",
+        "name" : "heldBy",
         "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/person/{+heldBy_MULTILEVEL_90115}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_6}",
-        "separator" : ","
+        "valueUrl" : "http://example.org/organization/hefce.ac.uk/person/{+heldBy}"
       }, {
         "@type" : "Column",
-        "titles" : "1_name",
-        "name" : "name_MULTILEVEL_1",
-        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/person/{+heldBy_MULTILEVEL_90115}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "90115_grade",
-        "name" : "grade_MULTILEVEL_90115",
-        "propertyUrl" : "http://example.org/gov.uk/def/grade",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_6}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "90115_job",
-        "name" : "job_MULTILEVEL_90115",
-        "propertyUrl" : "http://example.org/gov.uk/def/job",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_6}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "90115_reportsTo",
-        "name" : "reportsTo_MULTILEVEL_90115",
-        "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_90115}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_6}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "90334_identifier",
-        "name" : "identifier_MULTILEVEL_90334",
-        "propertyUrl" : "http://purl.org/dc/terms/identifier",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_90115}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "90334_heldBy",
-        "name" : "heldBy_MULTILEVEL_90334",
-        "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/person/{+heldBy_MULTILEVEL_90334}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_90115}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "2_name",
-        "name" : "name_MULTILEVEL_2",
-        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/person/{+describes_MULTILEVEL_3}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "90334_grade",
-        "name" : "grade_MULTILEVEL_90334",
-        "propertyUrl" : "http://example.org/gov.uk/def/grade",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_90115}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "90334_job",
-        "name" : "job_MULTILEVEL_90334",
-        "propertyUrl" : "http://example.org/gov.uk/def/job",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_90115}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "90334_profession",
-        "name" : "profession_MULTILEVEL_90334",
-        "propertyUrl" : "http://example.org/gov.uk/def/profession",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_90115}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "90334_postIn",
-        "name" : "postIn_MULTILEVEL_90334",
-        "propertyUrl" : "http://www.w3.org/ns/org#postIn",
-        "valueUrl" : "http://example.org/organization/{+postIn_MULTILEVEL_90334}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_90115}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "90115_profession",
-        "name" : "profession_MULTILEVEL_90115",
-        "propertyUrl" : "http://example.org/gov.uk/def/profession",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_6}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "90115_postIn",
-        "name" : "postIn_MULTILEVEL_90115",
-        "propertyUrl" : "http://www.w3.org/ns/org#postIn",
-        "valueUrl" : "http://example.org/organization/{+postIn_MULTILEVEL_90115}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_6}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "3_type",
-        "name" : "type_MULTILEVEL_3",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_3}"
-      }, {
-        "@type" : "Column",
-        "titles" : "3_rownum",
-        "name" : "rownum_MULTILEVEL_3",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "3_url",
-        "name" : "url_MULTILEVEL_3",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://senior-roles.csv#{+url_MULTILEVEL_3}"
-      }, {
-        "@type" : "Column",
-        "titles" : "3_describes",
-        "name" : "describes_MULTILEVEL_3",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
-        "valueUrl" : "{+describes_MULTILEVEL_3}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "4_type",
-        "name" : "type_MULTILEVEL_4",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_4}"
-      }, {
-        "@type" : "Column",
-        "titles" : "4_url",
-        "name" : "url_MULTILEVEL_4",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://{+url_MULTILEVEL_4}"
-      }, {
-        "@type" : "Column",
-        "titles" : "4_row",
-        "name" : "row_MULTILEVEL_4",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#row",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+row_MULTILEVEL_4}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "5_type",
-        "name" : "type_MULTILEVEL_5",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_5}"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_rownum",
-        "name" : "rownum_MULTILEVEL_5",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_url",
-        "name" : "url_MULTILEVEL_5",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://junior-roles.csv#{+url_MULTILEVEL_5}"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_describes",
-        "name" : "describes_MULTILEVEL_5",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_5}"
-      }, {
-        "@type" : "Column",
-        "titles" : "6_reportsTo",
-        "name" : "reportsTo_MULTILEVEL_6",
-        "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_6}"
-      }, {
-        "@type" : "Column",
-        "titles" : "6_grade",
-        "name" : "grade_MULTILEVEL_6",
+        "titles" : "grade",
+        "name" : "grade",
         "propertyUrl" : "http://example.org/gov.uk/def/grade"
       }, {
         "@type" : "Column",
-        "titles" : "6_min_pay",
-        "name" : "min_pay_MULTILEVEL_6",
-        "propertyUrl" : "http://example.org/gov.uk/def/min_pay",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "6_max_pay",
-        "name" : "max_pay_MULTILEVEL_6",
-        "propertyUrl" : "http://example.org/gov.uk/def/max_pay",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "6_job",
-        "name" : "job_MULTILEVEL_6",
+        "titles" : "job",
+        "name" : "job",
         "propertyUrl" : "http://example.org/gov.uk/def/job"
       }, {
         "@type" : "Column",
-        "titles" : "6_number_of_posts",
-        "name" : "number_of_posts_MULTILEVEL_6",
-        "propertyUrl" : "http://example.org/gov.uk/def/number_of_posts",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "6_profession",
-        "name" : "profession_MULTILEVEL_6",
-        "propertyUrl" : "http://example.org/gov.uk/def/profession"
-      }, {
-        "@type" : "Column",
-        "titles" : "6_postIn",
-        "name" : "postIn_MULTILEVEL_6",
-        "propertyUrl" : "http://www.w3.org/ns/org#postIn",
-        "valueUrl" : "http://example.org/organization/{+postIn_MULTILEVEL_6}"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_type",
-        "name" : "type_MULTILEVEL_7",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_7}"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_rownum",
-        "name" : "rownum_MULTILEVEL_7",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_url",
-        "name" : "url_MULTILEVEL_7",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://junior-roles.csv#{+url_MULTILEVEL_7}"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_describes",
-        "name" : "describes_MULTILEVEL_7",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_7}"
-      }, {
-        "@type" : "Column",
-        "titles" : "8_reportsTo",
-        "name" : "reportsTo_MULTILEVEL_8",
+        "titles" : "reportsTo",
+        "name" : "reportsTo",
         "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo_MULTILEVEL_8}"
+        "valueUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo}"
       }, {
         "@type" : "Column",
-        "titles" : "8_grade",
-        "name" : "grade_MULTILEVEL_8",
-        "propertyUrl" : "http://example.org/gov.uk/def/grade"
-      }, {
-        "@type" : "Column",
-        "titles" : "8_min_pay",
-        "name" : "min_pay_MULTILEVEL_8",
-        "propertyUrl" : "http://example.org/gov.uk/def/min_pay",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "8_max_pay",
-        "name" : "max_pay_MULTILEVEL_8",
-        "propertyUrl" : "http://example.org/gov.uk/def/max_pay",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "8_job",
-        "name" : "job_MULTILEVEL_8",
-        "propertyUrl" : "http://example.org/gov.uk/def/job"
-      }, {
-        "@type" : "Column",
-        "titles" : "8_number_of_posts",
-        "name" : "number_of_posts_MULTILEVEL_8",
-        "propertyUrl" : "http://example.org/gov.uk/def/number_of_posts",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "8_profession",
-        "name" : "profession_MULTILEVEL_8",
+        "titles" : "profession",
+        "name" : "profession",
         "propertyUrl" : "http://example.org/gov.uk/def/profession"
       }, {
         "@type" : "Column",
-        "titles" : "8_postIn",
-        "name" : "postIn_MULTILEVEL_8",
+        "titles" : "postIn",
+        "name" : "postIn",
         "propertyUrl" : "http://www.w3.org/ns/org#postIn",
-        "valueUrl" : "http://example.org/organization/{+postIn_MULTILEVEL_8}"
+        "valueUrl" : "http://example.org/organization/{+postIn}"
       }, {
         "@type" : "Column",
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#TableGroup",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
-        "virtual" : true
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/name"
       } ],
-      "rowTitles" : [ "TableGroup", "type", "table", "type_MULTILEVEL_1", "url_MULTILEVEL_1", "row_MULTILEVEL_1", "type_MULTILEVEL_2", "rownum_MULTILEVEL_2", "url_MULTILEVEL_2", "describes_MULTILEVEL_2", "identifier_MULTILEVEL_90115", "heldBy_MULTILEVEL_90115", "name_MULTILEVEL_1", "grade_MULTILEVEL_90115", "job_MULTILEVEL_90115", "reportsTo_MULTILEVEL_90115", "identifier_MULTILEVEL_90334", "heldBy_MULTILEVEL_90334", "name_MULTILEVEL_2", "grade_MULTILEVEL_90334", "job_MULTILEVEL_90334", "profession_MULTILEVEL_90334", "postIn_MULTILEVEL_90334", "profession_MULTILEVEL_90115", "postIn_MULTILEVEL_90115", "type_MULTILEVEL_3", "rownum_MULTILEVEL_3", "url_MULTILEVEL_3", "describes_MULTILEVEL_3", "type_MULTILEVEL_4", "url_MULTILEVEL_4", "row_MULTILEVEL_4", "type_MULTILEVEL_5", "rownum_MULTILEVEL_5", "url_MULTILEVEL_5", "describes_MULTILEVEL_5", "reportsTo_MULTILEVEL_6", "grade_MULTILEVEL_6", "min_pay_MULTILEVEL_6", "max_pay_MULTILEVEL_6", "job_MULTILEVEL_6", "number_of_posts_MULTILEVEL_6", "profession_MULTILEVEL_6", "postIn_MULTILEVEL_6", "type_MULTILEVEL_7", "rownum_MULTILEVEL_7", "url_MULTILEVEL_7", "describes_MULTILEVEL_7", "reportsTo_MULTILEVEL_8", "grade_MULTILEVEL_8", "min_pay_MULTILEVEL_8", "max_pay_MULTILEVEL_8", "job_MULTILEVEL_8", "number_of_posts_MULTILEVEL_8", "profession_MULTILEVEL_8", "postIn_MULTILEVEL_8" ]
+      "rowTitles" : [ "Subjekt", "identifier", "heldBy", "grade", "job", "reportsTo", "profession", "postIn", "name" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "test034.ttlTestOutput1.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "reportsTo",
+        "name" : "reportsTo",
+        "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
+        "valueUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo}"
+      }, {
+        "@type" : "Column",
+        "titles" : "grade",
+        "name" : "grade",
+        "propertyUrl" : "http://example.org/gov.uk/def/grade"
+      }, {
+        "@type" : "Column",
+        "titles" : "min_pay",
+        "name" : "min_pay",
+        "propertyUrl" : "http://example.org/gov.uk/def/min_pay",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "max_pay",
+        "name" : "max_pay",
+        "propertyUrl" : "http://example.org/gov.uk/def/max_pay",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "job",
+        "name" : "job",
+        "propertyUrl" : "http://example.org/gov.uk/def/job"
+      }, {
+        "@type" : "Column",
+        "titles" : "number_of_posts",
+        "name" : "number_of_posts",
+        "propertyUrl" : "http://example.org/gov.uk/def/number_of_posts",
+        "datatype" : "double"
+      }, {
+        "@type" : "Column",
+        "titles" : "profession",
+        "name" : "profession",
+        "propertyUrl" : "http://example.org/gov.uk/def/profession"
+      }, {
+        "@type" : "Column",
+        "titles" : "postIn",
+        "name" : "postIn",
+        "propertyUrl" : "http://www.w3.org/ns/org#postIn",
+        "valueUrl" : "http://example.org/organization/{+postIn}"
+      } ],
+      "rowTitles" : [ "Subjekt", "reportsTo", "grade", "min_pay", "max_pay", "job", "number_of_posts", "profession", "postIn" ]
     }
   } ]
 }

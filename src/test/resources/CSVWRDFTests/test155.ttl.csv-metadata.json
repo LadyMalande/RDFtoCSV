@@ -8,689 +8,114 @@
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "TableGroup",
-        "name" : "TableGroup",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
-      }, {
-        "@type" : "Column",
-        "titles" : "table",
-        "name" : "table",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#table",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+table}"
-      }, {
-        "@type" : "Column",
-        "titles" : "1_type",
-        "name" : "type_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_1}"
-      }, {
-        "@type" : "Column",
-        "titles" : "1_label",
-        "name" : "label_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#label"
-      }, {
-        "@type" : "Column",
-        "titles" : "1_comment",
-        "name" : "comment_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#comment"
-      }, {
-        "@type" : "Column",
-        "titles" : "1_row",
-        "name" : "row_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#row",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+row_MULTILEVEL_1}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "2_type",
-        "name" : "type_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_2}"
-      }, {
-        "@type" : "Column",
-        "titles" : "2_describes",
-        "name" : "describes_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_2}"
-      }, {
-        "@type" : "Column",
-        "titles" : "3_byte",
-        "name" : "byte_MULTILEVEL_3",
+        "titles" : "byte",
+        "name" : "byte",
         "propertyUrl" : "file://test155.csv#byte",
         "datatype" : "byte"
       }, {
         "@type" : "Column",
-        "titles" : "3_decimal",
-        "name" : "decimal_MULTILEVEL_3",
+        "titles" : "decimal",
+        "name" : "decimal",
         "propertyUrl" : "file://test155.csv#decimal",
         "datatype" : "decimal"
       }, {
         "@type" : "Column",
-        "titles" : "3_double",
-        "name" : "double_MULTILEVEL_3",
+        "titles" : "double",
+        "name" : "double",
         "propertyUrl" : "file://test155.csv#double",
         "datatype" : "double"
       }, {
         "@type" : "Column",
-        "titles" : "3_float",
-        "name" : "float_MULTILEVEL_3",
+        "titles" : "float",
+        "name" : "float",
         "propertyUrl" : "file://test155.csv#float",
         "datatype" : "float"
       }, {
         "@type" : "Column",
-        "titles" : "3_int",
-        "name" : "int_MULTILEVEL_3",
+        "titles" : "int",
+        "name" : "int",
         "propertyUrl" : "file://test155.csv#int",
         "datatype" : "int"
       }, {
         "@type" : "Column",
-        "titles" : "3_integer",
-        "name" : "integer_MULTILEVEL_3",
+        "titles" : "integer",
+        "name" : "integer",
         "propertyUrl" : "file://test155.csv#integer",
         "datatype" : "integer"
       }, {
         "@type" : "Column",
-        "titles" : "3_long",
-        "name" : "long_MULTILEVEL_3",
+        "titles" : "long",
+        "name" : "long",
         "propertyUrl" : "file://test155.csv#long",
         "datatype" : "long"
       }, {
         "@type" : "Column",
-        "titles" : "3_negativeInteger",
-        "name" : "negativeInteger_MULTILEVEL_3",
+        "titles" : "negativeInteger",
+        "name" : "negativeInteger",
         "propertyUrl" : "file://test155.csv#negativeInteger",
         "datatype" : "negativeInteger"
       }, {
         "@type" : "Column",
-        "titles" : "3_nonNegativeInteger",
-        "name" : "nonNegativeInteger_MULTILEVEL_3",
+        "titles" : "nonNegativeInteger",
+        "name" : "nonNegativeInteger",
         "propertyUrl" : "file://test155.csv#nonNegativeInteger",
         "datatype" : "nonNegativeInteger"
       }, {
         "@type" : "Column",
-        "titles" : "3_nonPositiveInteger",
-        "name" : "nonPositiveInteger_MULTILEVEL_3",
+        "titles" : "nonPositiveInteger",
+        "name" : "nonPositiveInteger",
         "propertyUrl" : "file://test155.csv#nonPositiveInteger",
         "datatype" : "nonPositiveInteger"
       }, {
         "@type" : "Column",
-        "titles" : "3_number",
-        "name" : "number_MULTILEVEL_3",
+        "titles" : "number",
+        "name" : "number",
         "propertyUrl" : "file://test155.csv#number",
         "datatype" : "double"
       }, {
         "@type" : "Column",
-        "titles" : "3_positiveInteger",
-        "name" : "positiveInteger_MULTILEVEL_3",
+        "titles" : "positiveInteger",
+        "name" : "positiveInteger",
         "propertyUrl" : "file://test155.csv#positiveInteger",
         "datatype" : "positiveInteger"
       }, {
         "@type" : "Column",
-        "titles" : "3_short",
-        "name" : "short_MULTILEVEL_3",
+        "titles" : "short",
+        "name" : "short",
         "propertyUrl" : "file://test155.csv#short",
         "datatype" : "short"
       }, {
         "@type" : "Column",
-        "titles" : "3_unsignedByte",
-        "name" : "unsignedByte_MULTILEVEL_3",
+        "titles" : "unsignedByte",
+        "name" : "unsignedByte",
         "propertyUrl" : "file://test155.csv#unsignedByte",
         "datatype" : "unsignedByte"
       }, {
         "@type" : "Column",
-        "titles" : "3_unsignedInt",
-        "name" : "unsignedInt_MULTILEVEL_3",
+        "titles" : "unsignedInt",
+        "name" : "unsignedInt",
         "propertyUrl" : "file://test155.csv#unsignedInt",
         "datatype" : "unsignedInt"
       }, {
         "@type" : "Column",
-        "titles" : "3_unsignedLong",
-        "name" : "unsignedLong_MULTILEVEL_3",
+        "titles" : "unsignedLong",
+        "name" : "unsignedLong",
         "propertyUrl" : "file://test155.csv#unsignedLong",
         "datatype" : "unsignedLong"
       }, {
         "@type" : "Column",
-        "titles" : "3_unsignedShort",
-        "name" : "unsignedShort_MULTILEVEL_3",
+        "titles" : "unsignedShort",
+        "name" : "unsignedShort",
         "propertyUrl" : "file://test155.csv#unsignedShort",
         "datatype" : "unsignedShort"
-      }, {
-        "@type" : "Column",
-        "titles" : "2_rownum",
-        "name" : "rownum_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "2_url",
-        "name" : "url_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://test155.csv#{+url_MULTILEVEL_2}"
-      }, {
-        "@type" : "Column",
-        "titles" : "4_type",
-        "name" : "type_MULTILEVEL_4",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_4}"
-      }, {
-        "@type" : "Column",
-        "titles" : "4_describes",
-        "name" : "describes_MULTILEVEL_4",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_4}"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_byte",
-        "name" : "byte_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#byte",
-        "datatype" : "byte"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_decimal",
-        "name" : "decimal_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#decimal",
-        "datatype" : "decimal"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_double",
-        "name" : "double_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#double",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_float",
-        "name" : "float_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#float",
-        "datatype" : "float"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_int",
-        "name" : "int_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#int",
-        "datatype" : "int"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_integer",
-        "name" : "integer_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#integer",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_long",
-        "name" : "long_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#long",
-        "datatype" : "long"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_negativeInteger",
-        "name" : "negativeInteger_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#negativeInteger",
-        "datatype" : "negativeInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_nonNegativeInteger",
-        "name" : "nonNegativeInteger_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#nonNegativeInteger",
-        "datatype" : "nonNegativeInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_nonPositiveInteger",
-        "name" : "nonPositiveInteger_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#nonPositiveInteger",
-        "datatype" : "nonPositiveInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_number",
-        "name" : "number_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#number",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_positiveInteger",
-        "name" : "positiveInteger_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#positiveInteger",
-        "datatype" : "positiveInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_short",
-        "name" : "short_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#short",
-        "datatype" : "short"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_unsignedByte",
-        "name" : "unsignedByte_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#unsignedByte",
-        "datatype" : "unsignedByte"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_unsignedInt",
-        "name" : "unsignedInt_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#unsignedInt",
-        "datatype" : "unsignedInt"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_unsignedLong",
-        "name" : "unsignedLong_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#unsignedLong",
-        "datatype" : "unsignedLong"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_unsignedShort",
-        "name" : "unsignedShort_MULTILEVEL_5",
-        "propertyUrl" : "file://test155.csv#unsignedShort",
-        "datatype" : "unsignedShort"
-      }, {
-        "@type" : "Column",
-        "titles" : "4_rownum",
-        "name" : "rownum_MULTILEVEL_4",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "4_url",
-        "name" : "url_MULTILEVEL_4",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://test155.csv#{+url_MULTILEVEL_4}"
-      }, {
-        "@type" : "Column",
-        "titles" : "6_type",
-        "name" : "type_MULTILEVEL_6",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_6}"
-      }, {
-        "@type" : "Column",
-        "titles" : "6_describes",
-        "name" : "describes_MULTILEVEL_6",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_6}"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_byte",
-        "name" : "byte_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#byte",
-        "datatype" : "byte"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_decimal",
-        "name" : "decimal_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#decimal",
-        "datatype" : "decimal"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_double",
-        "name" : "double_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#double",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_float",
-        "name" : "float_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#float",
-        "datatype" : "float"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_int",
-        "name" : "int_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#int",
-        "datatype" : "int"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_integer",
-        "name" : "integer_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#integer",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_long",
-        "name" : "long_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#long",
-        "datatype" : "long"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_negativeInteger",
-        "name" : "negativeInteger_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#negativeInteger",
-        "datatype" : "negativeInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_nonNegativeInteger",
-        "name" : "nonNegativeInteger_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#nonNegativeInteger",
-        "datatype" : "nonNegativeInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_nonPositiveInteger",
-        "name" : "nonPositiveInteger_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#nonPositiveInteger",
-        "datatype" : "nonPositiveInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_number",
-        "name" : "number_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#number",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_positiveInteger",
-        "name" : "positiveInteger_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#positiveInteger",
-        "datatype" : "positiveInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_short",
-        "name" : "short_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#short",
-        "datatype" : "short"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_unsignedByte",
-        "name" : "unsignedByte_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#unsignedByte",
-        "datatype" : "unsignedByte"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_unsignedInt",
-        "name" : "unsignedInt_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#unsignedInt",
-        "datatype" : "unsignedInt"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_unsignedLong",
-        "name" : "unsignedLong_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#unsignedLong",
-        "datatype" : "unsignedLong"
-      }, {
-        "@type" : "Column",
-        "titles" : "7_unsignedShort",
-        "name" : "unsignedShort_MULTILEVEL_7",
-        "propertyUrl" : "file://test155.csv#unsignedShort",
-        "datatype" : "unsignedShort"
-      }, {
-        "@type" : "Column",
-        "titles" : "6_rownum",
-        "name" : "rownum_MULTILEVEL_6",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "6_url",
-        "name" : "url_MULTILEVEL_6",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://test155.csv#{+url_MULTILEVEL_6}"
-      }, {
-        "@type" : "Column",
-        "titles" : "8_type",
-        "name" : "type_MULTILEVEL_8",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_8}"
-      }, {
-        "@type" : "Column",
-        "titles" : "8_describes",
-        "name" : "describes_MULTILEVEL_8",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_8}"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_byte",
-        "name" : "byte_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#byte",
-        "datatype" : "byte"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_decimal",
-        "name" : "decimal_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#decimal",
-        "datatype" : "decimal"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_double",
-        "name" : "double_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#double",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_float",
-        "name" : "float_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#float",
-        "datatype" : "float"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_int",
-        "name" : "int_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#int",
-        "datatype" : "int"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_integer",
-        "name" : "integer_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#integer",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_long",
-        "name" : "long_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#long",
-        "datatype" : "long"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_negativeInteger",
-        "name" : "negativeInteger_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#negativeInteger",
-        "datatype" : "negativeInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_nonNegativeInteger",
-        "name" : "nonNegativeInteger_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#nonNegativeInteger",
-        "datatype" : "nonNegativeInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_nonPositiveInteger",
-        "name" : "nonPositiveInteger_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#nonPositiveInteger",
-        "datatype" : "nonPositiveInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_number",
-        "name" : "number_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#number",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_positiveInteger",
-        "name" : "positiveInteger_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#positiveInteger",
-        "datatype" : "positiveInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_short",
-        "name" : "short_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#short",
-        "datatype" : "short"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_unsignedByte",
-        "name" : "unsignedByte_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#unsignedByte",
-        "datatype" : "unsignedByte"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_unsignedInt",
-        "name" : "unsignedInt_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#unsignedInt",
-        "datatype" : "unsignedInt"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_unsignedLong",
-        "name" : "unsignedLong_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#unsignedLong",
-        "datatype" : "unsignedLong"
-      }, {
-        "@type" : "Column",
-        "titles" : "9_unsignedShort",
-        "name" : "unsignedShort_MULTILEVEL_9",
-        "propertyUrl" : "file://test155.csv#unsignedShort",
-        "datatype" : "unsignedShort"
-      }, {
-        "@type" : "Column",
-        "titles" : "8_rownum",
-        "name" : "rownum_MULTILEVEL_8",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "8_url",
-        "name" : "url_MULTILEVEL_8",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://test155.csv#{+url_MULTILEVEL_8}"
-      }, {
-        "@type" : "Column",
-        "titles" : "10_type",
-        "name" : "type_MULTILEVEL_10",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_10}"
-      }, {
-        "@type" : "Column",
-        "titles" : "10_describes",
-        "name" : "describes_MULTILEVEL_10",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_10}"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_byte",
-        "name" : "byte_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#byte",
-        "datatype" : "byte"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_decimal",
-        "name" : "decimal_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#decimal",
-        "datatype" : "decimal"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_double",
-        "name" : "double_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#double",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_float",
-        "name" : "float_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#float",
-        "datatype" : "float"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_int",
-        "name" : "int_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#int",
-        "datatype" : "int"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_integer",
-        "name" : "integer_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#integer",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_long",
-        "name" : "long_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#long",
-        "datatype" : "long"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_negativeInteger",
-        "name" : "negativeInteger_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#negativeInteger",
-        "datatype" : "negativeInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_nonNegativeInteger",
-        "name" : "nonNegativeInteger_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#nonNegativeInteger",
-        "datatype" : "nonNegativeInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_nonPositiveInteger",
-        "name" : "nonPositiveInteger_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#nonPositiveInteger",
-        "datatype" : "nonPositiveInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_number",
-        "name" : "number_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#number",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_positiveInteger",
-        "name" : "positiveInteger_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#positiveInteger",
-        "datatype" : "positiveInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_short",
-        "name" : "short_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#short",
-        "datatype" : "short"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_unsignedByte",
-        "name" : "unsignedByte_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#unsignedByte",
-        "datatype" : "unsignedByte"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_unsignedInt",
-        "name" : "unsignedInt_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#unsignedInt",
-        "datatype" : "unsignedInt"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_unsignedLong",
-        "name" : "unsignedLong_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#unsignedLong",
-        "datatype" : "unsignedLong"
-      }, {
-        "@type" : "Column",
-        "titles" : "11_unsignedShort",
-        "name" : "unsignedShort_MULTILEVEL_11",
-        "propertyUrl" : "file://test155.csv#unsignedShort",
-        "datatype" : "unsignedShort"
-      }, {
-        "@type" : "Column",
-        "titles" : "10_rownum",
-        "name" : "rownum_MULTILEVEL_10",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "10_url",
-        "name" : "url_MULTILEVEL_10",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://test155.csv#{+url_MULTILEVEL_10}"
-      }, {
-        "@type" : "Column",
-        "titles" : "1_url",
-        "name" : "url_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://{+url_MULTILEVEL_1}"
-      }, {
-        "@type" : "Column",
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#TableGroup",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
-        "virtual" : true
       } ],
-      "rowTitles" : [ "TableGroup", "type", "table", "type_MULTILEVEL_1", "label_MULTILEVEL_1", "comment_MULTILEVEL_1", "row_MULTILEVEL_1", "type_MULTILEVEL_2", "describes_MULTILEVEL_2", "byte_MULTILEVEL_3", "decimal_MULTILEVEL_3", "double_MULTILEVEL_3", "float_MULTILEVEL_3", "int_MULTILEVEL_3", "integer_MULTILEVEL_3", "long_MULTILEVEL_3", "negativeInteger_MULTILEVEL_3", "nonNegativeInteger_MULTILEVEL_3", "nonPositiveInteger_MULTILEVEL_3", "number_MULTILEVEL_3", "positiveInteger_MULTILEVEL_3", "short_MULTILEVEL_3", "unsignedByte_MULTILEVEL_3", "unsignedInt_MULTILEVEL_3", "unsignedLong_MULTILEVEL_3", "unsignedShort_MULTILEVEL_3", "rownum_MULTILEVEL_2", "url_MULTILEVEL_2", "type_MULTILEVEL_4", "describes_MULTILEVEL_4", "byte_MULTILEVEL_5", "decimal_MULTILEVEL_5", "double_MULTILEVEL_5", "float_MULTILEVEL_5", "int_MULTILEVEL_5", "integer_MULTILEVEL_5", "long_MULTILEVEL_5", "negativeInteger_MULTILEVEL_5", "nonNegativeInteger_MULTILEVEL_5", "nonPositiveInteger_MULTILEVEL_5", "number_MULTILEVEL_5", "positiveInteger_MULTILEVEL_5", "short_MULTILEVEL_5", "unsignedByte_MULTILEVEL_5", "unsignedInt_MULTILEVEL_5", "unsignedLong_MULTILEVEL_5", "unsignedShort_MULTILEVEL_5", "rownum_MULTILEVEL_4", "url_MULTILEVEL_4", "type_MULTILEVEL_6", "describes_MULTILEVEL_6", "byte_MULTILEVEL_7", "decimal_MULTILEVEL_7", "double_MULTILEVEL_7", "float_MULTILEVEL_7", "int_MULTILEVEL_7", "integer_MULTILEVEL_7", "long_MULTILEVEL_7", "negativeInteger_MULTILEVEL_7", "nonNegativeInteger_MULTILEVEL_7", "nonPositiveInteger_MULTILEVEL_7", "number_MULTILEVEL_7", "positiveInteger_MULTILEVEL_7", "short_MULTILEVEL_7", "unsignedByte_MULTILEVEL_7", "unsignedInt_MULTILEVEL_7", "unsignedLong_MULTILEVEL_7", "unsignedShort_MULTILEVEL_7", "rownum_MULTILEVEL_6", "url_MULTILEVEL_6", "type_MULTILEVEL_8", "describes_MULTILEVEL_8", "byte_MULTILEVEL_9", "decimal_MULTILEVEL_9", "double_MULTILEVEL_9", "float_MULTILEVEL_9", "int_MULTILEVEL_9", "integer_MULTILEVEL_9", "long_MULTILEVEL_9", "negativeInteger_MULTILEVEL_9", "nonNegativeInteger_MULTILEVEL_9", "nonPositiveInteger_MULTILEVEL_9", "number_MULTILEVEL_9", "positiveInteger_MULTILEVEL_9", "short_MULTILEVEL_9", "unsignedByte_MULTILEVEL_9", "unsignedInt_MULTILEVEL_9", "unsignedLong_MULTILEVEL_9", "unsignedShort_MULTILEVEL_9", "rownum_MULTILEVEL_8", "url_MULTILEVEL_8", "type_MULTILEVEL_10", "describes_MULTILEVEL_10", "byte_MULTILEVEL_11", "decimal_MULTILEVEL_11", "double_MULTILEVEL_11", "float_MULTILEVEL_11", "int_MULTILEVEL_11", "integer_MULTILEVEL_11", "long_MULTILEVEL_11", "negativeInteger_MULTILEVEL_11", "nonNegativeInteger_MULTILEVEL_11", "nonPositiveInteger_MULTILEVEL_11", "number_MULTILEVEL_11", "positiveInteger_MULTILEVEL_11", "short_MULTILEVEL_11", "unsignedByte_MULTILEVEL_11", "unsignedInt_MULTILEVEL_11", "unsignedLong_MULTILEVEL_11", "unsignedShort_MULTILEVEL_11", "rownum_MULTILEVEL_10", "url_MULTILEVEL_10", "url_MULTILEVEL_1" ]
+      "rowTitles" : [ "Subjekt", "byte", "decimal", "double", "float", "int", "integer", "long", "negativeInteger", "nonNegativeInteger", "nonPositiveInteger", "number", "positiveInteger", "short", "unsignedByte", "unsignedInt", "unsignedLong", "unsignedShort" ]
     }
   } ]
 }

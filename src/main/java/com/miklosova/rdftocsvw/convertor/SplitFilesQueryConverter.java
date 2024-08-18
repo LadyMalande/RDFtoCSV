@@ -25,6 +25,7 @@ import org.jruby.RubyProcess;
 
 import java.util.*;
 
+import static com.miklosova.rdftocsvw.support.StandardModeCSVWIris.CSVW_TableGroup;
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 @Log
@@ -45,6 +46,8 @@ public class SplitFilesQueryConverter implements IQueryParser{
     String CSVFileTOWriteTo;
     String allRowsOfOutput;
     Repository db;
+
+    RepositoryConnection rc;
 
     Integer fileNumberX;
 
@@ -111,6 +114,7 @@ public class SplitFilesQueryConverter implements IQueryParser{
 
     @Override
     public PrefinishedOutput convertWithQuery(RepositoryConnection rc) {
+        this.rc = rc;
         loadConfiguration();
         changeBNodesForIri(rc);
         deleteBlankNodes(rc);
@@ -249,6 +253,11 @@ public class SplitFilesQueryConverter implements IQueryParser{
                         //System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
                         System.out.println("?subject = " + solution.getValue("s") + " added to roots");
                         //System.out.println("?subject = " + solution.getValue("s") + " is a o=" + solution.getValue("o") + " added to roots");
+                        if(solution.getValue("o").stringValue().equalsIgnoreCase(CSVW_TableGroup)){
+                            System.out.println("Table Group, engaging in StandardModeConverter in splitQueryConverter");
+                            StandardModeConverter smc = new StandardModeConverter(db);
+                            return smc.convertWithQuery(this.rc);
+                        }
                         if(!roots.contains(solution.getValue("s"))){
                             System.out.println("root " +solution.getValue("s"));
                             roots.add(solution.getValue("s"));

@@ -1,2 +1,2 @@
-TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_name,2_rownum,2_url,1_url
-0,TableGroup,1,Table,`@base` set in `@context` overriding eg CSV location,"If present, its value MUST be a string that is interpreted as a URL which is resolved against the location of the metadata document to provide the **base URL** for other URLs in the metadata document.",2,Row,3,Foo,1,row=2,action.csv
+Subjekt,name
+2,Foo

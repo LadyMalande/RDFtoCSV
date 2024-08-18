@@ -26,8 +26,15 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
     }
 
     @Override
-    public Metadata addMetadata(PrefinishedOutput<? extends Object> info) {
-        RowAndKey rnk = (RowAndKey) info.getPrefinishedOutput();
+    public Metadata addMetadata(PrefinishedOutput<?> info) {
+        RowAndKey rnk;
+        try{
+            rnk = (RowAndKey) info.getPrefinishedOutput();
+        } catch(ClassCastException ex){
+            SplitFilesMetadataCreator smc = new SplitFilesMetadataCreator(null);
+            return smc.addMetadata(info);
+        }
+
         System.out.println("getRowsAndKeys() size: " + rnk.getRows().size());
         for(Row row : rnk.getRows()) {
             System.out.println("key: " + row.type);

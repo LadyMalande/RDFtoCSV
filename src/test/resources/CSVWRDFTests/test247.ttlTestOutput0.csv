@@ -1,2 +1,2 @@
-TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_HH%3Amm%3Ass.S,2_rownum,2_url,1_url
-0,TableGroup,1,Table,date format (extra milliseconds),The supported date and time formats listed here are expressed in terms of the date field symbols defined in [UAX35] and MUST be interpreted by implementations as defined in that specification.,2,Row,3,15:02:37.143,1,row=2,test247.csv
+Subjekt,HH%3Amm%3Ass.S
+2,15:02:37.143

@@ -1,2 +1,4 @@
-TableGroup,type,table,1_type,1_row,2_type,2_describes,3_Book1,3_Book2,3_Path,2_rownum,2_url,4_type,4_describes,5_Book1,5_Book2,5_Path,4_rownum,4_url,6_type,6_describes,7_Book1,7_Book2,7_Path,6_rownum,6_url,1_url
-0,TableGroup,1,Table,"2,4,6",Row,3,1,7680,"http://dbpedia.org/ontology/language,http://dbpedia.org/resource/English_language,http://dbpedia.org/ontology/language",1,row=2,Row,5,1,2,"http://dbpedia.org/ontology/author,http://dbpedia.org/resource/Diana_Gabaldon,http://dbpedia.org/ontology/author",2,row=3,Row,7,1,2,"http://dbpedia.org/ontology/country,http://dbpedia.org/resource/United_States,http://dbpedia.org/ontology/country",3,row=4,test008.csv
+Subjekt,Book1,Book2,Path
+2,1,7680,"http://dbpedia.org/ontology/language,http://dbpedia.org/resource/English_language,http://dbpedia.org/ontology/language"
+4,1,2,"http://dbpedia.org/ontology/author,http://dbpedia.org/resource/Diana_Gabaldon,http://dbpedia.org/ontology/author"
+6,1,2,"http://dbpedia.org/ontology/country,http://dbpedia.org/resource/United_States,http://dbpedia.org/ontology/country"

@@ -1,2 +1,2 @@
-TableGroup,type,table,1_type,1_row,2_type,2_describes,test047.csv_aboutUrl,test047.csv_datatype,test047.csv_default,test047.csv_lang,test047.csv_null,test047.csv_ordered,test047.csv_propertyUrl,test047.csv_separator,test047.csv_textDirection,test047.csv_valueUrl,2_rownum,2_url,1_url
-0,TableGroup,1,Table,2,Row,test047.csv,"about,about","string,string","def,def","en,en","empty,empty","true,true","prop,prop","-,-","ltr,ltr","value,value",1,row=2,test047.csv
+Subjekt,aboutUrl,datatype,default,lang,null,ordered,propertyUrl,separator,textDirection,valueUrl
+2,about,string,def,en,empty,true,prop,-,ltr,value

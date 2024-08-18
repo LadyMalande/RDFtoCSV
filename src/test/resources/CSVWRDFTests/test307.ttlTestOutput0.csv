@@ -1,2 +1,3 @@
-TableGroup,type,table,7_type,7_label,7_comment,7_row,8_type,8_describes,about_value,0_first,0_rest,1_first,1_rest,2_first,2_rest,3_first,3_rest,4_first,4_rest,5_first,5_rest,8_rownum,8_url,9_type,9_describes,9_rownum,9_url,7_url
-6,TableGroup,7,Table,multiple values with same subject and property (ordered and unordered),Values in separate columns using the same propertyUrl are kept in proper relative order.,"8,9",Row,about,"0,3",1,1,2,2,3,nil,a,4,b,5,c,nil,1,row=2,Row,about,2,row=3,test307.csv
+Subjekt,value
+8,3
+9,3

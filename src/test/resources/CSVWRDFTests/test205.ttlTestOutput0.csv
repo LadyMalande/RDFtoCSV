@@ -1,2 +1,2 @@
-TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_maxExclusive,3_maxInclusive,3_maximum,3_minExclusive,3_minInclusive,3_minimum,2_rownum,2_url,1_url
-0,TableGroup,1,Table,float value constraint not matching minInclusive,"validate the value based on the length constraints described in section 4.6.1 Length Constraints, the value constraints described in section 4.6.2 Value Constraints and the datatype format annotation if one is specified, as described below. If there are any errors, add them to the list of errors for the cell",2,Row,3,4,5,5,6,4,5,1,row=2,test205.csv
+Subjekt,maxExclusive,maxInclusive,maximum,minExclusive,minInclusive,minimum
+2,4,5,5,6,4,5

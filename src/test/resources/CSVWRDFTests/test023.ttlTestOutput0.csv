@@ -1,2 +1,4 @@
-TableGroup,type,table,1_type,1_row,2_type,2_describes,3__col.1,3__col.2,3__col.3,3__col.4,3__col.5,2_rownum,2_url,4_type,4_describes,5__col.1,5__col.2,5__col.3,5__col.4,5__col.5,4_rownum,4_url,6_type,6_describes,7__col.1,7__col.2,7__col.3,7__col.4,7__col.5,6_rownum,6_url,1_url
-0,TableGroup,1,Table,"2,4,6",Row,3,GID,On Street,Species,Trim Cycle,Inventory Date,1,row=1,Row,5,1,ADDISON AV,Celtis australis,Large Tree Routine Prune,10/18/2010,2,row=2,Row,7,2,EMERSON ST,Liquidambar styraciflua,Large Tree Routine Prune,6/2/2010,3,row=3,tree-ops.csv
+Subjekt,_col.1,_col.2,_col.3,_col.4,_col.5
+2,GID,On Street,Species,Trim Cycle,Inventory Date
+4,1,ADDISON AV,Celtis australis,Large Tree Routine Prune,10/18/2010
+6,2,EMERSON ST,Liquidambar styraciflua,Large Tree Routine Prune,6/2/2010

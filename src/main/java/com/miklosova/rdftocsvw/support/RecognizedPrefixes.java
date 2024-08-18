@@ -1,4 +1,4 @@
-package com.miklosova.rdftocsvw.metadata_creator;
+package com.miklosova.rdftocsvw.support;
 
 import java.util.Map;
 import static java.util.Map.entry;

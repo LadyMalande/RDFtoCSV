@@ -1,0 +1,6 @@
+Subjekt,latitude,longitude,name,countryCode,countryRef,population,year
+http://example.org/countries.csv#AD,42.546245,1.601554,Andorra,AD,,,
+http://example.org/countries.csv#AE,23.424076,53.847818,United Arab Emirates,AE,,,
+https://blank_Nodes_IRI.org/0,,,,,http://example.org/countries.csv#AF,9616353,1960
+https://blank_Nodes_IRI.org/1,,,,,http://example.org/countries.csv#AF,9799379,1961
+https://blank_Nodes_IRI.org/2,,,,,http://example.org/countries.csv#AF,9989846,1962

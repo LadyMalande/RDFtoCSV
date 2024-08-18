@@ -349,7 +349,6 @@ public class TableSchema {
                 this.aboutUrl = null;
                 return null;
             }
-            IRI valueIri = (IRI) value;
             String theNameOfTheColumn;
             if (isRdfType) {
                 theNameOfTheColumn = getLastSectionOfIri(type);

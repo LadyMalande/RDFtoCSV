@@ -1,3 +1,5 @@
-Subjekt,identifier,heldBy,grade,job,reportsTo,profession,postIn
-6,,,4,Administrator,90115,Operational Delivery,hefce.ac.uk
-8,,,5,Administrator,90115,Operational Delivery,hefce.ac.uk
+Subjekt,reportsTo,grade,min_pay,max_pay,job,number_of_posts,profession,postIn
+2,90334,SCS1A,,,Deputy Chief Executive,,Finance,hefce.ac.uk
+2,,,,,,,,
+3,,SCS4,,,Chief Executive,,Policy,hefce.ac.uk
+3,,,,,,,,

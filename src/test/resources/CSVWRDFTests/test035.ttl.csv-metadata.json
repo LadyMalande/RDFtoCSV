@@ -65,7 +65,7 @@
           "columnReference" : "reportsTo"
         }
       } ],
-      "rowTitles" : [ "reportsTo", null, null, null, null, null, null, "postIn" ]
+      "rowTitles" : [ "Subjekt", "reportsTo", "grade", "min_pay", "max_pay", "job", "number_of_posts", "profession", "postIn" ]
     }
   }, {
     "@type" : "Table",
@@ -80,7 +80,7 @@
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "identifier",
+        "titles" : "Identifier",
         "name" : "identifier",
         "propertyUrl" : "http://purl.org/dc/terms/identifier",
         "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
@@ -144,8 +144,7 @@
         }
       } ],
       "primaryKey" : "Subjekt",
-      "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}",
-      "rowTitles" : [ null, "heldBy", null, null, "reportsTo", null, "postIn" ]
+      "rowTitles" : [ "Subjekt", "identifier", "heldBy", "grade", "job", "reportsTo", "profession", "postIn" ]
     }
   }, {
     "@type" : "Table",
@@ -163,45 +162,45 @@
         "titles" : "name",
         "name" : "name",
         "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
-        "aboutUrl" : "{+Subjekt}"
+        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/person/{+Subjekt}"
       }, {
         "@type" : "Column",
-        "titles" : "identifier",
+        "titles" : "Identifier",
         "name" : "identifier",
         "propertyUrl" : "http://purl.org/dc/terms/identifier",
-        "aboutUrl" : "{+Subjekt}"
+        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
       }, {
         "@type" : "Column",
         "titles" : "heldBy",
         "name" : "heldBy",
         "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
         "valueUrl" : "{+heldBy}",
-        "aboutUrl" : "{+Subjekt}"
+        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
       }, {
         "@type" : "Column",
         "titles" : "grade",
         "name" : "grade",
         "propertyUrl" : "http://example.org/gov.uk/def/grade",
-        "aboutUrl" : "{+Subjekt}"
+        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
       }, {
         "@type" : "Column",
         "titles" : "job",
         "name" : "job",
         "propertyUrl" : "http://example.org/gov.uk/def/job",
-        "aboutUrl" : "{+Subjekt}"
+        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
       }, {
         "@type" : "Column",
         "titles" : "profession",
         "name" : "profession",
         "propertyUrl" : "http://example.org/gov.uk/def/profession",
-        "aboutUrl" : "{+Subjekt}"
+        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
       }, {
         "@type" : "Column",
         "titles" : "postIn",
         "name" : "postIn",
         "propertyUrl" : "http://www.w3.org/ns/org#postIn",
         "valueUrl" : "{+postIn}",
-        "aboutUrl" : "{+Subjekt}"
+        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
       } ],
       "foreignKeys" : [ {
         "columnReference" : "heldBy",
@@ -217,8 +216,7 @@
         }
       } ],
       "primaryKey" : "Subjekt",
-      "aboutUrl" : "http://example.org/organization/hefce.ac.uk/person/{+Subjekt}",
-      "rowTitles" : [ "name", null, "heldBy", null, null, null, "postIn" ]
+      "rowTitles" : [ "Subjekt", "name", "identifier", "heldBy", "grade", "job", "profession", "postIn" ]
     }
   }, {
     "@type" : "Table",
@@ -239,8 +237,7 @@
         "aboutUrl" : "http://example.org/organization/hefce.ac.uk/person/{+Subjekt}"
       } ],
       "primaryKey" : "Subjekt",
-      "aboutUrl" : "http://example.org/organization/hefce.ac.uk/person/{+Subjekt}",
-      "rowTitles" : [ "name" ]
+      "rowTitles" : [ "Subjekt", "name" ]
     }
   } ]
 }
