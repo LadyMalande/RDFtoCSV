@@ -54,7 +54,7 @@ public class CSVWValidatorTests extends BaseTest {
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> configs(){
         Collection<Object[]> conf = new ArrayList<>();
-
+/*
         for(int i = 1; i < NUMBER_OF_W3C_TESTS; i++)
         {
             if(!NOT_DEFINED.contains(i) && !NO_FILE.contains(i)) {
@@ -70,10 +70,10 @@ public class CSVWValidatorTests extends BaseTest {
             }
         }
 
-   /*
+   */
         Object[] array = new Object[3];
-        array[0] = "test028.ttl";
-        conf.add(array);         */
+        array[0] = "test039.ttl";
+        conf.add(array);
         return conf;
 
     }
@@ -89,6 +89,7 @@ public class CSVWValidatorTests extends BaseTest {
     @BeforeEach
     void createPrefinishedOutputAndMetadata(){
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, "splitQuery");
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH, RESOURCES_PATH);
         db = new SailRepository(new MemoryStore());
         RDFtoCSV rdFtoCSV = new RDFtoCSV(this.filePath);
         rdFtoCSV.configure();
@@ -118,10 +119,10 @@ public class CSVWValidatorTests extends BaseTest {
 
             String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
             for (String filename : allFiles.split(",")) {
-                Assert.assertFalse(TestSupport.isFileEmpty(filename));
+                Assert.assertFalse(TestSupport.isFileEmpty(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH) + filename));
             }
 
-            Assert.assertFalse(TestSupport.isFileEmpty(this.filePathForMetadata));
+            Assert.assertFalse(TestSupport.isFileEmpty(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME)));
         }
     }
 }

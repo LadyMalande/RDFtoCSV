@@ -51,9 +51,14 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
 
 
             String newFileName = CSVFileTOWriteTo + fileNumberX + ".csv";
-            System.out.println("newFileName: " + newFileName);
+
             // Write the rows with respective keys to the current file
             //rowAndKey.getKeys().forEach(k -> System.out.println("Key " + k));
+        System.out.println("INTERMEDIATE_FILE_NAMES: " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES));
+            if(!ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES).isEmpty()){
+                newFileName = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+            }
+        System.out.println("newFileName: " + newFileName);
             metadata.addMetadata(newFileName, rnk.getKeys(), rnk.getRows());
             fileNumberX = fileNumberX + 1;
             allRows.add(rnk.getRows());

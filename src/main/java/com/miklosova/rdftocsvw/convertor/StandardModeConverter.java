@@ -1,10 +1,11 @@
 package com.miklosova.rdftocsvw.convertor;
 
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
-import org.eclipse.rdf4j.model.vocabulary.SKOS;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
@@ -13,15 +14,13 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepositoryConnection;
 import org.eclipse.rdf4j.sail.NotifyingSailConnection;
 import org.eclipse.rdf4j.sail.SailConnectionListener;
-import org.eclipse.rdf4j.sparqlbuilder.core.Prefix;
 import org.eclipse.rdf4j.sparqlbuilder.core.SparqlBuilder;
 import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 
 import static com.miklosova.rdftocsvw.support.StandardModeCSVWIris.*;
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
@@ -38,6 +37,7 @@ public class StandardModeConverter implements IQueryParser{
     String delimiter;
     String CSVFileTOWriteTo;
     Repository db;
+
 
     public StandardModeConverter(Repository db) {
         this.keys = new ArrayList<>();
@@ -112,6 +112,24 @@ public class StandardModeConverter implements IQueryParser{
     }
 
     private void makeTable(SailRepositoryConnection conn, Value tableIRI) {
+        TupleQuery queryForUrl = conn.prepareTupleQuery(getQueryForObjectBySubjectAndPredicate(tableIRI, CSVW_url));
+
+        try (TupleQueryResult resultForUrl = queryForUrl.evaluate()) {
+            for (BindingSet solution : resultForUrl) {
+
+                Value fileIRI = solution.getValue("o");
+                String fileName = extractFileName(fileIRI);
+                System.out.println("filename in StandardModeConverter = " + fileName);
+                String fileNamesInConfig = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+                System.out.println("fileNamesInConfig in StandardModeConverter = " + fileNamesInConfig);
+                String valueToSave = (fileNamesInConfig.isEmpty()) ? fileName : fileNamesInConfig + "," + fileName;
+                System.out.println("valueToSave in StandardModeConverter = " + valueToSave);
+                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, valueToSave);
+                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH) + fileName + "-metadata.json");
+
+            }
+        }
+
         TupleQuery query = conn.prepareTupleQuery(getQueryForObjectBySubjectAndPredicate(tableIRI, CSVW_row));
 
         ArrayList<Value> rowIRIs = new ArrayList<>();
@@ -124,7 +142,13 @@ public class StandardModeConverter implements IQueryParser{
                 
             }
         }
-        sortRowIRIsByRownums(rowIRIs);
+        Map<Value, Integer> rowNumsByRowIrisMap = buildRownumMap(conn, rowIRIs);
+        if(!rowNumsByRowIrisMap.isEmpty()){
+            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.METADATA_ROWNUMS, "true");
+        }
+        rowNumsByRowIrisMap.forEach((k,v) -> System.out.println(k.stringValue() + ": " + v));
+        //sortRowIRIsByRownums(rowIRIs, rowNumsByRowIrisMap);
+        rowIRIs.forEach(rowIri -> System.out.println("rowIri: " + rowIri + " rownum: " + getRowNum(rowIri,rowNumsByRowIrisMap)));
         for(Value rowIRI : rowIRIs) {
             TupleQuery queryForDescribes = conn.prepareTupleQuery(getQueryForObjectBySubjectAndPredicate(rowIRI, CSVW_describes));
             try (TupleQueryResult result = queryForDescribes.evaluate()) {
@@ -158,11 +182,44 @@ public class StandardModeConverter implements IQueryParser{
                                 throw new UnsupportedOperationException("BNodes should not exist in this phase");
                             }
                         }
+                        System.out.println("Newrow: " + newRow.id.stringValue() + ", type: " + newRow.type.stringValue() + " " + newRow.isRdfType);
+                        for(Map.Entry<Value, TypeIdAndValues> val :newRow.columns.entrySet()){
+                            System.out.println(val.getKey().stringValue() + ": " + val.getValue().values.get(0) + "(" + val.getValue().type.toString() + ")");
+                        }
                         rows.add(newRow);
                     }
                 }
             }
         }
+
+    }
+
+    private String extractFileName(Value fileValue) {
+        IRI fileIri = (IRI)  fileValue;
+        String namespace = fileIri.getNamespace();
+        String[] splitByDoubleSlash = fileIri.toString().split("//");
+        System.out.println("namespace:" + namespace);
+        System.out.println("splitByDoubleSlash[1]:" + splitByDoubleSlash[1]);
+        return splitByDoubleSlash[1].split("csv")[0] + "csv";
+    }
+
+    private Map<Value, Integer> buildRownumMap(SailRepositoryConnection conn, ArrayList<Value> rowIRIs ) {
+        Map<Value, Integer> map = new HashMap<>();
+
+        for(Value rowIri : rowIRIs){
+            TupleQuery queryForColumnValues = conn.prepareTupleQuery(getQueryForObjectBySubjectAndPredicate(rowIri, CSVW_rownum));
+            try (TupleQueryResult resultForColumns = queryForColumnValues.evaluate()) {
+                for (BindingSet solutionForColumns : resultForColumns) {
+
+                    Literal rownumLiteral = (Literal)solutionForColumns.getValue("o");
+                    Integer rownum = Integer.parseInt(rownumLiteral.getLabel());
+                    System.out.println("rownum " + rownumLiteral.getLabel() + " int " + rownum);
+                    map.put(rowIri, rownum);
+                }
+            }
+        }
+
+        return map;
     }
 
     private String getQueryForObjectAndPredBySubject(Value subject) {
@@ -175,10 +232,22 @@ public class StandardModeConverter implements IQueryParser{
         return selectQuery.getQueryString();
     }
 
-    private void sortRowIRIsByRownums(ArrayList<Value> rowIRIs) {
+    private static int getRowNum(Value rowIri, Map<Value, Integer> map){
+        return map.get(rowIri);
     }
 
-    private String getQueryForObjectBySubjectAndPredicate(Value s, String predicate) {
+
+
+    private void sortRowIRIsByRownums(ArrayList<Value> rowIRIs, Map<Value, Integer> map) {
+        rowIRIs.sort((v1, v2) -> compareTwoFields(v1, v2, map));
+    }
+
+    private int compareTwoFields(Value v1, Value v2, Map<Value, Integer> map) {
+        int result = Integer.compare(getRowNum(v1, map), getRowNum(v2, map));
+        return result;
+    }
+
+    private static String getQueryForObjectBySubjectAndPredicate(Value s, String predicate) {
         SelectQuery selectQuery = Queries.SELECT();
 
         Variable o = SparqlBuilder.var("o");
