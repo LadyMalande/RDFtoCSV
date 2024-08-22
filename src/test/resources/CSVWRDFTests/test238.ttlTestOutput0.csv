@@ -1,2 +1,2 @@
-TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_string,2_rownum,2_url,1_url
-0,TableGroup,1,Table,datatype value an absolute URL that does not resolve,"If the value of this property is a string, it MUST be one of the built-in datatypes defined in section 5.11.1 Built-in Datatypes or an absolute URL.",2,Row,3,foo,1,row=2,test238.csv
+Subjekt,string
+2,foo

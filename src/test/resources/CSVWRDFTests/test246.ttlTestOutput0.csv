@@ -1,2 +1,2 @@
-TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_yyyy%2DMM%2DddTHH%3Amm%3Ass.S,3_yyyy%2DMM%2DddTHH%3Amm%3Ass.SS,2_rownum,2_url,1_url
-0,TableGroup,1,Table,date format (valid dateTime combinations with formats and milliseconds),The supported date and time formats listed here are expressed in terms of the date field symbols defined in [UAX35] and MUST be interpreted by implementations as defined in that specification.,2,Row,3,2015-03-15T15:02:37.1,2015-03-15T15:02:37.14,1,row=2,test246.csv
+Subjekt,yyyy%2DMM%2DddTHH%3Amm%3Ass.S,yyyy%2DMM%2DddTHH%3Amm%3Ass.SS
+2,2015-03-15T15:02:37.1,2015-03-15T15:02:37.14

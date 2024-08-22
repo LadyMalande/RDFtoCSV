@@ -1,2 +1,5 @@
-TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_boolean,3_boolean1,2_rownum,2_url,4_type,4_describes,5_boolean,5_boolean1,4_rownum,4_url,6_type,6_describes,7_boolean,7_boolean1,6_rownum,6_url,8_type,8_describes,9_boolean,9_boolean1,8_rownum,8_url,1_url
-0,TableGroup,1,Table,boolean format (valid combinations),"If the datatype base for a cell is boolean, the datatype format annotation provides the true and false values expected, separated by `|`..","2,4,6,8",Row,3,true,true,1,row=2,Row,5,false,false,2,row=3,Row,7,true,true,3,row=4,Row,9,false,false,4,row=5,test183.csv
+Subjekt,boolean,boolean1
+2,true,true
+4,false,false
+6,true,true
+8,false,false

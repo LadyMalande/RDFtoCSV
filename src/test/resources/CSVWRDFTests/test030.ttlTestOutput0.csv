@@ -1,2 +1,4 @@
-TableGroup,type,table,1_type,1_row,2_type,2_describes,AD_latitude,AD_longitude,AD_name,AD_countryCode,2_rownum,2_url,3_type,3_describes,AE_latitude,AE_longitude,AE_name,AE_countryCode,3_rownum,3_url,4_type,4_describes,AF_latitude,AF_longitude,AF_name,AF_countryCode,4_rownum,4_url,1_url,5_type,5_row,6_type,6_describes,7_countryRef,7_population,7_year,6_rownum,6_url,8_type,8_describes,9_countryRef,9_population,9_year,8_rownum,8_url,10_type,10_describes,11_countryRef,11_population,11_year,10_rownum,10_url,5_url
-0,TableGroup,"1,5",Table,"2,3,4",Row,AD,42.546245,1.601554,Andorra,AD,1,row=2,Row,AE,23.424076,53.847818,United Arab Emirates,AE,2,row=3,Row,AF,"33.93911,33.93911,33.93911,33.93911","67.709953,67.709953,67.709953,67.709953","Afghanistan,Afghanistan,Afghanistan,Afghanistan","AF,AF,AF,AF",3,row=4,countries.csv,Table,"6,8,10",Row,7,AF,9616353,1960,1,row=2,Row,9,AF,9799379,1961,2,row=3,Row,11,AF,9989846,1962,3,row=4,country_slice.csv
+Subjekt,latitude,longitude,name,countryCode
+2,42.546245,1.601554,Andorra,AD
+3,23.424076,53.847818,United Arab Emirates,AE
+4,33.93911,67.709953,Afghanistan,AF

@@ -1,2 +1,2 @@
-TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_float,2_rownum,2_url,1_url
-0,TableGroup,1,Table,invalid float,"Implementations MUST add a validation error to the errors annotation for the cell contains an exponent, does not meet the numeric format defined above.",2,Row,3,1z,1,row=2,test182.csv
+Subjekt,float
+2,1z

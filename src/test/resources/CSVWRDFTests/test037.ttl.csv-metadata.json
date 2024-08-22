@@ -54,7 +54,7 @@
         "aboutUrl" : "http://example.org/tree-ops-ext#{+Subjekt}"
       }, {
         "@type" : "Column",
-        "titles" : "trim_cycle (null)",
+        "titles" : "trim_cycle (en)",
         "name" : "trim_cycle_en",
         "propertyUrl" : "file://tree-ops-ext.csv#trim_cycle",
         "aboutUrl" : "http://example.org/tree-ops-ext#{+Subjekt}",
@@ -65,11 +65,11 @@
         "name" : "comments",
         "propertyUrl" : "file://tree-ops-ext.csv#comments",
         "datatype" : "normalizedString",
-        "aboutUrl" : "{+Subjekt}"
+        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subjekt}",
+        "separator" : ","
       } ],
       "primaryKey" : "Subjekt",
-      "aboutUrl" : "http://example.org/tree-ops-ext#{+Subjekt}",
-      "rowTitles" : [ null, null, null, null, null, null, null, null ]
+      "rowTitles" : [ "Subjekt", "dbh", "inventory_date", "kml", "on_street", "protected", "species", "trim_cycle_en", "comments" ]
     }
   } ]
 }

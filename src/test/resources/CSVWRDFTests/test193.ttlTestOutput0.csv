@@ -1,2 +1,10 @@
-TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_dayTimeDuration,3_duration,3_yearMonthDuration,2_rownum,2_url,4_type,4_describes,5_dayTimeDuration,5_duration,5_yearMonthDuration,4_rownum,4_url,6_type,6_describes,7_dayTimeDuration,7_duration,7_yearMonthDuration,6_rownum,6_url,8_type,8_describes,9_dayTimeDuration,9_duration,9_yearMonthDuration,8_rownum,8_url,10_type,10_describes,11_dayTimeDuration,11_duration,11_yearMonthDuration,10_rownum,10_url,12_type,12_describes,13_dayTimeDuration,13_duration,13_yearMonthDuration,12_rownum,12_url,14_type,14_describes,15_dayTimeDuration,15_duration,15_yearMonthDuration,14_rownum,14_url,16_type,16_describes,17_dayTimeDuration,17_duration,17_yearMonthDuration,16_rownum,16_url,18_type,18_describes,19_dayTimeDuration,19_duration,19_yearMonthDuration,18_rownum,18_url,1_url
-0,TableGroup,1,Table,duration format (valid combinations),"If the datatype base is a duration type, the datatype format annotation provides a regular expression for the string values.","2,4,6,8,10,12,14,16,18",Row,3,P1DT2H,PT130S,P0Y20M,1,row=2,Row,5,P1DT2H3M,PT130M,P0Y20M,2,row=3,Row,7,P1DT2H3S,PT130H,P0Y20M,3,row=4,Row,9,P1DT2M,P130D,P0Y20M,4,row=5,Row,11,P1DT2S,P130M,P0Y20M,5,row=6,Row,13,P1DT2H,P130Y,P0Y20M,6,row=7,Row,15,P1DT2H,PT2M10S,P0Y20M,7,row=8,Row,17,P0DT2H,P0Y20M0D,P1Y20M,8,row=9,Row,19,-P1DT2H,-P60D,-P0Y20M,9,row=10,test193.csv
+Subjekt,dayTimeDuration,duration,yearMonthDuration
+2,P1DT2H,PT130S,P0Y20M
+4,P1DT2H3M,PT130M,P0Y20M
+6,P1DT2H3S,PT130H,P0Y20M
+8,P1DT2M,P130D,P0Y20M
+10,P1DT2S,P130M,P0Y20M
+12,P1DT2H,P130Y,P0Y20M
+14,P1DT2H,PT2M10S,P0Y20M
+16,P0DT2H,P0Y20M0D,P1Y20M
+18,-P1DT2H,-P60D,-P0Y20M

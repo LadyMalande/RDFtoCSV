@@ -112,6 +112,30 @@ public class Column {
         return lang;
     }
 
+    public void setTitles(String titles) {
+        this.titles = titles;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPropertyUrl(String propertyUrl) {
+        this.propertyUrl = propertyUrl;
+    }
+
+    public void setValueUrl(String valueUrl) {
+        this.valueUrl = valueUrl;
+    }
+
+    public void setDatatype(String datatype) {
+        this.datatype = datatype;
+    }
+
+    public void setVirtual(Boolean virtual) {
+        this.virtual = virtual;
+    }
+
     public Column(Map.Entry<Value, TypeIdAndValues> column, boolean namespaceIsTheSame) {
         //assert column != null;
         this.column = column;
@@ -201,6 +225,7 @@ public class Column {
     }
 
     private void createLang() {
+        System.out.println("Column being made in createLang " + this.column.getKey().stringValue() + " size of values " + this.column.getValue().values.size());
         Value valueFromThisColumn = this.column.getValue().values.get(0);
         if(valueFromThisColumn.isLiteral()){
             Literal literal = (Literal) valueFromThisColumn;

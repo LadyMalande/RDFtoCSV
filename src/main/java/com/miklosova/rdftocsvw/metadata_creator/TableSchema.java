@@ -70,9 +70,23 @@ public class TableSchema {
         //rows.get(0).columns.entrySet().forEach( column -> System.out.println(column.getKey()));
         this.columns = createColumns(this.rows);
         this.rowTitles = new ArrayList<>();
+        if(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.METADATA_ROWNUMS).equalsIgnoreCase("true")){
+            addRowNumsColumn();
+        }
         addRowTitles();
 
 
+    }
+
+    private void addRowNumsColumn() {
+        Column rownumsColumn = new Column(null, false);
+        rownumsColumn.setName("rowNum");
+        rownumsColumn.setTitles("Row Number");
+        rownumsColumn.setDatatype("integer");
+        rownumsColumn.setVirtual(true);
+        rownumsColumn.setValueUrl("{_row}");
+
+        this.columns.add(rownumsColumn);
     }
 
     private void addRowTitles(){
@@ -217,6 +231,7 @@ public class TableSchema {
     }
 
     private void enrichMetadataWithLangVariations(Map.Entry<Value, TypeIdAndValues> column, List<Column> listOfColumns, List<Row> rows) {
+        System.out.println("enrichMetadataWithLangVariations ");
         Map<String,Map.Entry<Value, TypeIdAndValues>> langVariations = new HashMap<>();
         Set<String> langVariationsAdded = new HashSet<>();
         List<Row> rowsWithLangVariation = rows.stream().filter(row -> row.columns.get(column.getKey()) != null).toList();
@@ -258,15 +273,16 @@ public class TableSchema {
             //TypeOfValue newType = column.getValue().type;
             TypeIdAndValues newValue = new TypeIdAndValues(newId, newType, new ArrayList<>());
             //System.out.println("langVar " + langVar);
-            newValue.values.addAll(newID.get(0).columns.get(column.getKey()).values.stream().filter(obj -> obj.toString().substring(obj.toString().length() - 2, obj.toString().length()).contains(langVar))
+            int LENGTH_OF_LANGVAR = langVar.length();
+            newValue.values.addAll(newID.get(0).columns.get(column.getKey()).values.stream().filter(obj -> obj.toString().substring(obj.toString().length() - LENGTH_OF_LANGVAR, obj.toString().length()).contains(langVar))
                     .toList());
             Map.Entry<Value, TypeIdAndValues> newEntry = new AbstractMap.SimpleEntry<Value, TypeIdAndValues>(column.getKey(), newValue);
             newValue.values.forEach(v -> System.out.println("new value from lang Variation " + langVar + " " + v));
             langVariations.put(langVar,newEntry);
 
         }
-        rowsByLangOccurance.forEach((k,v) -> System.out.println(k + ": " + v));
-        langVariations.forEach((k,v) -> System.out.println(k + ": " + v));
+        rowsByLangOccurance.forEach((k,v) -> System.out.println(k + ": " + v.id.stringValue()));
+        langVariations.forEach((k,v) -> System.out.println(k + ": " + v.getKey().stringValue() + " : " + v.getValue().values.get(0)));
         for(Map.Entry<String, Row> entry : rowsByLangOccurance.entrySet()){
             System.out.println("Adding lang variation " + langVariations.get(entry.getKey()).getValue().values + " key:" + entry.getKey() + " value:" + entry.getValue());
             boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, langVariations.get(entry.getKey()).getKey(),null);
@@ -349,7 +365,6 @@ public class TableSchema {
                 this.aboutUrl = null;
                 return null;
             }
-            IRI valueIri = (IRI) value;
             String theNameOfTheColumn;
             if (isRdfType) {
                 theNameOfTheColumn = getLastSectionOfIri(type);

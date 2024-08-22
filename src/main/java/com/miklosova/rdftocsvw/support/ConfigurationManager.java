@@ -17,7 +17,12 @@ public class ConfigurationManager {
     public static final String CONVERSION_HAS_RDF_TYPES = "conversion.hasRDFType";
     public static final String OUTPUT_FILENAME = "input.outputFileName";
     public static final String OUTPUT_METADATA_FILE_NAME = "output.metadataFileName";
+
+    public static final String OUTPUT_FILE_PATH = "output.filePath";
     public static final String CONVERSION_METHOD = "conversion.method";
+
+    public static final String METADATA_ROWNUMS = "metadata.rownums";
+
 
     /**
      * Default name for metadata file in case the metadata does not adhere to csv quivalent file name
@@ -26,7 +31,7 @@ public class ConfigurationManager {
     public static final String DEFAULT_METADATA_FILENAME = "csv-metadata.json";
 
     public static void saveVariableToConfigFile(String variableName, String value){
-        //System.out.println("new String value with encoding for variable(" + variableName + "): " + value );
+        System.out.println("new String value with encoding for variable(" + variableName + "): " + value );
         Properties prop = new Properties();
         try (FileInputStream fis = new FileInputStream(CONFIG_FILE_NAME)) {
             prop.load(new InputStreamReader(fis, Charset.forName("UTF-8")));
@@ -102,10 +107,13 @@ public class ConfigurationManager {
         //System.out.println("Set configuration of input.outputFileName to: " + prop.getProperty("input.outputFileName"));
         prop.setProperty("conversion.method", conversionMethod);
         //System.out.println("Set configuration of conversion.method to: " + prop.getProperty("conversion.method"));
+        prop.setProperty(ConfigurationManager.INTERMEDIATE_FILE_NAMES, "");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
         prop.setProperty(ConfigurationManager.OUTPUT_ZIPFILE_NAME, "compressed.zip");
         prop.setProperty(ConfigurationManager.READ_METHOD, "rdf4j");
+        prop.setProperty(ConfigurationManager.METADATA_ROWNUMS, "false");
+        prop.setProperty(ConfigurationManager.OUTPUT_FILE_PATH, "");
         if(metadataFileName == null){
             metadataFileName = DEFAULT_METADATA_FILENAME;
         }

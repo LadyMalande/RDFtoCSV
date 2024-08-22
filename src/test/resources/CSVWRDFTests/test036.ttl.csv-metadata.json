@@ -10,78 +10,56 @@
         "@type" : "Column",
         "titles" : "Subjekt",
         "name" : "Subjekt",
-        "valueUrl" : "{+Subjekt}",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
         "titles" : "dbh",
         "name" : "dbh",
         "propertyUrl" : "file://tree-ops-ext.csv#dbh",
-        "datatype" : "integer",
-        "aboutUrl" : "{+Subjekt}"
+        "datatype" : "integer"
       }, {
         "@type" : "Column",
         "titles" : "inventory_date",
         "name" : "inventory_date",
         "propertyUrl" : "file://tree-ops-ext.csv#inventory_date",
-        "datatype" : "date",
-        "aboutUrl" : "{+Subjekt}"
+        "datatype" : "date"
       }, {
         "@type" : "Column",
         "titles" : "kml",
         "name" : "kml",
         "propertyUrl" : "file://tree-ops-ext.csv#kml",
-        "datatype" : "XMLLiteral",
-        "aboutUrl" : "{+Subjekt}"
+        "datatype" : "XMLLiteral"
       }, {
         "@type" : "Column",
         "titles" : "on_street",
         "name" : "on_street",
-        "propertyUrl" : "file://tree-ops-ext.csv#on_street",
-        "aboutUrl" : "{+Subjekt}"
+        "propertyUrl" : "file://tree-ops-ext.csv#on_street"
       }, {
         "@type" : "Column",
         "titles" : "protected",
         "name" : "protected",
         "propertyUrl" : "file://tree-ops-ext.csv#protected",
-        "datatype" : "boolean",
-        "aboutUrl" : "{+Subjekt}"
+        "datatype" : "boolean"
       }, {
         "@type" : "Column",
         "titles" : "species",
         "name" : "species",
-        "propertyUrl" : "file://tree-ops-ext.csv#species",
-        "aboutUrl" : "{+Subjekt}"
+        "propertyUrl" : "file://tree-ops-ext.csv#species"
       }, {
         "@type" : "Column",
-        "titles" : "trim_cycle (null)",
+        "titles" : "trim_cycle (en)",
         "name" : "trim_cycle_en",
         "propertyUrl" : "file://tree-ops-ext.csv#trim_cycle",
-        "aboutUrl" : "{+Subjekt}",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "comments",
         "name" : "comments",
         "propertyUrl" : "file://tree-ops-ext.csv#comments",
-        "datatype" : "normalizedString",
-        "aboutUrl" : "{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "name (null)",
-        "name" : "name_en",
-        "propertyUrl" : "http://schema.org/name",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "url",
-        "name" : "url",
-        "propertyUrl" : "http://schema.org/url",
-        "valueUrl" : "{+url}"
+        "datatype" : "normalizedString"
       } ],
-      "primaryKey" : "Subjekt",
-      "aboutUrl" : "http://example.org/tree-ops-ext#{+Subjekt}",
-      "rowTitles" : [ null, null, null, null, null, null, null, null, "name_en", "url" ]
+      "rowTitles" : [ "Subjekt", "dbh", "inventory_date", "kml", "on_street", "protected", "species", "trim_cycle_en", "comments" ]
     }
   } ]
 }

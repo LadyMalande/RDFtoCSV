@@ -1,2 +1,3 @@
-TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_PK,2_rownum,2_url,4_type,4_describes,5_PK,4_rownum,4_url,1_url
-0,TableGroup,1,Table,single column primaryKey success,"As defined in [tabular-data-model], validators must check that each row has a unique combination of values of cells in the indicated columns.","2,4",Row,3,1,1,row=2,Row,5,2,2,row=3,test231.csv
+Subjekt,PK
+2,1
+4,2

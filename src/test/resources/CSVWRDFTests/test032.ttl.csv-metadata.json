@@ -8,243 +8,52 @@
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "TableGroup",
-        "name" : "TableGroup",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
         "titles" : "type",
         "name" : "type",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
+        "valueUrl" : "http://schema.org/{+type}"
       }, {
         "@type" : "Column",
-        "titles" : "table",
-        "name" : "table",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#table",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+table}"
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://schema.org/name"
       }, {
         "@type" : "Column",
-        "titles" : "1_type",
-        "name" : "type_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_1}"
-      }, {
-        "@type" : "Column",
-        "titles" : "1_url",
-        "name" : "url_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://{+url_MULTILEVEL_1}"
-      }, {
-        "@type" : "Column",
-        "titles" : "1_row",
-        "name" : "row_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#row",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+row_MULTILEVEL_1}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "2_type",
-        "name" : "type_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_2}"
-      }, {
-        "@type" : "Column",
-        "titles" : "2_rownum",
-        "name" : "rownum_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "2_url",
-        "name" : "url_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://events-listing.csv#{+url_MULTILEVEL_2}"
-      }, {
-        "@type" : "Column",
-        "titles" : "2_describes",
-        "name" : "describes_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
-        "valueUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_2}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "event-1_type",
-        "name" : "type_MULTILEVEL_event1",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://schema.org/{+type_MULTILEVEL_event1}",
-        "aboutUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_2}"
-      }, {
-        "@type" : "Column",
-        "titles" : "event-1_name",
-        "name" : "name_MULTILEVEL_event1",
-        "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_2}"
-      }, {
-        "@type" : "Column",
-        "titles" : "event-1_startDate",
-        "name" : "startDate_MULTILEVEL_event1",
+        "titles" : "startDate",
+        "name" : "startDate",
         "propertyUrl" : "http://schema.org/startDate",
-        "datatype" : "dateTime",
-        "aboutUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_2}"
+        "datatype" : "dateTime"
       }, {
         "@type" : "Column",
-        "titles" : "event-1_location",
-        "name" : "location_MULTILEVEL_event1",
+        "titles" : "location",
+        "name" : "location",
         "propertyUrl" : "http://schema.org/location",
-        "valueUrl" : "file://events-listing.csv#{+location_MULTILEVEL_event1}",
-        "aboutUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_2}"
+        "valueUrl" : "file://events-listing.csv#{+location}"
       }, {
         "@type" : "Column",
-        "titles" : "place-1_type",
-        "name" : "type_MULTILEVEL_place1",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://schema.org/{+type_MULTILEVEL_place1}",
-        "aboutUrl" : "file://events-listing.csv#{+location_MULTILEVEL_event1}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "place-1_name",
-        "name" : "name_MULTILEVEL_place1",
-        "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "file://events-listing.csv#{+location_MULTILEVEL_event1}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "place-1_address",
-        "name" : "address_MULTILEVEL_place1",
-        "propertyUrl" : "http://schema.org/address",
-        "aboutUrl" : "file://events-listing.csv#{+location_MULTILEVEL_event1}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "event-1_offers",
-        "name" : "offers_MULTILEVEL_event1",
+        "titles" : "offers",
+        "name" : "offers",
         "propertyUrl" : "http://schema.org/offers",
-        "valueUrl" : "file://events-listing.csv#{+offers_MULTILEVEL_event1}",
-        "aboutUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_2}"
+        "valueUrl" : "file://events-listing.csv#{+offers}"
       }, {
         "@type" : "Column",
-        "titles" : "offer-1_type",
-        "name" : "type_MULTILEVEL_offer1",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://schema.org/{+type_MULTILEVEL_offer1}",
-        "aboutUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_2}",
-        "separator" : ","
+        "titles" : "address",
+        "name" : "address",
+        "propertyUrl" : "http://schema.org/address"
       }, {
         "@type" : "Column",
-        "titles" : "offer-1_url",
-        "name" : "url_MULTILEVEL_offer1",
+        "titles" : "url",
+        "name" : "url",
         "propertyUrl" : "http://schema.org/url",
-        "datatype" : "anyURI",
-        "aboutUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_2}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "3_type",
-        "name" : "type_MULTILEVEL_3",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_3}"
-      }, {
-        "@type" : "Column",
-        "titles" : "3_rownum",
-        "name" : "rownum_MULTILEVEL_3",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "3_url",
-        "name" : "url_MULTILEVEL_3",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://events-listing.csv#{+url_MULTILEVEL_3}"
-      }, {
-        "@type" : "Column",
-        "titles" : "3_describes",
-        "name" : "describes_MULTILEVEL_3",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
-        "valueUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_3}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "event-2_type",
-        "name" : "type_MULTILEVEL_event2",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://schema.org/{+type_MULTILEVEL_event2}",
-        "aboutUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_3}"
-      }, {
-        "@type" : "Column",
-        "titles" : "event-2_name",
-        "name" : "name_MULTILEVEL_event2",
-        "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_3}"
-      }, {
-        "@type" : "Column",
-        "titles" : "event-2_startDate",
-        "name" : "startDate_MULTILEVEL_event2",
-        "propertyUrl" : "http://schema.org/startDate",
-        "datatype" : "dateTime",
-        "aboutUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_3}"
-      }, {
-        "@type" : "Column",
-        "titles" : "event-2_location",
-        "name" : "location_MULTILEVEL_event2",
-        "propertyUrl" : "http://schema.org/location",
-        "valueUrl" : "file://events-listing.csv#{+location_MULTILEVEL_event2}",
-        "aboutUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_3}"
-      }, {
-        "@type" : "Column",
-        "titles" : "place-2_type",
-        "name" : "type_MULTILEVEL_place2",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://schema.org/{+type_MULTILEVEL_place2}",
-        "aboutUrl" : "file://events-listing.csv#{+location_MULTILEVEL_event2}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "place-2_name",
-        "name" : "name_MULTILEVEL_place2",
-        "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "file://events-listing.csv#{+location_MULTILEVEL_event2}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "place-2_address",
-        "name" : "address_MULTILEVEL_place2",
-        "propertyUrl" : "http://schema.org/address",
-        "aboutUrl" : "file://events-listing.csv#{+location_MULTILEVEL_event2}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "event-2_offers",
-        "name" : "offers_MULTILEVEL_event2",
-        "propertyUrl" : "http://schema.org/offers",
-        "valueUrl" : "file://events-listing.csv#{+offers_MULTILEVEL_event2}",
-        "aboutUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_3}"
-      }, {
-        "@type" : "Column",
-        "titles" : "offer-2_type",
-        "name" : "type_MULTILEVEL_offer2",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://schema.org/{+type_MULTILEVEL_offer2}",
-        "aboutUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_3}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "offer-2_url",
-        "name" : "url_MULTILEVEL_offer2",
-        "propertyUrl" : "http://schema.org/url",
-        "datatype" : "anyURI",
-        "aboutUrl" : "file://events-listing.csv#{+describes_MULTILEVEL_3}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#TableGroup",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
-        "virtual" : true
+        "datatype" : "anyURI"
       } ],
-      "rowTitles" : [ "TableGroup", "type", "table", "type_MULTILEVEL_1", "url_MULTILEVEL_1", "row_MULTILEVEL_1", "type_MULTILEVEL_2", "rownum_MULTILEVEL_2", "url_MULTILEVEL_2", "describes_MULTILEVEL_2", "type_MULTILEVEL_event1", "name_MULTILEVEL_event1", "startDate_MULTILEVEL_event1", "location_MULTILEVEL_event1", "type_MULTILEVEL_place1", "name_MULTILEVEL_place1", "address_MULTILEVEL_place1", "offers_MULTILEVEL_event1", "type_MULTILEVEL_offer1", "url_MULTILEVEL_offer1", "type_MULTILEVEL_3", "rownum_MULTILEVEL_3", "url_MULTILEVEL_3", "describes_MULTILEVEL_3", "type_MULTILEVEL_event2", "name_MULTILEVEL_event2", "startDate_MULTILEVEL_event2", "location_MULTILEVEL_event2", "type_MULTILEVEL_place2", "name_MULTILEVEL_place2", "address_MULTILEVEL_place2", "offers_MULTILEVEL_event2", "type_MULTILEVEL_offer2", "url_MULTILEVEL_offer2" ]
+      "rowTitles" : [ "Subjekt", "type", "name", "startDate", "location", "offers", "address", "url" ]
     }
   } ]
 }

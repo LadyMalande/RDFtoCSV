@@ -1,4 +1,4 @@
-package com.miklosova.rdftocsvw.metadata_creator;
+package com.miklosova.rdftocsvw.support;
 
 public enum PredefinedPrefixes {
     AS("as"),

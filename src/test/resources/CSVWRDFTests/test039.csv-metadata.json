@@ -1,0 +1,86 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test039.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "COL=propertyUrl (en)",
+        "name" : "COL=propertyUrl_en",
+        "propertyUrl" : "file://test039.csv#COL=propertyUrl",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=datatype",
+        "name" : "col=datatype",
+        "propertyUrl" : "file://test039.csv#col=datatype",
+        "datatype" : "normalizedString"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=default (en)",
+        "name" : "col=default_en",
+        "propertyUrl" : "file://test039.csv#col=default",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=lang (en-US)",
+        "name" : "col=lang_en-US",
+        "propertyUrl" : "file://test039.csv#col=lang",
+        "lang" : "en-US"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=null (en)",
+        "name" : "col=null_en",
+        "propertyUrl" : "file://test039.csv#col=null",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=ordered (en)",
+        "name" : "col=ordered_en",
+        "propertyUrl" : "file://test039.csv#col=ordered",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=separator (en)",
+        "name" : "col=separator_en",
+        "propertyUrl" : "file://test039.csv#col=separator",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=textDirection (en)",
+        "name" : "col=textDirection_en",
+        "propertyUrl" : "file://test039.csv#col=textDirection",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=valueUrl",
+        "name" : "col=valueUrl",
+        "propertyUrl" : "file://test039.csv#col=valueUrl",
+        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+col=valueUrl}"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=aboutUrl (en)",
+        "name" : "col=aboutUrl_en",
+        "propertyUrl" : "file://test039.csv#col=aboutUrl",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "rowTitles" : [ "Subjekt", "COL=propertyUrl_en", "col=datatype", "col=default_en", "col=lang_en-US", "col=null_en", "col=ordered_en", "col=separator_en", "col=textDirection_en", "col=valueUrl", "col=aboutUrl_en" ]
+    }
+  } ]
+}

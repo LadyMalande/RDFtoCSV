@@ -48,9 +48,14 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
         for(RowAndKey rowAndKey : rnk.getRowsAndKeys()){
 
             String newFileName = CSVFileTOWriteTo + fileNumberX + ".csv";
-            System.out.println("newFileName: " + newFileName);
+
             // Write the rows with respective keys to the current file
             //rowAndKey.getKeys().forEach(k -> System.out.println("Key " + k));
+            System.out.println("INTERMEDIATE_FILE_NAMES: " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES));
+            if(!ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES).isEmpty()){
+                newFileName = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+            }
+            System.out.println("newFileName: " + newFileName);
             metadata.addMetadata(newFileName, rowAndKey.getKeys(), rowAndKey.getRows());
             fileNumberX = fileNumberX + 1;
             allRows.add(rowAndKey.getRows());

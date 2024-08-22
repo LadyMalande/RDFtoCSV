@@ -33,7 +33,7 @@
         "name" : "name",
         "propertyUrl" : "file://countries.csv#name"
       } ],
-      "rowTitles" : [ null, null, null, null ]
+      "rowTitles" : [ "Subjekt", "countryCode", "latitude", "longitude", "name" ]
     }
   } ]
 }

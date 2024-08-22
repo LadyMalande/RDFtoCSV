@@ -28,25 +28,6 @@
         "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
       }, {
         "@type" : "Column",
-        "titles" : "place-1_type",
-        "name" : "type_MULTILEVEL_place1",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://schema.org/{+type_MULTILEVEL_place1}",
-        "aboutUrl" : "file://events-listing.csv#{+location}"
-      }, {
-        "@type" : "Column",
-        "titles" : "place-1_address",
-        "name" : "address_MULTILEVEL_place1",
-        "propertyUrl" : "http://schema.org/address",
-        "aboutUrl" : "file://events-listing.csv#{+location}"
-      }, {
-        "@type" : "Column",
-        "titles" : "place-1_name",
-        "name" : "name_MULTILEVEL_place1",
-        "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "file://events-listing.csv#{+location}"
-      }, {
-        "@type" : "Column",
         "titles" : "name",
         "name" : "name",
         "propertyUrl" : "http://schema.org/name",
@@ -60,57 +41,10 @@
         "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
       }, {
         "@type" : "Column",
-        "titles" : "offer-1_type",
-        "name" : "type_MULTILEVEL_offer1",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://schema.org/{+type_MULTILEVEL_offer1}",
-        "aboutUrl" : "file://events-listing.csv#{+offers}"
-      }, {
-        "@type" : "Column",
-        "titles" : "offer-1_url",
-        "name" : "url_MULTILEVEL_offer1",
-        "propertyUrl" : "http://schema.org/url",
-        "datatype" : "anyURI",
-        "aboutUrl" : "file://events-listing.csv#{+offers}"
-      }, {
-        "@type" : "Column",
         "titles" : "startDate",
         "name" : "startDate",
         "propertyUrl" : "http://schema.org/startDate",
         "datatype" : "dateTime",
-        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
-      }, {
-        "@type" : "Column",
-        "titles" : "place-2_type",
-        "name" : "type_MULTILEVEL_place2",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "{+type_MULTILEVEL_place2}",
-        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
-      }, {
-        "@type" : "Column",
-        "titles" : "place-2_address",
-        "name" : "address_MULTILEVEL_place2",
-        "propertyUrl" : "http://schema.org/address",
-        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
-      }, {
-        "@type" : "Column",
-        "titles" : "place-2_name",
-        "name" : "name_MULTILEVEL_place2",
-        "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
-      }, {
-        "@type" : "Column",
-        "titles" : "offer-2_type",
-        "name" : "type_MULTILEVEL_offer2",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "{+type_MULTILEVEL_offer2}",
-        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
-      }, {
-        "@type" : "Column",
-        "titles" : "offer-2_url",
-        "name" : "url_MULTILEVEL_offer2",
-        "propertyUrl" : "http://schema.org/url",
-        "datatype" : "anyURI",
         "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
       }, {
         "@type" : "Column",
@@ -119,8 +53,96 @@
         "aboutUrl" : "file://events-listing.csv#{+MusicEvent}",
         "virtual" : true
       } ],
+      "foreignKeys" : [ {
+        "columnReference" : "offers",
+        "reference" : {
+          "resource" : "test033.ttlTestOutput1.csv",
+          "columnReference" : "Place"
+        }
+      }, {
+        "columnReference" : "offers",
+        "reference" : {
+          "resource" : "test033.ttlTestOutput2.csv",
+          "columnReference" : "Offer"
+        }
+      } ],
       "primaryKey" : "MusicEvent",
-      "rowTitles" : [ "MusicEvent", "type", "location", "type_MULTILEVEL_place1", "address_MULTILEVEL_place1", "name_MULTILEVEL_place1", "name", "offers", "type_MULTILEVEL_offer1", "url_MULTILEVEL_offer1", "startDate", "type_MULTILEVEL_place2", "address_MULTILEVEL_place2", "name_MULTILEVEL_place2", "type_MULTILEVEL_offer2", "url_MULTILEVEL_offer2" ]
+      "rowTitles" : [ "MusicEvent", "type", "location", "name", "offers", "startDate" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "test033.ttlTestOutput1.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Place",
+        "name" : "Place",
+        "valueUrl" : "file://events-listing.csv#{+Place}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "file://events-listing.csv#{+Place}"
+      }, {
+        "@type" : "Column",
+        "titles" : "address",
+        "name" : "address",
+        "propertyUrl" : "http://schema.org/address",
+        "aboutUrl" : "file://events-listing.csv#{+Place}"
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://schema.org/name",
+        "aboutUrl" : "file://events-listing.csv#{+Place}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://schema.org/Place",
+        "aboutUrl" : "file://events-listing.csv#{+Place}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Place",
+      "rowTitles" : [ "Place", "type", "address", "name" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "test033.ttlTestOutput2.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Offer",
+        "name" : "Offer",
+        "valueUrl" : "file://events-listing.csv#{+Offer}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://schema.org/{+type}",
+        "aboutUrl" : "file://events-listing.csv#{+Offer}"
+      }, {
+        "@type" : "Column",
+        "titles" : "url",
+        "name" : "url",
+        "propertyUrl" : "http://schema.org/url",
+        "datatype" : "anyURI",
+        "aboutUrl" : "file://events-listing.csv#{+Offer}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://schema.org/Offer",
+        "aboutUrl" : "file://events-listing.csv#{+Offer}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Offer",
+      "rowTitles" : [ "Offer", "type", "url" ]
     }
   } ]
 }

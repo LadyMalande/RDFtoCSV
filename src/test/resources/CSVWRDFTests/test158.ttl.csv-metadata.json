@@ -8,155 +8,36 @@
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "TableGroup",
-        "name" : "TableGroup",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type}"
-      }, {
-        "@type" : "Column",
-        "titles" : "table",
-        "name" : "table",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#table",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+table}"
-      }, {
-        "@type" : "Column",
-        "titles" : "1_type",
-        "name" : "type_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_1}"
-      }, {
-        "@type" : "Column",
-        "titles" : "1_label",
-        "name" : "label_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#label"
-      }, {
-        "@type" : "Column",
-        "titles" : "1_comment",
-        "name" : "comment_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#comment"
-      }, {
-        "@type" : "Column",
-        "titles" : "1_row",
-        "name" : "row_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#row",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+row_MULTILEVEL_1}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "2_type",
-        "name" : "type_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_2}"
-      }, {
-        "@type" : "Column",
-        "titles" : "2_describes",
-        "name" : "describes_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_2}"
-      }, {
-        "@type" : "Column",
-        "titles" : "3_decimal",
-        "name" : "decimal_MULTILEVEL_3",
+        "titles" : "decimal",
+        "name" : "decimal",
         "propertyUrl" : "file://test158.csv#decimal",
         "datatype" : "decimal"
       }, {
         "@type" : "Column",
-        "titles" : "3_decimal1",
-        "name" : "decimal1_MULTILEVEL_3",
+        "titles" : "decimal1",
+        "name" : "decimal1",
         "propertyUrl" : "file://test158.csv#decimal1",
         "datatype" : "decimal"
       }, {
         "@type" : "Column",
-        "titles" : "3_double",
-        "name" : "double_MULTILEVEL_3",
+        "titles" : "double",
+        "name" : "double",
         "propertyUrl" : "file://test158.csv#double",
         "datatype" : "double"
       }, {
         "@type" : "Column",
-        "titles" : "3_integer",
-        "name" : "integer_MULTILEVEL_3",
+        "titles" : "integer",
+        "name" : "integer",
         "propertyUrl" : "file://test158.csv#integer",
         "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "2_rownum",
-        "name" : "rownum_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "2_url",
-        "name" : "url_MULTILEVEL_2",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://test158.csv#{+url_MULTILEVEL_2}"
-      }, {
-        "@type" : "Column",
-        "titles" : "4_type",
-        "name" : "type_MULTILEVEL_4",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#{+type_MULTILEVEL_4}"
-      }, {
-        "@type" : "Column",
-        "titles" : "4_describes",
-        "name" : "describes_MULTILEVEL_4",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#describes",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+describes_MULTILEVEL_4}"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_decimal",
-        "name" : "decimal_MULTILEVEL_5",
-        "propertyUrl" : "file://test158.csv#decimal",
-        "datatype" : "decimal"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_decimal1",
-        "name" : "decimal1_MULTILEVEL_5",
-        "propertyUrl" : "file://test158.csv#decimal1",
-        "datatype" : "decimal"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_double",
-        "name" : "double_MULTILEVEL_5",
-        "propertyUrl" : "file://test158.csv#double",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "5_integer",
-        "name" : "integer_MULTILEVEL_5",
-        "propertyUrl" : "file://test158.csv#integer",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "4_rownum",
-        "name" : "rownum_MULTILEVEL_4",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#rownum",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "4_url",
-        "name" : "url_MULTILEVEL_4",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://test158.csv#{+url_MULTILEVEL_4}"
-      }, {
-        "@type" : "Column",
-        "titles" : "1_url",
-        "name" : "url_MULTILEVEL_1",
-        "propertyUrl" : "http://www.w3.org/ns/csvw#url",
-        "valueUrl" : "file://{+url_MULTILEVEL_1}"
-      }, {
-        "@type" : "Column",
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://www.w3.org/ns/csvw#TableGroup",
-        "aboutUrl" : "https://blank_Nodes_IRI.org/{+TableGroup}",
-        "virtual" : true
       } ],
-      "rowTitles" : [ "TableGroup", "type", "table", "type_MULTILEVEL_1", "label_MULTILEVEL_1", "comment_MULTILEVEL_1", "row_MULTILEVEL_1", "type_MULTILEVEL_2", "describes_MULTILEVEL_2", "decimal_MULTILEVEL_3", "decimal1_MULTILEVEL_3", "double_MULTILEVEL_3", "integer_MULTILEVEL_3", "rownum_MULTILEVEL_2", "url_MULTILEVEL_2", "type_MULTILEVEL_4", "describes_MULTILEVEL_4", "decimal_MULTILEVEL_5", "decimal1_MULTILEVEL_5", "double_MULTILEVEL_5", "integer_MULTILEVEL_5", "rownum_MULTILEVEL_4", "url_MULTILEVEL_4", "url_MULTILEVEL_1" ]
+      "rowTitles" : [ "Subjekt", "decimal", "decimal1", "double", "integer" ]
     }
   } ]
 }

@@ -86,6 +86,7 @@ public class FileWrite {
     }
 
     public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata){
+        fileName = getFullPathOfFile(fileName);
         ObjectNode originalMetadataJSON = null;
         try {
             originalMetadataJSON = JsonUtil.serializeWithContext(metadata);
@@ -228,6 +229,11 @@ public class FileWrite {
         //System.out.println("saveCSVFileFromRows end");
         return forOutput.toString();
 
+    }
+
+    private static String getFullPathOfFile(String fileName) {
+
+        return ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH) + fileName;
     }
 
     private static boolean allLanguagesAreUnique(List<Value> values) {

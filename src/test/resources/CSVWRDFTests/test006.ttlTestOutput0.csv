@@ -1,2 +1,7 @@
-TableGroup,type,table,1_type,1_row,2_type,2_describes,3_FamilyName,3_Surname,3_childName,2_rownum,2_url,4_type,4_describes,5_FamilyName,5_Surname,5_childName,4_rownum,4_url,6_type,6_describes,7_FamilyName,7_Surname,7_childName,6_rownum,6_url,8_type,8_describes,9_FamilyName,9_Surname,9_childName,8_rownum,8_url,10_type,10_describes,11_FamilyName,11_Surname,11_childName,10_rownum,10_url,12_type,12_describes,13_FamilyName,13_Surname,13_childName,12_rownum,12_url,1_url
-0,TableGroup,1,Table,"2,4,6,8,10,12",Row,3,Simpson,Homer,Bart,1,row=2,Row,5,Simpson,Homer,Lisa,2,row=3,Row,7,Simpson,Homer,Maggie,3,row=4,Row,9,Simpson,Marge,Bart,4,row=5,Row,11,Simpson,Marge,Lisa,5,row=6,Row,13,Simpson,Marge,Maggie,6,row=7,test006.csv
+Subjekt,FamilyName,Surname,childName
+2,Simpson,Homer,Bart
+4,Simpson,Homer,Lisa
+6,Simpson,Homer,Maggie
+8,Simpson,Marge,Bart
+10,Simpson,Marge,Lisa
+12,Simpson,Marge,Maggie

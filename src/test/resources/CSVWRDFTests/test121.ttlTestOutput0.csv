@@ -1,2 +1,4 @@
-TableGroup,type,label,comment,table,1_type,1_row,2_type,2_describes,3_countryCode,3_latitude,3_longitude,3_name,2_rownum,2_url,4_type,4_describes,5_countryCode,5_latitude,5_longitude,5_name,4_rownum,4_url,6_type,6_describes,7_countryCode,7_latitude,7_longitude,7_name,6_rownum,6_url,1_url
-0,TableGroup,This metadata is used,User-specified metadata does not need to reference the starting CSV,1,Table,"2,4,6",Row,3,YE,15,48,Yemen,1,row=2,Row,5,ZM,-15,30,Zambia,2,row=3,Row,7,ZW,-20,30,Zimbabwe,3,row=4,test121-ref.csv
+Subjekt,countryCode,latitude,longitude,name
+2,YE,15,48,Yemen
+4,ZM,-15,30,Zambia
+6,ZW,-20,30,Zimbabwe

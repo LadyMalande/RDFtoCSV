@@ -1,2 +1,3 @@
-TableGroup,type,table,13_type,13_label,13_comment,13_row,14_type,14_describes,about_value,0_first,0_rest,1_first,1_rest,2_first,2_rest,3_first,3_rest,4_first,4_rest,5_first,5_rest,6_first,6_rest,7_first,7_rest,8_first,8_rest,9_first,9_rest,10_first,10_rest,11_first,11_rest,14_rownum,14_url,15_type,15_describes,15_rownum,15_url,13_url
-12,TableGroup,13,Table,multiple values with same subject and property (ordered),Values in separate columns using the same propertyUrl are kept in proper relative order.,"14,15",Row,about,"0,3,6,9,0,3,6,9",1,1,2,2,3,nil,4,4,5,5,6,nil,a,7,b,8,c,nil,d,10,e,11,f,nil,1,row=2,Row,about,2,row=3,test306.csv
+Subjekt,value
+14,9
+15,9

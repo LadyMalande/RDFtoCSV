@@ -26,8 +26,15 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
     }
 
     @Override
-    public Metadata addMetadata(PrefinishedOutput<? extends Object> info) {
-        RowAndKey rnk = (RowAndKey) info.getPrefinishedOutput();
+    public Metadata addMetadata(PrefinishedOutput<?> info) {
+        RowAndKey rnk;
+        try{
+            rnk = (RowAndKey) info.getPrefinishedOutput();
+        } catch(ClassCastException ex){
+            SplitFilesMetadataCreator smc = new SplitFilesMetadataCreator(null);
+            return smc.addMetadata(info);
+        }
+
         System.out.println("getRowsAndKeys() size: " + rnk.getRows().size());
         for(Row row : rnk.getRows()) {
             System.out.println("key: " + row.type);
@@ -44,9 +51,14 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
 
 
             String newFileName = CSVFileTOWriteTo + fileNumberX + ".csv";
-            System.out.println("newFileName: " + newFileName);
+
             // Write the rows with respective keys to the current file
             //rowAndKey.getKeys().forEach(k -> System.out.println("Key " + k));
+        System.out.println("INTERMEDIATE_FILE_NAMES: " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES));
+            if(!ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES).isEmpty()){
+                newFileName = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+            }
+        System.out.println("newFileName: " + newFileName);
             metadata.addMetadata(newFileName, rnk.getKeys(), rnk.getRows());
             fileNumberX = fileNumberX + 1;
             allRows.add(rnk.getRows());

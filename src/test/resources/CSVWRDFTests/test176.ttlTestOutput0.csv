@@ -1,2 +1,2 @@
-TableGroup,type,table,1_type,1_label,1_comment,1_row,2_type,2_describes,3_positiveInteger,2_rownum,2_url,1_url
-0,TableGroup,1,Table,invalid positiveInteger,"Implementations MUST add a validation error to the errors annotation for the cell contains an exponent, does not meet the numeric format defined above.",2,Row,3,-123,1,row=2,test176.csv
+Subjekt,positiveInteger
+2,-123

@@ -46,6 +46,7 @@ public class CSVWRDFTests extends BaseTest {
     private RepositoryConnection repositoryConnection;
 
     private static final List<Integer> NOT_DEFINED =  Arrays.asList(new Integer[]{2, 3, 4,11,12,14,15,16,17,18,19,20,21,22,24,25,26,50,51,52,53,54,55,56,57,58,64,94,96,145,239,240,241,249,250,254,255,256,257,258,262,265});
+    private static final List<Integer> NO_FILE = Arrays.asList(new Integer[]{74,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,98,103,104,108,128,133,134,135,136,137,138,139,140,141,142,143,144,146,199,200,201,216,217,218,219,220,221,222,223,224,225,226,227,243,244,251,252,253,259,260,261,263,267,271,272,274});
     private static final String RESOURCES_PATH = "./src/test/resources/CSVWRDFTests/";
 
 

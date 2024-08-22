@@ -1,7 +1,5 @@
 package com.miklosova.rdftocsvw.convertor;
 
-import com.google.common.collect.Iterators;
-import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import lombok.extern.java.Log;
 import org.eclipse.rdf4j.model.*;
@@ -21,39 +19,32 @@ import org.eclipse.rdf4j.sparqlbuilder.core.query.ModifyQuery;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
-import org.jruby.RubyProcess;
 
 import java.util.*;
 
+import static com.miklosova.rdftocsvw.support.StandardModeCSVWIris.CSVW_TableGroup;
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 @Log
 public class BasicQueryConverter implements IQueryParser{
 
-    String resultCSV;
     ArrayList<Value> roots;
     ArrayList<Row> rows;
     ArrayList<Value> keys;
     ArrayList<ArrayList<Row>> allRows;
     ArrayList<ArrayList<Value>> allKeys;
-    Metadata metadata;
 
-    ArrayList<String> fileNamesCreated;
     public Map<String, Integer> mapOfPredicatesAndTheirNumbers;
     public Map<Value, Integer> mapOfTypesAndTheirNumbers;
     String delimiter;
     String CSVFileTOWriteTo;
-    String allRowsOfOutput;
     Repository db;
 
-    Integer fileNumberX;
+    RepositoryConnection rc;
 
     public BasicQueryConverter(Repository db) {
         this.keys = new ArrayList<>();
         this.db = db;
-        this.fileNumberX = 0;
-        this.fileNamesCreated = new ArrayList<>();
-        this.metadata = new Metadata();
     }
 
     public void changeBNodesForIri(RepositoryConnection rc){
@@ -109,6 +100,7 @@ public class BasicQueryConverter implements IQueryParser{
 
     @Override
     public PrefinishedOutput convertWithQuery(RepositoryConnection rc) {
+        this.rc = rc;
         loadConfiguration();
         changeBNodesForIri(rc);
         deleteBlankNodes(rc);
@@ -217,7 +209,7 @@ public class BasicQueryConverter implements IQueryParser{
     }
 
 
-    private PrefinishedOutput<RowAndKey> queryRDFModel(String queryString, boolean askForTypes) {
+    private PrefinishedOutput queryRDFModel(String queryString, boolean askForTypes) {
 
         PrefinishedOutput<RowAndKey> gen = new PrefinishedOutput<RowAndKey>(new RowAndKey.RowAndKeyFactory());
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
@@ -264,6 +256,12 @@ public class BasicQueryConverter implements IQueryParser{
                         //System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
                         //System.out.println("?subject = " + solution.getValue("s") + " added to roots");
                         System.out.println("?subject = " + solution.getValue("s") + " is a o=" + solution.getValue("o") + " added to roots");
+                        System.out.println("Table Group=" + CSVW_TableGroup);
+                        if(solution.getValue("o").stringValue().equalsIgnoreCase(CSVW_TableGroup)){
+                            System.out.println("Table Group, engaging in StandardModeConverter");
+                            StandardModeConverter smc = new StandardModeConverter(db);
+                            return smc.convertWithQuery(this.rc);
+                        }
                         if(!roots.contains(solution.getValue("s"))){
                             roots.add(solution.getValue("s"));
                             System.out.println("Root: " + solution.getValue("s"));
