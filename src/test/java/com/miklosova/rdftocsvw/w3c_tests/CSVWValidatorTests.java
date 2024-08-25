@@ -28,6 +28,9 @@ import java.util.Collection;
 import java.util.List;
 
 @RunWith(Parameterized.class)
+/**
+ * Test for data conversion from dataset https://w3c.github.io/csvw/tests/#manifest-rdf
+ */
 public class CSVWValidatorTests extends BaseTest {
     private static final CharSequence EXCEPTION_MESSAGE = "OR 'NO TRIPLES FOUND'";
     private final String READ_METHOD = "rdf4j";

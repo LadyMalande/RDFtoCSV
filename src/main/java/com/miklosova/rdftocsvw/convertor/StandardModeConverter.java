@@ -130,18 +130,9 @@ public class StandardModeConverter implements IQueryParser{
             }
         }
 
-        TupleQuery query = conn.prepareTupleQuery(getQueryForObjectBySubjectAndPredicate(tableIRI, CSVW_row));
+        // Get row IRIs to process later
+        ArrayList<Value> rowIRIs = getRowIRIs(conn, tableIRI);
 
-        ArrayList<Value> rowIRIs = new ArrayList<>();
-        
-        try (TupleQueryResult result = query.evaluate()) {
-            for (BindingSet solution : result) {
-
-                Value rowIRI = solution.getValue("o");
-                rowIRIs.add(rowIRI);
-                
-            }
-        }
         Map<Value, Integer> rowNumsByRowIrisMap = buildRownumMap(conn, rowIRIs);
         if(!rowNumsByRowIrisMap.isEmpty()){
             ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.METADATA_ROWNUMS, "true");
@@ -150,48 +141,76 @@ public class StandardModeConverter implements IQueryParser{
         //sortRowIRIsByRownums(rowIRIs, rowNumsByRowIrisMap);
         rowIRIs.forEach(rowIri -> System.out.println("rowIri: " + rowIri + " rownum: " + getRowNum(rowIri,rowNumsByRowIrisMap)));
         for(Value rowIRI : rowIRIs) {
-            TupleQuery queryForDescribes = conn.prepareTupleQuery(getQueryForObjectBySubjectAndPredicate(rowIRI, CSVW_describes));
-            try (TupleQueryResult result = queryForDescribes.evaluate()) {
-                for (BindingSet solution : result) {
-                    Value describesItemIRI = solution.getValue("o");
-                    TupleQuery queryForColumnValues = conn.prepareTupleQuery(getQueryForObjectAndPredBySubject(describesItemIRI));
-                    try (TupleQueryResult resultForColumns = queryForColumnValues.evaluate()) {
-                        Row newRow = null;
-                        boolean firstEntry = true;
-                        for (BindingSet solutionForColumns : resultForColumns) {
-                            Value columnKey = solutionForColumns.getValue("p");
-                            Value columnValue = solutionForColumns.getValue("o");
-                            if(firstEntry){
-                                System.out.println("id for Row = " + rowIRI.stringValue());
-                                newRow = new Row(rowIRI, columnKey, false);
-                                firstEntry = false;
-                            }
-                            if(!keys.contains(columnKey)){
-                                keys.add(columnKey);
-                            }
-                            ArrayList<Value> values = new ArrayList<>();
-                            values.add(columnValue);
+            addNewRow(conn, rowIRI);
+        }
+    }
 
-                            if(columnValue.isIRI()){
-                                newRow.columns.put(columnKey, new TypeIdAndValues(rowIRI, TypeOfValue.IRI, values));
+    private void addNewRow(SailRepositoryConnection conn, Value rowIRI) {
+        // Get described columns with their values
+        TupleQuery queryForDescribes = conn.prepareTupleQuery(getQueryForObjectBySubjectAndPredicate(rowIRI, CSVW_describes));
+        try (TupleQueryResult result = queryForDescribes.evaluate()) {
+            Row newRow = null;
+            Value columnKey = null;
+            newRow = new Row(rowIRI, null, false);
+            for (BindingSet solution : result) {
+                Value describesItemIRI = solution.getValue("o");
+                System.out.println("trying to find subject IRI for column/column value tuple" + describesItemIRI.stringValue());
+                TupleQuery queryForColumnValues = conn.prepareTupleQuery(getQueryForObjectAndPredBySubject(describesItemIRI));
 
-                            } else if(columnValue.isLiteral()) {
-                                newRow.columns.put(columnKey, new TypeIdAndValues(rowIRI, TypeOfValue.LITERAL, values));
+                try (TupleQueryResult resultForColumns = queryForColumnValues.evaluate()) {
 
-                            } else {
-                                throw new UnsupportedOperationException("BNodes should not exist in this phase");
-                            }
+                    boolean firstEntry = true;
+                    for (BindingSet solutionForColumns : resultForColumns) {
+                        newRow.type = solutionForColumns.getValue("p");
+                        columnKey = solutionForColumns.getValue("p");
+                        Value columnValue = solutionForColumns.getValue("o");
+                        if(firstEntry){
+                            System.out.println("id for Row = " + rowIRI.stringValue());
+
+                            firstEntry = false;
                         }
-                        System.out.println("Newrow: " + newRow.id.stringValue() + ", type: " + newRow.type.stringValue() + " " + newRow.isRdfType);
-                        for(Map.Entry<Value, TypeIdAndValues> val :newRow.columns.entrySet()){
-                            System.out.println(val.getKey().stringValue() + ": " + val.getValue().values.get(0) + "(" + val.getValue().type.toString() + ")");
+                        if(!keys.contains(columnKey)){
+                            keys.add(columnKey);
                         }
-                        rows.add(newRow);
+                        ArrayList<Value> values = new ArrayList<>();
+                        values.add(columnValue);
+
+                        if(columnValue.isIRI()){
+                            newRow.columns.put(columnKey, new TypeIdAndValues(rowIRI, TypeOfValue.IRI, values));
+
+                        } else if(columnValue.isLiteral()) {
+                            newRow.columns.put(columnKey, new TypeIdAndValues(rowIRI, TypeOfValue.LITERAL, values));
+
+                        } else {
+                            throw new UnsupportedOperationException("BNodes should not exist in this phase");
+                        }
                     }
+                    System.out.println("Newrow: " + newRow.id.stringValue() + ", type: " + newRow.type.stringValue() + " " + newRow.isRdfType);
+                    for(Map.Entry<Value, TypeIdAndValues> val :newRow.columns.entrySet()){
+                        System.out.println(val.getKey().stringValue() + ": " + val.getValue().values.get(0) + "(" + val.getValue().type.toString() + ")");
+                    }
+
                 }
+
+            }
+            rows.add(newRow);
+        }
+    }
+
+    private ArrayList<Value> getRowIRIs(SailRepositoryConnection conn, Value tableIRI) {
+        ArrayList<Value> rowIRIs = new ArrayList<>();
+        // Tuple query for finding the IRI of a row
+        TupleQuery query = conn.prepareTupleQuery(getQueryForObjectBySubjectAndPredicate(tableIRI, CSVW_row));
+
+        try (TupleQueryResult result = query.evaluate()) {
+            for (BindingSet solution : result) {
+                // Add row IRI to process later
+                Value rowIRI = solution.getValue("o");
+                rowIRIs.add(rowIRI);
+
             }
         }
-
+        return rowIRIs;
     }
 
     private String extractFileName(Value fileValue) {
@@ -234,12 +253,6 @@ public class StandardModeConverter implements IQueryParser{
 
     private static int getRowNum(Value rowIri, Map<Value, Integer> map){
         return map.get(rowIri);
-    }
-
-
-
-    private void sortRowIRIsByRownums(ArrayList<Value> rowIRIs, Map<Value, Integer> map) {
-        rowIRIs.sort((v1, v2) -> compareTwoFields(v1, v2, map));
     }
 
     private int compareTwoFields(Value v1, Value v2, Map<Value, Integer> map) {
