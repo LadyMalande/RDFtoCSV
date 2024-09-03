@@ -1,33 +1,3 @@
 
-<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dp%C4%8D>
-  a <http://www.w3.org/2004/02/skos/core#Concept>;
-  <http://www.w3.org/2004/02/skos/core#inScheme> <https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF>;
-  <http://www.w3.org/2004/02/skos/core#notation> "dpč";
-  <http://www.w3.org/2004/02/skos/core#prefLabel> "Agreement to Perform Work"@en, "Dohoda o pracovní činnosti"@cs .
-
-<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dpp> a <http://www.w3.org/2004/02/skos/core#Concept>;
-  <http://www.w3.org/2004/02/skos/core#inScheme> <https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF>;
-  <http://www.w3.org/2004/02/skos/core#notation> "dpp";
-  <http://www.w3.org/2004/02/skos/core#prefLabel> "Agreement to Complete a Job"@en,
-    "Dohoda o provedení práce"@cs .
-
-<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/pln%C3%BD-%C3%BAvazek>
-  a <http://www.w3.org/2004/02/skos/core#Concept>;
-  <http://www.w3.org/2004/02/skos/core#inScheme> <https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF>;
-  <http://www.w3.org/2004/02/skos/core#notation> "plný-úvazek";
-  <http://www.w3.org/2004/02/skos/core#prefLabel> "Full time employment"@en, "Pracovní poměr - plný úvazek"@cs .
-
-<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/zkr%C3%A1cen%C3%BD-%C3%BAvazek>
-  a <http://www.w3.org/2004/02/skos/core#Concept>;
-  <http://www.w3.org/2004/02/skos/core#inScheme> <https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF>;
-  <http://www.w3.org/2004/02/skos/core#notation> "zkrácený-úvazek";
-  <http://www.w3.org/2004/02/skos/core#prefLabel> "Part time employment"@en, "Pracovní poměr - zkrácený úvazek"@cs .
-
-<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/slu%C5%BEebn%C3%AD-pom%C4%9Br>
-  a <http://www.w3.org/2004/02/skos/core#Concept>;
-  <http://www.w3.org/2004/02/skos/core#inScheme> <https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF>;
-  <http://www.w3.org/2004/02/skos/core#notation> "služební-poměr";
-  <http://www.w3.org/2004/02/skos/core#prefLabel> "Civil service employment"@en, "Služební poměr"@cs .
-
-<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF> a <http://www.w3.org/2004/02/skos/core#ConceptScheme>;
-  <http://www.w3.org/2004/02/skos/core#prefLabel> "Employment relation types"@en, "Typy pracovních vztahů"@cs .
+<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/frag> a <http://www.w3.org/2004/02/skos/core#Concept>;
+  <http://www.w3.org/2004/02/skos/core#notation> "v" .

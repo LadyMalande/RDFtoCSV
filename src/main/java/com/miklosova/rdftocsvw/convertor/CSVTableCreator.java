@@ -4,6 +4,8 @@ import com.miklosova.rdftocsvw.input_processor.RDFAssetManager;
 import lombok.extern.java.Log;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -102,10 +104,10 @@ public class CSVTableCreator {
                     System.out.println("inside");
                     roots.add(solution.getValue("s"));
                 }
+                ValueFactory factory = SimpleValueFactory.getInstance();
                 for (Value root : roots) {
-                    Iri typeIri = iri("rdf:type");
-                    Value typeValue = (IRI) typeIri;
-                    Row newRow = new Row(root, typeValue, true);
+                    IRI typeIri = factory.createIRI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+                    Row newRow = new Row(root, typeIri, true);
                     // TODO
                     //recursiveQueryForSubjects(conn, newRow, root, null);
                     rows.add(newRow);

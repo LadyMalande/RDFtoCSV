@@ -3,6 +3,7 @@ package com.miklosova.rdftocsvw.support;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.Properties;
 
 public class ConfigurationManager {
@@ -48,6 +49,13 @@ public class ConfigurationManager {
             prop.store(pw, null);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+    }
+
+    public static void processConfigMap(Map<String,String> configMap){
+        if(configMap.containsKey("choice")){
+            saveVariableToConfigFile(CONVERSION_METHOD, configMap.get("choice"));
         }
 
     }

@@ -14,7 +14,9 @@ import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.jruby.RubyProcess;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Map;
 import java.util.zip.ZipOutputStream;
 
 public class RDFtoCSV {
@@ -49,6 +51,14 @@ public class RDFtoCSV {
         this.filePathForOutput = this.fileName + "TestOutput";
     }
 
+    public RDFtoCSV(String fileName, Map<String, String> configMap) {
+        this.fileName = fileName;
+        System.out.println("this.filename" + this.fileName);
+        this.metadataFilename = this.fileName + ".csv-metadata.json";
+        this.filePathForOutput = this.fileName + "TestOutput";
+        ConfigurationManager.processConfigMap(configMap);
+    }
+
 
     Repository db;
     MethodService methodService;
@@ -61,7 +71,7 @@ public class RDFtoCSV {
     /**
      * Default conversion method, returns zipped file
      */
-    public FinalizedOutput<ZipOutputStream> convertToZip() throws IOException {
+    public FinalizedOutput<byte[]> convertToZip() throws IOException {
         this.configure();
 
         parseInput();
@@ -83,7 +93,7 @@ public class RDFtoCSV {
 
     }
 
-    private void writeToCSV(PrefinishedOutput po, Metadata metadata) {
+    private void writeToCSV(PrefinishedOutput<?> po, Metadata metadata) {
         String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
         String[] files = allFiles.split(",");
         try {
@@ -118,25 +128,24 @@ public class RDFtoCSV {
 
         db.shutDown();
     }
-
-    private FinalizedOutput<ZipOutputStream> finalizeOutput(PrefinishedOutput po) {
+    private FinalizedOutput<byte[]> finalizeOutput(PrefinishedOutput<?> po) {
         ZipOutputProcessor zop = new ZipOutputProcessor();
         return zop.processCSVToOutput(po);
     }
 
-    public Metadata createMetadata(PrefinishedOutput po) {
+    public Metadata createMetadata(PrefinishedOutput<?> po) {
         // Convert intermediate data into basic metadata
         MetadataService ms = new MetadataService();
         return ms.createMetadata(po);
     }
 
-    private PrefinishedOutput convertData() {
+    private PrefinishedOutput<?> convertData() {
         // Convert the table to intermediate data for processing into metadata
         ConversionService cs = new ConversionService();
         return cs.convertByQuery(rc, db);
     }
 
-    public PrefinishedOutput convertData(RepositoryConnection repositoryConnection, Repository repository) {
+    public PrefinishedOutput<?> convertData(RepositoryConnection repositoryConnection, Repository repository) {
         // Convert the table to intermediate data for processing into metadata
         ConversionService cs = new ConversionService();
         return cs.convertByQuery(repositoryConnection, repository);
