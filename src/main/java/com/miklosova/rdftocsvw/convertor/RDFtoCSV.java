@@ -40,7 +40,6 @@ public class RDFtoCSV {
     public final String DEFAULT_OUTPUT_FILE_NAME = "tabularDataOutput";
 
     public final String DEFAULT_METHOD = "splitQuery";
-    public final String DEFAULT_TABLE_METHOD = "";
 
     public final String DEFAULT_READ_METHOD = "rdf4j";
 
@@ -48,14 +47,14 @@ public class RDFtoCSV {
         this.fileName = fileName;
         System.out.println("this.filename" + this.fileName);
         this.metadataFilename = this.fileName + ".csv-metadata.json";
-        this.filePathForOutput = this.fileName + "TestOutput";
+        this.filePathForOutput = this.fileName;// + "TestOutput";
     }
 
     public RDFtoCSV(String fileName, Map<String, String> configMap) {
         this.fileName = fileName;
         System.out.println("this.filename" + this.fileName);
         this.metadataFilename = this.fileName + ".csv-metadata.json";
-        this.filePathForOutput = this.fileName + "TestOutput";
+        this.filePathForOutput = this.fileName;// + "TestOutput";
         ConfigurationManager.processConfigMap(configMap);
     }
 
@@ -175,9 +174,6 @@ public class RDFtoCSV {
         String m = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD);
         method = (m != null) ? m : DEFAULT_METHOD;
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, method);
-
-        tableMethod = (tableMethod != null) ? tableMethod : DEFAULT_TABLE_METHOD;
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.TABLE_METHOD, tableMethod);
 
         readMethod = (readMethod != null) ? readMethod : DEFAULT_READ_METHOD;
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.READ_METHOD, readMethod);

@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile="lib/RDFtoCSV.jar" -DgroupId="com.miklosova.rdftocsvw" -DartifactId="RDFtoCSV" -Dversion="1.0-SNAPSHOT" -Dpackaging=jar

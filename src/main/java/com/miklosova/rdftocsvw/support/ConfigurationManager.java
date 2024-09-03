@@ -9,8 +9,8 @@ import java.util.Properties;
 public class ConfigurationManager {
 
     public static final String READ_METHOD = "converion.readMethod";
-    public static final String TABLE_METHOD = "conversion.tableMethod";
-    private static final String CONFIG_FILE_NAME = "./src/main/resources/app.config";
+    //private static final String CONFIG_FILE_NAME = "./src/main/resources/app.config";
+    private static final String CONFIG_FILE_NAME = "../app.config";
     public static final String INTERMEDIATE_FILE_NAMES = "app.filesInProgress";
     public static final String OUTPUT_ZIPFILE_NAME = "output.zipname";
 
@@ -40,7 +40,7 @@ public class ConfigurationManager {
         } catch (IOException ex) {
         }
         prop.setProperty(variableName, value);
-        //System.out.println("Set configuration of "+ variableName +" to: " + prop.getProperty(variableName));
+        System.out.println("Set configuration of "+ variableName +" to: " + prop.getProperty(variableName));
 
         //for(String fileNames : file.list()) System.out.println(fileNames);
         try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(
@@ -67,11 +67,30 @@ public class ConfigurationManager {
      */
     public static String getVariableFromConfigFile(String variableName){
         Properties prop = new Properties();
+        // Access the resource from the classpath
+          /*
+        try (InputStream configStream = ConfigurationManager.class.getClassLoader().getResourceAsStream("app.config")) {
+
+            if (configStream == null) {
+                throw new FileNotFoundException("Resource 'app.config' not found in the classpath");
+            }
+
+            prop.load(configStream);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Properties prop = new Properties();
+
+           */
         try (FileInputStream fis = new FileInputStream(CONFIG_FILE_NAME)) {
             prop.load(new InputStreamReader(fis, Charset.forName("UTF-8")));
         } catch (FileNotFoundException ex) {
         } catch (IOException ex) {
         }
+
+
         //System.out.println("Get configuration of "+ variableName +" : " + prop.getProperty(variableName));
         return prop.getProperty(variableName);
     }
@@ -83,7 +102,23 @@ public class ConfigurationManager {
      * @param args Parameters provided in command line/parameters of conversion
      */
     public static void loadSettingsFromInputToConfigFile(String[] args){
+          /*
+        Properties prop = new Properties();
+        // Access the resource from the classpath
+        try (InputStream configStream = ConfigurationManager.class.getClassLoader().getResourceAsStream("app.config")) {
+
+            if (configStream == null) {
+                throw new FileNotFoundException("Resource 'app.config' not found in the classpath");
+            }
+
+            prop.load(configStream);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+*/
         String metadataFileName = null;
+
         Properties prop = new Properties();
         try (FileInputStream fis = new FileInputStream(CONFIG_FILE_NAME)) {
             prop.load(fis);
@@ -129,9 +164,10 @@ public class ConfigurationManager {
 
 
         //for(String fileNames : file.list()) System.out.println(fileNames);
+
         try {
             PrintWriter pw = new PrintWriter(CONFIG_FILE_NAME);
-
+            System.out.println("Written to configFile " + CONFIG_FILE_NAME);
             prop.store(pw, null);
         } catch (IOException e) {
             e.printStackTrace();

@@ -3,75 +3,55 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "test039.csv",
+    "url" : "test039.csv,",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "titles" : "Concept",
+        "name" : "Concept",
+        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{+Concept}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "COL=propertyUrl (en)",
-        "name" : "COL=propertyUrl_en",
-        "propertyUrl" : "file://test039.csv#COL=propertyUrl",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/2004/02/skos/core#{+type}",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{+Concept}"
+      }, {
+        "@type" : "Column",
+        "titles" : "is in scheme",
+        "name" : "inScheme",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#inScheme",
+        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+inScheme}",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{+Concept}"
+      }, {
+        "@type" : "Column",
+        "titles" : "preferred label (cs)",
+        "name" : "prefLabel_cs",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{+Concept}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "preferred label (en)",
+        "name" : "prefLabel_en",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{+Concept}",
         "lang" : "en"
       }, {
         "@type" : "Column",
-        "titles" : "col=datatype",
-        "name" : "col=datatype",
-        "propertyUrl" : "file://test039.csv#col=datatype",
-        "datatype" : "normalizedString"
+        "titles" : "notation",
+        "name" : "notation",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#notation",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{+Concept}"
       }, {
         "@type" : "Column",
-        "titles" : "col=default (en)",
-        "name" : "col=default_en",
-        "propertyUrl" : "file://test039.csv#col=default",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=lang (en-US)",
-        "name" : "col=lang_en-US",
-        "propertyUrl" : "file://test039.csv#col=lang",
-        "lang" : "en-US"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=null (en)",
-        "name" : "col=null_en",
-        "propertyUrl" : "file://test039.csv#col=null",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=ordered (en)",
-        "name" : "col=ordered_en",
-        "propertyUrl" : "file://test039.csv#col=ordered",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=separator (en)",
-        "name" : "col=separator_en",
-        "propertyUrl" : "file://test039.csv#col=separator",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=textDirection (en)",
-        "name" : "col=textDirection_en",
-        "propertyUrl" : "file://test039.csv#col=textDirection",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=valueUrl",
-        "name" : "col=valueUrl",
-        "propertyUrl" : "file://test039.csv#col=valueUrl",
-        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+col=valueUrl}"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=aboutUrl (en)",
-        "name" : "col=aboutUrl_en",
-        "propertyUrl" : "file://test039.csv#col=aboutUrl",
-        "lang" : "en"
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/2004/02/skos/core#Concept",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{+Concept}",
+        "virtual" : true
       }, {
         "@type" : "Column",
         "titles" : "Row Number",
@@ -80,7 +60,64 @@
         "datatype" : "integer",
         "virtual" : true
       } ],
-      "rowTitles" : [ "Subjekt", "COL=propertyUrl_en", "col=datatype", "col=default_en", "col=lang_en-US", "col=null_en", "col=ordered_en", "col=separator_en", "col=textDirection_en", "col=valueUrl", "col=aboutUrl_en" ]
+      "foreignKeys" : [ {
+        "columnReference" : "inScheme",
+        "reference" : {
+          "resource" : "test039.csv,",
+          "columnReference" : "ConceptScheme"
+        }
+      } ],
+      "primaryKey" : "Concept",
+      "rowTitles" : [ "Concept", "type", "inScheme", "prefLabel_cs", "prefLabel_en", "notation" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "test039.csv,",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "ConceptScheme",
+        "name" : "ConceptScheme",
+        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+ConceptScheme}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/2004/02/skos/core#{+type}",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+ConceptScheme}"
+      }, {
+        "@type" : "Column",
+        "titles" : "preferred label (cs)",
+        "name" : "prefLabel_cs",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+ConceptScheme}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "preferred label (en)",
+        "name" : "prefLabel_en",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+ConceptScheme}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/2004/02/skos/core#ConceptScheme",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+ConceptScheme}",
+        "virtual" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "ConceptScheme",
+      "rowTitles" : [ "ConceptScheme", "type", "prefLabel_cs", "prefLabel_en" ]
     }
   } ]
 }
