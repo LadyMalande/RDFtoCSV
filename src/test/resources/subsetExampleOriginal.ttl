@@ -1,7 +1,6 @@
 @prefix ex: <http://example.org/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 ex:myThesis a <http://purl.org/dc/dcmitype/Text>;
             dcterms:creator ex:TerezaMiklóšová;
@@ -14,12 +13,9 @@ ex:myJavaDoc a <http://purl.org/dc/dcmitype/Text>;
 ex:myProject a <http://purl.org/dc/dcmitype/Software>;
              dcterms:creator ex:TerezaMiklóšová;
              dcterms:title "Generování pravidel SHACL a ShEx podle konceptuálního datového modelu"@cs, "Generating SHACL and ShEx rules based on conceptual data model"@en;
-             ex:datatypeTest  "2024-12-12"^^xsd:date.
+             ex:parts  3.
 
 ex:myProject2 a <http://purl.org/dc/dcmitype/Software>;
              dcterms:creator ex:TerezaMiklóšová;
              dcterms:title "Projekt 2"@cs, "Project Two"@en;
-             ex:datatypeTest  "2004-04-12"^^xsd:date.
-
-
-ex:myGraph a rdf:Graph .
+             ex:startDate "2024-01-12"^^xsd:date.

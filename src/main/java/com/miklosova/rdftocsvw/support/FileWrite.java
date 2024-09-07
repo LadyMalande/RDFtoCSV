@@ -17,6 +17,9 @@ import org.eclipse.rdf4j.rio.Rio;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -78,6 +81,26 @@ public class FileWrite {
 
      */
 
+    public static String getFileContent(File file) throws IOException {
+        StringBuilder content = new StringBuilder();
+
+        // Use Files.newBufferedReader for simplicity
+        try (BufferedReader reader = Files.newBufferedReader(file.toPath())) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append(System.lineSeparator());
+            }
+        }
+
+        return content.toString();
+    }
+
+
+    public static boolean isUTF8Encoded(String filePath) throws IOException {
+        byte[] fileContent = Files.readAllBytes(Paths.get(filePath));
+        String content = new String(fileContent, StandardCharsets.UTF_8);
+        return content.equals(new String(content.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+    }
     public static void writeFilesToconfigFile(ArrayList<String> fileNamesCreated) {
         System.out.println("fileNamesCreated[0]  = " + fileNamesCreated.get(0));
         StringBuilder sb = new StringBuilder();

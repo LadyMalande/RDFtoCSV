@@ -44,14 +44,14 @@ public class RDFtoCSV {
     public final String DEFAULT_READ_METHOD = "rdf4j";
 
     public RDFtoCSV(String fileName) {
-        this.fileName = fileName;
+        this.fileName = "../" + fileName;
         System.out.println("this.filename" + this.fileName);
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;// + "TestOutput";
     }
 
     public RDFtoCSV(String fileName, Map<String, String> configMap) {
-        this.fileName = fileName;
+        this.fileName = "../" + fileName;
         System.out.println("this.filename" + this.fileName);
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;// + "TestOutput";
@@ -75,7 +75,7 @@ public class RDFtoCSV {
 
         parseInput();
 
-        PrefinishedOutput po = convertData();
+        PrefinishedOutput<RowsAndKeys> po = convertData();
 
         Metadata metadata = createMetadata(po);
 
@@ -132,13 +132,13 @@ public class RDFtoCSV {
         return zop.processCSVToOutput(po);
     }
 
-    public Metadata createMetadata(PrefinishedOutput<?> po) {
+    public Metadata createMetadata(PrefinishedOutput<RowsAndKeys> po) {
         // Convert intermediate data into basic metadata
         MetadataService ms = new MetadataService();
         return ms.createMetadata(po);
     }
 
-    private PrefinishedOutput<?> convertData() {
+    private PrefinishedOutput<RowsAndKeys> convertData() {
         // Convert the table to intermediate data for processing into metadata
         ConversionService cs = new ConversionService();
         return cs.convertByQuery(rc, db);

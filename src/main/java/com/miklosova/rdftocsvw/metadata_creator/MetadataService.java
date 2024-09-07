@@ -9,7 +9,7 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
 public class MetadataService {
     private MetadataGateway metadataGateway;
 
-    public Metadata createMetadata(PrefinishedOutput po) {
+    public Metadata createMetadata(PrefinishedOutput<RowsAndKeys> po) {
 
         metadataGateway = new MetadataGateway();
         processMetadataCreation(po);
@@ -18,18 +18,30 @@ public class MetadataService {
         return metadata;
     }
 
-    private void processMetadataCreation(PrefinishedOutput data){
+    private void processMetadataCreation(PrefinishedOutput<RowsAndKeys> data) {
         String conversionChoice = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD);
 
         switch (conversionChoice) {
             case "basicQuery":
-                metadataGateway.setMetadataCreator(new BasicQueryMetadataCreator(data));
+                if (data != null && data.getPrefinishedOutput() != null) {
+                    metadataGateway.setMetadataCreator(new BasicQueryMetadataCreator((PrefinishedOutput<RowsAndKeys>) data));
+                } else {
+                    throw new IllegalArgumentException("Invalid data type for basicQuery");
+                }
                 break;
             case "splitQuery":
-                metadataGateway.setMetadataCreator(new SplitFilesMetadataCreator(data));
+                if (data != null && data.getPrefinishedOutput() != null) {
+                    metadataGateway.setMetadataCreator(new SplitFilesMetadataCreator((PrefinishedOutput<RowsAndKeys>) data));
+                } else {
+                    throw new IllegalArgumentException("Invalid data type for splitQuery");
+                }
                 break;
             case "codelistQuery":
-                metadataGateway.setMetadataCreator(new CodelistQueryMetadataCreator(data));
+                if (data != null && data.getPrefinishedOutput() != null) {
+                    metadataGateway.setMetadataCreator(new CodelistQueryMetadataCreator((PrefinishedOutput<RowsAndKeys>) data));
+                } else {
+                    throw new IllegalArgumentException("Invalid data type for codelistQuery");
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Invalid conversion method");
