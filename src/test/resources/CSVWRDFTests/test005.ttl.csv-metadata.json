@@ -1,0 +1,39 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test005.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "FamilyName",
+        "name" : "FamilyName",
+        "propertyUrl" : "file://test005.csv#FamilyName"
+      }, {
+        "@type" : "Column",
+        "titles" : "Surname",
+        "name" : "Surname",
+        "propertyUrl" : "file://test005.csv#Surname"
+      }, {
+        "@type" : "Column",
+        "titles" : "child_id",
+        "name" : "child_id",
+        "propertyUrl" : "file://test005.csv#child_id"
+      }, {
+        "@type" : "Column",
+        "titles" : "id",
+        "name" : "id",
+        "propertyUrl" : "file://test005.csv#id"
+      } ],
+      "rowTitles" : [ "Subjekt", "FamilyName", "Surname", "child_id", "id" ]
+    }
+  } ]
+}

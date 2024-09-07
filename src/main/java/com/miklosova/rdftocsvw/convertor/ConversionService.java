@@ -11,11 +11,11 @@ public class ConversionService {
     private ConversionGateway conversionGateway;
     private BinaryParser basicQuery;
 
-    public PrefinishedOutput convertByQuery(RepositoryConnection rc, Repository db) {
+    public PrefinishedOutput<RowsAndKeys> convertByQuery(RepositoryConnection rc, Repository db) {
 
         conversionGateway = new ConversionGateway();
-        processConversionType( db);
-        PrefinishedOutput convertedInput = conversionGateway.processInput(rc);
+        processConversionType(db);
+        PrefinishedOutput<RowsAndKeys> convertedInput = conversionGateway.processInput(rc);
         System.out.println("Processed file: \n" + convertedInput);
         return convertedInput;
     }

@@ -1,0 +1,61 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test282.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "%23%230",
+        "name" : "%23%230",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test282.csv#%23%230",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "%23%2C%23%23%2C%2300",
+        "name" : "%23%2C%23%23%2C%2300",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test282.csv#%23%2C%23%23%2C%2300",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "%23%2C%2300",
+        "name" : "%23%2C%2300",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test282.csv#%23%2C%2300",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "%230.%23",
+        "name" : "%230.%23",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test282.csv#%230.%23",
+        "datatype" : "decimal"
+      }, {
+        "@type" : "Column",
+        "titles" : "%230.0",
+        "name" : "%230.0",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test282.csv#%230.0",
+        "datatype" : "decimal"
+      }, {
+        "@type" : "Column",
+        "titles" : "%230.0%23",
+        "name" : "%230.0%23",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test282.csv#%230.0%23",
+        "datatype" : "decimal"
+      }, {
+        "@type" : "Column",
+        "titles" : "%230.0%23%2C%23",
+        "name" : "%230.0%23%2C%23",
+        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test282.csv#%230.0%23%2C%23",
+        "datatype" : "decimal"
+      } ],
+      "rowTitles" : [ "Subjekt", "%23%230", "%23%2C%23%23%2C%2300", "%23%2C%2300", "%230.%23", "%230.0", "%230.0%23", "%230.0%23%2C%23" ]
+    }
+  } ]
+}

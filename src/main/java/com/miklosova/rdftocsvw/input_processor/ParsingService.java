@@ -1,8 +1,12 @@
 package com.miklosova.rdftocsvw.input_processor;
 
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.*;
+import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import org.eclipse.jetty.util.IO;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFParseException;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -33,11 +37,11 @@ public class ParsingService {
     private TurtlestarParser turtlestarParser;
     private TrigstarParser trigstarParser;
 
-    public RepositoryConnection processInput(RepositoryConnection conn, File fileToRead) {
+    public RepositoryConnection processInput(RepositoryConnection conn, File fileToRead) throws RDFParseException, IOException {
         String fileName = fileToRead.getName();
         System.out.println("String fileName = fileToRead.getName();: " + fileName);
         inputGateway = new InputGateway();
-        //processURI(fileName);
+
         processExtension(fileName);
 
         conn = inputGateway.processInput(conn, fileToRead);
@@ -109,25 +113,8 @@ public class ParsingService {
             }
 
     }
-    /*
-    private boolean isURI(){
-        boolean isURI = false;
 
-        String[] URLPrefixes = {"http","https", "example"};
-        UrlValidator urlValidator = new UrlValidator(URLPrefixes);
-        if (urlValidator.isValid("http://www.example.com/gizmos")) {
-            System.out.println("URL is valid");
-        } else {
-            System.out.println("URL is invalid");
-        }
-
-
-        return isURI;
-    }
-
-     */
-
-    private void processURI(String fileName) {
+    private String processURI(String fileName) throws IOException {
         try {
             URL url = new URL(fileName);
             URLConnection conn = url.openConnection();
@@ -139,10 +126,11 @@ public class ParsingService {
             String[] splitURI = fileName.split("\\.");
             String nameForFile = splitURI[splitURI.length - 2];
             String extension = splitURI[splitURI.length - 1];
-
+            String fileNameToSave = nameForFile + "." + extension;
             // Enter filename in which you want to download
             BufferedWriter writer =
-                    new BufferedWriter(new FileWriter(nameForFile + "\\." + extension));
+                    new BufferedWriter(new FileWriter(fileNameToSave));
+
 
             // read each line from stream till end
             String line;
@@ -153,16 +141,19 @@ public class ParsingService {
             readr.close();
             writer.close();
             System.out.println("Successfully Downloaded.");
+            return fileNameToSave;
         } catch (MalformedURLException e) {
             System.out.println("URL is invalid");
-            e.printStackTrace();
+            throw e;
 
             // the URL is not in a valid form
         } catch (IOException ex) {
             System.out.println("the connection couldn't be established");
             ex.printStackTrace();
+            throw ex;
             // the connection couldn't be established
         }
+
     }
 
 

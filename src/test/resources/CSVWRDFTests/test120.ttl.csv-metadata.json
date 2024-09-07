@@ -1,0 +1,39 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test120.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "countryCode",
+        "name" : "countryCode",
+        "propertyUrl" : "file://test120.csv#countryCode"
+      }, {
+        "@type" : "Column",
+        "titles" : "latitude",
+        "name" : "latitude",
+        "propertyUrl" : "file://test120.csv#latitude"
+      }, {
+        "@type" : "Column",
+        "titles" : "longitude",
+        "name" : "longitude",
+        "propertyUrl" : "file://test120.csv#longitude"
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "file://test120.csv#name"
+      } ],
+      "rowTitles" : [ "Subjekt", "countryCode", "latitude", "longitude", "name" ]
+    }
+  } ]
+}

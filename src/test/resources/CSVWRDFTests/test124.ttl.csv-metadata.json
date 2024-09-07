@@ -1,0 +1,44 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test124.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "GID1",
+        "name" : "GID1",
+        "propertyUrl" : "file://tree-ops.csv#GID1"
+      }, {
+        "@type" : "Column",
+        "titles" : "inventory_date1",
+        "name" : "inventory_date1",
+        "propertyUrl" : "file://tree-ops.csv#inventory_date1"
+      }, {
+        "@type" : "Column",
+        "titles" : "on_street1",
+        "name" : "on_street1",
+        "propertyUrl" : "file://tree-ops.csv#on_street1"
+      }, {
+        "@type" : "Column",
+        "titles" : "species1",
+        "name" : "species1",
+        "propertyUrl" : "file://tree-ops.csv#species1"
+      }, {
+        "@type" : "Column",
+        "titles" : "trim_cycle1",
+        "name" : "trim_cycle1",
+        "propertyUrl" : "file://tree-ops.csv#trim_cycle1"
+      } ],
+      "rowTitles" : [ "Subjekt", "GID1", "inventory_date1", "on_street1", "species1", "trim_cycle1" ]
+    }
+  } ]
+}

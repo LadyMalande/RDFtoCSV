@@ -16,10 +16,12 @@ public class RdfaParser implements IRDF4JParsingMethod {
     @Override
     public RepositoryConnection processInput(RepositoryConnection conn, File fileToParse) {
         try {
+            // According to https://github.com/eclipse-rdf4j/rdf4j/issues/512 the work on RDFa parser is in progress.
+            // The RDFa format is not supported in the current version of this RDFtcCSV converter.
             InputStream inputStream = new FileInputStream(fileToParse);
 
             ParserConfig parserConfig = new ParserConfig();
-            parserConfig.set(RDFaParserSettings.RDFA_COMPATIBILITY, RDFaVersion.RDFA_1_1);
+            parserConfig.set(RDFaParserSettings.RDFA_COMPATIBILITY, RDFaVersion.RDFA_1_0);
             Model model = Rio.parse(inputStream, "", RDFFormat.RDFA,
                     parserConfig, SimpleValueFactory.getInstance(), new ParseErrorLogger());
 

@@ -1,0 +1,21 @@
+@prefix ex: <http://example.org/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+ex:myThesis a <http://purl.org/dc/dcmitype/Text>;
+            dcterms:creator ex:TerezaMiklóšová;
+            dcterms:title "Automatický převod RDF dat do CSV"@cs, "Automated transformation of RDF data to CSV"@en .
+
+ex:myJavaDoc a <http://purl.org/dc/dcmitype/Text>;
+             dcterms:creator ex:TerezaMiklóšová;
+             dcterms:title "Javadoc dokumentace pro diplomovou práci"@cs, "Javadoc documentation for thesis project"@en .
+
+ex:myProject a <http://purl.org/dc/dcmitype/Software>;
+             dcterms:creator ex:TerezaMiklóšová;
+             dcterms:title "Generování pravidel SHACL a ShEx podle konceptuálního datového modelu"@cs, "Generating SHACL and ShEx rules based on conceptual data model"@en;
+             ex:parts  3.
+
+ex:myProject2 a <http://purl.org/dc/dcmitype/Software>;
+             dcterms:creator ex:TerezaMiklóšová;
+             dcterms:title "Projekt 2"@cs, "Project Two"@en;
+             ex:startDate "2024-01-12"^^xsd:date.

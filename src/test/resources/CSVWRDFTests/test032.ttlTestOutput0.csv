@@ -1,0 +1,7 @@
+Subjekt,type,name,startDate,location,offers,address,url
+2,MusicEvent,B.B. King,2014-04-12T19:30:00,place-1,offer-1,,
+2,Place,Lupo’s Heartbreak Hotel,,,,"79 Washington St., Providence, RI",
+2,Offer,,,,,,https://www.etix.com/ticket/1771656
+3,MusicEvent,B.B. King,2014-04-13T20:00:00,place-2,offer-2,,
+3,Place,Lynn Auditorium,,,,"Lynn, MA, 01901",
+3,Offer,,,,,,http://frontgatetickets.com/venue.php?id=11766

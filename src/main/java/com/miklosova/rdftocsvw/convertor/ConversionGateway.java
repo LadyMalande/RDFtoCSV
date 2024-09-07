@@ -13,7 +13,7 @@ public class ConversionGateway {
         this.conversionMethod = conversionMethod;
     }
 
-    public PrefinishedOutput processInput(RepositoryConnection repositoryConnection) {
+    public PrefinishedOutput<RowsAndKeys> processInput(RepositoryConnection repositoryConnection) {
         return conversionMethod.convertWithQuery(repositoryConnection);
     }
 }

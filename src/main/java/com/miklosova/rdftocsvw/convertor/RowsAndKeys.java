@@ -15,7 +15,17 @@ public class RowsAndKeys {
         this.rowsAndKeys = rowsAndKeys;
     }
 
+    public void setHasRDFType(boolean hasRDFType) {
+        this.hasRDFType = hasRDFType;
+    }
+
     ArrayList<RowAndKey> rowsAndKeys;
+
+    public boolean isHasRDFType() {
+        return hasRDFType;
+    }
+
+    private boolean hasRDFType;
 
     public RowsAndKeys() {
         this.rowsAndKeys = new ArrayList<>();

@@ -1,0 +1,28 @@
+@prefix ex: <http://example.org/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+@prefix vann: <http://purl.org/vocab/vann/>.
+@prefix vs: <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
+
+@prefix wot: <http://xmlns.com/wot/0.1/>.
+
+
+ex:myThesis a <http://purl.org/dc/dcmitype/Text>;
+  dcterms:creator ex:TerezaMiklóšová;
+  dc:publisher "Tereza Miklóšová";
+  foaf:givenName "Tereza";
+  vann:usageNote "Jedna se o diplomovou praci, pouzivat v souladu s nakladanim dle zakona o diplomovych pracech.";
+  cc:Distribution "Should not be in predicate";
+  vs:moreinfo "More information here";
+  wot:encrypter ex:noPerson;
+  skos:scopeNote "Note of scope";
+  dcterms:title "Automatický převod RDF dat do CSV"@cs,"Jin7 n8yev"@cs, "Automated transformation of RDF data to CSV"@en .
+
+ex:yourThesis a <http://purl.org/dc/dcmitype/Text>;
+  dcterms:creator ex:LenkaHoráková;
+  dcterms:title "Tvoje diplomová práce"@cs,"Twoja praca magisterska"@pl .
+
+ex:myGraph a rdf:Graph .

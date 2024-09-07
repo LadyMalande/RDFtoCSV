@@ -4,6 +4,8 @@ import com.miklosova.rdftocsvw.input_processor.RDFAssetManager;
 import lombok.extern.java.Log;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -25,7 +27,6 @@ import com.miklosova.rdftocsvw.support.FileWrite;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
@@ -73,14 +74,14 @@ public class CSVTableCreator {
                 // InputStream input = CSVTableCreator.class.getResourceAsStream("/" + fileToRead)
                 File initialFile = new File(fileToRead);
                 System.out.println("initial file absolute path: " + initialFile.getAbsolutePath() + "\n initial file canonical path: " + initialFile.getCanonicalPath());
-                log.warning("initial file absolute path: " + initialFile.getAbsolutePath() + "\n initial file canonical path: " + initialFile.getCanonicalPath());
+                //log.warning("initial file absolute path: " + initialFile.getAbsolutePath() + "\n initial file canonical path: " + initialFile.getCanonicalPath());
                 InputStream targetStream = new FileInputStream(initialFile);
                 RDFAssetManager ram = new RDFAssetManager();
                 RDFFormat fileFormat = ram.load(fileToRead);
                 if (fileFormat == null)
                     throw new RuntimeException("No loader registered for file type \"." + fileToRead + "\" files");
                 // add the RDF data from the inputstream directly to our database
-                log.warning("returned file format: " + fileFormat);
+                //log.warning("returned file format: " + fileFormat);
                 conn.add(targetStream, "", fileFormat);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -103,11 +104,12 @@ public class CSVTableCreator {
                     System.out.println("inside");
                     roots.add(solution.getValue("s"));
                 }
+                ValueFactory factory = SimpleValueFactory.getInstance();
                 for (Value root : roots) {
-                    Iri typeIri = iri("rdf:type");
-                    Value typeValue = (IRI) typeIri;
-                    Row newRow = new Row(root, typeValue);
-                    recursiveQueryForSubjects(conn, newRow, root, null);
+                    IRI typeIri = factory.createIRI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+                    Row newRow = new Row(root, typeIri, true);
+                    // TODO
+                    //recursiveQueryForSubjects(conn, newRow, root, null);
                     rows.add(newRow);
 
                 }
@@ -129,6 +131,7 @@ public class CSVTableCreator {
         return allRowsOfOutput;
     }
 
+    /*
     private void recursiveQueryForSubjects(RepositoryConnection conn,Row root, Value object,String predicateOfIRI){
         String queryForSubjects = createQueryForSubjects(object);
         TupleQuery query = conn.prepareTupleQuery(queryForSubjects);
@@ -141,7 +144,6 @@ public class CSVTableCreator {
                         keys.add(solution.getValue("p"));
                     }
                 } else {
-                    /*
                     // TODO Provide sensible headers for all data in just one csv
                     String keyOfNextLevels = predicateOfIRI + "." + solution.getValue("p").toString();
                     root.map.put(keyOfNextLevels, solution.getValue("s").toString());
@@ -150,7 +152,7 @@ public class CSVTableCreator {
                         keys.add(keyOfNextLevels);
                     }
 
-                     */
+
                 }
 
                 System.out.println(solution.getValue("p").toString() + " " + solution.getValue("s").toString());
@@ -160,6 +162,7 @@ public class CSVTableCreator {
             }
         }
     }
+    */
 
     private String createQueryForSubjects(Value object) {
         SelectQuery selectQuery = Queries.SELECT();
@@ -174,11 +177,11 @@ public class CSVTableCreator {
         for(Row row : rows){
             ArrayList<Value> missingKeys = new ArrayList<>();
             for(Value key : keys){
-                if(!row.map.keySet().contains(key)){
+                if(!row.columns.keySet().contains(key)){
                     missingKeys.add(key);
                 }
             }
-            missingKeys.forEach(key -> row.map.put(key, null));
+            missingKeys.forEach(key -> row.columns.put(key, null));
         }
     }
 
@@ -217,8 +220,8 @@ public class CSVTableCreator {
             StringBuilder sb = new StringBuilder();
             sb.append(row.id).append(delimiter);
             for(Value key : keys){
-                sb.append(row.map.get(key)).append(delimiter);
-                System.out.println("in entry set " + row.map.get(key) + ".");
+                sb.append(row.columns.get(key)).append(delimiter);
+                System.out.println("in entry set " + row.columns.get(key) + ".");
 
             }
 

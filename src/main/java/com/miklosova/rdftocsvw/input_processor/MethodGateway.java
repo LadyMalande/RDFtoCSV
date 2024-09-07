@@ -5,8 +5,10 @@ import com.miklosova.rdftocsvw.input_processor.parsing_methods.IRDF4JParsingMeth
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFParseException;
 
 import java.io.File;
+import java.io.IOException;
 
 public class MethodGateway {
     private IInputParsingMethod parsingMethod;
@@ -15,7 +17,7 @@ public class MethodGateway {
         this.parsingMethod = parsingMethod;
     }
 
-    public RepositoryConnection processInput(File fileToProcess, Repository db) {
+    public RepositoryConnection processInput(File fileToProcess, Repository db) throws RDFParseException, IOException {
         return parsingMethod.processInput(fileToProcess, db);
     }
 }

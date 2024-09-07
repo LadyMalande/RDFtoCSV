@@ -1,0 +1,134 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "CSVfileToWriteTo0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Text",
+        "name" : "Text",
+        "valueUrl" : "http://example.org/{+Text}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://purl.org/dc/dcmitype/{+type}",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Creator",
+        "name" : "creator",
+        "propertyUrl" : "http://purl.org/dc/terms/creator",
+        "valueUrl" : "http://example.org/{+creator}",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Publisher",
+        "name" : "publisher",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/publisher",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Given name",
+        "name" : "givenName",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/givenName",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Usage Note",
+        "name" : "usageNote",
+        "propertyUrl" : "http://purl.org/vocab/vann/usageNote",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Distribution",
+        "name" : "Distribution",
+        "propertyUrl" : "http://creativecommons.org/ns#Distribution",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "moreinfo",
+        "name" : "moreinfo",
+        "propertyUrl" : "http://www.w3.org/2003/06/sw-vocab-status/ns#moreinfo",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Encrypted by",
+        "name" : "encrypter",
+        "propertyUrl" : "http://xmlns.com/wot/0.1/encrypter",
+        "valueUrl" : "http://example.org/{+encrypter}",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "scope note",
+        "name" : "scopeNote",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#scopeNote",
+        "aboutUrl" : "http://example.org/{+Text}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (cs)",
+        "name" : "title_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "http://example.org/{+Text}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (en)",
+        "name" : "title_en",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "http://example.org/{+Text}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (pl)",
+        "name" : "title_pl",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "http://example.org/{+Text}",
+        "lang" : "pl"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://purl.org/dc/dcmitype/Text",
+        "aboutUrl" : "http://example.org/{+Text}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Text",
+      "aboutUrl" : "http://example.org/{+Text}",
+      "rowTitles" : [ "Text", "type", "creator", "publisher", "givenName", "usageNote", "Distribution", "moreinfo", "encrypter", "scopeNote", "title_cs", "title_en", "title_pl" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "CSVfileToWriteTo1.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Graph",
+        "name" : "Graph",
+        "valueUrl" : "http://example.org/{+Graph}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+type}",
+        "aboutUrl" : "http://example.org/{+Graph}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#Graph",
+        "aboutUrl" : "http://example.org/{+Graph}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Graph",
+      "aboutUrl" : "http://example.org/{+Graph}",
+      "rowTitles" : [ "Graph", "type" ]
+    }
+  } ]
+}

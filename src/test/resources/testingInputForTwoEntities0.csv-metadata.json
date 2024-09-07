@@ -1,0 +1,70 @@
+{
+  "tables" : [ {
+    "url" : "splitQueryTest0.csv",
+    "tableSchema" : {
+      "columns" : [ {
+        "titles" : "Software",
+        "name" : "Software",
+        "valueUrl" : "http://example.org/{Software}",
+        "suppressOutput" : true
+      }, {
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://purl.org/dc/dcmitype/Software",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Software",
+      "aboutUrl" : "http://example.org/{Software}",
+      "rowTitles" : [ "Software" ]
+    }
+  }, {
+    "url" : "splitQueryTest1.csv",
+    "tableSchema" : {
+      "columns" : [ {
+        "titles" : "Graph",
+        "name" : "Graph",
+        "valueUrl" : "http://example.org/{Graph}",
+        "suppressOutput" : true
+      }, {
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#Graph",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Graph",
+      "aboutUrl" : "http://example.org/{Graph}",
+      "rowTitles" : [ "Graph" ]
+    }
+  }, {
+    "url" : "splitQueryTest2.csv",
+    "tableSchema" : {
+      "columns" : [ {
+        "titles" : "Text",
+        "name" : "Text",
+        "valueUrl" : "http://example.org/{Text}",
+        "suppressOutput" : true
+      }, {
+        "titles" : "creator",
+        "name" : "creator",
+        "propertyUrl" : "http://purl.org/dc/terms/creator",
+        "valueUrl" : "http://example.org/{creator}"
+      }, {
+        "titles" : "title (cs)",
+        "name" : "title_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "lang" : "cs"
+      }, {
+        "titles" : "title (en)",
+        "name" : "title_en",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "lang" : "en"
+      }, {
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://purl.org/dc/dcmitype/Text",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Text",
+      "aboutUrl" : "http://example.org/{Text}",
+      "rowTitles" : [ "Text", "creator", "title_cs", "title_en" ]
+    }
+  } ],
+  "@context" : "http://www.w3.org/ns/csvw"
+}

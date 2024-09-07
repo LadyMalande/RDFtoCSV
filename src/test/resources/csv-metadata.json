@@ -1,0 +1,41 @@
+{
+"@context" : "http://www.w3.org/ns/csvw",
+  "tables" : [ {
+    "url" : "splitQueryTest0.csv",
+    "tableSchema" : {
+      "columns" : [ {
+        "titles" : "Concept",
+        "name" : "Concept",
+        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{Concept}",
+        "suppressOutput" : true
+      }, {
+        "titles" : "notation",
+        "name" : "notation",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#notation"
+      }, {
+        "titles" : "inScheme",
+        "name" : "inScheme",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#inScheme",
+        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{inScheme}"
+      }, {
+        "titles" : "prefLabel (cs)",
+        "name" : "prefLabel_cs",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
+        "lang" : "cs"
+      }, {
+        "titles" : "prefLabel (en)",
+        "name" : "prefLabel_en",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
+        "lang" : "en"
+      }, {
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/2004/02/skos/core#Concept",
+        "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{Concept}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Concept",
+      "aboutUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{Concept}",
+      "rowTitles" : [ "Concept", "notation", "inScheme", "prefLabel_cs", "prefLabel_en" ]
+    }
+  } ]
+}

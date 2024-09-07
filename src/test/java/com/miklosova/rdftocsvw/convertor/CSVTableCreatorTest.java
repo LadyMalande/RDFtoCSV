@@ -38,6 +38,7 @@ public class CSVTableCreatorTest {
         Assert.assertTrue(csvFromTtl.equals(csvFromTrig));
     }
 
+    /*
     @Test
     @Disabled
     void csvIsSameHTML() {
@@ -63,6 +64,8 @@ public class CSVTableCreatorTest {
 
         Assert.assertTrue(csvFromTtl.equals(csvFromJsonld));
     }
+
+     */
 
     @Test
     void csvIsSameNq() {
@@ -111,7 +114,7 @@ public class CSVTableCreatorTest {
 
         Assert.assertNotNull(csvFromRdf);
     }
-
+/*
     @Test
     @Disabled
     void csvIsCreatedFromHTML() {
@@ -124,7 +127,7 @@ public class CSVTableCreatorTest {
 
         Assert.assertNotNull(csvFromRdf);
     }
-/*
+
     @Test
     void csvIsCreatedFrom() {
         String filePath = "src/test/resources/testingInput";

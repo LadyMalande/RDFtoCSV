@@ -1,0 +1,31 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test183.ttlTestOutput0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subjekt",
+        "name" : "Subjekt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "boolean",
+        "name" : "boolean",
+        "propertyUrl" : "file://test183.csv#boolean",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "boolean1",
+        "name" : "boolean1",
+        "propertyUrl" : "file://test183.csv#boolean1",
+        "datatype" : "boolean"
+      } ],
+      "rowTitles" : [ "Subjekt", "boolean", "boolean1" ]
+    }
+  } ]
+}
