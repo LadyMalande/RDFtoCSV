@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.input_processor;
 
 
+import com.miklosova.rdftocsvw.BaseTest;
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.HdtParser;
 import com.sun.source.doctree.SeeTree;
 import org.eclipse.rdf4j.model.Value;
@@ -28,7 +29,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class FormatsProcessingTest {
+public class FormatsProcessingTest extends BaseTest {
 
     String csvFromTtl;
     final String inputProcessingMethod = "rdf4j";
