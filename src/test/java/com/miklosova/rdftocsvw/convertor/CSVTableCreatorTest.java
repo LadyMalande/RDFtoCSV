@@ -12,7 +12,7 @@ public class CSVTableCreatorTest {
 
     @BeforeEach
     void setUp() {
-        String filePath = "src/test/resources/testingInput.ttl";
+        String filePath = "src/test/resources/differentSerializations/testingInput.ttl";
         String fileOutput = "src/test/resources/csvFileToTestSameCSV";
 
         CSVTableCreator tc = new CSVTableCreator(";", fileOutput, filePath);
@@ -25,7 +25,7 @@ public class CSVTableCreatorTest {
 
     @Test
     void csvIsSameTrig() {
-        String filePath = "src/test/resources/testingInput.trig";
+        String filePath = "src/test/resources/differentSerializations/testingInput.trig";
         String fileOutput = "src/test/resources/csvFileToTestSameCSVTrig";
 
         CSVTableCreator tc = new CSVTableCreator(";", fileOutput, filePath);
@@ -69,7 +69,7 @@ public class CSVTableCreatorTest {
 
     @Test
     void csvIsSameNq() {
-        String filePath = "src/test/resources/testingInput.nq";
+        String filePath = "src/test/resources/differentSerializations/testingInput.nq";
         String fileOutput = "src/test/resources/csvFileToTestSameCSVnq";
 
         CSVTableCreator tc = new CSVTableCreator(";", fileOutput, filePath);
@@ -81,7 +81,7 @@ public class CSVTableCreatorTest {
 
     @Test
     void csvIsSameNt() {
-        String filePath = "src/test/resources/testingInput.nt";
+        String filePath = "src/test/resources/differentSerializations/testingInput.nt";
         String fileOutput = "src/test/resources/csvFileToTestSameCSVnt";
 
         CSVTableCreator tc = new CSVTableCreator(";", fileOutput, filePath);
@@ -93,7 +93,7 @@ public class CSVTableCreatorTest {
 
     @Test
     void csvIsSameRDF() {
-        String filePath = "src/test/resources/testingInput.rdf";
+        String filePath = "src/test/resources/differentSerializations/testingInput.rdf";
         String fileOutput = "src/test/resources/csvFileToTestSameCSVrdf";
 
         CSVTableCreator tc = new CSVTableCreator(";", fileOutput, filePath);
@@ -105,7 +105,7 @@ public class CSVTableCreatorTest {
 
     @Test
     void csvIsCreatedFromTurtle() {
-        String filePath = "src/test/resources/testingInput.ttl";
+        String filePath = "src/test/resources/differentSerializations/testingInput.ttl";
         String fileOutput = "src/test/resources/csvFileToTestSameCSVttl";
 
         CSVTableCreator tc = new CSVTableCreator(";", fileOutput, filePath);

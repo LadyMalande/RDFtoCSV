@@ -7,6 +7,8 @@ import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParseException;
+import org.eclipse.rdf4j.rio.Rio;
+import org.eclipse.rdf4j.rio.nquads.NQuadsParserFactory;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -41,6 +43,13 @@ public class ParsingService {
         String fileName = fileToRead.getName();
         System.out.println("String fileName = fileToRead.getName();: " + fileName);
         inputGateway = new InputGateway();
+
+
+        if (Rio.getParserFormatForMIMEType("application/n-quads").isPresent()) {
+            System.out.println("N-Quads format is recognized.");
+        } else {
+            System.out.println("N-Quads format is not recognized.");
+        }
 
         processExtension(fileName);
 

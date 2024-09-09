@@ -40,7 +40,7 @@ public class FormatsProcessingTest extends BaseTest {
     String queryString, queryStringForTest;
     RepositoryConnection rcForTurtle;
     TupleQueryResult resultForTurtle;
-    String filePathForTurtle = "src/test/resources/testingInput.ttl";
+    String filePathForTurtle = "src/test/resources/differentSerializations/testingInput.ttl";
     Set<Value> valuesFromTurtle;
     Set<Value> valuesFromTest;
 
@@ -77,7 +77,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        String filePath = "src/test/resources/testingInput.ttl";
+        String filePath = "src/test/resources/differentSerializations/testingInput.ttl";
         String fileOutput = "src/test/resources/csvFileToTestSameCSV";
         ms = new MethodService();
         db = new SailRepository(new MemoryStore());
@@ -116,7 +116,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void valuesInConnectionAreSameTrig() throws IOException {
-        String filePath = "src/test/resources/testingInput.trig";
+        String filePath = "src/test/resources/differentSerializations/testingInput.trig";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -132,7 +132,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForNquad() throws IOException {
-        String filePath = "src/test/resources/testingInput.nq";
+        String filePath = "src/test/resources/differentSerializations/testingInput.nq";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -147,7 +147,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForJsonLd() throws IOException {
-        String filePath = "src/test/resources/testingInput.jsonld";
+        String filePath = "src/test/resources/differentSerializations/testingInput.jsonld";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -159,7 +159,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForNTriples() throws IOException {
-        String filePath = "src/test/resources/testingInput.nt";
+        String filePath = "src/test/resources/differentSerializations/testingInput.nt";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -174,7 +174,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForTurtle() throws IOException {
-        String filePath = "src/test/resources/testingInput.ttl";
+        String filePath = "src/test/resources/differentSerializations/testingInput.ttl";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -189,7 +189,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForBrf() throws IOException {
-        String filePath = "src/test/resources/testingInput.brf";
+        String filePath = "src/test/resources/differentSerializations/testingInput.brf";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -204,7 +204,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForNdjsonld() throws IOException {
-        String filePath = "src/test/resources/testingInput.ndjsonld";
+        String filePath = "src/test/resources/differentSerializations/testingInput.ndjsonld";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -215,9 +215,10 @@ public class FormatsProcessingTest extends BaseTest {
     }
 
     // HDT format writer/reader is not implemented in RDF4J due to licencing issues.
+    @Disabled
     @Test
     void repositoryConnectionIsEstablishedForHdt() throws IOException {
-        String filePath = "src/test/resources/testingInput.hdt";
+        String filePath = "src/test/resources/differentSerializations/testingInput.hdt";
 /*
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -236,7 +237,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForN3() throws IOException {
-        String filePath = "src/test/resources/testingInput.n3";
+        String filePath = "src/test/resources/differentSerializations/testingInput.n3";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -248,7 +249,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForJsonl() throws IOException {
-        String filePath = "src/test/resources/testingInput.jsonl";
+        String filePath = "src/test/resources/differentSerializations/testingInput.jsonl";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -260,7 +261,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForNdjson() throws IOException {
-        String filePath = "src/test/resources/testingInput.ndjson";
+        String filePath = "src/test/resources/differentSerializations/testingInput.ndjson";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -272,7 +273,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForXhtml() throws IOException {
-        String filePath = "src/test/resources/testingInput.xhtml";
+        String filePath = "src/test/resources/differentSerializations/testingInput.xhtml";
         // As of 2nd July 2024, the parser for RDFa does not work in rdf4j according to https://github.com/eclipse-rdf4j/rdf4j/issues/512
         // Default test is therefore set to throw exception while parsing the file
 
@@ -283,7 +284,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForRj() throws IOException {
-        String filePath = "src/test/resources/testingInput.rj";
+        String filePath = "src/test/resources/differentSerializations/testingInput.rj";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -295,7 +296,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForRdfs() throws IOException {
-        String filePath = "src/test/resources/testingInput.rdfs";
+        String filePath = "src/test/resources/differentSerializations/testingInput.rdfs";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -307,7 +308,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForOwl() throws IOException {
-        String filePath = "src/test/resources/testingInput.owl";
+        String filePath = "src/test/resources/differentSerializations/testingInput.owl";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -319,7 +320,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForXml() throws IOException {
-        String filePath = "src/test/resources/testingInput.xml";
+        String filePath = "src/test/resources/differentSerializations/testingInput.xml";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -331,7 +332,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForTrigs() throws IOException {
-        String filePath = "src/test/resources/testingInput.trigs";
+        String filePath = "src/test/resources/differentSerializations/testingInput.trigs";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -343,7 +344,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForTrix() throws IOException {
-        String filePath = "src/test/resources/testingInput.trix";
+        String filePath = "src/test/resources/differentSerializations/testingInput.trix";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
@@ -355,7 +356,7 @@ public class FormatsProcessingTest extends BaseTest {
 
     @Test
     void repositoryConnectionIsEstablishedForTtls() throws IOException {
-        String filePath = "src/test/resources/testingInput.ttls";
+        String filePath = "src/test/resources/differentSerializations/testingInput.ttls";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
