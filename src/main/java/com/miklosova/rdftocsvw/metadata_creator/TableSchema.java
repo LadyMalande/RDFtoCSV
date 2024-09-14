@@ -65,7 +65,7 @@ public class TableSchema {
         // TODO process the IRIs
         // This only works for the tables that have different types of entities
 
-        this.primaryKey = createAboutUrl(this.keys.get(0));
+        //this.primaryKey = createAboutUrl(this.keys.get(0));
         //System.out.println("columns");
         //rows.get(0).columns.entrySet().forEach( column -> System.out.println(column.getKey()));
         this.columns = createColumns(this.rows);
@@ -137,7 +137,9 @@ public class TableSchema {
     private List<Column> createColumns(List<Row> rows) {
         List<Column> listOfColumns = new ArrayList<>();
        // if(Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))) {
-            listOfColumns.add(createIdColumnWithType());
+        Column firstColumn = createIdColumnWithType();
+        this.primaryKey = firstColumn.getName();
+        listOfColumns.add(firstColumn);
         List<Map.Entry<Value, TypeIdAndValues>> columns = getColumnsFromRows();
 
 
@@ -149,7 +151,7 @@ public class TableSchema {
                 System.out.println("isNamespaceTheSameForAllRows " + namespaceIsTheSame + " for column " + column.getKey());
                 boolean subjectNamespaceIsTheSame = isNamespaceTheSameForAllSubjects(rows, column.getKey(), null);
                 System.out.println("isNamespaceTheSameForAllSubjects " + subjectNamespaceIsTheSame + " for column " + column.getKey());
-                newColumn.createColumn(rows.get(0), subjectNamespaceIsTheSame);
+                newColumn.createColumn(rows.get(0), subjectNamespaceIsTheSame, this.rows);
                 if (newColumn.getLang() != null) {
                     System.out.println("Column lang not null " + newColumn.getLang());
                     enrichMetadataWithLangVariations(column, listOfColumns, rows);
@@ -182,6 +184,7 @@ public class TableSchema {
                     return false;
                 }
             } else{
+                // TODO not true - the NON empty values can still be with the same namespace
                 return false;
             }
         } else {
@@ -288,7 +291,7 @@ public class TableSchema {
             boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, langVariations.get(entry.getKey()).getKey(),null);
 
             Column newColumn = new Column(langVariations.get(entry.getKey()), namespaceIsTheSame);
-            newColumn.createColumn(entry.getValue(), isNamespaceTheSameForAllSubjects(rows,langVariations.get(entry.getKey()).getKey(),null));
+            newColumn.createColumn(entry.getValue(), isNamespaceTheSameForAllSubjects(rows,langVariations.get(entry.getKey()).getKey(),null), this.rows);
 
             listOfColumns.add(newColumn);
         }
@@ -315,7 +318,8 @@ public class TableSchema {
         Row row = new Row(null, true);
         row.columns = new HashMap<>();
         Column newColumn = new Column( null, namespaceIsTheSame);
-        newColumn.addVirtualTypeColumn(type, value, id);
+        boolean isTypetheSame = isTypeTheSameForAllPrimary(rows);
+        newColumn.addVirtualTypeColumn(type, value, id, isTypetheSame);
         return newColumn;
     }
 
@@ -325,8 +329,31 @@ public class TableSchema {
         boolean isRdfType = rows.get(0).isRdfType;
         boolean namespaceIsTheSame = isNamespaceTheSameForAllPrimary(rows);
         Column newColumn = new Column(null, namespaceIsTheSame);
-        newColumn.addFirstColumn(type, value, isRdfType, namespaceIsTheSame);
+        boolean typeIsTheSame = isTypeTheSameForAllPrimary(rows);
+        newColumn.addFirstColumn(type, value, isRdfType, namespaceIsTheSame, typeIsTheSame);
         return newColumn;
+    }
+
+    public static boolean isTypeTheSameForAllPrimary(List<Row> rows) {
+        List<Row> nonnulls = rows.stream().filter(row -> row.type != null).toList();
+        // Some rows do not have type - the type is therefore not the same for all of them
+        if(nonnulls.size() != rows.size()){
+            return false;
+        }
+        System.out.println("Deciding whether this type is the same for all rows : " + nonnulls.get(0).type.stringValue());
+
+        Value type = nonnulls.get(0).type;
+
+        return nonnulls.stream().allMatch(row -> {
+
+                    System.out.println("type=" + type + " id="
+                            + row.id
+                            + " equals? " + row.type.equals(type));
+
+
+                    return row.type.equals(type);
+                }
+        );
     }
 
     public static boolean isNamespaceTheSameForAllSubjects(List<Row> rows, Value type, String lang) {

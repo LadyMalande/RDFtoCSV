@@ -13,6 +13,7 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 @SuppressWarnings("SpellCheckingInspection")
@@ -148,7 +149,7 @@ public class Column {
 
     }
 
-    public void createColumn(Row row, boolean isSubjectTheSame) {
+    public void createColumn(Row row, boolean isSubjectTheSame, List<Row> rows) {
         if(this.column != null) {
 
             createLang();
@@ -157,7 +158,7 @@ public class Column {
             this.titles = createTitles();
             createValueUrl();
             createDatatype();
-            createAboutUrl(row, isSubjectTheSame);
+            createAboutUrl(row, isSubjectTheSame, rows);
             createSuppressOutput();
         }
 
@@ -167,12 +168,13 @@ public class Column {
 
     }
 
-    private void createAboutUrl(Row row, boolean isSubjectTheSame) {
+    private void createAboutUrl(Row row, boolean isSubjectTheSame, List<Row> rows) {
         boolean isRdfType = row.isRdfType;
         TypeOfValue type = column.getValue().type;
         Value id = column.getValue().id;
         Value value = column.getValue().values.get(0);
-
+        boolean isTypetheSame = TableSchema.isTypeTheSameForAllPrimary(rows);
+        IRI typeIri = (IRI) rows.get(0).type;
         Value valueForAboutUrlPattern = row.type;
 
         if(this.name.contains("_MULTILEVEL_")){
@@ -204,17 +206,18 @@ public class Column {
                 this.aboutUrl = null;
             } else {
                 if (isSubjectTheSame) {
-                    if (isRdfType) {
+                    if (isRdfType && isTypetheSame) {
                         // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                        this.aboutUrl = idIRI.getNamespace() + "{+" + createSafeName(((IRI) valueForAboutUrlPattern).getLocalName()) + "}";
+                        //this.aboutUrl = idIRI.getNamespace() + "{+" + createSafeName(((IRI) valueForAboutUrlPattern).getLocalName()) + "}";
+                        this.aboutUrl = idIRI.getNamespace() + "{+" + typeIri.getLocalName() + "}";
                     } else {
                         // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
                         this.aboutUrl = idIRI.getNamespace() + "{+" + "Subjekt" + "}";
                     }
                 } else {
-                    if (isRdfType) {
+                    if (isRdfType && isTypetheSame) {
                         // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                        this.aboutUrl = "{+" + createSafeName(((IRI) valueForAboutUrlPattern).getLocalName()) + "}";
+                        this.aboutUrl = "{+" + typeIri.getLocalName() + "}";
                     } else {
                         // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
                         this.aboutUrl = "{+" + "Subjekt" + "}";
@@ -343,7 +346,7 @@ public class Column {
             try {
                 this.titles = dereferencer.getTitle();
             } catch (NullPointerException noElement){
-
+                this.titles = propertyUrlIRI.getLocalName();
             }
         }
         if(valueFromThisColumn.isLiteral()){
@@ -371,13 +374,14 @@ public class Column {
         return suppressOutput;
     }
 
-    public void addFirstColumn(Value type, Value value, boolean isRdfType, boolean isNamespaceTheSame) {
+    public void addFirstColumn(Value type, Value value, boolean isRdfType, boolean isNamespaceTheSame, boolean typeIsTheSame) {
         //System.out.println("addFirstColumn is typeIri string value " + typeIri.stringValue());
-        if(isRdfType){
+        if(isRdfType && typeIsTheSame){
             IRI typeIri = (IRI) type;
 
             //System.out.println("CONVERSION_HAS_RDF_TYPES is " + true);
-            this.titles = typeIri.getLocalName();
+            Dereferencer d = new Dereferencer(typeIri.toString());
+            this.titles = d.getTitle();
             this.name = typeIri.getLocalName();
 
         } else{
@@ -403,7 +407,7 @@ public class Column {
 
     }
 
-    public void addVirtualTypeColumn(Value type, Value value, Value id){
+    public void addVirtualTypeColumn(Value type, Value value, Value id, boolean isTypeTheSame){
         this.virtual = true;
         this.propertyUrl = "rdf:type";
         if(isNamespaceTheSame){
@@ -411,7 +415,10 @@ public class Column {
         } else{
             this.aboutUrl = "{+" + ((IRI)type).getLocalName() + "}";
         }
-
-        this.valueUrl = type.toString();
+        if(isTypeTheSame){
+            this.valueUrl = type.stringValue();
+        } else{
+            this.valueUrl = "{+type}";
+        }
     }
 }
