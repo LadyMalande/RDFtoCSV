@@ -1,4 +1,5 @@
 package com.miklosova.rdftocsvw.support;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -39,7 +40,7 @@ public class JsonUtil {
 
     }
 
-    public static void writeJsonToFile(ObjectNode resultNode){
+    public static void writeJsonToFile(ObjectNode resultNode) {
         // Serialize the final object to a JSON string
 
         String metadataFilename = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
@@ -51,7 +52,7 @@ public class JsonUtil {
         }
     }
 
-    public static String serializeAndWriteToFile(Object obj){
+    public static String serializeAndWriteToFile(Object obj) {
         ObjectNode resultNode = null;
         try {
             resultNode = serializeWithContext(obj);
@@ -59,6 +60,21 @@ public class JsonUtil {
             e.printStackTrace();
         }
         writeJsonToFile(resultNode);
+        try {
+            return mapper.writeValueAsString(resultNode);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String serializeAndReturnPrettyString(Object obj) {
+        ObjectNode resultNode = null;
+        try {
+            resultNode = serializeWithContext(obj);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         try {
             return mapper.writeValueAsString(resultNode);
         } catch (JsonProcessingException e) {

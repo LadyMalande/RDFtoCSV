@@ -1,9 +1,12 @@
 package com.miklosova.rdftocsvw.convertor;
 
-import org.eclipse.rdf4j.model.*;
+import com.miklosova.rdftocsvw.support.FileWrite;
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.base.InternedIRI;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
-import com.miklosova.rdftocsvw.support.FileWrite;
 
 import java.io.File;
 import java.util.HashSet;
@@ -20,12 +23,12 @@ public class RDFParser {
         columnIndex = 0;
     }
 
-    public void printModelByRows(){
+    public void printModelByRows() {
         Set<Resource> subjects = new HashSet<>();
         System.out.print("The model is: \n");
         //model.forEach(System.out::println);
         System.out.println(model.getNamespace("skos"));
-        for(Statement statement: model){
+        for (Statement statement : model) {
             subjects.add(statement.getSubject());
         }
         System.out.println(subjects);
@@ -35,11 +38,11 @@ public class RDFParser {
         System.out.println(RDF.TYPE.getLocalName());
         System.out.println(RDF.TYPE);
         int numberOfFile = 1;
-        for(Value type : types){
+        for (Value type : types) {
             //Vocabularies.createIRI("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "type");
             String[] namespaceLocal = type.stringValue().split("#");
             InternedIRI typeIRI = new InternedIRI(namespaceLocal[0] + "#", namespaceLocal[1]);
-            System.out.println("Type " + typeIRI.stringValue()  + " is IRI? " + typeIRI.isIRI());
+            System.out.println("Type " + typeIRI.stringValue() + " is IRI? " + typeIRI.isIRI());
 
 
             Set<Resource> resourcesByType = model.filter(null, RDF.TYPE, typeIRI).subjects();
@@ -54,12 +57,12 @@ public class RDFParser {
         }
     }
 
-    private void linkSubjectsToOtherSubjects(){
+    private void linkSubjectsToOtherSubjects() {
         Set<Resource> resourcesInObject = model.filter(null, RDF.TYPE, null).subjects();
-        for(Resource r : resourcesInObject){
+        for (Resource r : resourcesInObject) {
             Set<Resource> linked = model.filter(null, null, r).subjects();
             System.out.println("Linked to " + r.stringValue() + " are :" + linked);
-            if(linked.size() > 0){
+            if (linked.size() > 0) {
                 // link it to the row of the resource it is linked to
                 linkTheResourceInObjectToSubject(linked, r);
                 System.out.println("We are linking " + linked.toString() + " to " + r.toString());
@@ -68,7 +71,7 @@ public class RDFParser {
     }
 
     private void linkTheResourceInObjectToSubject(Set<Resource> list, Resource addColumn) {
-        for(int i = 0; i < list.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
             //outputCSV.getTable()[0][i] =
         }
 

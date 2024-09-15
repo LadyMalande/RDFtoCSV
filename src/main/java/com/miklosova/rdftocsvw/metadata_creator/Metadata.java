@@ -29,11 +29,11 @@ import java.util.Map;
 
 /**
  * Conforming to the must have annotations for the Group of tables:
- *  https://www.w3.org/TR/2015/REC-tabular-data-model-20151217/#dfn-group-of-tables
- *  https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#table-groups - specifying only tables as REQUIRED PROPERTIES
- *  "notes" annotation is left out as it is not mandatory and may depend heavily on the inside knowledge of the data tables at hand.
- *
- *  "@context": "http://www.w3.org/ns/csvw" included on basis of: https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#top-level-properties
+ * https://www.w3.org/TR/2015/REC-tabular-data-model-20151217/#dfn-group-of-tables
+ * https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#table-groups - specifying only tables as REQUIRED PROPERTIES
+ * "notes" annotation is left out as it is not mandatory and may depend heavily on the inside knowledge of the data tables at hand.
+ * <p>
+ * "@context": "http://www.w3.org/ns/csvw" included on basis of: https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#top-level-properties
  */
 @JsonldType("TableGroup")
 public class Metadata {
@@ -48,7 +48,7 @@ public class Metadata {
 
     private static final ObjectMapper SORTED_MAPPER = new ObjectMapper();
 
-    public String jsonldMetadata(){
+    public String jsonldMetadata() {
         ObjectMapper objectMapper = new ObjectMapper();
         SORTED_MAPPER.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         SORTED_MAPPER.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, false);
@@ -98,7 +98,7 @@ public class Metadata {
     }
 
     public void addForeignKeys(ArrayList<ArrayList<Row>> allRows) {
-        for(ArrayList<Row> rows : allRows){
+        for (ArrayList<Row> rows : allRows) {
             Value id = rows.get(0).id;
             Value type = rows.get(0).type;
             System.out.println("Type in addForeignKeys: " + type.stringValue());
@@ -106,59 +106,59 @@ public class Metadata {
             try {
                 IRI typeIri = (IRI) type;
                 typeLocalName = typeIri.getLocalName();
-            } catch(ClassCastException ex){
+            } catch (ClassCastException ex) {
                 // The type is literal
                 Literal literal = (Literal) type;
                 typeLocalName = type.stringValue();
             }
             String foreignKeyFile = null;
-            for(Table fileUrlDescriptor : tables){
+            for (Table fileUrlDescriptor : tables) {
                 String finalTypeLocalName = typeLocalName;
-                if(fileUrlDescriptor.getTableSchema().getColumns().stream().anyMatch(column -> {
-                    if(column.getName() != null){
+                if (fileUrlDescriptor.getTableSchema().getColumns().stream().anyMatch(column -> {
+                    if (column.getName() != null) {
                         //System.out.println("Foreign key match? column.getName=" + column.getName() + " typeLocalName=" + typeLocalName);
                         //System.out.println("Foreign key match? equals?=" + column.getName().equals(typeLocalName));
                         return column.getName().equals(finalTypeLocalName);
-                    } else{
+                    } else {
                         return false;
                     }
 
-                })){
+                })) {
                     foreignKeyFile = fileUrlDescriptor.getUrl();
                 }
             }
             Value columnKeyValue = null;
-            for(ArrayList<Row> rows2 : allRows){
-                for(Row row : rows2){
-                    for(Map.Entry<Value, TypeIdAndValues> entry : row.columns.entrySet()){
-                        if(entry.getValue().values.contains(id)){
+            for (ArrayList<Row> rows2 : allRows) {
+                for (Row row : rows2) {
+                    for (Map.Entry<Value, TypeIdAndValues> entry : row.columns.entrySet()) {
+                        if (entry.getValue().values.contains(id)) {
                             columnKeyValue = entry.getKey();
                         }
                     }
                 }
             }
-            if(columnKeyValue != null){
+            if (columnKeyValue != null) {
                 TableSchema outcomingTableSchema;
                 // FIND the file in which the id is and the file in which the columnKeyValue is
-                for(Table fileDescriptor : tables){
+                for (Table fileDescriptor : tables) {
                     Value finalColumnKeyValue = columnKeyValue;
-                    if(fileDescriptor.getTableSchema().getColumns().stream().anyMatch(column -> {
-                        if(column.getPropertyUrl() != null){
+                    if (fileDescriptor.getTableSchema().getColumns().stream().anyMatch(column -> {
+                        if (column.getPropertyUrl() != null) {
                             return column.getPropertyUrl().equals(finalColumnKeyValue.toString());
-                        } else{
+                        } else {
                             return false;
                         }
 
-                    })){
+                    })) {
                         outcomingTableSchema = fileDescriptor.getTableSchema();
-                        IRI iri = (IRI)finalColumnKeyValue;
+                        IRI iri = (IRI) finalColumnKeyValue;
                         String columnName = iri.getLocalName();
-                        if(outcomingTableSchema.getForeignKeys() == null){
-                            List<ForeignKey> fk =  new ArrayList<>();
+                        if (outcomingTableSchema.getForeignKeys() == null) {
+                            List<ForeignKey> fk = new ArrayList<>();
                             fk.add(new ForeignKey(columnName, new Reference(foreignKeyFile, typeLocalName)));
                             outcomingTableSchema.setForeignKeys(fk);
-                        } else{
-                            List<ForeignKey> fk =  outcomingTableSchema.getForeignKeys();
+                        } else {
+                            List<ForeignKey> fk = outcomingTableSchema.getForeignKeys();
                             fk.add(new ForeignKey(columnName, new Reference(foreignKeyFile, typeLocalName)));
                             outcomingTableSchema.setForeignKeys(fk);
                         }

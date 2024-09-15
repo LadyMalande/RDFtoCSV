@@ -16,6 +16,7 @@ import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 @SuppressWarnings("SpellCheckingInspection")
 @JsonldType("Column")
 public class Column {
@@ -64,9 +65,9 @@ public class Column {
      * Record for column that is not displayed in the .csv but has significance for the meaning of data.
      * Namely useful for denoting the rdf:type of all the rows in one file.
      * {
-     *   "virtual": true,
-     *   "propertyUrl": "rdf:type",
-     *   "valueUrl": "schema:Country"
+     * "virtual": true,
+     * "propertyUrl": "rdf:type",
+     * "valueUrl": "schema:Country"
      * }
      */
     private Boolean virtual;
@@ -141,7 +142,7 @@ public class Column {
         //assert column != null;
         this.column = column;
         this.isNamespaceTheSame = namespaceIsTheSame;
-        if(column != null){
+        if (column != null) {
             this.originalColumnKey = column.getKey();
 
             System.out.println("original column key = " + originalColumnKey);
@@ -150,7 +151,7 @@ public class Column {
     }
 
     public void createColumn(Row row, boolean isSubjectTheSame, List<Row> rows) {
-        if(this.column != null) {
+        if (this.column != null) {
 
             createLang();
             createName();
@@ -177,14 +178,14 @@ public class Column {
         IRI typeIri = (IRI) rows.get(0).type;
         Value valueForAboutUrlPattern = row.type;
 
-        if(this.name.contains("_MULTILEVEL_")){
+        if (this.name.contains("_MULTILEVEL_")) {
             System.out.println("making different aboutUrl for _MULTILEVEL_ column ");
             // Regex pattern
             String regex = id.stringValue();
             System.out.println("regex = " + regex);
 
             for (Map.Entry<Value, TypeIdAndValues> entry : row.columns.entrySet()) {
-                for(Value valueFromMap : entry.getValue().values) {
+                for (Value valueFromMap : entry.getValue().values) {
                     System.out.println("Matching value = " + valueFromMap + " with regex ");
                     if (valueFromMap.stringValue().matches(regex)) {
                         System.out.println("Found matching value: " + valueFromMap.stringValue());
@@ -197,11 +198,11 @@ public class Column {
         }
 
 
-        if(id.isBNode()){
+        if (id.isBNode()) {
             this.aboutUrl = null;
         } else {
             IRI idIRI = (IRI) column.getValue().id;
-            if(idIRI.stringValue().startsWith("https://blank_Nodes_IRI")){
+            if (idIRI.stringValue().startsWith("https://blank_Nodes_IRI")) {
                 // Subject is a blank node, put no aboutUrl
                 this.aboutUrl = null;
             } else {
@@ -230,7 +231,7 @@ public class Column {
     private void createLang() {
         System.out.println("Column being made in createLang " + this.column.getKey().stringValue() + " size of values " + this.column.getValue().values.size());
         Value valueFromThisColumn = this.column.getValue().values.get(0);
-        if(valueFromThisColumn.isLiteral()){
+        if (valueFromThisColumn.isLiteral()) {
             Literal literal = (Literal) valueFromThisColumn;
             Optional<String> languageTag = literal.getLanguage();
             languageTag.ifPresent(s -> this.lang = s);
@@ -239,7 +240,7 @@ public class Column {
 
     private void createDatatype() {
         Value valueFromThisColumn = this.column.getValue().values.get(0);
-        if(valueFromThisColumn.isLiteral()){
+        if (valueFromThisColumn.isLiteral()) {
             Literal literal = (Literal) valueFromThisColumn;
             IRI datatype = literal.getDatatype();
             String localname = datatype.getLocalName();
@@ -252,18 +253,18 @@ public class Column {
         Value valueFromThisColumn = this.column.getValue().values.get(0);
         IRI iriOfColumnKey = (IRI) this.column.getKey();
         String safeNameOfTheColumn = createSafeName(iriOfColumnKey.getLocalName());
-        if(valueFromThisColumn.isIRI()){
+        if (valueFromThisColumn.isIRI()) {
             IRI iri = (IRI) valueFromThisColumn;
             String firstPart = iri.getNamespace();
             String lastPart = iri.getLocalName();
-            if(isNamespaceTheSame){
+            if (isNamespaceTheSame) {
                 this.valueUrl = firstPart + "{+" + safeNameOfTheColumn + "}";
             } else {
                 this.valueUrl = "{+" + safeNameOfTheColumn + "}";
             }
 
-        } else if(valueFromThisColumn.isBNode()){
-            this.valueUrl = "_:" + "{+" +  safeNameOfTheColumn + "}";
+        } else if (valueFromThisColumn.isBNode()) {
+            this.valueUrl = "_:" + "{+" + safeNameOfTheColumn + "}";
         }
 
     }
@@ -300,7 +301,6 @@ public class Column {
     }
 
 
-
     public Boolean getVirtual() {
         return virtual;
     }
@@ -310,9 +310,9 @@ public class Column {
         IRI columnKeyIRI = (IRI) column;
         // Create name without - and nonascii characters
         String safeName = createSafeName(columnKeyIRI.getLocalName());
-        if(this.lang != null){
+        if (this.lang != null) {
             this.name = safeName + "_" + this.lang;
-        } else{
+        } else {
             this.name = safeName;
         }
 
@@ -341,27 +341,27 @@ public class Column {
         String prependix = (delimiterIndex != -1) ? columnKeyIRI.stringValue().substring(delimiterIndex + delimiter.length()) + "_" : "";
         System.out.println("prependix==" + prependix);
 
-        if(ConnectionChecker.checkConnection()){
+        if (ConnectionChecker.checkConnection()) {
             Dereferencer dereferencer = new Dereferencer(this.getPropertyUrl());
             try {
                 this.titles = dereferencer.getTitle();
-            } catch (NullPointerException noElement){
+            } catch (NullPointerException noElement) {
                 this.titles = propertyUrlIRI.getLocalName();
             }
         }
-        if(valueFromThisColumn.isLiteral()){
+        if (valueFromThisColumn.isLiteral()) {
             Literal literal = (Literal) valueFromThisColumn;
             Optional<String> languageTag = literal.getLanguage();
             String langTag = null;
-            if(languageTag.isPresent()){
+            if (languageTag.isPresent()) {
                 langTag = languageTag.get();
             }
-                if(this.titles != null) {
-                    //System.out.println("valueFromThisColumn from createTitles() isLiteral = " + this.titles);
-                    return (langTag == null) ? prependix + this.titles : prependix + this.titles + " (" + langTag + ")";
-                } else {
-                    return (langTag == null) ? prependix + propertyUrlIRI.getLocalName() : prependix + propertyUrlIRI.getLocalName() + " (" + langTag + ")";
-                }
+            if (this.titles != null) {
+                //System.out.println("valueFromThisColumn from createTitles() isLiteral = " + this.titles);
+                return (langTag == null) ? prependix + this.titles : prependix + this.titles + " (" + langTag + ")";
+            } else {
+                return (langTag == null) ? prependix + propertyUrlIRI.getLocalName() : prependix + propertyUrlIRI.getLocalName() + " (" + langTag + ")";
+            }
 
         } else {
             return (this.titles == null) ? prependix + propertyUrlIRI.getLocalName() : prependix + this.titles;
@@ -376,7 +376,7 @@ public class Column {
 
     public void addFirstColumn(Value type, Value value, boolean isRdfType, boolean isNamespaceTheSame, boolean typeIsTheSame) {
         //System.out.println("addFirstColumn is typeIri string value " + typeIri.stringValue());
-        if(isRdfType && typeIsTheSame){
+        if (isRdfType && typeIsTheSame) {
             IRI typeIri = (IRI) type;
 
             //System.out.println("CONVERSION_HAS_RDF_TYPES is " + true);
@@ -384,18 +384,18 @@ public class Column {
             this.titles = d.getTitle();
             this.name = typeIri.getLocalName();
 
-        } else{
+        } else {
             //System.out.println("CONVERSION_HAS_RDF_TYPES is " + false);
             this.titles = "Subjekt";
             this.name = "Subjekt";
         }
-        if(value.isBNode()){
+        if (value.isBNode()) {
 
-        } else{
-            if(isNamespaceTheSame){
+        } else {
+            if (isNamespaceTheSame) {
                 IRI valueIri = (IRI) value;
                 //System.out.println("isNamespaceTheSame is " + isNamespaceTheSame);
-                this.valueUrl = valueIri.getNamespace() +  "{+" + this.name + "}";
+                this.valueUrl = valueIri.getNamespace() + "{+" + this.name + "}";
             } else {
                 this.valueUrl = "{+" + this.name + "}";
             }
@@ -404,20 +404,19 @@ public class Column {
         this.suppressOutput = true;
 
 
-
     }
 
-    public void addVirtualTypeColumn(Value type, Value value, Value id, boolean isTypeTheSame){
+    public void addVirtualTypeColumn(Value type, Value value, Value id, boolean isTypeTheSame) {
         this.virtual = true;
         this.propertyUrl = "rdf:type";
-        if(isNamespaceTheSame){
-            this.aboutUrl = ((IRI)id).getNamespace() + "{+" + ((IRI)type).getLocalName() + "}";
-        } else{
-            this.aboutUrl = "{+" + ((IRI)type).getLocalName() + "}";
+        if (isNamespaceTheSame) {
+            this.aboutUrl = ((IRI) id).getNamespace() + "{+" + ((IRI) type).getLocalName() + "}";
+        } else {
+            this.aboutUrl = "{+" + ((IRI) type).getLocalName() + "}";
         }
-        if(isTypeTheSame){
+        if (isTypeTheSame) {
             this.valueUrl = type.stringValue();
-        } else{
+        } else {
             this.valueUrl = "{+type}";
         }
     }

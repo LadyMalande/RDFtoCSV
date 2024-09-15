@@ -17,11 +17,11 @@ public class ExampleMaker {
 
     Model model;
 
-    public void makeExample(){
+    public void makeExample() {
         ModelBuilder builder = new ModelBuilder();
 
         // set some com.miklosova.RDFtoCSV.namespaces
-        builder.setNamespace("ex", "http://example.org/").setNamespace(DCTERMS.NS).setNamespace("rdf","http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+        builder.setNamespace("ex", "http://example.org/").setNamespace(DCTERMS.NS).setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
         String dcmitype = "http://purl.org/dc/dcmitype/";
         IRI picasso = Values.iri(dcmitype, "Text");
         // add a new named graph to the model
@@ -32,7 +32,6 @@ public class ExampleMaker {
                 .add(DCTERMS.CREATOR, "ex:TerezaMiklóšová")
                 .add(DCTERMS.TITLE, Values.literal("Automatický převod RDF dat do CSV", "cs"))
                 .add(DCTERMS.TITLE, Values.literal("Automated transformation of RDF data to CSV", "en"));
-
 
 
         // add a triple to the default graph
@@ -52,11 +51,11 @@ public class ExampleMaker {
         //m.forEach(System.out::println);
     }
 
-    public Model makeExampleModel(){
+    public Model makeExampleModel() {
         ModelBuilder builder = new ModelBuilder();
 
         // set some com.miklosova.RDFtoCSV.namespaces
-        builder.setNamespace("ex", "http://example.org/").setNamespace(DCTERMS.NS).setNamespace("rdf","http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+        builder.setNamespace("ex", "http://example.org/").setNamespace(DCTERMS.NS).setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
         String dcmitype = "http://purl.org/dc/dcmitype/";
         IRI picasso = Values.iri(dcmitype, "Text");
         // add a new named graph to the model
@@ -67,7 +66,6 @@ public class ExampleMaker {
                 .add(DCTERMS.CREATOR, "ex:TerezaMiklóšová")
                 .add(DCTERMS.TITLE, Values.literal("Automatický převod RDF dat do CSV", "cs"))
                 .add(DCTERMS.TITLE, Values.literal("Automated transformation of RDF data to CSV", "en"));
-
 
 
         // add a triple to the default graph
@@ -88,7 +86,7 @@ public class ExampleMaker {
         return model;
     }
 
-    public void exampleFilesInAllExtensions(){
+    public void exampleFilesInAllExtensions() {
         // Creation of example RDFs in various formats
         Model exampleModel = this.makeExampleModel();
         CreateOtherRDFFormats cof = new CreateOtherRDFFormats(exampleModel);

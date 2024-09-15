@@ -8,7 +8,6 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 @JsonldType("Template")
 public class Transformation {
     /**
-     *
      * Required Property
      */
     private String url;

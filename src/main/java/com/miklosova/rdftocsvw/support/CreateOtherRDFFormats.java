@@ -12,11 +12,11 @@ public class CreateOtherRDFFormats {
 
     private Model model;
 
-    public CreateOtherRDFFormats(Model m){
+    public CreateOtherRDFFormats(Model m) {
         this.model = m;
     }
 
-    public void writeModelToFile(String fileName, RDFFormat rdfFormat){
+    public void writeModelToFile(String fileName, RDFFormat rdfFormat) {
 
         FileOutputStream outputStream = null;
         try {

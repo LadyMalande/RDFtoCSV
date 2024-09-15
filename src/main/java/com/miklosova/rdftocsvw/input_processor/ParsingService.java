@@ -1,14 +1,9 @@
 package com.miklosova.rdftocsvw.input_processor;
 
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.*;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import org.eclipse.jetty.util.IO;
-import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.Rio;
-import org.eclipse.rdf4j.rio.nquads.NQuadsParserFactory;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -58,68 +53,68 @@ public class ParsingService {
         return conn;
     }
 
-    private void processExtension(String fileName){
+    private void processExtension(String fileName) {
         System.out.println("processExtension " + fileName);
 
         String[] splitName = fileName.split("\\.");
         String fileExtension = splitName[splitName.length - 1];
         System.out.println("fileExtension " + fileExtension);
-            switch (fileExtension) {
-                case "ttl":
-                    inputGateway.setParsingMethod(new TurtleParser());
-                    System.out.println("turtle parser set ");
-                    break;
-                case "brf":
-                    inputGateway.setParsingMethod(new BinaryParser());
-                    break;
-                case "hdt":
-                    inputGateway.setParsingMethod(new HdtParser());
-                    break;
-                case "jsonld":
-                    inputGateway.setParsingMethod(new JsonldParser());
-                    break;
-                case "n3":
-                    inputGateway.setParsingMethod(new N3Parser());
-                    break;
-                case "ndjsonld":
-                case "jsonl":
-                case "ndjson":
-                    inputGateway.setParsingMethod(new NdjsonldParser());
-                    break;
-                case "nq":
-                    inputGateway.setParsingMethod(new NquadsParser());
-                    break;
-                case "nt":
-                    inputGateway.setParsingMethod(new NtriplesParser());
-                    break;
-                case "xhtml":
-                case "html":
-                    inputGateway.setParsingMethod(new RdfaParser());
-                    break;
-                case "rj":
-                    inputGateway.setParsingMethod(new RdfjsonParser());
-                    break;
-                case "rdf":
-                case "rdfs":
-                case "owl":
-                case "xml":
-                    inputGateway.setParsingMethod(new RdfxmlParser());
-                    break;
-                case "trig":
-                    inputGateway.setParsingMethod(new TrigParser());
-                    break;
-                case "trigs":
-                    inputGateway.setParsingMethod(new TrigstarParser());
-                    break;
-                case "trix":
-                    inputGateway.setParsingMethod(new TrixParser());
-                    break;
-                case "ttls":
-                    inputGateway.setParsingMethod(new TurtlestarParser());
-                    break;
-                default:
-                    throw new IllegalArgumentException("Invalid file extension");
-            }
+        switch (fileExtension) {
+            case "ttl":
+                inputGateway.setParsingMethod(new TurtleParser());
+                System.out.println("turtle parser set ");
+                break;
+            case "brf":
+                inputGateway.setParsingMethod(new BinaryParser());
+                break;
+            case "hdt":
+                inputGateway.setParsingMethod(new HdtParser());
+                break;
+            case "jsonld":
+                inputGateway.setParsingMethod(new JsonldParser());
+                break;
+            case "n3":
+                inputGateway.setParsingMethod(new N3Parser());
+                break;
+            case "ndjsonld":
+            case "jsonl":
+            case "ndjson":
+                inputGateway.setParsingMethod(new NdjsonldParser());
+                break;
+            case "nq":
+                inputGateway.setParsingMethod(new NquadsParser());
+                break;
+            case "nt":
+                inputGateway.setParsingMethod(new NtriplesParser());
+                break;
+            case "xhtml":
+            case "html":
+                inputGateway.setParsingMethod(new RdfaParser());
+                break;
+            case "rj":
+                inputGateway.setParsingMethod(new RdfjsonParser());
+                break;
+            case "rdf":
+            case "rdfs":
+            case "owl":
+            case "xml":
+                inputGateway.setParsingMethod(new RdfxmlParser());
+                break;
+            case "trig":
+                inputGateway.setParsingMethod(new TrigParser());
+                break;
+            case "trigs":
+                inputGateway.setParsingMethod(new TrigstarParser());
+                break;
+            case "trix":
+                inputGateway.setParsingMethod(new TrixParser());
+                break;
+            case "ttls":
+                inputGateway.setParsingMethod(new TurtlestarParser());
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid file extension");
+        }
 
     }
 

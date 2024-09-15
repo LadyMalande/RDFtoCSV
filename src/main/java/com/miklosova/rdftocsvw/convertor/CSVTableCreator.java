@@ -1,6 +1,8 @@
 package com.miklosova.rdftocsvw.convertor;
 
 import com.miklosova.rdftocsvw.input_processor.RDFAssetManager;
+import com.miklosova.rdftocsvw.metadata_creator.Metadata;
+import com.miklosova.rdftocsvw.support.FileWrite;
 import lombok.extern.java.Log;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
@@ -11,7 +13,6 @@ import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
-
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -23,12 +24,12 @@ import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf;
-import com.miklosova.rdftocsvw.support.FileWrite;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-
-import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 /**
  * Class for creating CSV table with the help of SPARQL query on the RDF data
@@ -53,7 +54,7 @@ public class CSVTableCreator {
     }
 
 
-    public String getCSVTableAsString(){
+    public String getCSVTableAsString() {
         String query = getCSVTableQueryForModel();
         return queryRDFModel(query);
     }
@@ -117,7 +118,7 @@ public class CSVTableCreator {
                 result.close();
             }
         } finally {
-        // Before our program exits, make sure the database is properly shut down.
+            // Before our program exits, make sure the database is properly shut down.
             db.shutDown();
         }
 
@@ -164,20 +165,21 @@ public class CSVTableCreator {
     }
     */
 
+
     private String createQueryForSubjects(Value object) {
         SelectQuery selectQuery = Queries.SELECT();
         Iri iri = Rdf.iri(object.toString());
         Variable s = SparqlBuilder.var("s"), p = SparqlBuilder.var("p");
-        selectQuery.select(s,p).where(iri.has(p, s));
+        selectQuery.select(s, p).where(iri.has(p, s));
         System.out.println(selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
-    private void augmentMapsByMissingKeys(){
-        for(Row row : rows){
+    private void augmentMapsByMissingKeys() {
+        for (Row row : rows) {
             ArrayList<Value> missingKeys = new ArrayList<>();
-            for(Value key : keys){
-                if(!row.columns.keySet().contains(key)){
+            for (Value key : keys) {
+                if (!row.columns.keySet().contains(key)) {
                     missingKeys.add(key);
                 }
             }
@@ -193,22 +195,22 @@ public class CSVTableCreator {
         //Variable job = SparqlBuilder.var("job"), pos = SparqlBuilder.var("pos");
         //selectQuery.prefix(skos).select(job).where(job.isA(skos.iri("ConceptScheme")));
         Variable o = SparqlBuilder.var("o"), s = SparqlBuilder.var("s"),
-                 s_in = SparqlBuilder.var("s_in"),p_in = SparqlBuilder.var("p_in");
+                s_in = SparqlBuilder.var("s_in"), p_in = SparqlBuilder.var("p_in");
         selectQuery.prefix(skos).select(s).where(s.isA(o).filterNotExists(s_in.has(p_in, s)));
         System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
-    private void saveCSVasFile(String fileName){
+    private void saveCSVasFile(String fileName) {
         File f = FileWrite.makeFileByNameAndExtension(fileName, "csv");
         FileWrite.writeToTheFile(f, resultCSV);
         System.out.println("Written CSV table to the file " + f + ".");
     }
 
-    private void saveCSFFileFromRows(String fileName){
+    private void saveCSFFileFromRows(String fileName) {
         StringBuilder forOutput = new StringBuilder();
         //File f = FileWrite.makeFileByNameAndExtension("../" + fileName, "csv");
-        File f = FileWrite.makeFileByNameAndExtension( fileName, "csv");
+        File f = FileWrite.makeFileByNameAndExtension(fileName, "csv");
 
         StringBuilder sb1 = new StringBuilder();
         sb1.append("id" + delimiter);
@@ -216,10 +218,10 @@ public class CSVTableCreator {
         sb1.deleteCharAt(sb1.length() - 1);
         sb1.append("\n");
         FileWrite.writeToTheFile(f, sb1.toString());
-        for(Row row : rows){
+        for (Row row : rows) {
             StringBuilder sb = new StringBuilder();
             sb.append(row.id).append(delimiter);
-            for(Value key : keys){
+            for (Value key : keys) {
                 sb.append(row.columns.get(key)).append(delimiter);
                 System.out.println("in entry set " + row.columns.get(key) + ".");
 

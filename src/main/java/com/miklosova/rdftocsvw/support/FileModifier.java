@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 public class FileModifier {
 
-    public static void addColonsToIRIsInFile(File file){
+    public static void addColonsToIRIsInFile(File file) {
         String inputFilePath = "input.txt";
         String outputFilePath = "output.txt";
 

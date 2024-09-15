@@ -49,7 +49,7 @@ public class Table {
         this.tableSchema = tableSchema;
     }
 
-    public Table(String url){
+    public Table(String url) {
         this.url = url;
     }
 
@@ -61,10 +61,10 @@ public class Table {
     }
 
     private void addTransformations() {
-        if(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES).equalsIgnoreCase("true")){
+        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES).equalsIgnoreCase("true")) {
             this.transformtaions = new ArrayList<>();
             this.transformtaions.add(new Transformation(
-                  "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+                    "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
                     "http://www.iana.org/assignments/media-types/application/javascript",
                     "http://www.iana.org/assignments/media-types/turtle",
                     "rdf",
