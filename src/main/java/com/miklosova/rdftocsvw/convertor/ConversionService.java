@@ -10,7 +10,9 @@ public class ConversionService {
     private BinaryParser basicQuery;
 
     public PrefinishedOutput<RowsAndKeys> convertByQuery(RepositoryConnection rc, Repository db) {
-
+        if(rc == null){
+            return null;
+        }
         conversionGateway = new ConversionGateway();
         processConversionType(db);
         PrefinishedOutput<RowsAndKeys> convertedInput = conversionGateway.processInput(rc);

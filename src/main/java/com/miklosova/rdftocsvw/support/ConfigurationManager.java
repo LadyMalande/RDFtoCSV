@@ -34,13 +34,16 @@ public class ConfigurationManager {
             System.out.println("jarDirectory = " + jarDirectory);
             String insertAfter = dirForCanonicalFile + File.separator;
             int insertPosition = canonicalPath.indexOf(insertAfter) + insertAfter.length();
-
+            String fileNameBeingRead = null;
             // Create the new path by inserting jarDirectory
             if(jarDirectory.equalsIgnoreCase("target")){
+                System.out.println("jarDirectory.equalsIgnoreCase(\"target\"");
                 fileInDirectory = canonicalPath.substring(0, insertPosition) + "RDFtoCSV" + File.separator
                         + jarDirectory
                         + File.separator
                         + canonicalPath.substring(insertPosition);
+
+
             } else {
                 fileInDirectory = canonicalPath.substring(0, insertPosition)
                         + jarDirectory
@@ -59,12 +62,14 @@ public class ConfigurationManager {
 
         return CONFIG_FILE_NAME;
     }
-    public static final String READ_METHOD = "converion.readMethod";
+    public static final String READ_METHOD = "conversion.readMethod";
 
     public static final String INTERMEDIATE_FILE_NAMES = "app.filesInProgress";
     public static final String OUTPUT_ZIPFILE_NAME = "output.zipname";
     public static final String CONVERSION_HAS_BLANK_NODES = "conversion.containsBlankNodes";
     public static final String CONVERSION_HAS_RDF_TYPES = "conversion.hasRDFType";
+
+    public static final String INPUT_FILENAME = "input.inputFileName";
     public static final String OUTPUT_FILENAME = "input.outputFileName";
 
     public static final String OUTPUT_METADATA_FILE_NAME = "output.metadataFileName";
@@ -143,7 +148,7 @@ public class ConfigurationManager {
         Properties prop = new Properties();
 
         String metadataFileName = null;
-
+        String parsingMethod = "rdf4j";
         // Now you call the static variable for the first time and set it if needed
         File finalConfigFile = new File(getCONFIG_FILE_NAME());
         System.out.println("finalConfigFile = " + finalConfigFile.getAbsolutePath());
@@ -175,9 +180,11 @@ public class ConfigurationManager {
         String conversionMethod = null;
         if (args.length == 2) {
             conversionMethod = args[1];
-
+            System.out.println("args.length == 2");
         } else if (args.length == 3) {
             conversionMethod = args[1];
+            parsingMethod = args[2];
+            System.out.println("args.length == 3");
         } else if (args.length == 4) {
             conversionMethod = args[1];
 
@@ -195,7 +202,8 @@ public class ConfigurationManager {
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
         prop.setProperty(ConfigurationManager.OUTPUT_ZIPFILE_NAME, "compressed.zip");
-        prop.setProperty(ConfigurationManager.READ_METHOD, "rdf4j");
+        System.out.println("property set prop.setProperty(ConfigurationManager.READ_METHOD," + parsingMethod);
+        prop.setProperty(ConfigurationManager.READ_METHOD, parsingMethod);
         prop.setProperty(ConfigurationManager.METADATA_ROWNUMS, "false");
         prop.setProperty(ConfigurationManager.OUTPUT_FILE_PATH, "");
         if (metadataFileName == null) {
@@ -210,5 +218,6 @@ public class ConfigurationManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("Get value from config: " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD));
     }
 }

@@ -21,6 +21,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.Map;
 
+import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 
@@ -58,6 +59,7 @@ public class RDFtoCSV {
         System.out.println("this.filename" + this.fileName);
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;// + "TestOutput";
+        ConfigurationManager.processConfigMap(null);
     }
 
     public RDFtoCSV(String fileName, Map<String, String> configMap) {
@@ -159,16 +161,12 @@ public class RDFtoCSV {
         return new FinalizedOutput<>(fileBytes);
     }
 
-    private boolean isUrl(String fileName){
-        try {
-            new URL(fileName);  // Try to create a URL object
-            return true;         // If successful, the string is a valid URL
-        } catch (MalformedURLException e) {
-            return false;        // If an exception is thrown, the string is not a valid URL
-        }
-    }
+
 
     private String writeToString(PrefinishedOutput<?> po, Metadata metadata) {
+        if(po == null){
+            return processStreaming(metadata);
+        }
         String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
         String[] files = allFiles.split(",");
         StringBuilder sb = new StringBuilder();
@@ -197,7 +195,27 @@ public class RDFtoCSV {
         return sb.toString();
     }
 
+    private String processStreaming(Metadata metadata) {
+        processStreamingEntities(metadata);
+        String result = processStreamingWrite(metadata);
+        File f = FileWrite.makeFileByNameAndExtension(fileName, "csv");
+        FileWrite.writeToTheFile(f, result);
+        return result;
+
+    }
+
+    private String processStreamingWrite(Metadata metadata) {
+        // TODO
+        return "CSV contents.";
+    }
+
+    private void processStreamingEntities(Metadata metadata) {
+    }
+
     private void writeToCSV(PrefinishedOutput<?> po, Metadata metadata) {
+        if(po == null){
+            processStreaming(metadata);
+        }
         String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
         String[] files = allFiles.split(",");
         try {
@@ -261,8 +279,9 @@ public class RDFtoCSV {
         // Create a new Repository.
         db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService();
+        System.out.println("read method: " + readMethod);
         rc = methodService.processInput(fileName, readMethod, db);
-        assert (rc != null);
+
     }
 
     public RepositoryConnection createRepositoryConnection(Repository repository, String filename, String readMethod) throws IOException {
@@ -280,8 +299,9 @@ public class RDFtoCSV {
         String m = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD);
         method = (m != null) ? m : DEFAULT_METHOD;
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, method);
-
+        readMethod = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD);
         readMethod = (readMethod != null) ? readMethod : DEFAULT_READ_METHOD;
+        System.out.println("readMethod is " + readMethod);
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.READ_METHOD, readMethod);
 
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, metadataFilename);

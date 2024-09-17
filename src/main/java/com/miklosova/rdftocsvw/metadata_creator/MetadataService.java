@@ -3,6 +3,7 @@ package com.miklosova.rdftocsvw.metadata_creator;
 import com.miklosova.rdftocsvw.convertor.*;
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.BinaryParser;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.FileWrite;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 
@@ -41,6 +42,14 @@ public class MetadataService {
                     metadataGateway.setMetadataCreator(new CodelistQueryMetadataCreator((PrefinishedOutput<RowsAndKeys>) data));
                 } else {
                     throw new IllegalArgumentException("Invalid data type for codelistQuery");
+                }
+                break;
+            case "streamingNTriples":
+                String extension = FileWrite.getFileExtension(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
+                if (!extension.equalsIgnoreCase("nt")) {
+                    throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);
+                } else{
+                    metadataGateway.setMetadataCreator(new StreamingNTriplesMetadataCreator(null));
                 }
                 break;
             default:

@@ -508,6 +508,17 @@ public class FileWrite {
         return orderOfColumns;
     }
 
+    public static String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf('.');
+
+        // Check if the dot exists and it's not the first or last character
+        if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(dotIndex + 1);
+        } else {
+            return "";  // Return an empty string if there's no extension
+        }
+    }
+
     public static File makeFileByNameAndExtension(String name, String ext) {
         try {
             File newFile;

@@ -44,6 +44,10 @@ public class TableSchema {
     private List<Value> keys;
     private List<Row> rows;
 
+    public TableSchema() {
+        this.columns = new ArrayList<>();
+    }
+
     @JsonIgnore
     public List<Value> getKeys() {
         return keys;

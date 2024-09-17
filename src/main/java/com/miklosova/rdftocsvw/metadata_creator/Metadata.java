@@ -97,6 +97,7 @@ public class Metadata {
         return tables;
     }
 
+
     public void addForeignKeys(ArrayList<ArrayList<Row>> allRows) {
         for (ArrayList<Row> rows : allRows) {
             Value id = rows.get(0).id;

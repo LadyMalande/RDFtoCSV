@@ -60,6 +60,8 @@ public class Table {
         addTransformations();
     }
 
+
+
     private void addTransformations() {
         if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES).equalsIgnoreCase("true")) {
             this.transformtaions = new ArrayList<>();

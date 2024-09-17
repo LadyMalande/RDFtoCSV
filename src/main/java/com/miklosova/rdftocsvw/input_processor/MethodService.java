@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.input_processor;
 
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.RDF4JMethod;
+import com.miklosova.rdftocsvw.input_processor.streaming_methods.StreamingMethod;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFParseException;
@@ -17,6 +18,7 @@ public class MethodService {
     public RepositoryConnection processInput(String fileName, String methodChoice, Repository db) throws RDFParseException, IOException {
         methodGateway = new MethodGateway();
         System.out.println("fileName in MethodService.java processInput1: " + fileName);
+        System.out.println("read method: " + methodChoice);
         processMethodChoice(methodChoice);
         fileName = processFileOrIRI(fileName);
         System.out.println("fileName in MethodService.java processInput: " + fileName);
@@ -25,6 +27,7 @@ public class MethodService {
     }
 
     private String processFileOrIRI(String fileName) {
+        System.out.println("fileName in processFileOrIRI fileName=: " + fileName);
         try {
             URL url = new URL(fileName);
 
@@ -66,9 +69,13 @@ public class MethodService {
     }
 
     private void processMethodChoice(String methodChoice) {
+        System.out.println("read method in processMethodChoice:" + methodChoice);
         switch (methodChoice) {
             case "rdf4j":
                 methodGateway.setParsingMethod(new RDF4JMethod());
+                break;
+            case "streaming":
+                methodGateway.setParsingMethod(new StreamingMethod());
                 break;
             default:
                 throw new IllegalArgumentException("Invalid reading method");

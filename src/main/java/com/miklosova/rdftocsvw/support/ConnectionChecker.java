@@ -21,4 +21,13 @@ public class ConnectionChecker {
             return false;
         }
     }
+
+    public static boolean isUrl(String fileName){
+        try {
+            new URL(fileName);  // Try to create a URL object
+            return true;         // If successful, the string is a valid URL
+        } catch (MalformedURLException e) {
+            return false;        // If an exception is thrown, the string is not a valid URL
+        }
+    }
 }

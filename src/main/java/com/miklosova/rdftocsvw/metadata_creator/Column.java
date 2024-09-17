@@ -20,12 +20,16 @@ import java.util.Optional;
 @SuppressWarnings("SpellCheckingInspection")
 @JsonldType("Column")
 public class Column {
+    public Column() {
+
+    }
+
     @JsonIgnore
     public boolean getIsNamespaceTheSame() {
         return isNamespaceTheSame;
     }
 
-    private final boolean isNamespaceTheSame;
+    private boolean isNamespaceTheSame;
     /**
      * Title for the column
      */
@@ -51,6 +55,19 @@ public class Column {
      * any, xml, html, json.
      */
     private String datatype;
+
+    public void setAboutUrl(String aboutUrl) {
+        this.aboutUrl = aboutUrl;
+    }
+
+    public void setSuppressOutput(Boolean suppressOutput) {
+        this.suppressOutput = suppressOutput;
+    }
+
+    public String getAboutUrl() {
+        return aboutUrl;
+    }
+
     /**
      * A URI template property that MAY be used to indicate what a cell contains information about
      * (subject of a triple of RDF). MAY be also defined on a tableSchema level to define aboutUrl
@@ -156,7 +173,7 @@ public class Column {
             createLang();
             createName();
             createPropertyUrl();
-            this.titles = createTitles();
+            this.titles = createTitles( this.column.getKey(),this.column.getValue().values.get(0));
             createValueUrl();
             createDatatype();
             createAboutUrl(row, isSubjectTheSame, rows);
@@ -249,6 +266,16 @@ public class Column {
         }
     }
 
+    public void createDatatypeFromValue(Value object) {
+        if (object.isLiteral()) {
+            Literal literal = (Literal) object;
+            IRI datatype = literal.getDatatype();
+            String localname = datatype.getLocalName();
+            localname = (localname.equalsIgnoreCase("langString")) ? "string" : localname;
+            this.datatype = (localname.equalsIgnoreCase("string")) ? null : localname;
+        }
+    }
+
     private void createValueUrl() {
         Value valueFromThisColumn = this.column.getValue().values.get(0);
         IRI iriOfColumnKey = (IRI) this.column.getKey();
@@ -315,21 +342,28 @@ public class Column {
         } else {
             this.name = safeName;
         }
+    }
 
+    public void createNameFromIRI(IRI predicate) {
+        // Create name without - and nonascii characters
+        String safeName = createSafeName(predicate.getLocalName());
+        if (this.lang != null) {
+            this.name = safeName + "_" + this.lang;
+        } else {
+            this.name = safeName;
+        }
     }
 
     public static String createSafeName(String localName) {
         // Replace all non-ASCII characters and hyphens
         String safeName = localName.replaceAll("[^\\x00-\\x7F-]", "").replace("-", "");
-        System.out.println("transformed localName to safe name: " + localName + " > " + safeName);
+        //System.out.println("transformed localName to safe name: " + localName + " > " + safeName);
         return safeName;
     }
 
-    private String createTitles() {
-        Value valueFromThisColumn = this.column.getValue().values.get(0);
+    public String createTitles(Value predicate, Value object) {
         //System.out.println("valueFromThisColumn from createTitles() = " + valueFromThisColumn.toString());
-        Value column = this.column.getKey();
-        IRI columnKeyIRI = (IRI) column;
+        IRI columnKeyIRI = (IRI) predicate;
         ValueFactory vf = SimpleValueFactory.getInstance();
         IRI propertyUrlIRI = vf.createIRI(this.getPropertyUrl());
 
@@ -337,9 +371,9 @@ public class Column {
 
         String delimiter = "_MULTILEVEL_";
         int delimiterIndex = columnKeyIRI.stringValue().indexOf(delimiter);
-        System.out.println("The delimiterIndex is " + delimiterIndex + " for iri " + columnKeyIRI.stringValue());
+        //System.out.println("The delimiterIndex is " + delimiterIndex + " for iri " + columnKeyIRI.stringValue());
         String prependix = (delimiterIndex != -1) ? columnKeyIRI.stringValue().substring(delimiterIndex + delimiter.length()) + "_" : "";
-        System.out.println("prependix==" + prependix);
+        //System.out.println("prependix==" + prependix);
 
         if (ConnectionChecker.checkConnection()) {
             Dereferencer dereferencer = new Dereferencer(this.getPropertyUrl());
@@ -349,8 +383,8 @@ public class Column {
                 this.titles = propertyUrlIRI.getLocalName();
             }
         }
-        if (valueFromThisColumn.isLiteral()) {
-            Literal literal = (Literal) valueFromThisColumn;
+        if (object.isLiteral()) {
+            Literal literal = (Literal) object;
             Optional<String> languageTag = literal.getLanguage();
             String langTag = null;
             if (languageTag.isPresent()) {
@@ -418,6 +452,14 @@ public class Column {
             this.valueUrl = type.stringValue();
         } else {
             this.valueUrl = "{+type}";
+        }
+    }
+
+    public void createLangFromLiteral(Value object) {
+        if (object.isLiteral()) {
+            Literal literal = (Literal) object;
+            Optional<String> languageTag = literal.getLanguage();
+            languageTag.ifPresent(s -> this.lang = s);
         }
     }
 }
