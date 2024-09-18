@@ -230,7 +230,7 @@ public class Column {
                         this.aboutUrl = idIRI.getNamespace() + "{+" + typeIri.getLocalName() + "}";
                     } else {
                         // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                        this.aboutUrl = idIRI.getNamespace() + "{+" + "Subjekt" + "}";
+                        this.aboutUrl = idIRI.getNamespace() + "{+" + "Subject" + "}";
                     }
                 } else {
                     if (isRdfType && isTypetheSame) {
@@ -238,7 +238,7 @@ public class Column {
                         this.aboutUrl = "{+" + typeIri.getLocalName() + "}";
                     } else {
                         // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                        this.aboutUrl = "{+" + "Subjekt" + "}";
+                        this.aboutUrl = "{+" + "Subject" + "}";
                     }
                 }
             }
@@ -354,6 +354,24 @@ public class Column {
         }
     }
 
+    public static String getNameFromIRI(IRI predicate, Value object) {
+        // Create name without - and nonascii characters
+        String safeName = createSafeName(predicate.getLocalName());
+        String langOfObject = null;
+        if (object.isLiteral()) {
+            Literal literal = (Literal) object;
+            Optional<String> languageTag = literal.getLanguage();
+           if(languageTag.isPresent()){
+               langOfObject = languageTag.get();
+           }
+        }
+        if (langOfObject != null) {
+            return safeName + "_" + langOfObject;
+        } else {
+            return safeName;
+        }
+    }
+
     public static String createSafeName(String localName) {
         // Replace all non-ASCII characters and hyphens
         String safeName = localName.replaceAll("[^\\x00-\\x7F-]", "").replace("-", "");
@@ -420,8 +438,8 @@ public class Column {
 
         } else {
             //System.out.println("CONVERSION_HAS_RDF_TYPES is " + false);
-            this.titles = "Subjekt";
-            this.name = "Subjekt";
+            this.titles = "Subject";
+            this.name = "Subject";
         }
         if (value.isBNode()) {
 

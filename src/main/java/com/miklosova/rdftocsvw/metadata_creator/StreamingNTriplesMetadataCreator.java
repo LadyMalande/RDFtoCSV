@@ -4,6 +4,7 @@ import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.Main;
+import com.miklosova.rdftocsvw.support.StreamingSupport;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
@@ -30,6 +31,8 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     private final ArrayList<Object> allFileNames;
     private final int fileNumberX;
 
+    private int lineCounter = 0;
+
     private String fileNameToRead;
     Metadata metadata;
     public StreamingNTriplesMetadataCreator(PrefinishedOutput<RowsAndKeys> data) {
@@ -48,7 +51,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         String jarDirectory = file.getParentFile().getName();
 
         this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) : (jarDirectory.equalsIgnoreCase("target")) ? fileNameFromConfig : "../" + fileNameFromConfig;
-        System.out.println("fileNameToRead = " + fileNameToRead);
+        //System.out.println("fileNameToRead = " + fileNameToRead);
     }
 
     @Override
@@ -57,6 +60,10 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         Table newTable = new Table(f.getName());
         metadata.getTables().add(newTable);
         tableSchema = new TableSchema();
+        tableSchema.setPrimaryKey("Subject");
+        createFirstColumn();
+
+
         newTable.setTableSchema(tableSchema);
         
         readFileWithStreaming();
@@ -65,13 +72,25 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         return metadata;
     }
 
+    private void createFirstColumn() {
+        Column firstColumn = new Column();
+
+        firstColumn.setName("Subject");
+        firstColumn.setValueUrl(null);
+
+        firstColumn.setSuppressOutput(true);
+        firstColumn.setTitles("Subject");
+
+        tableSchema.getColumns().add(firstColumn);
+    }
+
     private void readFileWithStreaming() {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileNameToRead))) {
             String line;
             // Read file line by line
             while ((line = reader.readLine()) != null) {
                 processLine(line);
-                System.out.println(line);  // Process the line (e.g., print it)
+                //System.out.println(line);  // Process the line (e.g., print it)
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,8 +98,12 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     }
 
     private void processLine(String line) {
-        Triple triple = createTripleFromLine(line);
+        Triple triple = StreamingSupport.createTripleFromLine(line);
         addMetadataToTableSchema(triple);
+        lineCounter++;
+        if(lineCounter % 100 == 0){
+            System.out.println("Processed " + lineCounter + " lines on input processing to metadata.");
+        }
     }
 
     private void addMetadataToTableSchema(Triple triple) {
@@ -94,7 +117,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             newColumn.setValueUrl("{+" + newColumn.getName() + "}");
         } 
         newColumn.createDatatypeFromValue(triple.object);
-        newColumn.setAboutUrl(triple.subject.getNamespace()+"{+Subjekt}");
+        newColumn.setAboutUrl(triple.subject.getNamespace()+"{+Subject}");
         newColumn.setTitles(newColumn.createTitles( triple.predicate,triple.object));
         if(!thereIsMatchingColumnAlready(newColumn, triple)){
             tableSchema.getColumns().add(newColumn);
@@ -108,29 +131,29 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             return false;
         }
         for(Column col: tableSchema.getColumns()){
-            System.out.println("numberOfNotMatching in the loop = " + numberOfNotMatching);
+            //System.out.println("numberOfNotMatching in the loop = " + numberOfNotMatching);
             if(!col.getName().equalsIgnoreCase(newColumn.getName())){
-                System.out.println("Name does not equal: " + col.getName() + " x " + newColumn.getName());
+                //System.out.println("Name does not equal: " + col.getName() + " x " + newColumn.getName());
                 numberOfNotMatching++;
                 continue;
             }
             if(!col.getTitles().equalsIgnoreCase(newColumn.getTitles())){
-                System.out.println("Titles does not equal: " + col.getTitles() + " x " + newColumn.getTitles());
+                //System.out.println("Titles does not equal: " + col.getTitles() + " x " + newColumn.getTitles());
                 numberOfNotMatching++;
                 continue;
             }
             if(!col.getPropertyUrl().equalsIgnoreCase(newColumn.getPropertyUrl())){
-                System.out.println("PropertyUrl does not equal: " + col.getPropertyUrl() + " x " + newColumn.getPropertyUrl());
+                //System.out.println("PropertyUrl does not equal: " + col.getPropertyUrl() + " x " + newColumn.getPropertyUrl());
                 numberOfNotMatching++;
                 continue;
             }
             if(col.getLang() != null && newColumn.getLang() != null && !col.getLang().equalsIgnoreCase(newColumn.getLang())){
-                System.out.println("Lang does not equal: " + col.getLang() + " x " + newColumn.getLang());
+                //System.out.println("Lang does not equal: " + col.getLang() + " x " + newColumn.getLang());
                 numberOfNotMatching++;
                 continue;
             }
             if(col.getDatatype() != null && newColumn.getDatatype() != null && !col.getDatatype().equalsIgnoreCase(newColumn.getDatatype())){
-                System.out.println("Datatype does not equal: " + col.getDatatype() + " x " + newColumn.getDatatype());
+                //System.out.println("Datatype does not equal: " + col.getDatatype() + " x " + newColumn.getDatatype());
                 numberOfNotMatching++;
                 continue;
             }
@@ -138,71 +161,21 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                     && (col.getAboutUrl().indexOf(triple.getSubject().getNamespace()) != 0 || col.getAboutUrl().length() != newColumn.getAboutUrl().length())){
                 // Adjust the metadata so that they are general as the namespaces are not matching
 
-                System.out.println("AboutUrl does not equal: " + col.getAboutUrl() + " x " + newColumn.getAboutUrl());
-                col.setAboutUrl("{+Subjekt}");
+                //System.out.println("AboutUrl does not equal: " + col.getAboutUrl() + " x " + newColumn.getAboutUrl());
+                col.setAboutUrl("{+Subject}");
 
             }
             if(col.getValueUrl() != null && newColumn.getValueUrl() != null && !col.getValueUrl().equalsIgnoreCase(newColumn.getValueUrl()) && (col.getValueUrl().indexOf(triple.getSubject().getNamespace()) != 0 || col.getValueUrl().length() != newColumn.getValueUrl().length())){
                 // Adjust the metadata so that they are general as the namespaces are not matching
 
-                System.out.println("ValueUrl does not equal: " + col.getValueUrl() + " x " + newColumn.getValueUrl());
+                //System.out.println("ValueUrl does not equal: " + col.getValueUrl() + " x " + newColumn.getValueUrl());
                 col.setValueUrl("{+" + col.getName() + "}");
             }
             return true;
         }
-        System.out.println("numberOfNotMatching != tableSchema.getColumns().size() " + numberOfNotMatching + " != " + tableSchema.getColumns().size() + "\n");
+        //System.out.println("numberOfNotMatching != tableSchema.getColumns().size() " + numberOfNotMatching + " != " + tableSchema.getColumns().size() + "\n");
         return false;
     }
 
-    private Triple createTripleFromLine(String line) {
-        // Regular expression to find text between < and >
-        Pattern pattern = Pattern.compile("<(.*?)>");
-        Matcher matcher = pattern.matcher(line);
-        IRI subject = null;
-        IRI predicate = null;
-        Value object = null;
-        // Iterate through the matches and print the results
-        int i = 1;
-        while (matcher.find()) {
-            if(i==1){
-                subject = iri(matcher.group(1)); // Prints the content between < and >
-                System.out.println("subject " + subject);
-            } else if(i==2){
-                predicate = iri(matcher.group(1));
-            } else if(i==3){
-                object = iri(matcher.group(1));
-            }
-            i++;
-        }
-        if(object == null){
-            object = createLiteralHere(line);
-        }
 
-        Triple t = new Triple(subject, predicate, object);
-        return t;
-    }
-
-    private Value createLiteralHere(String line) {
-        ValueFactory factory = SimpleValueFactory.getInstance();
-        // Regex to match the string between the last '>' and the final '.'
-        Pattern pattern = Pattern.compile(">\\s*(.+?)\\s*\\.");
-        Matcher matcher = pattern.matcher(line);
-        Literal value = null;
-        int i = 1;
-        while (matcher.find()) {
-            if(i==2){
-                String literalWithDatatype = matcher.group(1).trim();
-                value = parseLiteral(literalWithDatatype, factory);
-                //System.out.println("Parsed Literal with Datatype: " + value.getLabel() + " " + value.getLanguage() + value.getDatatype());
-            }
-            i++;
-        }
-        if(i<3){
-            throw new IllegalArgumentException("The n triples file is malformed.");
-        }
-
-
-
-        return value;
-    }
 }

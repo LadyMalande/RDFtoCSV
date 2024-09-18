@@ -38,21 +38,27 @@ public class Dereferencer {
     }
 
     public String getTitle() {
-        if (this.url.startsWith(FOAF_PREFIX)) {
-            return foafDereference();
-        } else if (this.url.startsWith(DC_PREFIX) || this.url.startsWith(DCTERMS_PREFIX)) {
-            return dcDereference();
-        } else if (this.url.startsWith(VANN_PREFIX)) {
-            return vannDereference();
-        } else if (this.url.startsWith(VS_PREFIX)) {
-            return vsDereference();
-        } else if (this.url.startsWith(WOT_PREFIX)) {
-            return wotDereference();
-        } else if (this.url.startsWith(SKOS_PREFIX)) {
-            return skosDereference();
-        } else {
-            System.out.println("No special title found.");
-            throw new NullPointerException();
+        try {
+            if (this.url.startsWith(FOAF_PREFIX)) {
+                return foafDereference();
+            } else if (this.url.startsWith(DC_PREFIX) || this.url.startsWith(DCTERMS_PREFIX)) {
+                return dcDereference();
+            } else if (this.url.startsWith(VANN_PREFIX)) {
+                return vannDereference();
+            } else if (this.url.startsWith(VS_PREFIX)) {
+                return vsDereference();
+            } else if (this.url.startsWith(WOT_PREFIX)) {
+                return wotDereference();
+            } else if (this.url.startsWith(SKOS_PREFIX)) {
+                return skosDereference();
+            } else {
+                //System.out.println("No special title found.");
+                throw new NullPointerException();
+            }
+        } catch(NullPointerException ex){
+            //System.err.println("There was a problem with dereferencing the IRI for title. Possible cause: no Internet Connection.");
+            return null;
+
         }
     }
 

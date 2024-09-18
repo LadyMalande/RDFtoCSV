@@ -4,6 +4,7 @@ import com.miklosova.rdftocsvw.input_processor.MethodService;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
 import com.miklosova.rdftocsvw.output_processor.FinalizedOutput;
+import com.miklosova.rdftocsvw.output_processor.StreamingNTriplesWrite;
 import com.miklosova.rdftocsvw.output_processor.ZipOutputProcessor;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
@@ -144,7 +145,7 @@ public class RDFtoCSV {
         String outputString = getCSVTableAsString();
         String fileNameSafe = isUrl(fileName) ? (iri(fileName).getLocalName()) : "../" + fileName;
         File f = FileWrite.makeFileByNameAndExtension(fileNameSafe, "csv");
-        FileWrite.writeToTheFile(f, outputString);
+        FileWrite.writeToTheFile(f, outputString, true);
         // Read the file into a byte array
         assert f != null;
         byte[] fileBytes = Files.readAllBytes(f.toPath());
@@ -197,16 +198,20 @@ public class RDFtoCSV {
 
     private String processStreaming(Metadata metadata) {
         processStreamingEntities(metadata);
-        String result = processStreamingWrite(metadata);
-        File f = FileWrite.makeFileByNameAndExtension(fileName, "csv");
-        FileWrite.writeToTheFile(f, result);
-        return result;
+        processStreamingWrite(metadata, fileName);
+        /*
+
+                FileWrite.writeToTheFile(f, result, true);
+
+         */
+
+        return "CSV written to the file by stream, the file is available here: " + fileName + ".csv";
 
     }
 
-    private String processStreamingWrite(Metadata metadata) {
-        // TODO
-        return "CSV contents.";
+    private void processStreamingWrite(Metadata metadata, String fileName) {
+        StreamingNTriplesWrite streamingWrite = new StreamingNTriplesWrite(metadata, fileName);
+        streamingWrite.writeToFileByMetadata();
     }
 
     private void processStreamingEntities(Metadata metadata) {

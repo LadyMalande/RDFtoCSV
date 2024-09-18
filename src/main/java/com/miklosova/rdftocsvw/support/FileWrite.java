@@ -128,7 +128,7 @@ public class FileWrite {
         StringBuilder sb1 = new StringBuilder();
         List<Column> orderOfColumnKeys = addHeadersFromMetadata(fileName, metadata, sb1);
         forOutput.append(sb1);
-        FileWrite.writeToTheFile(f, sb1.toString());
+        FileWrite.writeToTheFile(f, sb1.toString(), true);
 
         for (Row row : rows) {
             //System.out.println("rows number " + rows.size());
@@ -251,7 +251,7 @@ public class FileWrite {
             JsonUtil.serializeAndWriteToFile(metadata);
 
         }
-        FileWrite.writeToTheFile(f, forOutput.toString());
+        FileWrite.writeToTheFile(f, forOutput.toString(), false);
         //System.out.println("Written CSV from rows to the file " + f + ". in saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata)");
         ////System.out.println("saveCSVFileFromRows end");
         return forOutput.toString();
@@ -561,10 +561,10 @@ public class FileWrite {
         }
     }
 
-    public static void writeToTheFile(File file, Object something) {
+    public static void writeToTheFile(File file, Object something, boolean appendOrNot) {
         try {
             System.out.println("writeToTheFile trying to create FileWriter with file.getName()=" + file.getName() + " and file.getAbsolutePath()=" + file.getAbsolutePath());
-            FileWriter myWriter = new FileWriter(file, true);
+            FileWriter myWriter = new FileWriter(file, appendOrNot);
 
             myWriter.write(something.toString());
 

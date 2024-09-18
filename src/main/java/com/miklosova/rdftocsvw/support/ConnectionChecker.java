@@ -14,10 +14,10 @@ public class ConnectionChecker {
             //System.out.println("Internet is connected");
             return true;
         } catch (MalformedURLException e) {
-            System.out.println("Internet is not connected");
+            //System.out.println("Internet is not connected");
             return false;
         } catch (IOException e) {
-            System.out.println("Internet is not connected");
+            //System.out.println("Internet is not connected");
             return false;
         }
     }

@@ -494,4 +494,11 @@ public class TableSchema {
     public void setRows(List<Row> rows) {
         this.rows = rows;
     }
+
+    public Column getColumnByName(String name) {
+        Optional<Column> foundColumn = columns.stream()
+                .filter(column -> column.getName().equalsIgnoreCase(name))
+                .findFirst(); // returns an Optional
+        return foundColumn.orElse(null);
+    }
 }
