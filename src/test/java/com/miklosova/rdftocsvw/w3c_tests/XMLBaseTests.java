@@ -4,7 +4,7 @@ import com.miklosova.rdftocsvw.convertor.ConversionService;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
-import com.miklosova.rdftocsvw.BaseTest;
+import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;

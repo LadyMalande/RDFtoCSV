@@ -1,9 +1,7 @@
 package com.miklosova.rdftocsvw.input_processor;
 
 
-import com.miklosova.rdftocsvw.BaseTest;
-import com.miklosova.rdftocsvw.input_processor.parsing_methods.HdtParser;
-import com.sun.source.doctree.SeeTree;
+import com.miklosova.rdftocsvw.support.BaseTest;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -19,8 +17,6 @@ import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

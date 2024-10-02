@@ -1,4 +1,4 @@
-package com.miklosova.rdftocsvw;
+package com.miklosova.rdftocsvw.convertor;
 
 import com.miklosova.rdftocsvw.convertor.ConversionService;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;

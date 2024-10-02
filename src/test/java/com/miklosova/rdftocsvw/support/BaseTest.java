@@ -1,11 +1,10 @@
-package com.miklosova.rdftocsvw;
+package com.miklosova.rdftocsvw.support;
 
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import org.eclipse.rdf4j.repository.Repository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.After;
-import org.junit.jupiter.api.BeforeEach;
 
 import java.io.FileReader;
 import java.util.logging.Level;

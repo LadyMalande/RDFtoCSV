@@ -18,4 +18,16 @@ public class CSVOutputGrid {
         this.csvOutputBuffer = new HashMap<>();
 
     }
+
+    public void print(){
+        for(Map.Entry<IRI, Map<String, List<Value>>> entry : csvOutputBuffer.entrySet()){
+            System.out.print(entry.getKey() + ": ");
+            for(Map.Entry<String, List<Value>> entryInside: entry.getValue().entrySet()){
+
+                System.out.print(" " + entryInside.getKey());
+                System.out.print(" " + entryInside.getValue().get(0));
+            }
+            System.out.print("\n");
+        }
+    }
 }

@@ -20,6 +20,9 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
+        // Capture start time
+        long startTime = System.currentTimeMillis();
+
         if (args.length < 1) {
             System.err.println("Usage: java -jar Main <filename>");
             System.exit(1);
@@ -53,8 +56,25 @@ public class Main {
             System.err.println("The file passed to the program is null. Usage: java -jar Main <filename>");
             System.exit(1);
         }
+        // Capture end time
+        long endTime1 = System.currentTimeMillis();
+
+        // Calculate total runtime
+        long subtotalTime1 = endTime1 - startTime;
+
+        // Output the total time
+        System.out.println("Program ran for " + subtotalTime1 + " milliseconds.");
 
         rdFtoCSV = new RDFtoCSV(RDFFileToRead);
+
+        // Capture end time
+        long endTime2 = System.currentTimeMillis();
+
+        // Calculate total runtime
+        long subtotalTime2 = endTime2 - startTime;
+
+        // Output the total time
+        System.out.println("Program ran for " + subtotalTime2 + " milliseconds. After rdFtoCSV = new RDFtoCSV(RDFFileToRead);");
 
         try {
             //rdFtoCSV.convertToZip();
@@ -67,5 +87,14 @@ public class Main {
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
+
+        // Capture end time
+        long endTime = System.currentTimeMillis();
+
+        // Calculate total runtime
+        long totalTime = endTime - startTime;
+
+        // Output the total time
+        System.out.println("Program ran for " + totalTime + " milliseconds.");
     }
 }

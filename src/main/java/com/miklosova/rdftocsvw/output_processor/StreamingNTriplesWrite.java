@@ -19,10 +19,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 import static com.miklosova.rdftocsvw.support.FileWrite.writeToTheFile;
@@ -70,9 +67,10 @@ public class StreamingNTriplesWrite {
                 // Read file line by line
                 while ((line = reader.readLine()) != null) {
                     // Skip lines until the desired line
-                    if(i < lineIndexOfProcessed - 1){
-                        // do nothing
+                    if(i < lineIndexOfProcessed){
+                        System.out.println("DO NOTHING + i=" + i+ " lineIndexOfProcessed=" + lineIndexOfProcessed); // do nothing
                     } else{
+                        System.out.println("process line + i=" + i + " lineIndexOfProcessed=" + lineIndexOfProcessed); // do nothing
                         processLine(line, bufferForCSVOutput);
                     }
                     i++;
@@ -81,6 +79,7 @@ public class StreamingNTriplesWrite {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            bufferForCSVOutput.print();
             writeToOutputFile(bufferForCSVOutput);
             processedSubjects.addAll(currentSubjects);
         }
@@ -158,7 +157,7 @@ public class StreamingNTriplesWrite {
                 }
                 // Skip lines until the desired line
                 if(i < lineIndexOfProcessed - 1){
-                    // do nothing
+                    System.out.println("do nothing i < lineIndexOfProcessed - 1    i = " + i);// do nothing
                 } else{
 
                     if(!processedSubjects.contains(triple.getSubject()) && !currentSubjects.contains(triple.getSubject())){
@@ -171,7 +170,12 @@ public class StreamingNTriplesWrite {
                             }
                         }
                         currentSubjects.add(triple.getSubject());
-                        bufferForCSVOutput.csvOutputBuffer.put(triple.getSubject(), new HashMap<>());
+                        HashMap<String, List<Value>> initialMap = new HashMap<>();
+                        List<Value> valueList = new ArrayList<>();
+                        valueList.add(triple.getObject());
+                        initialMap.put(Column.getNameFromIRI(triple.getPredicate(), triple.getObject()), valueList);
+                        System.out.println("initialMap: " + Column.getNameFromIRI(triple.getPredicate(), triple.getObject()) + " : " + initialMap.get(Column.getNameFromIRI(triple.getPredicate(), triple.getObject())).get(0));
+                        bufferForCSVOutput.csvOutputBuffer.put(triple.getSubject(), initialMap);
 
                     }
                 }
@@ -179,6 +183,7 @@ public class StreamingNTriplesWrite {
                 //System.out.println(line);  // Process the line (e.g., print it)
                 if(currentSubjects.size() == maximumOfProcessedSubjects){
                     lineIndexOfProcessed = i;
+                    System.out.println("lineIndexOfProcessed = " + i);
                     return true;
                 }
                 if(i % 100 == 0){
@@ -196,15 +201,18 @@ public class StreamingNTriplesWrite {
 
     private void processLine(String line, CSVOutputGrid grid) {
         Triple triple = StreamingSupport.createTripleFromLine(line);
+        System.out.println("Processing line: " + line);
         if(currentSubjects.contains(triple.getSubject())) {
             String keyForColumn = Column.getNameFromIRI(triple.getPredicate(), triple.getObject());
             if (grid.getCsvOutputBuffer().get(triple.getSubject()).containsKey(keyForColumn)) {
                 grid.getCsvOutputBuffer().get(triple.getSubject()).get(keyForColumn).add(triple.getObject());
                 metadata.getTables().get(0).getTableSchema().getColumnByName(keyForColumn).setSeparator(",");
+                System.out.println("initialMap: " + keyForColumn + " : " + grid.getCsvOutputBuffer().get(triple.getSubject()).get(keyForColumn).get(1));
             } else {
                 ArrayList<Value> values = new ArrayList<>();
                 values.add(triple.getObject());
                 grid.getCsvOutputBuffer().get(triple.getSubject()).put(keyForColumn, values);
+                System.out.println("initialMap: " + keyForColumn + " : " + values.get(0));
             }
         }
     }

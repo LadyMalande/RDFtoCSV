@@ -1,16 +1,9 @@
 package com.miklosova.rdftocsvw.w3c_tests;
 
-import com.miklosova.rdftocsvw.BaseTest;
-import com.miklosova.rdftocsvw.convertor.ConversionService;
+import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
-import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
-import com.miklosova.rdftocsvw.input_processor.MethodService;
-import com.miklosova.rdftocsvw.metadata_creator.Metadata;
-import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.miklosova.rdftocsvw.support.FileWrite;
 import com.miklosova.rdftocsvw.support.TestSupport;
-import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
@@ -20,8 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
