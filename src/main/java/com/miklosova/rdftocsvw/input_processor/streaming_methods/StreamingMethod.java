@@ -19,7 +19,7 @@ public class StreamingMethod implements IInputParsingMethod{
         ParsingService ps = new ParsingService();
 
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, fileToParse.getAbsolutePath());
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, "streamingNTriples");
+        //ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, "streamingNTriples");
         System.out.println("Saved input file name: " + fileToParse.getAbsolutePath());
 
         return null;

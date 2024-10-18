@@ -1,11 +1,8 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.miklosova.rdftocsvw.convertor.*;
-import com.miklosova.rdftocsvw.input_processor.parsing_methods.BinaryParser;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
-import org.eclipse.rdf4j.repository.Repository;
-import org.eclipse.rdf4j.repository.RepositoryConnection;
 
 public class MetadataService {
     private MetadataGateway metadataGateway;
@@ -21,6 +18,8 @@ public class MetadataService {
 
     private void processMetadataCreation(PrefinishedOutput<RowsAndKeys> data) {
         String conversionChoice = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD);
+        System.out.println(" conversionChoice = " + conversionChoice);
+        String extension = FileWrite.getFileExtension(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
 
         switch (conversionChoice) {
             case "basicQuery":
@@ -44,8 +43,15 @@ public class MetadataService {
                     throw new IllegalArgumentException("Invalid data type for codelistQuery");
                 }
                 break;
-            case "streamingNTriples":
-                String extension = FileWrite.getFileExtension(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
+            case "bigFileStreaming":
+
+                if (!extension.equalsIgnoreCase("nt")) {
+                    throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);
+                } else{
+                    metadataGateway.setMetadataCreator(new BigFileStreamingNTriplesMetadataCreator(null));
+                }
+                break;
+            case "streaming":
                 if (!extension.equalsIgnoreCase("nt")) {
                     throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);
                 } else{

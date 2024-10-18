@@ -75,6 +75,7 @@ public class MethodService {
                 methodGateway.setParsingMethod(new RDF4JMethod());
                 break;
             case "streaming":
+            case "bigFileStreaming":
                 methodGateway.setParsingMethod(new StreamingMethod());
                 break;
             default:
