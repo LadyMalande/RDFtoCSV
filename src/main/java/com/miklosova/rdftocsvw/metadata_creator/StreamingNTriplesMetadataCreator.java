@@ -2,6 +2,7 @@ package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
+import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.StreamingSupport;
 import org.eclipse.rdf4j.model.IRI;
 import org.jruby.RubyProcess;
@@ -37,9 +38,11 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
         //tableSchemaByFiles.put(newCSVname, tableSchema);
 
-
-        readFileWithStreaming();
-        //readInputStream(System.in);
+        if(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.STREAMING_FILE).equalsIgnoreCase("false")){
+            readInputStream(System.in);
+        } else{
+            readFileWithStreaming();
+        }
 
         metadata.jsonldMetadata();
         return metadata;
@@ -61,13 +64,14 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     private void readInputStream(InputStream inputStream){
         Scanner scanner = new Scanner(System.in);
         String inputLine;
-
-        System.out.println("Enter input lines (type '---END_OF_STREAM---' to stop):");
+        String endingString = "END";
+        System.out.println("Enter input lines (type '" + endingString +"' to stop):");
 
         // Loop until the termination line is encountered
         while (scanner.hasNextLine()) {
             inputLine = scanner.nextLine();
-            if ("---END_OF_STREAM---".equals(inputLine)) {
+            //if ("---END_OF_STREAM---".equals(inputLine)) {
+            if (endingString.equals(inputLine)) {
                 break;  // Exit the loop when the termination line is entered
             } else {
                 processLine(inputLine);
@@ -156,7 +160,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("File updated successfully - new headers. "+file.getAbsolutePath());
+        //System.out.println("File updated successfully - new headers. "+file.getAbsolutePath());
 
     }
 
@@ -314,10 +318,10 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                     if(parts[indexOfChangeColumn] != ""){
                         // There is already a value in the column - add the value and add the separator to metadata
                         if(parts[indexOfChangeColumn].startsWith("\"")){
-                            parts[indexOfChangeColumn] = parts[indexOfChangeColumn].substring(0, parts[indexOfChangeColumn].length()-2) + "," + triple.getObject().stringValue() + "\"";
+                            parts[indexOfChangeColumn] = parts[indexOfChangeColumn].substring(0, parts[indexOfChangeColumn].length()-2) + ";" + triple.getObject().stringValue() + "\"";
                         } else{
-                            parts[indexOfChangeColumn] = "\"" + parts[indexOfChangeColumn] + "," + triple.getObject().stringValue() + "\"";
-                            tableSchema.getColumns().get(indexOfChangeColumn).setSeparator(",");
+                            parts[indexOfChangeColumn] = "\"" + parts[indexOfChangeColumn] + ";" + triple.getObject().stringValue() + "\"";
+                            tableSchema.getColumns().get(indexOfChangeColumn).setSeparator(";");
                         }
 
                     } else{
@@ -356,7 +360,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                     writer.newLine();
                 }
             }
-            System.out.println("File updated successfully.");
+            //System.out.println("File updated successfully.");
         } else {
             System.out.println("No matching line found.");
         }

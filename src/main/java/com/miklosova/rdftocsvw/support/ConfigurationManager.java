@@ -63,6 +63,7 @@ public class ConfigurationManager {
         return CONFIG_FILE_NAME;
     }
     public static final String READ_METHOD = "conversion.readMethod";
+    public static final String STREAMING_FILE = "conversion.streamingFile";
 
     public static final String INTERMEDIATE_FILE_NAMES = "app.filesInProgress";
     public static final String OUTPUT_ZIPFILE_NAME = "output.zipname";
@@ -183,6 +184,7 @@ public class ConfigurationManager {
 
         String CSVFileToWriteTo = null;
         String conversionMethod = null;
+        String streamingFile = null;
         if (args.length == 2) {
             conversionMethod = args[1];
             System.out.println("args.length == 2");
@@ -192,8 +194,8 @@ public class ConfigurationManager {
             System.out.println("args.length == 3");
         } else if (args.length == 4) {
             conversionMethod = args[1];
-
-            metadataFileName = args[3];
+            parsingMethod = args[2];
+            streamingFile = args[3];
         } else {
 
         }
@@ -202,6 +204,10 @@ public class ConfigurationManager {
         }
         conversionMethod = (conversionMethod == null) ? DEFAULT_CONVERSION_METHOD : conversionMethod;
         prop.setProperty(ConfigurationManager.OUTPUT_FILENAME, CSVFileToWriteTo);
+        if(streamingFile == null){
+            streamingFile = "true";
+        }
+        prop.setProperty(ConfigurationManager.STREAMING_FILE, streamingFile);
         prop.setProperty(ConfigurationManager.CONVERSION_METHOD, conversionMethod);
         System.out.println("property set prop.conversionMethod," + conversionMethod);
         System.out.println("Setting property CONVERSION_METHOD=" + conversionMethod);
