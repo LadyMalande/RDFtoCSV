@@ -76,6 +76,7 @@ public class Main {
         // Output the total time
         System.out.println("Program ran for " + subtotalTime2 + " milliseconds. After rdFtoCSV = new RDFtoCSV(RDFFileToRead);");
 
+
         try {
             //rdFtoCSV.convertToZip();
 
@@ -87,6 +88,8 @@ public class Main {
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
+
+
 
         // Capture end time
         long endTime = System.currentTimeMillis();

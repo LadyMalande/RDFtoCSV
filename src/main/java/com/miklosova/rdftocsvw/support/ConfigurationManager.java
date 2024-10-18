@@ -107,6 +107,10 @@ public class ConfigurationManager {
     }
 
     public static void processConfigMap(Map<String, String> configMap) {
+        if(!ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD)
+                .equalsIgnoreCase(QueryMethods.BASIC_QUERY.getValue()) && configMap == null){
+            return;
+        }
         String queryMethod = QueryMethods.BASIC_QUERY.getValue();
         if (configMap != null && configMap.containsKey("table")) {
             queryMethod = switch (configMap.get("table")) {
@@ -198,6 +202,7 @@ public class ConfigurationManager {
         conversionMethod = (conversionMethod == null) ? DEFAULT_CONVERSION_METHOD : conversionMethod;
         prop.setProperty(ConfigurationManager.OUTPUT_FILENAME, CSVFileToWriteTo);
         prop.setProperty(ConfigurationManager.CONVERSION_METHOD, conversionMethod);
+        System.out.println("Setting property CONVERSION_METHOD=" + conversionMethod);
         prop.setProperty(ConfigurationManager.INTERMEDIATE_FILE_NAMES, "");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");

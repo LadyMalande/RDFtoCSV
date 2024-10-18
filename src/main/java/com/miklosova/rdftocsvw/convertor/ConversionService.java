@@ -25,6 +25,7 @@ public class ConversionService {
 
         switch (conversionChoice) {
             case "basicQuery":
+            case "trivial":
                 conversionGateway.setConversionMethod(new BasicQueryConverter(db));
                 break;
             case "splitQuery":
