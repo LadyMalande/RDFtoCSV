@@ -57,7 +57,7 @@ public class RDFtoCSV {
 
     public RDFtoCSV(String fileName) {
         this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
-        System.out.println("this.filename" + this.fileName);
+        System.out.println("this.filename in RDFtoCSV(String fileName)" + this.fileName);
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;// + "TestOutput";
         ConfigurationManager.processConfigMap(null);
@@ -66,7 +66,7 @@ public class RDFtoCSV {
     public RDFtoCSV(String fileName, Map<String, String> configMap) {
 
         this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
-        System.out.println("this.filename" + this.fileName);
+        System.out.println("this.filename in RDFtoCSV(String fileName, Map<String, String> configMap]" + this.fileName);
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;// + "TestOutput";
         ConfigurationManager.processConfigMap(configMap);
@@ -166,6 +166,9 @@ public class RDFtoCSV {
 
     private String writeToString(PrefinishedOutput<?> po, Metadata metadata) {
         if(po == null){
+            if(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD).equalsIgnoreCase("streaming")){
+                return "";
+            }
             return processStreaming(metadata);
         }
         String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);

@@ -114,7 +114,8 @@ public class ConfigurationManager {
                 default -> QueryMethods.BASIC_QUERY.getValue();
             };
         }
-        saveVariableToConfigFile(CONVERSION_METHOD, queryMethod);
+        if(ConfigurationManager.getVariableFromConfigFile(CONVERSION_METHOD) == null)
+            saveVariableToConfigFile(CONVERSION_METHOD, queryMethod);
         // TODO add more parameters compatible with web service
 
     }
@@ -198,6 +199,7 @@ public class ConfigurationManager {
         conversionMethod = (conversionMethod == null) ? DEFAULT_CONVERSION_METHOD : conversionMethod;
         prop.setProperty(ConfigurationManager.OUTPUT_FILENAME, CSVFileToWriteTo);
         prop.setProperty(ConfigurationManager.CONVERSION_METHOD, conversionMethod);
+        System.out.println("property set prop.conversionMethod," + conversionMethod);
         prop.setProperty(ConfigurationManager.INTERMEDIATE_FILE_NAMES, "");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
