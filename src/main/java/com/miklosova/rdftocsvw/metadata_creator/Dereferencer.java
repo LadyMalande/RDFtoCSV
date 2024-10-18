@@ -1,10 +1,6 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-
 import org.eclipse.rdf4j.model.IRI;
 import org.jsoup.*;
 import org.jsoup.nodes.Document;
@@ -26,12 +22,10 @@ public class Dereferencer {
     //private String _PREFIX = "";
 
 
-
-
     private String url;
 
     public Dereferencer(String url) {
-        System.out.println("Dereferencer constructor");
+        //System.out.println("Dereferencer constructor");
         this.url = url;
     }
 
@@ -44,21 +38,27 @@ public class Dereferencer {
     }
 
     public String getTitle() {
-        if(this.url.startsWith(FOAF_PREFIX)) {
-            return foafDereference();
-        } else if(this.url.startsWith(DC_PREFIX) || this.url.startsWith(DCTERMS_PREFIX)){
-            return dcDereference();
-        } else if(this.url.startsWith(VANN_PREFIX)){
-            return vannDereference();
-        } else if(this.url.startsWith(VS_PREFIX)){
-            return vsDereference();
-        } else if(this.url.startsWith(WOT_PREFIX)){
-            return wotDereference();
-        } else if(this.url.startsWith(SKOS_PREFIX)){
-            return skosDereference();
-        } else{
-            System.out.println("No special title found.");
-            throw new NullPointerException();
+        try {
+            if (this.url.startsWith(FOAF_PREFIX)) {
+                return foafDereference();
+            } else if (this.url.startsWith(DC_PREFIX) || this.url.startsWith(DCTERMS_PREFIX)) {
+                return dcDereference();
+            } else if (this.url.startsWith(VANN_PREFIX)) {
+                return vannDereference();
+            } else if (this.url.startsWith(VS_PREFIX)) {
+                return vsDereference();
+            } else if (this.url.startsWith(WOT_PREFIX)) {
+                return wotDereference();
+            } else if (this.url.startsWith(SKOS_PREFIX)) {
+                return skosDereference();
+            } else {
+                //System.out.println("No special title found.");
+                throw new NullPointerException();
+            }
+        } catch(NullPointerException ex){
+            //System.err.println("There was a problem with dereferencing the IRI for title. Possible cause: no Internet Connection.");
+            return null;
+
         }
     }
 
@@ -70,21 +70,21 @@ public class Dereferencer {
             IRI iri = iri(this.url);
             Document doc = Jsoup.connect(iri.getNamespace()).get();
 
-            System.out.println("iri=" + this.url);
+            //System.out.println("iri=" + this.url);
             String cssQuery = "h3[id=\"" + iri.getLocalName() + "\"]";
             // Find the <h3> element with id=<iriLocalName>
-            System.out.println("cssQuery " + cssQuery);
+            //System.out.println("cssQuery " + cssQuery);
             Element broaderTr = doc.select(cssQuery).first();
             if (broaderTr != null) {
-                System.out.println("text of dereferenced " + broaderTr.text());
+                //System.out.println("text of dereferenced " + broaderTr.text());
                 return broaderTr.text();
             } else {
-                System.out.println("No <tr> element with id='broader' found.");
+                //System.out.println("No <tr> element with id='broader' found.");
             }
-        } catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             throw ex;
         } catch (IOException e) {
-            System.out.println("IOException in Dereferencer.");
+            //System.out.println("IOException in Dereferencer.");
         }
         throw new NullPointerException();
     }
@@ -96,29 +96,29 @@ public class Dereferencer {
             Document doc = Jsoup.connect(this.url).get();
             IRI iri = iri(this.url);
 
-            System.out.println("iri=" + this.url);
+            //System.out.println("iri=" + this.url);
             String cssQuery = "div[id=\"term_" + iri.getLocalName() + "\"]";
             // Find the <tr> element with id="broader"
-            System.out.println("cssQuery " + cssQuery);
+            //System.out.println("cssQuery " + cssQuery);
             Element foundElement = doc.select(cssQuery).first();//.parent().parent();
             //broaderTr.parent().parent();
-            System.out.println("text on broaderTr " + foundElement.text());
+            //System.out.println("text on broaderTr " + foundElement.text());
             if (foundElement != null) {
                 // Find the next <tr> element relative to the <tr> with id="broader"
                 Element elementEm = foundElement.selectFirst("em");
 
 
                 assert elementEm != null;
-                System.out.println("element em text = " + elementEm.text());
+                //System.out.println("element em text = " + elementEm.text());
 
                 return elementEm.text();
             } else {
-                System.out.println("No <tr> element with id='broader' found.");
+                //System.out.println("No <tr> element with id='broader' found.");
             }
-        } catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             throw ex;
         } catch (IOException e) {
-            System.out.println("IOException in Dereferencer.");
+            //System.out.println("IOException in Dereferencer.");
             //e.printStackTrace();
         }
         throw new NullPointerException();
@@ -131,25 +131,25 @@ public class Dereferencer {
             Document doc = Jsoup.connect(this.url).get();
             IRI iri = iri(this.url);
 
-            System.out.println("iri=" + this.url);
+            //System.out.println("iri=" + this.url);
             String cssQuery = "rdf\\:Property[rdf\\:about=\"#" + iri.getLocalName() + "\"]";
             String xpath = "//rdf:Property[@rdf:about='#" + iri.getLocalName() + "']";
             // Find the <h3> element with id=<iriLocalName>
-            System.out.println("cssQuery " + cssQuery);
+            //System.out.println("cssQuery " + cssQuery);
             //Element broaderTr = doc.select(cssQuery).first();
             Element broaderTr = doc.selectXpath(xpath).first();
             if (broaderTr != null) {
                 Element label = broaderTr.select("rdfs:label").first();
                 assert label != null;
-                System.out.println("text of dereferenced " + label.text());
+                //System.out.println("text of dereferenced " + label.text());
                 return label.text();
             } else {
-                System.out.println("No <tr> element with id='broader' found.");
+                //System.out.println("No <tr> element with id='broader' found.");
             }
-        } catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             throw ex;
         } catch (IOException e) {
-            System.out.println("IOException in Dereferencer.");
+            //System.out.println("IOException in Dereferencer.");
         }
         throw new NullPointerException();
     }
@@ -161,13 +161,13 @@ public class Dereferencer {
             Document doc = Jsoup.connect(this.url).get();
             IRI iri = iri(this.url);
 
-            System.out.println("iri=" + this.url);
+            //System.out.println("iri=" + this.url);
             String cssQuery = "#" + iri.getLocalName();
             // Find the <tr> element with id="broader"
-            System.out.println("cssQuery " + cssQuery);
+            //System.out.println("cssQuery " + cssQuery);
             Element broaderTr = doc.select(cssQuery).first().parent().parent();
             //broaderTr.parent().parent();
-            System.out.println("text on broaderTr " + broaderTr.text());
+            //System.out.println("text on broaderTr " + broaderTr.text());
             if (broaderTr != null) {
                 // Find the next <tr> element relative to the <tr> with id="broader"
                 Element nextTr = broaderTr.nextElementSibling();
@@ -185,16 +185,16 @@ public class Dereferencer {
                         }
                     }
                     nextTr = nextTr.nextElementSibling();
-                    System.out.println("End of  while (nextTr != null)");
+                    //System.out.println("End of  while (nextTr != null)");
                 }
-                System.out.println("End of if (broaderTr != null) ");
+                //System.out.println("End of if (broaderTr != null) ");
             } else {
-                System.out.println("No <tr> element with id='broader' found.");
+                //System.out.println("No <tr> element with id='broader' found.");
             }
-        } catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             throw ex;
         } catch (IOException e) {
-            System.out.println("IOException in Dereferencer.");
+            //System.out.println("IOException in Dereferencer.");
             //e.printStackTrace();
         }
         throw new NullPointerException();
@@ -207,13 +207,13 @@ public class Dereferencer {
             Document doc = Jsoup.connect(this.url).get();
             IRI iri = iri(this.url);
 
-            System.out.println("iri=" + this.url);
-            String xpath = "//td[text()='"+iri+"']";
+            //System.out.println("iri=" + this.url);
+            String xpath = "//td[text()='" + iri + "']";
             // Find the <tr> element with id="broader"
 
             Element tr = doc.selectXpath(xpath).first().parent();//.parent().parent();
             //broaderTr.parent().parent();
-            System.out.println("text on broaderTr " + tr.text());
+            //System.out.println("text on broaderTr " + tr.text());
             if (tr != null) {
                 // Find the next <tr> element relative to the <tr> with id="broader"
                 Element nextTr = tr.nextElementSibling();
@@ -228,21 +228,21 @@ public class Dereferencer {
                             //System.out.println("Found <tr> sibling with <td> containing 'Label:': " + nextTr);
 
                             assert titleElement != null;
-                            System.out.println("Found td with Label name: " + titleElement.text());
+                            //System.out.println("Found td with Label name: " + titleElement.text());
                             return titleElement.text();
                         }
                     }
                     nextTr = nextTr.nextElementSibling();
-                    System.out.println("End of  while (nextTr != null)");
+                    //System.out.println("End of  while (nextTr != null)");
                 }
-                System.out.println("End of if (broaderTr != null) ");
+                //System.out.println("End of if (broaderTr != null) ");
             } else {
-                System.out.println("No <tr> element with id='broader' found.");
+                //System.out.println("No <tr> element with id='broader' found.");
             }
-        } catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             throw ex;
         } catch (IOException e) {
-            System.out.println("IOException in Dereferencer.");
+            //System.out.println("IOException in Dereferencer.");
             //e.printStackTrace();
         }
         throw new NullPointerException();
@@ -255,29 +255,29 @@ public class Dereferencer {
             Document doc = Jsoup.connect(this.url).get();
             IRI iri = iri(this.url);
 
-            System.out.println("iri=" + this.url);
+            //System.out.println("iri=" + this.url);
             String cssQuery = "div[about=\"" + iri + "\"]";
             // Find the <tr> element with id="broader"
-            System.out.println("cssQuery " + cssQuery);
+            //System.out.println("cssQuery " + cssQuery);
             Element foundElement = doc.select(cssQuery).first();//.parent().parent();
             //broaderTr.parent().parent();
-            System.out.println("text on broaderTr " + foundElement.text());
+            //System.out.println("text on broaderTr " + foundElement.text());
             if (foundElement != null) {
                 // Find the next <tr> element relative to the <tr> with id="broader"
                 Element elementEm = foundElement.selectFirst("em");
 
 
                 assert elementEm != null;
-                System.out.println("element em text = " + elementEm.text());
+                //System.out.println("element em text = " + elementEm.text());
 
                 return elementEm.text();
             } else {
-                System.out.println("No <tr> element with id='broader' found.");
+                //System.out.println("No <tr> element with id='broader' found.");
             }
-        } catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             throw ex;
         } catch (IOException e) {
-            System.out.println("IOException in Dereferencer.");
+            //System.out.println("IOException in Dereferencer.");
             //e.printStackTrace();
         }
         throw new NullPointerException();

@@ -26,7 +26,7 @@ import static com.miklosova.rdftocsvw.support.StandardModeCSVWIris.CSVW_TableGro
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 @Log
-public class BasicQueryConverter implements IQueryParser{
+public class BasicQueryConverter implements IQueryParser {
 
     ArrayList<Value> roots;
     ArrayList<Row> rows;
@@ -47,21 +47,21 @@ public class BasicQueryConverter implements IQueryParser{
         this.db = db;
     }
 
-    public void changeBNodesForIri(RepositoryConnection rc){
+    public void changeBNodesForIri(RepositoryConnection rc) {
         Iterator statements = rc.getStatements(null, null, null, true).iterator();
         Map<Value, Value> mapOfBlanks = new HashMap<>();
         //System.out.println("Iterator size: " + Iterators.size(statements));
         int counter = 0;
         int i = 0;
-        while(statements.hasNext()){
-            Statement st = (Statement)statements.next();
+        while (statements.hasNext()) {
+            Statement st = (Statement) statements.next();
             Statement statement = null;
             IRI subj = null;
-            if(st.getSubject().isBNode()){
-                if(mapOfBlanks.get(st.getSubject()) != null){
+            if (st.getSubject().isBNode()) {
+                if (mapOfBlanks.get(st.getSubject()) != null) {
                     ValueFactory vf = SimpleValueFactory.getInstance();
-                    subj = (IRI)mapOfBlanks.get(st.getSubject());
-                    statement = vf.createStatement((IRI)mapOfBlanks.get(st.getSubject()), st.getPredicate(), st.getObject());
+                    subj = (IRI) mapOfBlanks.get(st.getSubject());
+                    statement = vf.createStatement((IRI) mapOfBlanks.get(st.getSubject()), st.getPredicate(), st.getObject());
 
                 } else {
                     ValueFactory vf = SimpleValueFactory.getInstance();
@@ -69,31 +69,31 @@ public class BasicQueryConverter implements IQueryParser{
                     //IRI v = (IRI) iri("https://blank_Nodes_IRI.org/" + i);
                     i++;
                     mapOfBlanks.put(st.getSubject(), v);
-                    subj = (IRI)mapOfBlanks.get(st.getSubject());
-                    statement = vf.createStatement((IRI)mapOfBlanks.get(st.getSubject()), st.getPredicate(), st.getObject());
+                    subj = (IRI) mapOfBlanks.get(st.getSubject());
+                    statement = vf.createStatement((IRI) mapOfBlanks.get(st.getSubject()), st.getPredicate(), st.getObject());
                 }
             }
-            if(st.getObject().isBNode()){
-                if(mapOfBlanks.get(st.getObject()) != null){
+            if (st.getObject().isBNode()) {
+                if (mapOfBlanks.get(st.getObject()) != null) {
                     ValueFactory vf = SimpleValueFactory.getInstance();
-                    subj = (subj == null) ? (IRI)st.getSubject() : subj;
-                    statement = vf.createStatement(subj, st.getPredicate(), (IRI)mapOfBlanks.get(st.getObject()));
+                    subj = (subj == null) ? (IRI) st.getSubject() : subj;
+                    statement = vf.createStatement(subj, st.getPredicate(), (IRI) mapOfBlanks.get(st.getObject()));
                     rc.add(statement);
-                } else{
+                } else {
                     ValueFactory vf = SimpleValueFactory.getInstance();
                     IRI v = vf.createIRI("https://blank_Nodes_IRI.org/" + i);
 
-                    mapOfBlanks.put(st.getObject(),v);
-                    subj = (subj == null) ? (IRI)st.getSubject() : subj;
-                    statement = vf.createStatement(subj, st.getPredicate(), (IRI)mapOfBlanks.get(st.getObject()));
+                    mapOfBlanks.put(st.getObject(), v);
+                    subj = (subj == null) ? (IRI) st.getSubject() : subj;
+                    statement = vf.createStatement(subj, st.getPredicate(), (IRI) mapOfBlanks.get(st.getObject()));
                     i++;
                 }
             }
-            if(statement != null){
+            if (statement != null) {
                 rc.add(statement);
             }
             System.out.println(st);
-            counter = counter +1;
+            counter = counter + 1;
         }
         System.out.println("Count " + counter);
     }
@@ -107,11 +107,11 @@ public class BasicQueryConverter implements IQueryParser{
         rows = new ArrayList<>();
         PrefinishedOutput queryResult;
         String query = getCSVTableQueryForModel(true);
-        try{
+        try {
             System.out.println("Query at top level in convertWithQuery\n" + query.toString());
             queryResult = queryRDFModel(query, true);
 
-        } catch(IndexOutOfBoundsException ex){
+        } catch (IndexOutOfBoundsException ex) {
             query = getCSVTableQueryForModel(false);
             queryResult = queryRDFModel(query, false);
         }
@@ -128,13 +128,13 @@ public class BasicQueryConverter implements IQueryParser{
         deleteQuery.execute();
         TupleQuery query = rc.prepareTupleQuery("SELECT ?s ?p ?o WHERE { ?s ?p ?o .}");
         try (TupleQueryResult result = query.evaluate()) {
-            for(BindingSet sol : result){
+            for (BindingSet sol : result) {
                 //System.out.println("s: " + sol.getBinding("s") +" p: " + sol.getBinding("p")+" o: " + sol.getBinding("o") + " count: ");
             }
         }
     }
 
-    private void loadConfiguration(){
+    private void loadConfiguration() {
 
         delimiter = ConfigurationManager.getVariableFromConfigFile("input.delimiter");
         System.out.println("READ delimiter from input.delimiter to: " + delimiter);
@@ -149,61 +149,64 @@ public class BasicQueryConverter implements IQueryParser{
         SelectQuery selectQuery = Queries.SELECT();
 
         Variable o = SparqlBuilder.var("o"), s = SparqlBuilder.var("s"),
-                s_in = SparqlBuilder.var("s_in"),p_in = SparqlBuilder.var("p_in"),
-                p = SparqlBuilder.var("p");;
+                s_in = SparqlBuilder.var("s_in"), p_in = SparqlBuilder.var("p_in"),
+                p = SparqlBuilder.var("p");
+        ;
 
-        if(askForTypes){
-            selectQuery.prefix(skos).select(s,o).where(s.isA(o).filterNotExists(s_in.has(p_in, s)));
-        } else{
-            selectQuery.prefix(skos).select(s,o).where(s.has(p, o).filterNotExists(s_in.has(p_in, s)));
+        if (askForTypes) {
+            selectQuery.prefix(skos).select(s, o).where(s.isA(o).filterNotExists(s_in.has(p_in, s)));
+        } else {
+            selectQuery.prefix(skos).select(s, o).where(s.has(p, o).filterNotExists(s_in.has(p_in, s)));
         }
 
         System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
-    public String getQueryForRoot(boolean askForTypes){
+    public String getQueryForRoot(boolean askForTypes) {
         // Create the query to get all data in CSV format
         SelectQuery selectQuery = Queries.SELECT();
 
         Variable o = SparqlBuilder.var("o"), s = SparqlBuilder.var("s"),
-                p = SparqlBuilder.var("p");;
+                p = SparqlBuilder.var("p");
+        ;
 
-        if(askForTypes){
-            selectQuery.select(s,o).where(s.isA(o));
-        } else{
-            selectQuery.select(s,o).where(s.has(p, o));
+        if (askForTypes) {
+            selectQuery.select(s, o).where(s.isA(o));
+        } else {
+            selectQuery.select(s, o).where(s.has(p, o));
         }
 
         System.out.println("getQueryForSubstituteRoots query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
-    public String getQueryForSubstituteRoots(boolean askForTypes){
+    public String getQueryForSubstituteRoots(boolean askForTypes) {
         // Create the query to get all data in CSV format
         SelectQuery selectQuery = Queries.SELECT();
 
         Variable o = SparqlBuilder.var("o"), s = SparqlBuilder.var("s"),
-                p = SparqlBuilder.var("p");;
+                p = SparqlBuilder.var("p");
+        ;
 
-        if(askForTypes){
-            selectQuery.select(s,o).where(s.isA(o));
-        } else{
-            selectQuery.select(s,o).where(s.has(p, o));
+        if (askForTypes) {
+            selectQuery.select(s, o).where(s.isA(o));
+        } else {
+            selectQuery.select(s, o).where(s.has(p, o));
         }
 
         System.out.println("getQueryForSubstituteRoots query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
-    private String getQueryForRoot(String root){
+    private String getQueryForRoot(String root) {
         Prefix skos = SparqlBuilder.prefix(SKOS.NS);
         SelectQuery selectQuery = Queries.SELECT();
 
         SimpleValueFactory rdf = SimpleValueFactory.getInstance();
         Variable o = SparqlBuilder.var("o"), p = SparqlBuilder.var("p");
         Iri subjectIRI = iri(root);
-        selectQuery.prefix(skos).select(p,o).where(subjectIRI.has(p,o));
+        selectQuery.prefix(skos).select(p, o).where(subjectIRI.has(p, o));
         //System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
@@ -236,7 +239,7 @@ public class BasicQueryConverter implements IQueryParser{
                 }
             });
 
-            while(!conn.isEmpty()) {
+            while (!conn.isEmpty()) {
 
                 TupleQuery query = conn.prepareTupleQuery(queryString);
                 //System.out.println("query.getDataset()" + query.getDataset());
@@ -257,16 +260,16 @@ public class BasicQueryConverter implements IQueryParser{
                         //System.out.println("?subject = " + solution.getValue("s") + " added to roots");
                         System.out.println("?subject = " + solution.getValue("s") + " is a o=" + solution.getValue("o") + " added to roots");
                         System.out.println("Table Group=" + CSVW_TableGroup);
-                        if(solution.getValue("o").stringValue().equalsIgnoreCase(CSVW_TableGroup)){
+                        if (solution.getValue("o").stringValue().equalsIgnoreCase(CSVW_TableGroup)) {
                             System.out.println("Table Group, engaging in StandardModeConverter");
                             StandardModeConverter smc = new StandardModeConverter(db);
                             return smc.convertWithQuery(this.rc);
                         }
-                        if(!roots.contains(solution.getValue("s"))){
+                        if (!roots.contains(solution.getValue("s"))) {
                             roots.add(solution.getValue("s"));
                             System.out.println("Root: " + solution.getValue("s"));
                         }
-                        Row newRow = new Row(solution.getValue("s"),solution.getValue("o"),askForTypes);
+                        Row newRow = new Row(solution.getValue("s"), solution.getValue("o"), askForTypes);
                         queryForSubjects(conn, newRow, solution.getValue("s"), solution.getValue("s"), null, askForTypes, 0);
                         System.out.println();
                         System.out.println("askForTypes=" + askForTypes);
@@ -274,7 +277,7 @@ public class BasicQueryConverter implements IQueryParser{
                                 " type: " + newRow.type.stringValue() +
                                 " isRdfType=" + newRow.isRdfType +
                                 " newRow columns " + newRow.columns.entrySet());
-                        if(rows.stream().anyMatch(row -> row.id.equals(newRow.id))){
+                        if (rows.stream().anyMatch(row -> row.id.equals(newRow.id))) {
                             // a row with the same id is already present in the data, dont create new one
                         } else {
                             rows.add(newRow);
@@ -283,21 +286,21 @@ public class BasicQueryConverter implements IQueryParser{
                     }
                     System.out.println("After loop with results of query " + queryString);
                     //countDominantPredicates(conn, roots);
-                    if(roots.isEmpty()){
+                    if (roots.isEmpty()) {
                         System.out.println("Roots is empty");
                         // NO ROOTS found, find different supplement roots
                         TupleQuery queryForSubstituteRoots = conn.prepareTupleQuery(getQueryForSubstituteRoots(askForTypes));
                         try (TupleQueryResult resultForSubstituteRoots = queryForSubstituteRoots.evaluate()) {
-                            if(resultForSubstituteRoots.hasNext()){
+                            if (resultForSubstituteRoots.hasNext()) {
                                 for (BindingSet solution : resultForSubstituteRoots) {
                                     // ... and print out the value of the variable binding for ?s and ?n
                                     //System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
-                                    if(!roots.contains(solution.getValue("s"))){
+                                    if (!roots.contains(solution.getValue("s"))) {
                                         System.out.println("Adding to roots in substituteRoots ?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
                                         roots.add(solution.getValue("s"));
                                     }
                                 }
-                            } else{
+                            } else {
                                 throw new IndexOutOfBoundsException();
 
                             }
@@ -336,9 +339,9 @@ public class BasicQueryConverter implements IQueryParser{
             rows.forEach(k -> System.out.println("Row: " + k.id.stringValue() + " " + k.columns.entrySet()));
             //System.out.println();
 
-                //System.out.println("Adding rowAndKey #: " + i);
+            //System.out.println("Adding rowAndKey #: " + i);
 
-                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
+            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
 
 
             //System.out.print(gen.get());
@@ -380,13 +383,13 @@ public class BasicQueryConverter implements IQueryParser{
         Iri subjectIRI = iri(root.toString());
         Iri dominantTypeIRI = iri(dominantType.toString());
 
-        if(askForTypes){
-            query = selectQuery.prefix(skos).delete().where(subjectIRI.has(p,o).andIsA(dominantTypeIRI)).getQueryString();
-        } else{
-            query = selectQuery.prefix(skos).delete().where(subjectIRI.has(p,o)).getQueryString();
+        if (askForTypes) {
+            query = selectQuery.prefix(skos).delete().where(subjectIRI.has(p, o).andIsA(dominantTypeIRI)).getQueryString();
+        } else {
+            query = selectQuery.prefix(skos).delete().where(subjectIRI.has(p, o)).getQueryString();
         }
 
-        if(root.isBNode()){
+        if (root.isBNode()) {
             query = changeIRItoBNode(query);
         }
         //System.out.println("getDeletePredicatesObjectsForRoot query string\n" + query);
@@ -437,40 +440,39 @@ public class BasicQueryConverter implements IQueryParser{
 
                  */
                 Value keyForColumnsMap = solution.getBinding("p").getValue();
-                if(level != 0){
+                if (level != 0) {
                     ValueFactory valueFactory = SimpleValueFactory.getInstance();
 
                     // Create a new IRI
 
-                    String newValueForMap = solution.getBinding("p").getValue().stringValue() + "_MULTILEVEL_" + ((IRI)subject).getLocalName();
-                    System.out.println("newValueForMap" +newValueForMap);
+                    String newValueForMap = solution.getBinding("p").getValue().stringValue() + "_MULTILEVEL_" + ((IRI) subject).getLocalName();
+                    System.out.println("newValueForMap" + newValueForMap);
                     IRI iri = valueFactory.createIRI(newValueForMap);
                     keyForColumnsMap = iri;
                 }
-                if(newRow.columns.containsKey(keyForColumnsMap) &&
+                if (newRow.columns.containsKey(keyForColumnsMap) &&
                         newRow.columns.get(keyForColumnsMap).type == TypeOfValue.IRI &&
-                        solution.getBinding("o").getValue().isIRI()){
+                        solution.getBinding("o").getValue().isIRI()) {
                     List<Value> oldStringValue = newRow.columns.get(keyForColumnsMap).values;
                     oldStringValue.add(solution.getBinding("o").getValue());
-                    TypeIdAndValues oldTypeIdAndValues =  newRow.columns.get(keyForColumnsMap);
+                    TypeIdAndValues oldTypeIdAndValues = newRow.columns.get(keyForColumnsMap);
                     oldTypeIdAndValues.values = oldStringValue;
                     newRow.columns.put(keyForColumnsMap, oldTypeIdAndValues);
                     encloseInDoubleQuotes = solution.getBinding("p").getValue();
                     System.out.println("IRI already in the map o Added to oldRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
 
-                } else if(newRow.columns.containsKey(keyForColumnsMap) &&
+                } else if (newRow.columns.containsKey(keyForColumnsMap) &&
                         newRow.columns.get(keyForColumnsMap).type == TypeOfValue.LITERAL &&
-                        solution.getBinding("o").getValue().isLiteral()){
+                        solution.getBinding("o").getValue().isLiteral()) {
                     List<Value> oldStringValue = newRow.columns.get(keyForColumnsMap).values;
                     oldStringValue.add(solution.getBinding("o").getValue());
-                    TypeIdAndValues oldTypeIdAndValues =  newRow.columns.get(keyForColumnsMap);
+                    TypeIdAndValues oldTypeIdAndValues = newRow.columns.get(keyForColumnsMap);
                     oldTypeIdAndValues.values = oldStringValue;
                     newRow.columns.put(keyForColumnsMap, oldTypeIdAndValues);
                     encloseInDoubleQuotes = solution.getBinding("p").getValue();
                     System.out.println("LITERAL already in the map o Added to oldRow.columns predicate = " + solution.getBinding("p").getValue() + "  Value of = " + solution.getBinding("o").getValue());
 
-                }
-                else { // There is no such key (column) in the map
+                } else { // There is no such key (column) in the map
                     //if(!solution.getValue("p").toString().equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")){
                     TypeOfValue newType = (solution.getBinding("o").getValue().isIRI()) ? TypeOfValue.IRI :
                             (solution.getBinding("o").getValue().isBNode()) ? TypeOfValue.BNODE : TypeOfValue.LITERAL;
@@ -479,21 +481,21 @@ public class BasicQueryConverter implements IQueryParser{
                             new ArrayList<>(Arrays.asList(solution.getBinding("o").getValue()))));
                     System.out.println("There is no such key in columns map o Added to newRow.columns predicate = " + keyForColumnsMap + "  Value of = " + solution.getBinding("o").getValue());
                     //}
-                    if(solution.getBinding("o").getValue().isBNode()){
+                    if (solution.getBinding("o").getValue().isBNode()) {
                         //System.out.println("o is BNode with Value of = " + solution.getBinding("o").getValue());
                     }
 
 
                 }
 
-                if(!keys.contains(keyForColumnsMap)){
+                if (!keys.contains(keyForColumnsMap)) {
                     keys.forEach(k -> System.out.print("key: " + k));
                     keys.add(keyForColumnsMap);
                     //System.out.println();
                     //System.out.println("Key added from solution: " + solution.getValue("p").toString() );
                 }
 
-                if(solution.getValue("o") != null && solution.getValue("o").isIRI()){
+                if (solution.getValue("o") != null && solution.getValue("o").isIRI()) {
                     System.out.println("Querying with queryForSubjects for o=" + solution.getValue("o").stringValue());
                     queryForSubjects(conn, newRow, root, solution.getValue("o"), dominantType, askForTypes, level + 1);
                 }
@@ -502,14 +504,14 @@ public class BasicQueryConverter implements IQueryParser{
                 // Delete the triple from the storage
                 Resource subjectToDelete = Values.iri(subject.toString());
                 IRI predicate = Values.iri(solution.getValue("p").toString());
-                System.out.println("Wanting to delete =  " + subject + ", " + predicate +  ", " + ""  + solution.getValue("o").toString());
-                if(subjectIsInOnlyOneTripleAsObject(conn, subjectToDelete)){
-                    conn.remove(subjectToDelete,predicate, solution.getValue("o"));
+                System.out.println("Wanting to delete =  " + subject + ", " + predicate + ", " + "" + solution.getValue("o").toString());
+                if (subjectIsInOnlyOneTripleAsObject(conn, subjectToDelete)) {
+                    conn.remove(subjectToDelete, predicate, solution.getValue("o"));
                 }
 
 
             }
-        } catch(QueryEvaluationException ex){
+        } catch (QueryEvaluationException ex) {
             System.out.println("QueryEvaluationException");
             ex.printStackTrace();
         }
@@ -546,19 +548,19 @@ public class BasicQueryConverter implements IQueryParser{
         Variable o = SparqlBuilder.var("o"), p = SparqlBuilder.var("p");
         Iri subjectIRI = iri(root.toString());
         //Iri dominantTypeIRI = iri(dominantType.toString());
-        if(askForTypes){
-            query = selectQuery.prefix(skos).select(p,o).where(subjectIRI.has(p,o)).getQueryString(); //andIsA(dominantTypeIRI)).getQueryString();
-        } else{
-            query = selectQuery.prefix(skos).select(p,o).where(subjectIRI.has(p,o)).getQueryString();
+        if (askForTypes) {
+            query = selectQuery.prefix(skos).select(p, o).where(subjectIRI.has(p, o)).getQueryString(); //andIsA(dominantTypeIRI)).getQueryString();
+        } else {
+            query = selectQuery.prefix(skos).select(p, o).where(subjectIRI.has(p, o)).getQueryString();
         }
-        if(root.isBNode()){
+        if (root.isBNode()) {
             query = changeIRItoBNode(query);
         }
         //System.out.println("getCSVTableQueryForModel query string\n" + query);
         return query;
     }
 
-    private String changeIRItoBNode(String query){
+    private String changeIRItoBNode(String query) {
         String newQuery = query.replace("<_:", "_:");
         newQuery = newQuery.replace("> ?p", " ?p");
         newQuery = newQuery.replace("> a", " a");
@@ -578,9 +580,9 @@ public class BasicQueryConverter implements IQueryParser{
                 // we just iterate over all solutions in the result...
                 for (BindingSet solution : result) {
                     Value key;
-                    if(askForTypes){
+                    if (askForTypes) {
                         key = solution.getValue("o");
-                    } else{
+                    } else {
                         key = solution.getValue("p");
                         //System.out.println("Found dominant possibility predicates: " + key);
 
@@ -589,7 +591,7 @@ public class BasicQueryConverter implements IQueryParser{
 
                     if (mapOfTypesAndTheirNumbers.containsKey(key)) {
                         Integer oldValue = mapOfTypesAndTheirNumbers.get(key);
-                        Integer newValue = oldValue+1;
+                        Integer newValue = oldValue + 1;
                         mapOfTypesAndTheirNumbers.put(key, newValue);
                         //System.out.println("Adding key for sorting predicates: " + key + " number= " + newValue);
                     } else {
@@ -598,9 +600,8 @@ public class BasicQueryConverter implements IQueryParser{
                     }
                 }
 
-            }
-            catch(QueryEvaluationException ex){
-                System.out.println("There has been a problem with query evaluation " );
+            } catch (QueryEvaluationException ex) {
+                System.out.println("There has been a problem with query evaluation ");
                 ex.printStackTrace();
             }
         }
@@ -611,15 +612,15 @@ public class BasicQueryConverter implements IQueryParser{
         SelectQuery selectQuery = Queries.SELECT();
         String query;
         SimpleValueFactory rdf = SimpleValueFactory.getInstance();
-        Variable o = SparqlBuilder.var("o"),  p = SparqlBuilder.var("p");
+        Variable o = SparqlBuilder.var("o"), p = SparqlBuilder.var("p");
         Iri subjectIRI = iri(root.toString());
 
-        if(askForTypes){
+        if (askForTypes) {
             query = selectQuery.prefix(skos).select(o).where(subjectIRI.isA(o)).getQueryString();
-        } else{
+        } else {
             query = selectQuery.prefix(skos).select(p, o).where(subjectIRI.has(p, o)).getQueryString();
         }
-        if(root.isBNode()){
+        if (root.isBNode()) {
             query = changeIRItoBNode(query);
         }
         //System.out.println("getQueryForTypes query string\n" + query);
@@ -631,7 +632,7 @@ public class BasicQueryConverter implements IQueryParser{
         //System.out.println("getDominantType");
 
         List<Map.Entry<Value, Integer>> sortedEnties = entriesSortedByValues(mapOfTypesAndTheirNumbers);
-        for(Map.Entry<Value, Integer> entry : sortedEnties){
+        for (Map.Entry<Value, Integer> entry : sortedEnties) {
             System.out.println(entry.getKey() + " : " + entry.getValue());
         }
         dominantType = sortedEnties.get(0).getKey();
@@ -656,7 +657,7 @@ public class BasicQueryConverter implements IQueryParser{
 
                     if (mapOfPredicatesAndTheirNumbers.containsKey(key)) {
                         Integer oldValue = mapOfPredicatesAndTheirNumbers.get(key);
-                        Integer newValue = oldValue+1;
+                        Integer newValue = oldValue + 1;
                         mapOfPredicatesAndTheirNumbers.put(key, newValue);
                     } else {
                         mapOfPredicatesAndTheirNumbers.put(key, 1);
@@ -667,13 +668,13 @@ public class BasicQueryConverter implements IQueryParser{
         }
     }
 
-    static <K,V extends Comparable<? super V>>
-    List<Map.Entry<K, V>> entriesSortedByValues(Map<K,V> map) {
+    static <K, V extends Comparable<? super V>>
+    List<Map.Entry<K, V>> entriesSortedByValues(Map<K, V> map) {
 
-        List<Map.Entry<K,V>> sortedEntries = new ArrayList<Map.Entry<K,V>>(map.entrySet());
+        List<Map.Entry<K, V>> sortedEntries = new ArrayList<Map.Entry<K, V>>(map.entrySet());
 
         Collections.sort(sortedEntries,
-                new Comparator<Map.Entry<K,V>>() {
+                new Comparator<Map.Entry<K, V>>() {
                     @Override
                     public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
                         return o2.getValue().compareTo(o1.getValue());
@@ -684,12 +685,12 @@ public class BasicQueryConverter implements IQueryParser{
         return sortedEntries;
     }
 
-    private String getDominantPredicate(){
+    private String getDominantPredicate() {
         String dominantPredicate = null;
         //System.out.println("getDominantPredicate");
 
         List<Map.Entry<String, Integer>> sortedEnties = entriesSortedByValues(mapOfPredicatesAndTheirNumbers);
-        for(Map.Entry<String, Integer> entry : sortedEnties){
+        for (Map.Entry<String, Integer> entry : sortedEnties) {
             //System.out.println(entry.getKey() + " : " + entry.getValue());
         }
 
@@ -699,11 +700,11 @@ public class BasicQueryConverter implements IQueryParser{
         return dominantPredicate;
     }
 
-    private void augmentMapsByMissingKeys(){
-        for(Row row : rows){
+    private void augmentMapsByMissingKeys() {
+        for (Row row : rows) {
             ArrayList<Value> missingKeys = new ArrayList<>();
-            for(Value key : keys){
-                if(!row.columns.keySet().contains(key)){
+            for (Value key : keys) {
+                if (!row.columns.keySet().contains(key)) {
                     missingKeys.add(key);
                 }
             }
@@ -711,7 +712,7 @@ public class BasicQueryConverter implements IQueryParser{
         }
     }
 
-    private void recursiveQueryForSubjects(RepositoryConnection conn,Row row, Value object, boolean askForTypes){
+    private void recursiveQueryForSubjects(RepositoryConnection conn, Row row, Value object, boolean askForTypes) {
 
         String queryForSubjects = createQueryForSubjects(object);
         TupleQuery query = conn.prepareTupleQuery(queryForSubjects);
@@ -719,20 +720,20 @@ public class BasicQueryConverter implements IQueryParser{
         try (TupleQueryResult result = query.evaluate()) {
             // we just iterate over all solutions in the result...
             for (BindingSet solution : result) {
-                if(row.id.equals(object)){
+                if (row.id.equals(object)) {
                     TypeOfValue newType = (solution.getBinding("s").getValue().isIRI()) ? TypeOfValue.IRI :
                             (solution.getBinding("s").getValue().isBNode()) ? TypeOfValue.BNODE : TypeOfValue.LITERAL;
                     assert solution.getBinding("s").getValue() != null;
-                    row.columns.put(solution.getValue("p"), new TypeIdAndValues(solution.getBinding("s").getValue(), newType,new ArrayList<>(Arrays.asList(solution.getBinding("s").getValue()))));
-                    if(!keys.contains(solution.getValue("p"))){
+                    row.columns.put(solution.getValue("p"), new TypeIdAndValues(solution.getBinding("s").getValue(), newType, new ArrayList<>(Arrays.asList(solution.getBinding("s").getValue()))));
+                    if (!keys.contains(solution.getValue("p"))) {
                         keys.add(solution.getValue("p"));
                     }
                 } else {
                     TypeOfValue newType = (solution.getBinding("s").getValue().isIRI()) ? TypeOfValue.IRI :
                             (solution.getBinding("s").getValue().isBNode()) ? TypeOfValue.BNODE : TypeOfValue.LITERAL;
                     assert solution.getBinding("s").getValue() != null;
-                    row.columns.put(solution.getValue("p"), new TypeIdAndValues(solution.getBinding("s").getValue(), newType,new ArrayList<>(Arrays.asList(solution.getBinding("s").getValue()))));
-                    if(!keys.contains(solution.getValue("p"))){
+                    row.columns.put(solution.getValue("p"), new TypeIdAndValues(solution.getBinding("s").getValue(), newType, new ArrayList<>(Arrays.asList(solution.getBinding("s").getValue()))));
+                    if (!keys.contains(solution.getValue("p"))) {
                         keys.add(solution.getValue("p"));
                     }
                     /*
@@ -744,11 +745,10 @@ public class BasicQueryConverter implements IQueryParser{
                      */
 
 
-
                 }
 
                 //System.out.println("BindingSet solution: result " + solution.getValue("p").toString() + " " + solution.getValue("s").toString());
-                if(solution.getValue("s").isIRI()){
+                if (solution.getValue("s").isIRI()) {
                     recursiveQueryForSubjects(conn, row, solution.getValue("s"), askForTypes);
                 }
             }
@@ -757,9 +757,9 @@ public class BasicQueryConverter implements IQueryParser{
 
     private String createQueryForSubjects(Value object) {
         SelectQuery selectQuery = Queries.SELECT();
-        Iri iri = iri(((IRI)object).stringValue());
+        Iri iri = iri(((IRI) object).stringValue());
         Variable s = SparqlBuilder.var("s"), p = SparqlBuilder.var("p");
-        selectQuery.select(s,p).where(iri.has(p, s));
+        selectQuery.select(s, p).where(iri.has(p, s));
         //System.out.println(selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }

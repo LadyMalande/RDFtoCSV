@@ -32,7 +32,7 @@ public class RowAndKey {
         }
     }
 
-    public RowAndKey(){
+    public RowAndKey() {
         this.keys = new ArrayList<>();
         this.rows = new ArrayList<>();
     }

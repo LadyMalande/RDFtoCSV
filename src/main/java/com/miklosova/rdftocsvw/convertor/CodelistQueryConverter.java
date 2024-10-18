@@ -1,31 +1,15 @@
 package com.miklosova.rdftocsvw.convertor;
 
-import com.miklosova.rdftocsvw.support.FileWrite;
 import lombok.extern.java.Log;
 import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.model.vocabulary.SKOS;
-import org.eclipse.rdf4j.query.BindingSet;
-import org.eclipse.rdf4j.query.TupleQuery;
-import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.sparqlbuilder.core.Prefix;
-import org.eclipse.rdf4j.sparqlbuilder.core.SparqlBuilder;
-import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
-import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
-import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
-import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
-import org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
 
-import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
+import java.util.ArrayList;
 
 
 @Log
-public class CodelistQueryConverter implements IQueryParser{
+public class CodelistQueryConverter implements IQueryParser {
 
     String resultCSV;
     ArrayList<Value> roots;

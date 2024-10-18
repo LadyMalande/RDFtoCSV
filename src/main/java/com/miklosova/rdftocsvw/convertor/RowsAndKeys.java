@@ -2,7 +2,6 @@ package com.miklosova.rdftocsvw.convertor;
 
 
 import com.miklosova.rdftocsvw.support.IFactory;
-import org.eclipse.rdf4j.model.Value;
 
 import java.util.ArrayList;
 
@@ -37,5 +36,8 @@ public class RowsAndKeys {
             return new RowsAndKeys();
         }
     }
-    public String toString() { return "Rows and keys for metadata creation"; }
+
+    public String toString() {
+        return "Rows and keys for metadata creation";
+    }
 }

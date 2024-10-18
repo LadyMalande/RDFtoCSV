@@ -1,6 +1,6 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.BaseTest;
+import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.convertor.ConversionService;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.convertor.RowsAndKeys;

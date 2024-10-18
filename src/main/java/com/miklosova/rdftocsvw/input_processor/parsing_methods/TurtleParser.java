@@ -18,10 +18,10 @@ public class TurtleParser implements IRDF4JParsingMethod {
             Path path = fileToParse.getAbsoluteFile().toPath();
             path = path.normalize();
             InputStream targetStream = new FileInputStream(path.toFile());
-            System.out.println("FileInputStream(path.toFile() " + path);
-            System.out.println(FileWrite.getFileContent(path.toFile()));
+            //System.out.println("FileInputStream(path.toFile() " + path);
+            //System.out.println(FileWrite.getFileContent(path.toFile()));
             boolean isUTF8 = FileWrite.isUTF8Encoded(path.toString());
-            System.out.println("Is UTF-8: " + isUTF8);
+            //System.out.println("Is UTF-8: " + isUTF8);
 
             conn.add(targetStream, "", fileFormat);
         } catch(RDFParseException rdfParseException){
@@ -31,7 +31,7 @@ public class TurtleParser implements IRDF4JParsingMethod {
             InputStream targetStream = null;
             try {
                 targetStream = new FileInputStream(path.toFile());
-                System.out.println("path.toFile(): " + path.toFile());
+                //System.out.println("path.toFile(): " + path.toFile());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }

@@ -33,11 +33,11 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
     public Metadata addMetadata(PrefinishedOutput<? extends Object> info) {
         RowsAndKeys rnk = (RowsAndKeys) info.getPrefinishedOutput();
         System.out.println("getRowsAndKeys() size: " + rnk.getRowsAndKeys().size());
-        for(RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
+        for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
             System.out.println("key: " + rowAndKey.getKeys());
             rowAndKey.getKeys().forEach(k -> System.out.print(k + " "));
             System.out.println();
-            for(Row r: rowAndKey.getRows()){
+            for (Row r : rowAndKey.getRows()) {
                 //System.out.println("id: " + r.id);
                 //System.out.println("type: " + r.type);
                 //r.columns.entrySet().stream().forEach(entry -> System.out.println( "Key of row:" + entry.getKey().toString()
@@ -45,14 +45,14 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
             }
 
         }
-        for(RowAndKey rowAndKey : rnk.getRowsAndKeys()){
+        for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
 
             String newFileName = CSVFileTOWriteTo + fileNumberX + ".csv";
 
             // Write the rows with respective keys to the current file
             //rowAndKey.getKeys().forEach(k -> System.out.println("Key " + k));
             System.out.println("INTERMEDIATE_FILE_NAMES: " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES));
-            if(!ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES).isEmpty()){
+            if (!ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES).isEmpty()) {
                 newFileName = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
             }
             System.out.println("newFileName: " + newFileName);
@@ -64,7 +64,8 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
         FileWrite.writeFilesToconfigFile(allFileNames);
 
         metadata.addForeignKeys(allRows);
-        metadata.jsonldMetadata();;
+        metadata.jsonldMetadata();
+        ;
         return metadata;
     }
 }

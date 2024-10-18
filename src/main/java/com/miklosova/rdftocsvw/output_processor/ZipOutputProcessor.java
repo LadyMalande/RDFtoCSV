@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class ZipOutputProcessor implements IOutputProcessor<ZipOutputStream>{
+public class ZipOutputProcessor implements IOutputProcessor<ZipOutputStream> {
     @Override
     public FinalizedOutput<byte[]> processCSVToOutput(PrefinishedOutput<?> prefinishedOutput) {
 
@@ -30,7 +30,6 @@ public class ZipOutputProcessor implements IOutputProcessor<ZipOutputStream>{
         try {
 
 
-
             ZipOutputStream zipOut = new ZipOutputStream(baos);
 
             for (String srcFile : srcFiles) {
@@ -41,7 +40,7 @@ public class ZipOutputProcessor implements IOutputProcessor<ZipOutputStream>{
 
                 byte[] bytes = new byte[1024];
                 int length;
-                while((length = fis.read(bytes)) >= 0) {
+                while ((length = fis.read(bytes)) >= 0) {
                     zipOut.write(bytes, 0, length);
                 }
                 fis.close();
@@ -62,7 +61,7 @@ public class ZipOutputProcessor implements IOutputProcessor<ZipOutputStream>{
 
     }
 
-    private ZipOutputStream zipPrefinishedOutput(PrefinishedOutput prefinishedOutput){
+    private ZipOutputStream zipPrefinishedOutput(PrefinishedOutput prefinishedOutput) {
         String sourceFile = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
 
 
@@ -81,7 +80,7 @@ public class ZipOutputProcessor implements IOutputProcessor<ZipOutputStream>{
 
             byte[] bytes = new byte[1024];
             int length;
-            while((length = fis.read(bytes)) >= 0) {
+            while ((length = fis.read(bytes)) >= 0) {
                 zipOut.write(bytes, 0, length);
             }
 
@@ -91,13 +90,13 @@ public class ZipOutputProcessor implements IOutputProcessor<ZipOutputStream>{
             return null;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (IOException ex){
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
         return null;
     }
 
-    public ZipOutputStream zipMultipleFiles(PrefinishedOutput prefinishedOutput){
+    public ZipOutputStream zipMultipleFiles(PrefinishedOutput prefinishedOutput) {
         String inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
         String filenameForZip = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME);
         String[] listOfFiles = inputFilesInString.split(",");
@@ -119,7 +118,7 @@ public class ZipOutputProcessor implements IOutputProcessor<ZipOutputStream>{
 
                 byte[] bytes = new byte[1024];
                 int length;
-                while((length = fis.read(bytes)) >= 0) {
+                while ((length = fis.read(bytes)) >= 0) {
                     zipOut.write(bytes, 0, length);
                 }
                 fis.close();

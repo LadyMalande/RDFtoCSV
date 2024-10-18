@@ -7,7 +7,6 @@ public class StandardModeCSVWIris {
     public static String CSVW_Row = RecognizedPrefixes.predefinedPrefixes.get("csvw") + "Row";
     public static String CSVW_row = RecognizedPrefixes.predefinedPrefixes.get("csvw") + "row";
     public static String CSVW_describes = RecognizedPrefixes.predefinedPrefixes.get("csvw") + "describes";
-
     public static String CSVW_rownum = RecognizedPrefixes.predefinedPrefixes.get("csvw") + "rownum";
     public static String CSVW_url = RecognizedPrefixes.predefinedPrefixes.get("csvw") + "url";
 

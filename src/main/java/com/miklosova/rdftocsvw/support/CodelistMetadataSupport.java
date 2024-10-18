@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CodelistMetadataSupport {
-    public static Map<String, Map<String,String>> articleMapOne;
+    public static Map<String, Map<String, String>> articleMapOne;
     public static Map<String, String> listOfTitlesAndDescription_Column1;
     public static Map<String, String> listOfTitlesAndDescription_Column2;
     public static Map<String, String> listOfTitlesAndDescription_Column3;

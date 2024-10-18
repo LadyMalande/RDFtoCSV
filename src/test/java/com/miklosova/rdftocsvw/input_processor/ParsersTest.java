@@ -1,6 +1,6 @@
 package com.miklosova.rdftocsvw.input_processor;
 
-import com.miklosova.rdftocsvw.BaseTest;
+import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.*;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
@@ -19,9 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
 

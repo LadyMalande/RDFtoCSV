@@ -1,11 +1,9 @@
 package com.miklosova.rdftocsvw.metadata_creator;
-import com.miklosova.rdftocsvw.BaseTest;
+import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.convertor.ConversionService;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
-import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.miklosova.rdftocsvw.support.FileWrite;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
@@ -15,7 +13,6 @@ import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -24,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RunWith(Parameterized.class)
 public class DereferencerTest extends BaseTest {

@@ -9,12 +9,15 @@ public class PrefinishedOutput<T> {
         System.out.println("Constructor with IFactory<T> parameter");
         prefinishedOutput = fact.factory();
     }
+
     public PrefinishedOutput(T prefinishedOutput) {
         System.out.println("Constructor with T parameter");
         this.prefinishedOutput = prefinishedOutput;
     }
 
-    T get() { return prefinishedOutput; }
+    T get() {
+        return prefinishedOutput;
+    }
 
 
     public T getPrefinishedOutput() {
