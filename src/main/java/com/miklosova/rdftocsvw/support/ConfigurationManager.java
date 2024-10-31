@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.Properties;
 
@@ -63,6 +64,8 @@ public class ConfigurationManager {
         return CONFIG_FILE_NAME;
     }
     public static final String READ_METHOD = "conversion.readMethod";
+    // True if the steaming data are being read from a file
+    // False if the streaming data are coming line by line - keeps input stream open until instructed to close
     public static final String STREAMING_FILE = "conversion.streamingFile";
 
     public static final String INTERMEDIATE_FILE_NAMES = "app.filesInProgress";
@@ -141,6 +144,35 @@ public class ConfigurationManager {
         }
 
         return prop.getProperty(variableName);
+    }
+
+    /**
+     * Get a parameter by its key from app.config file.
+     *
+     * @param configFileName The name of the configuration file. Useful for tests setting with set config.
+     * @param variableName The name of the key to retrieve from the app.config map of parameters.
+     * @return
+     */
+    public static String getVariableFromConfigFile(String configFileName, String variableName) {
+        Properties prop = new Properties();
+
+        try (FileInputStream fis = new FileInputStream(configFileName)) {
+            prop.load(new InputStreamReader(fis, Charset.forName("UTF-8")));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return prop.getProperty(variableName);
+    }
+
+    public static void setConfigFileFromAnotherFile(String configFileFromAnotherFile){
+        File configFile = new File(CONFIG_FILE_NAME);
+        File sourceConfigFile = new File(configFileFromAnotherFile);
+        try {
+            Files.copy(sourceConfigFile.toPath(), configFile.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

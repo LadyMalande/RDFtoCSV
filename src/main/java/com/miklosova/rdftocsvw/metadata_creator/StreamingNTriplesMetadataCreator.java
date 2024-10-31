@@ -323,9 +323,10 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
                 // Add the Object into the correct column in the line as there is already a line with this subject
                 // TODO - if the predicate is already full, add new row at the end of the file with a new data variation
-                else if (!isModified && unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
+                //else if (!isModified && unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
+                    else if (unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
                     // Add this line as a data variation to the data variation list
-                    rowDataVariationsForSubject.add(line);
+
                     // Split the line into parts by commas
 
                     System.out.println(Arrays.toString(line) + " --- parts size " + line.length);
@@ -349,6 +350,9 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                         // There is already a value in the column - add the value and add the separator to metadata
                         // Create a new line with the data variation
                         // TODO - append a new line data variation
+                        if(dataLineVariationIsNotPresent(rowDataVariationsForSubject, line, indexOfChangeColumn)){
+                            rowDataVariationsForSubject.add(line);
+                        }
                         isNeedForAddingDataVariations = true;
                         indexOfDataVariationColumn = indexOfChangeColumn;
                         System.out.println("2) " + line[indexOfChangeColumn] + " already there for triple " + triple.getSubject().stringValue() + ", " + triple.getPredicate().stringValue() + ", " + triple.getObject().stringValue());
@@ -357,9 +361,10 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                         // If those data really came from RDF
                     } else{
                         // Add new object at the end of the line
+                        // TODO add the object at the end of EACH line with matching subject
                         line[indexOfChangeColumn] = triple.getObject().stringValue();
                         isModified = true;  // Mark that the line has been modified
-                        System.out.println("3) " + line[indexOfChangeColumn]);
+                        System.out.println("3) " + line[indexOfChangeColumn] + " the line: " + line);
                     }
 
                 }
@@ -413,6 +418,34 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         }
     }
 
+    private boolean dataLineVariationIsNotPresent(List<String[]> rowDataVariationsForSubject, String[] line, int indexOfChangeColumn) {
+
+        if(rowDataVariationsForSubject.isEmpty()){
+            System.out.println("variations are empty, add this line: " + Arrays.toString(line));
+            return true;
+
+        }
+        System.out.println("rowDataVariationsForSubject.size() = " + rowDataVariationsForSubject.size());
+        System.out.println("line.length = " + line.length);
+        boolean foundMatch = false;
+        for(String[] value : rowDataVariationsForSubject) {
+            int same = 0;
+            for (int i = 0; i < line.length; i++) {
+                if (i != indexOfChangeColumn && line[i].equalsIgnoreCase(value[i])) {
+                    same++;
+                    System.out.println("Entity already there: " + line[i] + " value " + value[i] + " from line " + Arrays.toString(line) + " " + Arrays.toString(value));
+                } else {
+                    System.out.println("Entity NOT there: " + line[i] + " value " + value[i] + " from line " + Arrays.toString(line)+ " " + Arrays.toString(value));
+                }
+            }
+            if(same == line.length -1){
+                System.out.println(same +" != " + line.length+ "Line variation is not there yet: " + Arrays.toString(line));
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void appendDataVariationsToCSV(File file, List<String[]> linesToMakeVariantFor, int indexOfDataVariationColumn, Value object) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(file, true))) {
             // Appends to the file instead of overwriting
@@ -451,7 +484,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     private int getIndexOfCurrentPredicate(IRI predicate) {
         for(int i = 0; i < tableSchema.getColumns().size(); i++){
             if(!tableSchema.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && tableSchema.getColumns().get(i).getPropertyUrl().equalsIgnoreCase(predicate.stringValue())){
-                System.out.println("Current index is " + i);
+                //System.out.println("Current index is " + i);
                 return i;
 
             }
