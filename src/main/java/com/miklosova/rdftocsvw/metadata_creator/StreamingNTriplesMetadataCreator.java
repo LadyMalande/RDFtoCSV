@@ -4,7 +4,11 @@ import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.StreamingSupport;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvValidationException;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Value;
 import org.jruby.RubyProcess;
 
 import java.io.*;
@@ -127,38 +131,45 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
     private void rewriteTheHeadersInCSV(String filePath, String titles) throws FileNotFoundException {
         File file = new File(filePath);
-        List<String> lines = new ArrayList<>();
+        List<String[]> lines = new ArrayList<>();
 
         // Read the file and process it line by line
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
+        try (CSVReader reader = new CSVReader(new FileReader(file))) {
+            String[] line;
             boolean isFirstLine = true;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readNext()) != null){
                 if(isFirstLine){
                     isFirstLine = false;
-                    String headerWithNewColumnTitle = line + "," + titles;
+                    String[] headerWithNewColumnTitle = Arrays.copyOf(line, line.length + 1);
+
+                    // Add the new element at the last position
+                    headerWithNewColumnTitle[line.length] = titles;
                     lines.add(headerWithNewColumnTitle);
+                    System.out.println(Arrays.toString(headerWithNewColumnTitle) + " -------  headerWithNewColumnTitle");
                 } else{
-                    String lineWithBlankFinalColumn = line + ",";
+                    String[] lineWithBlankFinalColumn = Arrays.copyOf(line, line.length + 1);
+
+                    // Add the new element at the last position
+                    lineWithBlankFinalColumn[line.length] = "";
                     lines.add(lineWithBlankFinalColumn);
+                    System.out.println(Arrays.toString(lineWithBlankFinalColumn)+ " -------  lineWithBlankFinalColumn");
                 }
 
             }
-        } catch (IOException e) {
+        } catch (IOException | CsvValidationException e) {
             throw new RuntimeException(e);
         }
 
         // Write the updated content back to the file
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            for (String updatedLine : lines) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
+            // Write array data as a single line
+            for(String[] updatedLine : lines){
                 System.out.println("new headers updated line: "+ updatedLine);
-                writer.write(updatedLine);
-                writer.newLine();
+                writer.writeNext(updatedLine);
             }
-            writer.flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         //System.out.println("File updated successfully - new headers. "+file.getAbsolutePath());
 
@@ -289,70 +300,104 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     }
 
     public void writeTripleToCSV(String filePath, Triple triple) throws IOException {
+        List<String[]> rowDataVariationsForSubject = new ArrayList<>();
+        boolean isNeedForAddingDataVariations = false;
+        int indexOfDataVariationColumn = -1;
+        int numberOfColumns = 0;
         File file = new File(filePath);
-        List<String> lines = new ArrayList<>();
+        List<String[]> lines = new ArrayList<>();
         boolean isModified = false;
 
         unifiedBySubject = isThereTheSameSubject(triple.getSubject());
         System.out.println("writeTripleToCSV.unifiedBySubject = " + unifiedBySubject);
 
         // Read the file and process it line by line
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
+        try (CSVReader reader = new CSVReader(new FileReader(file))) {
+            String[] line;
             boolean isFirstLine = true;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readNext()) != null){
                 if(isFirstLine){
                     isFirstLine = false;
+                    numberOfColumns = line.length;
                 }
 
                 // Add the Object into the correct column in the line as there is already a line with this subject
-                else if (!isModified && unifiedBySubject && line.startsWith(triple.subject.stringValue())) {
+                // TODO - if the predicate is already full, add new row at the end of the file with a new data variation
+                else if (!isModified && unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
+                    // Add this line as a data variation to the data variation list
+                    rowDataVariationsForSubject.add(line);
                     // Split the line into parts by commas
-                    String[] parts = line.split(",", -1);
 
-                    System.out.println(line + " --- parts size " + parts.length);
+                    System.out.println(Arrays.toString(line) + " --- parts size " + line.length);
 
                     int indexOfChangeColumn = getIndexOfCurrentPredicate(triple.getPredicate());
 
                     // Insert the new value between two commas in the middle (adjust index as needed)
-                    if(parts[indexOfChangeColumn] != ""){
-                        // There is already a value in the column - add the value and add the separator to metadata
-                        if(parts[indexOfChangeColumn].startsWith("\"")){
-                            parts[indexOfChangeColumn] = parts[indexOfChangeColumn].substring(0, parts[indexOfChangeColumn].length()-2) + ";" + triple.getObject().stringValue() + "\"";
-                        } else{
-                            parts[indexOfChangeColumn] = "\"" + parts[indexOfChangeColumn] + ";" + triple.getObject().stringValue() + "\"";
-                            tableSchema.getColumns().get(indexOfChangeColumn).setSeparator(";");
-                        }
+                    if(indexOfChangeColumn >= line.length){
+                        System.out.println(line + " line.length: " + line.length + " columnIndex: " + indexOfChangeColumn + " columns: " + lines.get(0));
+                        // The subject has been matched but the line does not contain the predicate column yet -> add it to the end of the line
+                        // Create a new array with one additional element
+                        String[] extendedArray = Arrays.copyOf(line, line.length + 1);
 
+                        // Add the new element at the last position
+                        extendedArray[line.length] = triple.object.stringValue();
+                        line = extendedArray;
+                        isModified = true;
+                        System.out.println("1) " + line);
+                    }
+                    else if(!line[indexOfChangeColumn].equalsIgnoreCase("")){
+                        // There is already a value in the column - add the value and add the separator to metadata
+                        // Create a new line with the data variation
+                        // TODO - append a new line data variation
+                        isNeedForAddingDataVariations = true;
+                        indexOfDataVariationColumn = indexOfChangeColumn;
+                        System.out.println("2) " + line[indexOfChangeColumn] + " already there for triple " + triple.getSubject().stringValue() + ", " + triple.getPredicate().stringValue() + ", " + triple.getObject().stringValue());
+                        // Check whether the object is the same as the value that is already in the data - that would imply that
+                        // I am trying to optimize the data, but that would modify it, so just make the same line duplicitly
+                        // If those data really came from RDF
                     } else{
-                        parts[indexOfChangeColumn] = triple.getObject().stringValue();
+                        // Add new object at the end of the line
+                        line[indexOfChangeColumn] = triple.getObject().stringValue();
+                        isModified = true;  // Mark that the line has been modified
+                        System.out.println("3) " + line[indexOfChangeColumn]);
                     }
 
-
-                    // Join the parts back into a single line
-                    line = String.join(",", parts);
-
-                    isModified = true;  // Mark that the line has been modified
                 }
                 lines.add(line);  // Add the processed line to the list
-                // If the file is still unmodified, we need to add a new predicate column at the end of the row
+
 
             }
-            if(!isModified && unifiedBySubject){
-                lines.add(createLineInCSVByMetadata(triple));
-                System.out.println("!isModified && unifiedBySubject" + createLineInCSVByMetadata(triple));
+
+            if(isNeedForAddingDataVariations){
+                // Add data variations for all the lines that have the same subject in the list
+                // todo
+                System.out.println("isNeedForAddingDataVariations ");
+                appendDataVariationsToCSV(file, rowDataVariationsForSubject, indexOfDataVariationColumn, triple.getObject());
+            } else if(!isModified && unifiedBySubject){
+                // If the file is still unmodified, we need to add a new predicate column at the end of the row
+                lines.add(createLineStringListByMetadata(triple).toArray(new String[0]));
+                System.out.println("!isModified && unifiedBySubject " + Arrays.toString(createLineStringListByMetadata(triple).toArray(new String[0])));
                 isModified = true;
             }
+
+
              if(!isModified && !unifiedBySubject){
                 // The match has been made by matching Predicate = we must create a new line at the end of the file and add values accordingly
-                lines.add(createLineInCSVByMetadata(triple));
-                 System.out.println("!isModified && !unifiedBySubject" + createLineInCSVByMetadata(triple));
-                isModified = true;
+                 // We can just append to the file - the lines wont be written again at the end of this writing modification
+                 // TODO - append a new line
+                appendLineToCSV(file, createLineStringListByMetadata(triple));
+                //lines.add(createLineInCSVByMetadata(triple));
+                 System.out.println("!isModified && !unifiedBySubject " + createLineInCSVByMetadata(triple));
             }
+
+        } catch (CsvValidationException e) {
+            e.printStackTrace();
         }
 
         // Write the updated content back to the file
         if (isModified) {
+            writeListOfLinesToCSV(file, lines);
+            /*
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
                 for (String updatedLine : lines) {
                     System.out.println("Updated line: " + updatedLine);
@@ -360,18 +405,58 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                     writer.newLine();
                 }
             }
-            //System.out.println("File updated successfully.");
+            
+             */
+            System.out.println("File updated successfully.");
         } else {
-            System.out.println("No matching line found.");
+            System.out.println("The file has been already modified by appending a new row.");
+        }
+    }
+
+    private void appendDataVariationsToCSV(File file, List<String[]> linesToMakeVariantFor, int indexOfDataVariationColumn, Value object) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(file, true))) {
+            // Appends to the file instead of overwriting
+            for(String[] line : linesToMakeVariantFor){
+                String[] copiedArray = Arrays.copyOf(line, line.length);
+                copiedArray[indexOfDataVariationColumn] = object.stringValue();
+                writer.writeNext(copiedArray);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeListOfLinesToCSV(File file, List<String[]> lines) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
+            // Write array data as a single line
+            for(String[] line : lines){
+                writer.writeNext(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void appendLineToCSV(File file, List<String> lineListInCSVByMetadata) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(file, true))) {
+            // Appends to the file instead of overwriting
+            String[] arrayOfStrings = lineListInCSVByMetadata.toArray(new String[0]);
+            writer.writeNext(arrayOfStrings);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     private int getIndexOfCurrentPredicate(IRI predicate) {
         for(int i = 0; i < tableSchema.getColumns().size(); i++){
             if(!tableSchema.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && tableSchema.getColumns().get(i).getPropertyUrl().equalsIgnoreCase(predicate.stringValue())){
+                System.out.println("Current index is " + i);
                 return i;
+
             }
         }
+        System.out.println("Current index is NOT FOUND for predicate " + predicate);
         return -1;
     }
 
@@ -380,6 +465,25 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         return mapOfKnownSubjects.get(currentCSVName).contains(subject);
     }
 
+    private List<String> createLineStringListByMetadata(Triple triple){
+        List<String> list = new ArrayList<>();
+        list.add(triple.subject.stringValue());
+
+        TableSchema relevantTS = tableSchemaByFiles.get(currentCSVName);
+        for(int i = 0; i < relevantTS.getColumns().size(); i++){
+            System.out.println("relevantTS.getColumns().size() = " + relevantTS.getColumns().size());
+            if(!relevantTS.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && relevantTS.getColumns().get(i).getPropertyUrl().equalsIgnoreCase(triple.getPredicate().stringValue())){
+                list.add(triple.getObject().stringValue());
+
+            } else if(!relevantTS.getColumns().get(i).getTitles().equalsIgnoreCase("Subject")){
+                list.add("");
+            }
+        }
+        list.forEach(entity -> System.out.print(entity + " "));
+        System.out.println();
+        return list;
+    }
+    
     private String createLineInCSVByMetadata(Triple triple) {
         StringBuilder sb = new StringBuilder();
             sb.append(triple.subject.stringValue());
