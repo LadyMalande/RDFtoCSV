@@ -28,14 +28,13 @@ import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 @Log
 public class BasicQueryConverter implements IQueryParser {
 
+    public Map<String, Integer> mapOfPredicatesAndTheirNumbers;
+    public Map<Value, Integer> mapOfTypesAndTheirNumbers;
     ArrayList<Value> roots;
     ArrayList<Row> rows;
     ArrayList<Value> keys;
     ArrayList<ArrayList<Row>> allRows;
     ArrayList<ArrayList<Value>> allKeys;
-
-    public Map<String, Integer> mapOfPredicatesAndTheirNumbers;
-    public Map<Value, Integer> mapOfTypesAndTheirNumbers;
     String delimiter;
     String CSVFileTOWriteTo;
     Repository db;
@@ -45,6 +44,23 @@ public class BasicQueryConverter implements IQueryParser {
     public BasicQueryConverter(Repository db) {
         this.keys = new ArrayList<>();
         this.db = db;
+    }
+
+    static <K, V extends Comparable<? super V>>
+    List<Map.Entry<K, V>> entriesSortedByValues(Map<K, V> map) {
+
+        List<Map.Entry<K, V>> sortedEntries = new ArrayList<Map.Entry<K, V>>(map.entrySet());
+
+        Collections.sort(sortedEntries,
+                new Comparator<Map.Entry<K, V>>() {
+                    @Override
+                    public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+                        return o2.getValue().compareTo(o1.getValue());
+                    }
+                }
+        );
+
+        return sortedEntries;
     }
 
     public void changeBNodesForIri(RepositoryConnection rc) {
@@ -210,7 +226,6 @@ public class BasicQueryConverter implements IQueryParser {
         //System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
-
 
     private PrefinishedOutput queryRDFModel(String queryString, boolean askForTypes) {
 
@@ -666,23 +681,6 @@ public class BasicQueryConverter implements IQueryParser {
 
             }
         }
-    }
-
-    static <K, V extends Comparable<? super V>>
-    List<Map.Entry<K, V>> entriesSortedByValues(Map<K, V> map) {
-
-        List<Map.Entry<K, V>> sortedEntries = new ArrayList<Map.Entry<K, V>>(map.entrySet());
-
-        Collections.sort(sortedEntries,
-                new Comparator<Map.Entry<K, V>>() {
-                    @Override
-                    public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
-                        return o2.getValue().compareTo(o1.getValue());
-                    }
-                }
-        );
-
-        return sortedEntries;
     }
 
     private String getDominantPredicate() {

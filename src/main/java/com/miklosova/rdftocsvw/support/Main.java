@@ -1,22 +1,12 @@
 package com.miklosova.rdftocsvw.support;
 
-import com.miklosova.rdftocsvw.convertor.*;
-import com.miklosova.rdftocsvw.input_processor.MethodService;
-import com.miklosova.rdftocsvw.metadata_creator.Metadata;
-import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
-import com.miklosova.rdftocsvw.output_processor.ZipOutputProcessor;
-import org.apache.log4j.BasicConfigurator;
-import org.eclipse.rdf4j.repository.Repository;
-import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.repository.sail.SailRepository;
+import com.miklosova.rdftocsvw.convertor.RDFtoCSV;
 import org.eclipse.rdf4j.rio.RDFParseException;
-import org.eclipse.rdf4j.sail.memory.MemoryStore;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
@@ -35,10 +25,13 @@ public class Main {
             String jarDirectory = file.getParentFile().getName();
             File fileToRead = new File(jarDirectory, args[0]);
             String fileInDirectory = null;
-            if(jarDirectory.equalsIgnoreCase("target")){
-                fileInDirectory =  args[0];
+            String fileArgFromArgs = ConfigurationManager.readArgWithDefaultOptions(args, "file");
+            if (jarDirectory.equalsIgnoreCase("target")) {
+                //fileInDirectory =  args[0];
+                fileInDirectory = fileArgFromArgs;
             } else {
-                fileInDirectory = jarDirectory + File.separator + args[0];
+                // fileInDirectory = jarDirectory + File.separator + args[0];
+                fileInDirectory = jarDirectory + File.separator + fileArgFromArgs;
             }
 
             RDFFileToRead = fileInDirectory;
@@ -52,7 +45,7 @@ public class Main {
         //System.out.println(RDFFileToRead);
         RDFtoCSV rdFtoCSV;
 
-        if(RDFFileToRead == null){
+        if (RDFFileToRead == null) {
             System.err.println("The file passed to the program is null. Usage: java -jar Main <filename>");
             System.exit(1);
         }

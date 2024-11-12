@@ -4,9 +4,9 @@ import com.miklosova.rdftocsvw.convertor.ConversionService;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
-import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
+import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
 import com.miklosova.rdftocsvw.support.TestSupport;
@@ -23,8 +23,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+
 @RunWith(Parameterized.class)
 public class XMLBaseTests extends BaseTest {
+    private static final String RESOURCES_PATH = "./src/test/resources/XMLBaseTests/";
     private final String PROCESS_METHOD = "rdf4j";
     private String nameForTest;
     private String filePath;
@@ -32,43 +34,6 @@ public class XMLBaseTests extends BaseTest {
     private String filePathForOutput;
     private String expectedDatatype;
     private PrefinishedOutput prefinishedOutput;
-
-    private static final String RESOURCES_PATH = "./src/test/resources/XMLBaseTests/";
-    @Parameterized.Parameters(name = "{0}")
-    public static Collection<Object[]> configs(){
-        return Arrays.asList(new Object[][]{
-                { "test001",  ""},
-                { "test002",  ""},
-                { "test003",  ""},
-                { "test004",  ""},
-                // Marked OBSOLETE { "test005",  ""},
-                { "test006",  ""},
-                { "test007",  ""},
-                { "test008",  ""},
-                { "test009",  ""},
-                { "test010",  ""},
-                { "test011",  ""},
-                // Marked WITHDRAWN { "test012",  ""},
-                { "test013",  ""},
-                { "test014",  ""},
-                // Status: NOT_APPROVED
-                { "test015",  ""},
-                // Status: NOT_APPROVED
-                { "test016",  ""},
-                { "test-001",  ""},
-                { "test-002",  ""},
-                { "test-003",  ""},
-                { "test-004",  ""},
-                { "test-005",  ""},
-
-
-
-
-               // { "Datatypes-boolean", "./src/test/resources/datatypes-boolean.ttl", "./src/test/resources/datatypes-boolean.csv-metadata.json", "./src/test/resources/testingInputOutput", "boolean"},
-                //{"Datatypes-string2", "./src/test/resources/test001.rdf", "./src/test/resources/datatypes-string2.csv-metadata.json", "./src/test/resources/testingInputOutput", "" }
-                //{ "", "", "", "", "", ""},
-        });
-    }
 
     public XMLBaseTests(String nameForTest, String expectedDatatype) {
         this.nameForTest = nameForTest;
@@ -78,8 +43,42 @@ public class XMLBaseTests extends BaseTest {
         this.expectedDatatype = expectedDatatype;
     }
 
+    @Parameterized.Parameters(name = "{0}")
+    public static Collection<Object[]> configs() {
+        return Arrays.asList(new Object[][]{
+                {"test001", ""},
+                {"test002", ""},
+                {"test003", ""},
+                {"test004", ""},
+                // Marked OBSOLETE { "test005",  ""},
+                {"test006", ""},
+                {"test007", ""},
+                {"test008", ""},
+                {"test009", ""},
+                {"test010", ""},
+                {"test011", ""},
+                // Marked WITHDRAWN { "test012",  ""},
+                {"test013", ""},
+                {"test014", ""},
+                // Status: NOT_APPROVED
+                {"test015", ""},
+                // Status: NOT_APPROVED
+                {"test016", ""},
+                {"test-001", ""},
+                {"test-002", ""},
+                {"test-003", ""},
+                {"test-004", ""},
+                {"test-005", ""},
+
+
+                // { "Datatypes-boolean", "./src/test/resources/datatypes-boolean.ttl", "./src/test/resources/datatypes-boolean.csv-metadata.json", "./src/test/resources/testingInputOutput", "boolean"},
+                //{"Datatypes-string2", "./src/test/resources/test001.rdf", "./src/test/resources/datatypes-string2.csv-metadata.json", "./src/test/resources/testingInputOutput", "" }
+                //{ "", "", "", "", "", ""},
+        });
+    }
+
     @BeforeEach
-    void createMetadata(){
+    void createMetadata() {
         System.out.println("Override before each");
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, filePathForOutput);
@@ -91,7 +90,7 @@ public class XMLBaseTests extends BaseTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        assert(rc != null);
+        assert (rc != null);
         // Convert the table to intermediate data for processing into metadata
         ConversionService cs = new ConversionService();
         System.out.println("createMetadata @BeforeEach");
@@ -102,6 +101,7 @@ public class XMLBaseTests extends BaseTest {
 
         this.testMetadata = metadata;
     }
+
     @Test
     public void csvFileIsCreated() throws IOException {
         createMetadata();
@@ -111,7 +111,7 @@ public class XMLBaseTests extends BaseTest {
         ArrayList<String> fileNamesCreated = new ArrayList<>();
         String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
 
-        for(String filename : allFiles.split(",")){
+        for (String filename : allFiles.split(",")) {
             System.out.println("newFileName " + filename);
             FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), this.testMetadata);
             Assert.assertFalse(TestSupport.isFileEmpty(filename));

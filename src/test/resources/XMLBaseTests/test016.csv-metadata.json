@@ -1,34 +1,42 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test016TestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "valueUrl" : "mailto:{+type}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://example.org/{+type}",
-        "aboutUrl" : "mailto:{+type}"
-      }, {
-        "@type" : "Column",
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://example.org/type",
-        "aboutUrl" : "mailto:{+type}",
-        "virtual" : true
-      } ],
-      "primaryKey" : "type",
-      "aboutUrl" : "mailto:{+type}",
-      "rowTitles" : [ "type" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test016TestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "type",
+            "name": "type",
+            "valueUrl": "mailto:{+type}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "type",
+            "name": "type",
+            "propertyUrl": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+            "valueUrl": "http://example.org/{+type}",
+            "aboutUrl": "mailto:{+type}"
+          },
+          {
+            "@type": "Column",
+            "propertyUrl": "rdf:type",
+            "valueUrl": "http://example.org/type",
+            "aboutUrl": "mailto:{+type}",
+            "virtual": true
+          }
+        ],
+        "primaryKey": "type",
+        "aboutUrl": "mailto:{+type}",
+        "rowTitles": [
+          "type"
+        ]
+      }
     }
-  } ]
+  ]
 }

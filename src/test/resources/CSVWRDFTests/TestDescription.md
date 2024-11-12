@@ -1,10 +1,11 @@
 # Test descriptions
-Tests have been made from test set for CSV on the Web Validators available at CSVW RDF Tests (270 entries) https://w3c.github.io/csvw/tests/#manifest-rdf.
-The tests have been reversed, taking the resulting RDF and expecting similar result as was the original CSV for the test.
 
-Because of the reverse technique, not all of the tests were eligible to be reproduced outright. 
-Especially the negative tests, that did not produce RDF in the original test.
-Those negative tests will have a new test set ready for them.
+Tests have been made from test set for CSV on the Web Validators available at CSVW RDF Tests (270
+entries) https://w3c.github.io/csvw/tests/#manifest-rdf. The tests have been reversed, taking the resulting RDF and
+expecting similar result as was the original CSV for the test.
+
+Because of the reverse technique, not all of the tests were eligible to be reproduced outright. Especially the negative
+tests, that did not produce RDF in the original test. Those negative tests will have a new test set ready for them.
 
 This folder contains test sources for positive tests.
 
@@ -2439,6 +2440,7 @@ manifest-rdf#test252: missing destination reference column
     As defined in [tabular-data-model], validators MUST check that, for each row, the combination of cells in the referencing columns references a unique row within the referenced table through a combination of cells in the referenced columns.
 
     Negative Test
+
 nifest-rdf#test253: missing destination table
 
     As defined in [tabular-data-model], validators MUST check that, for each row, the combination of cells in the referencing columns references a unique row within the referenced table through a combination of cells in the referenced columns.
@@ -2533,7 +2535,6 @@ manifest-rdf#test280: dayTimeDuration not matching xsd pattern
 
     Value MUST be a valid xsd:dayTimeDuration.
 
-
 manifest-rdf#test281: yearMonthDuration not matching xsd pattern
 
     Value MUST be a valid xsd:yearMonthDuration.
@@ -2541,7 +2542,6 @@ manifest-rdf#test281: yearMonthDuration not matching xsd pattern
 manifest-rdf#test282: valid number patterns
 
     A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols 0, #, the specified decimalChar (or . if unspecified), the specified groupChar (or , if unspecified), E, +, % and &permil;.
-
 
 manifest-rdf#test283: valid number patterns (signs and percent/permille)
 
@@ -2563,61 +2563,49 @@ manifest-rdf#test287: invalid ##0 123.4
 
     A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols 0, #, the specified decimalChar (or . if unspecified), the specified groupChar (or , if unspecified), E, +, % and &permil;.
 
-
 manifest-rdf#test288: invalid #,#00 1
 
     A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols 0, #, the specified decimalChar (or . if unspecified), the specified groupChar (or , if unspecified), E, +, % and &permil;.
-
 
 manifest-rdf#test289: invalid #,#00 1234
 
     A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols 0, #, the specified decimalChar (or . if unspecified), the specified groupChar (or , if unspecified), E, +, % and &permil;.
 
-
 manifest-rdf#test290: invalid #,#00 12,34
 
     A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols 0, #, the specified decimalChar (or . if unspecified), the specified groupChar (or , if unspecified), E, +, % and &permil;.
-
 
 manifest-rdf#test291: invalid #,#00 12,34,567
 
     A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols 0, #, the specified decimalChar (or . if unspecified), the specified groupChar (or , if unspecified), E, +, % and &permil;.
 
-
 manifest-rdf#test292: invalid #,##,#00 1
 
     A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols 0, #, the specified decimalChar (or . if unspecified), the specified groupChar (or , if unspecified), E, +, % and &permil;.
-
 
 manifest-rdf#test293: invalid #,##,#00 1234
 
     A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols 0, #, the specified decimalChar (or . if unspecified), the specified groupChar (or , if unspecified), E, +, % and &permil;.
 
-
 manifest-rdf#test294: invalid #,##,#00 12,34
 
     A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols 0, #, the specified decimalChar (or . if unspecified), the specified groupChar (or , if unspecified), E, +, % and &permil;.
-
 
 manifest-rdf#test295: invalid #,##,#00 1,234,567
 
     A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols 0, #, the specified decimalChar (or . if unspecified), the specified groupChar (or , if unspecified), E, +, % and &permil;.
 
-
 manifest-rdf#test296: invalid #0.# 12.34
 
     A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols 0, #, the specified decimalChar (or . if unspecified), the specified groupChar (or , if unspecified), E, +, % and &permil;.
-
 
 manifest-rdf#test297: invalid #0.# 1,234.5
 
     A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols 0, #, the specified decimalChar (or . if unspecified), the specified groupChar (or , if unspecified), E, +, % and &permil;.
 
-
 manifest-rdf#test298: invalid #0.0 1
 
     A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols 0, #, the specified decimalChar (or . if unspecified), the specified groupChar (or , if unspecified), E, +, % and &permil;.
-
 
 manifest-rdf#test299: invalid #0.0 12.34
 
@@ -2630,7 +2618,6 @@ manifest-rdf#test300: invalid #0.0# 1
 manifest-rdf#test301: invalid #0.0# 12.345
 
     A number format pattern as defined in [UAX35]. Implementations MUST recognise number format patterns containing the symbols 0, #, the specified decimalChar (or . if unspecified), the specified groupChar (or , if unspecified), E, +, % and &permil;.
-
 
 manifest-rdf#test302: invalid #0.0#,# 1
 

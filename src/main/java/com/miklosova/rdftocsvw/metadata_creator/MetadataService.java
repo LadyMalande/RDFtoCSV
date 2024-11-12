@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.convertor.*;
+import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
+import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
 
@@ -47,14 +48,14 @@ public class MetadataService {
 
                 if (!extension.equalsIgnoreCase("nt")) {
                     throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);
-                } else{
+                } else {
                     metadataGateway.setMetadataCreator(new BigFileStreamingNTriplesMetadataCreator(null));
                 }
                 break;
             case "streaming":
                 if (!extension.equalsIgnoreCase("nt")) {
                     throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);
-                } else{
+                } else {
                     metadataGateway.setMetadataCreator(new StreamingNTriplesMetadataCreator(null));
                 }
                 break;

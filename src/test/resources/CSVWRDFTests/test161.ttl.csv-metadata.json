@@ -1,34 +1,46 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test161.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "decimal",
-        "name" : "decimal",
-        "propertyUrl" : "file://test161.csv#decimal"
-      }, {
-        "@type" : "Column",
-        "titles" : "double",
-        "name" : "double",
-        "propertyUrl" : "file://test161.csv#double"
-      }, {
-        "@type" : "Column",
-        "titles" : "integer",
-        "name" : "integer",
-        "propertyUrl" : "file://test161.csv#integer"
-      } ],
-      "rowTitles" : [ "Subjekt", "decimal", "double", "integer" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test161.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "decimal",
+            "name": "decimal",
+            "propertyUrl": "file://test161.csv#decimal"
+          },
+          {
+            "@type": "Column",
+            "titles": "double",
+            "name": "double",
+            "propertyUrl": "file://test161.csv#double"
+          },
+          {
+            "@type": "Column",
+            "titles": "integer",
+            "name": "integer",
+            "propertyUrl": "file://test161.csv#integer"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "decimal",
+          "double",
+          "integer"
+        ]
+      }
     }
-  } ]
+  ]
 }

@@ -8,7 +8,6 @@ import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
 import com.miklosova.rdftocsvw.support.Main;
 import com.miklosova.rdftocsvw.support.StreamingSupport;
-import org.apache.commons.collections.ArrayStack;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
@@ -55,21 +54,21 @@ public class StreamingNTriplesWrite {
         //this.fileNameToWriteTo = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH);
     }
 
-    public void writeToFileByMetadata(){
+    public void writeToFileByMetadata() {
 
         writeToTheFile(fileToWriteTo, columnHeaders(), false);
 
         bufferForCSVOutput = new CSVOutputGrid();
-        while(gettingNewSubjects()) {
+        while (gettingNewSubjects()) {
             int i = 1;
             try (BufferedReader reader = new BufferedReader(new FileReader(fileNameToRead))) {
                 String line;
                 // Read file line by line
                 while ((line = reader.readLine()) != null) {
                     // Skip lines until the desired line
-                    if(i < lineIndexOfProcessed){
-                        System.out.println("DO NOTHING + i=" + i+ " lineIndexOfProcessed=" + lineIndexOfProcessed); // do nothing
-                    } else{
+                    if (i < lineIndexOfProcessed) {
+                        System.out.println("DO NOTHING + i=" + i + " lineIndexOfProcessed=" + lineIndexOfProcessed); // do nothing
+                    } else {
                         System.out.println("process line + i=" + i + " lineIndexOfProcessed=" + lineIndexOfProcessed); // do nothing
                         processLine(line, bufferForCSVOutput);
                     }
@@ -87,10 +86,10 @@ public class StreamingNTriplesWrite {
 
     private Object columnHeaders() {
         StringBuilder sb = new StringBuilder();
-        for(Column column : metadata.getTables().get(0).getTableSchema().getColumns()){
+        for (Column column : metadata.getTables().get(0).getTableSchema().getColumns()) {
             sb.append(column.getTitles()).append(",");
         }
-        sb.deleteCharAt(sb.length()-1);
+        sb.deleteCharAt(sb.length() - 1);
         sb.append("\n");
         return sb.toString();
     }
@@ -103,34 +102,34 @@ public class StreamingNTriplesWrite {
 
     private String parseOutputGridForCSV(CSVOutputGrid bufferForCSVOutput) {
         StringBuilder sb = new StringBuilder();
-        for(IRI subject : currentSubjects){
-            for(Column column : metadata.getTables().get(0).getTableSchema().getColumns()){
-                if(column.getName().equalsIgnoreCase("Subject")){
+        for (IRI subject : currentSubjects) {
+            for (Column column : metadata.getTables().get(0).getTableSchema().getColumns()) {
+                if (column.getName().equalsIgnoreCase("Subject")) {
                     // add subject
                     //System.out.println("Subject when adding to CSV string = " + subject.stringValue());
                     sb.append(subject.stringValue());
-                } else if(bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).isEmpty()){
+                } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).isEmpty()) {
                     sb.append("");
-                } else if(bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).size() == 1){
-                    if(bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isIRI()){
+                } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).size() == 1) {
+                    if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isIRI()) {
                         sb.append(bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0));
-                    } else if(bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isLiteral()){
-                        sb.append(((Literal)bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0)).getLabel());
+                    } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isLiteral()) {
+                        sb.append(((Literal) bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0)).getLabel());
                     }
-                } else if(bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).size() > 1){
+                } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).size() > 1) {
                     sb.append("\"");
-                    if(bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isIRI()){
+                    if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isIRI()) {
                         bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).forEach(value -> sb.append(value).append(","));
-                    } else if(bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isLiteral()){
-                        bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).forEach(value -> sb.append(((Literal)value).getLabel()).append(","));
+                    } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isLiteral()) {
+                        bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).forEach(value -> sb.append(((Literal) value).getLabel()).append(","));
                     }
 
-                    sb.deleteCharAt(sb.length()-1);
+                    sb.deleteCharAt(sb.length() - 1);
                     sb.append("\"");
                 }
                 sb.append(",");
             }
-            sb.deleteCharAt(sb.length()-1);
+            sb.deleteCharAt(sb.length() - 1);
             sb.append("\n");
         }
         return sb.toString();
@@ -148,24 +147,24 @@ public class StreamingNTriplesWrite {
             //System.out.println("Got this column as first column: " + firstColumn.getTitles());
             while ((line = reader.readLine()) != null) {
                 Triple triple = StreamingSupport.createTripleFromLine(line);
-                if(firstColumn.getValueUrl() == null){
-                    if(triple.getSubject().isBNode()){
+                if (firstColumn.getValueUrl() == null) {
+                    if (triple.getSubject().isBNode()) {
                         firstColumn.setValueUrl("{+Subject}");
-                    } else if(triple.getSubject().isIRI()){
-                        firstColumn.setValueUrl(((IRI)triple.getSubject()).getNamespace()+"{+Subject}");
+                    } else if (triple.getSubject().isIRI()) {
+                        firstColumn.setValueUrl(((IRI) triple.getSubject()).getNamespace() + "{+Subject}");
                     }
                 }
                 // Skip lines until the desired line
-                if(i < lineIndexOfProcessed - 1){
+                if (i < lineIndexOfProcessed - 1) {
                     System.out.println("do nothing i < lineIndexOfProcessed - 1    i = " + i);// do nothing
-                } else{
+                } else {
 
-                    if(!processedSubjects.contains(triple.getSubject()) && !currentSubjects.contains(triple.getSubject())){
-                        if(!firstColumn.getValueUrl().startsWith("{")){
+                    if (!processedSubjects.contains(triple.getSubject()) && !currentSubjects.contains(triple.getSubject())) {
+                        if (!firstColumn.getValueUrl().startsWith("{")) {
                             String[] splitValue = firstColumn.getValueUrl().split("\\{");
-                            if(triple.getSubject().isIRI() && !((IRI)triple.getObject()).getNamespace().equalsIgnoreCase(splitValue[0])){
+                            if (triple.getSubject().isIRI() && !((IRI) triple.getObject()).getNamespace().equalsIgnoreCase(splitValue[0])) {
                                 firstColumn.setValueUrl("{+Subject}");
-                            } else if(triple.getSubject().isBNode()){
+                            } else if (triple.getSubject().isBNode()) {
                                 firstColumn.setValueUrl("{+Subject}");
                             }
                         }
@@ -181,16 +180,16 @@ public class StreamingNTriplesWrite {
                 }
                 i++;
                 //System.out.println(line);  // Process the line (e.g., print it)
-                if(currentSubjects.size() == maximumOfProcessedSubjects){
+                if (currentSubjects.size() == maximumOfProcessedSubjects) {
                     lineIndexOfProcessed = i;
                     System.out.println("lineIndexOfProcessed = " + i);
                     return true;
                 }
-                if(i % 100 == 0){
+                if (i % 100 == 0) {
                     System.out.println("Processed " + i + " lines in gettingNewSubjects");
                 }
             }
-            if(!currentSubjects.isEmpty()){
+            if (!currentSubjects.isEmpty()) {
                 return true;
             }
         } catch (IOException e) {
@@ -202,7 +201,7 @@ public class StreamingNTriplesWrite {
     private void processLine(String line, CSVOutputGrid grid) {
         Triple triple = StreamingSupport.createTripleFromLine(line);
         System.out.println("Processing line: " + line);
-        if(currentSubjects.contains(triple.getSubject())) {
+        if (currentSubjects.contains(triple.getSubject())) {
             String keyForColumn = Column.getNameFromIRI(triple.getPredicate(), triple.getObject());
             if (grid.getCsvOutputBuffer().get(triple.getSubject()).containsKey(keyForColumn)) {
                 grid.getCsvOutputBuffer().get(triple.getSubject()).get(keyForColumn).add(triple.getObject());

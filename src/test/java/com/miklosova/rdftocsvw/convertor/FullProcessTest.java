@@ -1,9 +1,5 @@
 package com.miklosova.rdftocsvw.convertor;
 
-import com.miklosova.rdftocsvw.convertor.ConversionService;
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
-import com.miklosova.rdftocsvw.convertor.RowAndKey;
-import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
@@ -36,15 +32,6 @@ public class FullProcessTest {
     private String methodName;
 
 
-
-    @Parameterized.Parameters(name = "{0}")
-    public static Collection<Object[]> configs(){
-        return Arrays.asList(new Object[][]{
-                { "SplitQuerySmallDataset", "./src/test/resources/testingInput.ttl", "./src/test/resources/csv-metadata.json", "./src/test/resources/splitQueryTest", "./src/test/resources/testingInput.ttl", "./src/test/resources/splitQueryTestRDFOutput.ttl", "rdf4j"},
-                //{ "", "", "", "", "", ""},
-        });
-    }
-
     public FullProcessTest(String nameForTest, String filePath, String filePathForMetadata, String filePathForOutput, String filePathForImage, String filePathForTestRDFOutput, String methodName) {
         this.nameForTest = nameForTest;
         this.filePath = filePath;
@@ -54,6 +41,15 @@ public class FullProcessTest {
         this.filePathForTestRDFOutput = filePathForTestRDFOutput;
         this.methodName = methodName;
     }
+
+    @Parameterized.Parameters(name = "{0}")
+    public static Collection<Object[]> configs() {
+        return Arrays.asList(new Object[][]{
+                {"SplitQuerySmallDataset", "./src/test/resources/testingInput.ttl", "./src/test/resources/csv-metadata.json", "./src/test/resources/splitQueryTest", "./src/test/resources/testingInput.ttl", "./src/test/resources/splitQueryTestRDFOutput.ttl", "rdf4j"},
+                //{ "", "", "", "", "", ""},
+        });
+    }
+
     @Test
     public void originalIsSubsetOfResult() {
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
@@ -66,7 +62,7 @@ public class FullProcessTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        assert(rc != null);
+        assert (rc != null);
         // Convert the table to intermediate data for processing into metadata
         ConversionService cs = new ConversionService();
         PrefinishedOutput prefinishedOutput = cs.convertByQuery(rc, db);
@@ -77,7 +73,7 @@ public class FullProcessTest {
         RowsAndKeys rnk = (RowsAndKeys) prefinishedOutput.getPrefinishedOutput();
         int i = 0;
         ArrayList<String> fileNamesCreated = new ArrayList<>();
-        for(RowAndKey rowAndKey : rnk.getRowsAndKeys()){
+        for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
             String newFileName = filePathForOutput + i + ".csv";
             System.out.println("newFileName " + newFileName);
             FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata);

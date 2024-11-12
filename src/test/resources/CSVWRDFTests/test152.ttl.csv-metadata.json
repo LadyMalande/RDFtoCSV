@@ -1,52 +1,70 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test152.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "NMTOKEN",
-        "name" : "NMTOKEN",
-        "propertyUrl" : "file://test152.csv#NMTOKEN",
-        "datatype" : "NMTOKEN"
-      }, {
-        "@type" : "Column",
-        "titles" : "anyUri",
-        "name" : "anyUri",
-        "propertyUrl" : "file://test152.csv#anyUri",
-        "datatype" : "anyURI"
-      }, {
-        "@type" : "Column",
-        "titles" : "normalizedString",
-        "name" : "normalizedString",
-        "propertyUrl" : "file://test152.csv#normalizedString",
-        "datatype" : "normalizedString"
-      }, {
-        "@type" : "Column",
-        "titles" : "string1",
-        "name" : "string1",
-        "propertyUrl" : "file://test152.csv#string1"
-      }, {
-        "@type" : "Column",
-        "titles" : "string2",
-        "name" : "string2",
-        "propertyUrl" : "file://test152.csv#string2"
-      }, {
-        "@type" : "Column",
-        "titles" : "string3",
-        "name" : "string3",
-        "propertyUrl" : "file://test152.csv#string3"
-      } ],
-      "rowTitles" : [ "Subjekt", "NMTOKEN", "anyUri", "normalizedString", "string1", "string2", "string3" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test152.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "NMTOKEN",
+            "name": "NMTOKEN",
+            "propertyUrl": "file://test152.csv#NMTOKEN",
+            "datatype": "NMTOKEN"
+          },
+          {
+            "@type": "Column",
+            "titles": "anyUri",
+            "name": "anyUri",
+            "propertyUrl": "file://test152.csv#anyUri",
+            "datatype": "anyURI"
+          },
+          {
+            "@type": "Column",
+            "titles": "normalizedString",
+            "name": "normalizedString",
+            "propertyUrl": "file://test152.csv#normalizedString",
+            "datatype": "normalizedString"
+          },
+          {
+            "@type": "Column",
+            "titles": "string1",
+            "name": "string1",
+            "propertyUrl": "file://test152.csv#string1"
+          },
+          {
+            "@type": "Column",
+            "titles": "string2",
+            "name": "string2",
+            "propertyUrl": "file://test152.csv#string2"
+          },
+          {
+            "@type": "Column",
+            "titles": "string3",
+            "name": "string3",
+            "propertyUrl": "file://test152.csv#string3"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "NMTOKEN",
+          "anyUri",
+          "normalizedString",
+          "string1",
+          "string2",
+          "string3"
+        ]
+      }
     }
-  } ]
+  ]
 }

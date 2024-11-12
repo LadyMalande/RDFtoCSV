@@ -1,41 +1,55 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test126.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "countryCode",
-        "name" : "countryCode",
-        "propertyUrl" : "file://test126.csv#countryCode"
-      }, {
-        "@type" : "Column",
-        "titles" : "latitude",
-        "name" : "latitude",
-        "propertyUrl" : "file://test126.csv#latitude",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "longitude",
-        "name" : "longitude",
-        "propertyUrl" : "file://test126.csv#longitude",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "name",
-        "name" : "name",
-        "propertyUrl" : "file://test126.csv#name"
-      } ],
-      "rowTitles" : [ "Subjekt", "countryCode", "latitude", "longitude", "name" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test126.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "countryCode",
+            "name": "countryCode",
+            "propertyUrl": "file://test126.csv#countryCode"
+          },
+          {
+            "@type": "Column",
+            "titles": "latitude",
+            "name": "latitude",
+            "propertyUrl": "file://test126.csv#latitude",
+            "datatype": "double"
+          },
+          {
+            "@type": "Column",
+            "titles": "longitude",
+            "name": "longitude",
+            "propertyUrl": "file://test126.csv#longitude",
+            "datatype": "double"
+          },
+          {
+            "@type": "Column",
+            "titles": "name",
+            "name": "name",
+            "propertyUrl": "file://test126.csv#name"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "countryCode",
+          "latitude",
+          "longitude",
+          "name"
+        ]
+      }
     }
-  } ]
+  ]
 }

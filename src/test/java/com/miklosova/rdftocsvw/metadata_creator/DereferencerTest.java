@@ -1,8 +1,9 @@
 package com.miklosova.rdftocsvw.metadata_creator;
-import com.miklosova.rdftocsvw.support.BaseTest;
+
 import com.miklosova.rdftocsvw.convertor.ConversionService;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
+import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -25,29 +26,13 @@ import java.util.List;
 @RunWith(Parameterized.class)
 public class DereferencerTest extends BaseTest {
     private static final String PROCESS_METHOD = "rdf4j";
-    private String nameForTest;
     private static String filePath = "./src/test/resources/DereferenceTests/dereferenceTestInput.ttl";
     private static String filePathForMetadata = "./src/test/resources/DereferenceTests/dereferenceTestInput.csv-metadata.json";
-    private String expectedTitle;
-
-    private String expectedName;
-
     private static Metadata createdMetadata;
-
     private static Repository db;
-    @Parameterized.Parameters(name = "{0}")
-    public static Collection<Object[]> configs(){
-        return Arrays.asList(new Object[][]{
-                { "Dereferencer-dcterms", "creator", "Creator"},
-                { "Dereferencer-dc", "publisher", "Publisher"},
-                { "Dereferencer-foaf", "givenName", "Given name"},
-                { "Dereferencer-vann", "usageNote", "Usage Note"},
-                { "Dereferencer-cc", "Distribution", "Distribution"},
-                { "Dereferencer-vs", "moreinfo", "moreinfo"},
-                { "Dereferencer-wot", "encrypter", "Encrypted by"},
-                { "Dereferencer-skos", "scopeNote", "scope note"},
-        });
-    }
+    private String nameForTest;
+    private String expectedTitle;
+    private String expectedName;
 
     public DereferencerTest(String nameForTest, String expectedName, String expectedTitle) {
         this.nameForTest = nameForTest;
@@ -55,8 +40,22 @@ public class DereferencerTest extends BaseTest {
         this.expectedTitle = expectedTitle;
     }
 
+    @Parameterized.Parameters(name = "{0}")
+    public static Collection<Object[]> configs() {
+        return Arrays.asList(new Object[][]{
+                {"Dereferencer-dcterms", "creator", "Creator"},
+                {"Dereferencer-dc", "publisher", "Publisher"},
+                {"Dereferencer-foaf", "givenName", "Given name"},
+                {"Dereferencer-vann", "usageNote", "Usage Note"},
+                {"Dereferencer-cc", "Distribution", "Distribution"},
+                {"Dereferencer-vs", "moreinfo", "moreinfo"},
+                {"Dereferencer-wot", "encrypter", "Encrypted by"},
+                {"Dereferencer-skos", "scopeNote", "scope note"},
+        });
+    }
+
     @BeforeAll
-    static void createMetadata(){
+    static void createMetadata() {
         System.out.println("Override before each");
         ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{filePath});
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
@@ -68,7 +67,7 @@ public class DereferencerTest extends BaseTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        assert(rc != null);
+        assert (rc != null);
         // Convert the table to intermediate data for processing into metadata
         ConversionService cs = new ConversionService();
         System.out.println("createMetadata @BeforeEach");
@@ -77,6 +76,7 @@ public class DereferencerTest extends BaseTest {
         MetadataService ms = new MetadataService();
         createdMetadata = ms.createMetadata(prefinishedOutput);
     }
+
     @Test
     public void isGivenDatatype() {
         createMetadata();

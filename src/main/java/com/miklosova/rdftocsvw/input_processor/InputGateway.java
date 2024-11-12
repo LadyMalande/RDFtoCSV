@@ -2,7 +2,6 @@ package com.miklosova.rdftocsvw.input_processor;
 
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.IRDF4JParsingMethod;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParseException;
 
 import java.io.File;
@@ -17,7 +16,7 @@ public class InputGateway {
 
     public RepositoryConnection processInput(RepositoryConnection conn, File fileToProcess) throws RDFParseException, IOException {
 
-        return parsingMethod.processInput(conn , fileToProcess);
+        return parsingMethod.processInput(conn, fileToProcess);
     }
 
 }

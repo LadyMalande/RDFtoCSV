@@ -7,10 +7,6 @@ import java.util.HashMap;
 public class RDFAssetManager {
     private static HashMap<String, RDFFormat> loaders = new HashMap<>();
 
-    public void addLoader(RDFFormat format, String extension) {
-        loaders.put(extension, format);
-    }
-
     public RDFAssetManager() {
         addLoader(RDFFormat.RDFXML, "rdf");
         addLoader(RDFFormat.RDFXML, "rdfs");
@@ -34,6 +30,10 @@ public class RDFAssetManager {
         addLoader(RDFFormat.RDFA, "xhtml");
         addLoader(RDFFormat.RDFA, "html");
         addLoader(RDFFormat.HDT, "hdt");
+    }
+
+    public void addLoader(RDFFormat format, String extension) {
+        loaders.put(extension, format);
     }
 
     @SuppressWarnings("unchecked")

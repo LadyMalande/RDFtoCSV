@@ -1,6 +1,8 @@
 package com.miklosova.rdftocsvw.convertor;
 
 public class CSV {
+    private String[][] table;
+
     public String[][] getTable() {
         return table;
     }
@@ -8,7 +10,5 @@ public class CSV {
     public void setTable(String[][] table) {
         this.table = table;
     }
-
-    private String[][] table;
 
 }

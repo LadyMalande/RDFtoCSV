@@ -24,7 +24,7 @@ public class TurtleParser implements IRDF4JParsingMethod {
             //System.out.println("Is UTF-8: " + isUTF8);
 
             conn.add(targetStream, "", fileFormat);
-        } catch(RDFParseException rdfParseException){
+        } catch (RDFParseException rdfParseException) {
             FileModifier.addColonsToIRIsInFile(fileToParse);
             Path path = fileToParse.getAbsoluteFile().toPath();
             path = path.normalize();
@@ -41,8 +41,7 @@ public class TurtleParser implements IRDF4JParsingMethod {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return conn;

@@ -1,17 +1,38 @@
 package com.miklosova.rdftocsvw.support;
 
 import com.miklosova.rdftocsvw.convertor.QueryMethods;
+import org.apache.commons.cli.*;
 
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
 
 public class ConfigurationManager {
+
+    public static final String READ_METHOD = "conversion.readMethod";
+    public static final String INTERMEDIATE_FILE_NAMES = "app.filesInProgress";
+    public static final String OUTPUT_ZIPFILE_NAME = "output.zipname";
+    public static final String CONVERSION_HAS_BLANK_NODES = "conversion.containsBlankNodes";
+    public static final String CONVERSION_HAS_RDF_TYPES = "conversion.hasRDFType";
+    public static final String INPUT_FILENAME = "input.inputFileName";
+    public static final String OUTPUT_FILENAME = "input.outputFileName";
+    public static final String OUTPUT_METADATA_FILE_NAME = "output.metadataFileName";
+    public static final String OUTPUT_FILE_PATH = "output.filePath";
+    public static final String CONVERSION_METHOD = "conversion.method";
+    public static final String METADATA_ROWNUMS = "metadata.rownums";
+    public static final String STREAMING = "input.streaming";
+    /**
+     * Default name for metadata file in case the metadata does not adhere to csv quivalent file name
+     * According to <a href="https://www.w3.org/TR/tabular-data-primer/#h-metadata">Tabular Metadata Primer</a>
+     */
+    public static final String DEFAULT_METADATA_FILENAME = "csv-metadata.json";
+    public static final String DEFAULT_CONVERSION_METHOD = "basicQuery";
+    private static final String DEFAULT_PARSING_METHOD = "rdf4j";
     private static String CONFIG_FILE_NAME = "../app.config";
+
     public static String getCONFIG_FILE_NAME() {
         // Lazy initialization (modifies the variable only once)
         // Convert the relative path to a canonical path (removes ../ and resolves symlinks)
@@ -36,7 +57,7 @@ public class ConfigurationManager {
             int insertPosition = canonicalPath.indexOf(insertAfter) + insertAfter.length();
             String fileNameBeingRead = null;
             // Create the new path by inserting jarDirectory
-            if(jarDirectory.equalsIgnoreCase("target")){
+            if (jarDirectory.equalsIgnoreCase("target")) {
                 System.out.println("jarDirectory.equalsIgnoreCase(\"target\"");
                 fileInDirectory = canonicalPath.substring(0, insertPosition) + "RDFtoCSV" + File.separator
                         + jarDirectory
@@ -62,30 +83,6 @@ public class ConfigurationManager {
 
         return CONFIG_FILE_NAME;
     }
-    public static final String READ_METHOD = "conversion.readMethod";
-
-    public static final String INTERMEDIATE_FILE_NAMES = "app.filesInProgress";
-    public static final String OUTPUT_ZIPFILE_NAME = "output.zipname";
-    public static final String CONVERSION_HAS_BLANK_NODES = "conversion.containsBlankNodes";
-    public static final String CONVERSION_HAS_RDF_TYPES = "conversion.hasRDFType";
-
-    public static final String INPUT_FILENAME = "input.inputFileName";
-    public static final String OUTPUT_FILENAME = "input.outputFileName";
-
-    public static final String OUTPUT_METADATA_FILE_NAME = "output.metadataFileName";
-
-    public static final String OUTPUT_FILE_PATH = "output.filePath";
-    public static final String CONVERSION_METHOD = "conversion.method";
-    public static final String METADATA_ROWNUMS = "metadata.rownums";
-
-
-    /**
-     * Default name for metadata file in case the metadata does not adhere to csv quivalent file name
-     * According to <a href="https://www.w3.org/TR/tabular-data-primer/#h-metadata">Tabular Metadata Primer</a>
-     */
-    public static final String DEFAULT_METADATA_FILENAME = "csv-metadata.json";
-
-    public static final String DEFAULT_CONVERSION_METHOD = "basicQuery";
 
     public static void saveVariableToConfigFile(String variableName, String value) {
         System.out.println("new String value with encoding for variable(" + variableName + "): " + value);
@@ -114,7 +111,7 @@ public class ConfigurationManager {
                 default -> QueryMethods.BASIC_QUERY.getValue();
             };
         }
-        if(ConfigurationManager.getVariableFromConfigFile(CONVERSION_METHOD) == null)
+        if (ConfigurationManager.getVariableFromConfigFile(CONVERSION_METHOD) == null)
             saveVariableToConfigFile(CONVERSION_METHOD, queryMethod);
         // TODO add more parameters compatible with web service
 
@@ -138,6 +135,154 @@ public class ConfigurationManager {
         return prop.getProperty(variableName);
     }
 
+    private static void createConfigFile() {
+
+        // Now you call the static variable for the first time and set it if needed
+        File finalConfigFile = new File(getCONFIG_FILE_NAME());
+        System.out.println("finalConfigFile = " + finalConfigFile.getAbsolutePath());
+        // Check if the file exists
+        if (!finalConfigFile.exists()) {
+            try {
+                // Try to create the file
+                if (finalConfigFile.createNewFile()) {
+                    System.out.println("File created: " + finalConfigFile.getName());
+                } else {
+                    System.out.println("File already exists.");
+                }
+            } catch (IOException e) {
+                System.out.println("An error occurred while creating the file.");
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("File already exists.");
+        }
+
+    }
+
+    public static String readArgWithDefaultOptions(String[] args, String argName) {
+        Options options = addArgsOptions();
+
+        CommandLineParser parser = new DefaultParser();
+        try {
+            CommandLine cmd = parser.parse(options, args);
+            String inputFile = cmd.getOptionValue(argName);
+            boolean streamingMethod = cmd.hasOption("streaming");
+            // Continue with processing...
+            if (inputFile == null && !streamingMethod) {
+                System.err.println("You must specify file input argument to the command line. ");
+                printHelpLine(options);
+                System.exit(1);
+            }
+            return inputFile;
+        } catch (ParseException e) {
+            System.err.println("Error parsing options from arguments: " + e.getMessage());
+            System.exit(1);
+        }
+
+        return null;
+    }
+
+    public static void loadSettingsFromInputToConfigFile(String[] args) {
+        createConfigFile();
+
+        Options options = addArgsOptions();
+
+        CommandLineParser parser = new DefaultParser();
+        try {
+            CommandLine cmd = parser.parse(options, args);
+            String multipleTables = cmd.getOptionValue("tables");
+            String parsingMethod = cmd.getOptionValue("parsing");
+            boolean help = cmd.hasOption("help");
+            String inputFile = cmd.getOptionValue("file");
+            boolean streamingMethod = cmd.hasOption("streaming");
+
+            if (help) {
+                printHelpLine(options);
+
+                System.exit(0);
+            }
+            // Continue with processing...
+            if (inputFile == null && !streamingMethod) {
+                System.err.println("You must specify file input argument to the command line. ");
+                printHelpLine(options);
+                System.exit(1);
+            }
+
+
+            writeOptionsToConfigFile(multipleTables, parsingMethod, inputFile, streamingMethod);
+        } catch (ParseException e) {
+            System.err.println("Error parsing options from arguments: " + e.getMessage());
+            System.exit(1);
+        }
+
+    }
+
+    private static void printHelpLine(Options options) {
+        HelpFormatter formatter = HelpFormatter.builder().get();
+        formatter.printHelp("Command line syntax:", options);
+    }
+
+    private static void writeOptionsToConfigFile(String conversionMethod, String parsingMethod, String inputFile, boolean streaming) {
+        System.out.println("conversion method=" + conversionMethod + " parsingMethod=" + parsingMethod + " inputFile=" + inputFile + " streaming=" + streaming);
+        File finalConfigFile = new File(CONFIG_FILE_NAME);
+
+        Properties prop = new Properties();
+
+        try (FileInputStream fis = new FileInputStream(finalConfigFile)) {
+            prop.load(fis);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            System.err.println("Trouble reading config file for the first time");
+            System.exit(1);
+        }
+
+        String CSVFileToWriteTo = null;
+        String metadataFileName = null;
+        parsingMethod = (parsingMethod != null) ? parsingMethod : DEFAULT_PARSING_METHOD;
+
+        if (CSVFileToWriteTo == null) {
+            CSVFileToWriteTo = "CSVfileToWriteTo";
+        }
+
+        conversionMethod = (conversionMethod == null) ? DEFAULT_CONVERSION_METHOD : conversionMethod;
+        prop.setProperty(ConfigurationManager.OUTPUT_FILENAME, CSVFileToWriteTo);
+        prop.setProperty(ConfigurationManager.CONVERSION_METHOD, conversionMethod);
+        System.out.println("property set prop.conversionMethod," + conversionMethod);
+        prop.setProperty(ConfigurationManager.INTERMEDIATE_FILE_NAMES, "");
+        prop.setProperty(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
+        prop.setProperty(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
+        prop.setProperty(ConfigurationManager.OUTPUT_ZIPFILE_NAME, "compressed.zip");
+        System.out.println("property set prop.setProperty(ConfigurationManager.READ_METHOD," + parsingMethod);
+        prop.setProperty(ConfigurationManager.READ_METHOD, parsingMethod);
+        prop.setProperty(ConfigurationManager.METADATA_ROWNUMS, "false");
+        prop.setProperty(ConfigurationManager.OUTPUT_FILE_PATH, "");
+        prop.setProperty(ConfigurationManager.STREAMING, String.valueOf(streaming));
+        if (metadataFileName == null) {
+            metadataFileName = DEFAULT_METADATA_FILENAME;
+        }
+        prop.setProperty(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, metadataFileName);
+
+        // Store options to config file
+        try {
+            PrintWriter pw = new PrintWriter(CONFIG_FILE_NAME);
+            System.out.println("Written to configFile " + CONFIG_FILE_NAME);
+            prop.store(pw, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Get value from config: " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD));
+    }
+
+    private static Options addArgsOptions() {
+        Options options = new Options();
+        options.addOption("t", "tables", true, "Enable creation of multiple tables during conversion");
+        options.addOption("p", "parsing", true, "Specify the parsing method");
+        options.addOption("h", "help", false, "Show the command line options");
+        options.addOption("f", "file", true, "File for conversion");
+        options.addOption("s", "streaming", false, "Parse the file in streaming mode (continual parsing until stopped)");
+        return options;
+    }
+
     /**
      * Set the configuration parameters in app.config
      * Set defaults if none are provided
@@ -145,6 +290,7 @@ public class ConfigurationManager {
      *
      * @param args Parameters provided in command line/parameters of conversion
      */
+    /*
     public static void loadSettingsFromInputToConfigFile(String[] args) {
         Properties prop = new Properties();
 
@@ -222,4 +368,6 @@ public class ConfigurationManager {
         }
         System.out.println("Get value from config: " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD));
     }
+
+     */
 }

@@ -6,6 +6,13 @@ import com.miklosova.rdftocsvw.support.IFactory;
 import java.util.ArrayList;
 
 public class RowsAndKeys {
+    ArrayList<RowAndKey> rowsAndKeys;
+    private boolean hasRDFType;
+
+    public RowsAndKeys() {
+        this.rowsAndKeys = new ArrayList<>();
+    }
+
     public ArrayList<RowAndKey> getRowsAndKeys() {
         return rowsAndKeys;
     }
@@ -14,20 +21,16 @@ public class RowsAndKeys {
         this.rowsAndKeys = rowsAndKeys;
     }
 
-    public void setHasRDFType(boolean hasRDFType) {
-        this.hasRDFType = hasRDFType;
-    }
-
-    ArrayList<RowAndKey> rowsAndKeys;
-
     public boolean isHasRDFType() {
         return hasRDFType;
     }
 
-    private boolean hasRDFType;
+    public void setHasRDFType(boolean hasRDFType) {
+        this.hasRDFType = hasRDFType;
+    }
 
-    public RowsAndKeys() {
-        this.rowsAndKeys = new ArrayList<>();
+    public String toString() {
+        return "Rows and keys for metadata creation";
     }
 
     //static inner class for Factory<T> implementation
@@ -35,9 +38,5 @@ public class RowsAndKeys {
         public RowsAndKeys factory() {
             return new RowsAndKeys();
         }
-    }
-
-    public String toString() {
-        return "Rows and keys for metadata creation";
     }
 }

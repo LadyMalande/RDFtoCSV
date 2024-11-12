@@ -1,17 +1,23 @@
 {
-  "tables" : [ {
-    "url" : "test-003TestOutput0.csv",
-    "tableSchema" : {
-      "columns" : [ {
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "http://example.org/{Subjekt}",
-        "suppressOutput" : true
-      } ],
-      "primaryKey" : "node",
-      "aboutUrl" : "http://example.org/{Subjekt}",
-      "rowTitles" : [ "Subjekt" ]
+  "tables": [
+    {
+      "url": "test-003TestOutput0.csv",
+      "tableSchema": {
+        "columns": [
+          {
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "http://example.org/{Subjekt}",
+            "suppressOutput": true
+          }
+        ],
+        "primaryKey": "node",
+        "aboutUrl": "http://example.org/{Subjekt}",
+        "rowTitles": [
+          "Subjekt"
+        ]
+      }
     }
-  } ],
-  "@context" : "http://www.w3.org/ns/csvw"
+  ],
+  "@context": "http://www.w3.org/ns/csvw"
 }

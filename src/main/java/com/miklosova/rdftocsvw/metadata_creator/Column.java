@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.miklosova.rdftocsvw.convertor.Row;
 import com.miklosova.rdftocsvw.convertor.TypeIdAndValues;
 import com.miklosova.rdftocsvw.convertor.TypeOfValue;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.ConnectionChecker;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
@@ -20,15 +19,6 @@ import java.util.Optional;
 @SuppressWarnings("SpellCheckingInspection")
 @JsonldType("Column")
 public class Column {
-    public Column() {
-
-    }
-
-    @JsonIgnore
-    public boolean getIsNamespaceTheSame() {
-        return isNamespaceTheSame;
-    }
-
     private boolean isNamespaceTheSame;
     /**
      * Title for the column
@@ -55,19 +45,6 @@ public class Column {
      * any, xml, html, json.
      */
     private String datatype;
-
-    public void setAboutUrl(String aboutUrl) {
-        this.aboutUrl = aboutUrl;
-    }
-
-    public void setSuppressOutput(Boolean suppressOutput) {
-        this.suppressOutput = suppressOutput;
-    }
-
-    public String getAboutUrl() {
-        return aboutUrl;
-    }
-
     /**
      * A URI template property that MAY be used to indicate what a cell contains information about
      * (subject of a triple of RDF). MAY be also defined on a tableSchema level to define aboutUrl
@@ -93,68 +70,16 @@ public class Column {
      * False is default if there is not suppressOutput.
      */
     private Boolean suppressOutput;
-
-    public String getSeparator() {
-        return separator;
-    }
-
-    public void setSeparator(String separator) {
-        this.separator = separator;
-    }
-
     /**
      * Separator that is used in case the column contains multiple values enclosed in ""
      * When converting csvw back to rdf it gets split to separate objects
      */
     private String separator;
-
     private Map.Entry<Value, TypeIdAndValues> column;
-
     private Value originalColumnKey;
+    public Column() {
 
-    @JsonIgnore
-    public Map.Entry<Value, TypeIdAndValues> getColumn() {
-        return column;
     }
-
-    @JsonIgnore
-    public Value getOriginalColumnKey() {
-        return originalColumnKey;
-    }
-
-
-    public void setColumn(Map.Entry<Value, TypeIdAndValues> column) {
-        this.column = column;
-    }
-
-    public String getLang() {
-        return lang;
-    }
-
-    public void setTitles(String titles) {
-        this.titles = titles;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPropertyUrl(String propertyUrl) {
-        this.propertyUrl = propertyUrl;
-    }
-
-    public void setValueUrl(String valueUrl) {
-        this.valueUrl = valueUrl;
-    }
-
-    public void setDatatype(String datatype) {
-        this.datatype = datatype;
-    }
-
-    public void setVirtual(Boolean virtual) {
-        this.virtual = virtual;
-    }
-
     public Column(Map.Entry<Value, TypeIdAndValues> column, boolean namespaceIsTheSame) {
         //assert column != null;
         this.column = column;
@@ -167,13 +92,77 @@ public class Column {
 
     }
 
+    public static String getNameFromIRI(IRI predicate, Value object) {
+        // Create name without - and nonascii characters
+        String safeName = createSafeName(predicate.getLocalName());
+        String langOfObject = null;
+        if (object.isLiteral()) {
+            Literal literal = (Literal) object;
+            Optional<String> languageTag = literal.getLanguage();
+            if (languageTag.isPresent()) {
+                langOfObject = languageTag.get();
+            }
+        }
+        if (langOfObject != null) {
+            return safeName + "_" + langOfObject;
+        } else {
+            return safeName;
+        }
+    }
+
+    public static String createSafeName(String localName) {
+        // Replace all non-ASCII characters and hyphens
+        String safeName = localName.replaceAll("[^\\x00-\\x7F-]", "").replace("-", "");
+        //System.out.println("transformed localName to safe name: " + localName + " > " + safeName);
+        return safeName;
+    }
+
+    @JsonIgnore
+    public boolean getIsNamespaceTheSame() {
+        return isNamespaceTheSame;
+    }
+
+    public String getAboutUrl() {
+        return aboutUrl;
+    }
+
+    public void setAboutUrl(String aboutUrl) {
+        this.aboutUrl = aboutUrl;
+    }
+
+    public String getSeparator() {
+        return separator;
+    }
+
+    public void setSeparator(String separator) {
+        this.separator = separator;
+    }
+
+    @JsonIgnore
+    public Map.Entry<Value, TypeIdAndValues> getColumn() {
+        return column;
+    }
+
+    public void setColumn(Map.Entry<Value, TypeIdAndValues> column) {
+        this.column = column;
+    }
+
+    @JsonIgnore
+    public Value getOriginalColumnKey() {
+        return originalColumnKey;
+    }
+
+    public String getLang() {
+        return lang;
+    }
+
     public void createColumn(Row row, boolean isSubjectTheSame, List<Row> rows) {
         if (this.column != null) {
 
             createLang();
             createName();
             createPropertyUrl();
-            this.titles = createTitles( this.column.getKey(),this.column.getValue().values.get(0));
+            this.titles = createTitles(this.column.getKey(), this.column.getValue().values.get(0));
             createValueUrl();
             createDatatype();
             createAboutUrl(row, isSubjectTheSame, rows);
@@ -311,25 +300,48 @@ public class Column {
         return titles;
     }
 
+    public void setTitles(String titles) {
+        this.titles = titles;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPropertyUrl() {
         return propertyUrl;
     }
 
+    public void setPropertyUrl(String propertyUrl) {
+        this.propertyUrl = propertyUrl;
+    }
+
     public String getValueUrl() {
         return valueUrl;
+    }
+
+    public void setValueUrl(String valueUrl) {
+        this.valueUrl = valueUrl;
     }
 
     public String getDatatype() {
         return datatype;
     }
 
+    public void setDatatype(String datatype) {
+        this.datatype = datatype;
+    }
 
     public Boolean getVirtual() {
         return virtual;
+    }
+
+    public void setVirtual(Boolean virtual) {
+        this.virtual = virtual;
     }
 
     private void createName() {
@@ -352,31 +364,6 @@ public class Column {
         } else {
             this.name = safeName;
         }
-    }
-
-    public static String getNameFromIRI(IRI predicate, Value object) {
-        // Create name without - and nonascii characters
-        String safeName = createSafeName(predicate.getLocalName());
-        String langOfObject = null;
-        if (object.isLiteral()) {
-            Literal literal = (Literal) object;
-            Optional<String> languageTag = literal.getLanguage();
-           if(languageTag.isPresent()){
-               langOfObject = languageTag.get();
-           }
-        }
-        if (langOfObject != null) {
-            return safeName + "_" + langOfObject;
-        } else {
-            return safeName;
-        }
-    }
-
-    public static String createSafeName(String localName) {
-        // Replace all non-ASCII characters and hyphens
-        String safeName = localName.replaceAll("[^\\x00-\\x7F-]", "").replace("-", "");
-        //System.out.println("transformed localName to safe name: " + localName + " > " + safeName);
-        return safeName;
     }
 
     public String createTitles(Value predicate, Value object) {
@@ -424,6 +411,10 @@ public class Column {
 
     public Boolean getSuppressOutput() {
         return suppressOutput;
+    }
+
+    public void setSuppressOutput(Boolean suppressOutput) {
+        this.suppressOutput = suppressOutput;
     }
 
     public void addFirstColumn(Value type, Value value, boolean isRdfType, boolean isNamespaceTheSame, boolean typeIsTheSame) {

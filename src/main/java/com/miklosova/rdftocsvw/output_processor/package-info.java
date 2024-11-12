@@ -9,9 +9,9 @@
  *   <li>{@code java.xml}: For .</li>
  * </ul>
  *
- * @since 1.0
  * @version 1.0
- * @see com.miklosova.rdftocsvw
  * @author Tereza Miklóšová
+ * @see com.miklosova.rdftocsvw
+ * @since 1.0
  */
 package com.miklosova.rdftocsvw.output_processor;

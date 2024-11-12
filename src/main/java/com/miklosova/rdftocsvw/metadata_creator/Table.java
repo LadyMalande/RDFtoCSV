@@ -25,6 +25,10 @@ public class Table {
     private List<Transformation> transformtaions;
 
 
+    public Table(String url) {
+        this.url = url;
+    }
+
     public List<Transformation> getTransformtaions() {
         return transformtaions;
     }
@@ -49,17 +53,12 @@ public class Table {
         this.tableSchema = tableSchema;
     }
 
-    public Table(String url) {
-        this.url = url;
-    }
-
     public void addTableMetadata(ArrayList<Value> keys, ArrayList<Row> rows) {
 
         this.tableSchema = new TableSchema(keys, rows);
         this.tableSchema.addTableSchemaMetadata();
         addTransformations();
     }
-
 
 
     private void addTransformations() {

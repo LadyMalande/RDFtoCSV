@@ -10,12 +10,8 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.model.util.Values;
-import org.jruby.RubyProcess;
-import org.jsoup.helper.ValidationException;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @JsonldType("Schema")
 public class TableSchema {
@@ -48,20 +44,77 @@ public class TableSchema {
         this.columns = new ArrayList<>();
     }
 
-    @JsonIgnore
-    public List<Value> getKeys() {
-        return keys;
-    }
-
     public TableSchema(List<Value> keys, List<Row> rows) {
         this.keys = keys;
         this.rows = rows;
 
     }
 
+    public static boolean isTypeTheSameForAllPrimary(List<Row> rows) {
+        List<Row> nonnulls = rows.stream().filter(row -> row.type != null).toList();
+        // Some rows do not have type - the type is therefore not the same for all of them
+        if (nonnulls.size() != rows.size()) {
+            return false;
+        }
+        System.out.println("Deciding whether this type is the same for all rows : " + nonnulls.get(0).type.stringValue());
+
+        Value type = nonnulls.get(0).type;
+
+        return nonnulls.stream().allMatch(row -> {
+
+                    System.out.println("type=" + type + " id="
+                            + row.id
+                            + " equals? " + row.type.equals(type));
+
+
+                    return row.type.equals(type);
+                }
+        );
+    }
+
+    public static boolean isNamespaceTheSameForAllSubjects(List<Row> rows, Value type, String lang) {
+        List<Row> nonnulls = rows.stream().filter(row -> row.columns.get(type) != null).toList();
+        System.out.println("the same subjects predicate: " + type.stringValue());
+
+        final String namespace = ((IRI) nonnulls.get(0).columns.get(type).id).getNamespace();
+
+        return nonnulls.stream().allMatch(row -> {
+/*
+                    System.out.println("namespace=" + namespace + " "
+                            + ((IRI) (row.columns).get(type).id).getNamespace()
+                            + " from " + (row.columns).get(type).id.toString() + " equals? " + ((IRI) (row.columns).get(type).id).getNamespace().equalsIgnoreCase(namespace));
+
+
+ */
+
+                    return ((IRI) (row.columns).get(type).id).getNamespace().equalsIgnoreCase(namespace);
+                }
+        );
+    }
+
+    public static boolean isNamespaceTheSameForAllPrimary(List<Row> rows) {
+
+        final String namespace = ((IRI) rows.get(0).id).getNamespace();
+        return rows.stream().allMatch(row ->
+                ((IRI) (row.id)).getNamespace().equalsIgnoreCase(namespace));
+    }
+
+    @JsonIgnore
+    public List<Value> getKeys() {
+        return keys;
+    }
+
+    public void setKeys(List<Value> keys) {
+        this.keys = keys;
+    }
+
     @JsonIgnore
     public List<Row> getRows() {
         return rows;
+    }
+
+    public void setRows(List<Row> rows) {
+        this.rows = rows;
     }
 
     public void addTableSchemaMetadata() {
@@ -194,18 +247,18 @@ public class TableSchema {
         } else {
             return false;
         }
-        for(Row row : rowsWithNonEmptyPredicate){
+        for (Row row : rowsWithNonEmptyPredicate) {
 
-                String namespaceForFirstValueInColUmn = ((IRI)row.columns.get(columnPredicate).values.get(0)).getNamespace();
-                for(Value valueOfColumn : row.columns.get(columnPredicate).values){
-                    if(valueOfColumn.isLiteral()){
-                        return false;
-                    }
-                    if(!((IRI)valueOfColumn).getNamespace().equalsIgnoreCase(namespaceForFirstValueInColUmn)){
-                        return false;
-                    }
+            String namespaceForFirstValueInColUmn = ((IRI) row.columns.get(columnPredicate).values.get(0)).getNamespace();
+            for (Value valueOfColumn : row.columns.get(columnPredicate).values) {
+                if (valueOfColumn.isLiteral()) {
+                    return false;
                 }
-                System.out.println(columnPredicate + "namespace might be the same? values: " + row.columns.get(columnPredicate).values + " id: " + row.columns.get(columnPredicate).id);
+                if (!((IRI) valueOfColumn).getNamespace().equalsIgnoreCase(namespaceForFirstValueInColUmn)) {
+                    return false;
+                }
+            }
+            System.out.println(columnPredicate + "namespace might be the same? values: " + row.columns.get(columnPredicate).values + " id: " + row.columns.get(columnPredicate).id);
         }
 
 
@@ -352,55 +405,6 @@ public class TableSchema {
         return newColumn;
     }
 
-    public static boolean isTypeTheSameForAllPrimary(List<Row> rows) {
-        List<Row> nonnulls = rows.stream().filter(row -> row.type != null).toList();
-        // Some rows do not have type - the type is therefore not the same for all of them
-        if (nonnulls.size() != rows.size()) {
-            return false;
-        }
-        System.out.println("Deciding whether this type is the same for all rows : " + nonnulls.get(0).type.stringValue());
-
-        Value type = nonnulls.get(0).type;
-
-        return nonnulls.stream().allMatch(row -> {
-
-                    System.out.println("type=" + type + " id="
-                            + row.id
-                            + " equals? " + row.type.equals(type));
-
-
-                    return row.type.equals(type);
-                }
-        );
-    }
-
-    public static boolean isNamespaceTheSameForAllSubjects(List<Row> rows, Value type, String lang) {
-        List<Row> nonnulls = rows.stream().filter(row -> row.columns.get(type) != null).toList();
-        System.out.println("the same subjects predicate: " + type.stringValue());
-
-        final String namespace = ((IRI) nonnulls.get(0).columns.get(type).id).getNamespace();
-
-        return nonnulls.stream().allMatch(row -> {
-/*
-                    System.out.println("namespace=" + namespace + " "
-                            + ((IRI) (row.columns).get(type).id).getNamespace()
-                            + " from " + (row.columns).get(type).id.toString() + " equals? " + ((IRI) (row.columns).get(type).id).getNamespace().equalsIgnoreCase(namespace));
-
-
- */
-
-                    return ((IRI) (row.columns).get(type).id).getNamespace().equalsIgnoreCase(namespace);
-                }
-        );
-    }
-
-    public static boolean isNamespaceTheSameForAllPrimary(List<Row> rows) {
-
-        final String namespace = ((IRI) rows.get(0).id).getNamespace();
-        return rows.stream().allMatch(row ->
-                ((IRI) (row.id)).getNamespace().equalsIgnoreCase(namespace));
-    }
-
     private String createAboutUrl(Value key0) {
         Value type = rows.get(0).type;
         Value value = rows.get(0).id;
@@ -485,14 +489,6 @@ public class TableSchema {
 
     public void setRowTitles(List<String> rowTitles) {
         this.rowTitles = rowTitles;
-    }
-
-    public void setKeys(List<Value> keys) {
-        this.keys = keys;
-    }
-
-    public void setRows(List<Row> rows) {
-        this.rows = rows;
     }
 
     public Column getColumnByName(String name) {

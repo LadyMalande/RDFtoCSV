@@ -1,7 +1,6 @@
 package com.miklosova.rdftocsvw.convertor;
 
 import com.miklosova.rdftocsvw.input_processor.RDFAssetManager;
-import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import com.miklosova.rdftocsvw.support.FileWrite;
 import lombok.extern.java.Log;
 import org.eclipse.rdf4j.model.IRI;
