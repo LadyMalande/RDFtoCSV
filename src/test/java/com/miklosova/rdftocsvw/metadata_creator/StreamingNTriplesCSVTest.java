@@ -34,7 +34,7 @@ public class StreamingNTriplesCSVTest extends BaseTest {
     private String expectedFile;
     private String expectedDatatype;
 
-    private PrefinishedOutput prefinishedOutput;
+    private PrefinishedOutput<?> prefinishedOutput;
     private static final String RESOURCES_PATH = "./RDFtoCSV/src/test/resources/StreamingNTriples/";
     private static final String RESOURCES_PATH_OUTPUT = "./";
     private static final String RESOURCES_PATH_EXPECTATION = "./src/test/resources/StreamingNTriples/";
@@ -42,7 +42,7 @@ public class StreamingNTriplesCSVTest extends BaseTest {
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> configs(){
         return Arrays.asList(new Object[][]{
-                { "", "streamingSample08c", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv"},
+                { "", "streamingSample08", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv"},
                 { "", "streamingSample03", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv"},
                 { "", "streamingSample04", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv"},
                 { "", "streamingSample05", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv"},
@@ -61,12 +61,6 @@ public class StreamingNTriplesCSVTest extends BaseTest {
         this.expectedFile = RESOURCES_PATH_EXPECTATION + filePath + "Expectation.csv";
         this.filePathForOutput = RESOURCES_PATH_OUTPUT  + filePath + ".nt" + "0.csv";
 
-    }
-
-    @BeforeAll
-    void setConfigFile(){
-        System.out.println("LoadConfig");
-        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{filePath, "streaming", "streaming", "true"});
     }
 
     @BeforeEach
@@ -92,8 +86,8 @@ public class StreamingNTriplesCSVTest extends BaseTest {
                 boolean isFirstLine = true;
                 while ((line = reader.readNext()) != null) {
                     String[] line2 = reader2.readNext();
-                    System.out.println(line);
-                    System.out.println(line2);
+                    System.out.println(Arrays.toString(line));
+                    System.out.println(Arrays.toString(line2));
                     Assert.assertArrayEquals(line, line2);
 
                 }
