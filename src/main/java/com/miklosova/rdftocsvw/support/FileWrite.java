@@ -96,6 +96,48 @@ public class FileWrite {
         return content.toString();
     }
 
+    public static String writeToString(ArrayList<Value> keys, ArrayList<Row> rows){
+        // Sorting the list by alphabetical order of getStringValue()
+        Collections.sort(keys, new Comparator<Value>() {
+            @Override
+            public int compare(Value v1, Value v2) {
+                return v1.stringValue().compareTo(v2.stringValue());
+            }
+        });
+        StringBuilder sb = new StringBuilder();
+            sb.append("Subject,");
+            for(Value val : keys){
+                sb.append(val.stringValue()).append(",");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append("\n");
+            for(Row row : rows){
+                sb.append(row.id.stringValue()).append(",");
+                for(Value columnName : keys){
+                    if(row.columns.get(columnName) != null){
+                        if(row.columns.get(columnName).values.size() > 1){
+                            sb.append("\"");
+                            for(Value val : row.columns.get(columnName).values){
+                                sb.append(val.stringValue()).append(",");
+                            }
+                            sb.deleteCharAt(sb.length() - 1);
+                            sb.append("\"");
+                        } else {
+                            System.out.println("Appended " + row.columns.get(columnName).values.get(0).stringValue() + " for " + columnName);
+                            sb.append(row.columns.get(columnName).values.get(0).stringValue()).append(",");
+                        }
+                    } else {
+                        System.out.println("No value for " + columnName);
+                        sb.append(",");
+                    }
+                }
+                sb.deleteCharAt(sb.length() - 1);
+                sb.append("\n");
+            }
+        sb.deleteCharAt(sb.length() - 1);
+        return sb.toString();
+    }
+
 
     public static boolean isUTF8Encoded(String filePath) throws IOException {
         byte[] fileContent = Files.readAllBytes(Paths.get(filePath));

@@ -105,9 +105,70 @@ public class RDFtoCSV {
         // Finalize the output to .zip
 
     }
+/*
+    public String getTrivialCSVTableAsStringFromStreaming() throws IOException {
+        this.configure();
+
+        parseInput();
+
+        PrefinishedOutput<RowsAndKeys> po = convertData();
+
+        Metadata metadata = createMetadata(po);
+
+        // Enrich metadata with online reachable data - disabled if offline
+        // TODO
+
+        // Write data to CSV by the metadata prepared
+
+        return writeToStringTrivialStreaming(po);
+    }
+
+
+ */
+    /**
+     * Runs the trivial basic algorithm for grouping data into Map by predicates and then writes them out by the
+     * sorted predicates.
+     * @return The complete CSV as String
+     * @throws IOException if the file or URL cannot be read
+     */
+    public String getTrivialCSVTableAsString() throws IOException {
+        // Configuration already done
+        parseInput();
+
+        PrefinishedOutput<RowsAndKeys> po = convertData();
+
+        return writeToStringTrivial(po);
+    }
+
+    private String writeToStringTrivial(PrefinishedOutput<?> po) {
+        /*
+        if(po == null){
+            return processStreaming(metadata);
+        }
+
+         */
+        String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+        String[] files = allFiles.split(",");
+        StringBuilder sb = new StringBuilder();
+
+            RowAndKey rnk = (RowAndKey) po.getPrefinishedOutput();
+
+            String newFileName = files[0];
+            System.out.println("ClassCastException FileWrite for newfilename= " + newFileName + " rowAndKey = ");
+            sb.append(FileWrite.writeToString(rnk.getKeys(), rnk.getRows()));
+
+        db.shutDown();
+
+        return sb.toString();
+    }
 
     public String getCSVTableAsString() throws IOException {
+
         this.configure();
+        if(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD).equalsIgnoreCase("trivial")){
+            System.out.println("doing TRIVIAL ");
+            return getTrivialCSVTableAsString();
+        }
 
         parseInput();
 

@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.Properties;
 
@@ -63,6 +64,9 @@ public class ConfigurationManager {
         return CONFIG_FILE_NAME;
     }
     public static final String READ_METHOD = "conversion.readMethod";
+    // True if the steaming data are being read from a file
+    // False if the streaming data are coming line by line - keeps input stream open until instructed to close
+    public static final String STREAMING_FILE = "conversion.streamingFile";
 
     public static final String INTERMEDIATE_FILE_NAMES = "app.filesInProgress";
     public static final String OUTPUT_ZIPFILE_NAME = "output.zipname";
@@ -107,6 +111,10 @@ public class ConfigurationManager {
     }
 
     public static void processConfigMap(Map<String, String> configMap) {
+        if(!ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD)
+                .equalsIgnoreCase(QueryMethods.BASIC_QUERY.getValue()) && configMap == null){
+            return;
+        }
         String queryMethod = QueryMethods.BASIC_QUERY.getValue();
         if (configMap != null && configMap.containsKey("table")) {
             queryMethod = switch (configMap.get("table")) {
@@ -136,6 +144,35 @@ public class ConfigurationManager {
         }
 
         return prop.getProperty(variableName);
+    }
+
+    /**
+     * Get a parameter by its key from app.config file.
+     *
+     * @param configFileName The name of the configuration file. Useful for tests setting with set config.
+     * @param variableName The name of the key to retrieve from the app.config map of parameters.
+     * @return
+     */
+    public static String getVariableFromConfigFile(String configFileName, String variableName) {
+        Properties prop = new Properties();
+
+        try (FileInputStream fis = new FileInputStream(configFileName)) {
+            prop.load(new InputStreamReader(fis, Charset.forName("UTF-8")));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return prop.getProperty(variableName);
+    }
+
+    public static void setConfigFileFromAnotherFile(String configFileFromAnotherFile){
+        File configFile = new File(CONFIG_FILE_NAME);
+        File sourceConfigFile = new File(configFileFromAnotherFile);
+        try {
+            Files.copy(sourceConfigFile.toPath(), configFile.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -179,6 +216,7 @@ public class ConfigurationManager {
 
         String CSVFileToWriteTo = null;
         String conversionMethod = null;
+        String streamingFile = null;
         if (args.length == 2) {
             conversionMethod = args[1];
             System.out.println("args.length == 2");
@@ -188,8 +226,8 @@ public class ConfigurationManager {
             System.out.println("args.length == 3");
         } else if (args.length == 4) {
             conversionMethod = args[1];
-
-            metadataFileName = args[3];
+            parsingMethod = args[2];
+            streamingFile = args[3];
         } else {
 
         }
@@ -198,8 +236,13 @@ public class ConfigurationManager {
         }
         conversionMethod = (conversionMethod == null) ? DEFAULT_CONVERSION_METHOD : conversionMethod;
         prop.setProperty(ConfigurationManager.OUTPUT_FILENAME, CSVFileToWriteTo);
+        if(streamingFile == null){
+            streamingFile = "true";
+        }
+        prop.setProperty(ConfigurationManager.STREAMING_FILE, streamingFile);
         prop.setProperty(ConfigurationManager.CONVERSION_METHOD, conversionMethod);
         System.out.println("property set prop.conversionMethod," + conversionMethod);
+        System.out.println("Setting property CONVERSION_METHOD=" + conversionMethod);
         prop.setProperty(ConfigurationManager.INTERMEDIATE_FILE_NAMES, "");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
