@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -173,6 +173,12 @@
             <version>4.2.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.23.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <properties>
@@ -194,7 +200,8 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.miklosova.rdftocsvw.support.Main</mainClass> <!-- Update this with your actual main class -->
+                            <mainClass>com.miklosova.rdftocsvw.support.Main
+                            </mainClass> <!-- Update this with your actual main class -->
                         </manifest>
                     </archive>
                 </configuration>
@@ -221,7 +228,8 @@
                         <configuration>
                             <transformers>
                                 <!-- Merges META-INF/services files -->
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
                         </configuration>
                     </execution>

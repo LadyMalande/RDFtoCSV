@@ -52,17 +52,19 @@ public class RDFtoCSV {
     private String readMethod;
     private String filePathForOutput;
     private String metadataFilename;
+
     public RDFtoCSV(String fileName) {
         this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
-        System.out.println("this.filename in RDFtoCSV(String fileName)" + this.fileName);
+        //System.out.println("this.filename in RDFtoCSV(String fileName)" + this.fileName);
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;// + "TestOutput";
         ConfigurationManager.processConfigMap(null);
     }
+
     public RDFtoCSV(String fileName, Map<String, String> configMap) {
 
         this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
-        System.out.println("this.filename in RDFtoCSV(String fileName, Map<String, String> configMap]" + this.fileName);
+        //System.out.println("this.filename in RDFtoCSV(String fileName, Map<String, String> configMap]" + this.fileName);
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;// + "TestOutput";
         ConfigurationManager.processConfigMap(configMap);
@@ -371,6 +373,6 @@ public class RDFtoCSV {
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.METADATA_ROWNUMS, "false");
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH, "");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME, "zippedCSVW.zip");
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME, ConfigurationManager.DEFAULT_OUTPUT_ZIPFILE_NAME);
     }
 }

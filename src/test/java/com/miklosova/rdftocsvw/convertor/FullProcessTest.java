@@ -1,21 +1,13 @@
 package com.miklosova.rdftocsvw.convertor;
 
-import com.miklosova.rdftocsvw.input_processor.MethodService;
-import com.miklosova.rdftocsvw.metadata_creator.Metadata;
-import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.miklosova.rdftocsvw.support.FileWrite;
+import com.miklosova.rdftocsvw.support.Main;
 import com.miklosova.rdftocsvw.support.TestSupport;
-import org.eclipse.rdf4j.repository.Repository;
-import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.repository.sail.SailRepository;
-import org.eclipse.rdf4j.sail.memory.MemoryStore;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -52,6 +44,9 @@ public class FullProcessTest {
 
     @Test
     public void originalIsSubsetOfResult() {
+        String[] args = new String[]{"-f", "streamingSample08c.nt", "-t", "streaming", "-p", "streaming"};
+        Main.main(args);
+        /*
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, filePathForOutput);
         Repository db = new SailRepository(new MemoryStore());
@@ -81,10 +76,17 @@ public class FullProcessTest {
             i++;
         }
 
-        //TestSupport.runToRDFConverter(fileNamesCreated.get(0), filePathForMetadata, filePathForTestRDFOutput);
-        TestSupport.rubyRun(fileNamesCreated.get(0), filePathForMetadata, filePathForTestRDFOutput, "src/test/resources/script.rb");
 
-        //Assert.assertTrue(TestSupport.isRDFSubsetOfTerms(filePathForTestRDFOutput,  filePathForImage));
+         */
+        //TestSupport.runToRDFConverter(fileNamesCreated.get(0), filePathForMetadata, filePathForTestRDFOutput);
+        //TestSupport.rubyRun(fileNamesCreated.get(0), filePathForMetadata, filePathForTestRDFOutput, "src/test/resources/script.rb");
+
+        try {
+            Assert.assertTrue(TestSupport.isRDFSubsetOfTerms(filePathForTestRDFOutput, filePathForImage));
+        } catch (IOException e) {
+            e.printStackTrace();
+            assert false;
+        }
 
     }
 }
