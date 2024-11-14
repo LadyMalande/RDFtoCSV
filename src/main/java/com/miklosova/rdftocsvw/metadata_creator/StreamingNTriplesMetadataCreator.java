@@ -9,7 +9,6 @@ import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
-import org.jruby.RubyProcess;
 
 import java.io.*;
 import java.util.*;
@@ -28,6 +27,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
     // the url for the csv file name that the triple has been unified to
     String currentCSVName = null;
+
     public StreamingNTriplesMetadataCreator(PrefinishedOutput<RowsAndKeys> data) {
         super(data);
         tableSchemaByFiles = new HashMap<>();
@@ -42,9 +42,9 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
         //tableSchemaByFiles.put(newCSVname, tableSchema);
 
-        if(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.STREAMING_FILE).equalsIgnoreCase("false")){
+        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.STREAMING_FILE).equalsIgnoreCase("false")) {
             readInputStream(System.in);
-        } else{
+        } else {
             readFileWithStreaming();
         }
 
@@ -65,11 +65,11 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         }
     }
 
-    private void readInputStream(InputStream inputStream){
+    private void readInputStream(InputStream inputStream) {
         Scanner scanner = new Scanner(System.in);
         String inputLine;
         String endingString = "END";
-        System.out.println("Enter input lines (type '" + endingString +"' to stop):");
+        System.out.println("Enter input lines (type '" + endingString + "' to stop):");
 
         // Loop until the termination line is encountered
         while (scanner.hasNextLine()) {
@@ -88,7 +88,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     }
 
     @Override
-    void processLine(String line){
+    void processLine(String line) {
         currentCSVName = null;
         unifiedBySubject = false;
         tableSchema = null;
@@ -111,19 +111,19 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         newColumn.setValueUrl("{+" + newColumn.getName() + "}");
         newColumn.createDatatypeFromValue(triple.object);
         newColumn.setAboutUrl("{+Subject}");
-        newColumn.setTitles(newColumn.createTitles( triple.predicate,triple.object));
+        newColumn.setTitles(newColumn.createTitles(triple.predicate, triple.object));
         currentCSVName = getCSVNameIfSubjectOrPredicateKnown(triple.getSubject(), triple.getPredicate());
         // Find the tableSchema that describes either Subject or Predicate in the triple
         tableSchema = getTableSchemaOfMatchingMetadata(triple);
 
         // There is no matching column found in any existing metadata -> Add the column
-        if(!thereIsMatchingColumnAlready(newColumn, triple, tableSchema)){
+        if (!thereIsMatchingColumnAlready(newColumn, triple, tableSchema)) {
 
             tableSchema.getColumns().add(newColumn);
             System.out.println("Adding new column");
             try {
                 rewriteTheHeadersInCSV(currentCSVName, newColumn.getTitles());
-            } catch (IOException e ) {
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -137,8 +137,8 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
             String[] line;
             boolean isFirstLine = true;
-            while ((line = reader.readNext()) != null){
-                if(isFirstLine){
+            while ((line = reader.readNext()) != null) {
+                if (isFirstLine) {
                     isFirstLine = false;
                     String[] headerWithNewColumnTitle = Arrays.copyOf(line, line.length + 1);
 
@@ -146,13 +146,13 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                     headerWithNewColumnTitle[line.length] = titles;
                     lines.add(headerWithNewColumnTitle);
                     System.out.println(Arrays.toString(headerWithNewColumnTitle) + " -------  headerWithNewColumnTitle");
-                } else{
+                } else {
                     String[] lineWithBlankFinalColumn = Arrays.copyOf(line, line.length + 1);
 
                     // Add the new element at the last position
                     lineWithBlankFinalColumn[line.length] = "";
                     lines.add(lineWithBlankFinalColumn);
-                    System.out.println(Arrays.toString(lineWithBlankFinalColumn)+ " -------  lineWithBlankFinalColumn");
+                    System.out.println(Arrays.toString(lineWithBlankFinalColumn) + " -------  lineWithBlankFinalColumn");
                 }
 
             }
@@ -164,8 +164,8 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
         try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
             // Write array data as a single line
-            for(String[] updatedLine : lines){
-                System.out.println("new headers updated line: "+ updatedLine);
+            for (String[] updatedLine : lines) {
+                System.out.println("new headers updated line: " + updatedLine);
                 writer.writeNext(updatedLine);
             }
         } catch (IOException e) {
@@ -177,9 +177,9 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
     private String getCSVNameIfSubjectOrPredicateKnown(IRI subject, IRI predicate) {
 
-        for(Map.Entry<String, List<IRI>> entry : mapOfKnownSubjects.entrySet()){
+        for (Map.Entry<String, List<IRI>> entry : mapOfKnownSubjects.entrySet()) {
             System.out.println("Is the subject there? AlreadyThere = " + entry.getValue().get(0) + " | subject = " + subject.stringValue());
-            if(entry.getValue().contains(subject)){
+            if (entry.getValue().contains(subject)) {
 
                 List<IRI> knownPredicates = mapOfKnownPredicates.get(entry.getKey());
                 knownPredicates.add(predicate);
@@ -187,9 +187,9 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             }
         }
 
-        for(Map.Entry<String, List<IRI>> entry : mapOfKnownPredicates.entrySet()){
+        for (Map.Entry<String, List<IRI>> entry : mapOfKnownPredicates.entrySet()) {
             System.out.println("Is the predicate there? AlreadyThere = " + entry.getValue().get(0) + " | predicate = " + predicate.stringValue());
-            if(entry.getValue().contains(predicate)){
+            if (entry.getValue().contains(predicate)) {
                 List<IRI> knownSubjects = mapOfKnownSubjects.get(entry.getKey());
                 knownSubjects.add(subject);
                 return entry.getKey();
@@ -215,13 +215,13 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     }
 
     private TableSchema getTableSchemaOfMatchingMetadata(Triple triple) {
-        for(Map.Entry<String, List<IRI>> entry : mapOfKnownSubjects.entrySet()){
-            if(entry.getValue().contains(triple.getSubject())){
+        for (Map.Entry<String, List<IRI>> entry : mapOfKnownSubjects.entrySet()) {
+            if (entry.getValue().contains(triple.getSubject())) {
                 return tableSchemaByFiles.get(entry.getKey());
             }
         }
-        for(Map.Entry<String, List<IRI>> entry : mapOfKnownPredicates.entrySet()){
-            if(entry.getValue().contains(triple.getPredicate())){
+        for (Map.Entry<String, List<IRI>> entry : mapOfKnownPredicates.entrySet()) {
+            if (entry.getValue().contains(triple.getPredicate())) {
                 return tableSchemaByFiles.get(entry.getKey());
             }
         }
@@ -254,40 +254,40 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
     boolean thereIsMatchingColumnAlready(Column newColumn, Triple triple, TableSchema tableSchema) {
 
-        if(tableSchema.getColumns().isEmpty()){
+        if (tableSchema.getColumns().isEmpty()) {
             return false;
         }
-        for(Column col: tableSchema.getColumns()){
+        for (Column col : tableSchema.getColumns()) {
             //System.out.println("numberOfNotMatching in the loop = " + numberOfNotMatching);
-            if(!col.getName().equalsIgnoreCase(newColumn.getName())){
+            if (!col.getName().equalsIgnoreCase(newColumn.getName())) {
                 //System.out.println("Name does not equal: " + col.getName() + " x " + newColumn.getName());
                 continue;
             }
-            if(!col.getTitles().equalsIgnoreCase(newColumn.getTitles())){
+            if (!col.getTitles().equalsIgnoreCase(newColumn.getTitles())) {
                 //System.out.println("Titles does not equal: " + col.getTitles() + " x " + newColumn.getTitles());
                 continue;
             }
-            if(!col.getPropertyUrl().equalsIgnoreCase(newColumn.getPropertyUrl())){
+            if (!col.getPropertyUrl().equalsIgnoreCase(newColumn.getPropertyUrl())) {
                 //System.out.println("PropertyUrl does not equal: " + col.getPropertyUrl() + " x " + newColumn.getPropertyUrl());
                 continue;
             }
-            if(col.getLang() != null && newColumn.getLang() != null && !col.getLang().equalsIgnoreCase(newColumn.getLang())){
+            if (col.getLang() != null && newColumn.getLang() != null && !col.getLang().equalsIgnoreCase(newColumn.getLang())) {
                 //System.out.println("Lang does not equal: " + col.getLang() + " x " + newColumn.getLang());
                 continue;
             }
-            if(col.getDatatype() != null && newColumn.getDatatype() != null && !col.getDatatype().equalsIgnoreCase(newColumn.getDatatype())){
+            if (col.getDatatype() != null && newColumn.getDatatype() != null && !col.getDatatype().equalsIgnoreCase(newColumn.getDatatype())) {
                 //System.out.println("Datatype does not equal: " + col.getDatatype() + " x " + newColumn.getDatatype());
                 continue;
             }
-            if(!col.getAboutUrl().equalsIgnoreCase(newColumn.getAboutUrl())
-                    && (col.getAboutUrl().indexOf(triple.getSubject().getNamespace()) != 0 || col.getAboutUrl().length() != newColumn.getAboutUrl().length())){
+            if (!col.getAboutUrl().equalsIgnoreCase(newColumn.getAboutUrl())
+                    && (col.getAboutUrl().indexOf(triple.getSubject().getNamespace()) != 0 || col.getAboutUrl().length() != newColumn.getAboutUrl().length())) {
                 // Adjust the metadata so that they are general as the namespaces are not matching
 
                 //System.out.println("AboutUrl does not equal: " + col.getAboutUrl() + " x " + newColumn.getAboutUrl());
                 col.setAboutUrl("{+Subject}");
 
             }
-            if(col.getValueUrl() != null && newColumn.getValueUrl() != null && !col.getValueUrl().equalsIgnoreCase(newColumn.getValueUrl()) && (col.getValueUrl().indexOf(triple.getSubject().getNamespace()) != 0 || col.getValueUrl().length() != newColumn.getValueUrl().length())){
+            if (col.getValueUrl() != null && newColumn.getValueUrl() != null && !col.getValueUrl().equalsIgnoreCase(newColumn.getValueUrl()) && (col.getValueUrl().indexOf(triple.getSubject().getNamespace()) != 0 || col.getValueUrl().length() != newColumn.getValueUrl().length())) {
                 // Adjust the metadata so that they are general as the namespaces are not matching
 
                 //System.out.println("ValueUrl does not equal: " + col.getValueUrl() + " x " + newColumn.getValueUrl());
@@ -315,8 +315,8 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
             String[] line;
             boolean isFirstLine = true;
-            while ((line = reader.readNext()) != null){
-                if(isFirstLine){
+            while ((line = reader.readNext()) != null) {
+                if (isFirstLine) {
                     isFirstLine = false;
                     numberOfColumns = line.length;
                 }
@@ -324,7 +324,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 // Add the Object into the correct column in the line as there is already a line with this subject
                 // TODO - if the predicate is already full, add new row at the end of the file with a new data variation
                 //else if (!isModified && unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
-                    else if (unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
+                else if (unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
                     // Add this line as a data variation to the data variation list
 
                     // Split the line into parts by commas
@@ -334,7 +334,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                     int indexOfChangeColumn = getIndexOfCurrentPredicate(triple.getPredicate());
 
                     // Insert the new value between two commas in the middle (adjust index as needed)
-                    if(indexOfChangeColumn >= line.length){
+                    if (indexOfChangeColumn >= line.length) {
                         System.out.println(line + " line.length: " + line.length + " columnIndex: " + indexOfChangeColumn + " columns: " + lines.get(0));
                         // The subject has been matched but the line does not contain the predicate column yet -> add it to the end of the line
                         // Create a new array with one additional element
@@ -345,12 +345,11 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                         line = extendedArray;
                         isModified = true;
                         System.out.println("1) " + line);
-                    }
-                    else if(!line[indexOfChangeColumn].equalsIgnoreCase("")){
+                    } else if (!line[indexOfChangeColumn].equalsIgnoreCase("")) {
                         // There is already a value in the column - add the value and add the separator to metadata
                         // Create a new line with the data variation
                         // TODO - append a new line data variation
-                        if(dataLineVariationIsNotPresent(rowDataVariationsForSubject, line, indexOfChangeColumn)){
+                        if (dataLineVariationIsNotPresent(rowDataVariationsForSubject, line, indexOfChangeColumn)) {
                             rowDataVariationsForSubject.add(line);
                         }
                         isNeedForAddingDataVariations = true;
@@ -359,7 +358,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                         // Check whether the object is the same as the value that is already in the data - that would imply that
                         // I am trying to optimize the data, but that would modify it, so just make the same line duplicitly
                         // If those data really came from RDF
-                    } else{
+                    } else {
                         // Add new object at the end of the line
                         // TODO add the object at the end of EACH line with matching subject
                         line[indexOfChangeColumn] = triple.getObject().stringValue();
@@ -373,12 +372,12 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
             }
 
-            if(isNeedForAddingDataVariations){
+            if (isNeedForAddingDataVariations) {
                 // Add data variations for all the lines that have the same subject in the list
                 // todo
                 System.out.println("isNeedForAddingDataVariations ");
                 appendDataVariationsToCSV(file, rowDataVariationsForSubject, indexOfDataVariationColumn, triple.getObject());
-            } else if(!isModified && unifiedBySubject){
+            } else if (!isModified && unifiedBySubject) {
                 // If the file is still unmodified, we need to add a new predicate column at the end of the row
                 lines.add(createLineStringListByMetadata(triple).toArray(new String[0]));
                 System.out.println("!isModified && unifiedBySubject " + Arrays.toString(createLineStringListByMetadata(triple).toArray(new String[0])));
@@ -386,17 +385,18 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             }
 
 
-             if(!isModified && !unifiedBySubject){
+            if (!isModified && !unifiedBySubject) {
                 // The match has been made by matching Predicate = we must create a new line at the end of the file and add values accordingly
-                 // We can just append to the file - the lines wont be written again at the end of this writing modification
-                 // TODO - append a new line
+                // We can just append to the file - the lines wont be written again at the end of this writing modification
+                // TODO - append a new line
                 appendLineToCSV(file, createLineStringListByMetadata(triple));
                 //lines.add(createLineInCSVByMetadata(triple));
-                 System.out.println("!isModified && !unifiedBySubject " + createLineInCSVByMetadata(triple));
+                System.out.println("!isModified && !unifiedBySubject " + createLineInCSVByMetadata(triple));
             }
 
         } catch (CsvValidationException e) {
             e.printStackTrace();
+
         }
 
         // Write the updated content back to the file
@@ -410,7 +410,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                     writer.newLine();
                 }
             }
-            
+
              */
             System.out.println("File updated successfully.");
         } else {
@@ -420,7 +420,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
     private boolean dataLineVariationIsNotPresent(List<String[]> rowDataVariationsForSubject, String[] line, int indexOfChangeColumn) {
 
-        if(rowDataVariationsForSubject.isEmpty()){
+        if (rowDataVariationsForSubject.isEmpty()) {
             System.out.println("variations are empty, add this line: " + Arrays.toString(line));
             return true;
 
@@ -428,18 +428,18 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         System.out.println("rowDataVariationsForSubject.size() = " + rowDataVariationsForSubject.size());
         System.out.println("line.length = " + line.length);
         boolean foundMatch = false;
-        for(String[] value : rowDataVariationsForSubject) {
+        for (String[] value : rowDataVariationsForSubject) {
             int same = 0;
             for (int i = 0; i < line.length; i++) {
                 if (i != indexOfChangeColumn && line[i].equalsIgnoreCase(value[i])) {
                     same++;
                     System.out.println("Entity already there: " + line[i] + " value " + value[i] + " from line " + Arrays.toString(line) + " " + Arrays.toString(value));
                 } else {
-                    System.out.println("Entity NOT there: " + line[i] + " value " + value[i] + " from line " + Arrays.toString(line)+ " " + Arrays.toString(value));
+                    System.out.println("Entity NOT there: " + line[i] + " value " + value[i] + " from line " + Arrays.toString(line) + " " + Arrays.toString(value));
                 }
             }
-            if(same == line.length -1){
-                System.out.println(same +" != " + line.length+ "Line variation is not there yet: " + Arrays.toString(line));
+            if (same == line.length - 1) {
+                System.out.println(same + " != " + line.length + "Line variation is not there yet: " + Arrays.toString(line));
                 return false;
             }
         }
@@ -449,7 +449,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     private void appendDataVariationsToCSV(File file, List<String[]> linesToMakeVariantFor, int indexOfDataVariationColumn, Value object) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(file, true))) {
             // Appends to the file instead of overwriting
-            for(String[] line : linesToMakeVariantFor){
+            for (String[] line : linesToMakeVariantFor) {
                 String[] copiedArray = Arrays.copyOf(line, line.length);
                 copiedArray[indexOfDataVariationColumn] = object.stringValue();
                 writer.writeNext(copiedArray);
@@ -463,7 +463,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     private void writeListOfLinesToCSV(File file, List<String[]> lines) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
             // Write array data as a single line
-            for(String[] line : lines){
+            for (String[] line : lines) {
                 writer.writeNext(line);
             }
         } catch (IOException e) {
@@ -482,14 +482,11 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     }
 
     private int getIndexOfCurrentPredicate(IRI predicate) {
-        for(int i = 0; i < tableSchema.getColumns().size(); i++){
-            if(!tableSchema.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && tableSchema.getColumns().get(i).getPropertyUrl().equalsIgnoreCase(predicate.stringValue())){
-                //System.out.println("Current index is " + i);
+        for (int i = 0; i < tableSchema.getColumns().size(); i++) {
+            if (!tableSchema.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && tableSchema.getColumns().get(i).getPropertyUrl().equalsIgnoreCase(predicate.stringValue())) {
                 return i;
-
             }
         }
-        System.out.println("Current index is NOT FOUND for predicate " + predicate);
         return -1;
     }
 
@@ -498,17 +495,17 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         return mapOfKnownSubjects.get(currentCSVName).contains(subject);
     }
 
-    private List<String> createLineStringListByMetadata(Triple triple){
+    private List<String> createLineStringListByMetadata(Triple triple) {
         List<String> list = new ArrayList<>();
         list.add(triple.subject.stringValue());
 
         TableSchema relevantTS = tableSchemaByFiles.get(currentCSVName);
-        for(int i = 0; i < relevantTS.getColumns().size(); i++){
+        for (int i = 0; i < relevantTS.getColumns().size(); i++) {
             System.out.println("relevantTS.getColumns().size() = " + relevantTS.getColumns().size());
-            if(!relevantTS.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && relevantTS.getColumns().get(i).getPropertyUrl().equalsIgnoreCase(triple.getPredicate().stringValue())){
+            if (!relevantTS.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && relevantTS.getColumns().get(i).getPropertyUrl().equalsIgnoreCase(triple.getPredicate().stringValue())) {
                 list.add(triple.getObject().stringValue());
 
-            } else if(!relevantTS.getColumns().get(i).getTitles().equalsIgnoreCase("Subject")){
+            } else if (!relevantTS.getColumns().get(i).getTitles().equalsIgnoreCase("Subject")) {
                 list.add("");
             }
         }
@@ -516,23 +513,23 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         System.out.println();
         return list;
     }
-    
+
     private String createLineInCSVByMetadata(Triple triple) {
         StringBuilder sb = new StringBuilder();
-            sb.append(triple.subject.stringValue());
+        sb.append(triple.subject.stringValue());
 
-            TableSchema relevantTS = tableSchemaByFiles.get(currentCSVName);
-            for(int i = 0; i < relevantTS.getColumns().size(); i++){
-                System.out.println("relevantTS.getColumns().size() = " + relevantTS.getColumns().size());
-                if(!relevantTS.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && relevantTS.getColumns().get(i).getPropertyUrl().equalsIgnoreCase(triple.getPredicate().stringValue())){
-                    sb.append(triple.getObject().stringValue());
+        TableSchema relevantTS = tableSchemaByFiles.get(currentCSVName);
+        for (int i = 0; i < relevantTS.getColumns().size(); i++) {
+            System.out.println("relevantTS.getColumns().size() = " + relevantTS.getColumns().size());
+            if (!relevantTS.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && relevantTS.getColumns().get(i).getPropertyUrl().equalsIgnoreCase(triple.getPredicate().stringValue())) {
+                sb.append(triple.getObject().stringValue());
 
-                }
-                sb.append(",");
             }
-            sb.deleteCharAt(sb.length()-1);
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length() - 1);
 
-            return sb.toString();
+        return sb.toString();
 
     }
 }

@@ -6,7 +6,6 @@ import org.eclipse.rdf4j.rio.Rio;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 
 public class CreateOtherRDFFormats {
 

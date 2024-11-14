@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 
 @Log
-public class StreamingMethod implements IInputParsingMethod{
+public class StreamingMethod implements IInputParsingMethod {
     @Override
     public RepositoryConnection processInput(File fileToParse, Repository db) throws RDFParseException, IOException {
 

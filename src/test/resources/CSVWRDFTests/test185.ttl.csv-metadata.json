@@ -1,24 +1,32 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test185.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "boolean",
-        "name" : "boolean",
-        "propertyUrl" : "file://test185.csv#boolean"
-      } ],
-      "rowTitles" : [ "Subjekt", "boolean" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test185.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "boolean",
+            "name": "boolean",
+            "propertyUrl": "file://test185.csv#boolean"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "boolean"
+        ]
+      }
     }
-  } ]
+  ]
 }

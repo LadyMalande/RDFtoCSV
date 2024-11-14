@@ -1,24 +1,30 @@
-@prefix ex: <http://example.org/> .
+@prefix ex:      <http://example.org/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix csvw: <http://www.w3.org/ns/csvw#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix csvw:    <http://www.w3.org/ns/csvw#> .
 
-ex:myThesis a <http://purl.org/dc/dcmitype/Text>;
-            dcterms:creator ex:TerezaMiklóšová;
-            dcterms:title "Automatický převod RDF dat do CSV"@cs, "Automated transformation of RDF data to CSV"@en .
+ex:myThesis
+    a               <http://purl.org/dc/dcmitype/Text> ;
+    dcterms:creator ex:TerezaMiklóšová ;
+    dcterms:title   "Automatický převod RDF dat do CSV"@cs, "Automated transformation of RDF data to CSV"@en .
 
-ex:myJavaDoc a <http://purl.org/dc/dcmitype/Text>;
-             dcterms:creator ex:TerezaMiklóšová;
-             dcterms:title "Javadoc dokumentace pro diplomovou práci"@cs, "Javadoc documentation for thesis project"@en .
+ex:myJavaDoc
+    a               <http://purl.org/dc/dcmitype/Text> ;
+    dcterms:creator ex:TerezaMiklóšová ;
+    dcterms:title   "Javadoc dokumentace pro diplomovou práci"@cs, "Javadoc documentation for thesis project"@en .
 
-ex:myProject a <http://purl.org/dc/dcmitype/Software>;
-             dcterms:creator ex:TerezaMiklóšová;
-             dcterms:title "Generování pravidel SHACL a ShEx podle konceptuálního datového modelu"@cs, "Generating SHACL and ShEx rules based on conceptual data model"@en;
-             ex:datatypeTest  "{\"tables\":[{\"url\":\"splitQueryTest0.csv\",\"tableSchema\":{\"columns\":[{\"titles\":\"Concept\",\"name\":\"Concept\",\"valueUrl\":\"https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{Concept}\",\"suppressOutput\":true}]}}]}"^^csvw:JSON.
+ex:myProject
+    a               <http://purl.org/dc/dcmitype/Software> ;
+    dcterms:creator ex:TerezaMiklóšová ;
+    dcterms:title   "Generování pravidel SHACL a ShEx podle konceptuálního datového modelu"@cs,
+                    "Generating SHACL and ShEx rules based on conceptual data model"@en ;
+    ex:datatypeTest "{\"tables\":[{\"url\":\"splitQueryTest0.csv\",\"tableSchema\":{\"columns\":[{\"titles\":\"Concept\",\"name\":\"Concept\",\"valueUrl\":\"https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{Concept}\",\"suppressOutput\":true}]}}]}"^^csvw:JSON .
 
-ex:myProject2 a <http://purl.org/dc/dcmitype/Software>;
-             dcterms:creator ex:TerezaMiklóšová;
-             dcterms:title "Projekt 2"@cs, "Project Two"@en;
-             ex:datatypeTest  "{\"tables\":[{\"url\":\"splitQueryTest0.csv\",\"tableSchema\":{\"columns\":[{\"titles\":\"Concept\",\"name\":\"Concept\",\"valueUrl\":\"https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{Concept}\",\"suppressOutput\":true}]}}]}"^^csvw:JSON.
+ex:myProject2
+    a               <http://purl.org/dc/dcmitype/Software> ;
+    dcterms:creator ex:TerezaMiklóšová ;
+    dcterms:title   "Projekt 2"@cs, "Project Two"@en ;
+    ex:datatypeTest "{\"tables\":[{\"url\":\"splitQueryTest0.csv\",\"tableSchema\":{\"columns\":[{\"titles\":\"Concept\",\"name\":\"Concept\",\"valueUrl\":\"https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/{Concept}\",\"suppressOutput\":true}]}}]}"^^csvw:JSON .
 
-ex:myGraph a rdf:Graph .
+ex:myGraph
+    a rdf:Graph .

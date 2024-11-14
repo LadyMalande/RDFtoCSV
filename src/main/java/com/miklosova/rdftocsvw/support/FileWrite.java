@@ -6,8 +6,8 @@ import com.miklosova.rdftocsvw.convertor.Row;
 import com.miklosova.rdftocsvw.convertor.TypeIdAndValues;
 import com.miklosova.rdftocsvw.convertor.TypeOfValue;
 import com.miklosova.rdftocsvw.metadata_creator.Column;
-import com.miklosova.rdftocsvw.metadata_creator.Table;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.Table;
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -15,14 +15,14 @@ import org.eclipse.rdf4j.rio.RDFHandlerException;
 import org.eclipse.rdf4j.rio.RDFWriter;
 import org.eclipse.rdf4j.rio.Rio;
 
-import static org.eclipse.rdf4j.model.util.Values.iri;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.eclipse.rdf4j.model.util.Values.iri;
 
 public class FileWrite {
 

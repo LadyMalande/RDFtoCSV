@@ -28,14 +28,13 @@ import static com.miklosova.rdftocsvw.support.StandardModeCSVWIris.*;
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 public class StandardModeConverter implements IQueryParser {
+    public Map<String, Integer> mapOfPredicatesAndTheirNumbers;
+    public Map<Value, Integer> mapOfTypesAndTheirNumbers;
     ArrayList<Value> roots;
     ArrayList<Row> rows;
     ArrayList<Value> keys;
     ArrayList<ArrayList<Row>> allRows;
     ArrayList<ArrayList<Value>> allKeys;
-
-    public Map<String, Integer> mapOfPredicatesAndTheirNumbers;
-    public Map<Value, Integer> mapOfTypesAndTheirNumbers;
     String delimiter;
     String CSVFileTOWriteTo;
     Repository db;
@@ -44,6 +43,21 @@ public class StandardModeConverter implements IQueryParser {
     public StandardModeConverter(Repository db) {
         this.keys = new ArrayList<>();
         this.db = db;
+    }
+
+    private static int getRowNum(Value rowIri, Map<Value, Integer> map) {
+        return map.get(rowIri);
+    }
+
+    private static String getQueryForObjectBySubjectAndPredicate(Value s, String predicate) {
+        SelectQuery selectQuery = Queries.SELECT();
+
+        Variable o = SparqlBuilder.var("o");
+        Iri subjectIRI = iri(s.stringValue());
+        Iri predicateIRI = iri(predicate);
+        selectQuery.select(o).where(subjectIRI.has(predicateIRI, o));
+        System.out.println("getQueryForObjectBySubjectAndPredicate query string\n" + selectQuery.getQueryString());
+        return selectQuery.getQueryString();
     }
 
     @Override
@@ -253,24 +267,9 @@ public class StandardModeConverter implements IQueryParser {
         return selectQuery.getQueryString();
     }
 
-    private static int getRowNum(Value rowIri, Map<Value, Integer> map) {
-        return map.get(rowIri);
-    }
-
     private int compareTwoFields(Value v1, Value v2, Map<Value, Integer> map) {
         int result = Integer.compare(getRowNum(v1, map), getRowNum(v2, map));
         return result;
-    }
-
-    private static String getQueryForObjectBySubjectAndPredicate(Value s, String predicate) {
-        SelectQuery selectQuery = Queries.SELECT();
-
-        Variable o = SparqlBuilder.var("o");
-        Iri subjectIRI = iri(s.stringValue());
-        Iri predicateIRI = iri(predicate);
-        selectQuery.select(o).where(subjectIRI.has(predicateIRI, o));
-        System.out.println("getQueryForObjectBySubjectAndPredicate query string\n" + selectQuery.getQueryString());
-        return selectQuery.getQueryString();
     }
 
     private String getQueryForSubjectByObject(String object) {

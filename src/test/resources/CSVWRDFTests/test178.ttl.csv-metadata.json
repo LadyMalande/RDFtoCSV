@@ -1,24 +1,32 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test178.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "nonPositiveInteger",
-        "name" : "nonPositiveInteger",
-        "propertyUrl" : "file://test178.csv#nonPositiveInteger"
-      } ],
-      "rowTitles" : [ "Subjekt", "nonPositiveInteger" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test178.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "nonPositiveInteger",
+            "name": "nonPositiveInteger",
+            "propertyUrl": "file://test178.csv#nonPositiveInteger"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "nonPositiveInteger"
+        ]
+      }
     }
-  } ]
+  ]
 }

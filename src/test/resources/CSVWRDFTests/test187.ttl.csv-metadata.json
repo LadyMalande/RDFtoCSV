@@ -1,73 +1,97 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test187.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "date",
-        "name" : "date",
-        "propertyUrl" : "file://test187.csv#date",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "datetime",
-        "name" : "datetime",
-        "propertyUrl" : "file://test187.csv#datetime",
-        "datatype" : "dateTime"
-      }, {
-        "@type" : "Column",
-        "titles" : "dateTimeStamp",
-        "name" : "dateTimeStamp",
-        "propertyUrl" : "file://test187.csv#dateTimeStamp",
-        "datatype" : "dateTimeStamp"
-      }, {
-        "@type" : "Column",
-        "titles" : "gDay",
-        "name" : "gDay",
-        "propertyUrl" : "file://test187.csv#gDay",
-        "datatype" : "gDay"
-      }, {
-        "@type" : "Column",
-        "titles" : "gMonth",
-        "name" : "gMonth",
-        "propertyUrl" : "file://test187.csv#gMonth",
-        "datatype" : "gMonth"
-      }, {
-        "@type" : "Column",
-        "titles" : "gMonthDay",
-        "name" : "gMonthDay",
-        "propertyUrl" : "file://test187.csv#gMonthDay",
-        "datatype" : "gMonthDay"
-      }, {
-        "@type" : "Column",
-        "titles" : "gYear",
-        "name" : "gYear",
-        "propertyUrl" : "file://test187.csv#gYear",
-        "datatype" : "gYear"
-      }, {
-        "@type" : "Column",
-        "titles" : "gYearMonth",
-        "name" : "gYearMonth",
-        "propertyUrl" : "file://test187.csv#gYearMonth",
-        "datatype" : "gYearMonth"
-      }, {
-        "@type" : "Column",
-        "titles" : "time",
-        "name" : "time",
-        "propertyUrl" : "file://test187.csv#time",
-        "datatype" : "time"
-      } ],
-      "rowTitles" : [ "Subjekt", "date", "datetime", "dateTimeStamp", "gDay", "gMonth", "gMonthDay", "gYear", "gYearMonth", "time" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test187.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "date",
+            "name": "date",
+            "propertyUrl": "file://test187.csv#date",
+            "datatype": "date"
+          },
+          {
+            "@type": "Column",
+            "titles": "datetime",
+            "name": "datetime",
+            "propertyUrl": "file://test187.csv#datetime",
+            "datatype": "dateTime"
+          },
+          {
+            "@type": "Column",
+            "titles": "dateTimeStamp",
+            "name": "dateTimeStamp",
+            "propertyUrl": "file://test187.csv#dateTimeStamp",
+            "datatype": "dateTimeStamp"
+          },
+          {
+            "@type": "Column",
+            "titles": "gDay",
+            "name": "gDay",
+            "propertyUrl": "file://test187.csv#gDay",
+            "datatype": "gDay"
+          },
+          {
+            "@type": "Column",
+            "titles": "gMonth",
+            "name": "gMonth",
+            "propertyUrl": "file://test187.csv#gMonth",
+            "datatype": "gMonth"
+          },
+          {
+            "@type": "Column",
+            "titles": "gMonthDay",
+            "name": "gMonthDay",
+            "propertyUrl": "file://test187.csv#gMonthDay",
+            "datatype": "gMonthDay"
+          },
+          {
+            "@type": "Column",
+            "titles": "gYear",
+            "name": "gYear",
+            "propertyUrl": "file://test187.csv#gYear",
+            "datatype": "gYear"
+          },
+          {
+            "@type": "Column",
+            "titles": "gYearMonth",
+            "name": "gYearMonth",
+            "propertyUrl": "file://test187.csv#gYearMonth",
+            "datatype": "gYearMonth"
+          },
+          {
+            "@type": "Column",
+            "titles": "time",
+            "name": "time",
+            "propertyUrl": "file://test187.csv#time",
+            "datatype": "time"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "date",
+          "datetime",
+          "dateTimeStamp",
+          "gDay",
+          "gMonth",
+          "gMonthDay",
+          "gYear",
+          "gYearMonth",
+          "time"
+        ]
+      }
     }
-  } ]
+  ]
 }

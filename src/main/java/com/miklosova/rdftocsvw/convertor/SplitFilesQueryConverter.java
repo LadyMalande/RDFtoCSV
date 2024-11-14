@@ -28,8 +28,10 @@ import static com.miklosova.rdftocsvw.support.StandardModeCSVWIris.CSVW_TableGro
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 @Log
-public class SplitFilesQueryConverter  extends ConverterHelper implements IQueryParser{
+public class SplitFilesQueryConverter extends ConverterHelper implements IQueryParser {
 
+    public Map<String, Integer> mapOfPredicatesAndTheirNumbers;
+    public Map<Value, Integer> mapOfTypesAndTheirNumbers;
     String resultCSV;
     ArrayList<Value> roots;
     ArrayList<Row> rows;
@@ -37,10 +39,7 @@ public class SplitFilesQueryConverter  extends ConverterHelper implements IQuery
     ArrayList<ArrayList<Row>> allRows;
     ArrayList<ArrayList<Value>> allKeys;
     Metadata metadata;
-
     ArrayList<String> fileNamesCreated;
-    public Map<String, Integer> mapOfPredicatesAndTheirNumbers;
-    public Map<Value, Integer> mapOfTypesAndTheirNumbers;
     String delimiter;
     String CSVFileTOWriteTo;
     String allRowsOfOutput;
@@ -56,6 +55,23 @@ public class SplitFilesQueryConverter  extends ConverterHelper implements IQuery
         this.fileNumberX = 0;
         this.fileNamesCreated = new ArrayList<>();
         this.metadata = new Metadata();
+    }
+
+    static <K, V extends Comparable<? super V>>
+    List<Map.Entry<K, V>> entriesSortedByValues(Map<K, V> map) {
+
+        List<Map.Entry<K, V>> sortedEntries = new ArrayList<Map.Entry<K, V>>(map.entrySet());
+
+        Collections.sort(sortedEntries,
+                new Comparator<Map.Entry<K, V>>() {
+                    @Override
+                    public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+                        return o2.getValue().compareTo(o1.getValue());
+                    }
+                }
+        );
+
+        return sortedEntries;
     }
 
     public void changeBNodesForIri(RepositoryConnection rc) {
@@ -210,7 +226,6 @@ public class SplitFilesQueryConverter  extends ConverterHelper implements IQuery
         return selectQuery.getQueryString();
     }
 
-
     private PrefinishedOutput<RowsAndKeys> queryRDFModel(String queryString, boolean askForTypes) {
         allKeys = new ArrayList<>();
         allRows = new ArrayList<>();
@@ -345,7 +360,6 @@ public class SplitFilesQueryConverter  extends ConverterHelper implements IQuery
         return gen;
     }
 
-
     private void recursiveQueryForFiles(RepositoryConnection conn, Value dominantType, boolean askForTypes) {
         // Make new rows and keys for the current file
         rows = new ArrayList<>();
@@ -356,7 +370,7 @@ public class SplitFilesQueryConverter  extends ConverterHelper implements IQuery
         List<Value> rootsThatHaveThisType = rootsThatHaveThisType(conn, dominantType, askForTypes);
         for (Value root : roots) {
             // If the root does not have the dominant type, it will be processed later
-            if(rootHasThisType(rootsThatHaveThisType, root)) {
+            if (rootHasThisType(rootsThatHaveThisType, root)) {
                 // new Row with the found subject as its id
                 Row newRow = new Row(root, dominantType, askForTypes);
 
@@ -724,23 +738,6 @@ public class SplitFilesQueryConverter  extends ConverterHelper implements IQuery
 
             }
         }
-    }
-
-    static <K, V extends Comparable<? super V>>
-    List<Map.Entry<K, V>> entriesSortedByValues(Map<K, V> map) {
-
-        List<Map.Entry<K, V>> sortedEntries = new ArrayList<Map.Entry<K, V>>(map.entrySet());
-
-        Collections.sort(sortedEntries,
-                new Comparator<Map.Entry<K, V>>() {
-                    @Override
-                    public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
-                        return o2.getValue().compareTo(o1.getValue());
-                    }
-                }
-        );
-
-        return sortedEntries;
     }
 
     private String getDominantPredicate() {

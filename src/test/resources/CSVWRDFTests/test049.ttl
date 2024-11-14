@@ -1,28 +1,28 @@
 @prefix csvw: <http://www.w3.org/ns/csvw#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
- [
-    a csvw:TableGroup;
-    csvw:table [
-      a csvw:Table;
-      csvw:row [
-        a csvw:Row;
-        csvw:describes [
-          <file://test049.csv#aboutUrl> <file://test049.csv>;
-          <file://test049.csv#datatype> <file://test049.csv>;
-          <file://test049.csv#default> <file://test049.csv>;
-          <file://test049.csv#lang> <file://test049.csv>;
-          <file://test049.csv#null> <file://test049.csv>;
-          <file://test049.csv#ordered> <file://test049.csv>;
-          <file://test049.csv#propertyUrl> <file://test049.csv>;
-          <file://test049.csv#separator> <file://test049.csv>;
-          <file://test049.csv#textDirection> <file://test049.csv>;
-          <file://test049.csv#valueUrl> <file://test049.csv>
-        ];
-        csvw:rownum 1;
-        csvw:url <file://test049.csv#row=2>
-      ];
-      csvw:url <file://test049.csv>
-    ]
- ] .
+[
+   a csvw:TableGroup;
+   csvw:table [
+     a csvw:Table;
+     csvw:row [
+       a csvw:Row;
+       csvw:describes [
+         <file://test049.csv#aboutUrl> <file://test049.csv>;
+         <file://test049.csv#datatype> <file://test049.csv>;
+         <file://test049.csv#default> <file://test049.csv>;
+         <file://test049.csv#lang> <file://test049.csv>;
+         <file://test049.csv#null> <file://test049.csv>;
+         <file://test049.csv#ordered> <file://test049.csv>;
+         <file://test049.csv#propertyUrl> <file://test049.csv>;
+         <file://test049.csv#separator> <file://test049.csv>;
+         <file://test049.csv#textDirection> <file://test049.csv>;
+         <file://test049.csv#valueUrl> <file://test049.csv>
+       ];
+       csvw:rownum 1;
+       csvw:url <file://test049.csv#row=2>
+     ];
+     csvw:url <file://test049.csv>
+   ]
+] .

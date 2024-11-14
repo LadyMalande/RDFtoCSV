@@ -11,11 +11,11 @@ import org.eclipse.rdf4j.rio.Rio;
 
 public class ExampleMaker {
 
+    Model model;
+
     public Model getModel() {
         return model;
     }
-
-    Model model;
 
     public void makeExample() {
         ModelBuilder builder = new ModelBuilder();

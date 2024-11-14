@@ -24,24 +24,23 @@ public class StreamingSupport {
         // Iterate through the matches and print the results
         int i = 1;
         while (matcher.find()) {
-            if(i==1){
+            if (i == 1) {
                 subject = iri(matcher.group(1)); // Prints the content between < and >
                 //System.out.println("subject " + subject);
-            } else if(i==2){
+            } else if (i == 2) {
                 predicate = iri(matcher.group(1));
-            } else if(i==3){
+            } else if (i == 3) {
                 object = iri(matcher.group(1));
             }
             i++;
         }
-        if(object == null){
+        if (object == null) {
             object = createLiteralHere(line);
         }
 
         Triple t = new Triple(subject, predicate, object);
         return t;
     }
-
 
 
     private static Value createLiteralHere(String line) {
@@ -52,17 +51,16 @@ public class StreamingSupport {
         Literal value = null;
         int i = 1;
         while (matcher.find()) {
-            if(i==2){
+            if (i == 2) {
                 String literalWithDatatype = matcher.group(1).trim();
                 value = parseLiteral(literalWithDatatype, factory);
                 //System.out.println("Parsed Literal with Datatype: " + value.getLabel() + " " + value.getLanguage() + value.getDatatype());
             }
             i++;
         }
-        if(i<3){
+        if (i < 3) {
             throw new IllegalArgumentException("The n triples file is malformed.");
         }
-
 
 
         return value;

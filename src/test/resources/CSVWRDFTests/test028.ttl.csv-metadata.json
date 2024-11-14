@@ -1,46 +1,61 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "countries.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "countryCode",
-        "name" : "countryCode",
-        "propertyUrl" : "file://countries.csv#countryCode"
-      }, {
-        "@type" : "Column",
-        "titles" : "latitude",
-        "name" : "latitude",
-        "propertyUrl" : "file://countries.csv#latitude"
-      }, {
-        "@type" : "Column",
-        "titles" : "longitude",
-        "name" : "longitude",
-        "propertyUrl" : "file://countries.csv#longitude"
-      }, {
-        "@type" : "Column",
-        "titles" : "name",
-        "name" : "name",
-        "propertyUrl" : "file://countries.csv#name"
-      }, {
-        "@type" : "Column",
-        "titles" : "Row Number",
-        "name" : "rowNum",
-        "valueUrl" : "{_row}",
-        "datatype" : "integer",
-        "virtual" : true
-      } ],
-      "rowTitles" : [ "Subjekt", "countryCode", "latitude", "longitude", "name" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "countries.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "countryCode",
+            "name": "countryCode",
+            "propertyUrl": "file://countries.csv#countryCode"
+          },
+          {
+            "@type": "Column",
+            "titles": "latitude",
+            "name": "latitude",
+            "propertyUrl": "file://countries.csv#latitude"
+          },
+          {
+            "@type": "Column",
+            "titles": "longitude",
+            "name": "longitude",
+            "propertyUrl": "file://countries.csv#longitude"
+          },
+          {
+            "@type": "Column",
+            "titles": "name",
+            "name": "name",
+            "propertyUrl": "file://countries.csv#name"
+          },
+          {
+            "@type": "Column",
+            "titles": "Row Number",
+            "name": "rowNum",
+            "valueUrl": "{_row}",
+            "datatype": "integer",
+            "virtual": true
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "countryCode",
+          "latitude",
+          "longitude",
+          "name"
+        ]
+      }
     }
-  } ]
+  ]
 }

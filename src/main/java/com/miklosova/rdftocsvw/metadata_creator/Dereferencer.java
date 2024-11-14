@@ -1,11 +1,12 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import java.io.IOException;
 import org.eclipse.rdf4j.model.IRI;
-import org.jsoup.*;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.io.IOException;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
@@ -55,7 +56,7 @@ public class Dereferencer {
                 //System.out.println("No special title found.");
                 throw new NullPointerException();
             }
-        } catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             //System.err.println("There was a problem with dereferencing the IRI for title. Possible cause: no Internet Connection.");
             return null;
 

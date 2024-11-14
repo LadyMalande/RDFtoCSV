@@ -1,112 +1,147 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test031.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "latitude",
-        "name" : "latitude",
-        "propertyUrl" : "http://schema.org/latitude",
-        "datatype" : "double",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "longitude",
-        "name" : "longitude",
-        "propertyUrl" : "http://schema.org/longitude",
-        "datatype" : "double",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "name",
-        "name" : "name",
-        "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "countryCode",
-        "name" : "countryCode",
-        "propertyUrl" : "http://www.geonames.org/ontology#countryCode",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "countryRef",
-        "name" : "countryRef",
-        "propertyUrl" : "file://country_slice.csv#countryRef",
-        "valueUrl" : "{+countryRef}"
-      }, {
-        "@type" : "Column",
-        "titles" : "population",
-        "name" : "population",
-        "propertyUrl" : "file://country_slice.csv#population",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "year",
-        "name" : "year",
-        "propertyUrl" : "file://country_slice.csv#year",
-        "datatype" : "gYear"
-      } ],
-      "foreignKeys" : [ {
-        "columnReference" : "countryRef",
-        "reference" : {
-          "resource" : "test031.ttlTestOutput1.csv",
-          "columnReference" : "name"
-        }
-      } ],
-      "primaryKey" : "Subjekt",
-      "rowTitles" : [ "Subjekt", "latitude", "longitude", "name", "countryCode", "countryRef", "population", "year" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test031.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "latitude",
+            "name": "latitude",
+            "propertyUrl": "http://schema.org/latitude",
+            "datatype": "double",
+            "aboutUrl": "http://example.org/countries.csv#{+Subjekt}"
+          },
+          {
+            "@type": "Column",
+            "titles": "longitude",
+            "name": "longitude",
+            "propertyUrl": "http://schema.org/longitude",
+            "datatype": "double",
+            "aboutUrl": "http://example.org/countries.csv#{+Subjekt}"
+          },
+          {
+            "@type": "Column",
+            "titles": "name",
+            "name": "name",
+            "propertyUrl": "http://schema.org/name",
+            "aboutUrl": "http://example.org/countries.csv#{+Subjekt}"
+          },
+          {
+            "@type": "Column",
+            "titles": "countryCode",
+            "name": "countryCode",
+            "propertyUrl": "http://www.geonames.org/ontology#countryCode",
+            "aboutUrl": "http://example.org/countries.csv#{+Subjekt}"
+          },
+          {
+            "@type": "Column",
+            "titles": "countryRef",
+            "name": "countryRef",
+            "propertyUrl": "file://country_slice.csv#countryRef",
+            "valueUrl": "{+countryRef}"
+          },
+          {
+            "@type": "Column",
+            "titles": "population",
+            "name": "population",
+            "propertyUrl": "file://country_slice.csv#population",
+            "datatype": "integer"
+          },
+          {
+            "@type": "Column",
+            "titles": "year",
+            "name": "year",
+            "propertyUrl": "file://country_slice.csv#year",
+            "datatype": "gYear"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "columnReference": "countryRef",
+            "reference": {
+              "resource": "test031.ttlTestOutput1.csv",
+              "columnReference": "name"
+            }
+          }
+        ],
+        "primaryKey": "Subjekt",
+        "rowTitles": [
+          "Subjekt",
+          "latitude",
+          "longitude",
+          "name",
+          "countryCode",
+          "countryRef",
+          "population",
+          "year"
+        ]
+      }
+    },
+    {
+      "@type": "Table",
+      "url": "test031.ttlTestOutput1.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "http://example.org/countries.csv#{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "latitude",
+            "name": "latitude",
+            "propertyUrl": "http://schema.org/latitude",
+            "datatype": "double",
+            "aboutUrl": "http://example.org/countries.csv#{+Subjekt}"
+          },
+          {
+            "@type": "Column",
+            "titles": "longitude",
+            "name": "longitude",
+            "propertyUrl": "http://schema.org/longitude",
+            "datatype": "double",
+            "aboutUrl": "http://example.org/countries.csv#{+Subjekt}"
+          },
+          {
+            "@type": "Column",
+            "titles": "name",
+            "name": "name",
+            "propertyUrl": "http://schema.org/name",
+            "aboutUrl": "http://example.org/countries.csv#{+Subjekt}"
+          },
+          {
+            "@type": "Column",
+            "titles": "countryCode",
+            "name": "countryCode",
+            "propertyUrl": "http://www.geonames.org/ontology#countryCode",
+            "aboutUrl": "http://example.org/countries.csv#{+Subjekt}"
+          }
+        ],
+        "primaryKey": "Subjekt",
+        "rowTitles": [
+          "Subjekt",
+          "latitude",
+          "longitude",
+          "name",
+          "countryCode"
+        ]
+      }
     }
-  }, {
-    "@type" : "Table",
-    "url" : "test031.ttlTestOutput1.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "http://example.org/countries.csv#{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "latitude",
-        "name" : "latitude",
-        "propertyUrl" : "http://schema.org/latitude",
-        "datatype" : "double",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "longitude",
-        "name" : "longitude",
-        "propertyUrl" : "http://schema.org/longitude",
-        "datatype" : "double",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "name",
-        "name" : "name",
-        "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "countryCode",
-        "name" : "countryCode",
-        "propertyUrl" : "http://www.geonames.org/ontology#countryCode",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subjekt}"
-      } ],
-      "primaryKey" : "Subjekt",
-      "rowTitles" : [ "Subjekt", "latitude", "longitude", "name", "countryCode" ]
-    }
-  } ]
+  ]
 }

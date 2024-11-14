@@ -22,7 +22,7 @@ public class ConnectionChecker {
         }
     }
 
-    public static boolean isUrl(String fileName){
+    public static boolean isUrl(String fileName) {
         try {
             new URL(fileName);  // Try to create a URL object
             return true;         // If successful, the string is a valid URL

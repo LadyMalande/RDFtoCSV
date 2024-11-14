@@ -17,7 +17,7 @@ public class RdfxmlParser implements IRDF4JParsingMethod {
             InputStream targetStream = new FileInputStream(fileToParse);
 
             conn.add(targetStream, "", fileFormat);
-        } catch(RDFParseException rdfParseException) {
+        } catch (RDFParseException rdfParseException) {
             throw rdfParseException;
         } catch (IOException e) {
             throw new RuntimeException(e);

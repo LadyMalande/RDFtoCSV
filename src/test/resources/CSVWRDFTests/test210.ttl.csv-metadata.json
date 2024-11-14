@@ -1,54 +1,72 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test210.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "maxExclusive",
-        "name" : "maxExclusive",
-        "propertyUrl" : "file://test210.csv#maxExclusive",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "maxInclusive",
-        "name" : "maxInclusive",
-        "propertyUrl" : "file://test210.csv#maxInclusive",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "maximum",
-        "name" : "maximum",
-        "propertyUrl" : "file://test210.csv#maximum",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "minExclusive",
-        "name" : "minExclusive",
-        "propertyUrl" : "file://test210.csv#minExclusive",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "minInclusive",
-        "name" : "minInclusive",
-        "propertyUrl" : "file://test210.csv#minInclusive",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "minimum",
-        "name" : "minimum",
-        "propertyUrl" : "file://test210.csv#minimum"
-      } ],
-      "rowTitles" : [ "Subjekt", "maxExclusive", "maxInclusive", "maximum", "minExclusive", "minInclusive", "minimum" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test210.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "maxExclusive",
+            "name": "maxExclusive",
+            "propertyUrl": "file://test210.csv#maxExclusive",
+            "datatype": "date"
+          },
+          {
+            "@type": "Column",
+            "titles": "maxInclusive",
+            "name": "maxInclusive",
+            "propertyUrl": "file://test210.csv#maxInclusive",
+            "datatype": "date"
+          },
+          {
+            "@type": "Column",
+            "titles": "maximum",
+            "name": "maximum",
+            "propertyUrl": "file://test210.csv#maximum",
+            "datatype": "date"
+          },
+          {
+            "@type": "Column",
+            "titles": "minExclusive",
+            "name": "minExclusive",
+            "propertyUrl": "file://test210.csv#minExclusive",
+            "datatype": "date"
+          },
+          {
+            "@type": "Column",
+            "titles": "minInclusive",
+            "name": "minInclusive",
+            "propertyUrl": "file://test210.csv#minInclusive",
+            "datatype": "date"
+          },
+          {
+            "@type": "Column",
+            "titles": "minimum",
+            "name": "minimum",
+            "propertyUrl": "file://test210.csv#minimum"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "maxExclusive",
+          "maxInclusive",
+          "maximum",
+          "minExclusive",
+          "minInclusive",
+          "minimum"
+        ]
+      }
     }
-  } ]
+  ]
 }

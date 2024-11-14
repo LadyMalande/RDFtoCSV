@@ -1,15 +1,15 @@
 package com.miklosova.rdftocsvw.input_processor;
 
-import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.*;
+import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -22,7 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(Parameterized.class)
@@ -35,6 +35,14 @@ public class ParsersTest extends BaseTest {
     private RepositoryConnection rc;
     private String testName;
     private Class<? extends IRDF4JParsingMethod> parser;
+
+    public ParsersTest(String testName, String processMethod, String filePath, Class<? extends Throwable> exception, Class<? extends IRDF4JParsingMethod> parser) {
+        this.testName = testName;
+        this.processMethod = processMethod;
+        this.filePath = filePath;
+        this.thrownException = exception;
+        this.parser = parser;
+    }
 
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> configs() {
@@ -57,14 +65,6 @@ public class ParsersTest extends BaseTest {
                 {" - NOK", "rdf4j", "./src/test/resources/nonexisting.", RuntimeException.class, TurtlestarParser.class},
                 {" - NOK", "rdf4j", "./src/test/resources/nonexisting.", RuntimeException.class, TurtlestarParser.class},
         });
-    }
-
-    public ParsersTest(String testName, String processMethod, String filePath, Class<? extends Throwable> exception, Class<? extends IRDF4JParsingMethod> parser) {
-        this.testName = testName;
-        this.processMethod = processMethod;
-        this.filePath = filePath;
-        this.thrownException = exception;
-        this.parser = parser;
     }
 
     @BeforeEach

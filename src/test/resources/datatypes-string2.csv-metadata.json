@@ -1,21 +1,29 @@
 {
-  "tables" : [ {
-    "url" : "splitQueryTest0.csv",
-    "tableSchema" : {
-      "columns" : [ {
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "http://example.org/dir/file#{null}",
-        "suppressOutput" : true
-      }, {
-        "titles" : "value",
-        "name" : "value",
-        "propertyUrl" : "http://example.org/value"
-      } ],
-      "primaryKey" : "frag",
-      "aboutUrl" : "http://example.org/dir/file#{frag}",
-      "rowTitles" : [ "Subjekt", "value" ]
+  "tables": [
+    {
+      "url": "splitQueryTest0.csv",
+      "tableSchema": {
+        "columns": [
+          {
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "http://example.org/dir/file#{null}",
+            "suppressOutput": true
+          },
+          {
+            "titles": "value",
+            "name": "value",
+            "propertyUrl": "http://example.org/value"
+          }
+        ],
+        "primaryKey": "frag",
+        "aboutUrl": "http://example.org/dir/file#{frag}",
+        "rowTitles": [
+          "Subjekt",
+          "value"
+        ]
+      }
     }
-  } ],
-  "@context" : "http://www.w3.org/ns/csvw"
+  ],
+  "@context": "http://www.w3.org/ns/csvw"
 }

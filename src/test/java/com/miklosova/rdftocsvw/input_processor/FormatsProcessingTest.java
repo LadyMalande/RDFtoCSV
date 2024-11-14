@@ -27,8 +27,8 @@ import java.util.Set;
 
 public class FormatsProcessingTest extends BaseTest {
 
-    String csvFromTtl;
     final String inputProcessingMethod = "rdf4j";
+    String csvFromTtl;
     MethodService ms;
     Repository db;
     MethodService msForTurtle;
@@ -41,21 +41,21 @@ public class FormatsProcessingTest extends BaseTest {
     Set<Value> valuesFromTest;
 
     @BeforeEach
-    void prepareQuery(){
+    void prepareQuery() {
         SelectQuery selectQuery = Queries.SELECT();
         Variable o = SparqlBuilder.var("o"), s = SparqlBuilder.var("s"),
-                s_in = SparqlBuilder.var("s_in"),p_in = SparqlBuilder.var("p_in");
+                s_in = SparqlBuilder.var("s_in"), p_in = SparqlBuilder.var("p_in");
         selectQuery.select(s).where(s.isA(o));
 
         queryString = selectQuery.getQueryString();
     }
 
     @BeforeEach
-    void prepareConnectionAndResult(){
+    void prepareConnectionAndResult() {
         valuesFromTurtle = new HashSet<>();
         msForTurtle = new MethodService();
         dbForTurtle = new SailRepository(new MemoryStore());
-        try(RepositoryConnection rcForTurtle = msForTurtle.processInput(filePathForTurtle, inputProcessingMethod, dbForTurtle)){
+        try (RepositoryConnection rcForTurtle = msForTurtle.processInput(filePathForTurtle, inputProcessingMethod, dbForTurtle)) {
             TupleQuery query = rcForTurtle.prepareTupleQuery(queryString);
             System.out.println("query.getDataset() @Before prepareConnectionAndResult " + query.getDataset());
             // A QueryResult is also an AutoCloseable resource, so make sure it gets closed when done.
@@ -80,7 +80,7 @@ public class FormatsProcessingTest extends BaseTest {
 
         SelectQuery selectQuery = Queries.SELECT();
         Variable o = SparqlBuilder.var("o"), s = SparqlBuilder.var("s"),
-                s_in = SparqlBuilder.var("s_in"),p_in = SparqlBuilder.var("p_in");
+                s_in = SparqlBuilder.var("s_in"), p_in = SparqlBuilder.var("p_in");
         selectQuery.select(s).where(s.isA(o));
 
         queryStringForTest = selectQuery.getQueryString();
@@ -92,7 +92,7 @@ public class FormatsProcessingTest extends BaseTest {
     public void tearDown() {
     }
 
-    private void setValuesFromTest(RepositoryConnection rc){
+    private void setValuesFromTest(RepositoryConnection rc) {
 
         TupleQuery query = rc.prepareTupleQuery(queryStringForTest);
         try (TupleQueryResult result = query.evaluate()) {
@@ -104,8 +104,9 @@ public class FormatsProcessingTest extends BaseTest {
         }
     }
 
-    private void reportCurrentMethodName(RepositoryConnection rc, Object o){
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+    private void reportCurrentMethodName(RepositoryConnection rc, Object o) {
+        String methodName = new Object() {
+        }.getClass().getEnclosingMethod().getName();
         System.out.println("Reporting from tests " + methodName);
         System.out.println(rc != null);
     }
@@ -147,7 +148,8 @@ public class FormatsProcessingTest extends BaseTest {
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        String methodName = new Object() {
+        }.getClass().getEnclosingMethod().getName();
         System.out.println("Reporting from tests " + methodName);
         System.out.println(rc != null);
         Assert.assertNotNull(rc);
@@ -204,7 +206,8 @@ public class FormatsProcessingTest extends BaseTest {
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        String methodName = new Object() {
+        }.getClass().getEnclosingMethod().getName();
         System.out.println("Reporting from tests " + methodName);
         System.out.println(rc != null);
         Assert.assertNotNull(rc);
@@ -237,7 +240,8 @@ public class FormatsProcessingTest extends BaseTest {
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        String methodName = new Object() {
+        }.getClass().getEnclosingMethod().getName();
         System.out.println("Reporting from tests " + methodName);
         System.out.println(rc != null);
         Assert.assertNotNull(rc);
@@ -249,7 +253,8 @@ public class FormatsProcessingTest extends BaseTest {
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        String methodName = new Object() {
+        }.getClass().getEnclosingMethod().getName();
         System.out.println("Reporting from tests " + methodName);
         System.out.println(rc != null);
         Assert.assertNotNull(rc);
@@ -261,7 +266,8 @@ public class FormatsProcessingTest extends BaseTest {
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        String methodName = new Object() {
+        }.getClass().getEnclosingMethod().getName();
         System.out.println("Reporting from tests " + methodName);
         System.out.println(rc != null);
         Assert.assertNotNull(rc);
@@ -284,7 +290,8 @@ public class FormatsProcessingTest extends BaseTest {
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        String methodName = new Object() {
+        }.getClass().getEnclosingMethod().getName();
         System.out.println("Reporting from tests " + methodName);
         System.out.println(rc != null);
         Assert.assertNotNull(rc);
@@ -296,7 +303,8 @@ public class FormatsProcessingTest extends BaseTest {
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        String methodName = new Object() {
+        }.getClass().getEnclosingMethod().getName();
         System.out.println("Reporting from tests " + methodName);
         System.out.println(rc != null);
         Assert.assertNotNull(rc);
@@ -308,7 +316,8 @@ public class FormatsProcessingTest extends BaseTest {
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        String methodName = new Object() {
+        }.getClass().getEnclosingMethod().getName();
         System.out.println("Reporting from tests " + methodName);
         System.out.println(rc != null);
         Assert.assertNotNull(rc);
@@ -320,7 +329,8 @@ public class FormatsProcessingTest extends BaseTest {
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        String methodName = new Object() {
+        }.getClass().getEnclosingMethod().getName();
         System.out.println("Reporting from tests " + methodName);
         System.out.println(rc != null);
         Assert.assertNotNull(rc);
@@ -332,7 +342,8 @@ public class FormatsProcessingTest extends BaseTest {
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        String methodName = new Object() {
+        }.getClass().getEnclosingMethod().getName();
         System.out.println("Reporting from tests " + methodName);
         System.out.println(rc != null);
         Assert.assertNotNull(rc);
@@ -344,7 +355,8 @@ public class FormatsProcessingTest extends BaseTest {
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        String methodName = new Object() {
+        }.getClass().getEnclosingMethod().getName();
         System.out.println("Reporting from tests " + methodName);
         System.out.println(rc != null);
         Assert.assertNotNull(rc);
@@ -356,7 +368,8 @@ public class FormatsProcessingTest extends BaseTest {
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        String methodName = new Object() {
+        }.getClass().getEnclosingMethod().getName();
         System.out.println("Reporting from tests " + methodName);
         System.out.println(rc != null);
         Assert.assertNotNull(rc);
@@ -381,7 +394,8 @@ public class FormatsProcessingTest extends BaseTest {
         System.out.println(filePath.toString());
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        String methodName = new Object() {
+        }.getClass().getEnclosingMethod().getName();
         System.out.println("Reporting from tests " + methodName);
         System.out.println(rc != null);
         Assert.assertNotNull(rc);

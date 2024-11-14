@@ -2,26 +2,17 @@ package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.miklosova.rdftocsvw.support.Main;
-import com.miklosova.rdftocsvw.support.StreamingSupport;
-import org.eclipse.rdf4j.model.IRI;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-
-import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
-import static org.eclipse.rdf4j.model.util.Values.iri;
 
 public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCreator implements IMetadataCreator {
 
 
     Metadata metadata;
+
     public BigFileStreamingNTriplesMetadataCreator(PrefinishedOutput<RowsAndKeys> data) {
         super(data);
         this.metadata = new Metadata();
@@ -39,9 +30,9 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
 
 
         newTable.setTableSchema(tableSchema);
-        
+
         readFileWithStreaming();
-        
+
         metadata.jsonldMetadata();
         return metadata;
     }
@@ -58,7 +49,6 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
             e.printStackTrace();
         }
     }
-
 
 
 }

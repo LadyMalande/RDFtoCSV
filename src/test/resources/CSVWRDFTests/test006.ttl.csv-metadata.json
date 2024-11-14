@@ -1,34 +1,46 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test006.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "FamilyName",
-        "name" : "FamilyName",
-        "propertyUrl" : "file://test006.csv#FamilyName"
-      }, {
-        "@type" : "Column",
-        "titles" : "Surname",
-        "name" : "Surname",
-        "propertyUrl" : "file://test006.csv#Surname"
-      }, {
-        "@type" : "Column",
-        "titles" : "childName",
-        "name" : "childName",
-        "propertyUrl" : "file://test006.csv#childName"
-      } ],
-      "rowTitles" : [ "Subjekt", "FamilyName", "Surname", "childName" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test006.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "FamilyName",
+            "name": "FamilyName",
+            "propertyUrl": "file://test006.csv#FamilyName"
+          },
+          {
+            "@type": "Column",
+            "titles": "Surname",
+            "name": "Surname",
+            "propertyUrl": "file://test006.csv#Surname"
+          },
+          {
+            "@type": "Column",
+            "titles": "childName",
+            "name": "childName",
+            "propertyUrl": "file://test006.csv#childName"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "FamilyName",
+          "Surname",
+          "childName"
+        ]
+      }
     }
-  } ]
+  ]
 }

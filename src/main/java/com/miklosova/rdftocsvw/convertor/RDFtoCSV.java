@@ -17,8 +17,6 @@ import org.eclipse.rdf4j.sail.memory.MemoryStore;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.util.Map;
 
@@ -28,10 +26,16 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 
 public class RDFtoCSV {
     private static final String STATIC_DELIMITER_FOR_CSVS_IN_ONE_STRING = """
-    
-    -----------ANOTHER CSV TABLE-----------
-    
-    """;
+                
+            -----------ANOTHER CSV TABLE-----------
+                
+            """;
+    public final String DEFAULT_OUTPUT_FILE_NAME = "tabularDataOutput";
+    public final String DEFAULT_METHOD = "splitQuery";
+    public final String DEFAULT_READ_METHOD = "rdf4j";
+    Repository db;
+    MethodService methodService;
+    RepositoryConnection rc;
     /**
      * Mandatory, sets the original RDF file to convert.
      */
@@ -48,13 +52,6 @@ public class RDFtoCSV {
     private String readMethod;
     private String filePathForOutput;
     private String metadataFilename;
-
-    public final String DEFAULT_OUTPUT_FILE_NAME = "tabularDataOutput";
-
-    public final String DEFAULT_METHOD = "splitQuery";
-
-    public final String DEFAULT_READ_METHOD = "rdf4j";
-
     public RDFtoCSV(String fileName) {
         this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
         System.out.println("this.filename in RDFtoCSV(String fileName)" + this.fileName);
@@ -62,7 +59,6 @@ public class RDFtoCSV {
         this.filePathForOutput = this.fileName;// + "TestOutput";
         ConfigurationManager.processConfigMap(null);
     }
-
     public RDFtoCSV(String fileName, Map<String, String> configMap) {
 
         this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
@@ -71,11 +67,6 @@ public class RDFtoCSV {
         this.filePathForOutput = this.fileName;// + "TestOutput";
         ConfigurationManager.processConfigMap(configMap);
     }
-
-
-    Repository db;
-    MethodService methodService;
-    RepositoryConnection rc;
 
     public String getOutputFileName() {
         return outputFileName;
@@ -217,17 +208,16 @@ public class RDFtoCSV {
         Metadata metadata = getMetadata();
 
         JsonUtil.serializeAndWriteToFile(metadata);
-        File f = new File( ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
+        File f = new File(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
         // Read the file into a byte array
         byte[] fileBytes = Files.readAllBytes(f.toPath());
         return new FinalizedOutput<>(fileBytes);
     }
 
 
-
     private String writeToString(PrefinishedOutput<?> po, Metadata metadata) {
-        if(po == null){
-            if(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD).equalsIgnoreCase("streaming")){
+        if (po == null) {
+            if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD).equalsIgnoreCase("streaming")) {
                 return "";
             }
             return processStreaming(metadata);
@@ -240,7 +230,7 @@ public class RDFtoCSV {
             int i = 0;
 
             for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
-                if(i>0){
+                if (i > 0) {
                     sb.append(STATIC_DELIMITER_FOR_CSVS_IN_ONE_STRING);
                 }
                 System.out.println("FileWrite for i= " + i + " rowAndKey = " + rowAndKey.getKeys() + " getRows= " + rowAndKey.getRows());
@@ -256,7 +246,7 @@ public class RDFtoCSV {
             FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata);
         }
         db.shutDown();
-        
+
         return sb.toString();
     }
 
@@ -282,7 +272,7 @@ public class RDFtoCSV {
     }
 
     private void writeToCSV(PrefinishedOutput<?> po, Metadata metadata) {
-        if(po == null){
+        if (po == null) {
             processStreaming(metadata);
         }
         String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);

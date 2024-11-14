@@ -1,55 +1,70 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "CSVfileToWriteTo0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Text",
-        "name" : "Text",
-        "valueUrl" : "http://example.org/{+Text}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "{+type}",
-        "aboutUrl" : "http://example.org/{+Text}"
-      }, {
-        "@type" : "Column",
-        "titles" : "creator",
-        "name" : "creator",
-        "propertyUrl" : "http://purl.org/dc/terms/creator",
-        "valueUrl" : "http://example.org/{+creator}",
-        "aboutUrl" : "{+Text}"
-      }, {
-        "@type" : "Column",
-        "titles" : "title (cs)",
-        "name" : "title_cs",
-        "propertyUrl" : "http://purl.org/dc/terms/title",
-        "aboutUrl" : "{+Text}",
-        "lang" : "cs"
-      }, {
-        "@type" : "Column",
-        "titles" : "title (en)",
-        "name" : "title_en",
-        "propertyUrl" : "http://purl.org/dc/terms/title",
-        "aboutUrl" : "{+Text}",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://purl.org/dc/dcmitype/Text",
-        "aboutUrl" : "http://example.org/{+Text}",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Text",
-      "aboutUrl" : "http://example.org/{+Text}",
-      "rowTitles" : [ "Text", "type", "creator", "title (cs)", "title (en)" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "CSVfileToWriteTo0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Text",
+            "name": "Text",
+            "valueUrl": "http://example.org/{+Text}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "type",
+            "name": "type",
+            "propertyUrl": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+            "valueUrl": "{+type}",
+            "aboutUrl": "http://example.org/{+Text}"
+          },
+          {
+            "@type": "Column",
+            "titles": "creator",
+            "name": "creator",
+            "propertyUrl": "http://purl.org/dc/terms/creator",
+            "valueUrl": "http://example.org/{+creator}",
+            "aboutUrl": "{+Text}"
+          },
+          {
+            "@type": "Column",
+            "titles": "title (cs)",
+            "name": "title_cs",
+            "propertyUrl": "http://purl.org/dc/terms/title",
+            "aboutUrl": "{+Text}",
+            "lang": "cs"
+          },
+          {
+            "@type": "Column",
+            "titles": "title (en)",
+            "name": "title_en",
+            "propertyUrl": "http://purl.org/dc/terms/title",
+            "aboutUrl": "{+Text}",
+            "lang": "en"
+          },
+          {
+            "@type": "Column",
+            "propertyUrl": "rdf:type",
+            "valueUrl": "http://purl.org/dc/dcmitype/Text",
+            "aboutUrl": "http://example.org/{+Text}",
+            "virtual": true
+          }
+        ],
+        "primaryKey": "Text",
+        "aboutUrl": "http://example.org/{+Text}",
+        "rowTitles": [
+          "Text",
+          "type",
+          "creator",
+          "title (cs)",
+          "title (en)"
+        ]
+      }
     }
-  } ]
+  ]
 }

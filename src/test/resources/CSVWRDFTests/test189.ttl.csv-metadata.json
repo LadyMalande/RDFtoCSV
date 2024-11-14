@@ -1,55 +1,73 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test189.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "HH%3Amm",
-        "name" : "HH%3Amm",
-        "propertyUrl" : "file://test189.csv#HH%3Amm",
-        "datatype" : "time"
-      }, {
-        "@type" : "Column",
-        "titles" : "HH%3Amm%3Ass",
-        "name" : "HH%3Amm%3Ass",
-        "propertyUrl" : "file://test189.csv#HH%3Amm%3Ass",
-        "datatype" : "time"
-      }, {
-        "@type" : "Column",
-        "titles" : "HH%3Amm%3AssX",
-        "name" : "HH%3Amm%3AssX",
-        "propertyUrl" : "file://test189.csv#HH%3Amm%3AssX",
-        "datatype" : "time"
-      }, {
-        "@type" : "Column",
-        "titles" : "HHmm",
-        "name" : "HHmm",
-        "propertyUrl" : "file://test189.csv#HHmm",
-        "datatype" : "time"
-      }, {
-        "@type" : "Column",
-        "titles" : "HHmm%20XX",
-        "name" : "HHmm%20XX",
-        "propertyUrl" : "file://test189.csv#HHmm%20XX",
-        "datatype" : "time"
-      }, {
-        "@type" : "Column",
-        "titles" : "HHmmss",
-        "name" : "HHmmss",
-        "propertyUrl" : "file://test189.csv#HHmmss",
-        "datatype" : "time"
-      } ],
-      "rowTitles" : [ "Subjekt", "HH%3Amm", "HH%3Amm%3Ass", "HH%3Amm%3AssX", "HHmm", "HHmm%20XX", "HHmmss" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test189.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "HH%3Amm",
+            "name": "HH%3Amm",
+            "propertyUrl": "file://test189.csv#HH%3Amm",
+            "datatype": "time"
+          },
+          {
+            "@type": "Column",
+            "titles": "HH%3Amm%3Ass",
+            "name": "HH%3Amm%3Ass",
+            "propertyUrl": "file://test189.csv#HH%3Amm%3Ass",
+            "datatype": "time"
+          },
+          {
+            "@type": "Column",
+            "titles": "HH%3Amm%3AssX",
+            "name": "HH%3Amm%3AssX",
+            "propertyUrl": "file://test189.csv#HH%3Amm%3AssX",
+            "datatype": "time"
+          },
+          {
+            "@type": "Column",
+            "titles": "HHmm",
+            "name": "HHmm",
+            "propertyUrl": "file://test189.csv#HHmm",
+            "datatype": "time"
+          },
+          {
+            "@type": "Column",
+            "titles": "HHmm%20XX",
+            "name": "HHmm%20XX",
+            "propertyUrl": "file://test189.csv#HHmm%20XX",
+            "datatype": "time"
+          },
+          {
+            "@type": "Column",
+            "titles": "HHmmss",
+            "name": "HHmmss",
+            "propertyUrl": "file://test189.csv#HHmmss",
+            "datatype": "time"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "HH%3Amm",
+          "HH%3Amm%3Ass",
+          "HH%3Amm%3AssX",
+          "HHmm",
+          "HHmm%20XX",
+          "HHmmss"
+        ]
+      }
     }
-  } ]
+  ]
 }

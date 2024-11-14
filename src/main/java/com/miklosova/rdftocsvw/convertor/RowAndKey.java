@@ -9,6 +9,16 @@ public class RowAndKey {
     ArrayList<Value> keys;
     ArrayList<Row> rows;
 
+    public RowAndKey() {
+        this.keys = new ArrayList<>();
+        this.rows = new ArrayList<>();
+    }
+
+    public RowAndKey(ArrayList<Value> keys, ArrayList<Row> rows) {
+        this.keys = keys;
+        this.rows = rows;
+    }
+
     public ArrayList<Value> getKeys() {
         return keys;
     }
@@ -30,15 +40,5 @@ public class RowAndKey {
         public RowAndKey factory() {
             return new RowAndKey();
         }
-    }
-
-    public RowAndKey() {
-        this.keys = new ArrayList<>();
-        this.rows = new ArrayList<>();
-    }
-
-    public RowAndKey(ArrayList<Value> keys, ArrayList<Row> rows) {
-        this.keys = keys;
-        this.rows = rows;
     }
 }

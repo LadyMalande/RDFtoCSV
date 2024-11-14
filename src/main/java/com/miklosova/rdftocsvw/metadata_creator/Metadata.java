@@ -1,18 +1,11 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.miklosova.rdftocsvw.convertor.Row;
 import com.miklosova.rdftocsvw.convertor.TypeIdAndValues;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.miklosova.rdftocsvw.support.FileWrite;
 import com.miklosova.rdftocsvw.support.JsonUtil;
 import ioinformarics.oss.jackson.module.jsonld.JsonldModule;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
@@ -21,8 +14,6 @@ import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +28,7 @@ import java.util.Map;
  */
 @JsonldType("TableGroup")
 public class Metadata {
+    private static final ObjectMapper SORTED_MAPPER = new ObjectMapper();
     /**
      * Array of files tied to the metadata file
      */
@@ -46,7 +38,9 @@ public class Metadata {
      */
     private String id;
 
-    private static final ObjectMapper SORTED_MAPPER = new ObjectMapper();
+    public Metadata() {
+        this.tables = new ArrayList<>();
+    }
 
     public String jsonldMetadata() {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -79,11 +73,6 @@ public class Metadata {
         System.out.println(jsonWithContext);
         return jsonWithContext;
     }
-
-    public Metadata() {
-        this.tables = new ArrayList<>();
-    }
-
 
     public void addMetadata(String newFileName, ArrayList<Value> keys, ArrayList<Row> rows) {
         File filePath = new File(newFileName);
