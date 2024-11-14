@@ -7,10 +7,10 @@ import org.json.simple.parser.JSONParser;
 import org.junit.After;
 
 import java.io.FileReader;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BaseTest {
+    public static final Logger logger = Logger.getLogger(BaseTest.class.getName());
     private static final Logger LOGGER = Logger.getLogger(BaseTest.class.getName());
     public Metadata testMetadata;
     public Repository db;
@@ -27,7 +27,8 @@ public class BaseTest {
     public JSONObject readJSONFile(String path) {
         JSONParser parser = new JSONParser();
         try {
-            LOGGER.log(Level.FINE, "readJSONFile");
+            logger.info("This is the " + 1 + " time I say 'Hello World'.");
+            //LOGGER.log(Level.FINE, "readJSONFile");
             Object obj = parser.parse(new FileReader(path));
             JSONObject jsonObject = (JSONObject) obj;
             return jsonObject;

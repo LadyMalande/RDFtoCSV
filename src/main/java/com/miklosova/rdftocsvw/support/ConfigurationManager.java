@@ -24,20 +24,22 @@ public class ConfigurationManager {
     public static final String CONVERSION_METHOD = "conversion.method";
     public static final String METADATA_ROWNUMS = "metadata.rownums";
     public static final String STREAMING = "input.streaming";
+    public static final String FIRST_NORMAL_FORM = "input.firstNormalForm";
     /**
-     * Default name for metadata file in case the metadata does not adhere to csv quivalent file name
+     * Default name for metadata file in case the metadata does not adhere to csv equivalent file name
      * According to <a href="https://www.w3.org/TR/tabular-data-primer/#h-metadata">Tabular Metadata Primer</a>
      */
     public static final String DEFAULT_METADATA_FILENAME = "csv-metadata.json";
     public static final String DEFAULT_CONVERSION_METHOD = "basicQuery";
+    public static final String DEFAULT_OUTPUT_ZIPFILE_NAME = "zippedCSVW.zip";
     private static final String DEFAULT_PARSING_METHOD = "rdf4j";
     private static String CONFIG_FILE_NAME = "../app.config";
 
     public static String getCONFIG_FILE_NAME() {
         // Lazy initialization (modifies the variable only once)
         // Convert the relative path to a canonical path (removes ../ and resolves symlinks)
-        String canonicalPath = null;
-        String fileInDirectory = null;
+        String canonicalPath;
+        String fileInDirectory;
         try {
             URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
             File file = new File(location.toURI().getPath());
@@ -50,15 +52,18 @@ public class ConfigurationManager {
 
             canonicalPath = configFile.getCanonicalPath();
             String dirForCanonicalFile = canonicalPath.substring(0, canonicalPath.length() - configFile.getName().length());
+            /*
             System.out.println("configFile = " + configFile);
             System.out.println("dirForCanonicalFile = " + dirForCanonicalFile);
             System.out.println("jarDirectory = " + jarDirectory);
+
+             */
             String insertAfter = dirForCanonicalFile + File.separator;
             int insertPosition = canonicalPath.indexOf(insertAfter) + insertAfter.length();
             String fileNameBeingRead = null;
             // Create the new path by inserting jarDirectory
             if (jarDirectory.equalsIgnoreCase("target")) {
-                System.out.println("jarDirectory.equalsIgnoreCase(\"target\"");
+                //System.out.println("jarDirectory.equalsIgnoreCase(\"target\"");
                 fileInDirectory = canonicalPath.substring(0, insertPosition) + "RDFtoCSV" + File.separator
                         + jarDirectory
                         + File.separator
@@ -85,14 +90,14 @@ public class ConfigurationManager {
     }
 
     public static void saveVariableToConfigFile(String variableName, String value) {
-        System.out.println("new String value with encoding for variable(" + variableName + "): " + value);
+        //System.out.println("new String value with encoding for variable(" + variableName + "): " + value);
         Properties prop = new Properties();
         try (FileInputStream fis = new FileInputStream(CONFIG_FILE_NAME)) {
             prop.load(new InputStreamReader(fis, Charset.forName("UTF-8")));
         } catch (IOException ex) {
         }
         prop.setProperty(variableName, value);
-        System.out.println("Set configuration of " + variableName + " to: " + prop.getProperty(variableName));
+        //System.out.println("Set configuration of " + variableName + " to: " + prop.getProperty(variableName));
 
         try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(
                 new FileOutputStream(CONFIG_FILE_NAME)))) {
@@ -195,6 +200,8 @@ public class ConfigurationManager {
             boolean help = cmd.hasOption("help");
             String inputFile = cmd.getOptionValue("file");
             boolean streamingMethod = cmd.hasOption("streaming");
+            boolean normalForm = cmd.hasOption("firstNormalForm");
+            String outputFilename = cmd.getOptionValue("output");
 
             if (help) {
                 printHelpLine(options);
@@ -209,7 +216,7 @@ public class ConfigurationManager {
             }
 
 
-            writeOptionsToConfigFile(multipleTables, parsingMethod, inputFile, streamingMethod);
+            writeOptionsToConfigFile(multipleTables, parsingMethod, inputFile, streamingMethod, normalForm, outputFilename);
         } catch (ParseException e) {
             System.err.println("Error parsing options from arguments: " + e.getMessage());
             System.exit(1);
@@ -222,7 +229,7 @@ public class ConfigurationManager {
         formatter.printHelp("Command line syntax:", options);
     }
 
-    private static void writeOptionsToConfigFile(String conversionMethod, String parsingMethod, String inputFile, boolean streaming) {
+    private static void writeOptionsToConfigFile(String conversionMethod, String parsingMethod, String inputFile, boolean streaming, boolean firstNormalForm, String outputFilename) {
         System.out.println("conversion method=" + conversionMethod + " parsingMethod=" + parsingMethod + " inputFile=" + inputFile + " streaming=" + streaming);
         File finalConfigFile = new File(CONFIG_FILE_NAME);
 
@@ -236,16 +243,18 @@ public class ConfigurationManager {
             System.exit(1);
         }
 
-        String CSVFileToWriteTo = null;
         String metadataFileName = null;
         parsingMethod = (parsingMethod != null) ? parsingMethod : DEFAULT_PARSING_METHOD;
-
-        if (CSVFileToWriteTo == null) {
-            CSVFileToWriteTo = "CSVfileToWriteTo";
+        String baseFileName;
+        if (outputFilename == null) {
+            baseFileName = inputFile.split("\\.")[0];
+        } else {
+            baseFileName = outputFilename;
         }
 
         conversionMethod = (conversionMethod == null) ? DEFAULT_CONVERSION_METHOD : conversionMethod;
-        prop.setProperty(ConfigurationManager.OUTPUT_FILENAME, CSVFileToWriteTo);
+        prop.setProperty(ConfigurationManager.OUTPUT_FILENAME, baseFileName);
+        prop.setProperty(ConfigurationManager.FIRST_NORMAL_FORM, String.valueOf(firstNormalForm));
         prop.setProperty(ConfigurationManager.CONVERSION_METHOD, conversionMethod);
         System.out.println("property set prop.conversionMethod," + conversionMethod);
         prop.setProperty(ConfigurationManager.INTERMEDIATE_FILE_NAMES, "");
@@ -280,6 +289,8 @@ public class ConfigurationManager {
         options.addOption("h", "help", false, "Show the command line options");
         options.addOption("f", "file", true, "File for conversion");
         options.addOption("s", "streaming", false, "Parse the file in streaming mode (continual parsing until stopped)");
+        options.addOption("n", "firstNormalForm", false, "Put the output CSV data into first normal form (every cell contains only one entry, no lists of values)");
+        options.addOption("o", "output", true, "Output file name base. Will be given .csv extension. If not set, the name of the input file is taken.");
         return options;
     }
 

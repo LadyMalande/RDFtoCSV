@@ -25,8 +25,6 @@ import org.eclipse.rdf4j.sparqlbuilder.core.SparqlBuilder;
 import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
-import org.jruby.embed.LocalContextScope;
-import org.jruby.embed.ScriptingContainer;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -48,7 +46,7 @@ public class TestSupport {
             File outputPathFile = new File(outputPath);
             // rdf serialize --input-format tabular --output-format turtle --minimal --metadata csv-metadata.json
             //ProcessBuilder builder = new ProcessBuilder(  "java", "-jar", pathToExecutable.getAbsolutePath(),  " -t", pathToTableFile.getName(), "-u", pathToMetadataFile.getName(), "-o", outputPathFile.getName(), "-m", "minimal");
-            ProcessBuilder builder = new ProcessBuilder("rdf serialize", "--input-format", "tabular", "--output-format", "turtle", "--minimal", "--metadata", "csv-metadata.json");
+            ProcessBuilder builder = new ProcessBuilder("rdf serialize", "--input-format", "tabular", "--output-format", "turtle", "--minimal", "--metadata", "OriginalIsSubsetOfCSV/csv-metadata.json");
             ProcessBuilder builder2 = new ProcessBuilder("gem", "install", "rdf-tabular", "rdf-turtle");
 
             builder.directory(new File("src/test/resources").getAbsoluteFile()); // this is where you set the root folder for the executable to run with
@@ -67,69 +65,6 @@ public class TestSupport {
             throw new RuntimeException(e);
         }
         System.out.println("run command line process");
-    }
-
-    public static void rubyRun(String pathToTable, String pathToMetadata, String outputPath, String scriptPath) {
-        ScriptingContainer container = new ScriptingContainer(LocalContextScope.SINGLETON);
-
-        // Set the Ruby script to run
-        String scriptPath2 = "src/test/resources/script.rb";
-
-        // Run the script
-        // container.runScriptlet(Ruby.newInstance().runScript().runScript(scriptPath2));
-
-/*
-        ScriptingContainer container = new ScriptingContainer(LocalVariableBehavior.PERSISTENT);
-
-            //container.runScriptlet(PathType.CLASSPATH, scriptPath);
-            //container.runScriptlet("p=9.0");
-            //container.runScriptlet("q = Math.sqrt p");
-            //container.runScriptlet("puts \"square root of #{p} is #{q}\"");
-            //System.out.println("Ruby used values: p = " + container.get("p") + ", q = " + container.get("q"));
-            //container.put("x", 12345);
-            //container.runScriptlet("puts x.to_s(2)");
-            String script = "def load_gem(name, version=nil)\n" +
-                    "  # needed if your ruby version is less than 1.9\n" +
-                    "  require 'rubygems'\n" +
-                    "\n" +
-                    "  begin\n" +
-                    "    gem name, version\n" +
-                    "  rescue LoadError\n" +
-                    "    version = \"--version '#{version}'\" unless version.nil?\n" +
-                    "    system(\"gem install #{name} #{version}\")\n" +
-                    "    Gem.clear_paths\n" +
-                    "    puts 'cleared paths'\n" +
-                    "    Gem.list\n" +
-                    //"    retry\n" +
-                    "  end\n" +
-                    "\n" +
-                    "  puts 'before require name'\n" +
-                    //"  require name\n" +
-                    "return\n" +
-                    "end\n" +
-                    "\n" +
-                    "require 'rubygems'\n" +
-                    "load_gem 'rdf-tabular'\n " +
-                    "gem list\n" +
-                    "puts 'gemfile installed'";
-            JavaEmbedUtils.EvalUnit unit = container.parse(script);
-            IRubyObject msg = unit.run(); // a RubyString instance
-            System.out.println(String.valueOf(JavaEmbedUtils.rubyToJava(msg)));
-
-
-
-        ScriptingContainer container = new ScriptingContainer(LocalVariableBehavior.PERSISTENT);
-        container.setCompileMode(RubyInstanceConfig.CompileMode.OFF);
-        container.setNativeEnabled(false);
-        container.setObjectSpaceEnabled(true);
-        //container.put("some_param", "someValue");
-
-
-
-        // My script return an array - tweak to fit your returning value
-        //RubyArray resourceArray = (RubyArray) container.runScriptlet(PathType.CLASSPATH, scriptPath);
-        //System.out.println(resourceArray.stream().toArray());
-        */
     }
 
     public static boolean isRDFSubsetOfTerms(String filePathForTest, String filePathForOriginal) throws IOException {
@@ -355,5 +290,25 @@ public class TestSupport {
         selectQuery.prefix(skos).select(s, p, o).where(s.has(p, o));
         System.out.println("prepareQueryForExtractAll query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
+    }
+
+    public File transformFileFromMetadataToRDF(String directoryPath, String metadataFileName, String resultingRDFFileName) {
+        try {
+            // -m minimal is for less verbose translation - to translate only what is given in the metadata, no extra triples like row numbers unless specifically mentioned in metadata
+
+            File pathToExecutable = new File(directoryPath + "csv2rdf-0.4.7-standalone.jar");
+            File pathToOutput = new File(directoryPath + resultingRDFFileName);
+            File pathToMetadata = new File(directoryPath + metadataFileName);
+            //pathToExecutable.getAbsolutePath()
+            ProcessBuilder builder = new ProcessBuilder("java", "-jar", pathToExecutable.getAbsolutePath(), "-u", pathToMetadata.getAbsolutePath(), "-o", pathToOutput.getAbsolutePath(), "-m", "minimal");
+            builder.directory(new File("src/test/resources").getAbsoluteFile()); // this is where you set the root folder for the executable to run with
+            builder.redirectErrorStream(true);
+            Process process = builder.start();
+
+            //System.out.println("command line error " + process.errorReader().readLine());
+            return pathToOutput;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

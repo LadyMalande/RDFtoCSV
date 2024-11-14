@@ -55,7 +55,7 @@ public class DatatypesTest extends BaseTest {
     @BeforeEach
     void createMetadata() {
         System.out.println("Override before each");
-        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{filePath});
+        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{"-f", filePath});
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
         db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService();
@@ -79,6 +79,7 @@ public class DatatypesTest extends BaseTest {
 
     @Test
     public void isGivenDatatype() {
+        logger.info("Starting test isGivenDatatype.");
         createMetadata();
 
         RowsAndKeys rnk = (RowsAndKeys) prefinishedOutput.getPrefinishedOutput();
