@@ -8,6 +8,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 
 import java.io.*;
@@ -42,7 +43,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
         //tableSchemaByFiles.put(newCSVname, tableSchema);
 
-        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.STREAMING_FILE).equalsIgnoreCase("false")) {
+        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.STREAMING_CONTINUOUS).equalsIgnoreCase("true")) {
             readInputStream(System.in);
         } else {
             readFileWithStreaming();
@@ -74,7 +75,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         // Loop until the termination line is encountered
         while (scanner.hasNextLine()) {
             inputLine = scanner.nextLine();
-            //if ("---END_OF_STREAM---".equals(inputLine)) {
             if (endingString.equals(inputLine)) {
                 break;  // Exit the loop when the termination line is entered
             } else {
@@ -331,7 +331,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
                     System.out.println(Arrays.toString(line) + " --- parts size " + line.length);
 
-                    int indexOfChangeColumn = getIndexOfCurrentPredicate(triple.getPredicate());
+                    int indexOfChangeColumn = getIndexOfCurrentPredicate(triple.getPredicate(), triple.getObject());
 
                     // Insert the new value between two commas in the middle (adjust index as needed)
                     if (indexOfChangeColumn >= line.length) {
@@ -345,19 +345,26 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                         line = extendedArray;
                         isModified = true;
                         System.out.println("1) " + line);
-                    } else if (!line[indexOfChangeColumn].equalsIgnoreCase("")) {
-                        // There is already a value in the column - add the value and add the separator to metadata
-                        // Create a new line with the data variation
-                        // TODO - append a new line data variation
-                        if (dataLineVariationIsNotPresent(rowDataVariationsForSubject, line, indexOfChangeColumn)) {
-                            rowDataVariationsForSubject.add(line);
+                    } else if (indexOfChangeColumn != -1 && !line[indexOfChangeColumn].equalsIgnoreCase("")) {
+                        if (Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM))) {
+                            // There is already a value in the column - add the value and add the separator to metadata
+                            // Create a new line with the data variation
+                            // TODO - append a new line data variation
+                            if (dataLineVariationIsNotPresent(rowDataVariationsForSubject, line, indexOfChangeColumn)) {
+                                rowDataVariationsForSubject.add(line);
+                            }
+                            isNeedForAddingDataVariations = true;
+                            indexOfDataVariationColumn = indexOfChangeColumn;
+                            System.out.println("2) " + line[indexOfChangeColumn] + " already there for triple " + triple.getSubject().stringValue() + ", " + triple.getPredicate().stringValue() + ", " + triple.getObject().stringValue());
+                            // Check whether the object is the same as the value that is already in the data - that would imply that
+                            // I am trying to optimize the data, but that would modify it, so just make the same line duplicitly
+                            // If those data really came from RDF
+                        } else {
+                            line[indexOfChangeColumn] = line[indexOfChangeColumn] + "," + triple.getObject().stringValue();
+                            tableSchema.getColumns().get(indexOfChangeColumn).setSeparator(",");
+                            isModified = true;
                         }
-                        isNeedForAddingDataVariations = true;
-                        indexOfDataVariationColumn = indexOfChangeColumn;
-                        System.out.println("2) " + line[indexOfChangeColumn] + " already there for triple " + triple.getSubject().stringValue() + ", " + triple.getPredicate().stringValue() + ", " + triple.getObject().stringValue());
-                        // Check whether the object is the same as the value that is already in the data - that would imply that
-                        // I am trying to optimize the data, but that would modify it, so just make the same line duplicitly
-                        // If those data really came from RDF
+
                     } else {
                         // Add new object at the end of the line
                         // TODO add the object at the end of EACH line with matching subject
@@ -481,13 +488,37 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         }
     }
 
-    private int getIndexOfCurrentPredicate(IRI predicate) {
+    private int getIndexOfCurrentPredicate(IRI predicate, Value object) {
+        System.out.println("predicate " + predicate + " object " + object.stringValue());
         for (int i = 0; i < tableSchema.getColumns().size(); i++) {
-            if (!tableSchema.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && tableSchema.getColumns().get(i).getPropertyUrl().equalsIgnoreCase(predicate.stringValue())) {
+            if (!tableSchema.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && isSameLanguagePredicate(tableSchema.getColumns().get(i).getPropertyUrl(), tableSchema.getColumns().get(i).getTitles(), predicate, object)) {
                 return i;
             }
         }
         return -1;
+    }
+
+    private boolean isSameLanguagePredicate(String predicateToCompare, String titlesToCompare, IRI predicate, Value object) {
+        if (predicateToCompare.equalsIgnoreCase(predicate.stringValue())) {
+            if (titlesToCompare.charAt(titlesToCompare.length() - 1) == ')' && object.isLiteral()) {
+                if (((Literal) object).getLanguage().isPresent()) {
+                    String languageTagToCompare = titlesToCompare.substring(titlesToCompare.length() - 3, titlesToCompare.length() - 1);
+                    String languageTag = ((Literal) object).getLanguage().get();
+                    System.out.println("languageTagToCompare = " + languageTagToCompare + " " + languageTag + "(languageTag)");
+                    return languageTagToCompare.equalsIgnoreCase(languageTag);
+                } else {
+                    return false;
+                }
+            } else if (!object.isLiteral() || (object.isLiteral() && !((Literal) object).getLanguage().isPresent())) {
+                return true;
+            } else {
+                System.out.println("predicateToCompare=" + predicateToCompare + " " + predicate.stringValue() + " predicate");
+                return false;
+            }
+        } else {
+            return false;
+        }
+
     }
 
     private boolean isThereTheSameSubject(IRI subject) {

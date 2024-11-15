@@ -23,7 +23,7 @@ public class ConfigurationManager {
     public static final String OUTPUT_FILE_PATH = "output.filePath";
     public static final String CONVERSION_METHOD = "conversion.method";
     public static final String METADATA_ROWNUMS = "metadata.rownums";
-    public static final String STREAMING = "input.streaming";
+    public static final String STREAMING_CONTINUOUS = "input.streaming";
     public static final String FIRST_NORMAL_FORM = "input.firstNormalForm";
     /**
      * Default name for metadata file in case the metadata does not adhere to csv equivalent file name
@@ -33,9 +33,11 @@ public class ConfigurationManager {
     public static final String DEFAULT_CONVERSION_METHOD = "basicQuery";
     public static final String DEFAULT_OUTPUT_ZIPFILE_NAME = "zippedCSVW.zip";
     private static final String DEFAULT_PARSING_METHOD = "rdf4j";
-    private static String CONFIG_FILE_NAME = "../app.config";
+    private static final String CONFIG_FILE_NAME = "../app.config";
+    private static String currentConfigFileName;
 
     public static String getCONFIG_FILE_NAME() {
+        currentConfigFileName = null;
         // Lazy initialization (modifies the variable only once)
         // Convert the relative path to a canonical path (removes ../ and resolves symlinks)
         String canonicalPath;
@@ -52,12 +54,13 @@ public class ConfigurationManager {
 
             canonicalPath = configFile.getCanonicalPath();
             String dirForCanonicalFile = canonicalPath.substring(0, canonicalPath.length() - configFile.getName().length());
-            /*
+
+            System.out.println("location = " + location);
             System.out.println("configFile = " + configFile);
             System.out.println("dirForCanonicalFile = " + dirForCanonicalFile);
             System.out.println("jarDirectory = " + jarDirectory);
 
-             */
+
             String insertAfter = dirForCanonicalFile + File.separator;
             int insertPosition = canonicalPath.indexOf(insertAfter) + insertAfter.length();
             String fileNameBeingRead = null;
@@ -77,7 +80,7 @@ public class ConfigurationManager {
                         + canonicalPath.substring(insertPosition);
             }
             //fileInDirectory = jarDirectory + File.separator + canonicalPath;
-            CONFIG_FILE_NAME = fileInDirectory;
+            currentConfigFileName = fileInDirectory;
 
 
         } catch (IOException e) {
@@ -86,13 +89,13 @@ public class ConfigurationManager {
             throw new RuntimeException(e);
         }
 
-        return CONFIG_FILE_NAME;
+        return currentConfigFileName;
     }
 
     public static void saveVariableToConfigFile(String variableName, String value) {
         //System.out.println("new String value with encoding for variable(" + variableName + "): " + value);
         Properties prop = new Properties();
-        try (FileInputStream fis = new FileInputStream(CONFIG_FILE_NAME)) {
+        try (FileInputStream fis = new FileInputStream(currentConfigFileName)) {
             prop.load(new InputStreamReader(fis, Charset.forName("UTF-8")));
         } catch (IOException ex) {
         }
@@ -100,7 +103,7 @@ public class ConfigurationManager {
         //System.out.println("Set configuration of " + variableName + " to: " + prop.getProperty(variableName));
 
         try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(
-                new FileOutputStream(CONFIG_FILE_NAME)))) {
+                new FileOutputStream(currentConfigFileName)))) {
             prop.store(pw, null);
         } catch (IOException e) {
             e.printStackTrace();
@@ -131,7 +134,7 @@ public class ConfigurationManager {
     public static String getVariableFromConfigFile(String variableName) {
         Properties prop = new Properties();
 
-        try (FileInputStream fis = new FileInputStream(CONFIG_FILE_NAME)) {
+        try (FileInputStream fis = new FileInputStream(currentConfigFileName)) {
             prop.load(new InputStreamReader(fis, Charset.forName("UTF-8")));
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -231,7 +234,7 @@ public class ConfigurationManager {
 
     private static void writeOptionsToConfigFile(String conversionMethod, String parsingMethod, String inputFile, boolean streaming, boolean firstNormalForm, String outputFilename) {
         System.out.println("conversion method=" + conversionMethod + " parsingMethod=" + parsingMethod + " inputFile=" + inputFile + " streaming=" + streaming);
-        File finalConfigFile = new File(CONFIG_FILE_NAME);
+        File finalConfigFile = new File(currentConfigFileName);
 
         Properties prop = new Properties();
 
@@ -265,7 +268,7 @@ public class ConfigurationManager {
         prop.setProperty(ConfigurationManager.READ_METHOD, parsingMethod);
         prop.setProperty(ConfigurationManager.METADATA_ROWNUMS, "false");
         prop.setProperty(ConfigurationManager.OUTPUT_FILE_PATH, "");
-        prop.setProperty(ConfigurationManager.STREAMING, String.valueOf(streaming));
+        prop.setProperty(ConfigurationManager.STREAMING_CONTINUOUS, String.valueOf(streaming));
         if (metadataFileName == null) {
             metadataFileName = DEFAULT_METADATA_FILENAME;
         }
@@ -273,8 +276,8 @@ public class ConfigurationManager {
 
         // Store options to config file
         try {
-            PrintWriter pw = new PrintWriter(CONFIG_FILE_NAME);
-            System.out.println("Written to configFile " + CONFIG_FILE_NAME);
+            PrintWriter pw = new PrintWriter(currentConfigFileName);
+            System.out.println("Written to configFile " + currentConfigFileName);
             prop.store(pw, null);
         } catch (IOException e) {
             e.printStackTrace();
