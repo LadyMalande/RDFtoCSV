@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.support;
 
 import com.miklosova.rdftocsvw.metadata_creator.Triple;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
@@ -26,11 +27,13 @@ public class StreamingSupport {
         while (matcher.find()) {
             if (i == 1) {
                 subject = iri(matcher.group(1)); // Prints the content between < and >
-                //System.out.println("subject " + subject);
+                System.out.println("subject " + subject);
             } else if (i == 2) {
                 predicate = iri(matcher.group(1));
+                System.out.println("predicate " + predicate);
             } else if (i == 3) {
                 object = iri(matcher.group(1));
+                System.out.println("object " + object);
             }
             i++;
         }
@@ -46,21 +49,29 @@ public class StreamingSupport {
     private static Value createLiteralHere(String line) {
         ValueFactory factory = SimpleValueFactory.getInstance();
         // Regex to match the string between the last '>' and the final '.'
-        Pattern pattern = Pattern.compile(">\\s*(.+?)\\s*\\.");
+        //Pattern pattern = Pattern.compile(">\\s*(.+?)\\s*\\.");
+        Pattern pattern = Pattern.compile(">([^>]*?)\\.[^.]*$");
         Matcher matcher = pattern.matcher(line);
         Literal value = null;
+        System.out.println("line " + line);
         int i = 1;
         while (matcher.find()) {
-            if (i == 2) {
+            if (i == 1) {
                 String literalWithDatatype = matcher.group(1).trim();
-                value = parseLiteral(literalWithDatatype, factory);
+
+                System.out.println("literalWithDatatype " + StringEscapeUtils.unescapeJava(literalWithDatatype));
+
+                value = parseLiteral(StringEscapeUtils.unescapeJava(literalWithDatatype), factory);
                 //System.out.println("Parsed Literal with Datatype: " + value.getLabel() + " " + value.getLanguage() + value.getDatatype());
             }
             i++;
         }
+        /*
         if (i < 3) {
             throw new IllegalArgumentException("The n triples file is malformed.");
         }
+
+         */
 
 
         return value;

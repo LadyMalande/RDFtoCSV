@@ -31,6 +31,7 @@ public class ConfigurationManager {
      */
     public static final String DEFAULT_METADATA_FILENAME = "csv-metadata.json";
     public static final String DEFAULT_CONVERSION_METHOD = "basicQuery";
+    public static final String MULTIPLE_TABLES_CONVERSION_METHOD = "splitQuery";
     public static final String DEFAULT_OUTPUT_ZIPFILE_NAME = "zippedCSVW.zip";
     private static final String DEFAULT_PARSING_METHOD = "rdf4j";
     private static final String CONFIG_FILE_NAME = "../app.config";
@@ -198,7 +199,7 @@ public class ConfigurationManager {
         CommandLineParser parser = new DefaultParser();
         try {
             CommandLine cmd = parser.parse(options, args);
-            String multipleTables = cmd.getOptionValue("tables");
+            boolean multipleTables = cmd.hasOption("multipleTables");
             String parsingMethod = cmd.getOptionValue("parsing");
             boolean help = cmd.hasOption("help");
             String inputFile = cmd.getOptionValue("file");
@@ -232,7 +233,8 @@ public class ConfigurationManager {
         formatter.printHelp("Command line syntax:", options);
     }
 
-    private static void writeOptionsToConfigFile(String conversionMethod, String parsingMethod, String inputFile, boolean streaming, boolean firstNormalForm, String outputFilename) {
+    private static void writeOptionsToConfigFile(boolean multipleTables, String parsingMethod, String inputFile, boolean streaming, boolean firstNormalForm, String outputFilename) {
+        String conversionMethod = "";
         System.out.println("conversion method=" + conversionMethod + " parsingMethod=" + parsingMethod + " inputFile=" + inputFile + " streaming=" + streaming);
         File finalConfigFile = new File(currentConfigFileName);
 
@@ -255,7 +257,12 @@ public class ConfigurationManager {
             baseFileName = outputFilename;
         }
 
-        conversionMethod = (conversionMethod == null) ? DEFAULT_CONVERSION_METHOD : conversionMethod;
+        conversionMethod = (!multipleTables) ? DEFAULT_CONVERSION_METHOD : MULTIPLE_TABLES_CONVERSION_METHOD;
+        conversionMethod = switch (parsingMethod) {
+            case "bigFileStreaming" -> "bigFileStreaming";
+            case "streaming" -> "streaming";
+            default -> conversionMethod;
+        };
         prop.setProperty(ConfigurationManager.OUTPUT_FILENAME, baseFileName);
         prop.setProperty(ConfigurationManager.FIRST_NORMAL_FORM, String.valueOf(firstNormalForm));
         prop.setProperty(ConfigurationManager.CONVERSION_METHOD, conversionMethod);
@@ -287,7 +294,7 @@ public class ConfigurationManager {
 
     private static Options addArgsOptions() {
         Options options = new Options();
-        options.addOption("t", "tables", true, "Enable creation of multiple tables during conversion");
+        options.addOption("t", "multipleTables", false, "Enable creation of multiple tables during conversion");
         options.addOption("p", "parsing", true, "Specify the parsing method");
         options.addOption("h", "help", false, "Show the command line options");
         options.addOption("f", "file", true, "File for conversion");

@@ -12,9 +12,8 @@ public class MetadataService {
 
         metadataGateway = new MetadataGateway();
         processMetadataCreation(po);
-        Metadata metadata = metadataGateway.processInput(po);
         //System.out.println("Processed metadata: \n" + metadata);
-        return metadata;
+        return metadataGateway.processInput(po);
     }
 
     private void processMetadataCreation(PrefinishedOutput<RowsAndKeys> data) {

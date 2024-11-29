@@ -68,7 +68,7 @@ public class TestSupport {
     }
 
     public static boolean isRDFSubsetOfTerms(String filePathForTest, String filePathForOriginal) throws IOException {
-        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{filePathForTest});
+        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{"-f",filePathForTest, "-p", "rdf4j"});
         Repository db = new SailRepository(new MemoryStore());
         System.out.println(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD));
         System.out.println(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD));

@@ -106,8 +106,11 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         Column newColumn = new Column();
         newColumn.createLangFromLiteral(triple.object);
         newColumn.createNameFromIRI(triple.predicate);
+        System.out.println("NameFromIRI " + newColumn.getName());
+        System.out.println("triple.predicate.stringValue() " + triple.predicate.stringValue());
         newColumn.setPropertyUrl(triple.predicate.stringValue());
-
+        System.out.println("newColumn.setPropertyUrl(triple.predicate.stringValue()) : " + triple.predicate.stringValue());
+        System.out.println();
         newColumn.setValueUrl("{+" + newColumn.getName() + "}");
         newColumn.createDatatypeFromValue(triple.object);
         newColumn.setAboutUrl("{+Subject}");
@@ -115,7 +118,8 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         currentCSVName = getCSVNameIfSubjectOrPredicateKnown(triple.getSubject(), triple.getPredicate());
         // Find the tableSchema that describes either Subject or Predicate in the triple
         tableSchema = getTableSchemaOfMatchingMetadata(triple);
-
+        System.out.println("currentCSVName " + currentCSVName);
+        System.out.println("tableSchema.getColumns().get(0) " + tableSchema.getColumns().get(0).getName() + " proper " + tableSchema.getColumns().get(0).getPropertyUrl());
         // There is no matching column found in any existing metadata -> Add the column
         if (!thereIsMatchingColumnAlready(newColumn, triple, tableSchema)) {
 
@@ -132,7 +136,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     private void rewriteTheHeadersInCSV(String filePath, String titles) throws FileNotFoundException {
         File file = new File(filePath);
         List<String[]> lines = new ArrayList<>();
-
+        System.out.println("Changing headers filePath " + filePath);
         // Read the file and process it line by line
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
             String[] line;
@@ -162,11 +166,14 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
         // Write the updated content back to the file
 
-        try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(file), ',',
+                CSVWriter.DEFAULT_QUOTE_CHARACTER,
+                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                CSVWriter.DEFAULT_LINE_END)) {
             // Write array data as a single line
             for (String[] updatedLine : lines) {
                 System.out.println("new headers updated line: " + updatedLine);
-                writer.writeNext(updatedLine);
+                writer.writeNext(updatedLine, false);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -178,7 +185,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     private String getCSVNameIfSubjectOrPredicateKnown(IRI subject, IRI predicate) {
 
         for (Map.Entry<String, List<IRI>> entry : mapOfKnownSubjects.entrySet()) {
-            System.out.println("Is the subject there? AlreadyThere = " + entry.getValue().get(0) + " | subject = " + subject.stringValue());
+            //System.out.println("Is the subject there? AlreadyThere = " + entry.getValue().get(0) + " | subject = " + subject.stringValue());
             if (entry.getValue().contains(subject)) {
 
                 List<IRI> knownPredicates = mapOfKnownPredicates.get(entry.getKey());
@@ -188,7 +195,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         }
 
         for (Map.Entry<String, List<IRI>> entry : mapOfKnownPredicates.entrySet()) {
-            System.out.println("Is the predicate there? AlreadyThere = " + entry.getValue().get(0) + " | predicate = " + predicate.stringValue());
+            //System.out.println("Is the predicate there? AlreadyThere = " + entry.getValue().get(0) + " | predicate = " + predicate.stringValue());
             if (entry.getValue().contains(predicate)) {
                 List<IRI> knownSubjects = mapOfKnownSubjects.get(entry.getKey());
                 knownSubjects.add(subject);
@@ -233,7 +240,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         //File f = new File(fileNameToRead);
         //String newCSVname = f.getName() + fileNumber + ".csv";
         //fileNumber++;
-
+        System.out.println("createNewTableSchema " + triple.getSubject() + " " + triple.getPredicate() + " " + triple.getObject());
         ArrayList<IRI> knownPredicates = new ArrayList<>();
         knownPredicates.add(triple.getPredicate());
         ArrayList<IRI> knownSubjects = new ArrayList<>();
@@ -258,42 +265,46 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             return false;
         }
         for (Column col : tableSchema.getColumns()) {
-            //System.out.println("numberOfNotMatching in the loop = " + numberOfNotMatching);
-            if (!col.getName().equalsIgnoreCase(newColumn.getName())) {
-                //System.out.println("Name does not equal: " + col.getName() + " x " + newColumn.getName());
-                continue;
-            }
-            if (!col.getTitles().equalsIgnoreCase(newColumn.getTitles())) {
-                //System.out.println("Titles does not equal: " + col.getTitles() + " x " + newColumn.getTitles());
-                continue;
-            }
-            if (!col.getPropertyUrl().equalsIgnoreCase(newColumn.getPropertyUrl())) {
-                //System.out.println("PropertyUrl does not equal: " + col.getPropertyUrl() + " x " + newColumn.getPropertyUrl());
-                continue;
-            }
-            if (col.getLang() != null && newColumn.getLang() != null && !col.getLang().equalsIgnoreCase(newColumn.getLang())) {
-                //System.out.println("Lang does not equal: " + col.getLang() + " x " + newColumn.getLang());
-                continue;
-            }
-            if (col.getDatatype() != null && newColumn.getDatatype() != null && !col.getDatatype().equalsIgnoreCase(newColumn.getDatatype())) {
-                //System.out.println("Datatype does not equal: " + col.getDatatype() + " x " + newColumn.getDatatype());
-                continue;
-            }
-            if (!col.getAboutUrl().equalsIgnoreCase(newColumn.getAboutUrl())
-                    && (col.getAboutUrl().indexOf(triple.getSubject().getNamespace()) != 0 || col.getAboutUrl().length() != newColumn.getAboutUrl().length())) {
-                // Adjust the metadata so that they are general as the namespaces are not matching
+            if(!col.getName().equalsIgnoreCase("subject")) {
+                //System.out.println("numberOfNotMatching in the loop = " + numberOfNotMatching);
+                if (!col.getName().equalsIgnoreCase(newColumn.getName())) {
+                    //System.out.println("Name does not equal: " + col.getName() + " x " + newColumn.getName());
+                    continue;
+                }
+                System.out.println("Titles does not equal: " + col.getTitles() + " x " + newColumn.getTitles());
+                System.out.println("col.getName(): " + col.getName() + " x " + newColumn.getTitles());
+                if (!col.getTitles().equalsIgnoreCase(newColumn.getTitles())) {
 
-                //System.out.println("AboutUrl does not equal: " + col.getAboutUrl() + " x " + newColumn.getAboutUrl());
-                col.setAboutUrl("{+Subject}");
+                    continue;
+                }
+                if (!col.getPropertyUrl().equalsIgnoreCase(newColumn.getPropertyUrl())) {
+                    //System.out.println("PropertyUrl does not equal: " + col.getPropertyUrl() + " x " + newColumn.getPropertyUrl());
+                    continue;
+                }
+                if (col.getLang() != null && newColumn.getLang() != null && !col.getLang().equalsIgnoreCase(newColumn.getLang())) {
+                    //System.out.println("Lang does not equal: " + col.getLang() + " x " + newColumn.getLang());
+                    continue;
+                }
+                if (col.getDatatype() != null && newColumn.getDatatype() != null && !col.getDatatype().equalsIgnoreCase(newColumn.getDatatype())) {
+                    //System.out.println("Datatype does not equal: " + col.getDatatype() + " x " + newColumn.getDatatype());
+                    continue;
+                }
+                if (!col.getAboutUrl().equalsIgnoreCase(newColumn.getAboutUrl())
+                        && (col.getAboutUrl().indexOf(triple.getSubject().getNamespace()) != 0 || col.getAboutUrl().length() != newColumn.getAboutUrl().length())) {
+                    // Adjust the metadata so that they are general as the namespaces are not matching
 
-            }
-            if (col.getValueUrl() != null && newColumn.getValueUrl() != null && !col.getValueUrl().equalsIgnoreCase(newColumn.getValueUrl()) && (col.getValueUrl().indexOf(triple.getSubject().getNamespace()) != 0 || col.getValueUrl().length() != newColumn.getValueUrl().length())) {
-                // Adjust the metadata so that they are general as the namespaces are not matching
+                    //System.out.println("AboutUrl does not equal: " + col.getAboutUrl() + " x " + newColumn.getAboutUrl());
+                    col.setAboutUrl("{+Subject}");
 
-                //System.out.println("ValueUrl does not equal: " + col.getValueUrl() + " x " + newColumn.getValueUrl());
-                col.setValueUrl("{+" + col.getName() + "}");
+                }
+                if (col.getValueUrl() != null && newColumn.getValueUrl() != null && !col.getValueUrl().equalsIgnoreCase(newColumn.getValueUrl()) && (col.getValueUrl().indexOf(triple.getSubject().getNamespace()) != 0 || col.getValueUrl().length() != newColumn.getValueUrl().length())) {
+                    // Adjust the metadata so that they are general as the namespaces are not matching
+
+                    //System.out.println("ValueUrl does not equal: " + col.getValueUrl() + " x " + newColumn.getValueUrl());
+                    col.setValueUrl("{+" + col.getName() + "}");
+                }
+                return true;
             }
-            return true;
         }
         //System.out.println("numberOfNotMatching != tableSchema.getColumns().size() " + numberOfNotMatching + " != " + tableSchema.getColumns().size() + "\n");
         return false;
@@ -309,6 +320,8 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         boolean isModified = false;
 
         unifiedBySubject = isThereTheSameSubject(triple.getSubject());
+        System.out.println("writing to = " + currentCSVName);
+        System.out.println("Want to write this triple: " + triple.getSubject().stringValue() + " " + triple.getPredicate().stringValue() + " " + triple.getObject().stringValue());
         System.out.println("writeTripleToCSV.unifiedBySubject = " + unifiedBySubject);
 
         // Read the file and process it line by line
@@ -316,6 +329,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             String[] line;
             boolean isFirstLine = true;
             while ((line = reader.readNext()) != null) {
+                System.out.println("reading line to write to CSV = " + Arrays.toString(line));
                 if (isFirstLine) {
                     isFirstLine = false;
                     numberOfColumns = line.length;

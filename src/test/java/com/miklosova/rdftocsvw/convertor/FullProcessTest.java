@@ -37,14 +37,14 @@ public class FullProcessTest {
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> configs() {
         return Arrays.asList(new Object[][]{
-                {"SplitQuerySmallDataset", "./src/test/resources/testingInput.ttl", "./src/test/resources/csv-metadata.json", "./src/test/resources/splitQueryTest", "./src/test/resources/testingInput.ttl", "./src/test/resources/splitQueryTestRDFOutput.ttl", "rdf4j"},
+                {"SplitQuerySmallDataset", "RDFtoCSV/src/test/resources/StreamingNTriples/streamingSample02.nt", "./src/test/resources/csv-metadata.json", "./src/test/resources/splitQueryTest", "./src/test/resources/StreamingNTriples/streamingSample02.nt", "./src/test/resources/splitQueryTestRDFOutput.ttl", "rdf4j"},
                 //{ "", "", "", "", "", ""},
         });
     }
 
     @Test
     public void originalIsSubsetOfResult() {
-        String[] args = new String[]{"-f", "streamingSample08c.nt", "-t", "streaming", "-p", "streaming"};
+        String[] args = new String[]{"-f", filePath,"-p", "streaming"};
         Main.main(args);
         /*
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
