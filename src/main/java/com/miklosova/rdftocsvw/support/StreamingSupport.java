@@ -2,12 +2,20 @@ package com.miklosova.rdftocsvw.support;
 
 import com.miklosova.rdftocsvw.metadata_creator.Triple;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Literal;
-import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.Rio;
+import org.eclipse.rdf4j.rio.helpers.StatementCollector;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,10 +35,10 @@ public class StreamingSupport {
         while (matcher.find()) {
             if (i == 1) {
                 subject = iri(matcher.group(1)); // Prints the content between < and >
-                System.out.println("subject " + subject);
+                //System.out.println("subject " + subject);
             } else if (i == 2) {
                 predicate = iri(matcher.group(1));
-                System.out.println("predicate " + predicate);
+                //System.out.println("predicate " + predicate);
             } else if (i == 3) {
                 object = iri(matcher.group(1));
                 System.out.println("object " + object);
@@ -46,11 +54,49 @@ public class StreamingSupport {
     }
 
 
+    public void readNTriples(){
+        try (Reader reader = new FileReader("example.nt")) {
+            // Create an N-Triples parser
+            Rio.createParser(RDFFormat.NTRIPLES).setRDFHandler(new RDFHandler() {
+                @Override
+                public void startRDF() throws RDFHandlerException {
+                    System.out.println("Start parsing N-Triples.");
+                }
+
+                @Override
+                public void endRDF() throws RDFHandlerException {
+                    System.out.println("Finished parsing N-Triples.");
+                }
+
+                @Override
+                public void handleNamespace(String prefix, String uri) throws RDFHandlerException {
+                    // No namespace handling in N-Triples
+                }
+
+                @Override
+                public void handleStatement(Statement st) throws RDFHandlerException {
+                    // Process each triple (subject, predicate, object)
+                    System.out.println("Triple: " + st);
+                }
+
+                @Override
+                public void handleComment(String comment) throws RDFHandlerException {
+                    // Handle comments if any
+                    System.out.println("Comment: " + comment);
+                }
+            }).parse(reader);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     private static Value createLiteralHere(String line) {
         ValueFactory factory = SimpleValueFactory.getInstance();
         // Regex to match the string between the last '>' and the final '.'
         //Pattern pattern = Pattern.compile(">\\s*(.+?)\\s*\\.");
-        Pattern pattern = Pattern.compile(">([^>]*?)\\.[^.]*$");
+        //Pattern pattern = Pattern.compile(">([^>]*?)\\.[^.]*$");
+        Pattern pattern = Pattern.compile("^(?:[^\\s\\t]+[ \\t]+){2}\"((?:[^\"\\\\]|\\\\[\"\\\\bnrt])*?)(?:\"(?:\\^\\^<[^>]+>|@[a-zA-Z\\-]+)?)\"[ \\t]*\\.$");
         Matcher matcher = pattern.matcher(line);
         Literal value = null;
         System.out.println("line " + line);
@@ -62,7 +108,7 @@ public class StreamingSupport {
                 System.out.println("literalWithDatatype " + StringEscapeUtils.unescapeJava(literalWithDatatype));
 
                 value = parseLiteral(StringEscapeUtils.unescapeJava(literalWithDatatype), factory);
-                //System.out.println("Parsed Literal with Datatype: " + value.getLabel() + " " + value.getLanguage() + value.getDatatype());
+                ////System.out.println("Parsed Literal with Datatype: " + value.getLabel() + " " + value.getLanguage() + value.getDatatype());
             }
             i++;
         }

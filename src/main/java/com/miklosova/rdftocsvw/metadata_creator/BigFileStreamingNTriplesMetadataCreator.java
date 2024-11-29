@@ -2,6 +2,7 @@ package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
+import com.miklosova.rdftocsvw.support.ConfigurationManager;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,7 +33,10 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
         newTable.setTableSchema(tableSchema);
 
         readFileWithStreaming();
+        if(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES).equalsIgnoreCase(ConfigurationManager.ONE_TABLE)){
 
+            metadata = consolidateMetadataAndCSVs(metadata);
+        }
         metadata.jsonldMetadata();
         return metadata;
     }

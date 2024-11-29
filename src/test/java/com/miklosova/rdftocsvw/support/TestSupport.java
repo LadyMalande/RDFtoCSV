@@ -38,7 +38,7 @@ public class TestSupport {
         try {
             // -m minimal is for less verbose translation - to translate only what is given in the metadata, no extra triples like row numbers unless specifically mentioned in metadata
 
-            File pathToExecutable = new File("src/test/resources/csv2rdf-0.4.7-standalone.jar");
+            File pathToExecutable = new File("src/test/resources/OriginalIsSubsetOfCSV/csv2rdf-0.4.7-standalone.jar");
             //pathToExecutable.getAbsolutePath()
             System.out.println("command line error " + " -t " + pathToTable + "-u " + pathToMetadata + "-o " + outputPath);
             File pathToTableFile = new File(pathToTable);

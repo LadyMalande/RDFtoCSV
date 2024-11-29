@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.miklosova.rdftocsvw.convertor.Row;
 import com.miklosova.rdftocsvw.convertor.TypeIdAndValues;
 import com.miklosova.rdftocsvw.convertor.TypeOfValue;
+import com.miklosova.rdftocsvw.support.BuiltInDatatypes;
 import com.miklosova.rdftocsvw.support.ConnectionChecker;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
@@ -261,7 +262,7 @@ public class Column {
             IRI datatype = literal.getDatatype();
             String localname = datatype.getLocalName();
             localname = (localname.equalsIgnoreCase("langString")) ? "string" : localname;
-            this.datatype = (localname.equalsIgnoreCase("string")) ? null : localname;
+            this.datatype = (localname.equalsIgnoreCase("string")) ? null : (BuiltInDatatypes.isBuiltInDatatype(datatype)) ? localname : datatype.stringValue();
         }
     }
 

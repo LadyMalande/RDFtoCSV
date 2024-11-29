@@ -33,6 +33,8 @@ public class ConfigurationManager {
     public static final String DEFAULT_CONVERSION_METHOD = "basicQuery";
     public static final String MULTIPLE_TABLES_CONVERSION_METHOD = "splitQuery";
     public static final String DEFAULT_OUTPUT_ZIPFILE_NAME = "zippedCSVW.zip";
+    public static final String TABLES = "conversion.tables";
+    public static final String ONE_TABLE = "one";
     private static final String DEFAULT_PARSING_METHOD = "rdf4j";
     private static final String CONFIG_FILE_NAME = "../app.config";
     private static String currentConfigFileName;
@@ -258,6 +260,7 @@ public class ConfigurationManager {
         }
 
         conversionMethod = (!multipleTables) ? DEFAULT_CONVERSION_METHOD : MULTIPLE_TABLES_CONVERSION_METHOD;
+        prop.setProperty(ConfigurationManager.TABLES, (!multipleTables) ? "one" : "more");
         conversionMethod = switch (parsingMethod) {
             case "bigFileStreaming" -> "bigFileStreaming";
             case "streaming" -> "streaming";
