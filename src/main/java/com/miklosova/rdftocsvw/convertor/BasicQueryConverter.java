@@ -143,11 +143,6 @@ public class BasicQueryConverter implements IQueryParser {
         Update deleteQuery = rc.prepareUpdate(del);
         deleteQuery.execute();
         TupleQuery query = rc.prepareTupleQuery("SELECT ?s ?p ?o WHERE { ?s ?p ?o .}");
-        try (TupleQueryResult result = query.evaluate()) {
-            for (BindingSet sol : result) {
-                //System.out.println("s: " + sol.getBinding("s") +" p: " + sol.getBinding("p")+" o: " + sol.getBinding("o") + " count: ");
-            }
-        }
     }
 
     private void loadConfiguration() {
@@ -219,11 +214,9 @@ public class BasicQueryConverter implements IQueryParser {
         Prefix skos = SparqlBuilder.prefix(SKOS.NS);
         SelectQuery selectQuery = Queries.SELECT();
 
-        SimpleValueFactory rdf = SimpleValueFactory.getInstance();
         Variable o = SparqlBuilder.var("o"), p = SparqlBuilder.var("p");
         Iri subjectIRI = iri(root);
         selectQuery.prefix(skos).select(p, o).where(subjectIRI.has(p, o));
-        //System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
@@ -257,13 +250,9 @@ public class BasicQueryConverter implements IQueryParser {
             while (!conn.isEmpty()) {
 
                 TupleQuery query = conn.prepareTupleQuery(queryString);
-                //System.out.println("query.getDataset()" + query.getDataset());
                 // A QueryResult is also an AutoCloseable resource, so make sure it gets closed when done.
                 try (TupleQueryResult result = query.evaluate()) {
                     // we just iterate over all solutions in the result...
-                    //System.out.println();
-                    //System.out.println(result == null);
-                    //System.out.println("Binding names: " + result.getBindingNames());
                     if (result == null) {
                         return null;
                     }
@@ -271,8 +260,6 @@ public class BasicQueryConverter implements IQueryParser {
                     //System.out.println(result.stream().count());
                     for (BindingSet solution : result) {
                         // ... and print out the value of the variable binding for ?s and ?n
-                        //System.out.println("?subject = " + solution.getValue("s") + " ?predicate = " + solution.getValue("p") + " is a o=" + solution.getValue("o"));
-                        //System.out.println("?subject = " + solution.getValue("s") + " added to roots");
                         System.out.println("?subject = " + solution.getValue("s") + " is a o=" + solution.getValue("o") + " added to roots");
                         System.out.println("Table Group=" + CSVW_TableGroup);
                         if (solution.getValue("o").stringValue().equalsIgnoreCase(CSVW_TableGroup)) {
@@ -322,69 +309,18 @@ public class BasicQueryConverter implements IQueryParser {
 
                         }
                     }
-                    //countDominantTypes(conn, roots, askForTypes);
-                    //Value dominantType = getDominantType();
-                    //String dominantPredicate = getDominantPredicate();
-                    //System.out.println("Here begins creating of of file");
-                    //System.out.println("Before recursiveQueryForFiles(conn, dominantType, askForTypes)");
-
-                    //System.out.println("After recursiveQueryForFiles(conn, dominantType, askForTypes)");
-
-/*
-                    // For all the found roots, make rows. Roots must have the same rdf:type
-                    for (Value root : roots) {
-                        // new Row with the found subject as its id
-                        Row newRow = new Row(root,solution.getValue("o"),askForTypes);
-                        queryForSubjects(conn, newRow, root, root, dominantType, askForTypes);
-                        rows.add(newRow);
-
-                    }
-
- */
-
-
-                    //resultCSV = result.toString();
-                    result.close();
                 }
                 queryString = getCSVTableQueryForModel(true);
             }
-            //System.out.println("allRows size #: " + allRows.size());
-            //allKeys.forEach(k -> System.out.print("key: " + k + " "));
-            //System.out.println();
             rows.forEach(k -> System.out.println("Row: " + k.id.stringValue() + " " + k.columns.entrySet()));
-            //System.out.println();
-
-            //System.out.println("Adding rowAndKey #: " + i);
 
             ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
-
-
-            //System.out.print(gen.get());
-
-
         }
 
         // Verify the output in console
-
-        //System.out.println(resultString);
         gen.prefinishedOutput.rows.addAll(rows);
         gen.prefinishedOutput.keys.addAll(keys);
 
-      /*
-        int i = 0;
-        for( RowAndKey rowsAndKey : gen.prefinishedOutput.rowsAndKeys) {
-            //System.out.println("KEYS[" + i + "]:");
-            //rowsAndKey.getKeys().forEach(k -> System.out.print(k + ", "));
-            //System.out.println("ROWS[" + i + "]:");
-            //rowsAndKey.getRows().forEach(r -> System.out.println("id=" + r.id + " type=" + r.type + " columns=" + r.columns));
-            //System.out.println();
-            i++;
-        }
-*/
-
-
-        //saveCSVasFile("resultCSVPrimer");
-        //return resultCSV;
         return gen;
     }
 
