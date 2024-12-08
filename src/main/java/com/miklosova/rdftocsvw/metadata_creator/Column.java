@@ -58,7 +58,7 @@ public class Column {
     private String lang;
     /**
      * Record for column that is not displayed in the .csv but has significance for the meaning of data.
-     * Namely useful for denoting the rdf:type of all the rows in one file.
+     * Namely, useful for denoting the rdf:type of all the rows in one file.
      * {
      * "virtual": true,
      * "propertyUrl": "rdf:type",
@@ -78,9 +78,11 @@ public class Column {
     private String separator;
     private Map.Entry<Value, TypeIdAndValues> column;
     private Value originalColumnKey;
+
     public Column() {
 
     }
+
     public Column(Map.Entry<Value, TypeIdAndValues> column, boolean namespaceIsTheSame) {
         //assert column != null;
         this.column = column;
@@ -215,19 +217,19 @@ public class Column {
             } else {
                 if (isSubjectTheSame) {
                     if (isRdfType && isTypetheSame) {
-                        // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
+                        // We don't know how aboutUrl is supposed to look like because we don't know semantic ties to the iris
                         //this.aboutUrl = idIRI.getNamespace() + "{+" + createSafeName(((IRI) valueForAboutUrlPattern).getLocalName()) + "}";
                         this.aboutUrl = idIRI.getNamespace() + "{+" + typeIri.getLocalName() + "}";
                     } else {
-                        // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
+                        // We don't know how aboutUrl is supposed to look like because we don't know semantic ties to the iris
                         this.aboutUrl = idIRI.getNamespace() + "{+" + "Subject" + "}";
                     }
                 } else {
                     if (isRdfType && isTypetheSame) {
-                        // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
+                        // We don't know how aboutUrl is supposed to look like because we don't know semantic ties to the iris
                         this.aboutUrl = "{+" + typeIri.getLocalName() + "}";
                     } else {
-                        // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
+                        // We don't know how aboutUrl is supposed to look like because we don't know semantic ties to the iris
                         this.aboutUrl = "{+" + "Subject" + "}";
                     }
                 }

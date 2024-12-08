@@ -2,11 +2,7 @@ package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
-import com.miklosova.rdftocsvw.output_processor.CSVConsolidator;
-import com.miklosova.rdftocsvw.output_processor.CustomCSVWriter;
-import com.miklosova.rdftocsvw.output_processor.MetadataConsolidator;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.miklosova.rdftocsvw.support.StreamingSupport;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
@@ -14,9 +10,6 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.Rio;
-import org.eclipse.rdf4j.rio.helpers.StatementCollector;
 
 import java.io.*;
 import java.util.*;
@@ -57,7 +50,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         }
 
         metadata.jsonldMetadata();
-        if(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES).equalsIgnoreCase(ConfigurationManager.ONE_TABLE)){
+        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES).equalsIgnoreCase(ConfigurationManager.ONE_TABLE)) {
 
             metadata = consolidateMetadataAndCSVs(metadata);
         }
@@ -283,7 +276,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             return false;
         }
         for (Column col : tableSchema.getColumns()) {
-            if(!col.getName().equalsIgnoreCase("subject")) {
+            if (!col.getName().equalsIgnoreCase("subject")) {
                 ////System.out.println("numberOfNotMatching in the loop = " + numberOfNotMatching);
                 if (!col.getName().equalsIgnoreCase(newColumn.getName())) {
                     ////System.out.println("Name does not equal: " + col.getName() + " x " + newColumn.getName());

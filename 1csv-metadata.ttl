@@ -1,47 +1,47 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
- [
-    <file:splitQuerynewCSVOutput0.csv#Concept> "dpč";
-    <file:splitQuerynewCSVOutput0.csv#inScheme> "typy-pracovních-vztahů";
-    <file:splitQuerynewCSVOutput0.csv#notation> "dpč";
-    <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28cs%29> "Dohoda o pracovní činnosti";
-    <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28en%29> "Agreement to Perform Work"
-  ] .
+[
+   <file:splitQuerynewCSVOutput0.csv#Concept> "dpč";
+   <file:splitQuerynewCSVOutput0.csv#inScheme> "typy-pracovních-vztahů";
+   <file:splitQuerynewCSVOutput0.csv#notation> "dpč";
+   <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28cs%29> "Dohoda o pracovní činnosti";
+   <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28en%29> "Agreement to Perform Work"
+ ] .
 
- [
-    <file:splitQuerynewCSVOutput0.csv#Concept> "dpp";
-    <file:splitQuerynewCSVOutput0.csv#inScheme> "typy-pracovních-vztahů";
-    <file:splitQuerynewCSVOutput0.csv#notation> "dpp";
-    <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28cs%29> "Dohoda o provedení práce";
-    <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28en%29> "Agreement to Complete a Job"
-  ] .
+[
+   <file:splitQuerynewCSVOutput0.csv#Concept> "dpp";
+   <file:splitQuerynewCSVOutput0.csv#inScheme> "typy-pracovních-vztahů";
+   <file:splitQuerynewCSVOutput0.csv#notation> "dpp";
+   <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28cs%29> "Dohoda o provedení práce";
+   <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28en%29> "Agreement to Complete a Job"
+ ] .
 
- [
-    <file:splitQuerynewCSVOutput0.csv#Concept> "plný-úvazek";
-    <file:splitQuerynewCSVOutput0.csv#inScheme> "typy-pracovních-vztahů";
-    <file:splitQuerynewCSVOutput0.csv#notation> "plný-úvazek";
-    <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28cs%29> "Pracovní poměr - plný úvazek";
-    <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28en%29> "Full time employment"
-  ] .
+[
+   <file:splitQuerynewCSVOutput0.csv#Concept> "plný-úvazek";
+   <file:splitQuerynewCSVOutput0.csv#inScheme> "typy-pracovních-vztahů";
+   <file:splitQuerynewCSVOutput0.csv#notation> "plný-úvazek";
+   <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28cs%29> "Pracovní poměr - plný úvazek";
+   <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28en%29> "Full time employment"
+ ] .
 
- [
-    <file:splitQuerynewCSVOutput0.csv#Concept> "zkrácený-úvazek";
-    <file:splitQuerynewCSVOutput0.csv#inScheme> "typy-pracovních-vztahů";
-    <file:splitQuerynewCSVOutput0.csv#notation> "zkrácený-úvazek";
-    <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28cs%29> "Pracovní poměr - zkrácený úvazek";
-    <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28en%29> "Part time employment"
-  ] .
+[
+   <file:splitQuerynewCSVOutput0.csv#Concept> "zkrácený-úvazek";
+   <file:splitQuerynewCSVOutput0.csv#inScheme> "typy-pracovních-vztahů";
+   <file:splitQuerynewCSVOutput0.csv#notation> "zkrácený-úvazek";
+   <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28cs%29> "Pracovní poměr - zkrácený úvazek";
+   <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28en%29> "Part time employment"
+ ] .
 
- [
-    <file:splitQuerynewCSVOutput0.csv#Concept> "služební-poměr";
-    <file:splitQuerynewCSVOutput0.csv#inScheme> "typy-pracovních-vztahů";
-    <file:splitQuerynewCSVOutput0.csv#notation> "služební-poměr";
-    <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28cs%29> "Služební poměr";
-    <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28en%29> "Civil service employment"
-  ] .
+[
+   <file:splitQuerynewCSVOutput0.csv#Concept> "služební-poměr";
+   <file:splitQuerynewCSVOutput0.csv#inScheme> "typy-pracovních-vztahů";
+   <file:splitQuerynewCSVOutput0.csv#notation> "služební-poměr";
+   <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28cs%29> "Služební poměr";
+   <file:splitQuerynewCSVOutput0.csv#prefLabel%20%28en%29> "Civil service employment"
+ ] .
 
- [
-    <file:splitQuerynewCSVOutput1.csv#ConceptScheme> "typy-pracovních-vztahů";
-    <file:splitQuerynewCSVOutput1.csv#prefLabel%20%28cs%29> "Typy pracovních vztahů";
-    <file:splitQuerynewCSVOutput1.csv#prefLabel%20%28en%29> "Employment relation types"
-  ] .
+[
+   <file:splitQuerynewCSVOutput1.csv#ConceptScheme> "typy-pracovních-vztahů";
+   <file:splitQuerynewCSVOutput1.csv#prefLabel%20%28cs%29> "Typy pracovních vztahů";
+   <file:splitQuerynewCSVOutput1.csv#prefLabel%20%28en%29> "Employment relation types"
+ ] .

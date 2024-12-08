@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class BasicQueryMetadataCreator extends MetadataCreator implements IMetadataCreator {
     Metadata metadata;
-    PrefinishedOutput data;
+    PrefinishedOutput<RowsAndKeys> data;
     String CSVFileTOWriteTo;
     Integer fileNumberX;
     ArrayList<ArrayList<Row>> allRows;
@@ -43,20 +43,12 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
             System.out.println("key: " + row.type);
             row.columns.forEach((k, v) -> System.out.print(k + " " + v));
             System.out.println();
-            for (Row r : rnk.getRows()) {
-                //System.out.println("id: " + r.id);
-                //System.out.println("type: " + r.type);
-                //r.columns.entrySet().stream().forEach(entry -> System.out.println( "Key of row:" + entry.getKey().toString()
-                //        + " id:"+ entry.getValue().id + " type:" + entry.getValue().type + "columns:" + entry.getValue().values));
-            }
-
         }
 
 
         String newFileName = CSVFileTOWriteTo + fileNumberX + ".csv";
 
         // Write the rows with respective keys to the current file
-        //rowAndKey.getKeys().forEach(k -> System.out.println("Key " + k));
         System.out.println("INTERMEDIATE_FILE_NAMES: " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES));
         if (!ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES).isEmpty()) {
             newFileName = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);

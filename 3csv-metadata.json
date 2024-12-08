@@ -1,10 +1,11 @@
 {
-	"@context" : "http://www.w3.org/ns/csvw",
-  "tables" : [ {
-    "url" : "splitQuerynewCSVOutput2.csv"
-  }, {
-    "url" : "splitQuerynewCSVOutput3.csv"
+  "@context": "http://www.w3.org/ns/csvw",
+  "tables": [
+    {
+      "url": "splitQuerynewCSVOutput2.csv"
+    },
+    {
+      "url": "splitQuerynewCSVOutput3.csv"
     }
-   ]
-
+  ]
 }

@@ -1,39 +1,44 @@
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
-<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dp%C4%8D> a skos:Concept;
-  skos:inScheme <https://data.mvcr.gov.cz/zdroj/číselníky/%23blankNodeValue%23_%3Atypy-pracovn%C3%ADch-vztah%C5%AF>;
-  skos:notation "dpč";
-  skos:prefLabel "Dohoda o pracovní činnosti"@cs .
+<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dp%C4%8D>
+    a              skos:Concept ;
+    skos:inScheme  <https://data.mvcr.gov.cz/zdroj/číselníky/%23blankNodeValue%23_%3Atypy-pracovn%C3%ADch-vztah%C5%AF> ;
+    skos:notation  "dpč" ;
+    skos:prefLabel "Dohoda o pracovní činnosti"@cs .
 
-<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dpp> a skos:Concept;
-  skos:inScheme <https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF>;
-  skos:notation "_blankNode26";
-  skos:prefLabel "Dohoda o provedení práce"@cs .
+<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dpp>
+    a              skos:Concept ;
+    skos:inScheme  <https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF> ;
+    skos:notation  "_blankNode26" ;
+    skos:prefLabel "Dohoda o provedení práce"@cs .
 
-<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/pln%C3%BD-%C3%BAvazek> a skos:Concept;
-  skos:inScheme <https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF>;
-  skos:notation "<_blankNodeplný-úvazek>";
-  skos:prefLabel "Pracovní poměr - plný úvazek"@cs .
+<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/pln%C3%BD-%C3%BAvazek>
+    a              skos:Concept ;
+    skos:inScheme  <https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF> ;
+    skos:notation  "<_blankNodeplný-úvazek>" ;
+    skos:prefLabel "Pracovní poměr - plný úvazek"@cs .
 
-<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/slu%C5%BEebn%C3%AD-pom%C4%9Br> a skos:Concept;
-  skos:inScheme <https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF>;
-  skos:notation "služební-poměr" .
+<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/slu%C5%BEebn%C3%AD-pom%C4%9Br>
+    a             skos:Concept ;
+    skos:inScheme <https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF> ;
+    skos:notation "služební-poměr" .
 
-<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/zkr%C3%A1cen%C3%BD-%C3%BAvazek> a skos:Concept;
-  skos:inScheme <https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF>;
-  skos:notation "zkrácený-úvazek";
-  skos:prefLabel "Pracovní poměr - zkrácený úvazek"@cs .
+<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/zkr%C3%A1cen%C3%BD-%C3%BAvazek>
+    a              skos:Concept ;
+    skos:inScheme  <https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF> ;
+    skos:notation  "zkrácený-úvazek" ;
+    skos:prefLabel "Pracovní poměr - zkrácený úvazek"@cs .
 
-<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF> a skos:ConceptScheme;
-  skos:prefLabel "Typy pracovních vztahů"@cs,
-    "Employment relation types"@en .
+<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovn%C3%ADch-vztah%C5%AF>
+    a              skos:ConceptScheme ;
+    skos:prefLabel "Typy pracovních vztahů"@cs, "Employment relation types"@en .
 
- [skos:prefLabel "Agreement to Perform Work"@en] .
+[skos:prefLabel "Agreement to Perform Work"@en] .
 
- [skos:prefLabel "Agreement to Complete a Job"@en] .
+[skos:prefLabel "Agreement to Complete a Job"@en] .
 
- [skos:prefLabel "Full time employment"@en] .
+[skos:prefLabel "Full time employment"@en] .
 
- [skos:prefLabel "Civil service employment"@en] .
+[skos:prefLabel "Civil service employment"@en] .

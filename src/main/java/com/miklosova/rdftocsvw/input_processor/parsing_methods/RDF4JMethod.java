@@ -24,15 +24,11 @@ public class RDF4JMethod implements IInputParsingMethod {
         //RDFFormat fileFormat = ps.processInput(conn, fileToParse);
         // add the RDF data from the inputstream directly to our database
         System.out.println("ps.processInput(conn, fileToParse); " + fileToParse);
-        try {
-            conn = ps.processInput(conn, fileToParse);
-            if (conn.isEmpty())
-                throw new RuntimeException("No loader registered for file type \"." + fileToParse.getAbsolutePath() + "\" files OR 'NO TRIPLES FOUND'");
-            // add the RDF data from the inputstream directly to our database
+        conn = ps.processInput(conn, fileToParse);
+        if (conn.isEmpty())
+            throw new RuntimeException("No loader registered for file type \"." + fileToParse.getAbsolutePath() + "\" files OR 'NO TRIPLES FOUND'");
+        // add the RDF data from the inputstream directly to our database
 
-            return conn;
-        } catch (RDFParseException | IOException rdfParseException) {
-            throw rdfParseException;
-        }
+        return conn;
     }
 }

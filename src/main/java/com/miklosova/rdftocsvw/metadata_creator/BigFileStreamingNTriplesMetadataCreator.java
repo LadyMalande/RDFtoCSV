@@ -33,7 +33,7 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
         newTable.setTableSchema(tableSchema);
 
         readFileWithStreaming();
-        if(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES).equalsIgnoreCase(ConfigurationManager.ONE_TABLE)){
+        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES).equalsIgnoreCase(ConfigurationManager.ONE_TABLE)) {
 
             metadata = consolidateMetadataAndCSVs(metadata);
         }

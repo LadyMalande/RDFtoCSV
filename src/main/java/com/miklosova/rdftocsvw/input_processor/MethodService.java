@@ -13,8 +13,6 @@ import java.net.URL;
 public class MethodService {
     private MethodGateway methodGateway;
 
-    private RDF4JMethod rDF4JMethod;
-
     public RepositoryConnection processInput(String fileName, String methodChoice, Repository db) throws RDFParseException, IOException {
         methodGateway = new MethodGateway();
         System.out.println("fileName in MethodService.java processInput1: " + fileName);
@@ -35,10 +33,8 @@ public class MethodService {
                     new BufferedReader(new InputStreamReader(url.openStream()));
 
             String[] splitURI = fileName.split("/");
-            String nameForFile = splitURI[splitURI.length - 1];
-            String extension = splitURI[splitURI.length - 1];
 
-            String newFileName = nameForFile;
+            String newFileName = splitURI[splitURI.length - 1];
 
             // Enter filename in which you want to download
             BufferedWriter writer =
@@ -71,15 +67,9 @@ public class MethodService {
     private void processMethodChoice(String methodChoice) {
         System.out.println("read method in processMethodChoice:" + methodChoice);
         switch (methodChoice) {
-            case "rdf4j":
-                methodGateway.setParsingMethod(new RDF4JMethod());
-                break;
-            case "streaming":
-            case "bigFileStreaming":
-                methodGateway.setParsingMethod(new StreamingMethod());
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid reading method");
+            case "rdf4j" -> methodGateway.setParsingMethod(new RDF4JMethod());
+            case "streaming", "bigFileStreaming" -> methodGateway.setParsingMethod(new StreamingMethod());
+            default -> throw new IllegalArgumentException("Invalid reading method");
         }
     }
 }

@@ -5,7 +5,6 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
@@ -35,8 +34,6 @@ public class StandardModeConverter implements IQueryParser {
     ArrayList<Value> keys;
     ArrayList<ArrayList<Row>> allRows;
     ArrayList<ArrayList<Value>> allKeys;
-    String delimiter;
-    String CSVFileTOWriteTo;
     Repository db;
 
 
@@ -77,7 +74,7 @@ public class StandardModeConverter implements IQueryParser {
 
                 @Override
                 public void statementRemoved(Statement removed) {
-                    //System.out.println("removed: " + removed);
+                    System.out.println("removed: " + removed);
                 }
 
                 @Override
@@ -103,7 +100,6 @@ public class StandardModeConverter implements IQueryParser {
         }
 
         for (int i = 0; i < allRows.size(); i++) {
-            //System.out.println("Adding rowAndKey #: " + i);
             gen.prefinishedOutput.rowsAndKeys.add(new RowAndKey(allKeys.get(i), allRows.get(i)));
         }
 
@@ -135,14 +131,11 @@ public class StandardModeConverter implements IQueryParser {
 
                 Value fileIRI = solution.getValue("o");
                 String fileName = extractFileName(fileIRI);
-                System.out.println("filename in StandardModeConverter = " + fileName);
                 String fileNamesInConfig = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-                System.out.println("fileNamesInConfig in StandardModeConverter = " + fileNamesInConfig);
                 String valueToSave = (fileNamesInConfig.isEmpty()) ? fileName : fileNamesInConfig + "," + fileName;
-                System.out.println("valueToSave in StandardModeConverter = " + valueToSave);
                 ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, valueToSave);
-                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH) + fileName + "-metadata.json");
-
+                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME,
+                        ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH) + fileName + "-metadata.json");
             }
         }
 
@@ -205,9 +198,7 @@ public class StandardModeConverter implements IQueryParser {
                     for (Map.Entry<Value, TypeIdAndValues> val : newRow.columns.entrySet()) {
                         System.out.println(val.getKey().stringValue() + ": " + val.getValue().values.get(0) + "(" + val.getValue().type.toString() + ")");
                     }
-
                 }
-
             }
             rows.add(newRow);
         }
@@ -231,10 +222,7 @@ public class StandardModeConverter implements IQueryParser {
 
     private String extractFileName(Value fileValue) {
         IRI fileIri = (IRI) fileValue;
-        String namespace = fileIri.getNamespace();
         String[] splitByDoubleSlash = fileIri.toString().split("//");
-        System.out.println("namespace:" + namespace);
-        System.out.println("splitByDoubleSlash[1]:" + splitByDoubleSlash[1]);
         return splitByDoubleSlash[1].split("csv")[0] + "csv";
     }
 
@@ -263,23 +251,15 @@ public class StandardModeConverter implements IQueryParser {
         Variable o = SparqlBuilder.var("o"), p = SparqlBuilder.var("p");
         Iri subjectIRI = iri(subject.stringValue());
         selectQuery.select(o, p).where(subjectIRI.has(p, o));
-        System.out.println("getQueryForObjectBySubjectAndPredicate query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
-    }
-
-    private int compareTwoFields(Value v1, Value v2, Map<Value, Integer> map) {
-        int result = Integer.compare(getRowNum(v1, map), getRowNum(v2, map));
-        return result;
     }
 
     private String getQueryForSubjectByObject(String object) {
         SelectQuery selectQuery = Queries.SELECT();
 
-        SimpleValueFactory rdf = SimpleValueFactory.getInstance();
         Variable s = SparqlBuilder.var("s");
         Iri objectIRI = iri(object);
         selectQuery.select(s).where(s.isA(objectIRI));
-        System.out.println("getQueryForSubjectByObject query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 }

@@ -4,11 +4,11 @@ import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 
 public class CodelistQueryMetadataCreator implements IMetadataCreator {
 
-    public CodelistQueryMetadataCreator(PrefinishedOutput data) {
+    public CodelistQueryMetadataCreator() {
     }
 
     @Override
-    public Metadata addMetadata(PrefinishedOutput info) {
+    public Metadata addMetadata(PrefinishedOutput<?> info) {
         return null;
     }
 }

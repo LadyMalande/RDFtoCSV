@@ -27,8 +27,6 @@ public class RdfaParser implements IRDF4JParsingMethod {
 
             conn.add(model);
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

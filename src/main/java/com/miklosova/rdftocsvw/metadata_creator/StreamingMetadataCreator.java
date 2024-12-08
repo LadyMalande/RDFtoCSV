@@ -8,17 +8,16 @@ import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.Main;
 import com.miklosova.rdftocsvw.support.StreamingSupport;
 import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.rio.*;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFParser;
+import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 
 import java.io.File;
 import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
@@ -47,6 +46,31 @@ public class StreamingMetadataCreator extends MetadataCreator {
         ////System.out.println("fileNameToRead = " + fileNameToRead);
     }
 
+    static Statement processNTripleLine(String line) {
+        AtomicReference<Statement> statementRef = new AtomicReference<>();
+        try {
+            Statement statement = null;
+            // Create an RDFParser instance
+            RDFParser parser = Rio.createParser(RDFFormat.NTRIPLES);
+
+            // Set a custom RDFHandler to process the parsed statements
+            parser.setRDFHandler(new AbstractRDFHandler() {
+                @Override
+                public void handleStatement(Statement st) {
+                    // Custom processing logic for each statement
+                    System.out.println("Parsed Triple: " + st);
+                    statementRef.set(st);
+                }
+            });
+
+            // Parse the single line
+            parser.parse(new StringReader(line), "");
+        } catch (Exception e) {
+            System.err.println("Error parsing line: " + line);
+            e.printStackTrace();
+        }
+        return statementRef.get();
+    }
 
     void createFirstColumn() {
         Column firstColumn = new Column();
@@ -88,7 +112,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
         }
     }
 
-    protected Metadata consolidateMetadataAndCSVs(Metadata oldmeta){
+    protected Metadata consolidateMetadataAndCSVs(Metadata oldmeta) {
         Metadata oldMetadata = oldmeta;
         MetadataConsolidator mc = new MetadataConsolidator();
         Metadata consolidatedMetadata = mc.consolidateMetadata(oldMetadata);
@@ -147,32 +171,6 @@ public class StreamingMetadataCreator extends MetadataCreator {
         }
         ////System.out.println("numberOfNotMatching != tableSchema.getColumns().size() " + numberOfNotMatching + " != " + tableSchema.getColumns().size() + "\n");
         return false;
-    }
-
-    static Statement processNTripleLine(String line) {
-        AtomicReference<Statement> statementRef = new AtomicReference<>();
-        try {
-            Statement statement = null;
-            // Create an RDFParser instance
-            RDFParser parser = Rio.createParser(RDFFormat.NTRIPLES);
-
-            // Set a custom RDFHandler to process the parsed statements
-            parser.setRDFHandler(new AbstractRDFHandler() {
-                @Override
-                public void handleStatement(Statement st) {
-                    // Custom processing logic for each statement
-                    System.out.println("Parsed Triple: " + st);
-                    statementRef.set(st);
-                }
-            });
-
-            // Parse the single line
-            parser.parse(new StringReader(line), "");
-        } catch (Exception e) {
-            System.err.println("Error parsing line: " + line);
-            e.printStackTrace();
-        }
-        return statementRef.get();
     }
 
     String createNewMetadata(int fileNumber) {

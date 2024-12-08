@@ -38,7 +38,7 @@ public class MetadataService {
                 break;
             case "codelistQuery":
                 if (data != null && data.getPrefinishedOutput() != null) {
-                    metadataGateway.setMetadataCreator(new CodelistQueryMetadataCreator((PrefinishedOutput<RowsAndKeys>) data));
+                    metadataGateway.setMetadataCreator(new CodelistQueryMetadataCreator());
                 } else {
                     throw new IllegalArgumentException("Invalid data type for codelistQuery");
                 }

@@ -15,11 +15,6 @@ public class PrefinishedOutput<T> {
         this.prefinishedOutput = prefinishedOutput;
     }
 
-    T get() {
-        return prefinishedOutput;
-    }
-
-
     public T getPrefinishedOutput() {
         return prefinishedOutput;
     }

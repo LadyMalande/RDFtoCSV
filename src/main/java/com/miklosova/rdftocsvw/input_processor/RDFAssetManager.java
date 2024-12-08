@@ -5,7 +5,7 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 import java.util.HashMap;
 
 public class RDFAssetManager {
-    private static HashMap<String, RDFFormat> loaders = new HashMap<>();
+    private static final HashMap<String, RDFFormat> loaders = new HashMap<>();
 
     public RDFAssetManager() {
         addLoader(RDFFormat.RDFXML, "rdf");

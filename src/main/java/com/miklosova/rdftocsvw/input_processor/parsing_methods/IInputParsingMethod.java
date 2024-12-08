@@ -7,5 +7,5 @@ import java.io.File;
 import java.io.IOException;
 
 public interface IInputParsingMethod {
-    public RepositoryConnection processInput(File fileToParse, Repository db) throws IOException;
+    RepositoryConnection processInput(File fileToParse, Repository db) throws IOException;
 }

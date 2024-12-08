@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class RowsAndKeys {
     ArrayList<RowAndKey> rowsAndKeys;
-    private boolean hasRDFType;
 
     public RowsAndKeys() {
         this.rowsAndKeys = new ArrayList<>();
@@ -19,14 +18,6 @@ public class RowsAndKeys {
 
     public void setRowsAndKeys(ArrayList<RowAndKey> rowsAndKeys) {
         this.rowsAndKeys = rowsAndKeys;
-    }
-
-    public boolean isHasRDFType() {
-        return hasRDFType;
-    }
-
-    public void setHasRDFType(boolean hasRDFType) {
-        this.hasRDFType = hasRDFType;
     }
 
     public String toString() {
