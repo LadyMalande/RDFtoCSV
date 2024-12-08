@@ -1,7 +1,5 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
-import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.output_processor.CSVConsolidator;
 import com.miklosova.rdftocsvw.output_processor.MetadataConsolidator;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
@@ -30,11 +28,11 @@ public class StreamingMetadataCreator extends MetadataCreator {
     int fileNumber = 0;
     int lineCounter = 0;
 
-    public StreamingMetadataCreator(PrefinishedOutput<RowsAndKeys> data) {
+    public StreamingMetadataCreator() {
 
         String fileNameFromConfig = ConfigurationManager.getVariableFromConfigFile("input.inputFileName");
         URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
-        File file = null;
+        File file;
         try {
             file = new File(location.toURI().getPath());
         } catch (URISyntaxException e) {
@@ -43,13 +41,11 @@ public class StreamingMetadataCreator extends MetadataCreator {
         String jarDirectory = file.getParentFile().getName();
 
         this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) : (jarDirectory.equalsIgnoreCase("target")) ? fileNameFromConfig : "../" + fileNameFromConfig;
-        ////System.out.println("fileNameToRead = " + fileNameToRead);
     }
 
     static Statement processNTripleLine(String line) {
         AtomicReference<Statement> statementRef = new AtomicReference<>();
         try {
-            Statement statement = null;
             // Create an RDFParser instance
             RDFParser parser = Rio.createParser(RDFFormat.NTRIPLES);
 
@@ -88,9 +84,6 @@ public class StreamingMetadataCreator extends MetadataCreator {
         Triple triple = StreamingSupport.createTripleFromLine(line);
         addMetadataToTableSchema(triple);
         lineCounter++;
-        if (lineCounter % 100 == 0) {
-            //System.out.println("Processed " + lineCounter + " lines on input processing to metadata.");
-        }
     }
 
     void addMetadataToTableSchema(Triple triple) {
@@ -108,71 +101,53 @@ public class StreamingMetadataCreator extends MetadataCreator {
         newColumn.setTitles(newColumn.createTitles(triple.predicate, triple.object));
         if (!thereIsMatchingColumnAlready(newColumn, triple)) {
             tableSchema.getColumns().add(newColumn);
-            //System.out.println("Adding new column");
         }
     }
 
     protected Metadata consolidateMetadataAndCSVs(Metadata oldmeta) {
-        Metadata oldMetadata = oldmeta;
         MetadataConsolidator mc = new MetadataConsolidator();
-        Metadata consolidatedMetadata = mc.consolidateMetadata(oldMetadata);
+        Metadata consolidatedMetadata = mc.consolidateMetadata(oldmeta);
         CSVConsolidator cc = new CSVConsolidator();
-        cc.consolidateCSVs(oldMetadata);
+        cc.consolidateCSVs(oldmeta);
         return consolidatedMetadata;
     }
 
     boolean thereIsMatchingColumnAlready(Column newColumn, Triple triple) {
-        int numberOfNotMatching = 0;
         if (tableSchema.getColumns().isEmpty()) {
             return false;
         }
         for (Column col : tableSchema.getColumns()) {
-            ////System.out.println("numberOfNotMatching in the loop = " + numberOfNotMatching);
             if (!col.getName().equalsIgnoreCase(newColumn.getName())) {
-                ////System.out.println("Name does not equal: " + col.getName() + " x " + newColumn.getName());
-                numberOfNotMatching++;
                 continue;
             }
             if (!col.getTitles().equalsIgnoreCase(newColumn.getTitles())) {
-                ////System.out.println("Titles does not equal: " + col.getTitles() + " x " + newColumn.getTitles());
-                numberOfNotMatching++;
                 continue;
             }
             if (!col.getPropertyUrl().equalsIgnoreCase(newColumn.getPropertyUrl())) {
-                ////System.out.println("PropertyUrl does not equal: " + col.getPropertyUrl() + " x " + newColumn.getPropertyUrl());
-                numberOfNotMatching++;
                 continue;
             }
             if (col.getLang() != null && newColumn.getLang() != null && !col.getLang().equalsIgnoreCase(newColumn.getLang())) {
-                ////System.out.println("Lang does not equal: " + col.getLang() + " x " + newColumn.getLang());
-                numberOfNotMatching++;
                 continue;
             }
             if (col.getDatatype() != null && newColumn.getDatatype() != null && !col.getDatatype().equalsIgnoreCase(newColumn.getDatatype())) {
-                ////System.out.println("Datatype does not equal: " + col.getDatatype() + " x " + newColumn.getDatatype());
-                numberOfNotMatching++;
                 continue;
             }
             if (!col.getAboutUrl().equalsIgnoreCase(newColumn.getAboutUrl())
                     && (col.getAboutUrl().indexOf(triple.getSubject().getNamespace()) != 0 || col.getAboutUrl().length() != newColumn.getAboutUrl().length())) {
                 // Adjust the metadata so that they are general as the namespaces are not matching
 
-                ////System.out.println("AboutUrl does not equal: " + col.getAboutUrl() + " x " + newColumn.getAboutUrl());
                 col.setAboutUrl("{+Subject}");
-
             }
             if (col.getValueUrl() != null && newColumn.getValueUrl() != null && !col.getValueUrl().equalsIgnoreCase(newColumn.getValueUrl()) && (col.getValueUrl().indexOf(triple.getSubject().getNamespace()) != 0 || col.getValueUrl().length() != newColumn.getValueUrl().length())) {
                 // Adjust the metadata so that they are general as the namespaces are not matching
-
-                ////System.out.println("ValueUrl does not equal: " + col.getValueUrl() + " x " + newColumn.getValueUrl());
                 col.setValueUrl("{+" + col.getName() + "}");
             }
             return true;
         }
-        ////System.out.println("numberOfNotMatching != tableSchema.getColumns().size() " + numberOfNotMatching + " != " + tableSchema.getColumns().size() + "\n");
         return false;
     }
 
+    @SuppressWarnings("unused")
     String createNewMetadata(int fileNumber) {
 
 

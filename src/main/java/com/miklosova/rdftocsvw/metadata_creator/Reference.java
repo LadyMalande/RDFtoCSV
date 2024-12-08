@@ -7,15 +7,16 @@ package com.miklosova.rdftocsvw.metadata_creator;
  * in the part called "reference".
  * A link property "schemaReference" was not implemented as its mutually exclusive with "resource" link property.
  */
+@SuppressWarnings({"unused", "FieldCanBeLocal"})
 public class Reference {
     /**
      * The name of the file that contains referenced value
      */
-    private String resource;
+    private final String resource;
     /**
      * The <name> of the column that this foreign key references
      */
-    private String columnReference;
+    private final String columnReference;
 
     public Reference(String resource, String columnReference) {
         this.resource = resource;

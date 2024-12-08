@@ -3,7 +3,6 @@ package com.miklosova.rdftocsvw.metadata_creator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.miklosova.rdftocsvw.convertor.Row;
 import com.miklosova.rdftocsvw.convertor.TypeIdAndValues;
-import com.miklosova.rdftocsvw.convertor.TypeOfValue;
 import com.miklosova.rdftocsvw.support.BuiltInDatatypes;
 import com.miklosova.rdftocsvw.support.ConnectionChecker;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
@@ -115,14 +114,7 @@ public class Column {
 
     public static String createSafeName(String localName) {
         // Replace all non-ASCII characters and hyphens
-        String safeName = localName.replaceAll("[^\\x00-\\x7F-]", "").replace("-", "");
-        //System.out.println("transformed localName to safe name: " + localName + " > " + safeName);
-        return safeName;
-    }
-
-    @JsonIgnore
-    public boolean getIsNamespaceTheSame() {
-        return isNamespaceTheSame;
+        return localName.replaceAll("[^\\x00-\\x7F-]", "").replace("-", "");
     }
 
     public String getAboutUrl() {
@@ -180,12 +172,9 @@ public class Column {
 
     private void createAboutUrl(Row row, boolean isSubjectTheSame, List<Row> rows) {
         boolean isRdfType = row.isRdfType;
-        TypeOfValue type = column.getValue().type;
         Value id = column.getValue().id;
-        Value value = column.getValue().values.get(0);
         boolean isTypetheSame = TableSchema.isTypeTheSameForAllPrimary(rows);
         IRI typeIri = (IRI) rows.get(0).type;
-        Value valueForAboutUrlPattern = row.type;
 
         if (this.name.contains("_MULTILEVEL_")) {
             System.out.println("making different aboutUrl for _MULTILEVEL_ column ");
@@ -198,7 +187,6 @@ public class Column {
                     System.out.println("Matching value = " + valueFromMap + " with regex ");
                     if (valueFromMap.stringValue().matches(regex)) {
                         System.out.println("Found matching value: " + valueFromMap.stringValue());
-                        valueForAboutUrlPattern = entry.getKey();
                         // Optionally break out of the loop if you only want the first match
                         break;
                     }
@@ -275,7 +263,6 @@ public class Column {
         if (valueFromThisColumn.isIRI()) {
             IRI iri = (IRI) valueFromThisColumn;
             String firstPart = iri.getNamespace();
-            String lastPart = iri.getLocalName();
             if (isNamespaceTheSame) {
                 this.valueUrl = firstPart + "{+" + safeNameOfTheColumn + "}";
             } else {
@@ -294,9 +281,7 @@ public class Column {
         String iri = columnKeyIRI.toString();
         String delimiter = "_MULTILEVEL_";
         int delimiterIndex = iri.indexOf(delimiter);
-        String fixedPropertyUrl = (delimiterIndex != -1) ? iri.substring(0, delimiterIndex) : iri;
-        //System.out.println("CreatedColumn.PropertyUrl=" + columnKeyIRI.toString());
-        this.propertyUrl = fixedPropertyUrl;
+        this.propertyUrl = (delimiterIndex != -1) ? iri.substring(0, delimiterIndex) : iri;
     }
 
     public String getTitles() {
@@ -435,9 +420,7 @@ public class Column {
             this.titles = "Subject";
             this.name = "Subject";
         }
-        if (value.isBNode()) {
-
-        } else {
+        if (!value.isBNode()) {
             if (isNamespaceTheSame) {
                 IRI valueIri = (IRI) value;
                 //System.out.println("isNamespaceTheSame is " + isNamespaceTheSame);
@@ -452,7 +435,7 @@ public class Column {
 
     }
 
-    public void addVirtualTypeColumn(Value type, Value value, Value id, boolean isTypeTheSame) {
+    public void addVirtualTypeColumn(Value type, Value id, boolean isTypeTheSame) {
         this.virtual = true;
         this.propertyUrl = "rdf:type";
         if (isNamespaceTheSame) {

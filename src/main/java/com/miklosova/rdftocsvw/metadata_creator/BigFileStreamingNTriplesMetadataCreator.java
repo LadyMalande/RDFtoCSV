@@ -15,7 +15,7 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
     Metadata metadata;
 
     public BigFileStreamingNTriplesMetadataCreator(PrefinishedOutput<RowsAndKeys> data) {
-        super(data);
+        super();
         this.metadata = new Metadata();
         System.out.println("fileNameToRead = " + fileNameToRead);
     }

@@ -389,8 +389,8 @@ public class TableSchema {
         Row row = new Row(null, true);
         row.columns = new HashMap<>();
         Column newColumn = new Column(null, namespaceIsTheSame);
-        boolean isTypetheSame = isTypeTheSameForAllPrimary(rows);
-        newColumn.addVirtualTypeColumn(type, value, id, isTypetheSame);
+        boolean isTypeSame = isTypeTheSameForAllPrimary(rows);
+        newColumn.addVirtualTypeColumn(type, id, isTypeSame);
         return newColumn;
     }
 

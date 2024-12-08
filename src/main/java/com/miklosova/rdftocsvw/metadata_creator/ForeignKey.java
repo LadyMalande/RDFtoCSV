@@ -8,11 +8,20 @@ public class ForeignKey {
     /**
      * The name of the column that is a foreign key in this file
      */
-    private String columnReference;
+    private final String columnReference;
+
+    public String getColumnReference() {
+        return columnReference;
+    }
+
+    public Reference getReference() {
+        return reference;
+    }
+
     /**
      * Reference for the foreign key containing the file name and the column name of the reference.
      */
-    private Reference reference;
+    private final Reference reference;
 
     public ForeignKey(String columnReference, Reference reference) {
         this.columnReference = columnReference;

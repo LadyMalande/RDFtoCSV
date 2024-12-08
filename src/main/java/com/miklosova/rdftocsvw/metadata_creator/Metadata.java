@@ -10,7 +10,6 @@ import com.miklosova.rdftocsvw.support.JsonUtil;
 import ioinformarics.oss.jackson.module.jsonld.JsonldModule;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 
 import java.io.File;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Conforming to the must have annotations for the Group of tables:
+ * Conforming to the must-have annotations for the Group of tables:
  * https://www.w3.org/TR/2015/REC-tabular-data-model-20151217/#dfn-group-of-tables
  * https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#table-groups - specifying only tables as REQUIRED PROPERTIES
  * "notes" annotation is left out as it is not mandatory and may depend heavily on the inside knowledge of the data tables at hand.
@@ -32,7 +31,7 @@ public class Metadata {
     /**
      * Array of files tied to the metadata file
      */
-    private List<Table> tables;
+    private final List<Table> tables;
     /**
      * an identifier for this group of tables, or null if this is undefined.
      */
@@ -43,31 +42,12 @@ public class Metadata {
     }
 
     public String jsonldMetadata() {
-        ObjectMapper objectMapper = new ObjectMapper();
         SORTED_MAPPER.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         SORTED_MAPPER.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, false);
         SORTED_MAPPER.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         SORTED_MAPPER.registerModule(new JsonldModule());
 
-/*
-        JsonNode node = SORTED_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL).convertValue(this, JsonNode.class);
-
-        ObjectNode objectNode = ((ObjectNode)node).put("@context", "http://www.w3.org/ns/csvw");
-
-
-        String personJsonLd = null;
-        try {
-            personJsonLd = SORTED_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        System.out.println(personJsonLd);
-
- */
-        String jsonWithContext = null;
-
-        jsonWithContext = JsonUtil.serializeAndWriteToFile(this);
-
+        String jsonWithContext = JsonUtil.serializeAndWriteToFile(this);
 
         // Print the resulting JSON
         System.out.println(jsonWithContext);
@@ -79,7 +59,6 @@ public class Metadata {
         Table newTable = new Table(filePath.getName());
         this.tables.add(newTable);
         newTable.addTableMetadata(keys, rows);
-        // TODO
     }
 
     public List<Table> getTables() {
@@ -92,13 +71,12 @@ public class Metadata {
             Value id = rows.get(0).id;
             Value type = rows.get(0).type;
             System.out.println("Type in addForeignKeys: " + type.stringValue());
-            String typeLocalName = null;
+            String typeLocalName;
             try {
                 IRI typeIri = (IRI) type;
                 typeLocalName = typeIri.getLocalName();
             } catch (ClassCastException ex) {
                 // The type is literal
-                Literal literal = (Literal) type;
                 typeLocalName = type.stringValue();
             }
             String foreignKeyFile = null;
@@ -106,8 +84,6 @@ public class Metadata {
                 String finalTypeLocalName = typeLocalName;
                 if (fileUrlDescriptor.getTableSchema().getColumns().stream().anyMatch(column -> {
                     if (column.getName() != null) {
-                        //System.out.println("Foreign key match? column.getName=" + column.getName() + " typeLocalName=" + typeLocalName);
-                        //System.out.println("Foreign key match? equals?=" + column.getName().equals(typeLocalName));
                         return column.getName().equals(finalTypeLocalName);
                     } else {
                         return false;
@@ -143,15 +119,14 @@ public class Metadata {
                         outcomingTableSchema = fileDescriptor.getTableSchema();
                         IRI iri = (IRI) finalColumnKeyValue;
                         String columnName = iri.getLocalName();
+                        List<ForeignKey> fk;
                         if (outcomingTableSchema.getForeignKeys() == null) {
-                            List<ForeignKey> fk = new ArrayList<>();
-                            fk.add(new ForeignKey(columnName, new Reference(foreignKeyFile, typeLocalName)));
-                            outcomingTableSchema.setForeignKeys(fk);
+                            fk = new ArrayList<>();
                         } else {
-                            List<ForeignKey> fk = outcomingTableSchema.getForeignKeys();
-                            fk.add(new ForeignKey(columnName, new Reference(foreignKeyFile, typeLocalName)));
-                            outcomingTableSchema.setForeignKeys(fk);
+                            fk = outcomingTableSchema.getForeignKeys();
                         }
+                        fk.add(new ForeignKey(columnName, new Reference(foreignKeyFile, typeLocalName)));
+                        outcomingTableSchema.setForeignKeys(fk);
 
                     }
                 }

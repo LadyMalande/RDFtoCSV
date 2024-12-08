@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonldType("Table")
+@SuppressWarnings("unused")
 public class Table {
     /**
      * Name for the file that is connected to the metadata
@@ -22,19 +23,19 @@ public class Table {
     /**
      * A list of transformation definitions for given table
      */
-    private List<Transformation> transformtaions;
+    private List<Transformation> transformations;
 
 
     public Table(String url) {
         this.url = url;
     }
 
-    public List<Transformation> getTransformtaions() {
-        return transformtaions;
+    public List<Transformation> getTransformations() {
+        return transformations;
     }
 
-    public void setTransformtaions(List<Transformation> transformtaions) {
-        this.transformtaions = transformtaions;
+    public void setTransformations(List<Transformation> transformations) {
+        this.transformations = transformations;
     }
 
     public String getUrl() {
@@ -63,8 +64,8 @@ public class Table {
 
     private void addTransformations() {
         if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES).equalsIgnoreCase("true")) {
-            this.transformtaions = new ArrayList<>();
-            this.transformtaions.add(new Transformation(
+            this.transformations = new ArrayList<>();
+            this.transformations.add(new Transformation(
                     "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
                     "http://www.iana.org/assignments/media-types/application/javascript",
                     "http://www.iana.org/assignments/media-types/turtle",

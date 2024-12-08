@@ -55,7 +55,7 @@ public class MetadataService {
                 if (!extension.equalsIgnoreCase("nt")) {
                     throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);
                 } else {
-                    metadataGateway.setMetadataCreator(new StreamingNTriplesMetadataCreator(null));
+                    metadataGateway.setMetadataCreator(new StreamingNTriplesMetadataCreator());
                 }
                 break;
             default:
