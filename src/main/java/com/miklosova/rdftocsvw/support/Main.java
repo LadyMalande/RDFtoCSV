@@ -74,12 +74,8 @@ public class Main {
             //rdFtoCSV.convertToZip();
 
             System.out.println(rdFtoCSV.getCSVTableAsString());
-        } catch (RDFParseException rdfParseException) {
-            String newFileName = rdFtoCSV.getOutputFileName() + ".csv";
-            File f = new File(newFileName);
+        } catch (RDFParseException | IOException rdfParseException) {
             System.out.println(rdfParseException.getMessage());
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
         }
 
 

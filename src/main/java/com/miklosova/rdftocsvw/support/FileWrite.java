@@ -225,9 +225,9 @@ public class FileWrite {
                             firstColumn = false;
                         } else {
                             if (combination.get((IRI) iri(multilevelPropertyUrl)) != null) {
-                                if (combination.get((IRI) iri(multilevelPropertyUrl)).isIRI()) {
+                                if (combination.get(iri(multilevelPropertyUrl)).isIRI()) {
                                     if (column.getValueUrl().startsWith("{")) {
-                                        sb.append(((IRI) combination.get(iri(multilevelPropertyUrl))).stringValue());
+                                        sb.append(combination.get(iri(multilevelPropertyUrl)).stringValue());
                                     } else {
                                         sb.append(((IRI) combination.get((IRI) iri(multilevelPropertyUrl))).getLocalName());
                                     }

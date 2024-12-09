@@ -13,7 +13,6 @@ public class Triple {
         this.subject = subject;
         this.predicate = predicate;
         this.object = object;
-        //System.out.println(subject.toString() + " " + predicate.stringValue() + " " + object.stringValue());
     }
 
     public IRI getSubject() {

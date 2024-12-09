@@ -134,6 +134,11 @@ public class Column {
     }
 
     @JsonIgnore
+    public boolean isNamespaceTheSame() {
+        return isNamespaceTheSame;
+    }
+
+    @JsonIgnore
     public Map.Entry<Value, TypeIdAndValues> getColumn() {
         return column;
     }

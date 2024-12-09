@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class ZipOutputProcessor implements IOutputProcessor<ZipOutputStream> {
+public class ZipOutputProcessor implements IOutputProcessor {
     @Override
     public FinalizedOutput<byte[]> processCSVToOutput(PrefinishedOutput<?> prefinishedOutput) {
 

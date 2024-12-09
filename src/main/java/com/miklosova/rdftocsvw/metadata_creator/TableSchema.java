@@ -10,6 +10,7 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
+import org.jsoup.helper.ValidationException;
 
 import java.util.*;
 
@@ -44,6 +45,9 @@ public class TableSchema {
         this.columns = new ArrayList<>();
     }
 
+
+
+
     public TableSchema(List<Value> keys, List<Row> rows) {
         this.keys = keys;
         this.rows = rows;
@@ -65,30 +69,18 @@ public class TableSchema {
                     System.out.println("type=" + type + " id="
                             + row.id
                             + " equals? " + row.type.equals(type));
-
-
                     return row.type.equals(type);
                 }
         );
     }
 
-    public static boolean isNamespaceTheSameForAllSubjects(List<Row> rows, Value type, String lang) {
+    public static boolean isNamespaceTheSameForAllSubjects(List<Row> rows, Value type) {
         List<Row> nonnulls = rows.stream().filter(row -> row.columns.get(type) != null).toList();
         System.out.println("the same subjects predicate: " + type.stringValue());
 
         final String namespace = ((IRI) nonnulls.get(0).columns.get(type).id).getNamespace();
 
-        return nonnulls.stream().allMatch(row -> {
-/*
-                    System.out.println("namespace=" + namespace + " "
-                            + ((IRI) (row.columns).get(type).id).getNamespace()
-                            + " from " + (row.columns).get(type).id.toString() + " equals? " + ((IRI) (row.columns).get(type).id).getNamespace().equalsIgnoreCase(namespace));
-
-
- */
-
-                    return ((IRI) (row.columns).get(type).id).getNamespace().equalsIgnoreCase(namespace);
-                }
+        return nonnulls.stream().allMatch(row -> ((IRI) (row.columns).get(type).id).getNamespace().equalsIgnoreCase(namespace)
         );
     }
 
@@ -120,18 +112,12 @@ public class TableSchema {
     public void addTableSchemaMetadata() {
         // TODO process the IRIs
         // This only works for the tables that have different types of entities
-
-        //this.primaryKey = createAboutUrl(this.keys.get(0));
-        //System.out.println("columns");
-        //rows.get(0).columns.entrySet().forEach( column -> System.out.println(column.getKey()));
         this.columns = createColumns(this.rows);
         this.rowTitles = new ArrayList<>();
         if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.METADATA_ROWNUMS).equalsIgnoreCase("true")) {
             addRowNumsColumn();
         }
         addRowTitles();
-
-
     }
 
     private void addRowNumsColumn() {
@@ -149,15 +135,9 @@ public class TableSchema {
         if (ConnectionChecker.checkConnection()) {
 
             this.columns.forEach(column -> {
-                //System.out.println("col: " + " " + column.getName() + ", column title: " + column.getTitles() + " column.virtual: " + column.getVirtual());
 
                 if ((column.getVirtual() == null) || (column.getVirtual() != null && !column.getVirtual())) {
-                    //System.out.println("(column.getVirtual() == null)");
-
-                    //System.out.println("(column.getSuppressOutput() != null)");
                     Dereferencer dereferencer = new Dereferencer(column.getPropertyUrl());
-                    //System.out.println("Dereference = " + column.getName());
-                    /*
                     try {
                         this.rowTitles.add(dereferencer.getTitle());
                         System.out.println("dereferencer.getTitle(): " + dereferencer.getTitle());
@@ -166,8 +146,6 @@ public class TableSchema {
                         System.out.println("Row name in create rowTitles: " + column.getName() + ", column title: " + column.getTitles());
                         this.rowTitles.add(column.getName());
                     }
-
-                     */
                     this.rowTitles.add(column.getName());
                 }
             });
@@ -193,7 +171,6 @@ public class TableSchema {
      */
     private List<Column> createColumns(List<Row> rows) {
         List<Column> listOfColumns = new ArrayList<>();
-        // if(Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))) {
         Column firstColumn = createIdColumnWithType();
         this.primaryKey = firstColumn.getName();
         listOfColumns.add(firstColumn);
@@ -201,11 +178,10 @@ public class TableSchema {
 
 
         for (Map.Entry<Value, TypeIdAndValues> column : columns) {
-            //System.out.println("Column " + column.getKey());
-            boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, column.getKey(), null);
+            boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, column.getKey());
             Column newColumn = new Column(column, namespaceIsTheSame);
             System.out.println("isNamespaceTheSameForAllRows " + namespaceIsTheSame + " for column " + column.getKey());
-            boolean subjectNamespaceIsTheSame = isNamespaceTheSameForAllSubjects(rows, column.getKey(), null);
+            boolean subjectNamespaceIsTheSame = isNamespaceTheSameForAllSubjects(rows, column.getKey());
             System.out.println("isNamespaceTheSameForAllSubjects " + subjectNamespaceIsTheSame + " for column " + column.getKey());
             newColumn.createColumn(rows.get(0), subjectNamespaceIsTheSame, this.rows);
             if (newColumn.getLang() != null) {
@@ -214,8 +190,6 @@ public class TableSchema {
             } else {
                 listOfColumns.add(newColumn);
             }
-
-
         }
         if (rows.get(0).isRdfType) {
             listOfColumns.add(createVirtualTypeColumn(rows.get(0).id));
@@ -225,12 +199,11 @@ public class TableSchema {
         return listOfColumns;
     }
 
-    private boolean isNamespaceTheSameForAllRows(List<Row> rows, Value columnPredicate, String lang) {
+    private boolean isNamespaceTheSameForAllRows(List<Row> rows, Value columnPredicate) {
         System.out.println("Column predicate = " + columnPredicate.stringValue());
         if (columnPredicate.stringValue().equalsIgnoreCase(rows.get(0).type.stringValue())) {
             return isNamespaceTheSameForAllPrimary(rows);
         }
-        //System.out.println("predicateOfColumn ="+ columnPredicate.stringValue());
         List<Row> rowsWithNonEmptyPredicate = rows.stream()
                 .filter(row -> row.columns.get(columnPredicate) != null) // Adjust getColumns() as per your implementation
                 .toList();
@@ -273,9 +246,7 @@ public class TableSchema {
         for (Row row : rows) {
             if (!row.columns.entrySet().stream().filter(column -> column.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())).allMatch(entry ->
                     entry.getValue().values.stream().allMatch(
-                            value -> {
-                                return ((IRI) value).getNamespace().equalsIgnoreCase(namespace);
-                            }))) {
+                            value -> ((IRI) value).getNamespace().equalsIgnoreCase(namespace)))) {
                 return false;
             }
         }
@@ -286,16 +257,12 @@ public class TableSchema {
     private List<Map.Entry<Value, TypeIdAndValues>> getColumnsFromRows() {
         List<Map.Entry<Value, TypeIdAndValues>> columns = new ArrayList<>();
         for (Value columnPredicate : keys) {
-            //System.out.println("Trying to add column for columnPredicate from keys= " + columnPredicate.stringValue());
             for (Row r : rows) {
                 for (Map.Entry<Value, TypeIdAndValues> entry : r.columns.entrySet()) {
 
 
-                    if (!columns.stream().anyMatch(p -> p.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())) && entry.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())) {
-                        //System.out.println("added to columns in metadata: " + entry.getKey());
+                    if (columns.stream().noneMatch(p -> p.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())) && entry.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())) {
                         columns.add(entry);
-                    } else {
-                        //System.out.println("NOT added to columns in metadata: " + entry.getKey());
                     }
                 }
             }
@@ -315,9 +282,9 @@ public class TableSchema {
             for (Value literal : rowToExtractLanguages.values) {
                 Literal langTag = (Literal) literal;
 
-                if (!langVariationsAdded.contains(langTag.getLanguage().get())) {
-                    langVariationsAdded.add(langTag.getLanguage().get());
-                    System.out.println("add language " + langTag.getLanguage().get());
+                if (!langVariationsAdded.contains(langTag.getLanguage().orElse(null))) {
+                    langVariationsAdded.add(langTag.getLanguage().orElse(null));
+                    System.out.println("add language " + langTag.getLanguage().orElse(null));
                 }
             }
         }
@@ -327,8 +294,7 @@ public class TableSchema {
             List<Row> newID = rowsWithLangVariation.stream().filter(row ->
                     {
                         for (Value v : row.columns.get(column.getKey()).values) {
-                            //System.out.println("Match for langVariation row id: " + row.id + " for language " + langVar + " value: " + ((Literal)v).getLabel() + " lang: " + ((Literal)v).getLanguage());
-                            if (((Literal) v).getLanguage().get().equals(langVar)) {
+                            if (Objects.equals(((Literal) v).getLanguage().orElse(null), langVar)) {
                                 System.out.println("Match for langVariation row id: " + row.id + " for language " + langVar + " value: " + ((Literal) v).getLabel() + " lang: " + ((Literal) v).getLanguage());
                                 return true;
                             }
@@ -343,14 +309,12 @@ public class TableSchema {
             rowsByLangOccurance.put(langVar, newID.get(0));
             Value newId = newID.get(0).columns.get(column.getKey()).id;
             TypeOfValue newType = newID.get(0).columns.get(column.getKey()).type;
-            //Value newId = column.getValue().id;
-            //TypeOfValue newType = column.getValue().type;
+
             TypeIdAndValues newValue = new TypeIdAndValues(newId, newType, new ArrayList<>());
-            //System.out.println("langVar " + langVar);
             int LENGTH_OF_LANGVAR = langVar.length();
-            newValue.values.addAll(newID.get(0).columns.get(column.getKey()).values.stream().filter(obj -> obj.toString().substring(obj.toString().length() - LENGTH_OF_LANGVAR, obj.toString().length()).contains(langVar))
+            newValue.values.addAll(newID.get(0).columns.get(column.getKey()).values.stream().filter(obj -> obj.toString().substring(obj.toString().length() - LENGTH_OF_LANGVAR).contains(langVar))
                     .toList());
-            Map.Entry<Value, TypeIdAndValues> newEntry = new AbstractMap.SimpleEntry<Value, TypeIdAndValues>(column.getKey(), newValue);
+            Map.Entry<Value, TypeIdAndValues> newEntry = new AbstractMap.SimpleEntry<>(column.getKey(), newValue);
             newValue.values.forEach(v -> System.out.println("new value from lang Variation " + langVar + " " + v));
             langVariations.put(langVar, newEntry);
 
@@ -359,32 +323,17 @@ public class TableSchema {
         langVariations.forEach((k, v) -> System.out.println(k + ": " + v.getKey().stringValue() + " : " + v.getValue().values.get(0)));
         for (Map.Entry<String, Row> entry : rowsByLangOccurance.entrySet()) {
             System.out.println("Adding lang variation " + langVariations.get(entry.getKey()).getValue().values + " key:" + entry.getKey() + " value:" + entry.getValue());
-            boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, langVariations.get(entry.getKey()).getKey(), null);
+            boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, langVariations.get(entry.getKey()).getKey());
 
             Column newColumn = new Column(langVariations.get(entry.getKey()), namespaceIsTheSame);
-            newColumn.createColumn(entry.getValue(), isNamespaceTheSameForAllSubjects(rows, langVariations.get(entry.getKey()).getKey(), null), this.rows);
+            newColumn.createColumn(entry.getValue(), isNamespaceTheSameForAllSubjects(rows, langVariations.get(entry.getKey()).getKey()), this.rows);
 
             listOfColumns.add(newColumn);
         }
-        /*
-        for(Map.Entry<Value, TypeIdAndValues> lang : langVariations){
-
-            System.out.println("Adding lang variation " + lang.getValue().values);
-            boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, lang.getKey());
-            Column newColumn = new Column(lang, namespaceIsTheSame);
-            rowWithGivenLang =
-            newColumn.createColumn(lang, isNamespaceTheSameForAllSubjects(rows,lang.getKey()));
-            // Check whether the language variation is already in the data
-
-            listOfColumns.add(newColumn);
-
-        }
-        */
     }
 
     private Column createVirtualTypeColumn(Value id) {
         Value type = rows.get(0).type;
-        Value value = rows.get(0).id;
         boolean namespaceIsTheSame = isNamespaceTheSameForAllPrimary(rows);
         Row row = new Row(null, true);
         row.columns = new HashMap<>();
@@ -403,52 +352,6 @@ public class TableSchema {
         boolean typeIsTheSame = isTypeTheSameForAllPrimary(rows);
         newColumn.addFirstColumn(type, value, isRdfType, namespaceIsTheSame, typeIsTheSame);
         return newColumn;
-    }
-
-    private String createAboutUrl(Value key0) {
-        Value type = rows.get(0).type;
-        Value value = rows.get(0).id;
-        boolean isRdfType = rows.get(0).isRdfType;
-        if (value.isBNode()) {
-            return null;
-        } else {
-            if (value.isIRI() && value.stringValue().startsWith("https://blank_Nodes_IRI")) {
-                this.aboutUrl = null;
-                return null;
-            }
-            String theNameOfTheColumn;
-            if (isRdfType) {
-                theNameOfTheColumn = getLastSectionOfIri(type);
-                // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                //this.aboutUrl = valueIri.getNamespace() + "{+" + theNameOfTheColumn + "}";
-            } else {
-
-                // We dont know how aboutUrl is supposed to look like because we dont know semantic ties to the iris
-                //this.aboutUrl = valueIri.getNamespace() + "{+" + "Subjekt" + "}";
-                theNameOfTheColumn = "Subjekt";
-            }
-            return theNameOfTheColumn;
-        }
-
-
-    }
-
-    private String getPartBeforeLastSection(Value key0) {
-        IRI iri = (IRI) key0;
-        String[] split = key0.toString().split("/");
-        String lastPart = iri.getLocalName();
-        //split[split.length - 1];
-
-        String firstPart = iri.getNamespace();
-        //key0.toString().substring(0, key0.toString().length() - lastPart.length());
-        return firstPart;
-    }
-
-    private String getLastSectionOfIri(Value key0) {
-        IRI iri = (IRI) key0;
-
-        String[] split = key0.toString().split("/");
-        return iri.getLocalName();
     }
 
     public List<Column> getColumns() {

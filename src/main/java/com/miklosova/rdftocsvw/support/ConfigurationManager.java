@@ -255,6 +255,7 @@ public class ConfigurationManager {
         String baseFileName;
         if (outputFilename == null) {
             baseFileName = inputFile.split("\\.")[0];
+            System.out.println("baseFileName "+ baseFileName);
         } else {
             baseFileName = outputFilename;
         }

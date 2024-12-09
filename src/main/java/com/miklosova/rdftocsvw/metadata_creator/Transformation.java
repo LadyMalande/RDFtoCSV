@@ -6,6 +6,7 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
  * A transformation is a definition of how tabular data can be transformed into another format using a script or template.
  */
 @JsonldType("Template")
+@SuppressWarnings({"unused", "FieldCanBeLocal"})
 public class Transformation {
     /**
      * Required Property
@@ -14,11 +15,11 @@ public class Transformation {
     /**
      * Required Property
      */
-    private String scriptFormat;
+    private final String scriptFormat;
     /**
      * Required Property
      */
-    private String targetFormat;
+    private final String targetFormat;
     /**
      * Optional Property
      */
@@ -42,22 +43,6 @@ public class Transformation {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public String getScriptFormat() {
-        return scriptFormat;
-    }
-
-    public void setScriptFormat(String scriptFormat) {
-        this.scriptFormat = scriptFormat;
-    }
-
-    public String getTargetFormat() {
-        return targetFormat;
-    }
-
-    public void setTargetFormat(String targetFormat) {
-        this.targetFormat = targetFormat;
     }
 
     public String getSource() {

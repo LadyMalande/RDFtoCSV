@@ -30,6 +30,9 @@ public class Table {
         this.url = url;
     }
 
+    public Table() {
+    }
+
     public List<Transformation> getTransformations() {
         return transformations;
     }

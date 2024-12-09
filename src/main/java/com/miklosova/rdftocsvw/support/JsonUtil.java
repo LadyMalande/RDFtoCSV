@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import ioinformarics.oss.jackson.module.jsonld.JsonldModule;
 
 import java.io.File;
@@ -81,5 +82,10 @@ public class JsonUtil {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static Metadata deserializeAndReturnObject(String jsonStr){
+        //Metadata metadata = JsonUtil.fromJson(jsonStr, Metadata.class);
+        return null;
     }
 }
