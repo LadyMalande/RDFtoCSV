@@ -66,9 +66,11 @@ public class TableSchema {
 
         return nonnulls.stream().allMatch(row -> {
 
-                    System.out.println("type=" + type + " id="
+                    /*System.out.println("type=" + type + " id="
                             + row.id
                             + " equals? " + row.type.equals(type));
+
+                     */
                     return row.type.equals(type);
                 }
         );
@@ -137,6 +139,7 @@ public class TableSchema {
             this.columns.forEach(column -> {
 
                 if ((column.getVirtual() == null) || (column.getVirtual() != null && !column.getVirtual())) {
+                    /*
                     Dereferencer dereferencer = new Dereferencer(column.getPropertyUrl());
                     try {
                         this.rowTitles.add(dereferencer.getTitle());
@@ -146,6 +149,8 @@ public class TableSchema {
                         System.out.println("Row name in create rowTitles: " + column.getName() + ", column title: " + column.getTitles());
                         this.rowTitles.add(column.getName());
                     }
+
+                     */
                     this.rowTitles.add(column.getName());
                 }
             });
@@ -191,6 +196,8 @@ public class TableSchema {
                 listOfColumns.add(newColumn);
             }
         }
+        makeColumnNamesUnique(listOfColumns);
+
         if (rows.get(0).isRdfType) {
             listOfColumns.add(createVirtualTypeColumn(rows.get(0).id));
         }
@@ -199,7 +206,23 @@ public class TableSchema {
         return listOfColumns;
     }
 
+    public static List<Column> makeColumnNamesUnique(List<Column> listOfColumns) {
+        Map<String, Integer> knownName = new HashMap<>();
+        for(Column c : listOfColumns){
+
+            if(knownName.keySet().contains(c.getName())){
+                String newName = c.getName() + "_" + knownName.get(c.getName());
+                knownName.put(c.getName(), knownName.get(c.getName() + 1));
+                c.setName(newName);
+            } else {
+                knownName.put(c.getName(), 1);
+            }
+        }
+        return listOfColumns;
+    }
+
     private boolean isNamespaceTheSameForAllRows(List<Row> rows, Value columnPredicate) {
+        /*
         System.out.println("Column predicate = " + columnPredicate.stringValue());
         if (columnPredicate.stringValue().equalsIgnoreCase(rows.get(0).type.stringValue())) {
             return isNamespaceTheSameForAllPrimary(rows);
@@ -243,24 +266,33 @@ public class TableSchema {
             }
         }).toList();
         final String namespace = ((IRI) hasIRI.get(0).columns.get(columnPredicate).values.get(0)).getNamespace();
+        if(((IRI)rows.get(0).columns.get(columnPredicate).values.get(0)).getLocalName().isEmpty()){
+            // the local name is empty => there would be empty space in the resulting csv, do not shorten the text
+            return false;
+        }
         for (Row row : rows) {
             if (!row.columns.entrySet().stream().filter(column -> column.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())).allMatch(entry ->
                     entry.getValue().values.stream().allMatch(
+
                             value -> ((IRI) value).getNamespace().equalsIgnoreCase(namespace)))) {
                 return false;
             }
         }
         return true;
 
+         */
+return false;
     }
 
     private List<Map.Entry<Value, TypeIdAndValues>> getColumnsFromRows() {
         List<Map.Entry<Value, TypeIdAndValues>> columns = new ArrayList<>();
+        System.out.println("getColumnsFromRows keys.size = " + keys.size() );
         for (Value columnPredicate : keys) {
+            System.out.println("getColumnsFromRows rows.size = " + rows.size());
             for (Row r : rows) {
                 for (Map.Entry<Value, TypeIdAndValues> entry : r.columns.entrySet()) {
 
-
+                    System.out.println("getColumnsFromRows row id = " + r.id + " type = " + r.type);
                     if (columns.stream().noneMatch(p -> p.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())) && entry.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())) {
                         columns.add(entry);
                     }
@@ -333,24 +365,30 @@ public class TableSchema {
     }
 
     private Column createVirtualTypeColumn(Value id) {
+        System.out.println("start createVirtualTypeColumn");
         Value type = rows.get(0).type;
         boolean namespaceIsTheSame = isNamespaceTheSameForAllPrimary(rows);
         Row row = new Row(null, true);
         row.columns = new HashMap<>();
         Column newColumn = new Column(null, namespaceIsTheSame);
         boolean isTypeSame = isTypeTheSameForAllPrimary(rows);
+        System.out.println("outside of isTypeTheSameForAllPrimary");
         newColumn.addVirtualTypeColumn(type, id, isTypeSame);
+        System.out.println("end createVirtualTypeColumn");
         return newColumn;
     }
 
     private Column createIdColumnWithType() {
+        System.out.println("start createIdColumnWithType");
         Value type = rows.get(0).type;
         Value value = rows.get(0).id;
         boolean isRdfType = rows.get(0).isRdfType;
         boolean namespaceIsTheSame = isNamespaceTheSameForAllPrimary(rows);
         Column newColumn = new Column(null, namespaceIsTheSame);
         boolean typeIsTheSame = isTypeTheSameForAllPrimary(rows);
+        System.out.println("outside of isTypeTheSameForAllPrimary");
         newColumn.addFirstColumn(type, value, isRdfType, namespaceIsTheSame, typeIsTheSame);
+        System.out.println("end createIdColumnWithType");
         return newColumn;
     }
 

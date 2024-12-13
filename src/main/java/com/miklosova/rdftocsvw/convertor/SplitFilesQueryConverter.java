@@ -120,6 +120,8 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
     @Override
     public PrefinishedOutput<RowsAndKeys> convertWithQuery(RepositoryConnection rc) {
         this.rc = rc;
+        allKeys = new ArrayList<>();
+        allRows = new ArrayList<>();
         loadConfiguration();
         changeBNodesForIri(rc);
         deleteBlankNodes(rc);
@@ -186,8 +188,7 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
     }
 
     private PrefinishedOutput<RowsAndKeys> queryRDFModel(String queryString, boolean askForTypes) {
-        allKeys = new ArrayList<>();
-        allRows = new ArrayList<>();
+
         rows = new ArrayList<>();
         PrefinishedOutput<RowsAndKeys> gen = new PrefinishedOutput<>(new RowsAndKeys.RowsAndKeysFactory());
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
@@ -215,16 +216,18 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
             });
 
             while (!conn.isEmpty()) {
-
+                System.out.println("conn size " + conn.size());
                 TupleQuery query = conn.prepareTupleQuery(queryString);
                 // A QueryResult is also an AutoCloseable resource, so make sure it gets closed when done.
                 try (TupleQueryResult result = query.evaluate()) {
+                    System.out.println("we just iterate over all solutions in the result...");
                     // we just iterate over all solutions in the result...
                     if (result == null) {
                         return null;
                     }
                     roots = new ArrayList<>();
                     for (BindingSet solution : result) {
+                        System.out.println("print out the value of the variable binding for ?s and ?n");
                         // ... and print out the value of the variable binding for ?s and ?n
                         if (solution.getValue("o").stringValue().equalsIgnoreCase(CSVW_TableGroup)) {
                             System.out.println("Table Group, engaging in StandardModeConverter in splitQueryConverter");
@@ -272,7 +275,9 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
         keys = new ArrayList<>();
 
         List<Value> rootsThatHaveThisType = rootsThatHaveThisType(conn, dominantType, askForTypes);
+        System.out.println("dominant type = " + dominantType.stringValue() + " rootsThatHaveTHisType size " + rootsThatHaveThisType.size());
         for (Value root : roots) {
+            System.out.println("roots number " + roots.size());
             // If the root does not have the dominant type, it will be processed later
             if (rootHasThisType(rootsThatHaveThisType, root)) {
                 // new Row with the found subject as its id
@@ -281,6 +286,7 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
                 System.out.println("Number of Roots in recursiveQuery: " + roots.size() + " root: " + root.stringValue());
                 // Query the model for individual rows lead by the roots and having the predicates as the headers in the file
                 queryForSubjects(conn, newRow, root, dominantType, askForTypes);
+                System.out.println("Row: " + newRow.id.stringValue() + " type " + newRow.type.stringValue() + " columns number " + newRow.columns.size());
                 rows.add(newRow);
             }
         }
@@ -360,8 +366,10 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
                 //System.out.println("Wanting to delete =  " + subject + ", " + predicate +  ", " + ""  + solution.getValue("o").toString());
                 if (subject.isBNode()) {
                     conn.remove(null, predicate, solution.getValue("o"));
+                    System.out.println("Removing blank from conn ");
                 }
                 conn.remove(subject, predicate, solution.getValue("o"));
+                System.out.println("Removing not blank from conn " + subject.toString() + " predicate " + predicate.stringValue() + " obj " + solution.getValue("o").stringValue());
 
             }
         } catch (QueryEvaluationException ex) {
@@ -408,8 +416,10 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
                     Value key;
                     if (askForTypes) {
                         key = solution.getValue("o");
+                        //System.out.println("key askForTypes = " + key.stringValue());
                     } else {
                         key = solution.getValue("p");
+                        //System.out.println("key !askForTypes = " + key.stringValue());
                     }
 
 
@@ -417,9 +427,10 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
                         Integer oldValue = mapOfTypesAndTheirNumbers.get(key);
                         Integer newValue = oldValue + 1;
                         mapOfTypesAndTheirNumbers.put(key, newValue);
+                        //System.out.println("Adding key for sorting predicates: " + key + " number="+newValue);
                     } else {
                         mapOfTypesAndTheirNumbers.put(key, 1);
-                        System.out.println("Adding key for sorting predicates: " + key + " number=1");
+                        //System.out.println("Adding key for sorting predicates: " + key + " number=1");
                     }
                 }
 

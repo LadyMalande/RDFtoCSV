@@ -45,11 +45,8 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             readFileWithStreaming();
         }
 
-        metadata.jsonldMetadata();
-        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES).equalsIgnoreCase(ConfigurationManager.ONE_TABLE)) {
+        repairMetadataAndMakeItJsonld(metadata);
 
-            metadata = consolidateMetadataAndCSVs(metadata);
-        }
         return metadata;
     }
 

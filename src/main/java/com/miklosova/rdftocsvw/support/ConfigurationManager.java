@@ -84,7 +84,7 @@ public class ConfigurationManager {
             }
             //fileInDirectory = jarDirectory + File.separator + canonicalPath;
             currentConfigFileName = fileInDirectory;
-
+            System.out.println(currentConfigFileName);
 
         } catch (IOException e) {
             throw new RuntimeException(e);

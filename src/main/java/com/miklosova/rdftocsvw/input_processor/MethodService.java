@@ -21,6 +21,7 @@ public class MethodService {
         fileName = processFileOrIRI(fileName);
         System.out.println("fileName in MethodService.java processInput: " + fileName);
         File fileToRead = new File(fileName);
+        System.out.println("fileName3 in MethodService.java processInput: " + fileToRead.getAbsolutePath());
         return methodGateway.processInput(fileToRead, db);
     }
 

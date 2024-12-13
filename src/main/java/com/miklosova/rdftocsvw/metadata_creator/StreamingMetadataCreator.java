@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
@@ -66,6 +67,22 @@ public class StreamingMetadataCreator extends MetadataCreator {
             e.printStackTrace();
         }
         return statementRef.get();
+    }
+
+    public void repairMetadataAndMakeItJsonld(Metadata metadata){
+        metadata = makeMetadataNameUnique(metadata);
+        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES).equalsIgnoreCase(ConfigurationManager.ONE_TABLE)) {
+
+            metadata = consolidateMetadataAndCSVs(metadata);
+        }
+        metadata.jsonldMetadata();
+    }
+
+    private Metadata makeMetadataNameUnique(Metadata metadata) {
+        ArrayList<Column> allColumns = new ArrayList<>();
+        metadata.getTables().forEach(t -> allColumns.addAll(t.getTableSchema().getColumns()));
+        TableSchema.makeColumnNamesUnique(allColumns);
+        return metadata;
     }
 
     void createFirstColumn() {

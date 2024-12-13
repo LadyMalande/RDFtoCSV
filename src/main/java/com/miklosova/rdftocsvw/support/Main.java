@@ -71,9 +71,9 @@ public class Main {
 
 
         try {
-            //rdFtoCSV.convertToZip();
+            rdFtoCSV.convertToZip();
 
-            System.out.println(rdFtoCSV.getCSVTableAsString());
+            //System.out.println(rdFtoCSV.getCSVTableAsString());
         } catch (RDFParseException | IOException rdfParseException) {
             System.out.println(rdfParseException.getMessage());
         }

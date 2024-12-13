@@ -11,6 +11,7 @@ import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.jsoup.helper.ValidationException;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @SuppressWarnings("SpellCheckingInspection")
 @JsonldType("Column")
 public class Column {
+    @JsonIgnore
     private boolean isNamespaceTheSame;
     /**
      * Title for the column
@@ -134,7 +136,7 @@ public class Column {
     }
 
     @JsonIgnore
-    public boolean isNamespaceTheSame() {
+    public boolean getIsNamespaceTheSame() {
         return isNamespaceTheSame;
     }
 
@@ -417,8 +419,19 @@ public class Column {
 
             //System.out.println("CONVERSION_HAS_RDF_TYPES is " + true);
             Dereferencer d = new Dereferencer(typeIri.toString());
-            this.titles = d.getTitle();
-            this.name = typeIri.getLocalName();
+
+            try {
+                this.titles = d.getTitle();
+                if(this.titles == null){
+                    this.titles = "Subject";
+                }
+                this.name = this.titles;
+
+            } catch(NullPointerException | ValidationException noElement){
+                this.name = typeIri.getLocalName();
+                this.titles = this.name;
+            }
+
 
         } else {
             //System.out.println("CONVERSION_HAS_RDF_TYPES is " + false);

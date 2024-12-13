@@ -50,10 +50,10 @@ public class ConverterHelper {
         if (askForTypes) {
             selectQuery.prefix(skos).select(s).where(s.isA(objectIri));
         } else {
-            selectQuery.prefix(skos).select(s).where(s.isA(objectIri));
+            selectQuery.prefix(skos).select(s).where(s.has(objectIri, o ));
         }
 
-        //System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
+        System.out.println("askfortypes " + askForTypes + " getSelectQuery query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
