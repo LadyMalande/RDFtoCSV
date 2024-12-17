@@ -23,7 +23,10 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
     @Override
     public Metadata addMetadata(PrefinishedOutput<?> info) {
         File f = new File(fileNameToRead);
+        System.out.println("filenametoRead " + fileNameToRead);
+        System.out.println("f.getName() " + f.getName());
         Table newTable = new Table(f.getName() + ".csv");
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, f.getName() + ".csv");
         metadata.getTables().add(newTable);
         tableSchema = new TableSchema();
         tableSchema.setPrimaryKey("Subject");

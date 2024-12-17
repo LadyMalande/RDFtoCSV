@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.convertor;
 
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.ConverterHelper;
 import lombok.extern.java.Log;
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
@@ -25,7 +26,7 @@ import static com.miklosova.rdftocsvw.support.StandardModeCSVWIris.CSVW_TableGro
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 @Log
-public class BasicQueryConverter implements IQueryParser {
+public class BasicQueryConverter extends ConverterHelper implements IQueryParser {
 
     ArrayList<Value> roots;
     ArrayList<Row> rows;
@@ -39,55 +40,6 @@ public class BasicQueryConverter implements IQueryParser {
     public BasicQueryConverter(Repository db) {
         this.keys = new ArrayList<>();
         this.db = db;
-    }
-
-    public void changeBNodesForIri(RepositoryConnection rc) {
-        Iterator<Statement> statements = rc.getStatements(null, null, null, true).iterator();
-        Map<Value, Value> mapOfBlanks = new HashMap<>();
-        int counter = 0;
-        int i = 0;
-        while (statements.hasNext()) {
-            Statement st = statements.next();
-            Statement statement = null;
-            IRI subj = null;
-            if (st.getSubject().isBNode()) {
-                if (mapOfBlanks.get(st.getSubject()) != null) {
-                    ValueFactory vf = SimpleValueFactory.getInstance();
-                    subj = (IRI) mapOfBlanks.get(st.getSubject());
-                    statement = vf.createStatement((IRI) mapOfBlanks.get(st.getSubject()), st.getPredicate(), st.getObject());
-
-                } else {
-                    ValueFactory vf = SimpleValueFactory.getInstance();
-                    IRI v = vf.createIRI("https://blank_Nodes_IRI.org/" + i);
-                    i++;
-                    mapOfBlanks.put(st.getSubject(), v);
-                    subj = (IRI) mapOfBlanks.get(st.getSubject());
-                    statement = vf.createStatement((IRI) mapOfBlanks.get(st.getSubject()), st.getPredicate(), st.getObject());
-                }
-            }
-            if (st.getObject().isBNode()) {
-                if (mapOfBlanks.get(st.getObject()) != null) {
-                    ValueFactory vf = SimpleValueFactory.getInstance();
-                    subj = (subj == null) ? (IRI) st.getSubject() : subj;
-                    statement = vf.createStatement(subj, st.getPredicate(), mapOfBlanks.get(st.getObject()));
-                    rc.add(statement);
-                } else {
-                    ValueFactory vf = SimpleValueFactory.getInstance();
-                    IRI v = vf.createIRI("https://blank_Nodes_IRI.org/" + i);
-
-                    mapOfBlanks.put(st.getObject(), v);
-                    subj = (subj == null) ? (IRI) st.getSubject() : subj;
-                    statement = vf.createStatement(subj, st.getPredicate(), mapOfBlanks.get(st.getObject()));
-                    i++;
-                }
-            }
-            if (statement != null) {
-                rc.add(statement);
-            }
-            //System.out.println(st);
-            counter = counter + 1;
-        }
-        //System.out.println("Count " + counter);
     }
 
     @Override
@@ -286,7 +238,7 @@ public class BasicQueryConverter implements IQueryParser {
 
                     // Create a new IRI
 
-                    String newValueForMap = solution.getBinding("p").getValue().stringValue() + "_MULTILEVEL_" + ((IRI) subject).getLocalName();
+                    String newValueForMap = solution.getBinding("p").getValue().stringValue() + "_MULTILEVEL_";// + ((IRI) subject).getLocalName();
                     //System.out.println("newValueForMap" + newValueForMap);
                     keyForColumnsMap = valueFactory.createIRI(newValueForMap);
                 }

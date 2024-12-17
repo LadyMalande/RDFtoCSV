@@ -1,6 +1,10 @@
 package com.miklosova.rdftocsvw.support;
 
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -13,8 +17,7 @@ import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
@@ -35,6 +38,53 @@ public class ConverterHelper {
             }
         }
         return compliantRoots;
+    }
+
+    public void changeBNodesForIri(RepositoryConnection rc) {
+        Iterator<Statement> statements = rc.getStatements(null, null, null, true).iterator();
+        Map<Value, Value> mapOfBlanks = new HashMap<>();
+        int counter = 0;
+        int i = 0;
+        while (statements.hasNext()) {
+            Statement st = statements.next();
+            Statement statement = null;
+            IRI subj = null;
+            if (st.getSubject().isBNode()) {
+                if (mapOfBlanks.get(st.getSubject()) != null) {
+                    ValueFactory vf = SimpleValueFactory.getInstance();
+                    subj = (IRI) mapOfBlanks.get(st.getSubject());
+                    statement = vf.createStatement((IRI) mapOfBlanks.get(st.getSubject()), st.getPredicate(), st.getObject());
+
+                } else {
+                    ValueFactory vf = SimpleValueFactory.getInstance();
+                    IRI v = vf.createIRI("https://blank_Nodes_IRI.org/" + i);
+                    i++;
+                    mapOfBlanks.put(st.getSubject(), v);
+                    subj = (IRI) mapOfBlanks.get(st.getSubject());
+                    statement = vf.createStatement((IRI) mapOfBlanks.get(st.getSubject()), st.getPredicate(), st.getObject());
+                }
+            }
+            if (st.getObject().isBNode()) {
+                if (mapOfBlanks.get(st.getObject()) != null) {
+                    ValueFactory vf = SimpleValueFactory.getInstance();
+                    subj = (subj == null) ? (IRI) st.getSubject() : subj;
+                    statement = vf.createStatement(subj, st.getPredicate(), mapOfBlanks.get(st.getObject()));
+                    rc.add(statement);
+                } else {
+                    ValueFactory vf = SimpleValueFactory.getInstance();
+                    IRI v = vf.createIRI("https://blank_Nodes_IRI.org/" + i);
+
+                    mapOfBlanks.put(st.getObject(), v);
+                    subj = (subj == null) ? (IRI) st.getSubject() : subj;
+                    statement = vf.createStatement(subj, st.getPredicate(), mapOfBlanks.get(st.getObject()));
+                    i++;
+                }
+            }
+            if (statement != null) {
+                rc.add(statement);
+            }
+            counter = counter + 1;
+        }
     }
 
     private static String getSelectQuery(boolean askForTypes, String subject, String predicate, String object) {

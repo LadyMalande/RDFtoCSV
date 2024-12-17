@@ -14,6 +14,7 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFHandlerException;
 import org.eclipse.rdf4j.rio.RDFWriter;
 import org.eclipse.rdf4j.rio.Rio;
+import org.jruby.ir.Tuple;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -26,6 +27,19 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 
 public class FileWrite {
 
+    public static void writeMapToFile(Map<String, Tuple<String, String>> map, String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (Map.Entry<String, Tuple<String, String>> entry : map.entrySet()) {
+                String key = entry.getKey();
+                Tuple<String, String> value = entry.getValue();
+                String line = String.format("%s -> (%s, %s)", key, value.a, value.b);
+                writer.write(line);
+                writer.newLine(); // Move to the next line
+            }
+        } catch (IOException e) {
+            System.err.println("Error writing to file: " + e.getMessage());
+        }
+    }
     public static File makeFile(int i) {
         try {
             File newFile = new File("output" + i + ".txt");

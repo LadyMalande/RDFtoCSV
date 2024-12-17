@@ -214,9 +214,10 @@ public class RDFtoCSV {
     }
 
     private String processStreaming(Metadata metadata) {
-        processStreamingEntities();
-        processStreamingWrite(metadata, fileName);
-
+        if(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD).equalsIgnoreCase("bigFileStreaming")){
+            processStreamingWrite(metadata, fileName);
+        }
+        System.out.println("CSV written to the file by stream, the file is available here: " + fileName + ".csv");
         return "CSV written to the file by stream, the file is available here: " + fileName + ".csv";
     }
 
@@ -225,8 +226,6 @@ public class RDFtoCSV {
         streamingWrite.writeToFileByMetadata();
     }
 
-    private void processStreamingEntities() {
-    }
 
     private void writeToCSV(PrefinishedOutput<?> po, Metadata metadata) {
         if (po == null) {
@@ -252,6 +251,9 @@ public class RDFtoCSV {
             String newFileName = files[0];
             System.out.println("ClassCastException FileWrite for newfilename= " + newFileName + " rowAndKey = ");
             FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata);
+        } catch(NullPointerException ex2){
+            // The po is null because the methods for processing didn't create po
+            return ;
         }
         db.shutDown();
     }

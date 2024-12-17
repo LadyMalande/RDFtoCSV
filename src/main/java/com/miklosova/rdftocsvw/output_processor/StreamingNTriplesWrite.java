@@ -7,7 +7,6 @@ import com.miklosova.rdftocsvw.metadata_creator.Triple;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
 import com.miklosova.rdftocsvw.support.Main;
-import com.miklosova.rdftocsvw.support.StreamingSupport;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
@@ -20,6 +19,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 
+import static com.miklosova.rdftocsvw.metadata_creator.StreamingMetadataCreator.processLineIntoTriple;
+import static com.miklosova.rdftocsvw.metadata_creator.StreamingMetadataCreator.processLineIntoTripleIRIsOnly;
 import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 import static com.miklosova.rdftocsvw.support.FileWrite.writeToTheFile;
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -38,6 +39,7 @@ public class StreamingNTriplesWrite {
 
     public StreamingNTriplesWrite(Metadata metadata, String fileName) {
         fileToWriteTo = FileWrite.makeFileByNameAndExtension(fileName, "csv");
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,fileToWriteTo.toString());
         this.metadata = metadata;
         String fileNameFromConfig = ConfigurationManager.getVariableFromConfigFile("input.inputFileName");
         URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
@@ -101,6 +103,8 @@ public class StreamingNTriplesWrite {
 
     private String parseOutputGridForCSV(CSVOutputGrid bufferForCSVOutput) {
         StringBuilder sb = new StringBuilder();
+        System.out.println("parseOutputGridForCSV");
+        bufferForCSVOutput.print();
         for (IRI subject : currentSubjects) {
             for (Column column : metadata.getTables().get(0).getTableSchema().getColumns()) {
                 if (column.getName().equalsIgnoreCase("Subject")) {
@@ -142,7 +146,7 @@ public class StreamingNTriplesWrite {
             Column firstColumn = metadata.getTables().get(0).getTableSchema().getColumns().get(0);
 
             while ((line = reader.readLine()) != null) {
-                Triple triple = StreamingSupport.createTripleFromLine(line);
+                Triple triple = processLineIntoTriple(line);
                 if (firstColumn.getValueUrl() == null) {
                     if (triple.getSubject().isBNode()) {
                         firstColumn.setValueUrl("{+Subject}");
@@ -168,6 +172,7 @@ public class StreamingNTriplesWrite {
                         HashMap<String, List<Value>> initialMap = new HashMap<>();
                         List<Value> valueList = new ArrayList<>();
                         valueList.add(triple.getObject());
+                        System.out.println("column triple: " + triple.getSubject() + " " + triple.getPredicate() + " " + triple.getObject());
                         initialMap.put(Column.getNameFromIRI(triple.getPredicate(), triple.getObject()), valueList);
                         System.out.println("initialMap: " + Column.getNameFromIRI(triple.getPredicate(), triple.getObject()) + " : " + initialMap.get(Column.getNameFromIRI(triple.getPredicate(), triple.getObject())).get(0));
                         bufferForCSVOutput.csvOutputBuffer.put(triple.getSubject(), initialMap);
@@ -195,7 +200,7 @@ public class StreamingNTriplesWrite {
     }
 
     private void processLine(String line, CSVOutputGrid grid) {
-        Triple triple = StreamingSupport.createTripleFromLine(line);
+        Triple triple = processLineIntoTriple(line);
         System.out.println("Processing line: " + line);
         if (currentSubjects.contains(triple.getSubject())) {
             String keyForColumn = Column.getNameFromIRI(triple.getPredicate(), triple.getObject());

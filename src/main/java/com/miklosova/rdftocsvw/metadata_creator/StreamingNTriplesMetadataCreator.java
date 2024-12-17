@@ -87,7 +87,9 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
         // Parse the single line
         Statement statement = processNTripleLine(line);
-        Triple triple = new Triple((IRI) statement.getSubject(), statement.getPredicate(), statement.getObject());
+        Statement statementWithIRIs = replaceBlankNodesWithIRI(statement, line);
+        Triple triple = new Triple((IRI) statementWithIRIs.getSubject(), statementWithIRIs.getPredicate(), statementWithIRIs.getObject());
+        //System.out.println("Parsed Triple after bnode to iri: " + statementWithIRIs.getSubject() +" " +  statementWithIRIs.getPredicate() +" " + statementWithIRIs.getObject());
         addMetadataToTableSchema(triple);
         try {
             writeTripleToCSV(currentCSVName, triple);
@@ -188,6 +190,9 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         // Neither subject nor predicate are known, create new CSVName and add new table to metadata;
         File f = new File(fileNameToRead);
         String newCSVname = f.getName() + fileNumber + ".csv";
+        String previousFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+        String allFilesUpToNow = (previousFiles.isEmpty()) ? newCSVname : previousFiles + "," + newCSVname;
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,allFilesUpToNow);
         fileNumber++;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(newCSVname))) {
@@ -348,7 +353,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                         // TODO add the object at the end of EACH line with matching subject
                         line[indexOfChangeColumn] = triple.getObject().stringValue();
                         isModified = true;  // Mark that the line has been modified
-                        //System.out.println("3) " + line[indexOfChangeColumn] + " the line: " + line);
+                        //System.out.println("3) " + line[indexOfChangeColumn] + " the line: " + Arrays.toString(line));
                     }
 
                 }
@@ -424,8 +429,10 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
     private void writeListOfLinesToCSV(File file, List<String[]> lines) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
+            //System.out.println("File I am writing to: " + file.getAbsolutePath());
             // Write array data as a single line
             for (String[] line : lines) {
+                //System.out.println("line to write: " + Arrays.toString(line));
                 writer.writeNext(line, false);
             }
         } catch (IOException e) {
@@ -491,7 +498,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 list.add("");
             }
         }
-        list.forEach(entity -> System.out.print(entity + " "));
+        //list.forEach(entity -> System.out.print(entity + " "));
         //System.out.println();
         return list;
     }

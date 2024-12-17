@@ -288,13 +288,15 @@ return false;
         List<Map.Entry<Value, TypeIdAndValues>> columns = new ArrayList<>();
         System.out.println("getColumnsFromRows keys.size = " + keys.size() );
         for (Value columnPredicate : keys) {
-            System.out.println("getColumnsFromRows rows.size = " + rows.size());
-            for (Row r : rows) {
+            System.out.println("keys contents = " + columnPredicate);
+            //System.out.println("getColumnsFromRows rows.size = " + rows.size());
+            rowLoop: for (Row r : rows) {
                 for (Map.Entry<Value, TypeIdAndValues> entry : r.columns.entrySet()) {
 
-                    System.out.println("getColumnsFromRows row id = " + r.id + " type = " + r.type);
+                    //System.out.println("getColumnsFromRows row id = " + r.id + " type = " + r.type);
                     if (columns.stream().noneMatch(p -> p.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())) && entry.getKey().stringValue().equalsIgnoreCase(columnPredicate.stringValue())) {
                         columns.add(entry);
+                        continue rowLoop; // Skip to the next iteration of the row loop as there is not going to be anything new
                     }
                 }
             }

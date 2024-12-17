@@ -28,13 +28,12 @@ public class ZipOutputProcessor implements IOutputProcessor {
         srcFiles.add(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-
-
             ZipOutputStream zipOut = new ZipOutputStream(baos);
 
             for (String srcFile : srcFiles) {
                 File fileToZip = new File(srcFile);
                 FileInputStream fis = new FileInputStream(fileToZip);
+                System.out.println("fileToZip " + fileToZip.getAbsolutePath());
                 ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
                 zipOut.putNextEntry(zipEntry);
 
@@ -98,6 +97,7 @@ public class ZipOutputProcessor implements IOutputProcessor {
 
     public ZipOutputStream zipMultipleFiles(PrefinishedOutput prefinishedOutput) {
         String inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+        System.out.println("ConfigurationManager.INTERMEDIATE_FILE_NAMES = " + inputFilesInString);
         String filenameForZip = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME);
         String[] listOfFiles = inputFilesInString.split(",");
 
@@ -112,7 +112,9 @@ public class ZipOutputProcessor implements IOutputProcessor {
 
             for (String srcFile : srcFiles) {
                 File fileToZip = new File(srcFile);
+                System.out.println("fileToZip " + fileToZip.getAbsolutePath());
                 FileInputStream fis = new FileInputStream(fileToZip);
+
                 ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
                 zipOut.putNextEntry(zipEntry);
 

@@ -1,0 +1,1120 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Description (cs)",
+        "name" : "description_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/description",
+        "aboutUrl" : "{+Event}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "Description (en)",
+        "name" : "description_en",
+        "propertyUrl" : "http://purl.org/dc/terms/description",
+        "aboutUrl" : "{+Event}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (cs)",
+        "name" : "title_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "{+Event}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (en)",
+        "name" : "title_en",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "{+Event}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "Type",
+        "name" : "type",
+        "propertyUrl" : "http://purl.org/dc/terms/type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Event}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type_1",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Event}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "openingHoursSpecification",
+        "name" : "openingHoursSpecification",
+        "propertyUrl" : "http://schema.org/openingHoursSpecification",
+        "valueUrl" : "{+openingHoursSpecification}",
+        "aboutUrl" : "{+Event}"
+      }, {
+        "@type" : "Column",
+        "titles" : "geometry",
+        "name" : "geometry",
+        "propertyUrl" : "http://www.w3.org/ns/locn#geometry",
+        "valueUrl" : "{+geometry}",
+        "aboutUrl" : "{+Event}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-kontakt",
+        "name" : "mkontakt",
+        "propertyUrl" : "https://slovník.gov.cz/datový/události/pojem/má-kontakt",
+        "valueUrl" : "{+mkontakt}",
+        "aboutUrl" : "{+Event}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-vstupné",
+        "name" : "mvstupn",
+        "propertyUrl" : "https://slovník.gov.cz/datový/události/pojem/má-vstupné",
+        "valueUrl" : "{+mvstupn}",
+        "aboutUrl" : "{+Event}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-přílohu",
+        "name" : "mplohu",
+        "propertyUrl" : "https://slovník.gov.cz/generický/věci/pojem/má-přílohu",
+        "valueUrl" : "{+mplohu}",
+        "aboutUrl" : "{+Event}"
+      }, {
+        "@type" : "Column",
+        "titles" : "superEvent",
+        "name" : "superEvent",
+        "propertyUrl" : "http://schema.org/superEvent",
+        "valueUrl" : "{+superEvent}",
+        "aboutUrl" : "{+Event}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://schema.org/Event",
+        "aboutUrl" : "{+Event}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "openingHoursSpecification",
+        "reference" : {
+          "columnReference" : "Schedule"
+        }
+      }, {
+        "columnReference" : "geometry",
+        "reference" : {
+          "columnReference" : "Point"
+        }
+      }, {
+        "columnReference" : "má-kontakt",
+        "reference" : {
+          "columnReference" : "VCard"
+        }
+      }, {
+        "columnReference" : "má-přílohu",
+        "reference" : {
+          "columnReference" : "CreativeWork"
+        }
+      }, {
+        "columnReference" : "superEvent",
+        "reference" : {
+          "columnReference" : "Event"
+        }
+      }, {
+        "columnReference" : "openingHoursSpecification",
+        "reference" : {
+          "columnReference" : "Schedule"
+        }
+      }, {
+        "columnReference" : "geometry",
+        "reference" : {
+          "columnReference" : "Point"
+        }
+      }, {
+        "columnReference" : "má-kontakt",
+        "reference" : {
+          "columnReference" : "VCard"
+        }
+      }, {
+        "columnReference" : "má-přílohu",
+        "reference" : {
+          "columnReference" : "CreativeWork"
+        }
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "description_cs", "description_en", "title_cs", "title_en", "type", "type_1", "openingHoursSpecification", "geometry", "mkontakt", "mvstupn", "mplohu", "superEvent" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt1.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-časový-interval",
+        "name" : "masovinterval",
+        "propertyUrl" : "https://slovník.gov.cz/generický/čas/pojem/má-časový-interval",
+        "valueUrl" : "{+masovinterval}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://schema.org/Schedule",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Schedule}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "má-časový-interval",
+        "reference" : {
+          "columnReference" : "ProperInterval"
+        }
+      }, {
+        "columnReference" : "má-časový-interval",
+        "reference" : {
+          "columnReference" : "ProperInterval"
+        }
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "masovinterval" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt2.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasBeginning",
+        "name" : "hasBeginning",
+        "propertyUrl" : "http://www.w3.org/2006/time#hasBeginning",
+        "valueUrl" : "{+hasBeginning}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasEnd",
+        "name" : "hasEnd",
+        "propertyUrl" : "http://www.w3.org/2006/time#hasEnd",
+        "valueUrl" : "{+hasEnd}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/2006/time#ProperInterval",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+ProperInterval}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "hasBeginning",
+        "reference" : {
+          "columnReference" : "Instant"
+        }
+      }, {
+        "columnReference" : "hasBeginning",
+        "reference" : {
+          "columnReference" : "Instant"
+        }
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "hasBeginning", "hasEnd" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt3.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "inXSDDateTimeStamp",
+        "name" : "inXSDDateTimeStamp",
+        "propertyUrl" : "http://www.w3.org/2006/time#inXSDDateTimeStamp",
+        "datatype" : "dateTimeStamp"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/2006/time#Instant",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Instant}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "inXSDDateTimeStamp" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt4.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "coordinates",
+        "name" : "coordinates",
+        "propertyUrl" : "https://purl.org/geojson/vocab#coordinates",
+        "valueUrl" : "{+coordinates}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "https://purl.org/geojson/vocab#Point",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Point}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "coordinates",
+        "reference" : {
+          "resource" : "events_Brno_rdf4j_multipleTables.nt19.csv",
+          "columnReference" : "rest"
+        }
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "coordinates" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt5.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasEmail",
+        "name" : "hasEmail",
+        "propertyUrl" : "http://www.w3.org/2006/vcard/ns#hasEmail",
+        "valueUrl" : "{+hasEmail}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasURL",
+        "name" : "hasURL",
+        "propertyUrl" : "http://www.w3.org/2006/vcard/ns#hasURL",
+        "datatype" : "anyURI"
+      }, {
+        "@type" : "Column",
+        "titles" : "druh (cs)",
+        "name" : "druh_cs",
+        "propertyUrl" : "https://slovník.gov.cz/generický/kontakty/pojem/druh",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "druh (en)",
+        "name" : "druh_en",
+        "propertyUrl" : "https://slovník.gov.cz/generický/kontakty/pojem/druh",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/2006/vcard/ns#VCard",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+VCard}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "hasEmail", "hasURL", "druh_cs", "druh_en" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt6.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "downloadUrl",
+        "name" : "downloadUrl",
+        "propertyUrl" : "http://schema.org/downloadUrl",
+        "datatype" : "anyURI"
+      }, {
+        "@type" : "Column",
+        "titles" : "encodingFormat",
+        "name" : "encodingFormat",
+        "propertyUrl" : "http://schema.org/encodingFormat",
+        "valueUrl" : "{+encodingFormat}"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-podmínky-užití",
+        "name" : "mpodmnkyuit",
+        "propertyUrl" : "https://slovník.gov.cz/generický/digitální-objekty/pojem/má-podmínky-užití",
+        "valueUrl" : "{+mpodmnkyuit}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-vykonavatele-majetkových-práv-autorských-u-autorského-díla",
+        "name" : "mvykonavatelemajetkovchprvautorskchuautorskhodla",
+        "propertyUrl" : "https://slovník.gov.cz/generický/digitální-objekty/pojem/má-vykonavatele-majetkových-práv-autorských-u-autorského-díla",
+        "valueUrl" : "{+mvykonavatelemajetkovchprvautorskchuautorskhodla}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://schema.org/CreativeWork",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+CreativeWork}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "má-vykonavatele-majetkových-práv-autorských-u-autorského-díla",
+        "reference" : {
+          "columnReference" : "RegisteredOrganization"
+        }
+      }, {
+        "columnReference" : "má-podmínky-užití",
+        "reference" : {
+          "columnReference" : "podmínky-užití"
+        }
+      }, {
+        "columnReference" : "má-vykonavatele-majetkových-práv-autorských-u-autorského-díla",
+        "reference" : {
+          "columnReference" : "RegisteredOrganization"
+        }
+      }, {
+        "columnReference" : "má-podmínky-užití",
+        "reference" : {
+          "columnReference" : "podmínky-užití"
+        }
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "downloadUrl", "encodingFormat", "type", "mpodmnkyuit", "mvykonavatelemajetkovchprvautorskchuautorskhodla" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt7.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "notation",
+        "name" : "notation",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#notation"
+      }, {
+        "@type" : "Column",
+        "titles" : "legalName (cs)",
+        "name" : "legalName_cs",
+        "propertyUrl" : "http://www.w3.org/ns/regorg#legalName",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/ns/regorg#RegisteredOrganization",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+RegisteredOrganization}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "notation", "legalName_cs" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt8.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "databáze-chráněná-zvláštními-právy-pořizovatele-databáze",
+        "name" : "databzechrnnzvltnmiprvypoizovateledatabze",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/databáze-chráněná-zvláštními-právy-pořizovatele-databáze",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "licence-autorského-díla",
+        "name" : "licenceautorskhodla",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/licence-autorského-díla",
+        "valueUrl" : "{+licenceautorskhodla}"
+      }, {
+        "@type" : "Column",
+        "titles" : "obsahuje-autorské-dílo",
+        "name" : "obsahujeautorskdlo",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-autorské-dílo",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "obsahuje-osobní-údaje",
+        "name" : "obsahujeosobndaje",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-osobní-údaje",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "obsahuje-více-autorských-děl",
+        "name" : "obsahujevceautorskchdl",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-více-autorských-děl",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "originální-databáze",
+        "name" : "originlndatabze",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/originální-databáze",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/podmínky-užití",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+podmínky-užití}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "databzechrnnzvltnmiprvypoizovateledatabze", "licenceautorskhodla", "obsahujeautorskdlo", "obsahujeosobndaje", "obsahujevceautorskchdl", "originlndatabze" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt9.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (cs)",
+        "name" : "title_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "https://www.gotobrno.cz/akce/pruvodcovske-sluzby-prohlidky-brna-pro-skoly/{+Event}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (en)",
+        "name" : "title_en",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "https://www.gotobrno.cz/akce/pruvodcovske-sluzby-prohlidky-brna-pro-skoly/{+Event}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Event}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "openingHoursSpecification",
+        "name" : "openingHoursSpecification",
+        "propertyUrl" : "http://schema.org/openingHoursSpecification",
+        "valueUrl" : "{+openingHoursSpecification}",
+        "aboutUrl" : "https://www.gotobrno.cz/akce/pruvodcovske-sluzby-prohlidky-brna-pro-skoly/{+Event}"
+      }, {
+        "@type" : "Column",
+        "titles" : "geometry",
+        "name" : "geometry",
+        "propertyUrl" : "http://www.w3.org/ns/locn#geometry",
+        "valueUrl" : "{+geometry}",
+        "aboutUrl" : "https://www.gotobrno.cz/akce/pruvodcovske-sluzby-prohlidky-brna-pro-skoly/{+Event}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-kontakt",
+        "name" : "mkontakt",
+        "propertyUrl" : "https://slovník.gov.cz/datový/události/pojem/má-kontakt",
+        "valueUrl" : "{+mkontakt}",
+        "aboutUrl" : "https://www.gotobrno.cz/akce/pruvodcovske-sluzby-prohlidky-brna-pro-skoly/{+Event}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-přílohu",
+        "name" : "mplohu",
+        "propertyUrl" : "https://slovník.gov.cz/generický/věci/pojem/má-přílohu",
+        "valueUrl" : "{+mplohu}",
+        "aboutUrl" : "https://www.gotobrno.cz/akce/pruvodcovske-sluzby-prohlidky-brna-pro-skoly/{+Event}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://schema.org/Event",
+        "aboutUrl" : "{+Event}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "openingHoursSpecification",
+        "reference" : {
+          "columnReference" : "Schedule"
+        }
+      }, {
+        "columnReference" : "geometry",
+        "reference" : {
+          "columnReference" : "Point"
+        }
+      }, {
+        "columnReference" : "má-kontakt",
+        "reference" : {
+          "columnReference" : "VCard"
+        }
+      }, {
+        "columnReference" : "má-přílohu",
+        "reference" : {
+          "columnReference" : "CreativeWork"
+        }
+      }, {
+        "columnReference" : "openingHoursSpecification",
+        "reference" : {
+          "columnReference" : "Schedule"
+        }
+      }, {
+        "columnReference" : "geometry",
+        "reference" : {
+          "columnReference" : "Point"
+        }
+      }, {
+        "columnReference" : "má-kontakt",
+        "reference" : {
+          "columnReference" : "VCard"
+        }
+      }, {
+        "columnReference" : "má-přílohu",
+        "reference" : {
+          "columnReference" : "CreativeWork"
+        }
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "title_cs", "title_en", "type", "openingHoursSpecification", "geometry", "mkontakt", "mplohu" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt10.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-časový-interval",
+        "name" : "masovinterval",
+        "propertyUrl" : "https://slovník.gov.cz/generický/čas/pojem/má-časový-interval",
+        "valueUrl" : "{+masovinterval}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://schema.org/Schedule",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Schedule}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "má-časový-interval",
+        "reference" : {
+          "columnReference" : "ProperInterval"
+        }
+      }, {
+        "columnReference" : "má-časový-interval",
+        "reference" : {
+          "columnReference" : "ProperInterval"
+        }
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "masovinterval" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt11.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasBeginning",
+        "name" : "hasBeginning",
+        "propertyUrl" : "http://www.w3.org/2006/time#hasBeginning",
+        "valueUrl" : "{+hasBeginning}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasEnd",
+        "name" : "hasEnd",
+        "propertyUrl" : "http://www.w3.org/2006/time#hasEnd",
+        "valueUrl" : "{+hasEnd}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/2006/time#ProperInterval",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+ProperInterval}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "hasBeginning",
+        "reference" : {
+          "columnReference" : "Instant"
+        }
+      }, {
+        "columnReference" : "hasBeginning",
+        "reference" : {
+          "columnReference" : "Instant"
+        }
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "hasBeginning", "hasEnd" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt12.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "inXSDDateTimeStamp",
+        "name" : "inXSDDateTimeStamp",
+        "propertyUrl" : "http://www.w3.org/2006/time#inXSDDateTimeStamp",
+        "datatype" : "dateTimeStamp"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/2006/time#Instant",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Instant}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "inXSDDateTimeStamp" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt13.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "coordinates",
+        "name" : "coordinates",
+        "propertyUrl" : "https://purl.org/geojson/vocab#coordinates",
+        "valueUrl" : "{+coordinates}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "https://purl.org/geojson/vocab#Point",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Point}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "coordinates",
+        "reference" : {
+          "resource" : "events_Brno_rdf4j_multipleTables.nt19.csv",
+          "columnReference" : "rest"
+        }
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "coordinates" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt14.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasEmail",
+        "name" : "hasEmail",
+        "propertyUrl" : "http://www.w3.org/2006/vcard/ns#hasEmail",
+        "valueUrl" : "{+hasEmail}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasURL",
+        "name" : "hasURL",
+        "propertyUrl" : "http://www.w3.org/2006/vcard/ns#hasURL",
+        "datatype" : "anyURI"
+      }, {
+        "@type" : "Column",
+        "titles" : "druh (cs)",
+        "name" : "druh_cs",
+        "propertyUrl" : "https://slovník.gov.cz/generický/kontakty/pojem/druh",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "druh (en)",
+        "name" : "druh_en",
+        "propertyUrl" : "https://slovník.gov.cz/generický/kontakty/pojem/druh",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/2006/vcard/ns#VCard",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+VCard}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "hasEmail", "hasURL", "druh_cs", "druh_en" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt15.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "downloadUrl",
+        "name" : "downloadUrl",
+        "propertyUrl" : "http://schema.org/downloadUrl",
+        "datatype" : "anyURI"
+      }, {
+        "@type" : "Column",
+        "titles" : "encodingFormat",
+        "name" : "encodingFormat",
+        "propertyUrl" : "http://schema.org/encodingFormat",
+        "valueUrl" : "{+encodingFormat}"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-podmínky-užití",
+        "name" : "mpodmnkyuit",
+        "propertyUrl" : "https://slovník.gov.cz/generický/digitální-objekty/pojem/má-podmínky-užití",
+        "valueUrl" : "{+mpodmnkyuit}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-vykonavatele-majetkových-práv-autorských-u-autorského-díla",
+        "name" : "mvykonavatelemajetkovchprvautorskchuautorskhodla",
+        "propertyUrl" : "https://slovník.gov.cz/generický/digitální-objekty/pojem/má-vykonavatele-majetkových-práv-autorských-u-autorského-díla",
+        "valueUrl" : "{+mvykonavatelemajetkovchprvautorskchuautorskhodla}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://schema.org/CreativeWork",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+CreativeWork}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "má-vykonavatele-majetkových-práv-autorských-u-autorského-díla",
+        "reference" : {
+          "columnReference" : "RegisteredOrganization"
+        }
+      }, {
+        "columnReference" : "má-podmínky-užití",
+        "reference" : {
+          "columnReference" : "podmínky-užití"
+        }
+      }, {
+        "columnReference" : "má-vykonavatele-majetkových-práv-autorských-u-autorského-díla",
+        "reference" : {
+          "columnReference" : "RegisteredOrganization"
+        }
+      }, {
+        "columnReference" : "má-podmínky-užití",
+        "reference" : {
+          "columnReference" : "podmínky-užití"
+        }
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "downloadUrl", "encodingFormat", "type", "mpodmnkyuit", "mvykonavatelemajetkovchprvautorskchuautorskhodla" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt16.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "notation",
+        "name" : "notation",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#notation"
+      }, {
+        "@type" : "Column",
+        "titles" : "legalName (cs)",
+        "name" : "legalName_cs",
+        "propertyUrl" : "http://www.w3.org/ns/regorg#legalName",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://www.w3.org/ns/regorg#RegisteredOrganization",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+RegisteredOrganization}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "notation", "legalName_cs" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt17.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}"
+      }, {
+        "@type" : "Column",
+        "titles" : "databáze-chráněná-zvláštními-právy-pořizovatele-databáze",
+        "name" : "databzechrnnzvltnmiprvypoizovateledatabze",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/databáze-chráněná-zvláštními-právy-pořizovatele-databáze",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "licence-autorského-díla",
+        "name" : "licenceautorskhodla",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/licence-autorského-díla",
+        "valueUrl" : "{+licenceautorskhodla}"
+      }, {
+        "@type" : "Column",
+        "titles" : "obsahuje-autorské-dílo",
+        "name" : "obsahujeautorskdlo",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-autorské-dílo",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "obsahuje-osobní-údaje",
+        "name" : "obsahujeosobndaje",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-osobní-údaje",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "obsahuje-více-autorských-děl",
+        "name" : "obsahujevceautorskchdl",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-více-autorských-děl",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "originální-databáze",
+        "name" : "originlndatabze",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/originální-databáze",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/podmínky-užití",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+podmínky-užití}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "databzechrnnzvltnmiprvypoizovateledatabze", "licenceautorskhodla", "obsahujeautorskdlo", "obsahujeosobndaje", "obsahujevceautorskchdl", "originlndatabze" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt18.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "first",
+        "name" : "first",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+        "datatype" : "double"
+      }, {
+        "@type" : "Column",
+        "titles" : "rest",
+        "name" : "rest",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+        "valueUrl" : "{+rest}"
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "rest",
+        "reference" : {
+          "resource" : "events_Brno_rdf4j_multipleTables.nt19.csv",
+          "columnReference" : "rest"
+        }
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "first", "rest" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_multipleTables.nt19.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "first",
+        "name" : "first",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+        "datatype" : "double"
+      }, {
+        "@type" : "Column",
+        "titles" : "rest",
+        "name" : "rest",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+        "valueUrl" : "{+rest}"
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "rest",
+        "reference" : {
+          "resource" : "events_Brno_rdf4j_multipleTables.nt19.csv",
+          "columnReference" : "rest"
+        }
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "first", "rest" ]
+    }
+  } ]
+}

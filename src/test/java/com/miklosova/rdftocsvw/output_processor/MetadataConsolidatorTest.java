@@ -49,6 +49,9 @@ public class MetadataConsolidatorTest extends BaseTest {
         return Arrays.asList(new Object[][]{
                 {"200", "./src/test/resources/testingInputForTwoEntities.ttl", "./dissesto_200_triples.nt.csv-metadata.json", "./src/test/resources/testingInputOutput", "consolidatedMetadata200.json", ""},
                 {"2000", "./src/test/resources/testingInputForTwoEntities.ttl", "./dissesto_2k_triples.nt.csv-metadata.json", "./src/test/resources/testingInputOutput", "consolidatedMetadata2k.json", ""},
+                //{"12k", "./src/test/resources/experimentstestingInputForTwoEntities.ttl", "./dissesto_2k_triples.nt.csv-metadata.json", "./src/test/resources/testingInputOutput", "consolidatedMetadata2k.json", ""},
+
+
                 //{ "Datatypes-anyURI", "./src/test/resources/datatypes-anyURI.ttl", "./src/test/resources/datatypes-anyURI.csv-metadata.json", "./src/test/resources/testingInputOutput", "anyURI"},
                 //{ "Datatypes-boolean", "./src/test/resources/datatypes-boolean.ttl", "./src/test/resources/datatypes-boolean.csv-metadata.json", "./src/test/resources/testingInputOutput", "boolean"},
                 //{"Datatypes-string2", "./src/test/resources/test001.rdf", "./src/test/resources/datatypes-string2.csv-metadata.json", "./src/test/resources/testingInputOutput", "" }

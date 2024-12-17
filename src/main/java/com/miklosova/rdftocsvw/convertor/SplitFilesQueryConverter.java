@@ -64,59 +64,6 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
         return sortedEntries;
     }
 
-    public void changeBNodesForIri(RepositoryConnection rc) {
-        Iterator<Statement> statements = rc.getStatements(null, null, null, true).iterator();
-        Map<Value, Value> mapOfBlanks = new HashMap<>();
-        //System.out.println("Iterator size: " + Iterators.size(statements));
-        int counter = 0;
-        int i = 0;
-        while (statements.hasNext()) {
-            Statement st = statements.next();
-            Statement statement = null;
-            IRI subj = null;
-            if (st.getSubject().isBNode()) {
-                if (mapOfBlanks.get(st.getSubject()) != null) {
-                    ValueFactory vf = SimpleValueFactory.getInstance();
-                    subj = (IRI) mapOfBlanks.get(st.getSubject());
-                    statement = vf.createStatement((IRI) mapOfBlanks.get(st.getSubject()), st.getPredicate(), st.getObject());
-
-                } else {
-                    ValueFactory vf = SimpleValueFactory.getInstance();
-                    IRI v = vf.createIRI("https://blank_Nodes_IRI.org/" + i);
-                    //IRI v = (IRI) iri("https://blank_Nodes_IRI.org/" + i);
-                    i++;
-                    mapOfBlanks.put(st.getSubject(), v);
-                    subj = (IRI) mapOfBlanks.get(st.getSubject());
-                    statement = vf.createStatement((IRI) mapOfBlanks.get(st.getSubject()), st.getPredicate(), st.getObject());
-                }
-            }
-            if (st.getObject().isBNode()) {
-                if (mapOfBlanks.get(st.getObject()) != null) {
-                    ValueFactory vf = SimpleValueFactory.getInstance();
-                    subj = (subj == null) ? (IRI) st.getSubject() : subj;
-                    statement = vf.createStatement(subj, st.getPredicate(), mapOfBlanks.get(st.getObject()));
-                    rc.add(statement);
-                } else {
-                    ValueFactory vf = SimpleValueFactory.getInstance();
-                    IRI v = vf.createIRI("https://blank_Nodes_IRI.org/" + i);
-
-                    mapOfBlanks.put(st.getObject(), v);
-                    subj = (subj == null) ? (IRI) st.getSubject() : subj;
-                    statement = vf.createStatement(subj, st.getPredicate(), mapOfBlanks.get(st.getObject()));
-                    i++;
-                }
-            }
-            if (statement != null) {
-                rc.add(statement);
-
-                System.out.println(statement.getSubject() + " " + statement.getPredicate() + " " + statement.getObject());
-                System.out.println(st);
-            }
-            counter = counter + 1;
-        }
-        System.out.println("Count " + counter);
-    }
-
     @Override
     public PrefinishedOutput<RowsAndKeys> convertWithQuery(RepositoryConnection rc) {
         this.rc = rc;
