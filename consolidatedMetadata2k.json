@@ -1,0 +1,675 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "../ntriplesTestFile1streaming.nt_merged",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "label",
+        "name" : "label",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#label",
+        "valueUrl" : "{+label}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "hasIter",
+        "name" : "hasIter",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasIter",
+        "valueUrl" : "{+hasIter}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "repairRelatedTo",
+        "name" : "repairRelatedTo",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#repairRelatedTo",
+        "valueUrl" : "{+repairRelatedTo}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "isDistrictAuthority",
+        "name" : "isDistrictAuthority",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#isDistrictAuthority",
+        "valueUrl" : "{+isDistrictAuthority}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "contractingAuthority",
+        "name" : "contractingAuthority",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#contractingAuthority",
+        "valueUrl" : "{+contractingAuthority}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "hasEconomicIndicator",
+        "name" : "hasEconomicIndicator",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasEconomicIndicator",
+        "valueUrl" : "{+hasEconomicIndicator}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "officialInstabilityType",
+        "name" : "officialInstabilityType",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#officialInstabilityType",
+        "valueUrl" : "{+officialInstabilityType}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Date Modified",
+        "name" : "modified",
+        "propertyUrl" : "http://purl.org/dc/terms/modified",
+        "valueUrl" : "{+modified}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "hasEconomicIndicator",
+        "name" : "hasEconomicIndicator",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasEconomicIndicator",
+        "valueUrl" : "{+hasEconomicIndicator}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "isLotOf",
+        "name" : "isLotOf",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#isLotOf",
+        "valueUrl" : "{+isLotOf}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Type",
+        "name" : "type",
+        "propertyUrl" : "http://purl.org/dc/terms/type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Is Referenced By",
+        "name" : "isReferencedBy",
+        "propertyUrl" : "http://purl.org/dc/terms/isReferencedBy",
+        "valueUrl" : "{+isReferencedBy}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "cup",
+        "name" : "cup",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#cup",
+        "valueUrl" : "{+cup}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "hasEconomicIndicator",
+        "name" : "hasEconomicIndicator",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasEconomicIndicator",
+        "valueUrl" : "{+hasEconomicIndicator}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "lot",
+        "name" : "lot",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#lot",
+        "valueUrl" : "{+lot}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "repairRelatedTo",
+        "name" : "repairRelatedTo",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#repairRelatedTo",
+        "valueUrl" : "{+repairRelatedTo}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Relation",
+        "name" : "relation",
+        "propertyUrl" : "http://purl.org/dc/terms/relation",
+        "valueUrl" : "{+relation}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Date",
+        "name" : "date",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/date",
+        "valueUrl" : "{+date}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "hasStep",
+        "name" : "hasStep",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasStep",
+        "valueUrl" : "{+hasStep}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "entity",
+        "name" : "entity",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#entity",
+        "valueUrl" : "{+entity}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "hasIter",
+        "name" : "hasIter",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasIter",
+        "valueUrl" : "{+hasIter}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "unit",
+        "name" : "unit",
+        "propertyUrl" : "http://qudt.org/vocab/unit#unit",
+        "valueUrl" : "{+unit}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "instabilityGroup",
+        "name" : "instabilityGroup",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#instabilityGroup",
+        "valueUrl" : "{+instabilityGroup}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "instabilityType",
+        "name" : "instabilityType",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#instabilityType",
+        "valueUrl" : "{+instabilityType}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "primaryGeographicalFeature",
+        "name" : "primaryGeographicalFeature",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#primaryGeographicalFeature",
+        "valueUrl" : "{+primaryGeographicalFeature}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "hasStep",
+        "name" : "hasStep",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasStep",
+        "valueUrl" : "{+hasStep}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "value",
+        "name" : "value",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+        "valueUrl" : "{+value}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "repairCategory",
+        "name" : "repairCategory",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#repairCategory",
+        "valueUrl" : "{+repairCategory}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "isMemberOf",
+        "name" : "isMemberOf",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/top/isMemberOf",
+        "valueUrl" : "{+isMemberOf}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "isLotOf",
+        "name" : "isLotOf",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#isLotOf",
+        "valueUrl" : "{+isLotOf}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Relation",
+        "name" : "relation",
+        "propertyUrl" : "http://purl.org/dc/terms/relation",
+        "valueUrl" : "{+relation}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "note",
+        "name" : "note",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#note",
+        "valueUrl" : "{+note}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "lat",
+        "name" : "lat",
+        "propertyUrl" : "http://www.w3.org/2003/01/geo/wgs84_pos#lat",
+        "valueUrl" : "{+lat}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "long",
+        "name" : "long",
+        "propertyUrl" : "http://www.w3.org/2003/01/geo/wgs84_pos#long",
+        "valueUrl" : "{+long}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "point",
+        "name" : "point",
+        "propertyUrl" : "http://www.georss.org/georss/point",
+        "valueUrl" : "{+point}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Source",
+        "name" : "source",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/source",
+        "valueUrl" : "{+source}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "hasAgreement",
+        "name" : "hasAgreement",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasAgreement",
+        "valueUrl" : "{+hasAgreement}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Publisher",
+        "name" : "publisher",
+        "propertyUrl" : "http://purl.org/dc/terms/publisher",
+        "valueUrl" : "{+publisher}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Type",
+        "name" : "type",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "contact",
+        "name" : "contact",
+        "propertyUrl" : "http://purl.org/procurement/public-contracts#contact",
+        "valueUrl" : "{+contact}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Description",
+        "name" : "description",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/description",
+        "valueUrl" : "{+description}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "location",
+        "name" : "location",
+        "propertyUrl" : "http://www.w3.org/2003/01/geo/wgs84_pos#location",
+        "valueUrl" : "{+location}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "amountFinanced",
+        "name" : "amountFinanced",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#amountFinanced",
+        "valueUrl" : "{+amountFinanced}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "role",
+        "name" : "role",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#role",
+        "valueUrl" : "{+role}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "instabilityRelatedTo",
+        "name" : "instabilityRelatedTo",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#instabilityRelatedTo",
+        "valueUrl" : "{+instabilityRelatedTo}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "procedureType",
+        "name" : "procedureType",
+        "propertyUrl" : "http://purl.org/procurement/public-contracts#procedureType",
+        "valueUrl" : "{+procedureType}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "lithologyType",
+        "name" : "lithologyType",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#lithologyType",
+        "valueUrl" : "{+lithologyType}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "lithologyRelatedTo",
+        "name" : "lithologyRelatedTo",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#lithologyRelatedTo",
+        "valueUrl" : "{+lithologyRelatedTo}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "note",
+        "name" : "note",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#note",
+        "valueUrl" : "{+note}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "repairType",
+        "name" : "repairType",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#repairType",
+        "valueUrl" : "{+repairType}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "officialInstabilityType",
+        "name" : "officialInstabilityType",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#officialInstabilityType",
+        "valueUrl" : "{+officialInstabilityType}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "secondaryGeographicalFeature",
+        "name" : "secondaryGeographicalFeature",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#secondaryGeographicalFeature",
+        "valueUrl" : "{+secondaryGeographicalFeature}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "isNamespaceTheSame" : false,
+        "titles" : "instabilityType",
+        "name" : "instabilityType",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#instabilityType",
+        "valueUrl" : "{+instabilityType}",
+        "aboutUrl" : "{+Subject}"
+      } ]
+    }
+  } ]
+}

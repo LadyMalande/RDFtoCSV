@@ -8,6 +8,9 @@ import com.miklosova.rdftocsvw.convertor.TypeOfValue;
 import com.miklosova.rdftocsvw.metadata_creator.Column;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.Table;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvValidationException;
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -23,6 +26,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.miklosova.rdftocsvw.output_processor.MetadataConsolidator.getFilePathForFileName;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 public class FileWrite {
@@ -317,6 +321,19 @@ public class FileWrite {
     private static String getFullPathOfFile(String fileName) {
 
         return ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH) + fileName;
+    }
+
+    public static void writeStringArrayAsCSVToFile(String fileName, String[] content) {
+        File fileToWriteTo = new File(fileName);
+        try (CSVWriter writer = new CSVWriter(new FileWriter(fileToWriteTo, true))) {
+            // Appends to the file instead of overwriting
+            //System.out.println("Writing newline of merged CSV: " + Arrays.toString(line));
+            writer.writeNext(content, false);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private static boolean allLanguagesAreUnique(List<Value> values) {

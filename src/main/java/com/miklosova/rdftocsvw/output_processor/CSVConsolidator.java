@@ -3,6 +3,7 @@ package com.miklosova.rdftocsvw.output_processor;
 import com.miklosova.rdftocsvw.metadata_creator.Column;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.Table;
+import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
@@ -69,11 +70,9 @@ public class CSVConsolidator {
                                 else {
                                     int finalI = i;
                                     if(t.getTableSchema().getColumns().stream().anyMatch(
-                                            column -> (columns.get(finalI).getPropertyUrl() != null &&  column.getPropertyUrl() != null
-                                                    && column.getPropertyUrl().equalsIgnoreCase(columns.get(finalI).getPropertyUrl())))){
+                                            column -> isMergeable(columns.get(finalI), column))){
                                         Optional<Column> columnOptional = t.getTableSchema().getColumns().stream().filter(
-                                                column -> (columns.get(finalI).getPropertyUrl() != null &&  column.getPropertyUrl() != null
-                                                        && column.getPropertyUrl().equalsIgnoreCase(columns.get(finalI).getPropertyUrl()))).findFirst();
+                                                column -> (isMergeable(columns.get(finalI), column))).findFirst();
                                         lineToWrite[i] = (columnOptional.isPresent()) ? line[t.getTableSchema().getColumns().indexOf(columnOptional.get())] : "";
                                         if(counter % 10 == 0)System.out.println(Arrays.toString(lineToWrite));
                                     }
@@ -89,15 +88,21 @@ public class CSVConsolidator {
                 } catch (CsvValidationException e) {
                     throw new RuntimeException(e);
                 }
-
-
             }
 
-
+            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileToWriteTo.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
+    }
+
+    private boolean isMergeable(Column c1, Column c2){
+        // The columns have nonnull popertyUrl, have the same propertyUrl, and if lang is not null, they have the same lang
+        return c1.getPropertyUrl() != null &&  c2.getPropertyUrl() != null
+                && c2.getPropertyUrl().equalsIgnoreCase(c1.getPropertyUrl()) &&
+                ((c1.getLang() == null && c2.getLang() == null) ||
+                        (c1.getLang().equalsIgnoreCase(c2.getLang())));
     }
 }

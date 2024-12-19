@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import static com.miklosova.rdftocsvw.support.FileWrite.writeStringArrayAsCSVToFile;
+
 public class Main {
     public static void main(String[] args) {
         // Capture start time
@@ -84,6 +86,40 @@ public class Main {
 
         // Calculate total runtime
         long totalTime = endTime - startTime;
+
+        int numberOfCreatedCSVs = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES).split(",").length;
+        File processedFile = new File("../" + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
+        System.out.println("INPUT_FILENAME : " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME) );
+
+        System.out.println("processedFile : " + processedFile.getAbsolutePath() );
+        if (processedFile.exists() && processedFile.isFile()) {
+            long fileSizeInBytes = processedFile.length();
+            double fileSizeInKB = fileSizeInBytes / 1024.0;
+            double fileSizeInMB = fileSizeInKB / 1024.0;
+            System.out.println("Length of file in bytes: " + fileSizeInBytes );
+            System.out.println("Length of file in Kbytes: " + fileSizeInKB );
+            System.out.println("Length of file in Mbytes: " + fileSizeInMB );
+
+            writeStringArrayAsCSVToFile("experimentTimeDurations.csv",new String[] {String.valueOf(totalTime),
+                    String.valueOf(fileSizeInMB),
+                    ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD),
+                    ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES),
+                    ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM),
+                    String.valueOf(numberOfCreatedCSVs),
+                    processedFile.getName()});
+
+            System.out.printf("File size: %d bytes (%.2f KB, %.2f MB)%n", fileSizeInBytes, fileSizeInKB, fileSizeInMB);
+        } else {
+            System.out.println("The file does not exist or is not a regular file.");
+            writeStringArrayAsCSVToFile("experimentTimeDurations.csv",new String[] {String.valueOf(totalTime),
+                    "null",
+                    ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD),
+                    ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES),
+                    ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM),
+                    String.valueOf(numberOfCreatedCSVs),
+                    processedFile.getName()});
+        }
+
 
         // Output the total time
         System.out.println("Program ran for " + totalTime + " milliseconds.");

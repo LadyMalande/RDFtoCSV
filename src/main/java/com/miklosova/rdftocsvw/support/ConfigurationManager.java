@@ -115,16 +115,34 @@ public class ConfigurationManager {
     }
 
     public static void processConfigMap(Map<String, String> configMap) {
+        String tables = ONE_TABLE;
+        String conversionMethod = QueryMethods.BASIC_QUERY.getValue();
         String queryMethod = QueryMethods.BASIC_QUERY.getValue();
-        if (configMap != null && configMap.containsKey("table")) {
-            queryMethod = switch (configMap.get("table")) {
-                case "splitQuery", "more" -> QueryMethods.SPLIT_QUERY.getValue();
-                default -> QueryMethods.BASIC_QUERY.getValue();
-            };
+        String firstNormalForm = "true";
+        if (configMap != null) {
+            if (configMap.containsKey("table")) {
+                tables = switch (configMap.get("table")) {
+                    case "splitQuery", "more" -> QueryMethods.SPLIT_QUERY.getValue();
+                    default -> QueryMethods.BASIC_QUERY.getValue();
+                };
+            }
+            if (configMap.containsKey("conversionMethod")) {
+                conversionMethod = switch (configMap.get("conversionMethod")) {
+                    case "splitQuery", "more" -> QueryMethods.SPLIT_QUERY.getValue();
+                    default -> QueryMethods.BASIC_QUERY.getValue();
+                };
+            }
+            if (configMap.containsKey("firstNormalForm")) {
+                firstNormalForm = configMap.get("firstNormalForm");
+            }
         }
+        // TODO finish implementing all the relevant parameters
         if (ConfigurationManager.getVariableFromConfigFile(CONVERSION_METHOD) == null)
             saveVariableToConfigFile(CONVERSION_METHOD, queryMethod);
-        // TODO add more parameters compatible with web service
+        if (ConfigurationManager.getVariableFromConfigFile(TABLES) == null)
+            saveVariableToConfigFile(TABLES, tables);
+        if (ConfigurationManager.getVariableFromConfigFile(FIRST_NORMAL_FORM) == null)
+            saveVariableToConfigFile(FIRST_NORMAL_FORM, String.valueOf(firstNormalForm));
 
     }
 
@@ -221,6 +239,26 @@ public class ConfigurationManager {
                 System.exit(1);
             }
 
+            try {
+                URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
+                File file = new File(location.toURI().getPath());
+                String jarDirectory = file.getParentFile().getName();
+                File fileToRead = new File(jarDirectory, args[0]);
+                String fileInDirectory = null;
+                String fileArgFromArgs = ConfigurationManager.readArgWithDefaultOptions(args, "file");
+                if (jarDirectory.equalsIgnoreCase("target")) {
+                    //fileInDirectory =  args[0];
+                    fileInDirectory = fileArgFromArgs;
+                } else {
+                    // fileInDirectory = jarDirectory + File.separator + args[0];
+                    fileInDirectory = jarDirectory + File.separator + fileArgFromArgs;
+                }
+
+                saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, fileInDirectory);
+                System.out.println("JAR Directory: " + jarDirectory + " fileInDirectory = " + fileInDirectory);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
 
             writeOptionsToConfigFile(multipleTables, parsingMethod, inputFile, streamingMethod, normalForm, outputFilename);
         } catch (ParseException e) {

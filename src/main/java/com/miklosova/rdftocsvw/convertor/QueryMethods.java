@@ -4,7 +4,6 @@ public enum QueryMethods {
     BASIC_QUERY("basicQuery"),
     SPLIT_QUERY("splitQuery");
 
-
     private final String value;
 
     QueryMethods(String value) {

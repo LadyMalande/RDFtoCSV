@@ -1,0 +1,6 @@
+duration (ms),size of RDF file (MB),conversion method,tables,first normal form,number of created CSVs,name of the original RDF file
+186659,0.0,basicQuery,one,false,1,posudky_streaming_n_t2LangFix.nt
+220130,0.0,basicQuery,one,false,1,posudky_streaming_n_t2LangFix.nt
+192728,null,basicQuery,one,false,1,posudky_rdf4j.nt
+209313,null,basicQuery,one,false,1,posudky_rdf4j.nt
+226728,19.178656578063965,basicQuery,one,false,1,posudky_rdf4j.nt

@@ -18,7 +18,6 @@ public class RDF4JMethod implements IInputParsingMethod {
 
         // Query in rdf4j
 
-
         // Open a connection to the database
         RepositoryConnection conn = db.getConnection();
         //RDFFormat fileFormat = ps.processInput(conn, fileToParse);
