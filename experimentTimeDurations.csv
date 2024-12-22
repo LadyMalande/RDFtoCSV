@@ -4,3 +4,7 @@ duration (ms),size of RDF file (MB),conversion method,tables,first normal form,n
 192728,null,basicQuery,one,false,1,posudky_rdf4j.nt
 209313,null,basicQuery,one,false,1,posudky_rdf4j.nt
 226728,19.178656578063965,basicQuery,one,false,1,posudky_rdf4j.nt
+377,null,streaming,one,true,1,events_Brno_streaming_n_consolidatedMetadata.nt
+1886882,null,streaming,one,true,1,events_Brno_streaming_n_consolidatedMetadata2.nt
+1935414,null,streaming,more,true,3,events_Brno_streaming_n_t_consolidatedMetadata2.nt
+1924717,null,streaming,more,false,3,events_Brno_streaming_t_consolidatedMetadata2.nt

@@ -43,13 +43,13 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
     }
 
     @Override
-    public PrefinishedOutput convertWithQuery(RepositoryConnection rc) {
+    public PrefinishedOutput<RowsAndKeys> convertWithQuery(RepositoryConnection rc) {
         this.rc = rc;
         loadConfiguration();
         changeBNodesForIri(rc);
         deleteBlankNodes(rc);
         rows = new ArrayList<>();
-        PrefinishedOutput queryResult;
+        PrefinishedOutput<RowAndKey> queryResult;
         String query = getCSVTableQueryForModel(true);
         try {
             //System.out.println("Query at top level in convertWithQuery\n" + query);
@@ -59,13 +59,19 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
             query = getCSVTableQueryForModel(false);
             queryResult = queryRDFModel(query, false);
         }
-        return queryResult;
+        RowsAndKeys rak = new RowsAndKeys();
+        ArrayList<RowAndKey> rakArray = new ArrayList<>();
+        assert queryResult != null;
+        rakArray.add(queryResult.getPrefinishedOutput());
+        rak.setRowsAndKeys(rakArray);
+        return new PrefinishedOutput<RowsAndKeys>(rak);
     }
 
     private void deleteBlankNodes(RepositoryConnection rc) {
         String del = "DELETE {?s ?p ?o .} WHERE { ?s ?p ?o . FILTER (isBlank(?s) || isBlank(?o))}";
         Update deleteQuery = rc.prepareUpdate(del);
         deleteQuery.execute();
+        System.out.println("Deleted blank NOdes: " + deleteQuery.toString());
     }
 
     private void loadConfiguration() {
@@ -113,9 +119,10 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
         return selectQuery.getQueryString();
     }
 
-    private PrefinishedOutput queryRDFModel(String queryString, boolean askForTypes) {
-
+    private PrefinishedOutput<RowAndKey> queryRDFModel(String queryString, boolean askForTypes) throws IndexOutOfBoundsException {
+        System.out.println("queryRDFModel start");
         PrefinishedOutput<RowAndKey> gen = new PrefinishedOutput<>(new RowAndKey.RowAndKeyFactory());
+        System.out.println("after initializing gen start");
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
         //System.out.println("CONVERSION_HAS_RDF_TYPES at the beginning " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES));
         // Query the data and pass the result as String
@@ -131,7 +138,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
 
                 @Override
                 public void statementRemoved(Statement removed) {
-                    //System.out.println("removed: " + removed);
+                    System.out.println("removed: " + removed);
                 }
 
                 @Override
@@ -141,20 +148,29 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
             });
 
             while (!conn.isEmpty()) {
-
+                System.out.println("Conn is not empty , size: " + conn.size());
+                System.out.println("queryString: \n" + queryString);
                 TupleQuery query = conn.prepareTupleQuery(queryString);
                 // A QueryResult is also an AutoCloseable resource, so make sure it gets closed when done.
                 try (TupleQueryResult result = query.evaluate()) {
                     // we just iterate over all solutions in the result...
                     if (result == null) {
+                        System.out.println("result == null ");
                         return null;
                     }
+                    List<BindingSet> resultList = result.stream().toList(); // Collect into a list
+
+                    System.out.println("result count = " + resultList.size());
+
+                    if (resultList.isEmpty()) {
+                        System.out.println("resultList.isEmpty() " + true);
+                        throw new IndexOutOfBoundsException();
+                    }
                     roots = new ArrayList<>();
-                    //System.out.println(result.stream().count());
-                    for (BindingSet solution : result) {
+                    for (BindingSet solution : resultList) {
                         // ... and print out the value of the variable binding for ?s and ?n
                         //System.out.println("?subject = " + solution.getValue("s") + " is a o=" + solution.getValue("o") + " added to roots");
-                        System.out.println("Table Group=" + CSVW_TableGroup);
+                        //System.out.println("Table Group=" + CSVW_TableGroup);
                         if (solution.getValue("o").stringValue().equalsIgnoreCase(CSVW_TableGroup)) {
                             //System.out.println("Table Group, engaging in StandardModeConverter");
                             StandardModeConverter smc = new StandardModeConverter(db);
@@ -205,12 +221,16 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
 
                         }
                     }
+                } catch(IndexOutOfBoundsException ex){
+                    throw new IndexOutOfBoundsException();
                 }
                 queryString = getCSVTableQueryForModel(true);
             }
             //rows.forEach(k -> System.out.println("Row: " + k.id.stringValue() + " " + k.columns.entrySet()));
 
             ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
+        }catch(IndexOutOfBoundsException ex){
+            throw new IndexOutOfBoundsException();
         }
 
         // Verify the output in console
@@ -223,6 +243,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
     private void queryForSubjects(RepositoryConnection conn, Row newRow, Value root, Value subject, int level) {
         String queryToGetAllPredicatesAndObjects = getQueryToGetObjectsForRoot(subject);
         TupleQuery query = conn.prepareTupleQuery(queryToGetAllPredicatesAndObjects);
+        System.out.println("tuple query:" + query.toString()) ;
         assert root != null;
         try (TupleQueryResult result = query.evaluate()) {
 
@@ -285,7 +306,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                 // Delete the triple from the storage
                 Resource subjectToDelete = Values.iri(subject.toString());
                 IRI predicate = Values.iri(solution.getValue("p").toString());
-                //System.out.println("Wanting to delete =  " + subject + ", " + predicate + ", " + "" + solution.getValue("o").toString());
+                System.out.println("Wanting to delete =  " + subject + ", " + predicate + ", " + "" + solution.getValue("o").toString());
                 if (subjectIsInOnlyOneTripleAsObject(conn, subjectToDelete)) {
                     conn.remove(subjectToDelete, predicate, solution.getValue("o"));
                 }

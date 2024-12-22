@@ -47,7 +47,41 @@ public class ConfigurationManager {
         String fileInDirectory;
         try {
             URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
-            File file = new File(location.toURI().getPath());
+            System.out.println("URL location.toString from getCONFIG_FILE_NAME " + location.toString());
+            System.out.println("URL location.getPath from getCONFIG_FILE_NAME " + location.getPath());
+            System.out.println("URL location.toURI() from getCONFIG_FILE_NAME " + location.toURI());
+            System.out.println("URL location.toURI().getPath() from getCONFIG_FILE_NAME " + location.toURI().getPath());
+            String fileName = "/app.config";
+            if(location.toURI().toString().contains("jar:nested:")){
+                // Change the directory in remote place
+                //.replaceFirst("!/$", "!/"); // Ensure correct trailing format if needed
+
+                // Create a new URL if required
+                //location = new URL(modifiedURLString);
+                fileName = location.toString()
+                        .replace("jar:nested:", "");
+                System.out.println("Modified URL location.toString from getCONFIG_FILE_NAME " + location.toString());
+            } else if (location.toURI().toString().contains("nested:")){
+                // Change the directory in remote place
+                //.replaceFirst("!/$", "!/"); // Ensure correct trailing format if needed
+
+                // Create a new URL if required
+                //location = new URL(modifiedURLString);
+                fileName = location.toString()
+                        .replace("nested:", "");
+                System.out.println("Modified URL location.toString from getCONFIG_FILE_NAME " + location.toString());
+            }
+
+
+            //File file = new File(location.toURI().getPath());
+            File file;
+            if(location.toURI().toString().contains("jar:nested:") || location.toURI().toString().contains("nested:")){
+                file = new File(fileName);
+            } else {
+                file = new File(location.getPath());
+            }
+            System.out.println("Created file getCONFIG_FILE_NAME " + file.getAbsolutePath());
+
             String jarDirectory = file.getParentFile().getName();
 
 
@@ -69,7 +103,7 @@ public class ConfigurationManager {
             String fileNameBeingRead = null;
             // Create the new path by inserting jarDirectory
             if (jarDirectory.equalsIgnoreCase("target")) {
-                //System.out.println("jarDirectory.equalsIgnoreCase(\"target\"");
+                System.out.println("jarDirectory.equalsIgnoreCase(\"target\"");
                 fileInDirectory = canonicalPath.substring(0, insertPosition) + "RDFtoCSV" + File.separator
                         + jarDirectory
                         + File.separator
@@ -77,14 +111,34 @@ public class ConfigurationManager {
 
 
             } else {
-                fileInDirectory = canonicalPath.substring(0, insertPosition)
-                        + jarDirectory
+                String path = ConfigurationManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+
+                // Decode spaces and special characters in the URL
+                String currentDir = new File(java.net.URLDecoder.decode(path, "UTF-8")).getAbsolutePath();
+                String currentDirsParent = new File(java.net.URLDecoder.decode(path, "UTF-8")).getParent();
+                System.out.println("currentDir " + currentDir);
+                System.out.println("currentDirsParent " + currentDirsParent);
+                System.out.println(//canonicalPath.substring(0, insertPosition)+
+                        currentDir
+                        + File.separator
+                        + canonicalPath.substring(insertPosition));
+                if(currentDir.contains("/app/nested:")){
+                    currentDir = currentDir.replace("/app/nested:","");
+                }
+                fileInDirectory = //canonicalPath.substring(0, insertPosition)+
+                         currentDir
                         + File.separator
                         + canonicalPath.substring(insertPosition);
             }
+            System.out.println("fileInDirectory " + fileInDirectory);
+            System.out.println("canonicalPath.substring(0, insertPosition) " + canonicalPath.substring(0, insertPosition));
+            System.out.println("jarDirectory " + jarDirectory);
+            System.out.println("File.separator " + File.separator);
+            System.out.println("canonicalPath.substring(insertPosition) " + canonicalPath.substring(insertPosition));
             //fileInDirectory = jarDirectory + File.separator + canonicalPath;
             currentConfigFileName = fileInDirectory;
-            System.out.println(currentConfigFileName);
+            System.out.println("currentConfigFileName in getCONFIG_FILE_NAME = " + currentConfigFileName);
+            File configFileCreated = new File(currentConfigFileName);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -94,6 +148,7 @@ public class ConfigurationManager {
 
         return currentConfigFileName;
     }
+
 
     public static void saveVariableToConfigFile(String variableName, String value) {
         //System.out.println("new String value with encoding for variable(" + variableName + "): " + value);
@@ -114,36 +169,39 @@ public class ConfigurationManager {
 
     }
 
-    public static void processConfigMap(Map<String, String> configMap) {
+    public static void processConfigMap(String fileName, Map<String, String> configMap) {
+        getCONFIG_FILE_NAME();
         String tables = ONE_TABLE;
+        String readMethod = DEFAULT_PARSING_METHOD;
         String conversionMethod = QueryMethods.BASIC_QUERY.getValue();
-        String queryMethod = QueryMethods.BASIC_QUERY.getValue();
         String firstNormalForm = "true";
         if (configMap != null) {
             if (configMap.containsKey("table")) {
                 tables = switch (configMap.get("table")) {
-                    case "splitQuery", "more" -> QueryMethods.SPLIT_QUERY.getValue();
-                    default -> QueryMethods.BASIC_QUERY.getValue();
+                    case "splitQuery", "more" -> "more";
+                    default -> "one";
                 };
             }
-            if (configMap.containsKey("conversionMethod")) {
-                conversionMethod = switch (configMap.get("conversionMethod")) {
-                    case "splitQuery", "more" -> QueryMethods.SPLIT_QUERY.getValue();
-                    default -> QueryMethods.BASIC_QUERY.getValue();
-                };
-            }
+            readMethod = configMap.getOrDefault("readMethod", readMethod);
+            System.out.println("tables = " + tables);
+            conversionMethod = (tables.equalsIgnoreCase(ONE_TABLE)) ? QueryMethods.BASIC_QUERY.getValue() : QueryMethods.SPLIT_QUERY.getValue();
             if (configMap.containsKey("firstNormalForm")) {
                 firstNormalForm = configMap.get("firstNormalForm");
             }
         }
         // TODO finish implementing all the relevant parameters
         if (ConfigurationManager.getVariableFromConfigFile(CONVERSION_METHOD) == null)
-            saveVariableToConfigFile(CONVERSION_METHOD, queryMethod);
+            saveVariableToConfigFile(CONVERSION_METHOD, conversionMethod);
         if (ConfigurationManager.getVariableFromConfigFile(TABLES) == null)
             saveVariableToConfigFile(TABLES, tables);
         if (ConfigurationManager.getVariableFromConfigFile(FIRST_NORMAL_FORM) == null)
             saveVariableToConfigFile(FIRST_NORMAL_FORM, String.valueOf(firstNormalForm));
-
+        if (ConfigurationManager.getVariableFromConfigFile(READ_METHOD) == null)
+            saveVariableToConfigFile(READ_METHOD,readMethod);
+        if(ConfigurationManager.getVariableFromConfigFile(INPUT_FILENAME) == null){
+            saveVariableToConfigFile(INPUT_FILENAME,fileName);
+            System.out.println("INPUT_FILENAME " + fileName);
+        }
     }
 
     /**
@@ -154,6 +212,8 @@ public class ConfigurationManager {
      */
     public static String getVariableFromConfigFile(String variableName) {
         Properties prop = new Properties();
+
+        System.out.println("currentConfigFileName = " + currentConfigFileName);
 
         try (FileInputStream fis = new FileInputStream(currentConfigFileName)) {
             prop.load(new InputStreamReader(fis, Charset.forName("UTF-8")));

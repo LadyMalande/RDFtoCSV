@@ -27,6 +27,7 @@ class FileReaderTest {
 
             File pathToExecutable = new File(DIRECTORY_PATH + "csv2rdf-0.4.7-standalone.jar");
             File pathToOutput = new File(DIRECTORY_PATH + "RDFoutput.ttl");
+            System.out.println(pathToOutput.getAbsolutePath());
             File pathToMetadata = new File(DIRECTORY_PATH + "csv-metadata.json");
             //pathToExecutable.getAbsolutePath()
             ProcessBuilder builder = new ProcessBuilder("java", "-jar", pathToExecutable.getAbsolutePath(), "-u", pathToMetadata.getAbsolutePath(), "-o", pathToOutput.getAbsolutePath(), "-m", "minimal");

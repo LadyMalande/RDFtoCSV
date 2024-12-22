@@ -46,7 +46,7 @@ public class RDFtoCSV {
         this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
-        ConfigurationManager.processConfigMap(null);
+        ConfigurationManager.processConfigMap(fileName, null);
     }
 
     public RDFtoCSV(String fileName, Map<String, String> configMap) {
@@ -54,7 +54,7 @@ public class RDFtoCSV {
         this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
-        ConfigurationManager.processConfigMap(configMap);
+        ConfigurationManager.processConfigMap(fileName, configMap);
     }
 
     /**
@@ -196,8 +196,9 @@ public class RDFtoCSV {
                 if (i > 0) {
                     sb.append(STATIC_DELIMITER_FOR_CSVS_IN_ONE_STRING);
                 }
-                System.out.println("FileWrite for i= " + i + " rowAndKey = " + rowAndKey.getKeys() + " getRows= " + rowAndKey.getRows());
+
                 String newFileName = files[i];
+                System.out.println("FileWrite for i= " + i + " rowAndKey = " + rowAndKey.getKeys() + " getRows= " + rowAndKey.getRows() + " newFileName " + newFileName);
                 sb.append(FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata));
                 i++;
             }
@@ -232,6 +233,7 @@ public class RDFtoCSV {
             processStreaming(metadata);
         }
         String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+        System.out.println("writeToCSV  + allFiles " + allFiles);
         String[] files = allFiles.split(",");
         try {
             assert po != null;
@@ -241,6 +243,7 @@ public class RDFtoCSV {
             for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
                 System.out.println("FileWrite for i= " + i + " rowAndKey = " + rowAndKey.getKeys() + " getRows= " + rowAndKey.getRows());
                 String newFileName = files[i];
+                System.out.println("writeToCSV for i= " + i + " newFileName = " + newFileName);
                 FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata);
                 i++;
             }

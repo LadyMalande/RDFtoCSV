@@ -1,0 +1,5 @@
+<https://blank_Nodes_IRI.org/0> <http://example.org/predicate01> <http://example.org/resource/object01> .
+<https://blank_Nodes_IRI.org/0> <http://example.org/predicate02> <https://blank_Nodes_IRI.org/1> .
+<http://example.org/resource/subject02> <http://example.org/predicate02> <https://blank_Nodes_IRI.org/1> .
+<http://example.org/resource/subject02> <http://example.org/predicate01> <http://example.org/resource/object01> .
+<http://example.org/resource/subject02> <http://example.org/predicate01> <https://blank_Nodes_IRI.org/2> .

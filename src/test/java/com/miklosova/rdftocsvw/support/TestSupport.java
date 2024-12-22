@@ -28,8 +28,12 @@ import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+
+import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestSupport {
     public static final String DEFAULT_READ_METHOD = "rdf4j";
@@ -127,6 +131,84 @@ public class TestSupport {
 
 
     }
+
+    // Utility method to check if two files are equal
+    public static void assertFilesEqual(File expectedFile, File actualFile) throws IOException {
+        // Check if the files exist
+        assertTrue(expectedFile.exists(), "Expected file does not exist.");
+        assertTrue(actualFile.exists(), "Actual file does not exist.");
+
+        // Compare the contents of the two files
+        try (BufferedReader expectedReader = new BufferedReader(new FileReader(expectedFile));
+             BufferedReader actualReader = new BufferedReader(new FileReader(actualFile))) {
+
+            String expectedLine;
+            String actualLine;
+            while ((expectedLine = expectedReader.readLine()) != null) {
+                actualLine = actualReader.readLine();
+                assertNotNull(actualLine, "Actual file has fewer lines than expected.");
+                assertEquals(expectedLine, actualLine, "File contents do not match.");
+            }
+            assertNull(actualReader.readLine(), "Actual file has more lines than expected.");
+        }
+    }
+
+    public static boolean isFile1ContainedInFile2(Path file1, Path file2) {
+        try {
+            // Read lines from file1 and file2
+            List<String> file1Lines = Files.readAllLines(file1);
+            List<String> file2Lines = Files.readAllLines(file2);
+
+            // Convert file2Lines to a Set for efficient checking of containment
+            Set<String> file2ProcessedLines = new HashSet<>();
+            for (String line : file2Lines) {
+                file2ProcessedLines.add(removeWhitespace(line));
+            }
+
+            // Check if all processed lines from file1 exist in processed lines from file2
+            for (String line : file1Lines) {
+                if (!file2ProcessedLines.contains(removeWhitespace(line))) {
+                    System.err.println(Arrays.toString(new Set[]{file2ProcessedLines}) + " does not match this line: \n" + removeWhitespace(line));
+                    return false; // Found a line in file1 not in file2 (ignoring whitespace)
+                }
+            }
+
+            return true; // All lines from file1 are found in file2
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false; // Return false if an error occurs during file reading
+        }
+    }
+
+    public static Class<?> getClassByName(String className){
+        try {
+
+            // Get the Class object
+            Class<?> clazz = Class.forName(className);
+
+            // Print some information about the class
+            System.out.println("Class Name: " + clazz.getName());
+            System.out.println("Is Interface: " + clazz.isInterface());
+            System.out.println("Is Array: " + clazz.isArray());
+            System.out.println("Superclass: " + clazz.getSuperclass());
+            return clazz;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
+     * Removes spaces and tabs from a given string.
+     *
+     * @param input The input string.
+     * @return A string with all spaces and tabs removed.
+     */
+    private static String removeWhitespace(String input) {
+        return input.replaceAll("[ \t]", ""); // Replace spaces and tabs with an empty string
+    }
+
 
     private static boolean testResultIsSubset(List<BindingSet> testResult, List<BindingSet> originalResult) {
         System.out.println("in testResultIsSubset ");

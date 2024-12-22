@@ -82,8 +82,11 @@ public class ConverterHelper {
             }
             if (statement != null) {
                 rc.add(statement);
+                System.out.println("Replacing blank nodes with " + statement.getSubject().stringValue() + " " + statement.getPredicate().stringValue() + " " + statement.getObject().stringValue());
+
             }
             counter = counter + 1;
+            System.out.println("Replacing blank nodes " + counter);
         }
     }
 

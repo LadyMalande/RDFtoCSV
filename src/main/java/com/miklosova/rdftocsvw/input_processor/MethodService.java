@@ -2,6 +2,7 @@ package com.miklosova.rdftocsvw.input_processor;
 
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.RDF4JMethod;
 import com.miklosova.rdftocsvw.input_processor.streaming_methods.StreamingMethod;
+import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFParseException;
@@ -19,6 +20,9 @@ public class MethodService {
         System.out.println("read method: " + methodChoice);
         processMethodChoice(methodChoice);
         fileName = processFileOrIRI(fileName);
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, fileName);
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME,  fileName+ ".csv-metadata.json");
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH,  fileName);
         System.out.println("fileName in MethodService.java processInput: " + fileName);
         File fileToRead = new File(fileName);
         System.out.println("fileName3 in MethodService.java processInput: " + fileToRead.getAbsolutePath());

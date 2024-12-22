@@ -48,9 +48,9 @@ public class FileWrite {
         try {
             File newFile = new File("output" + i + ".txt");
             if (newFile.createNewFile()) {
-                //System.out.println("File created: " + newFile.getName());
+                System.out.println("File created: " + newFile.getName());
             } else {
-                //System.out.println("File already exists.");
+                System.out.println("File already exists.");
             }
             return newFile;
         } catch (IOException e) {
@@ -171,7 +171,10 @@ public class FileWrite {
     }
 
     public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata) {
-
+        System.out.println("saveCSVFileFromRows fileName " + fileName);
+        String split = (fileName.split("/"))[fileName.split("/").length-1];
+        System.out.println("saveCSVFileFromRows split " + split);
+        fileName = split;
         fileName = getFullPathOfFile(fileName);
         ObjectNode originalMetadataJSON = null;
         try {
@@ -184,7 +187,7 @@ public class FileWrite {
 
         File f = FileWrite.makeFileByNameAndExtension(fileName, null);
 
-        ////System.out.println("File f: " + f.getAbsolutePath());
+        System.out.println("File f filename: " + fileName);
         StringBuilder sb1 = new StringBuilder();
         List<Column> orderOfColumnKeys = addHeadersFromMetadata(fileName, metadata, sb1);
         forOutput.append(sb1);
@@ -320,7 +323,8 @@ public class FileWrite {
 
     private static String getFullPathOfFile(String fileName) {
 
-        return ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH) + fileName;
+        //return ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH);// + fileName;
+        return fileName;
     }
 
     public static void writeStringArrayAsCSVToFile(String fileName, String[] content) {
@@ -554,10 +558,12 @@ public class FileWrite {
 
     private static List<Column> addHeadersFromMetadata(String fileName, Metadata metadata, StringBuilder sb1) {
         List<Column> orderOfColumns = new ArrayList<>();
-        //System.out.println("addHeadersFromMetadata fileName = " + fileName);
+        System.out.println("addHeadersFromMetadata fileName = " + fileName);
         File fileObject = new File(fileName);
-        //metadata.getTables().forEach(tables -> System.out.println("tables = " + tables.getUrl()));
-        Table fud = metadata.getTables().stream().filter(tables -> tables.getUrl().equals(fileObject.getName())).findFirst().get();
+        metadata.getTables().forEach(tables -> System.out.println("tables = " + tables.getUrl()));
+        Optional<Table> findTable = metadata.getTables().stream().filter(tables -> tables.getUrl().equals(fileObject.getName())).findFirst();
+        System.out.println("addHeadersFromMetadata fileObject.getName() = " + fileObject.getName());
+        Table fud = findTable.orElse(null);
         Column firstColumn = null;
         if (Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))) {
 
@@ -604,6 +610,7 @@ public class FileWrite {
                 newFile = new File(name);
                 System.out.println("newFile.getName(): " + newFile.getName());
             }
+            System.out.println("Trying to delete file.getAbsolutePAth " + newFile.getAbsolutePath());
             FileWrite.deleteFile(newFile.getAbsolutePath());
             if (newFile.createNewFile()) {
                 //System.out.println("File created: " + newFile);
@@ -613,13 +620,14 @@ public class FileWrite {
             }
             return newFile;
         } catch (IOException e) {
-            //System.out.println("An error occurred.");
+            System.out.println("An error occurred.");
             e.printStackTrace();
             return null;
         }
     }
 
     public static void writeSubjectsTotheFile(File file, Set<Resource> resources) {
+        System.out.println("writeSubjectsTotheFile file.getName() " + file.getName() + " file.getAbs " + file.getAbsolutePath());
         try {
             FileWriter myWriter = new FileWriter(file.getName());
             for (Resource r : resources) {
@@ -627,7 +635,7 @@ public class FileWrite {
                 myWriter.write("\n");
             }
             myWriter.close();
-            //System.out.println("Successfully wrote to the file.");
+            System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
             //System.out.println("An error occurred.");
             e.printStackTrace();

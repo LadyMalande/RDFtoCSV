@@ -4,7 +4,7 @@ import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import org.eclipse.rdf4j.repository.Repository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 
 import java.io.FileReader;
 import java.util.logging.Logger;
@@ -16,7 +16,7 @@ public class BaseTest {
     public Repository db;
     private String PROCESS_METHOD = "rdf4j";
 
-    @After
+    @AfterEach
     public void tearDown() {
         if (db != null) {
             db.shutDown();

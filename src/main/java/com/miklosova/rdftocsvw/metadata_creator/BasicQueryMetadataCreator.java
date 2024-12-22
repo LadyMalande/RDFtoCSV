@@ -53,6 +53,7 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
         if (!ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES).isEmpty()) {
             newFileName = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
         }
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES) + "," + newFileName);
         System.out.println("newFileName: " + newFileName);
         metadata.addMetadata(newFileName, rnk.getKeys(), rnk.getRows());
         fileNumberX = fileNumberX + 1;

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rdf:RDF
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:ns0="http://example.org/">
+
+  <rdf:Description rdf:about="http://example.org/resource/subject02">
+    <ns0:predicate02 rdf:resource="https://blank_Nodes_IRI.org/0"/>
+    <ns0:predicate01 rdf:resource="http://example.org/resource/object01"/>
+    <ns0:predicate01 rdf:resource="https://blank_Nodes_IRI.org/1"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="https://blank_Nodes_IRI.org/2">
+    <ns0:predicate01 rdf:resource="http://example.org/resource/object01"/>
+    <ns0:predicate02 rdf:resource="https://blank_Nodes_IRI.org/0"/>
+  </rdf:Description>
+
+</rdf:RDF>

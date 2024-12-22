@@ -83,9 +83,4 @@ public class JsonUtil {
             return null;
         }
     }
-
-    public static Metadata deserializeAndReturnObject(String jsonStr){
-        //Metadata metadata = JsonUtil.fromJson(jsonStr, Metadata.class);
-        return null;
-    }
 }

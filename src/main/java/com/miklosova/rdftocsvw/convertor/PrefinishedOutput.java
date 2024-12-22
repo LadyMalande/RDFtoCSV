@@ -6,8 +6,9 @@ public class PrefinishedOutput<T> {
     T prefinishedOutput;
 
     PrefinishedOutput(IFactory<T> fact) {
-        System.out.println("Constructor with IFactory<T> parameter");
+        System.out.println("Constructor with IFactory<T> parameter start");
         prefinishedOutput = fact.factory();
+        System.out.println("Constructor with IFactory<T> parameter end");
     }
 
     public PrefinishedOutput(T prefinishedOutput) {
