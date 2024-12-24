@@ -12,8 +12,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.*;
 
-import static com.miklosova.rdftocsvw.support.FileWrite.writeMapToFile;
-
 public class MetadataConsolidator {
 
     private final String nameExtension = "_merged.csv";

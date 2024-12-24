@@ -8,3 +8,6 @@ duration (ms),size of RDF file (MB),conversion method,tables,first normal form,n
 1886882,null,streaming,one,true,1,events_Brno_streaming_n_consolidatedMetadata2.nt
 1935414,null,streaming,more,true,3,events_Brno_streaming_n_t_consolidatedMetadata2.nt
 1924717,null,streaming,more,false,3,events_Brno_streaming_t_consolidatedMetadata2.nt
+21253,null,splitQuery,more,false,1,test005.ttl
+21227,null,basicQuery,one,false,1,test005.ttl
+21461,null,splitQuery,more,false,1,test005.ttl

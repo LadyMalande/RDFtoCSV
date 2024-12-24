@@ -58,7 +58,7 @@ public class StandardModeConverter implements IQueryParser {
     }
 
     @Override
-    public PrefinishedOutput convertWithQuery(RepositoryConnection rc) {
+    public PrefinishedOutput<RowsAndKeys> convertWithQuery(RepositoryConnection rc) {
         PrefinishedOutput<RowsAndKeys> gen = new PrefinishedOutput<RowsAndKeys>(new RowsAndKeys.RowsAndKeysFactory());
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(true));
         System.out.println("CONVERSION_HAS_RDF_TYPES at the beginning " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES));

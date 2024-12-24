@@ -60,7 +60,7 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
         allRows.add(rnk.getRows());
         allFileNames.add(newFileName);
 
-        FileWrite.writeFilesToconfigFile(allFileNames);
+        FileWrite.writeFilesToConfigFile(allFileNames);
 
         metadata.addForeignKeys(allRows);
         metadata.jsonldMetadata();

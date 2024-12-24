@@ -53,7 +53,7 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
             allRows.add(rowAndKey.getRows());
             allFileNames.add(newFileName);
         }
-        FileWrite.writeFilesToconfigFile(allFileNames);
+        FileWrite.writeFilesToConfigFile(allFileNames);
 
         metadata.addForeignKeys(allRows);
         metadata.jsonldMetadata();

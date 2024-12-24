@@ -30,16 +30,23 @@ public class RDFtoCSV {
             -----------ANOTHER CSV TABLE-----------
                 
             """;
-    public final String DEFAULT_METHOD = "splitQuery";
-    public final String DEFAULT_READ_METHOD = "rdf4j";
+
     Repository db;
     RepositoryConnection rc;
     /**
      * Mandatory, sets the original RDF file to convert.
      */
-    private final String fileName;
-    private String readMethod;
+    private String fileName;
     private final String filePathForOutput;
+
+    public String getFilePathForOutput() {
+        return filePathForOutput;
+    }
+
+    public String getMetadataFilename() {
+        return metadataFilename;
+    }
+
     private final String metadataFilename;
 
     public RDFtoCSV(String fileName) {
@@ -52,6 +59,7 @@ public class RDFtoCSV {
     public RDFtoCSV(String fileName, Map<String, String> configMap) {
 
         this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
+        System.out.println("Constructor for RDFtoCSV: isUrl(fileName) = " + isUrl(fileName) + " fileName = " + fileName);
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
         ConfigurationManager.processConfigMap(fileName, configMap);
@@ -62,7 +70,7 @@ public class RDFtoCSV {
      */
     @SuppressWarnings("unused")
     public FinalizedOutput<byte[]> convertToZip() throws IOException {
-        this.configure();
+        ConfigurationManager.configure(metadataFilename, filePathForOutput);
 
         parseInput();
 
@@ -104,7 +112,15 @@ public class RDFtoCSV {
         String[] files = allFiles.split(",");
         StringBuilder sb = new StringBuilder();
 
-        RowAndKey rnk = (RowAndKey) po.getPrefinishedOutput();
+        RowAndKey rnk;
+        if(po.getPrefinishedOutput() instanceof RowsAndKeys){
+            rnk = (RowAndKey) ((RowsAndKeys) po.getPrefinishedOutput()).rowsAndKeys.get(0);
+        } else if(po.getPrefinishedOutput() instanceof  RowAndKey){
+            rnk = (RowAndKey) po.getPrefinishedOutput();
+        } else {
+            throw new IllegalArgumentException("The passed argument for writeToStringTrivial can only be of " +
+                    "generic PrefinishedOutput<RowsAndKeys> or PrefinishedOutput<RowAndKey>");
+        }
 
         String newFileName = files[0];
         System.out.println("ClassCastException FileWrite for newfilename= " + newFileName + " rowAndKey = ");
@@ -112,12 +128,13 @@ public class RDFtoCSV {
 
         db.shutDown();
 
+        System.out.println(sb.toString());
         return sb.toString();
     }
 
     public String getCSVTableAsString() throws IOException {
 
-        this.configure();
+        ConfigurationManager.configure(metadataFilename, filePathForOutput);
         if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD).equalsIgnoreCase("trivial")) {
             System.out.println("doing TRIVIAL ");
             return getTrivialCSVTableAsString();
@@ -129,11 +146,7 @@ public class RDFtoCSV {
 
         Metadata metadata = createMetadata(po);
 
-        // Enrich metadata with online reachable data - disabled if offline
-        // TODO
-
         // Write data to CSV by the metadata prepared
-
         return writeToString(po, metadata);
     }
 
@@ -145,7 +158,7 @@ public class RDFtoCSV {
     }
 
     public Metadata getMetadata() throws IOException {
-        this.configure();
+        ConfigurationManager.configure(metadataFilename, filePathForOutput);
 
         parseInput();
 
@@ -157,7 +170,11 @@ public class RDFtoCSV {
     @SuppressWarnings("unused")
     public FinalizedOutput<byte[]> getCSVTableAsFile() throws IOException {
         String outputString = getCSVTableAsString();
+        if(fileName.startsWith("../")){
+            fileName = fileName.substring(2);
+        }
         String fileNameSafe = isUrl(fileName) ? (iri(fileName).getLocalName()) : "../" + fileName;
+        System.out.println("getCSVTableAsFile: fileNameSafe = " + fileNameSafe);
         File f = FileWrite.makeFileByNameAndExtension(fileNameSafe, "csv");
         assert f != null;
         FileWrite.writeToTheFile(f, outputString, true);
@@ -289,7 +306,9 @@ public class RDFtoCSV {
         // Create a new Repository.
         db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService();
-        System.out.println("read method: " + readMethod);
+
+        String readMethod = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD);
+        System.out.println("read method in parse input: " + readMethod);
         rc = methodService.processInput(fileName, readMethod, db);
 
     }
@@ -298,34 +317,10 @@ public class RDFtoCSV {
         // Parse input
         // Create a new Repository.
         MethodService methodService = new MethodService();
+        System.out.println("fileName in createRepositoryConnection = " + filename);
         RepositoryConnection repositoryConnection = methodService.processInput(filename, readMethod, repository);
         assert (repositoryConnection != null);
         return repositoryConnection;
     }
 
-    public void configure() {
-        BasicConfigurator.configure();
-
-        String m = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD);
-        String method = (m != null) ? m : DEFAULT_METHOD;
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, method);
-        readMethod = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD);
-        readMethod = (readMethod != null) ? readMethod : DEFAULT_READ_METHOD;
-        System.out.println("readMethod is " + readMethod);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.READ_METHOD, readMethod);
-
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, metadataFilename);
-
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, filePathForOutput);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, "");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.METADATA_ROWNUMS, "false");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH, "");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME, ConfigurationManager.DEFAULT_OUTPUT_ZIPFILE_NAME);
-    }
-
-    public String getOutputFileName() {
-        return filePathForOutput;
-    }
 }

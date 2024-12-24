@@ -6,6 +6,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Row {
+    public Value getId() {
+        return id;
+    }
+
+    public void setId(Value id) {
+        this.id = id;
+    }
+
+    public Value getType() {
+        return type;
+    }
+
+    public void setType(Value type) {
+        this.type = type;
+    }
+
+    public boolean isRdfType() {
+        return isRdfType;
+    }
+
+    public void setRdfType(boolean rdfType) {
+        isRdfType = rdfType;
+    }
+
+    public Map<Value, TypeIdAndValues> getColumns() {
+        return columns;
+    }
+
+    public void setColumns(Map<Value, TypeIdAndValues> columns) {
+        this.columns = columns;
+    }
+
     public Value id;
     public Value type;
     public boolean isRdfType;

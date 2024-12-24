@@ -84,7 +84,7 @@ public class CSVWValidatorTests extends BaseTest {
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH, RESOURCES_PATH);
         db = new SailRepository(new MemoryStore());
         RDFtoCSV rdFtoCSV = new RDFtoCSV(this.filePath);
-        rdFtoCSV.configure();
+        ConfigurationManager.configure(rdFtoCSV.getMetadataFilename(), rdFtoCSV.getFilePathForOutput());
         try {
             repositoryConnection = rdFtoCSV.createRepositoryConnection(db, this.filePath, READ_METHOD);
             this.prefinishedOutput = rdFtoCSV.convertData(repositoryConnection, db);

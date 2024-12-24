@@ -2,6 +2,7 @@ package com.miklosova.rdftocsvw.support;
 
 import com.miklosova.rdftocsvw.convertor.QueryMethods;
 import org.apache.commons.cli.*;
+import org.apache.log4j.BasicConfigurator;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -31,6 +32,8 @@ public class ConfigurationManager {
      */
     public static final String DEFAULT_METADATA_FILENAME = "csv-metadata.json";
     public static final String DEFAULT_CONVERSION_METHOD = "basicQuery";
+    public static final String DEFAULT_METHOD = "basicQuery";
+    public static final String DEFAULT_READ_METHOD = "rdf4j";
     public static final String MULTIPLE_TABLES_CONVERSION_METHOD = "splitQuery";
     public static final String DEFAULT_OUTPUT_ZIPFILE_NAME = "zippedCSVW.zip";
     public static final String TABLES = "conversion.tables";
@@ -170,7 +173,8 @@ public class ConfigurationManager {
     }
 
     public static void processConfigMap(String fileName, Map<String, String> configMap) {
-        getCONFIG_FILE_NAME();
+        createConfigFile();
+        //getCONFIG_FILE_NAME();
         String tables = ONE_TABLE;
         String readMethod = DEFAULT_PARSING_METHOD;
         String conversionMethod = QueryMethods.BASIC_QUERY.getValue();
@@ -223,7 +227,7 @@ public class ConfigurationManager {
 
         return prop.getProperty(variableName);
     }
-
+/*
     private static void createConfigFile() {
 
         // Now you call the static variable for the first time and set it if needed
@@ -248,6 +252,40 @@ public class ConfigurationManager {
 
     }
 
+
+ */
+
+    public static void createConfigFile(){
+        // Define the default config file path (can be made configurable)
+        String configFilePath = System.getProperty("config.file", "config/app.config");
+
+        // Ensure the directory exists
+        File configFile = new File(configFilePath);
+        currentConfigFileName = configFile.getAbsolutePath();
+        File parentDir = configFile.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            if (!parentDir.mkdirs()) {
+                try {
+                    throw new IOException("Failed to create directory: " + parentDir.getAbsolutePath());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        // Create the config file
+        if (!configFile.exists()) {
+            try {
+                if (!configFile.createNewFile()) {
+                    throw new IOException("Failed to create file: " + configFilePath);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        System.out.println("Configuration file created at: " + configFile.getAbsolutePath());
+    }
     public static String readArgWithDefaultOptions(String[] args, String argName) {
         Options options = addArgsOptions();
 
@@ -411,7 +449,7 @@ public class ConfigurationManager {
      * Set defaults if none are provided
      * Set parameters given in args if args are provided
      *
-     * @param args Parameters provided in command line/parameters of conversion
+     //* @param args Parameters provided in command line/parameters of conversion
      */
     /*
     public static void loadSettingsFromInputToConfigFile(String[] args) {
@@ -493,4 +531,27 @@ public class ConfigurationManager {
     }
 
      */
+
+
+    public static void configure(String metadataFilename, String filePathForOutput) {
+        BasicConfigurator.configure();
+
+        String m = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD);
+        String method = (m != null) ? m : DEFAULT_METHOD;
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, method);
+        String readMethod = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD);
+        readMethod = (readMethod != null) ? readMethod : DEFAULT_READ_METHOD;
+        System.out.println("readMethod is " + readMethod);
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.READ_METHOD, readMethod);
+
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, metadataFilename);
+
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, filePathForOutput);
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, "");
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.METADATA_ROWNUMS, "false");
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH, "");
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME, ConfigurationManager.DEFAULT_OUTPUT_ZIPFILE_NAME);
+    }
 }

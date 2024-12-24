@@ -138,6 +138,8 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
 
         rows = new ArrayList<>();
         PrefinishedOutput<RowsAndKeys> gen = new PrefinishedOutput<>(new RowsAndKeys.RowsAndKeysFactory());
+        System.out.println("splitFilesQuery gen instanceof PrefinishedOutput<RowAndKey> " + (gen instanceof PrefinishedOutput<RowsAndKeys>));
+        System.out.println("splitFilesQuery gen instanceof PrefinishedOutput<RowAndKey> " + (gen.prefinishedOutput instanceof RowsAndKeys));
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
         System.out.println("CONVERSION_HAS_RDF_TYPES at the beginning " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES));
         // Query the data and pass the result as String
@@ -213,7 +215,10 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
                 ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
             }
         }
+        System.out.println("splitFilesQuery gen instanceof PrefinishedOutput<RowAndKey> " + (gen instanceof PrefinishedOutput<RowsAndKeys>));
+        System.out.println("splitFilesQuery gen instanceof PrefinishedOutput<RowAndKey> " + (gen.prefinishedOutput instanceof RowsAndKeys));
         return gen;
+
     }
 
     private void recursiveQueryForFiles(RepositoryConnection conn, Value dominantType, boolean askForTypes) {

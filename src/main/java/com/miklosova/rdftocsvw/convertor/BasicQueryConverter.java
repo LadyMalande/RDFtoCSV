@@ -49,7 +49,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
         changeBNodesForIri(rc);
         deleteBlankNodes(rc);
         rows = new ArrayList<>();
-        PrefinishedOutput<RowAndKey> queryResult;
+        PrefinishedOutput<RowAndKey> queryResult = new PrefinishedOutput<>(new RowAndKey.RowAndKeyFactory());
         String query = getCSVTableQueryForModel(true);
         try {
             //System.out.println("Query at top level in convertWithQuery\n" + query);
@@ -62,7 +62,10 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
         RowsAndKeys rak = new RowsAndKeys();
         ArrayList<RowAndKey> rakArray = new ArrayList<>();
         assert queryResult != null;
-        rakArray.add(queryResult.getPrefinishedOutput());
+        System.out.println("queryResult instanceof PrefinishedOutput<RowAndKey> " + (queryResult instanceof PrefinishedOutput<RowAndKey>));
+        System.out.println("queryResult instanceof PrefinishedOutput<RowAndKey> " + (queryResult.prefinishedOutput instanceof RowAndKey));
+        rakArray.add((RowAndKey) queryResult.prefinishedOutput);
+        System.out.println("after rakArray.add(queryResult.getPrefinishedOutput());");
         rak.setRowsAndKeys(rakArray);
         return new PrefinishedOutput<RowsAndKeys>(rak);
     }
@@ -122,6 +125,8 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
     private PrefinishedOutput<RowAndKey> queryRDFModel(String queryString, boolean askForTypes) throws IndexOutOfBoundsException {
         System.out.println("queryRDFModel start");
         PrefinishedOutput<RowAndKey> gen = new PrefinishedOutput<>(new RowAndKey.RowAndKeyFactory());
+        System.out.println("gen instanceof PrefinishedOutput<RowAndKey> " + (gen instanceof PrefinishedOutput<RowAndKey>));
+        System.out.println("gen.prefinishedOutput instanceof RowAndKey " + (gen.prefinishedOutput instanceof RowAndKey));
         System.out.println("after initializing gen start");
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
         //System.out.println("CONVERSION_HAS_RDF_TYPES at the beginning " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES));
@@ -174,7 +179,12 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                         if (solution.getValue("o").stringValue().equalsIgnoreCase(CSVW_TableGroup)) {
                             //System.out.println("Table Group, engaging in StandardModeConverter");
                             StandardModeConverter smc = new StandardModeConverter(db);
-                            return smc.convertWithQuery(this.rc);
+                            RowAndKey smcOutputRowAndKey = new RowAndKey();
+                            PrefinishedOutput<RowAndKey> smcOutput = new PrefinishedOutput<>(new RowAndKey.RowAndKeyFactory());
+                            smcOutputRowAndKey = smc.convertWithQuery(this.rc).prefinishedOutput.rowsAndKeys.get(0);
+                            smcOutput.prefinishedOutput.rows.addAll(smcOutputRowAndKey.getRows());
+                            smcOutput.prefinishedOutput.keys.addAll(smcOutputRowAndKey.getKeys());
+                            return smcOutput;
                         }
                         if (!roots.contains(solution.getValue("s"))) {
                             roots.add(solution.getValue("s"));
@@ -236,7 +246,8 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
         // Verify the output in console
         gen.prefinishedOutput.rows.addAll(rows);
         gen.prefinishedOutput.keys.addAll(keys);
-
+        System.out.println("gen instanceof PrefinishedOutput<RowAndKey> 2" + (gen instanceof PrefinishedOutput<RowAndKey>));
+        System.out.println("gen.prefinishedOutput instanceof RowAndKey 2" + (gen.prefinishedOutput instanceof RowAndKey));
         return gen;
     }
 

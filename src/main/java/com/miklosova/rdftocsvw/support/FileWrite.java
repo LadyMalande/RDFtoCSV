@@ -8,57 +8,20 @@ import com.miklosova.rdftocsvw.convertor.TypeOfValue;
 import com.miklosova.rdftocsvw.metadata_creator.Column;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.Table;
-import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
-import com.opencsv.exceptions.CsvValidationException;
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFHandlerException;
-import org.eclipse.rdf4j.rio.RDFWriter;
-import org.eclipse.rdf4j.rio.Rio;
-import org.jruby.ir.Tuple;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.miklosova.rdftocsvw.output_processor.MetadataConsolidator.getFilePathForFileName;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
+/**
+ * Class containing methods regarding writing to files.
+ */
 public class FileWrite {
-
-    public static void writeMapToFile(Map<String, Tuple<String, String>> map, String filePath) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (Map.Entry<String, Tuple<String, String>> entry : map.entrySet()) {
-                String key = entry.getKey();
-                Tuple<String, String> value = entry.getValue();
-                String line = String.format("%s -> (%s, %s)", key, value.a, value.b);
-                writer.write(line);
-                writer.newLine(); // Move to the next line
-            }
-        } catch (IOException e) {
-            System.err.println("Error writing to file: " + e.getMessage());
-        }
-    }
-    public static File makeFile(int i) {
-        try {
-            File newFile = new File("output" + i + ".txt");
-            if (newFile.createNewFile()) {
-                System.out.println("File created: " + newFile.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-            return newFile;
-        } catch (IOException e) {
-            //System.out.println("An error occurred.");
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     /*
     public static String saveCSVFileFromRows(String fileName, ArrayList<Value> keys, ArrayList<Row> rows, String delimiter){
@@ -100,20 +63,13 @@ public class FileWrite {
 
      */
 
-    public static String getFileContent(File file) throws IOException {
-        StringBuilder content = new StringBuilder();
-
-        // Use Files.newBufferedReader for simplicity
-        try (BufferedReader reader = Files.newBufferedReader(file.toPath())) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content.append(line).append(System.lineSeparator());
-            }
-        }
-
-        return content.toString();
-    }
-
+    /**
+     * Write given data structures of Keys and Rows into String.
+     *
+     * @param keys The keys representing column headers.
+     * @param rows The objects containing Row information.
+     * @return The string representation of given headers and rows.
+     */
     public static String writeToString(ArrayList<Value> keys, ArrayList<Row> rows) {
         // Sorting the list by alphabetical order of getStringValue()
         Collections.sort(keys, new Comparator<Value>() {
@@ -156,20 +112,25 @@ public class FileWrite {
         return sb.toString();
     }
 
-
-    public static boolean isUTF8Encoded(String filePath) throws IOException {
-        byte[] fileContent = Files.readAllBytes(Paths.get(filePath));
-        String content = new String(fileContent, StandardCharsets.UTF_8);
-        return content.equals(new String(content.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
-    }
-
-    public static void writeFilesToconfigFile(ArrayList<String> fileNamesCreated) {
-        //System.out.println("fileNamesCreated[0]  = " + fileNamesCreated.get(0));
+    /**
+     * Creates a one line of file names of created CSVs separated by commas and writes it to a config file.
+     *
+     * @param fileNamesCreated array list of created CSV file names
+     */
+    public static void writeFilesToConfigFile(ArrayList<String> fileNamesCreated) {
         StringBuilder sb = new StringBuilder();
         fileNamesCreated.forEach(fileName -> sb.append(fileName).append(","));
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, sb.toString());
     }
 
+    /**
+     * Save the CSV file from ArrayList of Rows created during conversion.
+     *
+     * @param fileName The name for the created CSV file.
+     * @param rows     ArrayList of Rows created by conversion by rdf4j method.
+     * @param metadata Metadata created during the rdf4j method.
+     * @return The contents of the file with headers as String.
+     */
     public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata) {
         System.out.println("saveCSVFileFromRows fileName " + fileName);
         String split = (fileName.split("/"))[fileName.split("/").length-1];
@@ -327,6 +288,12 @@ public class FileWrite {
         return fileName;
     }
 
+    /**
+     * Write string array as csv to file.
+     *
+     * @param fileName the file name
+     * @param content  the content
+     */
     public static void writeStringArrayAsCSVToFile(String fileName, String[] content) {
         File fileToWriteTo = new File(fileName);
         try (CSVWriter writer = new CSVWriter(new FileWriter(fileToWriteTo, true))) {
@@ -370,6 +337,12 @@ public class FileWrite {
         }
     }
 
+    /**
+     * Generate combinations list.
+     *
+     * @param listOfLists the list of lists
+     * @return the list
+     */
     public static List<Map<Value, Value>> generateCombinations(List<Map.Entry<Value, TypeIdAndValues>> listOfLists) {
         // Map of predicatesOfColumns and Values in the Column
         List<Map<Value, Value>> resultingRowOfFormerMultivalues = new ArrayList<>();
@@ -578,7 +551,6 @@ public class FileWrite {
                 sb1.append(column.getTitles());
                 sb1.append(",");
                 orderOfColumns.add(column);
-                ////System.out.println("Added column to ordered columns: " + column.getTitles() + " " + column.getName() + " " + column.getVirtual() + " " + column.getPropertyUrl());
             }
         }
         sb1.deleteCharAt(sb1.length() - 1);
@@ -587,6 +559,12 @@ public class FileWrite {
         return orderOfColumns;
     }
 
+    /**
+     * Gets file extension.
+     *
+     * @param fileName the file name
+     * @return the file extension
+     */
     public static String getFileExtension(String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
 
@@ -598,6 +576,13 @@ public class FileWrite {
         }
     }
 
+    /**
+     * Make file by name and extension file.
+     *
+     * @param name the name
+     * @param ext  the ext
+     * @return the file
+     */
     public static File makeFileByNameAndExtension(String name, String ext) {
         try {
             File newFile;
@@ -626,22 +611,13 @@ public class FileWrite {
         }
     }
 
-    public static void writeSubjectsTotheFile(File file, Set<Resource> resources) {
-        System.out.println("writeSubjectsTotheFile file.getName() " + file.getName() + " file.getAbs " + file.getAbsolutePath());
-        try {
-            FileWriter myWriter = new FileWriter(file.getName());
-            for (Resource r : resources) {
-                myWriter.write(r.toString());
-                myWriter.write("\n");
-            }
-            myWriter.close();
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            //System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Write to the file.
+     *
+     * @param file        the file
+     * @param something   the something
+     * @param appendOrNot the append or not
+     */
     public static void writeToTheFile(File file, Object something, boolean appendOrNot) {
         try {
             System.out.println("writeToTheFile trying to create FileWriter with file.getName()=" + file.getName() + " and file.getAbsolutePath()=" + file.getAbsolutePath());
@@ -657,6 +633,11 @@ public class FileWrite {
         }
     }
 
+    /**
+     * Delete file.
+     *
+     * @param fileName the file name
+     */
     public static void deleteFile(String fileName) {
         File myObj = new File(fileName);
         if (myObj.delete()) {
@@ -665,25 +646,4 @@ public class FileWrite {
             //System.out.println("Failed to delete the file.");
         }
     }
-
-    public static void writeRDFTypedToFile(String filename, Model model, RDFFormat format) {
-        try {
-            FileOutputStream out = new FileOutputStream(filename);
-            RDFWriter writer = Rio.createWriter(format, out);
-
-            writer.startRDF();
-            for (Statement st : model) {
-                writer.handleStatement(st);
-            }
-            writer.endRDF();
-
-            out.close();
-        } catch (RDFHandlerException e) {
-            // oh no, do something!
-        } catch (IOException ioex) {
-
-        }
-    }
-
-
 }

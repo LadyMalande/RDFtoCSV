@@ -17,7 +17,7 @@ public class MethodService {
     public RepositoryConnection processInput(String fileName, String methodChoice, Repository db) throws RDFParseException, IOException {
         methodGateway = new MethodGateway();
         System.out.println("fileName in MethodService.java processInput1: " + fileName);
-        System.out.println("read method: " + methodChoice);
+        System.out.println("read method in processInput : " + methodChoice);
         processMethodChoice(methodChoice);
         fileName = processFileOrIRI(fileName);
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, fileName);
