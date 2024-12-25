@@ -132,6 +132,7 @@ public class StandardModeConverter implements IQueryParser {
                 Value fileIRI = solution.getValue("o");
                 String fileName = extractFileName(fileIRI);
                 String fileNamesInConfig = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+                System.out.println("fileName in makeTable in StandardModeConverter " + fileName);
                 String valueToSave = (fileNamesInConfig.isEmpty()) ? fileName : fileNamesInConfig + "," + fileName;
                 ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, valueToSave);
                 ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME,
@@ -178,6 +179,7 @@ public class StandardModeConverter implements IQueryParser {
 
                             firstEntry = false;
                         }
+                        System.out.println("The type of the row: " + newRow.type);
                         if (!keys.contains(columnKey)) {
                             keys.add(columnKey);
                         }

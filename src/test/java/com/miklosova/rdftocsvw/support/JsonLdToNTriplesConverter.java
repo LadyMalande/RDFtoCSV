@@ -6,13 +6,10 @@ import org.eclipse.rdf4j.rio.*;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 import org.eclipse.rdf4j.rio.helpers.BasicParserSettings;
 import org.eclipse.rdf4j.rio.helpers.JSONLDSettings;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
-
+@Disabled
 public class JsonLdToNTriplesConverter {
 
     final static String DIRECTORY_PATH = "src/test/resources/OriginalIsSubsetOfCSV/";
@@ -72,7 +69,8 @@ public class JsonLdToNTriplesConverter {
     }
 
     @Test
-    public void transformTrigToNTriples(){
+    public void
+    transformTrigToNTriples(){
         // Define input JSON-LD file and output N-Triples file
         File inputFile = new File("posudky_trig.trig");
         File outputFile = new File("posudky_rdf4j.nt");

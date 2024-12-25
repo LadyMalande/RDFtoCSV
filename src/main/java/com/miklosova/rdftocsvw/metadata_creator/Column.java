@@ -181,7 +181,13 @@ public class Column {
         boolean isRdfType = row.isRdfType;
         Value id = column.getValue().id;
         boolean isTypetheSame = TableSchema.isTypeTheSameForAllPrimary(rows);
-        IRI typeIri = (IRI) rows.get(0).type;
+        System.out.println("createAboutUrl: row.id=" + row.id + " row.type=" + row.type + " ");
+
+        System.out.println("createAboutUrl: rows.get(0).type.stringValue() " + rows.get(0).type.stringValue() + " is it Literal? " + rows.get(0).type.isLiteral());
+        IRI typeIri = null;
+        if(isRdfType){
+            typeIri = (IRI) rows.get(0).type;
+        }
 
         if (this.name.contains("_MULTILEVEL_")) {
             System.out.println("making different aboutUrl for _MULTILEVEL_ column ");
@@ -214,6 +220,7 @@ public class Column {
                     if (isRdfType && isTypetheSame) {
                         // We don't know how aboutUrl is supposed to look like because we don't know semantic ties to the iris
                         //this.aboutUrl = idIRI.getNamespace() + "{+" + createSafeName(((IRI) valueForAboutUrlPattern).getLocalName()) + "}";
+                        assert typeIri != null;
                         this.aboutUrl = idIRI.getNamespace() + "{+" + typeIri.getLocalName() + "}";
                     } else {
                         // We don't know how aboutUrl is supposed to look like because we don't know semantic ties to the iris

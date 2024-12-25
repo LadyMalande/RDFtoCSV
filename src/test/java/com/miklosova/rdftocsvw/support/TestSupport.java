@@ -355,7 +355,7 @@ public class TestSupport {
     }
 
     public static void createSerialization(String filename, RDFFormat format, Model model) throws IOException {
-        FileOutputStream out = new FileOutputStream("./src/test/resources/typy-pracovních-vztahů_soubory/testingInput.brf");
+        FileOutputStream out = new FileOutputStream("./src/test/resources/differentSerializations/testingInput.brf");
         try {
             Rio.write(model, out, RDFFormat.BINARY);
         } finally {

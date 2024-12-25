@@ -11,6 +11,10 @@ import java.io.IOException;
 public class MethodGateway {
     private IInputParsingMethod parsingMethod;
 
+    public IInputParsingMethod getParsingMethod() {
+        return parsingMethod;
+    }
+
     public void setParsingMethod(IInputParsingMethod parsingMethod) {
         this.parsingMethod = parsingMethod;
     }

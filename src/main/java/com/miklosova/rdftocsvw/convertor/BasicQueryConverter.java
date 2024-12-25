@@ -194,13 +194,13 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                         queryForSubjects(conn, newRow, solution.getValue("s"), solution.getValue("s"),  0);
                         //System.out.println();
                         //System.out.println("askForTypes=" + askForTypes);
-                        /*
+
                         System.out.println("new Row is: " + newRow.id.stringValue() +
                                 " type: " + newRow.type.stringValue() +
                                 " isRdfType=" + newRow.isRdfType +
                                 " newRow columns " + newRow.columns.entrySet());
 
-                         */
+
                         if (rows.stream().anyMatch(row -> row.id.equals(newRow.id))) {
                             // a row with the same id is already present in the data, don't create new one
                         } else {

@@ -10,6 +10,7 @@ import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
@@ -51,7 +52,7 @@ public class CSVWRDFTests extends BaseTest {
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> configs() {
         Collection<Object[]> conf = new ArrayList<>();
-        for (int i = 1; i < 2; i++) {
+        for (int i = 1; i < 308; i++) {
             Object[] array = new Object[3];
             String extra = "";
             if (i < 10) {
@@ -123,6 +124,9 @@ public class CSVWRDFTests extends BaseTest {
             }
             //Assert.assertTrue(exception.getMessage().contains(EXCEPTION_MESSAGE));
         } else {
+            System.out.println("Integer.getInteger(nameForTest.substring(4,7))) " + Integer.parseInt(nameForTest.substring(4,7))+ " nameForTest.substring(4,7)) " + nameForTest.substring(4,7));
+            Assume.assumeFalse("Skipping test because there is no file defined for this test", (NO_FILE.contains(Integer.parseInt(nameForTest.substring(4,7)))));
+            Assume.assumeFalse("Skipping test because the test is not defined", (NOT_DEFINED.contains(Integer.parseInt(nameForTest.substring(4,7)))));
             createPrefinishedOutputAndMetadata();
 
             TestSupport.writeToFile(this.prefinishedOutput, this.testMetadata);

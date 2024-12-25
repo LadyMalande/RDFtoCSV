@@ -155,6 +155,7 @@ public class ConfigurationManager {
 
     public static void saveVariableToConfigFile(String variableName, String value) {
         //System.out.println("new String value with encoding for variable(" + variableName + "): " + value);
+        System.out.println("saveVariableToConfigFile currentConfigFileName(" + currentConfigFileName + "): " + value);
         Properties prop = new Properties();
         try (FileInputStream fis = new FileInputStream(currentConfigFileName)) {
             prop.load(new InputStreamReader(fis, Charset.forName("UTF-8")));
@@ -194,18 +195,18 @@ public class ConfigurationManager {
             }
         }
         // TODO finish implementing all the relevant parameters
-        if (ConfigurationManager.getVariableFromConfigFile(CONVERSION_METHOD) == null)
+        //if (ConfigurationManager.getVariableFromConfigFile(CONVERSION_METHOD) == null)
             saveVariableToConfigFile(CONVERSION_METHOD, conversionMethod);
-        if (ConfigurationManager.getVariableFromConfigFile(TABLES) == null)
+        //if (ConfigurationManager.getVariableFromConfigFile(TABLES) == null)
             saveVariableToConfigFile(TABLES, tables);
-        if (ConfigurationManager.getVariableFromConfigFile(FIRST_NORMAL_FORM) == null)
+        //if (ConfigurationManager.getVariableFromConfigFile(FIRST_NORMAL_FORM) == null)
             saveVariableToConfigFile(FIRST_NORMAL_FORM, String.valueOf(firstNormalForm));
-        if (ConfigurationManager.getVariableFromConfigFile(READ_METHOD) == null)
+        //if (ConfigurationManager.getVariableFromConfigFile(READ_METHOD) == null)
             saveVariableToConfigFile(READ_METHOD,readMethod);
-        if(ConfigurationManager.getVariableFromConfigFile(INPUT_FILENAME) == null){
+        //if(ConfigurationManager.getVariableFromConfigFile(INPUT_FILENAME) == null){
             saveVariableToConfigFile(INPUT_FILENAME,fileName);
             System.out.println("INPUT_FILENAME " + fileName);
-        }
+        //}
     }
 
     /**
