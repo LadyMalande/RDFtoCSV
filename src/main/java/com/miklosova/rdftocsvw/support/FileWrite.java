@@ -14,6 +14,8 @@ import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -22,7 +24,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  * Class containing methods regarding writing to files.
  */
 public class FileWrite {
-
+    private static final Logger logger = Logger.getLogger(FileWrite.class.getName());
     /*
     public static String saveCSVFileFromRows(String fileName, ArrayList<Value> keys, ArrayList<Row> rows, String delimiter){
         StringBuilder forOutput = new StringBuilder();
@@ -72,12 +74,7 @@ public class FileWrite {
      */
     public static String writeToString(ArrayList<Value> keys, ArrayList<Row> rows) {
         // Sorting the list by alphabetical order of getStringValue()
-        Collections.sort(keys, new Comparator<Value>() {
-            @Override
-            public int compare(Value v1, Value v2) {
-                return v1.stringValue().compareTo(v2.stringValue());
-            }
-        });
+        keys.sort(Comparator.comparing(Value::stringValue));
         StringBuilder sb = new StringBuilder();
         sb.append("Subject,");
         for (Value val : keys) {
@@ -149,10 +146,8 @@ public class FileWrite {
         File f = FileWrite.makeFileByNameAndExtension(fileName, null);
 
         System.out.println("File f filename: " + fileName);
-        StringBuilder sb1 = new StringBuilder();
-        List<Column> orderOfColumnKeys = addHeadersFromMetadata(fileName, metadata, sb1);
-        forOutput.append(sb1);
-        FileWrite.writeToTheFile(f, sb1.toString(), true);
+        List<String[]> lines = new ArrayList<>();
+        List<Column> orderOfColumnKeys = addHeadersFromMetadata(fileName, metadata, lines);
 
         for (Row row : rows) {
             //System.out.println("rows number " + rows.size());
@@ -163,7 +158,6 @@ public class FileWrite {
             List<Map.Entry<Value, TypeIdAndValues>> multivalues = row.columns.entrySet().stream()
                     .filter(entry -> (entry.getValue().values.size() > 1 && entry.getValue().type.equals(TypeOfValue.LITERAL) && entry.getValue().values.get(0).isLiteral() && ((Literal) entry.getValue().values.get(0)).getLanguage().isPresent() && literalHasDifferentLanguageTags(entry.getValue().values) && !allLanguagesAreUnique(entry.getValue().values)))
                     .toList();
-            ;
             ////System.out.println("multivalues.size() " + multivalues.size());
             //multivalues.forEach(multivalue -> System.out.print("multivalue: " + multivalue.getValue().values + ", "));
             List<Map<Value, Value>> combinations = generateCombinations(multivalues);
@@ -180,11 +174,12 @@ public class FileWrite {
             ////System.out.println("combinations:");
             ////System.out.println("cize of combinations " + combinations.size());
             int i = 0;
+            // TODO TO OPENCSV writer and by the COMBINATION for first normal form
             if (!combinations.isEmpty()) {
                 for (Map<Value, Value> combination : combinations) {
                     ////System.out.println("Combinations size: " + combinations.size());
                     ////System.out.println("Combination: " + combination.entrySet());
-                    appendIdByValuePattern(row, metadata, sb, orderOfColumnKeys.get(0));
+                    appendIdByValuePattern(row, orderOfColumnKeys.get(0));
                     ////System.out.println("Combination #"  + i);
                     i++;
                     firstColumn = true;
@@ -206,14 +201,14 @@ public class FileWrite {
                         if (!Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES)) && firstColumn) {
                             firstColumn = false;
                         } else {
-                            if (combination.get((IRI) iri(multilevelPropertyUrl)) != null) {
+                            if (combination.get(iri(multilevelPropertyUrl)) != null) {
                                 if (combination.get(iri(multilevelPropertyUrl)).isIRI()) {
                                     if (column.getValueUrl().startsWith("{")) {
                                         sb.append(combination.get(iri(multilevelPropertyUrl)).stringValue());
                                     } else {
-                                        sb.append(((IRI) combination.get((IRI) iri(multilevelPropertyUrl))).getLocalName());
+                                        sb.append(((IRI) combination.get(iri(multilevelPropertyUrl))).getLocalName());
                                     }
-                                } else if (combination.get((IRI) iri(multilevelPropertyUrl)).isLiteral()) {
+                                } else if (combination.get(iri(multilevelPropertyUrl)).isLiteral()) {
                                     //System.out.println("appending literal " + safeLiteral((Literal)combination.get((IRI)iri(multilevelPropertyUrl))));
                                     sb.append(safeLiteral((Literal) combination.get((IRI) iri(multilevelPropertyUrl))));
                                 }
@@ -230,7 +225,8 @@ public class FileWrite {
                 //System.out.println("forOutput : " + forOutput.toString());
                 forOutput.append(sb);
             } else {
-                appendIdByValuePattern(row, metadata, sb, orderOfColumnKeys.get(0));
+                String[] line = new String[lines.get(0).length];
+                line[0] = appendIdByValuePattern(row, orderOfColumnKeys.get(0));
                 //System.out.println("Combination #"  + i);
                 i++;
                 firstColumn = true;
@@ -247,19 +243,15 @@ public class FileWrite {
                         String multilevelPropertyUrl = propertyUrlIRI.getNamespace() + column.getName();
 
 
-                        appendColumnValueByKey(column, row, sb, 0, multilevelPropertyUrl, metadata);
+                        line[i] = appendColumnValueByKey(column, row, sb, 0, multilevelPropertyUrl, metadata);
 
                     }
+                    i++;
                 }
-                sb.deleteCharAt(sb.length() - 1);
-                sb.append("\n");
                 ////System.out.println("row: " + sb.toString() + ".");
-                forOutput.append(sb);
+                lines.add(line);
             }
-
-
         }
-
 
         ////System.out.println("Written rows from rows to the file " + forOutput.toString() + ".");
         ObjectNode metadataNow = null;
@@ -280,6 +272,22 @@ public class FileWrite {
         ////System.out.println("saveCSVFileFromRows end");
         return forOutput.toString();
 
+    }
+
+    public static void writeLinesToCSVFile(File file,  List<String[]> lines, boolean append){
+        // Write the updated content back to the file
+        try (CSVWriter writer = new CSVWriter(new FileWriter(file, append), ',',
+                CSVWriter.DEFAULT_QUOTE_CHARACTER,
+                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                CSVWriter.DEFAULT_LINE_END)) {
+            // Write array data as a single line
+            for (String[] updatedLine : lines) {
+                //System.out.println("new headers updated line: " + updatedLine);
+                writer.writeNext(updatedLine, false);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static String getFullPathOfFile(String fileName) {
@@ -344,17 +352,20 @@ public class FileWrite {
      * @return the list
      */
     public static List<Map<Value, Value>> generateCombinations(List<Map.Entry<Value, TypeIdAndValues>> listOfLists) {
-        // Map of predicatesOfColumns and Values in the Column
-        List<Map<Value, Value>> resultingRowOfFormerMultivalues = new ArrayList<>();
-        if (!listOfLists.isEmpty() && listOfLists.get(0).getValue().values.get(0).isLiteral() && ((Literal) listOfLists.get(0).getValue().values.get(0)).getLanguage().isPresent()) {
-            Integer maxDepth = getMaxDepthForDifferentLanguageTags(listOfLists);
-            //generateCombinationsHelper(maxDepth, resultingRowOfFormerMultivalues, 0, new HashMap<Value,Value>());
+        if(Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM))) {
+            // Map of predicatesOfColumns and Values in the Column
+            List<Map<Value, Value>> resultingRowOfFormerMultivalues = new ArrayList<>();
+            if (!listOfLists.isEmpty() && listOfLists.get(0).getValue().values.get(0).isLiteral() && ((Literal) listOfLists.get(0).getValue().values.get(0)).getLanguage().isPresent()) {
+                Integer maxDepth = getMaxDepthForDifferentLanguageTags(listOfLists);
+                //generateCombinationsHelper(maxDepth, resultingRowOfFormerMultivalues, 0, new HashMap<Value,Value>());
 
-        } else {
-            generateCombinationsHelper(listOfLists, resultingRowOfFormerMultivalues, 0, new HashMap<Value, Value>());
+            } else {
+                generateCombinationsHelper(listOfLists, resultingRowOfFormerMultivalues, 0, new HashMap<Value, Value>());
 
+            }
+            return resultingRowOfFormerMultivalues;
         }
-        return resultingRowOfFormerMultivalues;
+        return new ArrayList<>();
     }
 
     private static Integer getMaxDepthForDifferentLanguageTags(List<Map.Entry<Value, TypeIdAndValues>> listOfLists) {
@@ -376,7 +387,7 @@ public class FileWrite {
         }
     }
 
-    private static void appendColumnValueByKey(Column column, Row row, StringBuilder sb, int i, String multilevelPropertyUrl, Metadata metadata) {
+    private static String appendColumnValueByKey(Column column, Row row, StringBuilder sb, int i, String multilevelPropertyUrl, Metadata metadata) {
         // Simple go through
         IRI iri2;
         /*
@@ -422,10 +433,10 @@ public class FileWrite {
                     IRI iri = (IRI) values.get(0);
                     if (column.getValueUrl().startsWith("{")) {
                         //System.out.println("Appending whole value: " + iri.stringValue());
-                        sb.append(iri.stringValue());
+                        return iri.stringValue();
                     } else {
                         //System.out.println("Appending shortened value: " + iri.getLocalName());
-                        sb.append(iri.getLocalName());
+                        return iri.getLocalName();
                     }
 
                 } else {
@@ -435,32 +446,27 @@ public class FileWrite {
                         IRI iri = (IRI) val;
                         if (column.getValueUrl().startsWith("{")) {
                             //System.out.println("Appending whole value: " + iri.stringValue());
-                            sb.append(iri.stringValue());
+                            return iri.stringValue();
                         } else {
                             //System.out.println("Appending shortened value: " + iri.getLocalName());
-                            sb.append(iri.getLocalName());
+                            return iri.getLocalName();
                         }
-                        sb.append(",");
                     });
-                    sb.deleteCharAt(sb.length() - 1);
-                    sb.append('"');
                     column.setSeparator(",");
                 }
             } else if (values.get(0).isLiteral()) {
                 if (values.size() == 1) {
                     Literal literal = (Literal) values.get(0);
 
-                    sb.append(safeLiteral(literal));
+                    return safeLiteral(literal);
                 } else {
                     // There are multiple values from the language, we need to enclose them in " "
                     sb.append('"');
                     values.forEach(val -> {
                         String strValue = ((Literal) val).getLabel();
-                        sb.append(strValue);
+                        return strValue;
                         sb.append(",");
                     });
-                    sb.deleteCharAt(sb.length() - 1);
-                    sb.append('"');
                     column.setSeparator(",");
                 }
             }
@@ -471,15 +477,14 @@ public class FileWrite {
             ////System.out.println(values);
             List<Value> languageVariations = values;
             if (languageVariations == null) {
-                sb.append(",");
-                return;
+                return "";
             }
             List<Value> valuesByLang = languageVariations.stream().filter(val -> ((Literal) val).getLanguage().get().equals(column.getLang())).collect(Collectors.toList());
             // There is only one value of this language
             if (!valuesByLang.isEmpty()) {
                 if (valuesByLang.size() == 1) {
                     Value val = valuesByLang.get(0);
-                    sb.append(safeLiteral((Literal) val));
+                    return safeLiteral((Literal) val);
                 } else {
                     //System.out.println();
                     //System.out.println(multilevelPropertyUrl + " " + column.getLang() + " column.separator=" + column.getSeparator());
@@ -491,8 +496,6 @@ public class FileWrite {
                         sb.append(strValue);
                         sb.append(",");
                     });
-                    sb.deleteCharAt(sb.length() - 1);
-                    sb.append('"');
                     column.setSeparator(",");
                     //System.out.println(multilevelPropertyUrl + " " + column.getLang() + " column.separator=" + column.getSeparator());
                 }
@@ -500,8 +503,6 @@ public class FileWrite {
 
 
         }
-
-        sb.append(",");
     }
 
     private static String safeLiteral(Literal literal) {
@@ -512,50 +513,48 @@ public class FileWrite {
         }
     }
 
-    private static void appendIdByValuePattern(Row row, Metadata metadata, StringBuilder sb, Column column) {
+    private static String appendIdByValuePattern(Row row, Column column) {
         if (column.getValueUrl().startsWith("{")) {
-            sb.append(row.id.stringValue());
-            sb.append(",");
+            return row.id.stringValue();
         } else {
             if (row.id.isBNode()) {
-                sb.append(row.id);
-                sb.append(",");
+                return row.id.stringValue();
             } else {
                 IRI iri = (IRI) row.id;
-                String value = iri.getLocalName();
-                sb.append(value);
-                sb.append(",");
+                return iri.getLocalName();
             }
         }
     }
 
-    private static List<Column> addHeadersFromMetadata(String fileName, Metadata metadata, StringBuilder sb1) {
+    private static List<Column> addHeadersFromMetadata(String fileName, Metadata metadata, List<String[]> lines) {
         List<Column> orderOfColumns = new ArrayList<>();
+
         System.out.println("addHeadersFromMetadata fileName = " + fileName);
         File fileObject = new File(fileName);
         metadata.getTables().forEach(tables -> System.out.println("tables = " + tables.getUrl()));
         Optional<Table> findTable = metadata.getTables().stream().filter(tables -> tables.getUrl().equals(fileObject.getName())).findFirst();
         System.out.println("addHeadersFromMetadata fileObject.getName() = " + fileObject.getName());
         Table fud = findTable.orElse(null);
+        List<String> headersBuffer = new ArrayList<>();
+
         Column firstColumn = null;
         if (Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))) {
 
+            assert fud != null;
             firstColumn = fud.getTableSchema().getColumns().stream().filter(column -> column.getPropertyUrl() == null).findFirst().get();
-            sb1.append(firstColumn.getTitles());
-            sb1.append(",");
+            headersBuffer.add(firstColumn.getTitles());
         }
 
 
+        assert fud != null;
         for (Column column : fud.getTableSchema().getColumns()) {
             if (column != firstColumn && column.getVirtual() == null) {
-                sb1.append(column.getTitles());
-                sb1.append(",");
+                headersBuffer.add(column.getTitles());
                 orderOfColumns.add(column);
             }
         }
-        sb1.deleteCharAt(sb1.length() - 1);
-        sb1.append("\n");
-
+        String[] headers = headersBuffer.toArray(new String[0]);
+        lines.add(headers);
         return orderOfColumns;
     }
 
@@ -568,7 +567,7 @@ public class FileWrite {
     public static String getFileExtension(String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
 
-        // Check if the dot exists and it's not the first or last character
+        // Check if the dot exists, and it's not the first or last character
         if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
             return fileName.substring(dotIndex + 1);
         } else {
@@ -579,56 +578,49 @@ public class FileWrite {
     /**
      * Make file by name and extension file.
      *
-     * @param name the name
-     * @param ext  the ext
-     * @return the file
+     * @param name The name for the file
+     * @param ext  The extension of the file to be made
+     * @return Created file object
      */
     public static File makeFileByNameAndExtension(String name, String ext) {
+        File newFile = null;
         try {
-            File newFile;
             if (ext != null) {
                 newFile = new File(name + "." + ext);
-                System.out.println("newFile: " + newFile.getAbsolutePath());
             } else {
-                System.out.println("newFile: " + name);
-
                 newFile = new File(name);
-                System.out.println("newFile.getName(): " + newFile.getName());
             }
-            System.out.println("Trying to delete file.getAbsolutePAth " + newFile.getAbsolutePath());
             FileWrite.deleteFile(newFile.getAbsolutePath());
             if (newFile.createNewFile()) {
-                //System.out.println("File created: " + newFile);
+                logger.log(Level.INFO, "File created: " + newFile.getAbsolutePath());
             } else {
-                //System.out.println("File already exists.");
-
+                logger.log(Level.INFO, "File already exists: " + newFile.getAbsolutePath());
             }
             return newFile;
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            logger.log(Level.SEVERE, "An error occured while trying to delete old version of file and create new file : " + newFile.getAbsolutePath());
             e.printStackTrace();
             return null;
         }
     }
 
     /**
-     * Write to the file.
+     * Write given String to the file (append the String or not).
      *
-     * @param file        the file
-     * @param something   the something
-     * @param appendOrNot the append or not
+     * @param file        The file to write to
+     * @param something   Something to be written in the file
+     * @param appendOrNot Append (true) to the file or write to the file from the beginning
      */
     public static void writeToTheFile(File file, Object something, boolean appendOrNot) {
         try {
-            System.out.println("writeToTheFile trying to create FileWriter with file.getName()=" + file.getName() + " and file.getAbsolutePath()=" + file.getAbsolutePath());
             FileWriter myWriter = new FileWriter(file, appendOrNot);
 
             myWriter.write(something.toString());
 
             myWriter.close();
-            //System.out.println("Successfully wrote to the file.");
+
+            logger.log(Level.INFO, "Successfully wrote to the file " + file.getAbsolutePath() + ".");
         } catch (IOException e) {
-            //System.out.println("An error occurred.");
             e.printStackTrace();
         }
     }
@@ -636,14 +628,12 @@ public class FileWrite {
     /**
      * Delete file.
      *
-     * @param fileName the file name
+     * @param fileName The name of the file to delete
      */
     public static void deleteFile(String fileName) {
         File myObj = new File(fileName);
         if (myObj.delete()) {
-            //System.out.println("Deleted the file: " + myObj);
-        } else {
-            //System.out.println("Failed to delete the file.");
+            logger.log(Level.INFO, "The file " + myObj.getAbsolutePath() + " was deleted.");
         }
     }
 }

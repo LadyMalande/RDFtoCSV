@@ -2,6 +2,7 @@ package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.FileWrite;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
@@ -151,21 +152,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         } catch (IOException | CsvValidationException e) {
             throw new RuntimeException(e);
         }
-
-        // Write the updated content back to the file
-
-        try (CSVWriter writer = new CSVWriter(new FileWriter(file), ',',
-                CSVWriter.DEFAULT_QUOTE_CHARACTER,
-                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
-                CSVWriter.DEFAULT_LINE_END)) {
-            // Write array data as a single line
-            for (String[] updatedLine : lines) {
-                //System.out.println("new headers updated line: " + updatedLine);
-                writer.writeNext(updatedLine, false);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FileWrite.writeLinesToCSVFile(file, lines, false);
     }
 
     private String getCSVNameIfSubjectOrPredicateKnown(IRI subject, IRI predicate) {
@@ -379,7 +366,9 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 // The match has been made by matching Predicate = we must create a new line at the end of the file and add values accordingly
                 // We can just append to the file - the lines wont be written again at the end of this writing modification
                 // TODO - append a new line
-                appendLineToCSV(file, createLineStringListByMetadata(triple));
+                List<String[]> newLine = new ArrayList<>();
+                newLine.add(createLineStringListByMetadata(triple).toArray(new String[0]));
+                FileWrite.writeLinesToCSVFile(file, newLine , true);
             }
 
         } catch (CsvValidationException e) {
@@ -389,7 +378,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
         // Write the updated content back to the file
         if (isModified) {
-            writeListOfLinesToCSV(file, lines);
+            FileWrite.writeLinesToCSVFile(file, lines, false);
         }
     }
 
@@ -397,7 +386,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
         if (rowDataVariationsForSubject.isEmpty()) {
             return true;
-
         }
         for (String[] value : rowDataVariationsForSubject) {
             int same = 0;
@@ -422,29 +410,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 writer.writeNext(copiedArray, false);
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void writeListOfLinesToCSV(File file, List<String[]> lines) {
-        try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
-            //System.out.println("File I am writing to: " + file.getAbsolutePath());
-            // Write array data as a single line
-            for (String[] line : lines) {
-                //System.out.println("line to write: " + Arrays.toString(line));
-                writer.writeNext(line, false);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void appendLineToCSV(File file, List<String> lineListInCSVByMetadata) {
-        try (CSVWriter writer = new CSVWriter(new FileWriter(file, true))) {
-            // Appends to the file instead of overwriting
-            String[] arrayOfStrings = lineListInCSVByMetadata.toArray(new String[0]);
-            writer.writeNext(arrayOfStrings, false);
         } catch (IOException e) {
             e.printStackTrace();
         }

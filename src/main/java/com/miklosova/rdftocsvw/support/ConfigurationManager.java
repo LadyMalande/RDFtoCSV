@@ -7,7 +7,7 @@ import org.apache.log4j.BasicConfigurator;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
 
@@ -31,15 +31,18 @@ public class ConfigurationManager {
      * According to <a href="https://www.w3.org/TR/tabular-data-primer/#h-metadata">Tabular Metadata Primer</a>
      */
     public static final String DEFAULT_METADATA_FILENAME = "csv-metadata.json";
-    public static final String DEFAULT_CONVERSION_METHOD = "basicQuery";
-    public static final String DEFAULT_METHOD = "basicQuery";
+    public static final String DEFAULT_CONVERSION_METHOD = QueryMethods.BASIC_QUERY.getValue();
+    public static final String DEFAULT_METHOD = QueryMethods.BASIC_QUERY.getValue();
     public static final String DEFAULT_READ_METHOD = "rdf4j";
-    public static final String MULTIPLE_TABLES_CONVERSION_METHOD = "splitQuery";
+    public static final String MULTIPLE_TABLES_CONVERSION_METHOD = QueryMethods.SPLIT_QUERY.getValue();
     public static final String DEFAULT_OUTPUT_ZIPFILE_NAME = "zippedCSVW.zip";
     public static final String TABLES = "conversion.tables";
     public static final String ONE_TABLE = "one";
     private static final String DEFAULT_PARSING_METHOD = "rdf4j";
     private static final String CONFIG_FILE_NAME = "../app.config";
+    public static final String CONFIG_FILE = "config.file";
+    public static final String DEFAULT_PATH_APP_CONFIG = "config/app.config";
+    public static final String CMD_OPTION_STREAMING = "streaming";
     private static String currentConfigFileName;
 
     public static String getCONFIG_FILE_NAME() {
@@ -63,7 +66,7 @@ public class ConfigurationManager {
                 //location = new URL(modifiedURLString);
                 fileName = location.toString()
                         .replace("jar:nested:", "");
-                System.out.println("Modified URL location.toString from getCONFIG_FILE_NAME " + location.toString());
+                System.out.println("Modified URL location.toString from getCONFIG_FILE_NAME " + location);
             } else if (location.toURI().toString().contains("nested:")){
                 // Change the directory in remote place
                 //.replaceFirst("!/$", "!/"); // Ensure correct trailing format if needed
@@ -72,7 +75,7 @@ public class ConfigurationManager {
                 //location = new URL(modifiedURLString);
                 fileName = location.toString()
                         .replace("nested:", "");
-                System.out.println("Modified URL location.toString from getCONFIG_FILE_NAME " + location.toString());
+                System.out.println("Modified URL location.toString from getCONFIG_FILE_NAME " + location);
             }
 
 
@@ -103,7 +106,6 @@ public class ConfigurationManager {
 
             String insertAfter = dirForCanonicalFile + File.separator;
             int insertPosition = canonicalPath.indexOf(insertAfter) + insertAfter.length();
-            String fileNameBeingRead = null;
             // Create the new path by inserting jarDirectory
             if (jarDirectory.equalsIgnoreCase("target")) {
                 System.out.println("jarDirectory.equalsIgnoreCase(\"target\"");
@@ -117,8 +119,8 @@ public class ConfigurationManager {
                 String path = ConfigurationManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 
                 // Decode spaces and special characters in the URL
-                String currentDir = new File(java.net.URLDecoder.decode(path, "UTF-8")).getAbsolutePath();
-                String currentDirsParent = new File(java.net.URLDecoder.decode(path, "UTF-8")).getParent();
+                String currentDir = new File(java.net.URLDecoder.decode(path, StandardCharsets.UTF_8)).getAbsolutePath();
+                String currentDirsParent = new File(java.net.URLDecoder.decode(path, StandardCharsets.UTF_8)).getParent();
                 System.out.println("currentDir " + currentDir);
                 System.out.println("currentDirsParent " + currentDirsParent);
                 System.out.println(//canonicalPath.substring(0, insertPosition)+
@@ -143,23 +145,21 @@ public class ConfigurationManager {
             System.out.println("currentConfigFileName in getCONFIG_FILE_NAME = " + currentConfigFileName);
             File configFileCreated = new File(currentConfigFileName);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (URISyntaxException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
 
         return currentConfigFileName;
     }
 
-
     public static void saveVariableToConfigFile(String variableName, String value) {
         //System.out.println("new String value with encoding for variable(" + variableName + "): " + value);
         System.out.println("saveVariableToConfigFile currentConfigFileName(" + currentConfigFileName + "): " + value);
         Properties prop = new Properties();
         try (FileInputStream fis = new FileInputStream(currentConfigFileName)) {
-            prop.load(new InputStreamReader(fis, Charset.forName("UTF-8")));
+            prop.load(new InputStreamReader(fis, StandardCharsets.UTF_8));
         } catch (IOException ex) {
+            ex.printStackTrace();
         }
         prop.setProperty(variableName, value);
         //System.out.println("Set configuration of " + variableName + " to: " + prop.getProperty(variableName));
@@ -213,7 +213,7 @@ public class ConfigurationManager {
      * Get a parameter by its key from app.config file.
      *
      * @param variableName The name of the key to retrieve from the app.config map of parameters.
-     * @return
+     * @return String object (value) of the given config variable (key)
      */
     public static String getVariableFromConfigFile(String variableName) {
         Properties prop = new Properties();
@@ -221,44 +221,17 @@ public class ConfigurationManager {
         System.out.println("currentConfigFileName = " + currentConfigFileName);
 
         try (FileInputStream fis = new FileInputStream(currentConfigFileName)) {
-            prop.load(new InputStreamReader(fis, Charset.forName("UTF-8")));
+            prop.load(new InputStreamReader(fis, StandardCharsets.UTF_8));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
         return prop.getProperty(variableName);
     }
-/*
-    private static void createConfigFile() {
-
-        // Now you call the static variable for the first time and set it if needed
-        File finalConfigFile = new File(getCONFIG_FILE_NAME());
-        System.out.println("finalConfigFile = " + finalConfigFile.getAbsolutePath());
-        // Check if the file exists
-        if (!finalConfigFile.exists()) {
-            try {
-                // Try to create the file
-                if (finalConfigFile.createNewFile()) {
-                    System.out.println("File created: " + finalConfigFile.getName());
-                } else {
-                    System.out.println("File already exists.");
-                }
-            } catch (IOException e) {
-                System.out.println("An error occurred while creating the file.");
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("File already exists.");
-        }
-
-    }
-
-
- */
 
     public static void createConfigFile(){
         // Define the default config file path (can be made configurable)
-        String configFilePath = System.getProperty("config.file", "config/app.config");
+        String configFilePath = System.getProperty(CONFIG_FILE, DEFAULT_PATH_APP_CONFIG);
 
         // Ensure the directory exists
         File configFile = new File(configFilePath);
@@ -294,7 +267,7 @@ public class ConfigurationManager {
         try {
             CommandLine cmd = parser.parse(options, args);
             String inputFile = cmd.getOptionValue(argName);
-            boolean streamingMethod = cmd.hasOption("streaming");
+            boolean streamingMethod = cmd.hasOption(CMD_OPTION_STREAMING);
             // Continue with processing...
             if (inputFile == null && !streamingMethod) {
                 System.err.println("You must specify file input argument to the command line. ");
@@ -342,8 +315,7 @@ public class ConfigurationManager {
                 URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
                 File file = new File(location.toURI().getPath());
                 String jarDirectory = file.getParentFile().getName();
-                File fileToRead = new File(jarDirectory, args[0]);
-                String fileInDirectory = null;
+                String fileInDirectory;
                 String fileArgFromArgs = ConfigurationManager.readArgWithDefaultOptions(args, "file");
                 if (jarDirectory.equalsIgnoreCase("target")) {
                     //fileInDirectory =  args[0];
@@ -387,7 +359,7 @@ public class ConfigurationManager {
             System.exit(1);
         }
 
-        String metadataFileName = null;
+        String metadataFileName;
         parsingMethod = (parsingMethod != null) ? parsingMethod : DEFAULT_PARSING_METHOD;
         String baseFileName;
         if (outputFilename == null) {
@@ -417,9 +389,9 @@ public class ConfigurationManager {
         prop.setProperty(ConfigurationManager.METADATA_ROWNUMS, "false");
         prop.setProperty(ConfigurationManager.OUTPUT_FILE_PATH, "");
         prop.setProperty(ConfigurationManager.STREAMING_CONTINUOUS, String.valueOf(streaming));
-        if (metadataFileName == null) {
-            metadataFileName = DEFAULT_METADATA_FILENAME;
-        }
+
+        metadataFileName = DEFAULT_METADATA_FILENAME;
+
         prop.setProperty(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, metadataFileName);
 
         // Store options to config file
@@ -444,95 +416,6 @@ public class ConfigurationManager {
         options.addOption("o", "output", true, "Output file name base. Will be given .csv extension. If not set, the name of the input file is taken.");
         return options;
     }
-
-    /**
-     * Set the configuration parameters in app.config
-     * Set defaults if none are provided
-     * Set parameters given in args if args are provided
-     *
-     //* @param args Parameters provided in command line/parameters of conversion
-     */
-    /*
-    public static void loadSettingsFromInputToConfigFile(String[] args) {
-        Properties prop = new Properties();
-
-        String metadataFileName = null;
-        String parsingMethod = "rdf4j";
-        // Now you call the static variable for the first time and set it if needed
-        File finalConfigFile = new File(getCONFIG_FILE_NAME());
-        System.out.println("finalConfigFile = " + finalConfigFile.getAbsolutePath());
-        // Check if the file exists
-        if (!finalConfigFile.exists()) {
-            try {
-                // Try to create the file
-                if (finalConfigFile.createNewFile()) {
-                    System.out.println("File created: " + finalConfigFile.getName());
-                } else {
-                    System.out.println("File already exists.");
-                }
-            } catch (IOException e) {
-                System.out.println("An error occurred while creating the file.");
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("File already exists.");
-        }
-        try (FileInputStream fis = new FileInputStream(finalConfigFile)) {
-            prop.load(fis);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            System.err.println("Trouble reading config file for the first time");
-            System.exit(1);
-        }
-
-        String CSVFileToWriteTo = null;
-        String conversionMethod = null;
-        if (args.length == 2) {
-            conversionMethod = args[1];
-            System.out.println("args.length == 2");
-        } else if (args.length == 3) {
-            conversionMethod = args[1];
-            parsingMethod = args[2];
-            System.out.println("args.length == 3");
-        } else if (args.length == 4) {
-            conversionMethod = args[1];
-
-            metadataFileName = args[3];
-        } else {
-
-        }
-        if (CSVFileToWriteTo == null) {
-            CSVFileToWriteTo = "CSVfileToWriteTo";
-        }
-        conversionMethod = (conversionMethod == null) ? DEFAULT_CONVERSION_METHOD : conversionMethod;
-        prop.setProperty(ConfigurationManager.OUTPUT_FILENAME, CSVFileToWriteTo);
-        prop.setProperty(ConfigurationManager.CONVERSION_METHOD, conversionMethod);
-        System.out.println("property set prop.conversionMethod," + conversionMethod);
-        prop.setProperty(ConfigurationManager.INTERMEDIATE_FILE_NAMES, "");
-        prop.setProperty(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
-        prop.setProperty(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
-        prop.setProperty(ConfigurationManager.OUTPUT_ZIPFILE_NAME, "compressed.zip");
-        System.out.println("property set prop.setProperty(ConfigurationManager.READ_METHOD," + parsingMethod);
-        prop.setProperty(ConfigurationManager.READ_METHOD, parsingMethod);
-        prop.setProperty(ConfigurationManager.METADATA_ROWNUMS, "false");
-        prop.setProperty(ConfigurationManager.OUTPUT_FILE_PATH, "");
-        if (metadataFileName == null) {
-            metadataFileName = DEFAULT_METADATA_FILENAME;
-        }
-        prop.setProperty(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, metadataFileName);
-
-        try {
-            PrintWriter pw = new PrintWriter(CONFIG_FILE_NAME);
-            System.out.println("Written to configFile " + CONFIG_FILE_NAME);
-            prop.store(pw, null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Get value from config: " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD));
-    }
-
-     */
-
 
     public static void configure(String metadataFilename, String filePathForOutput) {
         BasicConfigurator.configure();
