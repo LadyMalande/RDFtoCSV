@@ -154,7 +154,7 @@ public class ConfigurationManager {
 
     public static void saveVariableToConfigFile(String variableName, String value) {
         //System.out.println("new String value with encoding for variable(" + variableName + "): " + value);
-        System.out.println("saveVariableToConfigFile currentConfigFileName(" + currentConfigFileName + "): " + value);
+        System.out.println("saveVariableToConfigFile currentConfigFileName(" + currentConfigFileName + "): " +variableName+ "=" + value);
         Properties prop = new Properties();
         try (FileInputStream fis = new FileInputStream(currentConfigFileName)) {
             prop.load(new InputStreamReader(fis, StandardCharsets.UTF_8));

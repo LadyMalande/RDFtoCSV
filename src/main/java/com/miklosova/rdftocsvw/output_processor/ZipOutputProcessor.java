@@ -4,6 +4,7 @@ import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,9 +32,9 @@ public class ZipOutputProcessor implements IOutputProcessor {
             ZipOutputStream zipOut = new ZipOutputStream(baos);
 
             for (String srcFile : srcFiles) {
-                File fileToZip = new File(srcFile);
+                File fileToZip = new File( srcFile);
                 FileInputStream fis = new FileInputStream(fileToZip);
-                System.out.println("fileToZip " + fileToZip.getAbsolutePath());
+                System.out.println("createBAOSWithZips fileToZip " + fileToZip.getAbsolutePath());
                 ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
                 zipOut.putNextEntry(zipEntry);
 
@@ -103,7 +104,7 @@ public class ZipOutputProcessor implements IOutputProcessor {
 
         List<String> srcFiles = new ArrayList<String>(Arrays.asList(listOfFiles));
         srcFiles.add(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
-
+        System.out.println("fileToZip metadata " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
         try {
 
 
@@ -112,7 +113,7 @@ public class ZipOutputProcessor implements IOutputProcessor {
 
             for (String srcFile : srcFiles) {
                 File fileToZip = new File(srcFile);
-                System.out.println("fileToZip " + fileToZip.getAbsolutePath());
+                System.out.println("zipMultipleFiles fileToZip " + fileToZip.getAbsolutePath());
                 FileInputStream fis = new FileInputStream(fileToZip);
 
                 ZipEntry zipEntry = new ZipEntry(fileToZip.getName());

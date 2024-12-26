@@ -140,7 +140,6 @@ public class FileWrite {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        ////System.out.println("saveCSVFileFromRows beginning");
         StringBuilder forOutput = new StringBuilder();
 
         File f = FileWrite.makeFileByNameAndExtension(fileName, null);
@@ -150,82 +149,62 @@ public class FileWrite {
         List<Column> orderOfColumnKeys = addHeadersFromMetadata(fileName, metadata, lines);
 
         for (Row row : rows) {
-            //System.out.println("rows number " + rows.size());
+            ArrayList<String> lineList = new ArrayList<>();
             StringBuilder sb = new StringBuilder();
 
-            ////System.out.println("orderOfColumnKeys number " + orderOfColumnKeys.size());
-            boolean firstColumn = true;
+            boolean firstColumn;
             List<Map.Entry<Value, TypeIdAndValues>> multivalues = row.columns.entrySet().stream()
                     .filter(entry -> (entry.getValue().values.size() > 1 && entry.getValue().type.equals(TypeOfValue.LITERAL) && entry.getValue().values.get(0).isLiteral() && ((Literal) entry.getValue().values.get(0)).getLanguage().isPresent() && literalHasDifferentLanguageTags(entry.getValue().values) && !allLanguagesAreUnique(entry.getValue().values)))
                     .toList();
-            ////System.out.println("multivalues.size() " + multivalues.size());
-            //multivalues.forEach(multivalue -> System.out.print("multivalue: " + multivalue.getValue().values + ", "));
+
             List<Map<Value, Value>> combinations = generateCombinations(multivalues);
-            combinations.forEach(combination -> {
-                for (Map.Entry<Value, Value> entry : combination.entrySet()) {
-                    ////System.out.print("k,v=" + entry.getKey().stringValue() + ": " + entry.getValue().stringValue());
 
-                    //System.out.println(entry);
-                }
-
-                ////System.out.println();
-            });
-
-            ////System.out.println("combinations:");
-            ////System.out.println("cize of combinations " + combinations.size());
+            String[] line = new String[lines.get(0).length];
             int i = 0;
             // TODO TO OPENCSV writer and by the COMBINATION for first normal form
             if (!combinations.isEmpty()) {
                 for (Map<Value, Value> combination : combinations) {
-                    ////System.out.println("Combinations size: " + combinations.size());
-                    ////System.out.println("Combination: " + combination.entrySet());
-                    appendIdByValuePattern(row, orderOfColumnKeys.get(0));
-                    ////System.out.println("Combination #"  + i);
-                    i++;
+                    i = 0;
+                    line = new String[lines.get(0).length];
+                    for(String lineElement : lines.get(0)){
+                        System.out.println("line element of first row: " + lineElement);
+                    }
+                    System.out.println("lines.get(0).length = " + lines.get(0).length);
+                    line[0] = (appendIdByValuePattern(row, orderOfColumnKeys.get(0)));
+
+
                     firstColumn = true;
 
-                    ValueFactory vf = SimpleValueFactory.getInstance();
-
-
                     for (Column column : orderOfColumnKeys) {
-
+                        i++;
                         String multilevelPropertyUrl = "";
                         if (column.getPropertyUrl() != null) {
-                            IRI propertyUrlIRI = vf.createIRI(column.getPropertyUrl());
                             multilevelPropertyUrl = (column.getLang() != null) ? column.getOriginalColumnKey().stringValue() : column.getOriginalColumnKey().stringValue();
-                            //System.out.println("multilevelPropertyUrl = " + multilevelPropertyUrl );
                         }
-
-
-                        ////System.out.println("Columns by keys " + column.getName());
                         if (!Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES)) && firstColumn) {
                             firstColumn = false;
+                            i--;
                         } else {
                             if (combination.get(iri(multilevelPropertyUrl)) != null) {
                                 if (combination.get(iri(multilevelPropertyUrl)).isIRI()) {
                                     if (column.getValueUrl().startsWith("{")) {
-                                        sb.append(combination.get(iri(multilevelPropertyUrl)).stringValue());
+                                        line[i] = combination.get(iri(multilevelPropertyUrl)).stringValue();
                                     } else {
-                                        sb.append(((IRI) combination.get(iri(multilevelPropertyUrl))).getLocalName());
+                                        line[i] = ((IRI) combination.get(iri(multilevelPropertyUrl))).getLocalName();
                                     }
                                 } else if (combination.get(iri(multilevelPropertyUrl)).isLiteral()) {
-                                    //System.out.println("appending literal " + safeLiteral((Literal)combination.get((IRI)iri(multilevelPropertyUrl))));
-                                    sb.append(safeLiteral((Literal) combination.get((IRI) iri(multilevelPropertyUrl))));
+                                    line[i] = safeLiteral((Literal) combination.get(iri(multilevelPropertyUrl)));
                                 }
-                                sb.append(",");
                             } else {
-                                //System.out.println("orderOfColumnKeys: " + column.getName());
-                                appendColumnValueByKey(column, row, sb, 0, multilevelPropertyUrl, metadata);
+                                line[i] = appendColumnValueByKey(column, row, sb, 0, multilevelPropertyUrl, metadata);
                             }
                         }
                     }
-                    sb.deleteCharAt(sb.length() - 1);
-                    sb.append("\n");
+                    System.out.println("forOutput : " + Arrays.toString(line));
+                    lines.add(line);
                 }
-                //System.out.println("forOutput : " + forOutput.toString());
-                forOutput.append(sb);
+
             } else {
-                String[] line = new String[lines.get(0).length];
                 line[0] = appendIdByValuePattern(row, orderOfColumnKeys.get(0));
                 //System.out.println("Combination #"  + i);
                 i++;
@@ -235,25 +214,22 @@ public class FileWrite {
                     ////System.out.println("Columns by keys " + column.getName());
                     if (!Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES)) && firstColumn) {
                         firstColumn = false;
+                        i--;
                     } else {
 
-                        ////System.out.println("orderOfColumnKeys: " + column.getName());
                         ValueFactory vf = SimpleValueFactory.getInstance();
                         IRI propertyUrlIRI = vf.createIRI(column.getPropertyUrl());
                         String multilevelPropertyUrl = propertyUrlIRI.getNamespace() + column.getName();
-
 
                         line[i] = appendColumnValueByKey(column, row, sb, 0, multilevelPropertyUrl, metadata);
 
                     }
                     i++;
                 }
-                ////System.out.println("row: " + sb.toString() + ".");
                 lines.add(line);
             }
         }
 
-        ////System.out.println("Written rows from rows to the file " + forOutput.toString() + ".");
         ObjectNode metadataNow = null;
         try {
             metadataNow = JsonUtil.serializeWithContext(metadata);
@@ -267,7 +243,8 @@ public class FileWrite {
             JsonUtil.serializeAndWriteToFile(metadata);
 
         }
-        FileWrite.writeToTheFile(f, forOutput.toString(), false);
+        FileWrite.writeLinesToCSVFile(f, lines,true);
+        //FileWrite.writeToTheFile(f, forOutput.toString(), false);
         //System.out.println("Written CSV from rows to the file " + f + ". in saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata)");
         ////System.out.println("saveCSVFileFromRows end");
         return forOutput.toString();
@@ -388,46 +365,26 @@ public class FileWrite {
     }
 
     private static String appendColumnValueByKey(Column column, Row row, StringBuilder sb, int i, String multilevelPropertyUrl, Metadata metadata) {
-        // Simple go through
         IRI iri2;
-        /*
-        //System.out.println("Column  name= " + column.getName() );
-        //System.out.println("Column  titles= " + column.getTitles() );
-        //System.out.println("Column  lang= " + column.getLang() );
-        //System.out.println("Column  virtual= " + column.getVirtual() );
-        //System.out.println("Column  datatype= " + column.getDatatype() );
-        //System.out.println("Column  entryset empty = " + row.columns.entrySet().isEmpty() );
 
-         */
         try {
             iri2 = iri(multilevelPropertyUrl);
-            ////System.out.println("Column iri(column.getPropertyUrl()) = " + iri2 );
         } catch (NullPointerException ex) {
             iri2 = iri(column.getValueUrl());
         }
-        //System.out.println("iri2 = "  + iri2.stringValue());
-        for (Map.Entry<Value, TypeIdAndValues> row2 : row.columns.entrySet()) {
-            ////System.out.println(row2.getKey() + " val= " + row2.getValue().values.get(0)+ " row get value size " + row2.getValue().values.size());
-        }
-        ////System.out.println(row.columns);
-        // //System.out.println("iri2 = " + iri2);
+
         List<Value> values;
         if (row.columns.get(iri2) == null) {
             values = null;
         } else {
-
             values = row.columns.get(iri2).values;
-            //System.out.println("row.columns.get(iri2) == null "  + values);
         }
         if (column.getLang() == null) {
 
             // If it is IRI, parse it by valueURL. If it is literal, just write down its Label.
-            ////System.out.println("column.getPropertyUrl() = " + column.getPropertyUrl());
-            //row.columns.entrySet().forEach(entry -> //System.out.println(entry.getKey() + " is key to: " + entry.getValue().values));
-
             if (values == null) {
                 // The Column is empty, put empty Value to the file
-                sb.append("");
+                return ("");
             } else if (values.get(0).isIRI()) {
                 if (values.size() == 1) {
                     IRI iri = (IRI) values.get(0);
@@ -442,17 +399,19 @@ public class FileWrite {
                 } else {
                     // There are multiple values from the language, we need to enclose them in " "
                     sb.append('"');
+                    StringBuilder sbForMultipleLangVariations = new StringBuilder();
                     values.forEach(val -> {
                         IRI iri = (IRI) val;
                         if (column.getValueUrl().startsWith("{")) {
                             //System.out.println("Appending whole value: " + iri.stringValue());
-                            return iri.stringValue();
+                            sbForMultipleLangVariations.append(iri.stringValue());
                         } else {
                             //System.out.println("Appending shortened value: " + iri.getLocalName());
-                            return iri.getLocalName();
+                            sbForMultipleLangVariations.append(iri.getLocalName());
                         }
                     });
                     column.setSeparator(",");
+                    return sbForMultipleLangVariations.toString();
                 }
             } else if (values.get(0).isLiteral()) {
                 if (values.size() == 1) {
@@ -462,13 +421,18 @@ public class FileWrite {
                 } else {
                     // There are multiple values from the language, we need to enclose them in " "
                     sb.append('"');
+                    StringBuilder sbForMultipleLangVariations = new StringBuilder();
                     values.forEach(val -> {
                         String strValue = ((Literal) val).getLabel();
-                        return strValue;
-                        sb.append(",");
+                        sbForMultipleLangVariations.append(strValue);
+                        sbForMultipleLangVariations.append(",");
                     });
                     column.setSeparator(",");
+                    return sbForMultipleLangVariations.toString();
                 }
+            } else {
+                // There should be no blanks
+                return "";
             }
         }
         // Language versions split
@@ -490,15 +454,21 @@ public class FileWrite {
                     //System.out.println(multilevelPropertyUrl + " " + column.getLang() + " column.separator=" + column.getSeparator());
                     // There are multiple values from the language, we need to enclose them in " "
                     sb.append('"');
+                    StringBuilder sbForMultipleLangVariations = new StringBuilder();
                     valuesByLang.forEach(val -> {
                         String strValue = ((Literal) val).getLabel();
                         //System.out.println("Literal value multivalue: " + strValue);
-                        sb.append(strValue);
-                        sb.append(",");
+                        sbForMultipleLangVariations.append(strValue);
+                        sbForMultipleLangVariations.append(",");
                     });
                     column.setSeparator(",");
+                    return sbForMultipleLangVariations.toString();
                     //System.out.println(multilevelPropertyUrl + " " + column.getLang() + " column.separator=" + column.getSeparator());
                 }
+            }
+            else {
+                // This should not happen
+                return "";
             }
 
 

@@ -7,6 +7,7 @@ import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class BasicQueryMetadataCreator extends MetadataCreator implements IMetadataCreator {
@@ -24,15 +25,18 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
         this.data = data;
         this.allRows = new ArrayList<>();
         this.fileNumberX = 0;
-        CSVFileTOWriteTo = ConfigurationManager.getVariableFromConfigFile("input.outputFileName");
-        System.out.println("CSVFileTOWriteTo = " + CSVFileTOWriteTo);
+        File f = new File(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILENAME));
+        CSVFileTOWriteTo = f.getName();
+        System.out.println("BasicQueryMetadataCreator CSVFileTOWriteTo = " + CSVFileTOWriteTo);
     }
 
     @Override
     public Metadata addMetadata(PrefinishedOutput<?> info) {
         RowAndKey rnk;
+
         try {
-            rnk = (RowAndKey) info.getPrefinishedOutput();
+            RowsAndKeys rnks = (RowsAndKeys) info.getPrefinishedOutput();
+            rnk = rnks.getRowsAndKeys().get(0);
         } catch (ClassCastException ex) {
             SplitFilesMetadataCreator smc = new SplitFilesMetadataCreator(null);
             return smc.addMetadata(info);

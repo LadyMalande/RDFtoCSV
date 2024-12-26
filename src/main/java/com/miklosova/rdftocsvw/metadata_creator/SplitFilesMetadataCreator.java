@@ -7,6 +7,7 @@ import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class SplitFilesMetadataCreator implements IMetadataCreator {
@@ -25,8 +26,9 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
         this.data = data;
         this.allRows = new ArrayList<>();
         this.fileNumberX = 0;
-        CSVFileTOWriteTo = ConfigurationManager.getVariableFromConfigFile("input.outputFileName");
-        System.out.println("CSVFileTOWriteTo = " + CSVFileTOWriteTo);
+        File f = new File(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILENAME));
+        CSVFileTOWriteTo = f.getName();
+        System.out.println("SplitFilesMetadataCreator CSVFileTOWriteTo = " + CSVFileTOWriteTo);
     }
 
     @Override

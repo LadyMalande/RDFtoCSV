@@ -53,7 +53,7 @@ public class RDFtoCSV {
         this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
-        ConfigurationManager.processConfigMap(fileName, null);
+        //ConfigurationManager.processConfigMap(fileName, null);
     }
 
     public RDFtoCSV(String fileName, Map<String, String> configMap) {
@@ -70,7 +70,7 @@ public class RDFtoCSV {
      */
     @SuppressWarnings("unused")
     public FinalizedOutput<byte[]> convertToZip() throws IOException {
-        ConfigurationManager.configure(metadataFilename, filePathForOutput);
+        //ConfigurationManager.configure(metadataFilename, filePathForOutput);
 
         parseInput();
 
@@ -134,7 +134,7 @@ public class RDFtoCSV {
 
     public String getCSVTableAsString() throws IOException {
 
-        ConfigurationManager.configure(metadataFilename, filePathForOutput);
+        //ConfigurationManager.configure(metadataFilename, filePathForOutput);
         if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD).equalsIgnoreCase("trivial")) {
             System.out.println("doing TRIVIAL ");
             return getTrivialCSVTableAsString();
@@ -158,7 +158,7 @@ public class RDFtoCSV {
     }
 
     public Metadata getMetadata() throws IOException {
-        ConfigurationManager.configure(metadataFilename, filePathForOutput);
+        //ConfigurationManager.configure(metadataFilename, filePathForOutput);
 
         parseInput();
 
