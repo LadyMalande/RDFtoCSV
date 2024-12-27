@@ -8,6 +8,7 @@ import com.miklosova.rdftocsvw.output_processor.StreamingNTriplesWrite;
 import com.miklosova.rdftocsvw.output_processor.ZipOutputProcessor;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.FileWrite;
+import com.miklosova.rdftocsvw.support.FileWrite.*;
 import com.miklosova.rdftocsvw.support.JsonUtil;
 import org.apache.log4j.BasicConfigurator;
 import org.eclipse.rdf4j.repository.Repository;
@@ -128,7 +129,7 @@ public class RDFtoCSV {
 
         db.shutDown();
 
-        System.out.println(sb.toString());
+        System.out.println("writeToStringTrivial : " + sb.toString());
         return sb.toString();
     }
 

@@ -271,7 +271,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                     // Create a new IRI
 
                     String newValueForMap = solution.getBinding("p").getValue().stringValue() + "_MULTILEVEL_";// + ((IRI) subject).getLocalName();
-                    //System.out.println("newValueForMap" + newValueForMap);
+                    System.out.println("newValueForMap" + newValueForMap);
                     keyForColumnsMap = valueFactory.createIRI(newValueForMap);
                 }
                 if (newRow.columns.containsKey(keyForColumnsMap) &&
@@ -305,7 +305,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                 }
 
                 if (!keys.contains(keyForColumnsMap)) {
-                    //keys.forEach(k -> System.out.print("key: " + k));
+                    keys.forEach(k -> System.out.print("key: " + k));
                     keys.add(keyForColumnsMap);
                 }
 
