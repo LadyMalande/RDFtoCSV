@@ -183,11 +183,11 @@ public class ConfigurationManager {
         if (configMap != null) {
             if (configMap.containsKey("table")) {
                 tables = switch (configMap.get("table")) {
-                    case "splitQuery", "more" -> "more";
+                    case "splitQuery", "MORE", "more" -> "more";
                     default -> "one";
                 };
             }
-            readMethod = configMap.getOrDefault("readMethod", readMethod);
+            readMethod = configMap.getOrDefault("readMethod", readMethod.toLowerCase());
             System.out.println("tables = " + tables);
             conversionMethod = (tables.equalsIgnoreCase(ONE_TABLE)) ? QueryMethods.BASIC_QUERY.getValue() : QueryMethods.SPLIT_QUERY.getValue();
             if (configMap.containsKey("firstNormalForm")) {
@@ -205,6 +205,7 @@ public class ConfigurationManager {
             saveVariableToConfigFile(READ_METHOD,readMethod);
         //if(ConfigurationManager.getVariableFromConfigFile(INPUT_FILENAME) == null){
             saveVariableToConfigFile(INPUT_FILENAME,fileName);
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.METADATA_ROWNUMS, "false");
             System.out.println("INPUT_FILENAME " + fileName);
         //}
     }
@@ -221,7 +222,9 @@ public class ConfigurationManager {
         System.out.println("currentConfigFileName = " + currentConfigFileName);
 
         try (FileInputStream fis = new FileInputStream(currentConfigFileName)) {
-            prop.load(new InputStreamReader(fis, StandardCharsets.UTF_8));
+
+                    prop.load(new InputStreamReader(fis, StandardCharsets.UTF_8));
+            System.out.println("CONFIGURATION ROWNUMS " + prop.getProperty(METADATA_ROWNUMS));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -360,7 +363,7 @@ public class ConfigurationManager {
         }
 
         String metadataFileName;
-        parsingMethod = (parsingMethod != null) ? parsingMethod : DEFAULT_PARSING_METHOD;
+        parsingMethod = (parsingMethod != null) ? parsingMethod.toLowerCase() : DEFAULT_PARSING_METHOD;
         String baseFileName;
         if (outputFilename == null) {
             baseFileName = inputFile.split("\\.")[0];
@@ -372,7 +375,7 @@ public class ConfigurationManager {
         conversionMethod = (!multipleTables) ? DEFAULT_CONVERSION_METHOD : MULTIPLE_TABLES_CONVERSION_METHOD;
         prop.setProperty(ConfigurationManager.TABLES, (!multipleTables) ? "one" : "more");
         conversionMethod = switch (parsingMethod) {
-            case "bigFileStreaming" -> "bigFileStreaming";
+            case "bigfilestreaming" -> "bigfilestreaming";
             case "streaming" -> "streaming";
             default -> conversionMethod;
         };

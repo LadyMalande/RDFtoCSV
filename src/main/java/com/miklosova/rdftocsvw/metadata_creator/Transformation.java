@@ -37,27 +37,31 @@ public class Transformation {
         this.titles = titles;
     }
 
-    public String getUrl() {
-        return url;
+    public Transformation() {
+        this.url = "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js";
+        this.scriptFormat = "http://www.iana.org/assignments/media-types/application/javascript";
+        this.targetFormat = "http://www.iana.org/assignments/media-types/turtle";
+        this.source = "rdf";
+        this.titles = "RDF format used as the output format in the transformation from CSV to RDF";
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public String getUrl() {
+        return url;
     }
 
     public String getSource() {
         return source;
     }
 
-    public void setSource(String source) {
-        this.source = source;
-    }
-
     public String getTitles() {
         return titles;
     }
 
-    public void setTitles(String titles) {
-        this.titles = titles;
+    public String getScriptFormat() {
+        return scriptFormat;
+    }
+
+    public String getTargetFormat() {
+        return targetFormat;
     }
 }

@@ -290,7 +290,7 @@ public class RDFtoCSV {
         return ms.createMetadata(po);
     }
 
-    private PrefinishedOutput<RowsAndKeys> convertData() {
+    public PrefinishedOutput<RowsAndKeys> convertData() {
         // Convert the table to intermediate data for processing into metadata
         ConversionService cs = new ConversionService();
         return cs.convertByQuery(rc, db);

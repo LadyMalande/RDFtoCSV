@@ -36,13 +36,6 @@ public class MetadataService {
                     throw new IllegalArgumentException("Invalid data type for splitQuery");
                 }
                 break;
-            case "codelistQuery":
-                if (data != null && data.getPrefinishedOutput() != null) {
-                    metadataGateway.setMetadataCreator(new CodelistQueryMetadataCreator());
-                } else {
-                    throw new IllegalArgumentException("Invalid data type for codelistQuery");
-                }
-                break;
             case "bigFileStreaming":
 
                 if (!extension.equalsIgnoreCase("nt")) {

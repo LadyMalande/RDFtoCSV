@@ -24,7 +24,6 @@ public class ConversionService {
         switch (conversionChoice) {
             case "basicQuery", "trivial" -> conversionGateway.setConversionMethod(new BasicQueryConverter(db));
             case "splitQuery" -> conversionGateway.setConversionMethod(new SplitFilesQueryConverter(db));
-            case "codelistQuery" -> conversionGateway.setConversionMethod(new CodelistQueryConverter(db));
             default -> throw new IllegalArgumentException("Invalid payment method");
         }
     }
