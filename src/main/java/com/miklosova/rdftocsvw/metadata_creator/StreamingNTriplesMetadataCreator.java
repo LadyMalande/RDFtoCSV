@@ -81,7 +81,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     }
 
     @Override
-    void processLine(String line) {
+    public void processLine(String line) {
         currentCSVName = null;
         unifiedBySubject = false;
         tableSchema = null;

@@ -5,6 +5,10 @@ import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 
 public class ConversionService {
+    public ConversionGateway getConversionGateway() {
+        return conversionGateway;
+    }
+
     private ConversionGateway conversionGateway;
 
     public PrefinishedOutput<RowsAndKeys> convertByQuery(RepositoryConnection rc, Repository db) {

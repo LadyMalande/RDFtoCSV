@@ -154,7 +154,7 @@ public class MetadataConsolidator {
         return newMetadata;
     }
 
-    private Tuple<String,String> firstColumnHasLinksToAnotherColumn(Metadata oldMetadata, Column subject, Table table) {
+    public Tuple<String,String> firstColumnHasLinksToAnotherColumn(Metadata oldMetadata, Column subject, Table table) {
         for(Table t : oldMetadata.getTables()){
             if(t != table){
                 try {

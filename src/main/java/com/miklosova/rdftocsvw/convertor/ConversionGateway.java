@@ -5,6 +5,10 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
 public class ConversionGateway {
     private IQueryParser conversionMethod;
 
+    public IQueryParser getConversionMethod() {
+        return conversionMethod;
+    }
+
     public void setConversionMethod(IQueryParser conversionMethod) {
         this.conversionMethod = conversionMethod;
     }

@@ -1,12 +1,5 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
   "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test_merged.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ ]
-    }
-  } ]
+  "tables" : [ ]
 }

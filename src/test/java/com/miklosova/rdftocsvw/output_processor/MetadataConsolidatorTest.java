@@ -2,6 +2,7 @@ package com.miklosova.rdftocsvw.output_processor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
+import com.miklosova.rdftocsvw.convertor.RDFtoCSV;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import com.miklosova.rdftocsvw.support.BaseTest;
@@ -42,6 +43,9 @@ public class MetadataConsolidatorTest extends BaseTest {
         this.filePathForOutput = filePathForOutput;
         this.outputFile = outputFile;
         this.expectedMetadataFile = expectedMetadataFile;
+        rdfToCSV = new RDFtoCSV(fileName);
+        db = new SailRepository(new MemoryStore());
+        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{"-f", fileName});
     }
 
     @Parameterized.Parameters(name = "{0}")
@@ -62,9 +66,8 @@ public class MetadataConsolidatorTest extends BaseTest {
     @BeforeEach
     void loadMetadata() {
         System.out.println("load metadata from file " + expectedMetadataFile);
-        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{"-f", filePath});
+
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
-        db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService();
         RepositoryConnection rc = null;
         try {
@@ -79,7 +82,7 @@ public class MetadataConsolidatorTest extends BaseTest {
 
     @Test
     public void isGivenDatatype() {
-        ConfigurationManager.getCONFIG_FILE_NAME();
+        //ConfigurationManager.getCONFIG_FILE_NAME();
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, outputFile);
         logger.info("Starting test isGivenDatatype.");
         //createMetadata();

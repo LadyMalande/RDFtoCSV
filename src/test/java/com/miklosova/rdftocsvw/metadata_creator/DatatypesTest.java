@@ -96,7 +96,7 @@ public class DatatypesTest extends BaseTest {
         System.out.println("START isGivenDatatype");
         JSONObject jsonObject = readJSONFile(filePathForMetadata);
         JSONArray tables = (JSONArray) jsonObject.get("tables");
-        JSONObject table = (JSONObject) tables.get(2);
+        JSONObject table = (JSONObject) tables.get(0);
         JSONObject tableSchema = (JSONObject) table.get("tableSchema");
         JSONArray columns = (JSONArray) tableSchema.get("columns");
         JSONObject testColumn = (JSONObject) columns.stream().filter(column -> ((JSONObject) column).get("name").equals("datatypeTest")).findAny().get();

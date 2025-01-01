@@ -5,6 +5,7 @@ import com.miklosova.rdftocsvw.convertor.Row;
 import com.miklosova.rdftocsvw.metadata_creator.Metadata;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.jupiter.api.AfterEach;
@@ -18,6 +19,7 @@ public class BaseTest {
     private static final Logger LOGGER = Logger.getLogger(BaseTest.class.getName());
     public Metadata testMetadata;
     public Repository db;
+    public RepositoryConnection conn;
     public String PROCESS_METHOD = "rdf4j";
 
     public String[] args;

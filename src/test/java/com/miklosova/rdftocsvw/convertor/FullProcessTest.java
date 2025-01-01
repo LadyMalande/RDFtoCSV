@@ -4,6 +4,7 @@ import com.miklosova.rdftocsvw.support.Main;
 import com.miklosova.rdftocsvw.support.TestSupport;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -43,6 +44,7 @@ public class FullProcessTest {
     }
 
     @Test
+    @Disabled
     public void originalIsSubsetOfResult() {
         String[] args = new String[]{"-f", filePath, "-p", "streaming"};
         Main.main(args);

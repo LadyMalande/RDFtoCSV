@@ -53,7 +53,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
 
 
 
-    private static String[] parseTripleFromLine(String line) throws InvalidObjectException {
+    public static String[] parseTripleFromLine(String line) throws InvalidObjectException {
         // Updated regex to handle URIs, literals, and blank nodes
         String regex = "^(<[^>]*>|_:\\w+)\\s+<([^>]*)>\\s+(\".*?\"(?:@\\w+|\\^\\^<[^>]+>)?|<[^>]*>|_:\\w+)\\s+\\.$";
         Pattern pattern = Pattern.compile(regex);
@@ -184,7 +184,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
         tableSchema.getColumns().add(firstColumn);
     }
 
-    void processLine(String line) {
+    public void processLine(String line) {
         Statement statement = processNTripleLine(line);
         Statement statementWithIRIs = replaceBlankNodesWithIRI(statement, line);
         Triple triple = new Triple((IRI) statementWithIRIs.getSubject(), statementWithIRIs.getPredicate(), statementWithIRIs.getObject());

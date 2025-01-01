@@ -55,14 +55,19 @@ public class JsonUtil {
 
     public static String serializeAndWriteToFile(Object obj) {
         ObjectNode resultNode = null;
+        System.out.println(" serializeAndWriteToFile(Object obj)");
         try {
+            System.out.println(" serializeWithContext(obj)");
             resultNode = serializeWithContext(obj);
+            System.out.println(" serializeWithContext(obj) after");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         writeJsonToFile(resultNode);
         try {
+            System.out.println(" return mapper.writeValueAsString(resultNode); ");
             return mapper.writeValueAsString(resultNode);
+
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return null;

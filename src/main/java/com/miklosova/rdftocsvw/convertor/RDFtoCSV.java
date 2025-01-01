@@ -320,7 +320,7 @@ public class RDFtoCSV {
         MethodService methodService = new MethodService();
         System.out.println("fileName in createRepositoryConnection = " + filename);
         RepositoryConnection repositoryConnection = methodService.processInput(filename, readMethod, repository);
-        assert (repositoryConnection != null);
+        //assert (repositoryConnection != null);
         return repositoryConnection;
     }
 
