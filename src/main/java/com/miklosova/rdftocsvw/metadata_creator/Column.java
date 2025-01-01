@@ -482,4 +482,8 @@ public class Column {
             languageTag.ifPresent(s -> this.lang = s);
         }
     }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
 }

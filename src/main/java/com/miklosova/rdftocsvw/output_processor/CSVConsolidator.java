@@ -23,11 +23,12 @@ public class CSVConsolidator {
     public void consolidateCSVs(Metadata oldMetadata, Metadata newMetadata) {
         String fullFilePath = getFilePathForFileName(newMetadata.getTables().get(0).getUrl());
         File fileToWrite = new File(newMetadata.getTables().get(0).getUrl());
+        System.out.println("consolidateCSVs " + fileToWrite.getAbsolutePath());
         createHeadersLineForCSV(newMetadata, fileToWrite);
         writeToCSVFromOldMetadataToMerged(oldMetadata, newMetadata, fileToWrite);
     }
 
-    private void createHeadersLineForCSV(Metadata newMetadata, File fileToWriteTo) {
+    public void createHeadersLineForCSV(Metadata newMetadata, File fileToWriteTo) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(fileToWriteTo, false))) {
             // Appends to the file instead of overwriting
             String[] line = new String[newMetadata.getTables().get(0).getTableSchema().getColumns().size()];
@@ -50,7 +51,9 @@ public class CSVConsolidator {
             String[] lineToWrite = new String[newMetadata.getTables().get(0).getTableSchema().getColumns().size()];
             int counter = 0;
             for(Table t : oldMetadata.getTables()){
+                System.out.println("table " + t.getTableSchema() + " url " + t.getUrl());
                 String fullFilePath = getFilePathForFileName(t.getUrl());
+                System.out.println("fullFilePath " + fullFilePath + " url " + t.getUrl());
                 File fileToWrite = new File(fullFilePath);
                 try (CSVReader reader = new CSVReader(new FileReader(fileToWrite))) {
                     String[] line;
@@ -78,7 +81,7 @@ public class CSVConsolidator {
                                     }
                                 }
                             }
-                            //System.out.println("Writing newline of merged CSV: " + Arrays.toString(line));
+                            System.out.println("Writing newline of merged CSV to "+ fileToWrite.getName() +" : " + Arrays.toString(line));
                             writer.writeNext(lineToWrite, false);
                             counter++;
                         }
@@ -98,7 +101,7 @@ public class CSVConsolidator {
 
     }
 
-    private boolean isMergeable(Column c1, Column c2){
+    public boolean isMergeable(Column c1, Column c2){
         // The columns have nonnull popertyUrl, have the same propertyUrl, and if lang is not null, they have the same lang
         return c1.getPropertyUrl() != null &&  c2.getPropertyUrl() != null
                 && c2.getPropertyUrl().equalsIgnoreCase(c1.getPropertyUrl()) &&

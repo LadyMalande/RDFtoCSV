@@ -209,6 +209,7 @@ public class MetadataConsolidator {
 
     public static String getFilePathForFileName(String url) {
         String intermediateFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+        System.out.println("getFilePathForFileName =  " + intermediateFiles);
         String[] files = intermediateFiles.split(",");
         for(String file : files){
             if(file.endsWith(url)){

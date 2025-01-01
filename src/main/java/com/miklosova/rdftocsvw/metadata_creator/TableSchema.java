@@ -115,6 +115,7 @@ public class TableSchema {
         // TODO process the IRIs
         // This only works for the tables that have different types of entities
         this.columns = createColumns(this.rows);
+        columns.forEach(column -> System.out.println("column " + column.getPropertyUrl()));
         this.rowTitles = new ArrayList<>();
         if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.METADATA_ROWNUMS).equalsIgnoreCase("true")) {
             addRowNumsColumn();
@@ -180,7 +181,7 @@ public class TableSchema {
         this.primaryKey = firstColumn.getName();
         listOfColumns.add(firstColumn);
         List<Map.Entry<Value, TypeIdAndValues>> columns = getColumnsFromRows();
-
+        System.out.println(Arrays.toString(columns.toArray()));
 
         for (Map.Entry<Value, TypeIdAndValues> column : columns) {
             boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, column.getKey());
