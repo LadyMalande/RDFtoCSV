@@ -219,15 +219,6 @@ public class FormatsProcessingTest extends BaseTest {
     @Test
     public  void repositoryConnectionIsEstablishedForHdt() throws IOException {
         String filePath = "src/test/resources/differentSerializations/testingInput.hdt";
-/*
-        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
-
-        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
-        System.out.println("Reporting from tests " + methodName);
-        System.out.println(rc != null);
-
- */
-        //Assert.assertNotNull(rc);
         // Was not able to test positive test for .hdt file format test.
         // So the default test case is expecting thrown exception.
         Assert.assertThrows(UnsupportedRDFormatException.class, () -> {
@@ -238,22 +229,6 @@ public class FormatsProcessingTest extends BaseTest {
     @Test
     public void repositoryConnectionIsEstablishedForN3() throws IOException {
         String filePath = "src/test/resources/differentSerializations/testingInput.n3";
-
-        RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
-
-        String methodName = new Object() {
-        }.getClass().getEnclosingMethod().getName();
-        System.out.println("Reporting from tests " + methodName);
-        System.out.println(rc != null);
-        Assert.assertNotNull(rc);
-    }
-
-    @Test
-    @Disabled
-    public void repositoryConnectionIsEstablishedForJsonl() throws IOException {
-        // Does not work properly as it works on ndjsonld
-
-        String filePath = "src/test/resources/differentSerializations/testingInput.jsonl";
 
         RepositoryConnection rc = ms.processInput(filePath, inputProcessingMethod, db);
 

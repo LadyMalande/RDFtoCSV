@@ -1,11 +1,13 @@
 package com.miklosova.rdftocsvw.output_processor;
 
-import com.miklosova.rdftocsvw.convertor.RDFtoCSV;
-import com.miklosova.rdftocsvw.convertor.Row;
-import com.miklosova.rdftocsvw.metadata_creator.*;
+import com.miklosova.rdftocsvw.converter.RDFtoCSV;
+import com.miklosova.rdftocsvw.converter.data_structure.Row;
 
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
 import com.miklosova.rdftocsvw.support.BaseTest;
-import com.miklosova.rdftocsvw.support.FileWrite;
 import com.opencsv.CSVReader;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;

@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "test029.ttl0.csv",
+    "url" : "0.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -35,6 +35,14 @@
       } ],
       "primaryKey" : "Subject",
       "rowTitles" : [ "Subject", "countryCode", "latitude", "longitude", "name" ]
-    }
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ]
   } ]
 }

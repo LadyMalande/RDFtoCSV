@@ -1,5 +1,6 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Transformation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.ParameterizedTest;

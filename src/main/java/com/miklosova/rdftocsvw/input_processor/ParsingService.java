@@ -46,14 +46,14 @@ public class ParsingService {
             }
             case "brf" -> inputGateway.setParsingMethod(new BinaryParser());
             case "hdt" -> inputGateway.setParsingMethod(new HdtParser());
-            case "jsonld" -> inputGateway.setParsingMethod(new JsonldParser());
+            case "jsonld" -> inputGateway.setParsingMethod((new JsonldParser()));
             case "n3" -> inputGateway.setParsingMethod(new N3Parser());
             case "ndjsonld", "jsonl", "ndjson" -> inputGateway.setParsingMethod(new NdjsonldParser());
             case "nq" -> inputGateway.setParsingMethod(new NquadsParser());
             case "nt" -> inputGateway.setParsingMethod(new NtriplesParser());
             case "xhtml", "html" -> inputGateway.setParsingMethod(new RdfaParser());
             case "rj" -> inputGateway.setParsingMethod(new RdfjsonParser());
-            case "rdf", "rdfs", "owl", "xml" -> inputGateway.setParsingMethod(new RdfxmlParser());
+            case "rdf", "rdfs", "owl", "xml" -> {System.out.println("Extension rdf\", \"rdfs\", \"owl\", \"xml");inputGateway.setParsingMethod(new RdfxmlParser());}
             case "trig" -> inputGateway.setParsingMethod(new TrigParser());
             case "trigs" -> inputGateway.setParsingMethod(new TrigstarParser());
             case "trix" -> inputGateway.setParsingMethod(new TrixParser());

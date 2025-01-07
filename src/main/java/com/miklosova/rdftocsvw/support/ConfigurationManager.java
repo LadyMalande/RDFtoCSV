@@ -1,6 +1,6 @@
 package com.miklosova.rdftocsvw.support;
 
-import com.miklosova.rdftocsvw.convertor.QueryMethods;
+import com.miklosova.rdftocsvw.converter.QueryMethods;
 import org.apache.commons.cli.*;
 import org.apache.log4j.BasicConfigurator;
 
@@ -10,6 +10,9 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
+
+import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
+import static org.eclipse.rdf4j.model.util.Values.iri;
 
 public class ConfigurationManager {
 
@@ -53,10 +56,13 @@ public class ConfigurationManager {
         String fileInDirectory;
         try {
             URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
+            /*
             System.out.println("URL location.toString from getCONFIG_FILE_NAME " + location.toString());
             System.out.println("URL location.getPath from getCONFIG_FILE_NAME " + location.getPath());
             System.out.println("URL location.toURI() from getCONFIG_FILE_NAME " + location.toURI());
             System.out.println("URL location.toURI().getPath() from getCONFIG_FILE_NAME " + location.toURI().getPath());
+
+             */
             String fileName = "/app.config";
             if(location.toURI().toString().contains("jar:nested:")){
                 // Change the directory in remote place
@@ -179,7 +185,7 @@ public class ConfigurationManager {
         String tables = ONE_TABLE;
         String readMethod = DEFAULT_PARSING_METHOD;
         String conversionMethod = QueryMethods.BASIC_QUERY.getValue();
-        String firstNormalForm = "true";
+        String firstNormalForm = "false";
         if (configMap != null) {
             if (configMap.containsKey("table")) {
                 tables = switch (configMap.get("table")) {
@@ -187,14 +193,16 @@ public class ConfigurationManager {
                     default -> "one";
                 };
             }
-            readMethod = configMap.getOrDefault("readMethod", readMethod.toLowerCase());
+            if(configMap.get("readMethod") != null){
+                readMethod = configMap.get("readMethod");
+            }
+            //readMethod = configMap.getOrDefault("readMethod", readMethod.toLowerCase());
             System.out.println("tables = " + tables);
             conversionMethod = (tables.equalsIgnoreCase(ONE_TABLE)) ? QueryMethods.BASIC_QUERY.getValue() : QueryMethods.SPLIT_QUERY.getValue();
             if (configMap.containsKey("firstNormalForm")) {
                 firstNormalForm = configMap.get("firstNormalForm");
             }
         }
-        // TODO finish implementing all the relevant parameters
         //if (ConfigurationManager.getVariableFromConfigFile(CONVERSION_METHOD) == null)
             saveVariableToConfigFile(CONVERSION_METHOD, conversionMethod);
         //if (ConfigurationManager.getVariableFromConfigFile(TABLES) == null)
@@ -205,8 +213,12 @@ public class ConfigurationManager {
             saveVariableToConfigFile(READ_METHOD,readMethod);
         //if(ConfigurationManager.getVariableFromConfigFile(INPUT_FILENAME) == null){
             saveVariableToConfigFile(INPUT_FILENAME,fileName);
+
+            saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, fileName);
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.METADATA_ROWNUMS, "false");
             System.out.println("INPUT_FILENAME " + fileName);
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME, fileName + "_CSVW.zip");
+
         //}
     }
 
@@ -219,12 +231,12 @@ public class ConfigurationManager {
     public static String getVariableFromConfigFile(String variableName) {
         Properties prop = new Properties();
 
-        System.out.println("currentConfigFileName = " + currentConfigFileName);
+        //System.out.println("currentConfigFileName = " + currentConfigFileName);
 
         try (FileInputStream fis = new FileInputStream(currentConfigFileName)) {
 
                     prop.load(new InputStreamReader(fis, StandardCharsets.UTF_8));
-            System.out.println("CONFIGURATION ROWNUMS " + prop.getProperty(METADATA_ROWNUMS));
+            //System.out.println("CONFIGURATION ROWNUMS " + prop.getProperty(METADATA_ROWNUMS));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -371,6 +383,9 @@ public class ConfigurationManager {
         } else {
             baseFileName = outputFilename;
         }
+        if(isUrl(inputFile)){
+            baseFileName = iri(inputFile).getLocalName();
+        }
 
         conversionMethod = (!multipleTables) ? DEFAULT_CONVERSION_METHOD : MULTIPLE_TABLES_CONVERSION_METHOD;
         prop.setProperty(ConfigurationManager.TABLES, (!multipleTables) ? "one" : "more");
@@ -386,7 +401,8 @@ public class ConfigurationManager {
         prop.setProperty(ConfigurationManager.INTERMEDIATE_FILE_NAMES, "");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
-        prop.setProperty(ConfigurationManager.OUTPUT_ZIPFILE_NAME, "compressed.zip");
+        prop.setProperty(ConfigurationManager.OUTPUT_ZIPFILE_NAME, "../" + baseFileName + "_CSVW.zip");
+        System.out.println("OUTPUT_ZIPFILE_NAME " + "../" + baseFileName + "_CSVW.zip" + " baseFileName = " + baseFileName);
         System.out.println("property set prop.setProperty(ConfigurationManager.READ_METHOD," + parsingMethod);
         prop.setProperty(ConfigurationManager.READ_METHOD, parsingMethod);
         prop.setProperty(ConfigurationManager.METADATA_ROWNUMS, "false");
@@ -418,27 +434,5 @@ public class ConfigurationManager {
         options.addOption("n", "firstNormalForm", false, "Put the output CSV data into first normal form (every cell contains only one entry, no lists of values)");
         options.addOption("o", "output", true, "Output file name base. Will be given .csv extension. If not set, the name of the input file is taken.");
         return options;
-    }
-
-    public static void configure(String metadataFilename, String filePathForOutput) {
-        BasicConfigurator.configure();
-
-        String m = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD);
-        String method = (m != null) ? m : DEFAULT_METHOD;
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, method);
-        String readMethod = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD);
-        readMethod = (readMethod != null) ? readMethod : DEFAULT_READ_METHOD;
-        System.out.println("readMethod is " + readMethod);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.READ_METHOD, readMethod);
-
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, metadataFilename);
-
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, filePathForOutput);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, "");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.METADATA_ROWNUMS, "false");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH, "");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME, ConfigurationManager.DEFAULT_OUTPUT_ZIPFILE_NAME);
     }
 }

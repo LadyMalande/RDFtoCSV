@@ -1,7 +1,10 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
-import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
+import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
+import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 
 import java.io.BufferedReader;

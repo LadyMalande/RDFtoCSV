@@ -3,19 +3,17 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "../ntriplesTestFile1streaming.nt_merged",
+    "url" : "_merged.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "Subject",
         "name" : "Subject",
         "valueUrl" : "{+Subject}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "type",
         "name" : "type",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
@@ -23,14 +21,12 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "label",
         "name" : "label",
         "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#label",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "isDistrictAuthority",
         "name" : "isDistrictAuthority",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#isDistrictAuthority",
@@ -38,7 +34,6 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "contractingAuthority",
         "name" : "contractingAuthority",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#contractingAuthority",
@@ -46,14 +41,12 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "Date Modified",
         "name" : "modified",
         "propertyUrl" : "http://purl.org/dc/terms/modified",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "hasEconomicIndicator",
         "name" : "hasEconomicIndicator",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasEconomicIndicator",
@@ -61,15 +54,13 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "Type",
-        "name" : "type",
+        "name" : "type_1",
         "propertyUrl" : "http://purl.org/dc/terms/type",
-        "valueUrl" : "https://w3id.org/italia/env/ld/skos/ihi/{+type}",
+        "valueUrl" : "{+type_1}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "Is Referenced By",
         "name" : "isReferencedBy",
         "propertyUrl" : "http://purl.org/dc/terms/isReferencedBy",
@@ -77,14 +68,12 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "cup",
         "name" : "cup",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#cup",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "lot",
         "name" : "lot",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#lot",
@@ -92,7 +81,6 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "repairRelatedTo",
         "name" : "repairRelatedTo",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#repairRelatedTo",
@@ -100,7 +88,6 @@
         "aboutUrl" : "https://w3id.org/italia/env/ld/ihi/repair/353/{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "Relation",
         "name" : "relation",
         "propertyUrl" : "http://purl.org/dc/terms/relation",
@@ -108,14 +95,12 @@
         "aboutUrl" : "https://w3id.org/italia/env/ld/ihi/lot/dait@22_0881/{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "Date",
         "name" : "date",
         "propertyUrl" : "http://purl.org/dc/elements/1.1/date",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "entity",
         "name" : "entity",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#entity",
@@ -123,7 +108,6 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "hasIter",
         "name" : "hasIter",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasIter",
@@ -131,7 +115,6 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "unit",
         "name" : "unit",
         "propertyUrl" : "http://qudt.org/vocab/unit#unit",
@@ -139,14 +122,12 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "instabilityGroup",
         "name" : "instabilityGroup",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#instabilityGroup",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "primaryGeographicalFeature",
         "name" : "primaryGeographicalFeature",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#primaryGeographicalFeature",
@@ -154,7 +135,6 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "hasStep",
         "name" : "hasStep",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasStep",
@@ -162,14 +142,12 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "value",
         "name" : "value",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "repairCategory",
         "name" : "repairCategory",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#repairCategory",
@@ -177,7 +155,6 @@
         "aboutUrl" : "https://w3id.org/italia/env/ld/ihi/repair/016/{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "isMemberOf",
         "name" : "isMemberOf",
         "propertyUrl" : "https://w3id.org/italia/env/onto/top/isMemberOf",
@@ -185,7 +162,6 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "isLotOf",
         "name" : "isLotOf",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#isLotOf",
@@ -193,35 +169,30 @@
         "aboutUrl" : "https://w3id.org/italia/env/ld/ihi/lot/dpc@19_4127/{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "lat",
         "name" : "lat",
         "propertyUrl" : "http://www.w3.org/2003/01/geo/wgs84_pos#lat",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "long",
         "name" : "long",
         "propertyUrl" : "http://www.w3.org/2003/01/geo/wgs84_pos#long",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "point",
         "name" : "point",
         "propertyUrl" : "http://www.georss.org/georss/point",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "Source",
         "name" : "source",
         "propertyUrl" : "http://purl.org/dc/elements/1.1/source",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "hasAgreement",
         "name" : "hasAgreement",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasAgreement",
@@ -229,7 +200,6 @@
         "aboutUrl" : "https://w3id.org/italia/env/ld/ihi/intervention/dpc@19_4575/{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "Publisher",
         "name" : "publisher",
         "propertyUrl" : "http://purl.org/dc/terms/publisher",
@@ -237,35 +207,31 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "Type",
-        "name" : "type",
+        "name" : "type_1",
         "propertyUrl" : "http://purl.org/dc/elements/1.1/type",
+        "valueUrl" : "{+type_1}",
         "aboutUrl" : "https://w3id.org/italia/env/ld/ihi/businessentity/{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "contact",
         "name" : "contact",
         "propertyUrl" : "http://purl.org/procurement/public-contracts#contact",
         "aboutUrl" : "https://w3id.org/italia/env/ld/ihi/lot/324/{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "Description",
         "name" : "description",
         "propertyUrl" : "http://purl.org/dc/elements/1.1/description",
         "aboutUrl" : "https://w3id.org/italia/env/ld/ihi/agreement/dait@23_0972/{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "location",
         "name" : "location",
         "propertyUrl" : "http://www.w3.org/2003/01/geo/wgs84_pos#location",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "amountFinanced",
         "name" : "amountFinanced",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#amountFinanced",
@@ -273,21 +239,18 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "Subject",
         "name" : "subject",
         "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
         "aboutUrl" : "https://w3id.org/italia/env/ld/ihi/agreement/dpc@19_0022/{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "role",
         "name" : "role",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#role",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "instabilityRelatedTo",
         "name" : "instabilityRelatedTo",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#instabilityRelatedTo",
@@ -295,14 +258,12 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "procedureType",
         "name" : "procedureType",
         "propertyUrl" : "http://purl.org/procurement/public-contracts#procedureType",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "titles" : "lithologyType",
         "name" : "lithologyType",
         "propertyUrl" : "https://w3id.org/italia/env/onto/core#lithologyType",
@@ -310,7 +271,6 @@
         "aboutUrl" : "https://w3id.org/italia/env/ld/ihi/lithology/001/{+Subject}"
       }, {
         "@type" : "Column",
-        "isNamespaceTheSame" : false,
         "propertyUrl" : "rdf:type",
         "valueUrl" : "{+type}",
         "aboutUrl" : "{+FrameworkAgreement}",

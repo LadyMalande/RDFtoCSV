@@ -1,6 +1,6 @@
 package com.miklosova.rdftocsvw.w3c_tests;
 
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
+import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.TestSupport;

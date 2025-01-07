@@ -1,10 +1,10 @@
 package com.miklosova.rdftocsvw.output_processor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
-import com.miklosova.rdftocsvw.convertor.RDFtoCSV;
+import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
+import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
-import com.miklosova.rdftocsvw.metadata_creator.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.JsonUtil;
@@ -43,9 +43,9 @@ public class MetadataConsolidatorTest extends BaseTest {
         this.filePathForOutput = filePathForOutput;
         this.outputFile = outputFile;
         this.expectedMetadataFile = expectedMetadataFile;
-        rdfToCSV = new RDFtoCSV(fileName);
+        rdfToCSV = new RDFtoCSV(filePath);
         db = new SailRepository(new MemoryStore());
-        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{"-f", fileName});
+        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{"-f", filePath});
     }
 
     @Parameterized.Parameters(name = "{0}")

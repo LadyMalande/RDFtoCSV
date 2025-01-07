@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "test031.ttl0.csv",
+    "url" : "0.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -43,33 +43,7 @@
         "titles" : "countryRef",
         "name" : "countryRef",
         "propertyUrl" : "file://country_slice.csv#countryRef",
-        "valueUrl" : "{+countryRef}"
-      }, {
-        "@type" : "Column",
-        "titles" : "_latitude",
-        "name" : "latitude_MULTILEVEL_",
-        "propertyUrl" : "http://schema.org/latitude",
-        "datatype" : "double",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "_longitude",
-        "name" : "longitude_MULTILEVEL_",
-        "propertyUrl" : "http://schema.org/longitude",
-        "datatype" : "double",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "_name",
-        "name" : "name_MULTILEVEL_",
-        "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "_countryCode",
-        "name" : "countryCode_MULTILEVEL_",
-        "propertyUrl" : "http://www.geonames.org/ontology#countryCode",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subject}"
+        "valueUrl" : "http://example.org/countries.csv#{+countryRef}"
       }, {
         "@type" : "Column",
         "titles" : "population",
@@ -84,7 +58,15 @@
         "datatype" : "gYear"
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "latitude", "longitude", "name", "countryCode", "countryRef", "latitude_MULTILEVEL_", "longitude_MULTILEVEL_", "name_MULTILEVEL_", "countryCode_MULTILEVEL_", "population", "year" ]
-    }
+      "rowTitles" : [ "Subject", "latitude", "longitude", "name", "countryCode", "countryRef", "population", "year" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ]
   } ]
 }

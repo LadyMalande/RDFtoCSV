@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.miklosova.rdftocsvw.metadata_creator.Metadata;
+import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import ioinformarics.oss.jackson.module.jsonld.JsonldModule;
 
 import java.io.File;

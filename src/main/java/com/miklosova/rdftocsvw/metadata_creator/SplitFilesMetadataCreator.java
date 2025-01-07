@@ -1,11 +1,12 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
-import com.miklosova.rdftocsvw.convertor.Row;
-import com.miklosova.rdftocsvw.convertor.RowAndKey;
-import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
+import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
+import com.miklosova.rdftocsvw.converter.data_structure.Row;
+import com.miklosova.rdftocsvw.converter.data_structure.RowAndKey;
+import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.miklosova.rdftocsvw.support.FileWrite;
+import com.miklosova.rdftocsvw.output_processor.FileWrite;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,7 +43,12 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
         }
         for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
 
-            String newFileName = CSVFileTOWriteTo + fileNumberX + ".csv";
+            String newFileName;
+            if(FileWrite.hasExtension(CSVFileTOWriteTo, "csv")){
+                newFileName = CSVFileTOWriteTo;
+            } else {
+                newFileName = CSVFileTOWriteTo + fileNumberX + ".csv";
+            }
 
             // Write the rows with respective keys to the current file
             System.out.println("INTERMEDIATE_FILE_NAMES: " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES));

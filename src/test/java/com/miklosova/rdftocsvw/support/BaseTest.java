@@ -1,14 +1,17 @@
 package com.miklosova.rdftocsvw.support;
 
-import com.miklosova.rdftocsvw.convertor.RDFtoCSV;
-import com.miklosova.rdftocsvw.convertor.Row;
-import com.miklosova.rdftocsvw.metadata_creator.Metadata;
+import com.miklosova.rdftocsvw.converter.RDFtoCSV;
+import com.miklosova.rdftocsvw.converter.data_structure.Row;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -30,6 +33,14 @@ public class BaseTest {
     public Row firstRow, secondRow, thirdRow, fourthRow;
 
     public ArrayList<Row> rows, rows1;
+
+    @BeforeEach
+    public void initialize() {
+        rdfToCSV = new RDFtoCSV(fileName);
+        db = new SailRepository(new MemoryStore());
+        args = new String[]{"-f", "test.rdf", "-p", "rdf4j"};
+        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
+    }
 
     @AfterEach
     public void tearDown() {

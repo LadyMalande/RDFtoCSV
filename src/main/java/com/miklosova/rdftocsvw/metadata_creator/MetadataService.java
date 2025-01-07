@@ -1,9 +1,10 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
-import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
+import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
+import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.miklosova.rdftocsvw.support.FileWrite;
+import com.miklosova.rdftocsvw.output_processor.FileWrite;
 
 public class MetadataService {
     private MetadataGateway metadataGateway;
@@ -21,22 +22,22 @@ public class MetadataService {
         System.out.println(" conversionChoice = " + conversionChoice);
         String extension = FileWrite.getFileExtension(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
 
-        switch (conversionChoice) {
-            case "basicQuery":
+        switch (conversionChoice.toLowerCase()) {
+            case "basicquery":
                 if (data != null && data.getPrefinishedOutput() != null) {
                     metadataGateway.setMetadataCreator(new BasicQueryMetadataCreator((PrefinishedOutput<RowsAndKeys>) data));
                 } else {
                     throw new IllegalArgumentException("Invalid data type for basicQuery");
                 }
                 break;
-            case "splitQuery":
+            case "splitquery":
                 if (data != null && data.getPrefinishedOutput() != null) {
                     metadataGateway.setMetadataCreator(new SplitFilesMetadataCreator((PrefinishedOutput<RowsAndKeys>) data));
                 } else {
                     throw new IllegalArgumentException("Invalid data type for splitQuery");
                 }
                 break;
-            case "bigFileStreaming":
+            case "bigfilestreaming":
 
                 if (!extension.equalsIgnoreCase("nt")) {
                     throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);

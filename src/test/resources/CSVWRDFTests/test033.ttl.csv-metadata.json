@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "test033.ttl0.csv",
+    "url" : "0.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -17,71 +17,57 @@
         "titles" : "type",
         "name" : "type",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "{+type}",
-        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
+        "valueUrl" : "http://schema.org/{+type}",
+        "aboutUrl" : "file://events-listing.csv#{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "location",
         "name" : "location",
         "propertyUrl" : "http://schema.org/location",
-        "valueUrl" : "{+location}",
-        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
-      }, {
-        "@type" : "Column",
-        "titles" : "_type",
-        "name" : "type_MULTILEVEL_",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "{+type_MULTILEVEL_}",
-        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "_address",
-        "name" : "address_MULTILEVEL_",
-        "propertyUrl" : "http://schema.org/address",
-        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
-      }, {
-        "@type" : "Column",
-        "titles" : "_name",
-        "name" : "name_MULTILEVEL_",
-        "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
+        "valueUrl" : "file://events-listing.csv#{+location}",
+        "aboutUrl" : "file://events-listing.csv#{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "name",
         "name" : "name",
         "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
+        "aboutUrl" : "file://events-listing.csv#{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "offers",
         "name" : "offers",
         "propertyUrl" : "http://schema.org/offers",
-        "valueUrl" : "{+offers}",
-        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
-      }, {
-        "@type" : "Column",
-        "titles" : "_url",
-        "name" : "url_MULTILEVEL_",
-        "propertyUrl" : "http://schema.org/url",
-        "datatype" : "anyURI",
-        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
+        "valueUrl" : "file://events-listing.csv#{+offers}",
+        "aboutUrl" : "file://events-listing.csv#{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "startDate",
         "name" : "startDate",
         "propertyUrl" : "http://schema.org/startDate",
         "datatype" : "dateTime",
-        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}"
+        "aboutUrl" : "file://events-listing.csv#{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "url",
+        "name" : "url",
+        "propertyUrl" : "http://schema.org/url",
+        "datatype" : "anyURI",
+        "aboutUrl" : "file://events-listing.csv#{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "address",
+        "name" : "address",
+        "propertyUrl" : "http://schema.org/address",
+        "aboutUrl" : "file://events-listing.csv#{+Subject}"
       }, {
         "@type" : "Column",
         "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://schema.org/MusicEvent",
+        "valueUrl" : "{+type}",
         "aboutUrl" : "file://events-listing.csv#{+MusicEvent}",
         "virtual" : true
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "type", "location", "type_MULTILEVEL_", "address_MULTILEVEL_", "name_MULTILEVEL_", "name", "offers", "url_MULTILEVEL_", "startDate" ]
+      "rowTitles" : [ "Subject", "type", "location", "name", "offers", "startDate", "url", "address" ]
     }
   } ]
 }

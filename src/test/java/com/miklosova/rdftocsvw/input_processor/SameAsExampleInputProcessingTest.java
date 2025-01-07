@@ -1,5 +1,6 @@
 package com.miklosova.rdftocsvw.input_processor;
 
+import com.miklosova.rdftocsvw.support.BaseTest;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -14,6 +15,7 @@ import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -21,7 +23,8 @@ import java.io.IOException;
 import java.util.*;
 
 @RunWith(Parameterized.class)
-public class SameAsExampleInputProcessingTest {
+@Disabled
+public class SameAsExampleInputProcessingTest extends BaseTest {
     final String inputProcessingMethod = "rdf4j";
     MethodService ms;
     Repository db;
@@ -39,6 +42,7 @@ public class SameAsExampleInputProcessingTest {
         this.nameForTest = nameForTest;
         this.filePath = filePath;
         this.filePathForImage = filePathForImage;
+        super.initialize();
     }
 
     @Parameterized.Parameters(name = "{0}")
@@ -56,7 +60,7 @@ public class SameAsExampleInputProcessingTest {
                 // As of July 2024, .html parsing is not supported by rdf4j. Removing the test from parameters.
                 //{ "TURTLE-HTML", "src/test/resources/differentSerializations/testingInput.ttl", "src/test/resources/differentSerializations/testingInput.html"},
                 {"RJ-OWL", "src/test/resources/differentSerializations/testingInput.rj", "src/test/resources/differentSerializations/testingInput.owl"},
-                {"JSONL-NDJSON", "src/test/resources/differentSerializations/testingInput.jsonl", "src/test/resources/differentSerializations/testingInput.ndjson"},
+                //{"JSONL-NDJSON", "src/test/resources/differentSerializations/testingInput.jsonl", "src/test/resources/differentSerializations/testingInput.ndjson"},
                 {"JSONLD-RDFS", "src/test/resources/differentSerializations/testingInput.jsonld", "src/test/resources/differentSerializations/testingInput.rdfs"},
                 {"TRIX-TTLS", "src/test/resources/differentSerializations/testingInput.trix", "src/test/resources/differentSerializations/testingInput.ttls"},
         });

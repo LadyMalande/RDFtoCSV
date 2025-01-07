@@ -3,79 +3,21 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "test035.ttl0.csv",
+    "url" : "0.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
         "titles" : "Subject",
         "name" : "Subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "valueUrl" : "{+Subject}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
         "titles" : "reportsTo",
         "name" : "reportsTo",
         "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
-        "valueUrl" : "{+reportsTo}"
-      }, {
-        "@type" : "Column",
-        "titles" : "_Identifier",
-        "name" : "identifier_MULTILEVEL_",
-        "propertyUrl" : "http://purl.org/dc/terms/identifier",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "_heldBy",
-        "name" : "heldBy_MULTILEVEL_",
-        "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
-        "valueUrl" : "{+heldBy_MULTILEVEL_}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "_name",
-        "name" : "name_MULTILEVEL_",
-        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/person/{+Subject}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "_grade",
-        "name" : "grade_MULTILEVEL_",
-        "propertyUrl" : "http://example.org/gov.uk/def/grade",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "_job",
-        "name" : "job_MULTILEVEL_",
-        "propertyUrl" : "http://example.org/gov.uk/def/job",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "_reportsTo",
-        "name" : "reportsTo_MULTILEVEL_",
-        "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
-        "valueUrl" : "{+reportsTo_MULTILEVEL_}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "_profession",
-        "name" : "profession_MULTILEVEL_",
-        "propertyUrl" : "http://example.org/gov.uk/def/profession",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}",
-        "separator" : ","
-      }, {
-        "@type" : "Column",
-        "titles" : "_postIn",
-        "name" : "postIn_MULTILEVEL_",
-        "propertyUrl" : "http://www.w3.org/ns/org#postIn",
-        "valueUrl" : "{+postIn_MULTILEVEL_}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}",
-        "separator" : ","
+        "valueUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo}"
       }, {
         "@type" : "Column",
         "titles" : "grade",
@@ -114,10 +56,37 @@
         "titles" : "postIn",
         "name" : "postIn",
         "propertyUrl" : "http://www.w3.org/ns/org#postIn",
-        "valueUrl" : "{+postIn}"
+        "valueUrl" : "http://example.org/organization/{+postIn}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Identifier",
+        "name" : "identifier",
+        "propertyUrl" : "http://purl.org/dc/terms/identifier",
+        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "heldBy",
+        "name" : "heldBy",
+        "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
+        "valueUrl" : "http://example.org/organization/hefce.ac.uk/person/{+heldBy}",
+        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
+        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/person/{+Subject}"
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "reportsTo", "identifier_MULTILEVEL_", "heldBy_MULTILEVEL_", "name_MULTILEVEL_", "grade_MULTILEVEL_", "job_MULTILEVEL_", "reportsTo_MULTILEVEL_", "profession_MULTILEVEL_", "postIn_MULTILEVEL_", "grade", "min_pay", "max_pay", "job", "number_of_posts", "profession", "postIn" ]
-    }
+      "rowTitles" : [ "Subject", "reportsTo", "grade", "min_pay", "max_pay", "job", "number_of_posts", "profession", "postIn", "identifier", "heldBy", "name" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ]
   } ]
 }

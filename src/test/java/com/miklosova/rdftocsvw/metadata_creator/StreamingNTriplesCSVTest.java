@@ -1,6 +1,6 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
+import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.support.Main;
 import com.opencsv.CSVReader;
@@ -62,7 +62,7 @@ public class StreamingNTriplesCSVTest extends BaseTest {
 
     void createCSV() {
         System.out.println("LoadConfig");
-        Main.main(new String[]{"-f", filePath, "-t", "streaming", "-p", "streaming"});
+        Main.main(new String[]{"-f", filePath, "-t", "-p", "streaming"});
         /*
         ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{filePath, "streaming", "streaming", "true"});
 
@@ -82,6 +82,7 @@ public class StreamingNTriplesCSVTest extends BaseTest {
 
         try (CSVReader reader = new CSVReader(new FileReader(filePathForOutput))) {
             System.out.println("filePathForOutput = " + filePathForOutput);
+            System.out.println("expectedFile = " + expectedFile);
             try (CSVReader reader2 = new CSVReader(new FileReader(expectedFile))) {
                 String[] line;
                 boolean isFirstLine = true;

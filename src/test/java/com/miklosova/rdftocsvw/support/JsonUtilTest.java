@@ -1,11 +1,12 @@
 package com.miklosova.rdftocsvw.support;
 
- import com.miklosova.rdftocsvw.convertor.RDFtoCSV;
- import com.miklosova.rdftocsvw.convertor.Row;
- import com.miklosova.rdftocsvw.metadata_creator.Table;
- import com.miklosova.rdftocsvw.metadata_creator.TableSchema;
+ import com.miklosova.rdftocsvw.converter.RDFtoCSV;
+ import com.miklosova.rdftocsvw.converter.data_structure.Row;
+ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
+ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
  import com.fasterxml.jackson.databind.node.ObjectNode;
 
+ import com.miklosova.rdftocsvw.output_processor.FileWrite;
  import org.eclipse.rdf4j.model.Value;
  import org.eclipse.rdf4j.repository.Repository;
  import org.eclipse.rdf4j.repository.sail.SailRepository;
@@ -23,7 +24,7 @@ package com.miklosova.rdftocsvw.support;
  import org.mockito.Mockito;
  import org.mockito.MockedStatic;
  import static org.mockito.Mockito.*;
- import com.miklosova.rdftocsvw.metadata_creator.Metadata;
+ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
  import java.io.IOException;
  import java.util.ArrayList;
 

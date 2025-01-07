@@ -1,12 +1,13 @@
 package com.miklosova.rdftocsvw.support;
 
-import com.miklosova.rdftocsvw.convertor.ConversionService;
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
-import com.miklosova.rdftocsvw.convertor.RowAndKey;
-import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
+import com.miklosova.rdftocsvw.converter.ConversionService;
+import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
+import com.miklosova.rdftocsvw.converter.data_structure.RowAndKey;
+import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
-import com.miklosova.rdftocsvw.metadata_creator.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
+import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;

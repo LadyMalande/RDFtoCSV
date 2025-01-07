@@ -1,10 +1,13 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
 import com.miklosova.rdftocsvw.output_processor.CSVConsolidator;
 import com.miklosova.rdftocsvw.output_processor.MetadataConsolidator;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.Main;
-import com.opencsv.CSVWriter;
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -16,7 +19,6 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -48,7 +50,8 @@ public class StreamingMetadataCreator extends MetadataCreator {
         }
         String jarDirectory = file.getParentFile().getName();
 
-        this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) : (jarDirectory.equalsIgnoreCase("target")) ? fileNameFromConfig : "../" + fileNameFromConfig;
+        this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) : (jarDirectory.equalsIgnoreCase("target")) ? fileNameFromConfig : fileNameFromConfig;
+                //"../"
     }
 
 

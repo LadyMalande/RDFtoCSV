@@ -1,8 +1,8 @@
 package com.miklosova.rdftocsvw.output_processor;
 
-import com.miklosova.rdftocsvw.metadata_creator.Column;
-import com.miklosova.rdftocsvw.metadata_creator.Metadata;
-import com.miklosova.rdftocsvw.metadata_creator.Table;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

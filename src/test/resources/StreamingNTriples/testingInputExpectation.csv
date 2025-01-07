@@ -1,4 +1,4 @@
-"Subject","type","prefLabel (en)","inScheme","prefLabel (cs)","notation"
+Subject,type,preferred label (en),is in scheme,preferred label (cs),"notation"
 "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů","http://www.w3.org/2004/02/skos/core#ConceptScheme","Employment relation types","","Typy pracovních vztahů",""
 "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dpč","http://www.w3.org/2004/02/skos/core#Concept","Agreement to Perform Work","https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů","Dohoda o pracovní činnosti","dpč"
 "https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/dpp","http://www.w3.org/2004/02/skos/core#Concept","Agreement to Complete a Job","https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů","Dohoda o provedení práce","dpp"

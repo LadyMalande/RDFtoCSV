@@ -1,10 +1,14 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.convertor.RDFtoCSV;
+import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import java.io.InvalidObjectException;
 
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;

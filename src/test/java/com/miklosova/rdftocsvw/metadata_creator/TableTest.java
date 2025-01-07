@@ -1,8 +1,11 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.convertor.RDFtoCSV;
+import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 
-import com.miklosova.rdftocsvw.convertor.Row;
+import com.miklosova.rdftocsvw.converter.data_structure.Row;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Transformation;
 import com.miklosova.rdftocsvw.support.BaseTest;
 
 import java.util.List;

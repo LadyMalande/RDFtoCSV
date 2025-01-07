@@ -1,11 +1,12 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
-import com.miklosova.rdftocsvw.convertor.Row;
-import com.miklosova.rdftocsvw.convertor.RowAndKey;
-import com.miklosova.rdftocsvw.convertor.RowsAndKeys;
+import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
+import com.miklosova.rdftocsvw.converter.data_structure.Row;
+import com.miklosova.rdftocsvw.converter.data_structure.RowAndKey;
+import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.miklosova.rdftocsvw.support.FileWrite;
+import com.miklosova.rdftocsvw.output_processor.FileWrite;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,16 +49,29 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
             row.columns.forEach((k, v) -> System.out.print(k + " " + v));
             System.out.println();
         }
+        String newFileName;
+    if(FileWrite.hasExtension(CSVFileTOWriteTo, "csv")){
+        newFileName = CSVFileTOWriteTo;
+    } else {
+        newFileName = CSVFileTOWriteTo + fileNumberX + ".csv";
+    }
 
-
-        String newFileName = CSVFileTOWriteTo + fileNumberX + ".csv";
 
         // Write the rows with respective keys to the current file
         System.out.println("INTERMEDIATE_FILE_NAMES: " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES));
+        /*
         if (!ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES).isEmpty()) {
+            String[] split = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES).split(",");
+            if(split.length > 1){
+                // There are more tables ready, because of standard mode that had more tables inside
+                SplitFilesMetadataCreator sfmc = new SplitFilesMetadataCreator(this.data);
+                return sfmc.addMetadata(info);
+            }
             newFileName = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
         }
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES) + "," + newFileName);
+
+         */
+        //ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES) + "," + newFileName);
         System.out.println("newFileName: " + newFileName);
         metadata.addMetadata(newFileName, rnk.getKeys(), rnk.getRows());
         fileNumberX = fileNumberX + 1;

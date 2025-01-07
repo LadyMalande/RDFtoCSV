@@ -1,11 +1,10 @@
 package com.miklosova.rdftocsvw.output_processor;
 
 
-import com.miklosova.rdftocsvw.metadata_creator.Column;
-import com.miklosova.rdftocsvw.metadata_creator.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.Triple;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.miklosova.rdftocsvw.support.FileWrite;
 import com.miklosova.rdftocsvw.support.Main;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
@@ -20,9 +19,8 @@ import java.net.URL;
 import java.util.*;
 
 import static com.miklosova.rdftocsvw.metadata_creator.StreamingMetadataCreator.processLineIntoTriple;
-import static com.miklosova.rdftocsvw.metadata_creator.StreamingMetadataCreator.processLineIntoTripleIRIsOnly;
 import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
-import static com.miklosova.rdftocsvw.support.FileWrite.writeToTheFile;
+import static com.miklosova.rdftocsvw.output_processor.FileWrite.writeToTheFile;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 public class StreamingNTriplesWrite {

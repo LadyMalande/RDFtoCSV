@@ -1,8 +1,9 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.convertor.ConversionService;
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
+import com.miklosova.rdftocsvw.converter.ConversionService;
+import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import org.eclipse.rdf4j.repository.Repository;
@@ -56,8 +57,9 @@ public class DereferencerTest extends BaseTest {
 
     @BeforeAll
     static void createMetadata() {
+
         System.out.println("Override before each");
-        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{filePath});
+        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{"-f", filePath, "-p", "rdf4j"});
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
         db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService();

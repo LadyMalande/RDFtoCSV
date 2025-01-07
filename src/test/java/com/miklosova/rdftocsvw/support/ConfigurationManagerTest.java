@@ -1,6 +1,6 @@
 package com.miklosova.rdftocsvw.support;
 
-import com.miklosova.rdftocsvw.convertor.RDFtoCSV;
+import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

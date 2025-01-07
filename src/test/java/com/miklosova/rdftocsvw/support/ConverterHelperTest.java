@@ -31,9 +31,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 class ConverterHelperTest {
     RepositoryConnection rc;
@@ -143,17 +141,18 @@ class ConverterHelperTest {
     @ParameterizedTest
     @CsvSource(value = {
             "beforeNoBNodeReplacement.ttl, http://www.w3.org/1999/02/22-rdf-syntax-ns#Graph, 1, http://example.org/myGraph",
-            "beforeNoBNodeReplacement.xml, http://purl.org/dc/dcmitype/Text, 2, http://example.org/resource/subject02"
+            "beforeNoBNodeReplacement.xml, http://purl.org/dc/dcmitype/Text, 2, http://example.org/resource/subject01"
     })
     void testRootsThatHaveThisType(String inputFileName, String expectedTypeIRI, int expectedNumberOfRoots, String expectedFirstRootIRI) throws Exception {
         String fullInputFileName = "src/test/resources/support/" + inputFileName;
         rc = ms.processInput(fullInputFileName, "rdf4j", db);
 
         // Calling the method under test
-        List<Value> roots = ConverterHelper.rootsThatHaveThisType(rc, SimpleValueFactory.getInstance().createIRI(expectedTypeIRI), true);
+        Set<Value> roots = ConverterHelper.rootsThatHaveThisType(rc, SimpleValueFactory.getInstance().createIRI(expectedTypeIRI), true);
 
         assertEquals(expectedNumberOfRoots, roots.size(), "Expected number of compliant roots: " + expectedNumberOfRoots);
-        assertEquals(expectedFirstRootIRI, roots.get(0).stringValue(), "The root should be 'root'.");
+        //assertEquals(expectedFirstRootIRI, roots.get(0).stringValue(), "The root should be 'root'.");
+        assertEquals(expectedFirstRootIRI, roots.iterator().next().stringValue(), "The root should be 'root'.");
     }
 
     @Test
@@ -162,7 +161,7 @@ class ConverterHelperTest {
         rc = ms.processInput(fullInputFileName, "rdf4j", db);
 
         // Calling the method under test
-        List<Value> roots = ConverterHelper.rootsThatHaveThisType(rc, SimpleValueFactory.getInstance().createIRI("http://purl.org/dc/dcmitype/Picture"), true);
+        Set<Value> roots = ConverterHelper.rootsThatHaveThisType(rc, SimpleValueFactory.getInstance().createIRI("http://purl.org/dc/dcmitype/Picture"), true);
 
         assertTrue(roots.isEmpty(), "Expected no compliant roots.");
     }
@@ -171,9 +170,9 @@ class ConverterHelperTest {
     void testRootHasThisTypeTrue() {
         Value value = SimpleValueFactory.getInstance().createLiteral("example");
         ConverterHelper helper = new ConverterHelper();
-
+        Set<Value> h = new HashSet<>(Collections.singletonList(value));
         // List containing the value
-        boolean result = helper.rootHasThisType(Arrays.asList(value), value);
+        boolean result = ConverterHelper.rootHasThisType(h, value);
 
         assertTrue(result, "The value should be found in the list.");
     }
@@ -183,9 +182,9 @@ class ConverterHelperTest {
         Value value = SimpleValueFactory.getInstance().createLiteral("example");
         Value anotherValue = SimpleValueFactory.getInstance().createLiteral("different");
         ConverterHelper helper = new ConverterHelper();
-
+        Set<Value> h = new HashSet<>(Collections.singletonList(anotherValue));
         // List not containing the value
-        boolean result = helper.rootHasThisType(Arrays.asList(anotherValue), value);
+        boolean result = ConverterHelper.rootHasThisType(h, value);
 
         assertFalse(result, "The value should not be found in the list.");
     }

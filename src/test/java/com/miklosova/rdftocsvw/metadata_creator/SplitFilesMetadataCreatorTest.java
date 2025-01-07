@@ -1,9 +1,14 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
- import com.miklosova.rdftocsvw.convertor.*;
+ import com.miklosova.rdftocsvw.converter.*;
 
  import java.io.IOException;
 
+ import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
+ import com.miklosova.rdftocsvw.converter.data_structure.Row;
+ import com.miklosova.rdftocsvw.converter.data_structure.RowAndKey;
+ import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
+ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
  import org.eclipse.rdf4j.model.Value;
  import org.eclipse.rdf4j.repository.Repository;
  import org.eclipse.rdf4j.repository.sail.SailRepository;
@@ -11,7 +16,7 @@ package com.miklosova.rdftocsvw.metadata_creator;
  import org.junit.jupiter.api.BeforeEach;
  import org.junit.jupiter.api.Test;
  import org.mockito.Mock;
- import com.miklosova.rdftocsvw.support.FileWrite;
+ import com.miklosova.rdftocsvw.output_processor.FileWrite;
  import com.miklosova.rdftocsvw.support.ConfigurationManager;
  import java.util.ArrayList;
 

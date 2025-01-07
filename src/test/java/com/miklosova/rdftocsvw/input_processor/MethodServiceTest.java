@@ -1,8 +1,6 @@
 package com.miklosova.rdftocsvw.input_processor;
 
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
-import com.miklosova.rdftocsvw.input_processor.parsing_methods.RDF4JMethod;
-import com.miklosova.rdftocsvw.input_processor.streaming_methods.StreamingMethod;
+import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.TestSupport;
@@ -13,7 +11,6 @@ import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

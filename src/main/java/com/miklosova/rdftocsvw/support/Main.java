@@ -1,14 +1,16 @@
 package com.miklosova.rdftocsvw.support;
 
-import com.miklosova.rdftocsvw.convertor.RDFtoCSV;
+import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 import org.eclipse.rdf4j.rio.RDFParseException;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
-import static com.miklosova.rdftocsvw.support.FileWrite.writeStringArrayAsCSVToFile;
+import static com.miklosova.rdftocsvw.output_processor.FileWrite.writeStringArrayAsCSVToFile;
 
 public class Main {
     public static void main(String[] args) {
@@ -88,8 +90,21 @@ public class Main {
         long totalTime = endTime - startTime;
 
         int numberOfCreatedCSVs = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES).split(",").length;
+
         File processedFile = new File("../" + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
+        if(processedFile.getAbsolutePath().contains("\\..\\..") || processedFile.getAbsolutePath().contains("..\\C")){
+            processedFile = new File(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
+        }
         System.out.println("INPUT_FILENAME : " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME) );
+        String afterParsingMilis = ConfigurationManager.getVariableFromConfigFile("experiment.afterParsing");
+        String afterConvertingMilis = ConfigurationManager.getVariableFromConfigFile("experiment.afterConverting");
+        String afterMetadataMilis = ConfigurationManager.getVariableFromConfigFile("experiment.afterMetadata");
+        String afterFileWriteMilis = ConfigurationManager.getVariableFromConfigFile("experiment.afterFileWrite");
+        long timeInParsing = Long.parseLong(afterParsingMilis) - startTime;
+        long timeInConverting = Long.parseLong(afterConvertingMilis) - Long.parseLong(afterParsingMilis);
+        long timeInMetadata = Long.parseLong(afterMetadataMilis) - Long.parseLong(afterConvertingMilis);
+        long timeInFileWrite = Long.parseLong(afterFileWriteMilis) - Long.parseLong(afterMetadataMilis);
+        long timeInZipping = endTime - Long.parseLong(afterFileWriteMilis);
 
         System.out.println("processedFile : " + processedFile.getAbsolutePath() );
         if (processedFile.exists() && processedFile.isFile()) {
@@ -100,13 +115,21 @@ public class Main {
             System.out.println("Length of file in Kbytes: " + fileSizeInKB );
             System.out.println("Length of file in Mbytes: " + fileSizeInMB );
 
+
             writeStringArrayAsCSVToFile("experimentTimeDurations.csv",new String[] {String.valueOf(totalTime),
                     String.valueOf(fileSizeInMB),
                     ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD),
                     ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES),
                     ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM),
                     String.valueOf(numberOfCreatedCSVs),
-                    processedFile.getName()});
+                    processedFile.getName(),
+                    new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()),
+                    String.valueOf(timeInParsing),
+                    String.valueOf(timeInConverting),
+                    String.valueOf(timeInMetadata),
+                    String.valueOf(timeInFileWrite),
+                    String.valueOf(timeInZipping)
+            });
 
             System.out.printf("File size: %d bytes (%.2f KB, %.2f MB)%n", fileSizeInBytes, fileSizeInKB, fileSizeInMB);
         } else {
@@ -117,7 +140,13 @@ public class Main {
                     ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES),
                     ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM),
                     String.valueOf(numberOfCreatedCSVs),
-                    processedFile.getName()});
+                    processedFile.getName(),
+                    new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()),
+                    String.valueOf(timeInParsing),
+                    String.valueOf(timeInConverting),
+                    String.valueOf(timeInMetadata),
+                    String.valueOf(timeInFileWrite),
+                    String.valueOf(timeInZipping)});
         }
 
 

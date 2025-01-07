@@ -1,8 +1,12 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
+import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.miklosova.rdftocsvw.support.FileWrite;
+import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
@@ -292,7 +296,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 }
 
                 // Add the Object into the correct column in the line as there is already a line with this subject
-                // TODO - if the predicate is already full, add new row at the end of the file with a new data variation
                 //else if (!isModified && unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
                 else if (unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
                     // Add this line as a data variation to the data variation list
@@ -319,7 +322,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                         if (Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM))) {
                             // There is already a value in the column - add the value and add the separator to metadata
                             // Create a new line with the data variation
-                            // TODO - append a new line data variation
                             if (dataLineVariationIsNotPresent(rowDataVariationsForSubject, line, indexOfChangeColumn)) {
                                 rowDataVariationsForSubject.add(line);
                             }
@@ -337,7 +339,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
                     } else {
                         // Add new object at the end of the line
-                        // TODO add the object at the end of EACH line with matching subject
                         line[indexOfChangeColumn] = triple.getObject().stringValue();
                         isModified = true;  // Mark that the line has been modified
                         //System.out.println("3) " + line[indexOfChangeColumn] + " the line: " + Arrays.toString(line));
@@ -351,7 +352,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
             if (isNeedForAddingDataVariations) {
                 // Add data variations for all the lines that have the same subject in the list
-                // todo
                 //System.out.println("isNeedForAddingDataVariations ");
                 appendDataVariationsToCSV(file, rowDataVariationsForSubject, indexOfDataVariationColumn, triple.getObject());
             } else if (!isModified && unifiedBySubject) {
@@ -365,7 +365,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             if (!isModified && !unifiedBySubject) {
                 // The match has been made by matching Predicate = we must create a new line at the end of the file and add values accordingly
                 // We can just append to the file - the lines wont be written again at the end of this writing modification
-                // TODO - append a new line
                 List<String[]> newLine = new ArrayList<>();
                 newLine.add(createLineStringListByMetadata(triple).toArray(new String[0]));
                 FileWrite.writeLinesToCSVFile(file, newLine , true);
