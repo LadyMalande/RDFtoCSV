@@ -1,121 +1,164 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test034.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "Identifier",
-        "name" : "identifier",
-        "propertyUrl" : "http://purl.org/dc/terms/identifier"
-      }, {
-        "@type" : "Column",
-        "titles" : "heldBy",
-        "name" : "heldBy",
-        "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/person/{+heldBy}"
-      }, {
-        "@type" : "Column",
-        "titles" : "grade",
-        "name" : "grade",
-        "propertyUrl" : "http://example.org/gov.uk/def/grade"
-      }, {
-        "@type" : "Column",
-        "titles" : "job",
-        "name" : "job",
-        "propertyUrl" : "http://example.org/gov.uk/def/job"
-      }, {
-        "@type" : "Column",
-        "titles" : "reportsTo",
-        "name" : "reportsTo",
-        "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo}"
-      }, {
-        "@type" : "Column",
-        "titles" : "profession",
-        "name" : "profession",
-        "propertyUrl" : "http://example.org/gov.uk/def/profession"
-      }, {
-        "@type" : "Column",
-        "titles" : "postIn",
-        "name" : "postIn",
-        "propertyUrl" : "http://www.w3.org/ns/org#postIn",
-        "valueUrl" : "http://example.org/organization/{+postIn}"
-      }, {
-        "@type" : "Column",
-        "titles" : "name",
-        "name" : "name",
-        "propertyUrl" : "http://xmlns.com/foaf/0.1/name"
-      } ],
-      "rowTitles" : [ "Subjekt", "identifier", "heldBy", "grade", "job", "reportsTo", "profession", "postIn", "name" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test034.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "Identifier",
+            "name": "identifier",
+            "propertyUrl": "http://purl.org/dc/terms/identifier"
+          },
+          {
+            "@type": "Column",
+            "titles": "heldBy",
+            "name": "heldBy",
+            "propertyUrl": "http://www.w3.org/ns/org#heldBy",
+            "valueUrl": "http://example.org/organization/hefce.ac.uk/person/{+heldBy}"
+          },
+          {
+            "@type": "Column",
+            "titles": "grade",
+            "name": "grade",
+            "propertyUrl": "http://example.org/gov.uk/def/grade"
+          },
+          {
+            "@type": "Column",
+            "titles": "job",
+            "name": "job",
+            "propertyUrl": "http://example.org/gov.uk/def/job"
+          },
+          {
+            "@type": "Column",
+            "titles": "reportsTo",
+            "name": "reportsTo",
+            "propertyUrl": "http://www.w3.org/ns/org#reportsTo",
+            "valueUrl": "http://example.org/organization/hefce.ac.uk/post/{+reportsTo}"
+          },
+          {
+            "@type": "Column",
+            "titles": "profession",
+            "name": "profession",
+            "propertyUrl": "http://example.org/gov.uk/def/profession"
+          },
+          {
+            "@type": "Column",
+            "titles": "postIn",
+            "name": "postIn",
+            "propertyUrl": "http://www.w3.org/ns/org#postIn",
+            "valueUrl": "http://example.org/organization/{+postIn}"
+          },
+          {
+            "@type": "Column",
+            "titles": "name",
+            "name": "name",
+            "propertyUrl": "http://xmlns.com/foaf/0.1/name"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "identifier",
+          "heldBy",
+          "grade",
+          "job",
+          "reportsTo",
+          "profession",
+          "postIn",
+          "name"
+        ]
+      }
+    },
+    {
+      "@type": "Table",
+      "url": "test034.ttlTestOutput1.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "reportsTo",
+            "name": "reportsTo",
+            "propertyUrl": "http://www.w3.org/ns/org#reportsTo",
+            "valueUrl": "http://example.org/organization/hefce.ac.uk/post/{+reportsTo}"
+          },
+          {
+            "@type": "Column",
+            "titles": "grade",
+            "name": "grade",
+            "propertyUrl": "http://example.org/gov.uk/def/grade"
+          },
+          {
+            "@type": "Column",
+            "titles": "min_pay",
+            "name": "min_pay",
+            "propertyUrl": "http://example.org/gov.uk/def/min_pay",
+            "datatype": "integer"
+          },
+          {
+            "@type": "Column",
+            "titles": "max_pay",
+            "name": "max_pay",
+            "propertyUrl": "http://example.org/gov.uk/def/max_pay",
+            "datatype": "integer"
+          },
+          {
+            "@type": "Column",
+            "titles": "job",
+            "name": "job",
+            "propertyUrl": "http://example.org/gov.uk/def/job"
+          },
+          {
+            "@type": "Column",
+            "titles": "number_of_posts",
+            "name": "number_of_posts",
+            "propertyUrl": "http://example.org/gov.uk/def/number_of_posts",
+            "datatype": "double"
+          },
+          {
+            "@type": "Column",
+            "titles": "profession",
+            "name": "profession",
+            "propertyUrl": "http://example.org/gov.uk/def/profession"
+          },
+          {
+            "@type": "Column",
+            "titles": "postIn",
+            "name": "postIn",
+            "propertyUrl": "http://www.w3.org/ns/org#postIn",
+            "valueUrl": "http://example.org/organization/{+postIn}"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "reportsTo",
+          "grade",
+          "min_pay",
+          "max_pay",
+          "job",
+          "number_of_posts",
+          "profession",
+          "postIn"
+        ]
+      }
     }
-  }, {
-    "@type" : "Table",
-    "url" : "test034.ttlTestOutput1.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "reportsTo",
-        "name" : "reportsTo",
-        "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo}"
-      }, {
-        "@type" : "Column",
-        "titles" : "grade",
-        "name" : "grade",
-        "propertyUrl" : "http://example.org/gov.uk/def/grade"
-      }, {
-        "@type" : "Column",
-        "titles" : "min_pay",
-        "name" : "min_pay",
-        "propertyUrl" : "http://example.org/gov.uk/def/min_pay",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "max_pay",
-        "name" : "max_pay",
-        "propertyUrl" : "http://example.org/gov.uk/def/max_pay",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "job",
-        "name" : "job",
-        "propertyUrl" : "http://example.org/gov.uk/def/job"
-      }, {
-        "@type" : "Column",
-        "titles" : "number_of_posts",
-        "name" : "number_of_posts",
-        "propertyUrl" : "http://example.org/gov.uk/def/number_of_posts",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "profession",
-        "name" : "profession",
-        "propertyUrl" : "http://example.org/gov.uk/def/profession"
-      }, {
-        "@type" : "Column",
-        "titles" : "postIn",
-        "name" : "postIn",
-        "propertyUrl" : "http://www.w3.org/ns/org#postIn",
-        "valueUrl" : "http://example.org/organization/{+postIn}"
-      } ],
-      "rowTitles" : [ "Subjekt", "reportsTo", "grade", "min_pay", "max_pay", "job", "number_of_posts", "profession", "postIn" ]
-    }
-  } ]
+  ]
 }

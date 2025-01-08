@@ -1,16 +1,19 @@
 package com.miklosova.rdftocsvw.output_processor;
 
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
+import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class ZipOutputProcessor implements IOutputProcessor<ZipOutputStream> {
+public class ZipOutputProcessor implements IOutputProcessor {
+    private static final Logger logger = Logger.getLogger(FileWrite.class.getName());
     @Override
     public FinalizedOutput<byte[]> processCSVToOutput(PrefinishedOutput<?> prefinishedOutput) {
 
@@ -21,20 +24,21 @@ public class ZipOutputProcessor implements IOutputProcessor<ZipOutputStream> {
 
     private byte[] createBAOSWithZips(PrefinishedOutput<?> prefinishedOutput) {
         String inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+        logger.log(Level.INFO, "inputFilesInString=" + inputFilesInString);
         String filenameForZip = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME);
         String[] listOfFiles = inputFilesInString.split(",");
 
         List<String> srcFiles = new ArrayList<String>(Arrays.asList(listOfFiles));
         srcFiles.add(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
+        logger.log(Level.INFO, "OUTPUT_METADATA_FILE_NAME=" + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-
-
             ZipOutputStream zipOut = new ZipOutputStream(baos);
 
             for (String srcFile : srcFiles) {
-                File fileToZip = new File(srcFile);
+                File fileToZip = new File( srcFile);
                 FileInputStream fis = new FileInputStream(fileToZip);
+                System.out.println("createBAOSWithZips fileToZip " + fileToZip.getAbsolutePath());
                 ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
                 zipOut.putNextEntry(zipEntry);
 
@@ -98,21 +102,30 @@ public class ZipOutputProcessor implements IOutputProcessor<ZipOutputStream> {
 
     public ZipOutputStream zipMultipleFiles(PrefinishedOutput prefinishedOutput) {
         String inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+        System.out.println("ConfigurationManager.INTERMEDIATE_FILE_NAMES = " + inputFilesInString);
         String filenameForZip = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME);
+        System.out.println("ConfigurationManager.zipfileName = " + filenameForZip);
         String[] listOfFiles = inputFilesInString.split(",");
-
-        List<String> srcFiles = new ArrayList<String>(Arrays.asList(listOfFiles));
+        String[] newArray;
+        if(listOfFiles[listOfFiles.length-1].isEmpty()){
+            newArray = Arrays.copyOf(listOfFiles, listOfFiles.length - 1);
+            System.out.println("The last from list of files is empty: " + Arrays.toString(listOfFiles));
+        } else {
+            newArray = listOfFiles;
+            System.out.println("List of files is OK: " + Arrays.toString(listOfFiles));
+        }
+        List<String> srcFiles = new ArrayList<String>(Arrays.asList(newArray));
         srcFiles.add(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
-
+        System.out.println("fileToZip metadata " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
         try {
-
-
             final FileOutputStream fos = new FileOutputStream(filenameForZip);
             ZipOutputStream zipOut = new ZipOutputStream(fos);
 
             for (String srcFile : srcFiles) {
                 File fileToZip = new File(srcFile);
+                System.out.println("zipMultipleFiles fileToZip " + fileToZip.getAbsolutePath());
                 FileInputStream fis = new FileInputStream(fileToZip);
+
                 ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
                 zipOut.putNextEntry(zipEntry);
 

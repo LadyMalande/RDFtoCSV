@@ -1,69 +1,95 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test042.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "aboutUrl",
-        "name" : "aboutUrl",
-        "propertyUrl" : "file://test042.csv#aboutUrl"
-      }, {
-        "@type" : "Column",
-        "titles" : "datatype",
-        "name" : "datatype",
-        "propertyUrl" : "file://test042.csv#datatype"
-      }, {
-        "@type" : "Column",
-        "titles" : "default",
-        "name" : "default",
-        "propertyUrl" : "file://test042.csv#default"
-      }, {
-        "@type" : "Column",
-        "titles" : "lang",
-        "name" : "lang",
-        "propertyUrl" : "file://test042.csv#lang"
-      }, {
-        "@type" : "Column",
-        "titles" : "null",
-        "name" : "null",
-        "propertyUrl" : "file://test042.csv#null"
-      }, {
-        "@type" : "Column",
-        "titles" : "ordered",
-        "name" : "ordered",
-        "propertyUrl" : "file://test042.csv#ordered"
-      }, {
-        "@type" : "Column",
-        "titles" : "propertyUrl",
-        "name" : "propertyUrl",
-        "propertyUrl" : "file://test042.csv#propertyUrl"
-      }, {
-        "@type" : "Column",
-        "titles" : "separator",
-        "name" : "separator",
-        "propertyUrl" : "file://test042.csv#separator"
-      }, {
-        "@type" : "Column",
-        "titles" : "textDirection",
-        "name" : "textDirection",
-        "propertyUrl" : "file://test042.csv#textDirection"
-      }, {
-        "@type" : "Column",
-        "titles" : "valueUrl",
-        "name" : "valueUrl",
-        "propertyUrl" : "file://test042.csv#valueUrl"
-      } ],
-      "rowTitles" : [ "Subjekt", "aboutUrl", "datatype", "default", "lang", "null", "ordered", "propertyUrl", "separator", "textDirection", "valueUrl" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test042.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "aboutUrl",
+            "name": "aboutUrl",
+            "propertyUrl": "file://test042.csv#aboutUrl"
+          },
+          {
+            "@type": "Column",
+            "titles": "datatype",
+            "name": "datatype",
+            "propertyUrl": "file://test042.csv#datatype"
+          },
+          {
+            "@type": "Column",
+            "titles": "default",
+            "name": "default",
+            "propertyUrl": "file://test042.csv#default"
+          },
+          {
+            "@type": "Column",
+            "titles": "lang",
+            "name": "lang",
+            "propertyUrl": "file://test042.csv#lang"
+          },
+          {
+            "@type": "Column",
+            "titles": "null",
+            "name": "null",
+            "propertyUrl": "file://test042.csv#null"
+          },
+          {
+            "@type": "Column",
+            "titles": "ordered",
+            "name": "ordered",
+            "propertyUrl": "file://test042.csv#ordered"
+          },
+          {
+            "@type": "Column",
+            "titles": "propertyUrl",
+            "name": "propertyUrl",
+            "propertyUrl": "file://test042.csv#propertyUrl"
+          },
+          {
+            "@type": "Column",
+            "titles": "separator",
+            "name": "separator",
+            "propertyUrl": "file://test042.csv#separator"
+          },
+          {
+            "@type": "Column",
+            "titles": "textDirection",
+            "name": "textDirection",
+            "propertyUrl": "file://test042.csv#textDirection"
+          },
+          {
+            "@type": "Column",
+            "titles": "valueUrl",
+            "name": "valueUrl",
+            "propertyUrl": "file://test042.csv#valueUrl"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "aboutUrl",
+          "datatype",
+          "default",
+          "lang",
+          "null",
+          "ordered",
+          "propertyUrl",
+          "separator",
+          "textDirection",
+          "valueUrl"
+        ]
+      }
     }
-  } ]
+  ]
 }

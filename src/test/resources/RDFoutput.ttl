@@ -1,3 +1,0 @@
-
-<https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů/položky/frag> a <http://www.w3.org/2004/02/skos/core#Concept>;
-  <http://www.w3.org/2004/02/skos/core#notation> "v" .

@@ -1,59 +1,79 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test032.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://schema.org/{+type}"
-      }, {
-        "@type" : "Column",
-        "titles" : "name",
-        "name" : "name",
-        "propertyUrl" : "http://schema.org/name"
-      }, {
-        "@type" : "Column",
-        "titles" : "startDate",
-        "name" : "startDate",
-        "propertyUrl" : "http://schema.org/startDate",
-        "datatype" : "dateTime"
-      }, {
-        "@type" : "Column",
-        "titles" : "location",
-        "name" : "location",
-        "propertyUrl" : "http://schema.org/location",
-        "valueUrl" : "file://events-listing.csv#{+location}"
-      }, {
-        "@type" : "Column",
-        "titles" : "offers",
-        "name" : "offers",
-        "propertyUrl" : "http://schema.org/offers",
-        "valueUrl" : "file://events-listing.csv#{+offers}"
-      }, {
-        "@type" : "Column",
-        "titles" : "address",
-        "name" : "address",
-        "propertyUrl" : "http://schema.org/address"
-      }, {
-        "@type" : "Column",
-        "titles" : "url",
-        "name" : "url",
-        "propertyUrl" : "http://schema.org/url",
-        "datatype" : "anyURI"
-      } ],
-      "rowTitles" : [ "Subjekt", "type", "name", "startDate", "location", "offers", "address", "url" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test032.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "type",
+            "name": "type",
+            "propertyUrl": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+            "valueUrl": "http://schema.org/{+type}"
+          },
+          {
+            "@type": "Column",
+            "titles": "name",
+            "name": "name",
+            "propertyUrl": "http://schema.org/name"
+          },
+          {
+            "@type": "Column",
+            "titles": "startDate",
+            "name": "startDate",
+            "propertyUrl": "http://schema.org/startDate",
+            "datatype": "dateTime"
+          },
+          {
+            "@type": "Column",
+            "titles": "location",
+            "name": "location",
+            "propertyUrl": "http://schema.org/location",
+            "valueUrl": "file://events-listing.csv#{+location}"
+          },
+          {
+            "@type": "Column",
+            "titles": "offers",
+            "name": "offers",
+            "propertyUrl": "http://schema.org/offers",
+            "valueUrl": "file://events-listing.csv#{+offers}"
+          },
+          {
+            "@type": "Column",
+            "titles": "address",
+            "name": "address",
+            "propertyUrl": "http://schema.org/address"
+          },
+          {
+            "@type": "Column",
+            "titles": "url",
+            "name": "url",
+            "propertyUrl": "http://schema.org/url",
+            "datatype": "anyURI"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "type",
+          "name",
+          "startDate",
+          "location",
+          "offers",
+          "address",
+          "url"
+        ]
+      }
     }
-  } ]
+  ]
 }

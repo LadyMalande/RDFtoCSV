@@ -1,0 +1,84 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t_copy.nt0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Description (cs)",
+        "name" : "description_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/description",
+        "valueUrl" : "{+description_cs}",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (cs)",
+        "name" : "title_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "valueUrl" : "{+title_cs}",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "Type",
+        "name" : "type",
+        "propertyUrl" : "http://purl.org/dc/terms/type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "openingHoursSpecification",
+        "name" : "openingHoursSpecification",
+        "propertyUrl" : "http://schema.org/openingHoursSpecification",
+        "valueUrl" : "{+openingHoursSpecification}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type_1",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "geometry",
+        "name" : "geometry",
+        "propertyUrl" : "http://www.w3.org/ns/locn#geometry",
+        "valueUrl" : "{+geometry}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-kontakt",
+        "name" : "mkontakt",
+        "propertyUrl" : "https://slovník.gov.cz/datový/události/pojem/má-kontakt",
+        "valueUrl" : "{+mkontakt}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-vstupné",
+        "name" : "mvstupn",
+        "propertyUrl" : "https://slovník.gov.cz/datový/události/pojem/má-vstupné",
+        "valueUrl" : "{+mvstupn}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-přílohu",
+        "name" : "mplohu",
+        "propertyUrl" : "https://slovník.gov.cz/generický/věci/pojem/má-přílohu",
+        "valueUrl" : "{+mplohu}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  } ]
+}

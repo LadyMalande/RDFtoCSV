@@ -1,27 +1,34 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test006TestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "http://example.org/file2#{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "value",
-        "name" : "value",
-        "propertyUrl" : "http://example.org/value",
-        "aboutUrl" : "http://example.org/file2#{+Subjekt}"
-      } ],
-      "primaryKey" : "Subjekt",
-      "aboutUrl" : "http://example.org/file2#{+Subjekt}",
-      "rowTitles" : [ null ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test006TestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "http://example.org/file2#{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "value",
+            "name": "value",
+            "propertyUrl": "http://example.org/value",
+            "aboutUrl": "http://example.org/file2#{+Subjekt}"
+          }
+        ],
+        "primaryKey": "Subjekt",
+        "aboutUrl": "http://example.org/file2#{+Subjekt}",
+        "rowTitles": [
+          null
+        ]
+      }
     }
-  } ]
+  ]
 }

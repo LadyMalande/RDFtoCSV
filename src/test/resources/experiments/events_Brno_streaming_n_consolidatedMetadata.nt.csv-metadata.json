@@ -1,0 +1,12 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_n_consolidatedMetadata.nt_merged.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ ]
+    }
+  } ]
+}

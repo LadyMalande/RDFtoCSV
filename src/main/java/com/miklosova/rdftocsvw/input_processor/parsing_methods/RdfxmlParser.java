@@ -2,7 +2,6 @@ package com.miklosova.rdftocsvw.input_processor.parsing_methods;
 
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFParseException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,8 +16,6 @@ public class RdfxmlParser implements IRDF4JParsingMethod {
             InputStream targetStream = new FileInputStream(fileToParse);
 
             conn.add(targetStream, "", fileFormat);
-        } catch(RDFParseException rdfParseException) {
-            throw rdfParseException;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

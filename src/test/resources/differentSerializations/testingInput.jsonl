@@ -1,4 +1,38 @@
-[{"@graph":[{"@id":"http://example.org/myThesis","@type":["http://purl.org/dc/dcmitype/Text"],"http://purl.org/dc/terms/creator":[{"@id":"http://example.org/TerezaMiklóšová"}],"http://purl.org/dc/terms/title":[{"@language":"cs","@value":"Automatický převod RDF dat do CSV"},{"@language":"en","@value":"Automated transformation of RDF data to CSV"}]}],"@id":"http://example.org/myGraph"}]
+[
+  {
+    "@graph": [
+      {
+        "@id": "http://example.org/myThesis",
+        "@type": [
+          "http://purl.org/dc/dcmitype/Text"
+        ],
+        "http://purl.org/dc/terms/creator": [
+          {
+            "@id": "http://example.org/TerezaMiklóšová"
+          }
+        ],
+        "http://purl.org/dc/terms/title": [
+          {
+            "@language": "cs",
+            "@value": "Automatický převod RDF dat do CSV"
+          },
+          {
+            "@language": "en",
+            "@value": "Automated transformation of RDF data to CSV"
+          }
+        ]
+      }
+    ],
+    "@id": "http://example.org/myGraph"
+  }
+]
 []
 []
-[{"@id":"http://example.org/myGraph","@type":["http://www.w3.org/1999/02/22-rdf-syntax-ns#Graph"]}]
+[
+  {
+    "@id": "http://example.org/myGraph",
+    "@type": [
+      "http://www.w3.org/1999/02/22-rdf-syntax-ns#Graph"
+    ]
+  }
+]

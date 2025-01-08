@@ -1,0 +1,3 @@
+_:genid2dd9446719f4cc4313a2cbf02a6aeb147c22db0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Person> .
+_:genid2dd9446719f4cc4313a2cbf02a6aeb147c22db0 <http://schema.org/jobTitle> "Software Engineer" .
+_:genid2dd9446719f4cc4313a2cbf02a6aeb147c22db0 <http://schema.org/name> "John Doe" .

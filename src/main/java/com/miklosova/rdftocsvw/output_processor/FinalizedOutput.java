@@ -1,5 +1,6 @@
 package com.miklosova.rdftocsvw.output_processor;
 
+@SuppressWarnings("unused")
 public class FinalizedOutput<T> {
     T outputData;
 

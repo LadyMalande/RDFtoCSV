@@ -1,28 +1,29 @@
 @prefix csvw: <http://www.w3.org/ns/csvw#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
-<file://test047.csv> <file://test047.csv#aboutUrl> "about";
-  <file://test047.csv#datatype> "string";
-  <file://test047.csv#default> "def";
-  <file://test047.csv#lang> "en";
-  <file://test047.csv#null> "empty";
-  <file://test047.csv#ordered> "true";
-  <file://test047.csv#propertyUrl> "prop";
-  <file://test047.csv#separator> "-";
-  <file://test047.csv#textDirection> "ltr";
-  <file://test047.csv#valueUrl> "value" .
+<file://test047.csv>
+    <file://test047.csv#aboutUrl>      "about" ;
+    <file://test047.csv#datatype>      "string" ;
+    <file://test047.csv#default>       "def" ;
+    <file://test047.csv#lang>          "en" ;
+    <file://test047.csv#null>          "empty" ;
+    <file://test047.csv#ordered>       "true" ;
+    <file://test047.csv#propertyUrl>   "prop" ;
+    <file://test047.csv#separator>     "-" ;
+    <file://test047.csv#textDirection> "ltr" ;
+    <file://test047.csv#valueUrl>      "value" .
 
- [
-    a csvw:TableGroup;
-    csvw:table [
-      a csvw:Table;
-      csvw:row [
-        a csvw:Row;
-        csvw:describes <file://test047.csv>;
-        csvw:rownum 1;
-        csvw:url <file://test047.csv#row=2>
-      ];
-      csvw:url <file://test047.csv>
-    ]
- ] .
+[
+   a csvw:TableGroup;
+   csvw:table [
+     a csvw:Table;
+     csvw:row [
+       a csvw:Row;
+       csvw:describes <file://test047.csv>;
+       csvw:rownum 1;
+       csvw:url <file://test047.csv#row=2>
+     ];
+     csvw:url <file://test047.csv>
+   ]
+] .

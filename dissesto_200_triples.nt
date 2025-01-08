@@ -1,0 +1,200 @@
+<https://w3id.org/italia/env/ld/ihi/lotstep/dait@21_2030/xm1-142> <http://www.w3.org/2000/01/rdf-schema#label> "Informazione acquisita (o confermata) da interrogazione automatica su BDAP del giorno 2024-11-21".
+<https://w3id.org/italia/env/ld/ihi/authkind/autbac/dpc@22_5487/xm> <https://w3id.org/italia/env/onto/core#isDistrictAuthority> "true"^^<http://www.w3.org/2001/XMLSchema#boolean>.
+<https://w3id.org/italia/env/ld/ihi/agreement/dait@21_3684/xm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#FrameworkAgreement>.
+<https://w3id.org/italia/env/ld/ihi/lot/dpc@19_4536/xm1> <https://w3id.org/italia/env/onto/core#contractingAuthority> <https://w3id.org/italia/env/ld/ihi/authkind/attuat/dpc@19_4536/xm1>.
+<https://w3id.org/italia/env/ld/ihi/lot/dpc@19_2280/xm1> <http://purl.org/dc/terms/modified> "2022-01-24".
+<https://w3id.org/italia/env/ld/ihi/lot/368/0912> <https://w3id.org/italia/env/onto/core#hasEconomicIndicator> <https://w3id.org/italia/env/ld/ihi/economicindicator/368/0912_1>.
+<https://w3id.org/italia/env/ld/ihi/businessentity/023089> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/goodrelations/v1#BusinessEntity>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/cb030a/101_18> <http://purl.org/dc/terms/type> <https://w3id.org/italia/env/ld/skos/ihi/l_qe_lavfin>.
+<https://w3id.org/italia/env/ld/ihi/agreement/dpc@19_4776/xm> <http://purl.org/dc/terms/isReferencedBy> <http://www.rendis.isprambiente.it/rendisweb/altri_dec/@DecN$Decreto_Proteggitalia_DPCM_20febbraio2019.pdf>.
+<https://w3id.org/italia/env/ld/ihi/intervention/710/99> <https://w3id.org/italia/env/onto/core#contractingAuthority> <https://w3id.org/italia/env/ld/ihi/authkind/autbac/710/99>.
+<https://w3id.org/italia/env/ld/ihi/lot/me130a/101> <https://w3id.org/italia/env/onto/core#cup> "J33B10000710006".
+<https://w3id.org/italia/env/ld/ihi/authkind/autbac/dait@23_1123/xm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#AuthorityKind>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/me109a/101-150> <https://w3id.org/italia/env/onto/core#lot> <https://w3id.org/italia/env/ld/ihi/lot/me109a/101>.
+<https://w3id.org/italia/env/ld/ihi/lot/rm034a/101> <http://purl.org/dc/terms/modified> "2020-01-08".
+<https://w3id.org/italia/env/ld/ihi/agreement/bs021a/10> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#FrameworkAgreement>.
+<https://w3id.org/italia/env/ld/ihi/repair/353/092sf-48> <https://w3id.org/italia/env/onto/core#repairRelatedTo> <https://w3id.org/italia/env/ld/ihi/lot/353/092>.
+<https://w3id.org/italia/env/ld/ihi/lot/dait@22_0881/xm1> <http://purl.org/dc/terms/relation> <http://www.rendis.isprambiente.it/rendisweb/quadro.jsp?id=DAIT@22_0881/XM&lotto=1>.
+<https://w3id.org/italia/env/ld/ihi/authkind/attuat/dpc@19_4521/xm1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#AuthorityKind>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/13ir622/g11-125> <http://www.w3.org/2000/01/rdf-schema#label> "Informazione acquisita (o confermata) da interrogazione automatica su BDAP del giorno 2024-11-21".
+<https://w3id.org/italia/env/ld/ihi/agreement/16ir636/g1> <http://purl.org/dc/elements/1.1/date> "2017-11-22".
+<https://w3id.org/italia/env/ld/ihi/lotstep/dait@21_1044/xm1-215> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#LotStep>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/090/071_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#EconomicIndicator>.
+<https://w3id.org/italia/env/ld/ihi/authkind/autbac/038/08> <https://w3id.org/italia/env/onto/core#entity> <https://w3id.org/italia/env/ld/ihi/businessentity/ab999>.
+<https://w3id.org/italia/env/ld/ihi/agreement/dait@21_4975/xm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/procurement/public-contracts#FrameworkAgreement>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/dait@21_3893/xm1-226> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#LotStep>.
+<https://w3id.org/italia/env/ld/ihi/lot/296/075> <https://w3id.org/italia/env/onto/core#hasIter> <https://w3id.org/italia/env/ld/skos/ihi/itertype/40>.
+<https://w3id.org/italia/env/ld/ihi/lot/fg022a/101> <https://w3id.org/italia/env/onto/core#hasEconomicIndicator> <https://w3id.org/italia/env/ld/ihi/economicindicator/fg022a/101_11>.
+<https://w3id.org/italia/env/ld/ihi/intervention/dpc@19_5166/xm> <http://www.w3.org/2000/01/rdf-schema#label> "S.P. 635*S.P. 635 AL KM 2+952*MESSA IN SICUREZZA PONTE DI SAN FELICE MEDIANTE COMPLETAMENTO INTERVENTI DI RISANAMENTO".
+<https://w3id.org/italia/env/ld/ihi/economicindicator/227/091_1> <http://qudt.org/vocab/unit#unit> <http://qudt.org/1.1/vocab/unit#Euro>.
+<https://w3id.org/italia/env/ld/ihi/instability/022/021di-2> <https://w3id.org/italia/env/onto/core#instabilityGroup> "Idraulico".
+<https://w3id.org/italia/env/ld/ihi/intervention/dait@21_7398/xm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#Intervention>.
+<https://w3id.org/italia/env/ld/ihi/agreement/dpc@22_5975/xm> <http://www.w3.org/2000/01/rdf-schema#label> "Decreto DPC Lazio n. 2772 del 31/10/2022".
+<https://w3id.org/italia/env/ld/ihi/lotstep/374/081-180> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#LotStep>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/dpc@19_1598/xm1-82> <http://purl.org/dc/elements/1.1/date> "2019-11-12".
+<https://w3id.org/italia/env/ld/ihi/intervention/dpc@22_5866/xm> <https://w3id.org/italia/env/onto/core#primaryGeographicalFeature> <https://w3id.org/italia/env/ld/place/municipality/00201_034006>.
+<https://w3id.org/italia/env/ld/ihi/instability/310/071df-1> <https://w3id.org/italia/env/onto/core#instabilityGroup> "Frana".
+<https://w3id.org/italia/env/ld/ihi/authkind/attuat/dpc@19_0124/xm1> <http://www.w3.org/2000/01/rdf-schema#label> "intervento DPC@19_0124/XM ha ente attuatore Comune - CASTEL FRENTANO".
+<https://w3id.org/italia/env/ld/ihi/economicindicator/vt066b/104_17> <http://qudt.org/vocab/unit#unit> <http://qudt.org/1.1/vocab/unit#Euro>.
+<https://w3id.org/italia/env/ld/ihi/authkind/autbac/119/06> <https://w3id.org/italia/env/onto/core#isDistrictAuthority> "true"^^<http://www.w3.org/2001/XMLSchema#boolean>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/dait@21_5520/xm1-184> <http://www.w3.org/2000/01/rdf-schema#label> "Informazione acquisita (o confermata) da interrogazione automatica su BDAP del giorno 2024-11-21".
+<https://w3id.org/italia/env/ld/ihi/economicindicator/131/084_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#EconomicIndicator>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/09ir707/g12-180> <https://w3id.org/italia/env/onto/core#hasStep> <https://w3id.org/italia/env/ld/skos/ihi/steptype/180>.
+<https://w3id.org/italia/env/ld/ihi/authkind/prop/359/08> <https://w3id.org/italia/env/onto/core#entity> <https://w3id.org/italia/env/ld/ihi/businessentity/14>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/201/081_4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> "300000,00".
+<https://w3id.org/italia/env/ld/ihi/authkind/prop/dait@21_3210/xm> <https://w3id.org/italia/env/onto/core#entity> <https://w3id.org/italia/env/ld/ihi/businessentity/001081>.
+<https://w3id.org/italia/env/ld/ihi/authkind/attuat/264/022> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#AuthorityKind>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/dpc@20_5728/xm1_3> <http://purl.org/dc/terms/type> <https://w3id.org/italia/env/ld/skos/ihi/_l_importo_lotto>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/fc063b/101_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> "500000,00".
+<https://w3id.org/italia/env/ld/ihi/economicindicator/483/991_6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#EconomicIndicator>.
+<https://w3id.org/italia/env/ld/ihi/agreement/430/99> <http://www.w3.org/2000/01/rdf-schema#label> "DPCM 21/12/1999 (DSTN/2/27774)".
+<https://w3id.org/italia/env/ld/ihi/authkind/autbac/dpc@21_6526/xm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#AuthorityKind>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/dait@21_4350/xm1_3> <http://purl.org/dc/terms/type> <https://w3id.org/italia/env/ld/skos/ihi/_l_importo_lotto>.
+<https://w3id.org/italia/env/ld/ihi/lot/03ir052/g11> <https://w3id.org/italia/env/onto/core#hasEconomicIndicator> <https://w3id.org/italia/env/ld/ihi/economicindicator/03ir052/g11_4>.
+<https://w3id.org/italia/env/ld/ihi/lot/pc001a/1021> <https://w3id.org/italia/env/onto/core#hasEconomicIndicator> <https://w3id.org/italia/env/ld/ihi/economicindicator/pc001a/1021_18>.
+<https://w3id.org/italia/env/ld/ihi/intervention/111/06> <http://www.w3.org/2000/01/rdf-schema#label> "Consolidamento dissesto franoso".
+<https://w3id.org/italia/env/ld/ihi/economicindicator/dpc@21_5811/xm1_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#EconomicIndicator>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/cb030a/101_10> <http://purl.org/dc/terms/type> <https://w3id.org/italia/env/ld/skos/ihi/l_qe_oneriart92prog>.
+<https://w3id.org/italia/env/ld/ihi/intervention/dpc@19_2442/xm> <http://purl.org/dc/terms/isReferencedBy> <http://www.rendis.isprambiente.it/rendisweb/dettaglioint.jsp?id=DPC@19_2442/XM>.
+<https://w3id.org/italia/env/ld/ihi/repair/016/b22sf-5> <https://w3id.org/italia/env/onto/core#repairCategory> <https://w3id.org/italia/env/ld/skos/ihi/repaircategory/tecnichediingegnerianaturalistica>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/372/022_9> <http://qudt.org/vocab/unit#unit> <http://qudt.org/1.1/vocab/unit#Euro>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/dpc@19_1927/xm1_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#EconomicIndicator>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/dait@21_2332/xm1-229> <http://purl.org/dc/elements/1.1/date> "2023-05-19".
+<https://w3id.org/italia/env/ld/ihi/lot/dait@21_1822/xm1> <https://w3id.org/italia/env/onto/core#contractingAuthority> <https://w3id.org/italia/env/ld/ihi/authkind/attuat/dait@21_1822/xm1>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/423/091_17> <http://qudt.org/vocab/unit#unit> <http://qudt.org/1.1/vocab/unit#Euro>.
+<https://w3id.org/italia/env/ld/ihi/intervention/dpc@19_0479/xm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#Intervention>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/maaf@20_0016/xm1-172> <https://w3id.org/italia/env/onto/core#lot> <https://w3id.org/italia/env/ld/ihi/lot/maaf@20_0016/xm1>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/390/021-220> <http://www.w3.org/2000/01/rdf-schema#label> "da comunicazione telefonica rup".
+<https://w3id.org/italia/env/ld/ihi/lotstep/513/091-225> <https://w3id.org/italia/env/onto/core#lot> <https://w3id.org/italia/env/ld/ihi/lot/513/091>.
+<https://w3id.org/italia/env/ld/ihi/intervention/dait@21_3823/xm> <https://w3id.org/italia/env/onto/top/isMemberOf> <https://w3id.org/italia/env/ld/dissesto/dataset>.
+<https://w3id.org/italia/env/ld/ihi/lot/dpc@19_1024/xm1> <http://purl.org/dc/terms/isReferencedBy> <http://www.rendis.isprambiente.it/rendisweb/dettagliolotto.jsp?id=DPC@19_1024/XM&lotto=1>.
+<https://w3id.org/italia/env/ld/ihi/lot/at052a/101> <https://w3id.org/italia/env/onto/core#cup> "E51J17000010002".
+<https://w3id.org/italia/env/ld/ihi/economicindicator/dpc@19_0642/xm1_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> "354699,24".
+<https://w3id.org/italia/env/ld/ihi/lotstep/at066a/101-220> <https://w3id.org/italia/env/onto/core#hasStep> <https://w3id.org/italia/env/ld/skos/ihi/steptype/220>.
+<https://w3id.org/italia/env/ld/ihi/lot/18ir979/g11> <http://www.w3.org/2000/01/rdf-schema#label> "Consolidamento pareti rocciose della Stretta del Fiume Alli (cofinanziamento di intervento di importo totale pari a \u20ac3.790.775,14)".
+<https://w3id.org/italia/env/ld/ihi/lotstep/200/081-170> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#LotStep>.
+<https://w3id.org/italia/env/ld/ihi/lot/dpc@19_4127/xm1> <https://w3id.org/italia/env/onto/core#isLotOf> <https://w3id.org/italia/env/ld/ihi/intervention/dpc@19_4127/xm>.
+<https://w3id.org/italia/env/ld/ihi/agreement/dait@23_0591/xm> <http://purl.org/dc/elements/1.1/date> "2023-05-19".
+<https://w3id.org/italia/env/ld/ihi/intervention/dpc@19_2803/xm> <https://w3id.org/italia/env/onto/top/isMemberOf> <https://w3id.org/italia/env/ld/dissesto/dataset>.
+<https://w3id.org/italia/env/ld/ihi/authkind/autbac/dait@22_1008/xm> <http://www.w3.org/2000/01/rdf-schema#label> "intervento DAIT@22_1008/XM ha autorità di bacino Autorit\u00e0 di Bacino - Abruzzo".
+<https://w3id.org/italia/env/ld/ihi/lot/dpc@22_5705/xm1> <http://www.w3.org/2003/01/geo/wgs84_pos#lat> "40.2399262454167".
+<https://w3id.org/italia/env/ld/ihi/lot/dpc@22_5705/xm1> <http://www.w3.org/2003/01/geo/wgs84_pos#long> "14.9875437280221".
+<https://w3id.org/italia/env/ld/ihi/lot/dpc@22_5705/xm1> <http://www.georss.org/georss/point> "14.9875437280221 40.2399262454167".
+<https://w3id.org/italia/env/ld/ihi/economicindicator/03ir383/g11_5> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#EconomicIndicator>.
+<https://w3id.org/italia/env/ld/ihi/agreement/dpc@22_6646/xm> <http://purl.org/dc/elements/1.1/source> "Non disponibile in G.U.".
+<https://w3id.org/italia/env/ld/ihi/authkind/attuat/dpc@19_4988/xm1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#AuthorityKind>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/253/091_17> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#EconomicIndicator>.
+<https://w3id.org/italia/env/ld/ihi/intervention/dpc@19_4575/xm> <https://w3id.org/italia/env/onto/core#hasAgreement> <https://w3id.org/italia/env/ld/ihi/agreement/dpc@19_4575/xm>.
+<https://w3id.org/italia/env/ld/ihi/agreement/dpc@19_0750/xm> <http://purl.org/dc/elements/1.1/source> "GU n.88 del 13/04/2019".
+<https://w3id.org/italia/env/ld/ihi/repair/519/991sf-14> <http://www.w3.org/2000/01/rdf-schema#label> "opere realizzate per l'intervento 519/991".
+<https://w3id.org/italia/env/ld/ihi/authkind/autbac/dait@21_2860/xm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#AuthorityKind>.
+<https://w3id.org/italia/env/ld/ihi/intervention/16ir347/g1> <http://purl.org/dc/terms/publisher> <https://w3id.org/italia/env/ld/organization/dip_2>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/mo002b/108_4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> "115000,00".
+<https://w3id.org/italia/env/ld/ihi/lot/dait@21_3672/xm1> <http://purl.org/dc/terms/isReferencedBy> <http://www.rendis.isprambiente.it/rendisweb/dettagliolotto.jsp?id=DAIT@21_3672/XM&lotto=1>.
+<https://w3id.org/italia/env/ld/ihi/intervention/dait@23_0172/xm> <http://www.w3.org/2000/01/rdf-schema#label> "INTERVENTI  DI REGIMENTAZIONE E  SMALTIMENTO ACQUE METEORICHE  PER IL MIGLIORAMENTO  DELL ASSETTO IDROGEOLOGICO E DI MESSA IN  SICUREZZA DELLE RELATIVE AREE A MAGGIOR CRITICIT\u00bf  DELLA  CITTA DI  BELPASSO -  TERRITORIO  NORD  URBANO".
+<https://w3id.org/italia/env/ld/ihi/economicindicator/dait@21_7404/xm1_3> <http://purl.org/dc/terms/type> <https://w3id.org/italia/env/ld/skos/ihi/_l_importo_lotto>.
+<https://w3id.org/italia/env/ld/ihi/intervention/dait@23_1651/xm> <http://www.w3.org/2000/01/rdf-schema#label> "MESSA IN SICUREZZA IDRAULICA CON CONTESTUALE MANUTENZIONE STRAORDINARIA E ALLARGAMENTO DI VIA CAVINAZZO EST NEL TRATTO TRA VIA TIEPOLO FINO ALL INCROCIO CON VIA CORNARA E COLLEGAMENTO IDRAULICO CON CANALETTA CORO *VIA TERRITORIO COMUNALE*MESSA IN SICUREZ".
+<https://w3id.org/italia/env/ld/ihi/authkind/attuat/dpc@19_2321/xm1> <https://w3id.org/italia/env/onto/core#entity> <https://w3id.org/italia/env/ld/ihi/businessentity/030112>.
+<https://w3id.org/italia/env/ld/ihi/lot/dait@21_0272/xm1> <http://purl.org/dc/terms/modified> "2022-03-29".
+<https://w3id.org/italia/env/ld/ihi/authkind/prop/03ir469/g1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#AuthorityKind>.
+<https://w3id.org/italia/env/ld/ihi/lot/dpc@21_5830/xm1> <https://w3id.org/italia/env/onto/core#cup> "F55H21000160001".
+<https://w3id.org/italia/env/ld/ihi/lotstep/15irb22/g11-217> <http://www.w3.org/2000/01/rdf-schema#label> "Informazione acquisita (o confermata) da interrogazione automatica su BDAP del giorno 2024-09-12".
+<https://w3id.org/italia/env/ld/ihi/lot/dait@21_0715/xm1> <https://w3id.org/italia/env/onto/core#hasEconomicIndicator> <https://w3id.org/italia/env/ld/ihi/economicindicator/dait@21_0715/xm1_5>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/311/061-180> <http://www.w3.org/2000/01/rdf-schema#label> "Determinazione n\u00b0 158 Servizio Tecnico Manutentivo".
+<https://w3id.org/italia/env/ld/ihi/lot/03ir067/g11> <https://w3id.org/italia/env/onto/core#hasEconomicIndicator> <https://w3id.org/italia/env/ld/ihi/economicindicator/03ir067/g11_25>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/dpc@19_4413/xm1_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> "0,00".
+<https://w3id.org/italia/env/ld/ihi/intervention/dpc@19_2901/xm> <http://www.w3.org/2000/01/rdf-schema#label> "RISISTEMAZIONE DELLA SAGOMA DELLA SCOGLIERA AL FINE DI GARANTIRE ADEGUATA PROTEZIONE ALLE INFRASTRUTTURE PUBBLICHE E PRIVATE RETROSTANTI ANCHE TRAMITE LA FORNITURA E POSA IN OPERA DI NUOVI MASSI NATURALI DI CATEGORIA ADEGUATA*PASSEGGIATA CADORNA*ADEGUAME".
+<https://w3id.org/italia/env/ld/ihi/businessentity/068032> <http://purl.org/dc/elements/1.1/type> "Comune".
+<https://w3id.org/italia/env/ld/ihi/lot/324/021> <http://purl.org/procurement/public-contracts#contact> "Ufficio tecnico CBSM Geom. Corrado Costa".
+<https://w3id.org/italia/env/ld/ihi/agreement/dait@23_0972/xm> <http://purl.org/dc/elements/1.1/description> "Decreto InterMinisteriale DAIT del 19 maggio 2023 -  assegnazione contributi ai comuni per interventi di messa in sicurezza del territorio a rischio idrogeologico".
+<https://w3id.org/italia/env/ld/ihi/intervention/288/02> <http://www.w3.org/2003/01/geo/wgs84_pos#location> "Torrenti Perledo e Bassola".
+<https://w3id.org/italia/env/ld/ihi/economicindicator/050/091_1> <http://purl.org/dc/terms/type> <https://w3id.org/italia/env/ld/skos/ihi/_l_or_i_stima_valore_lotto>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/dpc@19_1390/xm1-172> <https://w3id.org/italia/env/onto/core#hasStep> <https://w3id.org/italia/env/ld/skos/ihi/steptype/172>.
+<https://w3id.org/italia/env/ld/ihi/intervention/dait@23_1652/xm> <http://purl.org/dc/terms/isReferencedBy> <http://www.rendis.isprambiente.it/rendisweb/dettaglioint.jsp?id=DAIT@23_1652/XM>.
+<https://w3id.org/italia/env/ld/ihi/authkind/autbac/vv006a/10> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#AuthorityKind>.
+<https://w3id.org/italia/env/ld/ihi/intervention/18ir658/g1> <http://www.w3.org/2000/01/rdf-schema#label> "Intervento per la mitigazione rischio frana sul versante in loc. Vermicelli del Comune di Rende".
+<https://w3id.org/italia/env/ld/ihi/authkind/autbac/dait@19_0062/xm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#AuthorityKind>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/14ir344/g11_10> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#EconomicIndicator>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/tv021a/101-220> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#LotStep>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/dait@21_6021/xm1-142> <https://w3id.org/italia/env/onto/core#hasStep> <https://w3id.org/italia/env/ld/skos/ihi/steptype/142>.
+<https://w3id.org/italia/env/ld/ihi/authkind/autbac/dpc@19_4408/xm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#AuthorityKind>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/dpc@19_0469/xm1_1> <http://qudt.org/vocab/unit#unit> <http://qudt.org/1.1/vocab/unit#Euro>.
+<https://w3id.org/italia/env/ld/ihi/intervention/dpc@20_5773/xm> <https://w3id.org/italia/env/onto/core#amountFinanced> "800000.00"^^<http://qudt.org/1.1/vocab/unit#Euro>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/dpc@19_1989/xm1-226> <https://w3id.org/italia/env/onto/core#hasStep> <https://w3id.org/italia/env/ld/skos/ihi/steptype/226>.
+<https://w3id.org/italia/env/ld/ihi/intervention/dait@22_0507/xm> <https://w3id.org/italia/env/onto/core#amountFinanced> "800000.00"^^<http://qudt.org/1.1/vocab/unit#Euro>.
+<https://w3id.org/italia/env/ld/ihi/authkind/prop/dait@21_6924/xm> <http://www.w3.org/2000/01/rdf-schema#label> "intervento DAIT@21_6924/XM ha ente proponente Comune - TORRE LE NOCELLE".
+<https://w3id.org/italia/env/ld/ihi/authkind/attuat/dpc@19_3957/xm1> <http://www.w3.org/2000/01/rdf-schema#label> "intervento DPC@19_3957/XM ha ente attuatore Comune - PRIMIERO SAN MARTINO DI CASTROZZA".
+<https://w3id.org/italia/env/ld/ihi/authkind/autbac/dait@21_0838/xm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#AuthorityKind>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/201/061_12> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#EconomicIndicator>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/co051b/101_22> <http://purl.org/dc/terms/type> <https://w3id.org/italia/env/ld/skos/ihi/l_qe_spesetecfin>.
+<https://w3id.org/italia/env/ld/ihi/lot/455/991> <http://purl.org/dc/terms/isReferencedBy> <http://www.rendis.isprambiente.it/rendisweb/dettagliolotto.jsp?id=455/99&lotto=1>.
+<https://w3id.org/italia/env/ld/ihi/agreement/dpc@19_0022/xm> <http://purl.org/dc/elements/1.1/subject> "Programmazioni Dipartimento Protezione Civile".
+<https://w3id.org/italia/env/ld/ihi/lotstep/140/062-170> <https://w3id.org/italia/env/onto/core#hasStep> <https://w3id.org/italia/env/ld/skos/ihi/steptype/170>.
+<https://w3id.org/italia/env/ld/ihi/intervention/dait@21_7051/xm> <https://w3id.org/italia/env/onto/core#contractingAuthority> <https://w3id.org/italia/env/ld/ihi/authkind/autbac/dait@21_7051/xm>.
+<https://w3id.org/italia/env/ld/ihi/lot/dait@19_0193/xm1> <https://w3id.org/italia/env/onto/core#hasEconomicIndicator> <https://w3id.org/italia/env/ld/ihi/economicindicator/dait@19_0193/xm1_1>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/dait@21_5043/xm1_1> <http://qudt.org/vocab/unit#unit> <http://qudt.org/1.1/vocab/unit#Euro>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/162/062-190> <http://purl.org/dc/elements/1.1/date> "2009-06-03".
+<https://w3id.org/italia/env/ld/ihi/lot/maaf@22_0120/xm1> <http://purl.org/dc/terms/modified> "2023-09-04".
+<https://w3id.org/italia/env/ld/ihi/authkind/attuat/dait@21_2168/xm1> <https://w3id.org/italia/env/onto/core#entity> <https://w3id.org/italia/env/ld/ihi/businessentity/004005>.
+<https://w3id.org/italia/env/ld/ihi/intervention/173/07> <https://w3id.org/italia/env/onto/core#contractingAuthority> <https://w3id.org/italia/env/ld/ihi/authkind/autbac/173/07>.
+<https://w3id.org/italia/env/ld/ihi/lot/dait@21_1652/xm1> <http://www.w3.org/2003/01/geo/wgs84_pos#lat> "45.6642983648864".
+<https://w3id.org/italia/env/ld/ihi/lot/dait@21_1652/xm1> <http://www.w3.org/2003/01/geo/wgs84_pos#long> "10.2028777245573".
+<https://w3id.org/italia/env/ld/ihi/lot/dait@21_1652/xm1> <http://www.georss.org/georss/point> "10.2028777245573 45.6642983648864".
+<https://w3id.org/italia/env/ld/ihi/intervention/dait@21_0559/xm> <https://w3id.org/italia/env/onto/core#contractingAuthority> <https://w3id.org/italia/env/ld/ihi/authkind/autbac/dait@21_0559/xm>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/dait@21_2846/xm1_3> <http://purl.org/dc/terms/type> <https://w3id.org/italia/env/ld/skos/ihi/_l_importo_lotto>.
+<https://w3id.org/italia/env/ld/ihi/intervention/dpc@19_2619/xm> <http://www.w3.org/2003/01/geo/wgs84_pos#location> "VIA ...".
+<https://w3id.org/italia/env/ld/ihi/lotstep/fg036a/101-150> <https://w3id.org/italia/env/onto/core#hasStep> <https://w3id.org/italia/env/ld/skos/ihi/steptype/150>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/034/071-150> <https://w3id.org/italia/env/onto/core#lot> <https://w3id.org/italia/env/ld/ihi/lot/034/071>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/dait@21_2567/xm1-184> <https://w3id.org/italia/env/onto/core#lot> <https://w3id.org/italia/env/ld/ihi/lot/dait@21_2567/xm1>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/cn153a/101-220> <https://w3id.org/italia/env/onto/core#lot> <https://w3id.org/italia/env/ld/ihi/lot/cn153a/101>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/249/061-180> <https://w3id.org/italia/env/onto/core#hasStep> <https://w3id.org/italia/env/ld/skos/ihi/steptype/180>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/572/991-130> <http://purl.org/dc/elements/1.1/date> "2001-08-09".
+<https://w3id.org/italia/env/ld/ihi/lot/dpc@19_0408/xm1> <https://w3id.org/italia/env/onto/core#hasEconomicIndicator> <https://w3id.org/italia/env/ld/ihi/economicindicator/dpc@19_0408/xm1_3>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/dpc@19_1013/xm1-226> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#LotStep>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/dpc@19_3203/xm1_1> <http://purl.org/dc/terms/type> <https://w3id.org/italia/env/ld/skos/ihi/_l_or_i_stima_valore_lotto>.
+<https://w3id.org/italia/env/ld/ihi/agreement/cs167b/10> <http://purl.org/dc/elements/1.1/date> "2010-11-25".
+<https://w3id.org/italia/env/ld/ihi/authkind/attuat/dpc@19_5051/xm1> <https://w3id.org/italia/env/onto/core#role> "ente attuatore".
+<https://w3id.org/italia/env/ld/ihi/instability/03ir290/g11df-7> <https://w3id.org/italia/env/onto/core#instabilityRelatedTo> <https://w3id.org/italia/env/ld/ihi/lot/03ir290/g11>.
+<https://w3id.org/italia/env/ld/ihi/intervention/211/02> <https://w3id.org/italia/env/onto/top/isMemberOf> <https://w3id.org/italia/env/ld/dissesto/dataset>.
+<https://w3id.org/italia/env/ld/ihi/agreement/dpc@20_5420/xm> <http://www.w3.org/2000/01/rdf-schema#label> "Nota DPC Calabria 44040 28/07/2020".
+<https://w3id.org/italia/env/ld/ihi/economicindicator/ud026c/101_1> <http://purl.org/dc/terms/type> <https://w3id.org/italia/env/ld/skos/ihi/_l_or_i_stima_valore_lotto>.
+<https://w3id.org/italia/env/ld/ihi/intervention/al013a/10> <https://w3id.org/italia/env/onto/core#contractingAuthority> <https://w3id.org/italia/env/ld/ihi/authkind/autbac/al013a/10>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/dait@22_0045/xm1_3> <http://purl.org/dc/terms/type> <https://w3id.org/italia/env/ld/skos/ihi/_l_importo_lotto>.
+<https://w3id.org/italia/env/ld/ihi/lot/lt029a/101> <http://www.w3.org/2000/01/rdf-schema#label> "Consolidamento del versante sovrastante la S.S. n.7 Appia al Km 126+380 (Posa in opera di difese passive)".
+<https://w3id.org/italia/env/ld/ihi/lot/08ir197/g11> <http://purl.org/procurement/public-contracts#procedureType> "dato mancante".
+<https://w3id.org/italia/env/ld/ihi/economicindicator/304/061_12> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#EconomicIndicator>.
+<https://w3id.org/italia/env/ld/ihi/authkind/autbac/dpc@22_5325/xm> <https://w3id.org/italia/env/onto/core#entity> <https://w3id.org/italia/env/ld/ihi/businessentity/ab56>.
+<https://w3id.org/italia/env/ld/ihi/agreement/dait@21_3482/xm> <http://purl.org/dc/terms/isReferencedBy> <http://www.rendis.isprambiente.it/rendisweb/altri_dec/@DecN$_DecMinIntDAIT_08-11-2021_conallegati.pdf>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/le080a/101_14> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#EconomicIndicator>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/pn016b/101-120> <https://w3id.org/italia/env/onto/core#hasStep> <https://w3id.org/italia/env/ld/skos/ihi/steptype/120>.
+<https://w3id.org/italia/env/ld/ihi/lot/198/021> <http://www.w3.org/2003/01/geo/wgs84_pos#lat> "43.9395985327083".
+<https://w3id.org/italia/env/ld/ihi/lot/198/021> <http://www.w3.org/2003/01/geo/wgs84_pos#long> "11.0572066926691".
+<https://w3id.org/italia/env/ld/ihi/lot/198/021> <http://www.georss.org/georss/point> "11.0572066926691 43.9395985327083".
+<https://w3id.org/italia/env/ld/ihi/intervention/dait@21_5195/xm> <http://purl.org/dc/terms/publisher> <https://w3id.org/italia/env/ld/organization/dip_2>.
+<https://w3id.org/italia/env/ld/ihi/authkind/prop/dait@23_1109/xm> <https://w3id.org/italia/env/onto/core#role> "ente proponente".
+<https://w3id.org/italia/env/ld/ihi/intervention/01ir114/g1> <https://w3id.org/italia/env/onto/core#primaryGeographicalFeature> <https://w3id.org/italia/env/ld/place/municipality/00201_006018>.
+<https://w3id.org/italia/env/ld/ihi/intervention/298/99> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#Intervention>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/258/091_4> <http://purl.org/dc/terms/type> <https://w3id.org/italia/env/ld/skos/ihi/l_qe_totgenprog>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/320/081-125> <http://www.w3.org/2000/01/rdf-schema#label> "Informazione acquisita (o confermata) da interrogazione automatica su BDAP del giorno 2024-05-30".
+<https://w3id.org/italia/env/ld/ihi/lithology/001/b11lf-20> <https://w3id.org/italia/env/onto/core#lithologyType> <https://w3id.org/italia/env/ld/skos/ihi/lithologytype/lf-20>.
+<https://w3id.org/italia/env/ld/ihi/authkind/prop/dait@21_2129/xm> <http://www.w3.org/2000/01/rdf-schema#label> "intervento DAIT@21_2129/XM ha ente proponente Comune - CORTANDONE".
+<https://w3id.org/italia/env/ld/ihi/instability/206/061df-11> <https://w3id.org/italia/env/onto/core#instabilityRelatedTo> <https://w3id.org/italia/env/ld/ihi/lot/206/061>.
+<https://w3id.org/italia/env/ld/ihi/lot/231/071> <http://www.w3.org/2003/01/geo/wgs84_pos#location> "Isola S. Nicola  - La Tagliata".
+<https://w3id.org/italia/env/ld/ihi/authkind/autbac/dait@21_2085/xm> <https://w3id.org/italia/env/onto/core#role> "autorità di bacino".
+<https://w3id.org/italia/env/ld/ihi/lotstep/11ir296/g11-190> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#LotStep>.
+<https://w3id.org/italia/env/ld/ihi/intervention/dait@23_1851/xm> <https://w3id.org/italia/env/onto/core#primaryGeographicalFeature> <https://w3id.org/italia/env/ld/place/municipality/00201_046010>.
+<https://w3id.org/italia/env/ld/ihi/lotstep/12ir079/g11-183> <http://www.w3.org/2000/01/rdf-schema#label> "Informazione acquisita (o confermata) da interrogazione automatica su BDAP del giorno 2024-05-02".
+<https://w3id.org/italia/env/ld/ihi/economicindicator/056/064_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> "302749,72".
+<https://w3id.org/italia/env/ld/ihi/lot/dait@21_2101/xm1> <http://purl.org/dc/terms/modified> "2022-09-05".
+<https://w3id.org/italia/env/ld/ihi/intervention/281/99> <https://w3id.org/italia/env/onto/core#primaryGeographicalFeature> <https://w3id.org/italia/env/ld/place/municipality/00201_047020>.
+<https://w3id.org/italia/env/ld/ihi/authkind/prop/dait@21_1466/xm> <https://w3id.org/italia/env/onto/core#role> "ente proponente".
+<https://w3id.org/italia/env/ld/ihi/lot/dpc@19_0985/xm1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#Contract>.
+<https://w3id.org/italia/env/ld/ihi/lot/dait@22_0882/xm1> <https://w3id.org/italia/env/onto/core#cup> "E42E22000010001".
+<https://w3id.org/italia/env/ld/ihi/economicindicator/dait@19_0303/xm1_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#EconomicIndicator>.
+<https://w3id.org/italia/env/ld/ihi/economicindicator/109/081_12> <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> "32786,21".
+<https://w3id.org/italia/env/ld/ihi/lotstep/18ir081/g11-152> <http://purl.org/dc/elements/1.1/date> "2022-06-18".
+<https://w3id.org/italia/env/ld/ihi/lot/lt029a/101> <https://w3id.org/italia/env/onto/core#hasIter> <https://w3id.org/italia/env/ld/skos/ihi/itertype/40>.
+<https://w3id.org/italia/env/ld/ihi/lot/dait@21_0527/xm1> <https://w3id.org/italia/env/onto/core#hasEconomicIndicator> <https://w3id.org/italia/env/ld/ihi/economicindicator/dait@21_0527/xm1_3>.
+<https://w3id.org/italia/env/ld/ihi/authkind/attuat/dait@21_1258/xm1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/italia/env/onto/core#AuthorityKind>.
+<https://w3id.org/italia/env/ld/ihi/authkind/attuat/239/093> <http://www.w3.org/2000/01/rdf-schema#label> "intervento 239/09 ha ente attuatore Comune - MENDATICA".
+<https://w3id.org/italia/env/ld/ihi/lot/dait@21_6620/xm1> <http://purl.org/procurement/public-contracts#procedureType> "dato mancante".

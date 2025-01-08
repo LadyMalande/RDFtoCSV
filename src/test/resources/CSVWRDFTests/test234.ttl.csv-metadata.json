@@ -1,29 +1,39 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test234.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "PK1",
-        "name" : "PK1",
-        "propertyUrl" : "file://test234.csv#PK1"
-      }, {
-        "@type" : "Column",
-        "titles" : "PK2",
-        "name" : "PK2",
-        "propertyUrl" : "file://test234.csv#PK2"
-      } ],
-      "rowTitles" : [ "Subjekt", "PK1", "PK2" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test234.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "PK1",
+            "name": "PK1",
+            "propertyUrl": "file://test234.csv#PK1"
+          },
+          {
+            "@type": "Column",
+            "titles": "PK2",
+            "name": "PK2",
+            "propertyUrl": "file://test234.csv#PK2"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "PK1",
+          "PK2"
+        ]
+      }
     }
-  } ]
+  ]
 }

@@ -1,8 +1,10 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.convertor.*;
+import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
+import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.miklosova.rdftocsvw.support.FileWrite;
+import com.miklosova.rdftocsvw.output_processor.FileWrite;
 
 public class MetadataService {
     private MetadataGateway metadataGateway;
@@ -11,9 +13,8 @@ public class MetadataService {
 
         metadataGateway = new MetadataGateway();
         processMetadataCreation(po);
-        Metadata metadata = metadataGateway.processInput(po);
         //System.out.println("Processed metadata: \n" + metadata);
-        return metadata;
+        return metadataGateway.processInput(po);
     }
 
     private void processMetadataCreation(PrefinishedOutput<RowsAndKeys> data) {
@@ -21,41 +22,34 @@ public class MetadataService {
         System.out.println(" conversionChoice = " + conversionChoice);
         String extension = FileWrite.getFileExtension(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
 
-        switch (conversionChoice) {
-            case "basicQuery":
+        switch (conversionChoice.toLowerCase()) {
+            case "basicquery":
                 if (data != null && data.getPrefinishedOutput() != null) {
                     metadataGateway.setMetadataCreator(new BasicQueryMetadataCreator((PrefinishedOutput<RowsAndKeys>) data));
                 } else {
                     throw new IllegalArgumentException("Invalid data type for basicQuery");
                 }
                 break;
-            case "splitQuery":
+            case "splitquery":
                 if (data != null && data.getPrefinishedOutput() != null) {
                     metadataGateway.setMetadataCreator(new SplitFilesMetadataCreator((PrefinishedOutput<RowsAndKeys>) data));
                 } else {
                     throw new IllegalArgumentException("Invalid data type for splitQuery");
                 }
                 break;
-            case "codelistQuery":
-                if (data != null && data.getPrefinishedOutput() != null) {
-                    metadataGateway.setMetadataCreator(new CodelistQueryMetadataCreator((PrefinishedOutput<RowsAndKeys>) data));
-                } else {
-                    throw new IllegalArgumentException("Invalid data type for codelistQuery");
-                }
-                break;
-            case "bigFileStreaming":
+            case "bigfilestreaming":
 
                 if (!extension.equalsIgnoreCase("nt")) {
                     throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);
-                } else{
+                } else {
                     metadataGateway.setMetadataCreator(new BigFileStreamingNTriplesMetadataCreator(null));
                 }
                 break;
             case "streaming":
                 if (!extension.equalsIgnoreCase("nt")) {
                     throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);
-                } else{
-                    metadataGateway.setMetadataCreator(new StreamingNTriplesMetadataCreator(null));
+                } else {
+                    metadataGateway.setMetadataCreator(new StreamingNTriplesMetadataCreator());
                 }
                 break;
             default:

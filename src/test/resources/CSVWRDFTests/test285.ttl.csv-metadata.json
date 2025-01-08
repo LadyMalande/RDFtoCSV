@@ -1,55 +1,73 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test285.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "0.0%23%23%2C%23%23%23",
-        "name" : "0.0%23%23%2C%23%23%23",
-        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test285.csv#0.0%23%23%2C%23%23%23",
-        "datatype" : "decimal"
-      }, {
-        "@type" : "Column",
-        "titles" : "0.00%23%2C%23%23%23",
-        "name" : "0.00%23%2C%23%23%23",
-        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test285.csv#0.00%23%2C%23%23%23",
-        "datatype" : "decimal"
-      }, {
-        "@type" : "Column",
-        "titles" : "0.000%2C%23%23%23",
-        "name" : "0.000%2C%23%23%23",
-        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test285.csv#0.000%2C%23%23%23",
-        "datatype" : "decimal"
-      }, {
-        "@type" : "Column",
-        "titles" : "0.000%2C0%23%23",
-        "name" : "0.000%2C0%23%23",
-        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test285.csv#0.000%2C0%23%23",
-        "datatype" : "decimal"
-      }, {
-        "@type" : "Column",
-        "titles" : "0.000%2C00%23",
-        "name" : "0.000%2C00%23",
-        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test285.csv#0.000%2C00%23",
-        "datatype" : "decimal"
-      }, {
-        "@type" : "Column",
-        "titles" : "0.000%2C000",
-        "name" : "0.000%2C000",
-        "propertyUrl" : "http://www.w3.org/2013/csvw/tests/test285.csv#0.000%2C000",
-        "datatype" : "decimal"
-      } ],
-      "rowTitles" : [ "Subjekt", "0.0%23%23%2C%23%23%23", "0.00%23%2C%23%23%23", "0.000%2C%23%23%23", "0.000%2C0%23%23", "0.000%2C00%23", "0.000%2C000" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test285.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "0.0%23%23%2C%23%23%23",
+            "name": "0.0%23%23%2C%23%23%23",
+            "propertyUrl": "http://www.w3.org/2013/csvw/tests/test285.csv#0.0%23%23%2C%23%23%23",
+            "datatype": "decimal"
+          },
+          {
+            "@type": "Column",
+            "titles": "0.00%23%2C%23%23%23",
+            "name": "0.00%23%2C%23%23%23",
+            "propertyUrl": "http://www.w3.org/2013/csvw/tests/test285.csv#0.00%23%2C%23%23%23",
+            "datatype": "decimal"
+          },
+          {
+            "@type": "Column",
+            "titles": "0.000%2C%23%23%23",
+            "name": "0.000%2C%23%23%23",
+            "propertyUrl": "http://www.w3.org/2013/csvw/tests/test285.csv#0.000%2C%23%23%23",
+            "datatype": "decimal"
+          },
+          {
+            "@type": "Column",
+            "titles": "0.000%2C0%23%23",
+            "name": "0.000%2C0%23%23",
+            "propertyUrl": "http://www.w3.org/2013/csvw/tests/test285.csv#0.000%2C0%23%23",
+            "datatype": "decimal"
+          },
+          {
+            "@type": "Column",
+            "titles": "0.000%2C00%23",
+            "name": "0.000%2C00%23",
+            "propertyUrl": "http://www.w3.org/2013/csvw/tests/test285.csv#0.000%2C00%23",
+            "datatype": "decimal"
+          },
+          {
+            "@type": "Column",
+            "titles": "0.000%2C000",
+            "name": "0.000%2C000",
+            "propertyUrl": "http://www.w3.org/2013/csvw/tests/test285.csv#0.000%2C000",
+            "datatype": "decimal"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "0.0%23%23%2C%23%23%23",
+          "0.00%23%2C%23%23%23",
+          "0.000%2C%23%23%23",
+          "0.000%2C0%23%23",
+          "0.000%2C00%23",
+          "0.000%2C000"
+        ]
+      }
     }
-  } ]
+  ]
 }

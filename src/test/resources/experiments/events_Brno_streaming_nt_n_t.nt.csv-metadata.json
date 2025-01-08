@@ -1,0 +1,588 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Description (cs)",
+        "name" : "description_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/description",
+        "valueUrl" : "{+description_cs}",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (cs)",
+        "name" : "title_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "valueUrl" : "{+title_cs}",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "Type",
+        "name" : "type",
+        "propertyUrl" : "http://purl.org/dc/terms/type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "openingHoursSpecification",
+        "name" : "openingHoursSpecification",
+        "propertyUrl" : "http://schema.org/openingHoursSpecification",
+        "valueUrl" : "{+openingHoursSpecification}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type_1",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "geometry",
+        "name" : "geometry",
+        "propertyUrl" : "http://www.w3.org/ns/locn#geometry",
+        "valueUrl" : "{+geometry}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-kontakt",
+        "name" : "mkontakt",
+        "propertyUrl" : "https://slovník.gov.cz/datový/události/pojem/má-kontakt",
+        "valueUrl" : "{+mkontakt}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-vstupné",
+        "name" : "mvstupn",
+        "propertyUrl" : "https://slovník.gov.cz/datový/události/pojem/má-vstupné",
+        "valueUrl" : "{+mvstupn}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-přílohu",
+        "name" : "mplohu",
+        "propertyUrl" : "https://slovník.gov.cz/generický/věci/pojem/má-přílohu",
+        "valueUrl" : "{+mplohu}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Description (en)",
+        "name" : "description_en",
+        "propertyUrl" : "http://purl.org/dc/terms/description",
+        "valueUrl" : "{+description_en}",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (en)",
+        "name" : "title_en",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "valueUrl" : "{+title_en}",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "superEvent",
+        "name" : "superEvent",
+        "propertyUrl" : "http://schema.org/superEvent",
+        "valueUrl" : "{+superEvent}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt1.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_1",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "má-časový-interval",
+        "name" : "masovinterval",
+        "propertyUrl" : "https://slovník.gov.cz/generický/čas/pojem/má-časový-interval",
+        "valueUrl" : "{+masovinterval}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt2.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "hasBeginning",
+        "name" : "hasBeginning",
+        "propertyUrl" : "http://www.w3.org/2006/time#hasBeginning",
+        "valueUrl" : "{+hasBeginning}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt3.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "hasEnd",
+        "name" : "hasEnd",
+        "propertyUrl" : "http://www.w3.org/2006/time#hasEnd",
+        "valueUrl" : "{+hasEnd}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt4.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "notation",
+        "name" : "notation",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#notation",
+        "valueUrl" : "{+notation}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt5.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "legalName (cs)",
+        "name" : "legalName_cs",
+        "propertyUrl" : "http://www.w3.org/ns/regorg#legalName",
+        "valueUrl" : "{+legalName_cs}",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt6.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "inXSDDateTimeStamp",
+        "name" : "inXSDDateTimeStamp",
+        "propertyUrl" : "http://www.w3.org/2006/time#inXSDDateTimeStamp",
+        "valueUrl" : "{+inXSDDateTimeStamp}",
+        "datatype" : "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt7.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "coordinates",
+        "name" : "coordinates",
+        "propertyUrl" : "https://purl.org/geojson/vocab#coordinates",
+        "valueUrl" : "{+coordinates}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt8.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "hasEmail",
+        "name" : "hasEmail",
+        "propertyUrl" : "http://www.w3.org/2006/vcard/ns#hasEmail",
+        "valueUrl" : "{+hasEmail}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt9.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "hasURL",
+        "name" : "hasURL",
+        "propertyUrl" : "http://www.w3.org/2006/vcard/ns#hasURL",
+        "valueUrl" : "{+hasURL}",
+        "datatype" : "http://www.w3.org/2001/XMLSchema#anyURI",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt10.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "druh (en)",
+        "name" : "druh_en",
+        "propertyUrl" : "https://slovník.gov.cz/generický/kontakty/pojem/druh",
+        "valueUrl" : "{+druh_en}",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "druh (cs)",
+        "name" : "druh_cs",
+        "propertyUrl" : "https://slovník.gov.cz/generický/kontakty/pojem/druh",
+        "valueUrl" : "{+druh_cs}",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt11.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "downloadUrl",
+        "name" : "downloadUrl",
+        "propertyUrl" : "http://schema.org/downloadUrl",
+        "valueUrl" : "{+downloadUrl}",
+        "datatype" : "http://www.w3.org/2001/XMLSchema#anyURI",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt12.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "encodingFormat",
+        "name" : "encodingFormat",
+        "propertyUrl" : "http://schema.org/encodingFormat",
+        "valueUrl" : "{+encodingFormat}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt13.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "má-podmínky-užití",
+        "name" : "mpodmnkyuit",
+        "propertyUrl" : "https://slovník.gov.cz/generický/digitální-objekty/pojem/má-podmínky-užití",
+        "valueUrl" : "{+mpodmnkyuit}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt14.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "má-vykonavatele-majetkových-práv-autorských-u-autorského-díla",
+        "name" : "mvykonavatelemajetkovchprvautorskchuautorskhodla",
+        "propertyUrl" : "https://slovník.gov.cz/generický/digitální-objekty/pojem/má-vykonavatele-majetkových-práv-autorských-u-autorského-díla",
+        "valueUrl" : "{+mvykonavatelemajetkovchprvautorskchuautorskhodla}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt15.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "databáze-chráněná-zvláštními-právy-pořizovatele-databáze",
+        "name" : "databzechrnnzvltnmiprvypoizovateledatabze",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/databáze-chráněná-zvláštními-právy-pořizovatele-databáze",
+        "valueUrl" : "{+databzechrnnzvltnmiprvypoizovateledatabze}",
+        "datatype" : "boolean",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt16.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "licence-autorského-díla",
+        "name" : "licenceautorskhodla",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/licence-autorského-díla",
+        "valueUrl" : "{+licenceautorskhodla}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt17.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "obsahuje-autorské-dílo",
+        "name" : "obsahujeautorskdlo",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-autorské-dílo",
+        "valueUrl" : "{+obsahujeautorskdlo}",
+        "datatype" : "boolean",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt18.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "obsahuje-osobní-údaje",
+        "name" : "obsahujeosobndaje",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-osobní-údaje",
+        "valueUrl" : "{+obsahujeosobndaje}",
+        "datatype" : "boolean",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt19.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "obsahuje-více-autorských-děl",
+        "name" : "obsahujevceautorskchdl",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-více-autorských-děl",
+        "valueUrl" : "{+obsahujevceautorskchdl}",
+        "datatype" : "boolean",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt20.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "originální-databáze",
+        "name" : "originlndatabze",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/originální-databáze",
+        "valueUrl" : "{+originlndatabze}",
+        "datatype" : "boolean",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt21.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "first",
+        "name" : "first",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+        "valueUrl" : "{+first}",
+        "datatype" : "double",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_nt_n_t.nt22.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "rest",
+        "name" : "rest",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+        "valueUrl" : "{+rest}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  } ]
+}

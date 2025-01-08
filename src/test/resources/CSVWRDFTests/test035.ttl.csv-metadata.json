@@ -3,14 +3,14 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "test035.ttlTestOutput0.csv",
+    "url" : "0.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "{+Subject}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
@@ -57,187 +57,36 @@
         "name" : "postIn",
         "propertyUrl" : "http://www.w3.org/ns/org#postIn",
         "valueUrl" : "http://example.org/organization/{+postIn}"
-      } ],
-      "foreignKeys" : [ {
-        "columnReference" : "reportsTo",
-        "reference" : {
-          "resource" : "test035.ttlTestOutput1.csv",
-          "columnReference" : "reportsTo"
-        }
-      } ],
-      "rowTitles" : [ "Subjekt", "reportsTo", "grade", "min_pay", "max_pay", "job", "number_of_posts", "profession", "postIn" ]
-    }
-  }, {
-    "@type" : "Table",
-    "url" : "test035.ttlTestOutput1.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}",
-        "suppressOutput" : true
       }, {
         "@type" : "Column",
         "titles" : "Identifier",
         "name" : "identifier",
         "propertyUrl" : "http://purl.org/dc/terms/identifier",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
+        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "heldBy",
         "name" : "heldBy",
         "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
         "valueUrl" : "http://example.org/organization/hefce.ac.uk/person/{+heldBy}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "grade",
-        "name" : "grade",
-        "propertyUrl" : "http://example.org/gov.uk/def/grade",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "job",
-        "name" : "job",
-        "propertyUrl" : "http://example.org/gov.uk/def/job",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "reportsTo",
-        "name" : "reportsTo",
-        "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "profession",
-        "name" : "profession",
-        "propertyUrl" : "http://example.org/gov.uk/def/profession",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "postIn",
-        "name" : "postIn",
-        "propertyUrl" : "http://www.w3.org/ns/org#postIn",
-        "valueUrl" : "http://example.org/organization/{+postIn}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
-      } ],
-      "foreignKeys" : [ {
-        "columnReference" : "reportsTo",
-        "reference" : {
-          "resource" : "test035.ttlTestOutput1.csv",
-          "columnReference" : "reportsTo"
-        }
-      }, {
-        "columnReference" : "heldBy",
-        "reference" : {
-          "resource" : "test035.ttlTestOutput3.csv",
-          "columnReference" : "name"
-        }
-      }, {
-        "columnReference" : "heldBy",
-        "reference" : {
-          "resource" : "test035.ttlTestOutput3.csv",
-          "columnReference" : "name"
-        }
-      } ],
-      "primaryKey" : "Subjekt",
-      "rowTitles" : [ "Subjekt", "identifier", "heldBy", "grade", "job", "reportsTo", "profession", "postIn" ]
-    }
-  }, {
-    "@type" : "Table",
-    "url" : "test035.ttlTestOutput2.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "{+Subjekt}",
-        "suppressOutput" : true
+        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "name",
         "name" : "name",
         "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/person/{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "Identifier",
-        "name" : "identifier",
-        "propertyUrl" : "http://purl.org/dc/terms/identifier",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "heldBy",
-        "name" : "heldBy",
-        "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
-        "valueUrl" : "{+heldBy}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "grade",
-        "name" : "grade",
-        "propertyUrl" : "http://example.org/gov.uk/def/grade",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "job",
-        "name" : "job",
-        "propertyUrl" : "http://example.org/gov.uk/def/job",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "profession",
-        "name" : "profession",
-        "propertyUrl" : "http://example.org/gov.uk/def/profession",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
-      }, {
-        "@type" : "Column",
-        "titles" : "postIn",
-        "name" : "postIn",
-        "propertyUrl" : "http://www.w3.org/ns/org#postIn",
-        "valueUrl" : "{+postIn}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subjekt}"
+        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/person/{+Subject}"
       } ],
-      "foreignKeys" : [ {
-        "columnReference" : "heldBy",
-        "reference" : {
-          "resource" : "test035.ttlTestOutput3.csv",
-          "columnReference" : "name"
-        }
-      }, {
-        "columnReference" : "heldBy",
-        "reference" : {
-          "resource" : "test035.ttlTestOutput3.csv",
-          "columnReference" : "name"
-        }
-      } ],
-      "primaryKey" : "Subjekt",
-      "rowTitles" : [ "Subjekt", "name", "identifier", "heldBy", "grade", "job", "profession", "postIn" ]
-    }
-  }, {
-    "@type" : "Table",
-    "url" : "test035.ttlTestOutput3.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/person/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "name",
-        "name" : "name",
-        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/person/{+Subjekt}"
-      } ],
-      "primaryKey" : "Subjekt",
-      "rowTitles" : [ "Subjekt", "name" ]
-    }
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "reportsTo", "grade", "min_pay", "max_pay", "job", "number_of_posts", "profession", "postIn", "identifier", "heldBy", "name" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ]
   } ]
 }

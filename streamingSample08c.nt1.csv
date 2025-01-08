@@ -1,0 +1,7 @@
+"Subject","predicate01","predicate02","predicate03"
+"http://example.org/resource/subject02","http://example.org/resource/object01","http://example.org/resource/object02","http://example.org/resource/object06"
+"http://example.org/resource/subject02","http://example.org/resource/object03","http://example.org/resource/object02","http://example.org/resource/object07"
+"http://example.org/resource/subject02","http://example.org/resource/object04","http://example.org/resource/object02","http://example.org/resource/object08"
+"http://example.org/resource/subject02","http://example.org/resource/object01","http://example.org/resource/object05","http://example.org/resource/object09"
+"http://example.org/resource/subject02","http://example.org/resource/object03","http://example.org/resource/object05",""
+"http://example.org/resource/subject02","http://example.org/resource/object04","http://example.org/resource/object05",""

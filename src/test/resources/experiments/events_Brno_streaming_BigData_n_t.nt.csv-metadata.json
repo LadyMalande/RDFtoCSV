@@ -1,0 +1,263 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "events_Brno_streaming_BigData_n_t.nt.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Description (cs)",
+        "name" : "description_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/description",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (cs)",
+        "name" : "title_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "Type",
+        "name" : "type",
+        "propertyUrl" : "http://purl.org/dc/terms/type",
+        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-událostí/položky/{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "openingHoursSpecification",
+        "name" : "openingHoursSpecification",
+        "propertyUrl" : "http://schema.org/openingHoursSpecification",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+openingHoursSpecification}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type_1",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "geometry",
+        "name" : "geometry",
+        "propertyUrl" : "http://www.w3.org/ns/locn#geometry",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+geometry}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-kontakt",
+        "name" : "mkontakt",
+        "propertyUrl" : "https://slovník.gov.cz/datový/události/pojem/má-kontakt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+mkontakt}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-vstupné",
+        "name" : "mvstupn",
+        "propertyUrl" : "https://slovník.gov.cz/datový/události/pojem/má-vstupné",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+mvstupn}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-přílohu",
+        "name" : "mplohu",
+        "propertyUrl" : "https://slovník.gov.cz/generický/věci/pojem/má-přílohu",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+mplohu}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Description (en)",
+        "name" : "description_en",
+        "propertyUrl" : "http://purl.org/dc/terms/description",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (en)",
+        "name" : "title_en",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "superEvent",
+        "name" : "superEvent",
+        "propertyUrl" : "http://schema.org/superEvent",
+        "valueUrl" : "{+superEvent}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-časový-interval",
+        "name" : "masovinterval",
+        "propertyUrl" : "https://slovník.gov.cz/generický/čas/pojem/má-časový-interval",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+masovinterval}",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasBeginning",
+        "name" : "hasBeginning",
+        "propertyUrl" : "http://www.w3.org/2006/time#hasBeginning",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+hasBeginning}",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasEnd",
+        "name" : "hasEnd",
+        "propertyUrl" : "http://www.w3.org/2006/time#hasEnd",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+hasEnd}",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "notation",
+        "name" : "notation",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#notation",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "legalName (cs)",
+        "name" : "legalName_cs",
+        "propertyUrl" : "http://www.w3.org/ns/regorg#legalName",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "inXSDDateTimeStamp",
+        "name" : "inXSDDateTimeStamp",
+        "propertyUrl" : "http://www.w3.org/2006/time#inXSDDateTimeStamp",
+        "datatype" : "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "coordinates",
+        "name" : "coordinates",
+        "propertyUrl" : "https://purl.org/geojson/vocab#coordinates",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+coordinates}",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasEmail",
+        "name" : "hasEmail",
+        "propertyUrl" : "http://www.w3.org/2006/vcard/ns#hasEmail",
+        "valueUrl" : "mailto:{+hasEmail}",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasURL",
+        "name" : "hasURL",
+        "propertyUrl" : "http://www.w3.org/2006/vcard/ns#hasURL",
+        "datatype" : "http://www.w3.org/2001/XMLSchema#anyURI",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "druh (en)",
+        "name" : "druh_en",
+        "propertyUrl" : "https://slovník.gov.cz/generický/kontakty/pojem/druh",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "druh (cs)",
+        "name" : "druh_cs",
+        "propertyUrl" : "https://slovník.gov.cz/generický/kontakty/pojem/druh",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "downloadUrl",
+        "name" : "downloadUrl",
+        "propertyUrl" : "http://schema.org/downloadUrl",
+        "datatype" : "http://www.w3.org/2001/XMLSchema#anyURI",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "encodingFormat",
+        "name" : "encodingFormat",
+        "propertyUrl" : "http://schema.org/encodingFormat",
+        "valueUrl" : "http://www.iana.org/assignments/media-types/image/{+encodingFormat}",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-podmínky-užití",
+        "name" : "mpodmnkyuit",
+        "propertyUrl" : "https://slovník.gov.cz/generický/digitální-objekty/pojem/má-podmínky-užití",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+mpodmnkyuit}",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-vykonavatele-majetkových-práv-autorských-u-autorského-díla",
+        "name" : "mvykonavatelemajetkovchprvautorskchuautorskhodla",
+        "propertyUrl" : "https://slovník.gov.cz/generický/digitální-objekty/pojem/má-vykonavatele-majetkových-práv-autorských-u-autorského-díla",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+mvykonavatelemajetkovchprvautorskchuautorskhodla}",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "databáze-chráněná-zvláštními-právy-pořizovatele-databáze",
+        "name" : "databzechrnnzvltnmiprvypoizovateledatabze",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/databáze-chráněná-zvláštními-právy-pořizovatele-databáze",
+        "datatype" : "boolean",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "licence-autorského-díla",
+        "name" : "licenceautorskhodla",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/licence-autorského-díla",
+        "valueUrl" : "https://creativecommons.org/licenses/by/4.0/{+licenceautorskhodla}",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "obsahuje-autorské-dílo",
+        "name" : "obsahujeautorskdlo",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-autorské-dílo",
+        "datatype" : "boolean",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "obsahuje-osobní-údaje",
+        "name" : "obsahujeosobndaje",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-osobní-údaje",
+        "datatype" : "boolean",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "obsahuje-více-autorských-děl",
+        "name" : "obsahujevceautorskchdl",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-více-autorských-děl",
+        "datatype" : "boolean",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "originální-databáze",
+        "name" : "originlndatabze",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/originální-databáze",
+        "datatype" : "boolean",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "first",
+        "name" : "first",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+        "datatype" : "double",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "rest",
+        "name" : "rest",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+        "valueUrl" : "{+rest}",
+        "aboutUrl" : "https://blank_Nodes_IRI.org/{+Subject}"
+      } ],
+      "primaryKey" : "Subject"
+    }
+  } ]
+}

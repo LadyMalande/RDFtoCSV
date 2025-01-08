@@ -1,49 +1,65 @@
 {
-  "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test149.ttlTestOutput0.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subjekt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "GID (en)",
-        "name" : "GID_en",
-        "propertyUrl" : "file://tree-ops.csv#GID",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "Inventory%20Date (en)",
-        "name" : "Inventory%20Date_en",
-        "propertyUrl" : "file://tree-ops.csv#Inventory%20Date",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "Species (en)",
-        "name" : "Species_en",
-        "propertyUrl" : "file://tree-ops.csv#Species",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "Trim%20Cycle (en)",
-        "name" : "Trim%20Cycle_en",
-        "propertyUrl" : "file://tree-ops.csv#Trim%20Cycle",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "_col.2 (en)",
-        "name" : "_col.2_en",
-        "propertyUrl" : "file://tree-ops.csv#_col.2",
-        "lang" : "en"
-      } ],
-      "rowTitles" : [ "Subjekt", "GID_en", "Inventory%20Date_en", "Species_en", "Trim%20Cycle_en", "_col.2_en" ]
+  "@context": "http://www.w3.org/ns/csvw",
+  "@type": "TableGroup",
+  "tables": [
+    {
+      "@type": "Table",
+      "url": "test149.ttlTestOutput0.csv",
+      "tableSchema": {
+        "@type": "Schema",
+        "columns": [
+          {
+            "@type": "Column",
+            "titles": "Subjekt",
+            "name": "Subjekt",
+            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
+            "suppressOutput": true
+          },
+          {
+            "@type": "Column",
+            "titles": "GID (en)",
+            "name": "GID_en",
+            "propertyUrl": "file://tree-ops.csv#GID",
+            "lang": "en"
+          },
+          {
+            "@type": "Column",
+            "titles": "Inventory%20Date (en)",
+            "name": "Inventory%20Date_en",
+            "propertyUrl": "file://tree-ops.csv#Inventory%20Date",
+            "lang": "en"
+          },
+          {
+            "@type": "Column",
+            "titles": "Species (en)",
+            "name": "Species_en",
+            "propertyUrl": "file://tree-ops.csv#Species",
+            "lang": "en"
+          },
+          {
+            "@type": "Column",
+            "titles": "Trim%20Cycle (en)",
+            "name": "Trim%20Cycle_en",
+            "propertyUrl": "file://tree-ops.csv#Trim%20Cycle",
+            "lang": "en"
+          },
+          {
+            "@type": "Column",
+            "titles": "_col.2 (en)",
+            "name": "_col.2_en",
+            "propertyUrl": "file://tree-ops.csv#_col.2",
+            "lang": "en"
+          }
+        ],
+        "rowTitles": [
+          "Subjekt",
+          "GID_en",
+          "Inventory%20Date_en",
+          "Species_en",
+          "Trim%20Cycle_en",
+          "_col.2_en"
+        ]
+      }
     }
-  } ]
+  ]
 }

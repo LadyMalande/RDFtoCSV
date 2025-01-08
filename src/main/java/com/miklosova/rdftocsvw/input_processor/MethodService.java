@@ -2,6 +2,8 @@ package com.miklosova.rdftocsvw.input_processor;
 
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.RDF4JMethod;
 import com.miklosova.rdftocsvw.input_processor.streaming_methods.StreamingMethod;
+import com.miklosova.rdftocsvw.output_processor.FileWrite;
+import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFParseException;
@@ -9,21 +11,33 @@ import org.eclipse.rdf4j.rio.RDFParseException;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MethodService {
     private MethodGateway methodGateway;
-
-    private RDF4JMethod rDF4JMethod;
+    private static final Logger logger = Logger.getLogger(FileWrite.class.getName());
 
     public RepositoryConnection processInput(String fileName, String methodChoice, Repository db) throws RDFParseException, IOException {
         methodGateway = new MethodGateway();
         System.out.println("fileName in MethodService.java processInput1: " + fileName);
-        System.out.println("read method: " + methodChoice);
+        System.out.println("read method in processInput : " + methodChoice);
         processMethodChoice(methodChoice);
         fileName = processFileOrIRI(fileName);
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, fileName);
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME,  fileName+ ".csv-metadata.json");
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH,  fileName);
         System.out.println("fileName in MethodService.java processInput: " + fileName);
         File fileToRead = new File(fileName);
-        return methodGateway.processInput(fileToRead, db);
+        System.out.println("fileName3 in MethodService.java processInput: " + fileToRead.getAbsolutePath());
+        try {
+            return methodGateway.processInput(fileToRead, db);
+        } catch(OutOfMemoryError err){
+            logger.log(Level.WARNING, "The data is too big to be processed by RDF4J method. The method has been changed to 'BigFileStreaming'. Continuing processing...");
+            methodGateway.setParsingMethod(new StreamingMethod());
+            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, "bigfilestreaming");
+            return methodGateway.processInput(fileToRead, db);
+        }
     }
 
     private String processFileOrIRI(String fileName) {
@@ -35,10 +49,8 @@ public class MethodService {
                     new BufferedReader(new InputStreamReader(url.openStream()));
 
             String[] splitURI = fileName.split("/");
-            String nameForFile = splitURI[splitURI.length - 1];
-            String extension = splitURI[splitURI.length - 1];
 
-            String newFileName = nameForFile;
+            String newFileName = splitURI[splitURI.length - 1];
 
             // Enter filename in which you want to download
             BufferedWriter writer =
@@ -70,16 +82,10 @@ public class MethodService {
 
     private void processMethodChoice(String methodChoice) {
         System.out.println("read method in processMethodChoice:" + methodChoice);
-        switch (methodChoice) {
-            case "rdf4j":
-                methodGateway.setParsingMethod(new RDF4JMethod());
-                break;
-            case "streaming":
-            case "bigFileStreaming":
-                methodGateway.setParsingMethod(new StreamingMethod());
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid reading method");
+        switch (methodChoice.toLowerCase()) {
+            case "rdf4j" -> methodGateway.setParsingMethod(new RDF4JMethod());
+            case "streaming", "bigfilestreaming" -> methodGateway.setParsingMethod(new StreamingMethod());
+            default -> throw new IllegalArgumentException("Invalid reading method");
         }
     }
 }

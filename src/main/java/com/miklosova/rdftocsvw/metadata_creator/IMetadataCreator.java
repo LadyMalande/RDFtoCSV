@@ -1,8 +1,8 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.convertor.PrefinishedOutput;
-import org.eclipse.rdf4j.repository.RepositoryConnection;
+import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 
 public interface IMetadataCreator {
-    public Metadata addMetadata(PrefinishedOutput<? extends Object> info);
+    Metadata addMetadata(PrefinishedOutput<?> info);
 }

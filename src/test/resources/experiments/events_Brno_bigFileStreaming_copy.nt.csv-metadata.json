@@ -1,0 +1,81 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "events_Brno_bigFileStreaming_copy.nt_merged.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "description (cs)",
+        "name" : "description_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/description",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "title (cs)",
+        "name" : "title_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://purl.org/dc/terms/type",
+        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/typy-událostí/položky/{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "openingHoursSpecification",
+        "name" : "openingHoursSpecification",
+        "propertyUrl" : "http://schema.org/openingHoursSpecification",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+openingHoursSpecification}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type_1",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "geometry",
+        "name" : "geometry",
+        "propertyUrl" : "http://www.w3.org/ns/locn#geometry",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+geometry}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-kontakt",
+        "name" : "mkontakt",
+        "propertyUrl" : "https://slovník.gov.cz/datový/události/pojem/má-kontakt",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+mkontakt}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-vstupné",
+        "name" : "mvstupn",
+        "propertyUrl" : "https://slovník.gov.cz/datový/události/pojem/má-vstupné",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+mvstupn}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-přílohu",
+        "name" : "mplohu",
+        "propertyUrl" : "https://slovník.gov.cz/generický/věci/pojem/má-přílohu",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+mplohu}",
+        "aboutUrl" : "{+Subject}"
+      } ]
+    }
+  } ]
+}

@@ -6,13 +6,12 @@
  *
  * <p>Modules required:</p>
  * <ul>
- *   <li>{@code rdf4j}: For .</li>
- *   <li>{@code java.xml}: For .</li>
+ *   <li>{@code rdf4j}: For utilizing methods regarding processing RDF resources.</li>
  * </ul>
  *
- * @since 1.0
  * @version 1.0
- * @see com.miklosova.rdftocsvw
  * @author Tereza Miklóšová
+ * @see com.miklosova.rdftocsvw
+ * @since 1.0
  */
 package com.miklosova.rdftocsvw.support;

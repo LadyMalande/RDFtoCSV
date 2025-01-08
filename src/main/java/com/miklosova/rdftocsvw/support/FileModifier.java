@@ -1,15 +1,24 @@
 package com.miklosova.rdftocsvw.support;
 
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+/**
+ * The file modifier. Used to correct the bad type of IRI that looks like IRI but instead begins with file:// and the RDF4J
+ * parser is not able to parse that.
+ */
 public class FileModifier {
-
+    private static final Logger logger = Logger.getLogger(FileModifier.class.getName());
+    /**
+     * Add colons to IRIs in file.
+     *
+     * @param file the file
+     */
     public static void addColonsToIRIsInFile(File file) {
-        String inputFilePath = "input.txt";
-        String outputFilePath = "output.txt";
-
         // Define the regex pattern and replacement string
         String regex = "<([^:>]+)>";
         String replacement = "<file://$1>";
@@ -22,7 +31,7 @@ public class FileModifier {
                 content.append(line).append(System.lineSeparator());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getCause() + " " + e.getLocalizedMessage());
         }
 
         // Replace all occurrences of the regex pattern
@@ -34,8 +43,7 @@ public class FileModifier {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(modifiedContent);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getCause() + " " + e.getLocalizedMessage());
         }
-
     }
 }

@@ -3,14 +3,14 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "test037.ttlTestOutput0.csv",
+    "url" : "0.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "Subjekt",
-        "name" : "Subjekt",
-        "valueUrl" : "http://example.org/tree-ops-ext#{+Subjekt}",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "http://example.org/tree-ops-ext#{+Subject}",
         "suppressOutput" : true
       }, {
         "@type" : "Column",
@@ -18,46 +18,46 @@
         "name" : "dbh",
         "propertyUrl" : "file://tree-ops-ext.csv#dbh",
         "datatype" : "integer",
-        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subjekt}"
+        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "inventory_date",
         "name" : "inventory_date",
         "propertyUrl" : "file://tree-ops-ext.csv#inventory_date",
         "datatype" : "date",
-        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subjekt}"
+        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "kml",
         "name" : "kml",
         "propertyUrl" : "file://tree-ops-ext.csv#kml",
         "datatype" : "XMLLiteral",
-        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subjekt}"
+        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "on_street",
         "name" : "on_street",
         "propertyUrl" : "file://tree-ops-ext.csv#on_street",
-        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subjekt}"
+        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "protected",
         "name" : "protected",
         "propertyUrl" : "file://tree-ops-ext.csv#protected",
         "datatype" : "boolean",
-        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subjekt}"
+        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "species",
         "name" : "species",
         "propertyUrl" : "file://tree-ops-ext.csv#species",
-        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subjekt}"
+        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "trim_cycle (en)",
         "name" : "trim_cycle_en",
         "propertyUrl" : "file://tree-ops-ext.csv#trim_cycle",
-        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subjekt}",
+        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subject}",
         "lang" : "en"
       }, {
         "@type" : "Column",
@@ -65,11 +65,11 @@
         "name" : "comments",
         "propertyUrl" : "file://tree-ops-ext.csv#comments",
         "datatype" : "normalizedString",
-        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subjekt}",
+        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subject}",
         "separator" : ","
       } ],
-      "primaryKey" : "Subjekt",
-      "rowTitles" : [ "Subjekt", "dbh", "inventory_date", "kml", "on_street", "protected", "species", "trim_cycle_en", "comments" ]
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "dbh", "inventory_date", "kml", "on_street", "protected", "species", "trim_cycle_en", "comments" ]
     }
   } ]
 }
