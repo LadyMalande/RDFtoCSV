@@ -433,7 +433,7 @@ public class Column {
                 if(this.titles == null){
                     this.titles = "Subject";
                 }
-                this.name = this.titles;
+                this.name = typeIri.getLocalName();
 
             } catch(NullPointerException | ValidationException noElement){
                 this.name = typeIri.getLocalName();

@@ -14,9 +14,10 @@ public class InputGateway {
         this.parsingMethod = parsingMethod;
     }
 
-    public RepositoryConnection processInput(RepositoryConnection conn, File fileToProcess) throws RDFParseException, IOException {
+    public RepositoryConnection processInput(RepositoryConnection conn, File fileToProcess) throws RDFParseException, IOException, OutOfMemoryError {
 
-        return parsingMethod.processInput(conn, fileToProcess);
+            return parsingMethod.processInput(conn, fileToProcess);
+
     }
 
 }

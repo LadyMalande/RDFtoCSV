@@ -65,7 +65,7 @@ public class Table {
     }
 
 
-    private void addTransformations() {
+    public void addTransformations() {
         if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES).equalsIgnoreCase("true")) {
             this.transformations = new ArrayList<>();
             this.transformations.add(new Transformation(

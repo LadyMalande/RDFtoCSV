@@ -9,10 +9,23 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.miklosova.rdftocsvw.output_processor.FileWrite.writeStringArrayAsCSVToFile;
 
+/**
+ * Main entry point for calling from command line.
+ * To get a list of available arguments, add parameter -h while running the JAR file.
+ */
 public class Main {
+    private static final Logger logger = Logger.getLogger(Main.class.getName());
+
+    /**
+     * The entry point of application.
+     *
+     * @param args The input arguments.
+     */
     public static void main(String[] args) {
         // Capture start time
         long startTime = System.currentTimeMillis();
@@ -27,61 +40,35 @@ public class Main {
             URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
             File file = new File(location.toURI().getPath());
             String jarDirectory = file.getParentFile().getName();
-            File fileToRead = new File(jarDirectory, args[0]);
-            String fileInDirectory = null;
+            String fileInDirectory;
             String fileArgFromArgs = ConfigurationManager.readArgWithDefaultOptions(args, "file");
             if (jarDirectory.equalsIgnoreCase("target")) {
-                //fileInDirectory =  args[0];
                 fileInDirectory = fileArgFromArgs;
             } else {
-                // fileInDirectory = jarDirectory + File.separator + args[0];
                 fileInDirectory = jarDirectory + File.separator + fileArgFromArgs;
             }
 
             RDFFileToRead = fileInDirectory;
             System.out.println("JAR Directory: " + jarDirectory + " fileInDirectory = " + fileInDirectory);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getReason() + " " + e.getMessage());
         }
 
         ConfigurationManager.loadSettingsFromInputToConfigFile(args);
 
-        //System.out.println(RDFFileToRead);
         RDFtoCSV rdFtoCSV;
 
         if (RDFFileToRead == null) {
             System.err.println("The file passed to the program is null. Usage: java -jar Main <filename>");
             System.exit(1);
         }
-        // Capture end time
-        long endTime1 = System.currentTimeMillis();
-
-        // Calculate total runtime
-        long subtotalTime1 = endTime1 - startTime;
-
-        // Output the total time
-        System.out.println("Program ran for " + subtotalTime1 + " milliseconds.");
-
         rdFtoCSV = new RDFtoCSV(RDFFileToRead);
-
-        // Capture end time
-        long endTime2 = System.currentTimeMillis();
-
-        // Calculate total runtime
-        long subtotalTime2 = endTime2 - startTime;
-
-        // Output the total time
-        System.out.println("Program ran for " + subtotalTime2 + " milliseconds. After rdFtoCSV = new RDFtoCSV(RDFFileToRead);");
-
 
         try {
             rdFtoCSV.convertToZip();
-
-            //System.out.println(rdFtoCSV.getCSVTableAsString());
         } catch (RDFParseException | IOException rdfParseException) {
             System.out.println(rdfParseException.getMessage());
         }
-
 
         // Capture end time
         long endTime = System.currentTimeMillis();
@@ -92,10 +79,10 @@ public class Main {
         int numberOfCreatedCSVs = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES).split(",").length;
 
         File processedFile = new File("../" + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
-        if(processedFile.getAbsolutePath().contains("\\..\\..") || processedFile.getAbsolutePath().contains("..\\C")){
+        if (processedFile.getAbsolutePath().contains("\\..\\..") || processedFile.getAbsolutePath().contains("..\\C")) {
             processedFile = new File(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
         }
-        System.out.println("INPUT_FILENAME : " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME) );
+        System.out.println("INPUT_FILENAME : " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
         String afterParsingMilis = ConfigurationManager.getVariableFromConfigFile("experiment.afterParsing");
         String afterConvertingMilis = ConfigurationManager.getVariableFromConfigFile("experiment.afterConverting");
         String afterMetadataMilis = ConfigurationManager.getVariableFromConfigFile("experiment.afterMetadata");
@@ -106,17 +93,17 @@ public class Main {
         long timeInFileWrite = Long.parseLong(afterFileWriteMilis) - Long.parseLong(afterMetadataMilis);
         long timeInZipping = endTime - Long.parseLong(afterFileWriteMilis);
 
-        System.out.println("processedFile : " + processedFile.getAbsolutePath() );
+        System.out.println("processedFile : " + processedFile.getAbsolutePath());
         if (processedFile.exists() && processedFile.isFile()) {
             long fileSizeInBytes = processedFile.length();
             double fileSizeInKB = fileSizeInBytes / 1024.0;
             double fileSizeInMB = fileSizeInKB / 1024.0;
-            System.out.println("Length of file in bytes: " + fileSizeInBytes );
-            System.out.println("Length of file in Kbytes: " + fileSizeInKB );
-            System.out.println("Length of file in Mbytes: " + fileSizeInMB );
+            System.out.println("Length of file in bytes: " + fileSizeInBytes);
+            System.out.println("Length of file in Kbytes: " + fileSizeInKB);
+            System.out.println("Length of file in Mbytes: " + fileSizeInMB);
 
 
-            writeStringArrayAsCSVToFile("experimentTimeDurations.csv",new String[] {String.valueOf(totalTime),
+            writeStringArrayAsCSVToFile("experimentTimeDurations.csv", new String[]{String.valueOf(totalTime),
                     String.valueOf(fileSizeInMB),
                     ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD),
                     ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES),
@@ -134,7 +121,7 @@ public class Main {
             System.out.printf("File size: %d bytes (%.2f KB, %.2f MB)%n", fileSizeInBytes, fileSizeInKB, fileSizeInMB);
         } else {
             System.out.println("The file does not exist or is not a regular file.");
-            writeStringArrayAsCSVToFile("experimentTimeDurations.csv",new String[] {String.valueOf(totalTime),
+            writeStringArrayAsCSVToFile("experimentTimeDurations.csv", new String[]{String.valueOf(totalTime),
                     "null",
                     ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD),
                     ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES),
@@ -146,7 +133,8 @@ public class Main {
                     String.valueOf(timeInConverting),
                     String.valueOf(timeInMetadata),
                     String.valueOf(timeInFileWrite),
-                    String.valueOf(timeInZipping)});
+                    String.valueOf(timeInZipping),
+                    "8192 MB heap space"});
         }
 
 

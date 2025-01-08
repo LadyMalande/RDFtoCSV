@@ -69,14 +69,12 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
     @Override
     public PrefinishedOutput<RowsAndKeys> convertWithQuery(RepositoryConnection rc) {
         this.rc = rc;
-        loadConfiguration();
         changeBNodesForIri(rc);
         deleteBlankNodes(rc);
         rows = new ArrayList<>();
         PrefinishedOutput<RowAndKey> queryResult = new PrefinishedOutput<>((new RowAndKey.RowAndKeyFactory()).factory());
         String query = getCSVTableQueryForModel(true);
         try {
-            //System.out.println("Query at top level in convertWithQuery\n" + query);
             queryResult = queryRDFModel(query, true);
 
         } catch (IndexOutOfBoundsException ex) {

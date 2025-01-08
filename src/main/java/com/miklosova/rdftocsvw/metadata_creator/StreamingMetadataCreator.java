@@ -35,6 +35,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
     int fileNumber = 0;
     int lineCounter = 0;
 
+    static boolean blankNodeRegisteredToConfig;
     private static Map<String, Value> mapOfBlanks = new HashMap<>();
     private static int blankNodeCounter = 0;
 
@@ -105,6 +106,10 @@ public class StreamingMetadataCreator extends MetadataCreator {
                 object = mapOfBlanks.get(triple[2]);
                 //System.out.println("Object is BNode was already in map " + object);
             } else {
+                if(!blankNodeRegisteredToConfig){
+                    blankNodeRegisteredToConfig = true;
+                    ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, String.valueOf(true));
+                }
                 IRI v = vf.createIRI("https://blank_Nodes_IRI.org/" + blankNodeCounter);
 
                 mapOfBlanks.put(triple[2], v);
@@ -121,6 +126,10 @@ public class StreamingMetadataCreator extends MetadataCreator {
                 subject = (IRI) mapOfBlanks.get(triple[0]);
                 //System.out.println("Subject is BNode was already in map " + subject);
             } else {
+                if(!blankNodeRegisteredToConfig){
+                    ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, String.valueOf(true));
+                    blankNodeRegisteredToConfig = true;
+                }
                 IRI v = vf.createIRI("https://blank_Nodes_IRI.org/" + blankNodeCounter);
                 blankNodeCounter++;
                 mapOfBlanks.put(triple[0], v);
@@ -215,7 +224,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
         newColumn.setPropertyUrl(triple.predicate.stringValue());
         if (triple.object.isIRI()) {
             newColumn.setValueUrl(((IRI) triple.object).getNamespace() + "{+" + newColumn.getName() + "}");
-            System.out.println("valueUrl= "+ newColumn.getValueUrl());
+            //System.out.println("valueUrl= "+ newColumn.getValueUrl());
         } else if (triple.object.isBNode()) {
             newColumn.setValueUrl("{+" + newColumn.getName() + "}");
         }

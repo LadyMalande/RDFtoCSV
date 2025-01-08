@@ -80,7 +80,6 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
         this.rc = rc;
         allKeys = new ArrayList<>();
         allRows = new ArrayList<>();
-        loadConfiguration();
         changeBNodesForIri(rc);
         deleteBlankNodes(rc);
         PrefinishedOutput<RowsAndKeys> queryResult;
@@ -199,11 +198,11 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
             }
 
             for(int i = 0; i < allKeys.size(); i++){
-                System.out.println("allKeys.get("+i+") ");
-                allKeys.get(i).forEach(key -> System.out.print((key == null) ? "null" : key.stringValue() + " "));
-                System.out.println();
-                System.out.println("allRows.get("+i+") columns");
-                allRows.get(i).get(0).columns.forEach((key, value) -> {System.out.print(key.stringValue() + " ");});
+                //System.out.println("allKeys.get("+i+") ");
+               // allKeys.get(i).forEach(key -> System.out.print((key == null) ? "null" : key.stringValue() + " "));
+                //System.out.println();
+                //System.out.println("allRows.get("+i+") columns");
+                //allRows.get(i).get(0).columns.forEach((key, value) -> {System.out.print(key.stringValue() + " ");});
             }
 
             for (int i = 0; i < allRows.size(); i++) {

@@ -16,51 +16,71 @@ import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
+/**
+ * The Converter helper contains multiple shared methods.
+ */
 public class ConverterHelper {
+    private static final Logger logger = Logger.getLogger(ConverterHelper.class.getName());
+    /**
+     * The Map of types and their number of occurrences.
+     */
     public Map<Value, Integer> mapOfTypesAndTheirNumbers;
 
-    String delimiter;
-    String CSVFileTOWriteTo;
-
+    /**
+     * Root has this type boolean.
+     *
+     * @param rootsThatHaveSomeType the roots that have some type
+     * @param root                  the root to ask about type
+     * @return True if the root is among the set of Values.
+     */
     public static boolean rootHasThisType(Set<Value> rootsThatHaveSomeType, Value root) {
         return rootsThatHaveSomeType.contains(root);
     }
 
 
+    /**
+     * Delete blank nodes from given Repository Connection.
+     *
+     * @param rc the Repository Connection on which to make the SPARQL query
+     */
     public void deleteBlankNodes(RepositoryConnection rc) {
         String del = "DELETE {?s ?p ?o .} WHERE { ?s ?p ?o . FILTER (isBlank(?s) || isBlank(?o))}";
         Update deleteQuery = rc.prepareUpdate(del);
         deleteQuery.execute();
     }
 
-    public void loadConfiguration() {
-
-        delimiter = ConfigurationManager.getVariableFromConfigFile("input.delimiter");
-
-        CSVFileTOWriteTo = ConfigurationManager.getVariableFromConfigFile("input.outputFileName");
-    }
-
+    /**
+     * Roots that have this type set.
+     *
+     * @param conn         RepositoryConnection to do SPARQL query on
+     * @param dominantType the dominant type to get the Subjects for
+     * @param askForTypes  the ask for types - if true then asking for object on rdf:type, if false asking for general
+     *                     predicate - dominantType
+     * @return the set of Values that are Subjects to the dominantType object.
+     */
     public static Set<Value> rootsThatHaveThisType(RepositoryConnection conn, Value dominantType, boolean askForTypes) {
-        //System.out.println("beginning of rootsThatHaveThisType  ");
         Set<Value> compliantRoots = new HashSet<>();
-        String queryForPredicates = getSelectQuery(askForTypes, null, null, dominantType.toString());
-        //System.out.println("rootsThatHaveThisType got SelectQuery " + queryForPredicates);
+        String queryForPredicates = getSelectQuery(askForTypes, dominantType.toString());
         TupleQuery query = conn.prepareTupleQuery(queryForPredicates);
-        //System.out.println("rootsThatHaveThisType after preparing TupleQuery ");
         try (TupleQueryResult result = query.evaluate()) {
             // we just iterate over all solutions in the result...
             for (BindingSet solution : result) {
                 compliantRoots.add(solution.getValue("s"));
-                //System.out.println("compliantRoots.add " + solution.getValue("s"));
-
             }
         }
         return compliantRoots;
     }
 
+    /**
+     * Change Blank Nodes for IRI in the whole RepositoryConnection and write information about it to config file.
+     *
+     * @param rc RepositoryConnection in which the blank nodes should be changed for IRIs
+     */
     public void changeBNodesForIri(RepositoryConnection rc) {
         Iterator<Statement> statements = rc.getStatements(null, null, null, true).iterator();
         Map<Value, Value> mapOfBlanks = new HashMap<>();
@@ -104,33 +124,43 @@ public class ConverterHelper {
             if (statement != null) {
                 ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "true");
                 rc.add(statement);
-                System.out.println("Replacing blank nodes with " + statement.getSubject().stringValue() + " " + statement.getPredicate().stringValue() + " " + statement.getObject().stringValue());
-
             }
             counter = counter + 1;
-            //System.out.println("Replacing blank nodes " + counter);
         }
     }
 
-    protected static String getSelectQuery(boolean askForTypes, String subject, String predicate, String object) {
+    /**
+     * Gets select query done in SPARQL. Asking for SUBJECT and OBJECT from the triples.
+     *
+     * @param askForTypes If true then asking for triples with rdf:type as their predicate.
+     * @param object      the object of the triple
+     * @return the select query
+     */
+    protected static String getSelectQuery(boolean askForTypes, String object) {
         Prefix skos = SparqlBuilder.prefix(SKOS.NS);
         // Create the query to get all data in CSV format
         SelectQuery selectQuery = Queries.SELECT();
 
-        Variable o = SparqlBuilder.var("o"), s = SparqlBuilder.var("s"),
-                s_in = SparqlBuilder.var("s_in"), p_in = SparqlBuilder.var("p_in"),
-                p = SparqlBuilder.var("p");
-        ;
+        Variable o = SparqlBuilder.var("o"), s = SparqlBuilder.var("s");
+
         Iri objectIri = iri(object);
         if (askForTypes) {
-            selectQuery.prefix(skos).select(s,o).where(s.isA(objectIri));
+            selectQuery.prefix(skos).select(s, o).where(s.isA(objectIri));
         } else {
-            selectQuery.prefix(skos).select(s,o).where(s.has(objectIri, o ));
+            selectQuery.prefix(skos).select(s, o).where(s.has(objectIri, o));
         }
 
-        //System.out.println("askfortypes " + askForTypes + " getSelectQuery query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
+
+    /**
+     * Entries sorted by values list.
+     *
+     * @param <K> the type parameter
+     * @param <V> the type parameter
+     * @param map the map
+     * @return the list
+     */
     static <K, V extends Comparable<? super V>>
     List<Map.Entry<K, V>> entriesSortedByValues(Map<K, V> map) {
 
@@ -142,10 +172,10 @@ public class ConverterHelper {
     }
 
     /**
-     * Gets query for substitute roots.
+     * Gets query for substitute roots (used when roots are not found with the main method asking for rdf:type).
      *
-     * @param askForTypes the ask for types
-     * @return the query for substitute roots
+     * @param askForTypes If true then choosing triples with rdf:type predicate
+     * @return the SPARQL query for substitute roots
      */
     public String getQueryForSubstituteRoots(boolean askForTypes) {
         // Create the query to get all data in CSV format
@@ -160,10 +190,15 @@ public class ConverterHelper {
             selectQuery.select(s, o).where(s.has(p, o));
         }
 
-        System.out.println("getQueryForSubstituteRoots query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
+    /**
+     * Gets csv table query for model. Gets the ROOTS of the graph meaning they are never acting as objects.
+     *
+     * @param askForTypes If true then choosing triples with rdf:type predicate
+     * @return the SPARQL query for roots of the table
+     **/
     public String getCSVTableQueryForModel(boolean askForTypes) {
         // Create the query to get all data in CSV format
         SelectQuery selectQuery = Queries.SELECT();
@@ -178,21 +213,30 @@ public class ConverterHelper {
             selectQuery.select(s, o).where(s.has(p, o).filterNotExists(s_in.has(p_in, s)));
         }
 
-        System.out.println("getCSVTableQueryForModel query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
+    /**
+     * Gets dominant type among the remaining triples.
+     *
+     * @return the dominant type of triples
+     */
     public Value getDominantType() {
         Value dominantType;
 
         List<Map.Entry<Value, Integer>> sortedEntries = entriesSortedByValues(mapOfTypesAndTheirNumbers);
         dominantType = sortedEntries.get(0).getKey();
 
-        System.out.println("Chosen dominant type is " + dominantType);
-
         return dominantType;
     }
 
+    /**
+     * Gets SPARQL query that returns available objects for given Value as subject.
+     *
+     * @param root        the subject of the triple we are asking about
+     * @param askForTypes If true then choosing triples with rdf:type predicate
+     * @return the query for objects for given subject
+     */
     public String getQueryForTypes(Value root, boolean askForTypes) {
         Prefix skos = SparqlBuilder.prefix(SKOS.NS);
         SelectQuery selectQuery = Queries.SELECT();
@@ -210,6 +254,14 @@ public class ConverterHelper {
         }
         return query;
     }
+
+    /**
+     * Count dominant types and update the map of occurrences.
+     *
+     * @param conn        the RepositoryConnection to count the types in
+     * @param roots       the subjects of the triples in question
+     * @param askForTypes If true then choosing triples with rdf:type predicate
+     */
     public void countDominantTypes(RepositoryConnection conn, Set<Value> roots, boolean askForTypes) {
         mapOfTypesAndTheirNumbers = new HashMap<>();
 
@@ -223,35 +275,37 @@ public class ConverterHelper {
                     Value key;
                     if (askForTypes) {
                         key = solution.getValue("o");
-                        //System.out.println("key askForTypes = " + key.stringValue());
                     } else {
                         key = solution.getValue("p");
-                        //System.out.println("key !askForTypes = " + key.stringValue());
                     }
-
 
                     if (mapOfTypesAndTheirNumbers.containsKey(key)) {
                         Integer oldValue = mapOfTypesAndTheirNumbers.get(key);
                         Integer newValue = oldValue + 1;
                         mapOfTypesAndTheirNumbers.put(key, newValue);
-                        //System.out.println("Adding key for sorting predicates: " + key + " number="+newValue);
                     } else {
                         mapOfTypesAndTheirNumbers.put(key, 1);
-                        //System.out.println("Adding key for sorting predicates: " + key + " number=1");
                     }
                 }
 
             } catch (QueryEvaluationException ex) {
                 System.out.println("There has been a problem with query evaluation ");
-                ex.printStackTrace();
+                logger.log(Level.SEVERE, ex.getCause() + " " + ex.getLocalizedMessage());
             }
         }
     }
-        public static String changeIRItoBNode(String query) {
-            String newQuery = query.replace("<_:", "_:");
-            newQuery = newQuery.replace("> ?p", " ?p");
-            newQuery = newQuery.replace("> a", " a");
-            return newQuery;
-        }
+
+    /**
+     * Change IRI into BlankNode string.
+     *
+     * @param query the query
+     * @return the string
+     */
+    public static String changeIRItoBNode(String query) {
+        String newQuery = query.replace("<_:", "_:");
+        newQuery = newQuery.replace("> ?p", " ?p");
+        newQuery = newQuery.replace("> a", " a");
+        return newQuery;
+    }
 
 }

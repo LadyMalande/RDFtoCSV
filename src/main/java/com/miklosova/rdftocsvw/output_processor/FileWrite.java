@@ -32,46 +32,6 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  */
 public class FileWrite {
     private static final Logger logger = Logger.getLogger(FileWrite.class.getName());
-    /*
-    public static String saveCSVFileFromRows(String fileName, ArrayList<Value> keys, ArrayList<Row> rows, String delimiter){
-        StringBuilder forOutput = new StringBuilder();
-        File f = FileWrite.makeFileByNameAndExtension( fileName, "csv");
-        //System.out.println("File f = " + f);
-        StringBuilder sb1 = new StringBuilder();
-        sb1.append("id" + delimiter);
-        keys.forEach(key -> sb1.append(key + delimiter));
-        sb1.deleteCharAt(sb1.length() - 1);
-        sb1.append("\n");
-        sb1.append("\n");
-        FileWrite.writeToTheFile(f, sb1.toString());
-        for(Row row : rows){
-            ////System.out.println();
-            StringBuilder sb = new StringBuilder();
-            sb.append(row.id).append(delimiter);
-            for(Value key : keys){
-                ////System.out.println("Number of keys: " + keys.size());
-                sb.append(row.columns.get(key)).append(delimiter);
-                //System.out.println("in entry set " + row.columns.get(key) + ".");
-
-            }
-
-            sb.deleteCharAt(sb.length() - 1);
-            sb.append("\n");
-            //System.out.println("row saveCSFFileFromRows 4 parameters: " + sb.toString() + ".");
-            //FileWrite.writeTotheFile(f, sb.toString());
-            forOutput.append(sb);
-            FileWrite.writeToTheFile(f, sb.toString());
-        }
-        //System.out.println("Written rows from rows to the file " + forOutput.toString() + ".");
-        //FileWrite.writeToTheFile(f, forOutput.toString());
-        //System.out.println("Written CSV from rows to the file " + f + ".");
-        return forOutput.toString();
-        //FileWrite.writeTotheFile(f, resultCSV);
-
-    }
-
-     */
-
     /**
      * Write given data structures of Keys and Rows into String.
      *
@@ -436,11 +396,11 @@ public class FileWrite {
 
         List<Value> values;
         if (row.columns.get(iri2) == null) {
-            //System.out.println("There is no row with this multilevelPropertyUrl=" + iri2.stringValue() + " row.columns.keys: " + row.columns.keySet());
+            System.out.println("There is no row with this multilevelPropertyUrl=" + iri2.stringValue() + " row.columns.keys: " + row.columns.keySet());
             values = null;
         } else {
             values = row.columns.get(iri2).values;
-            //System.out.println("values are not empty this multilevelPropertyUrl=" + iri2.stringValue() + " row.columns.keys: " + row.columns.keySet());
+            System.out.println("values are not empty this multilevelPropertyUrl=" + iri2.stringValue() + " row.columns.keys: " + row.columns.keySet());
         }
         if (column.getLang() == null) {
 
@@ -508,14 +468,13 @@ public class FileWrite {
             ////System.out.println("column.getPropertyUrl() = " + column.getPropertyUrl());
             ////System.out.println(values);
 
-            List<Value> languageVariations = values;
-            if (languageVariations == null) {
+            if (values == null) {
                 System.out.println("languageVariations == null ~~~~~ ");
                 return "";
             }
 
 
-            List<Value> valuesByLang = languageVariations.stream().filter(val -> ((Literal) val).getLanguage().get().equals(column.getLang())).collect(Collectors.toList());
+            List<Value> valuesByLang = values.stream().filter(val -> (((Literal) val).getLanguage().isPresent()) ? ((Literal) val).getLanguage().get().equals(column.getLang()) : false).collect(Collectors.toList());
             // There is only one value of this language
             if (!valuesByLang.isEmpty()) {
                 if (valuesByLang.size() == 1) {
@@ -539,6 +498,9 @@ public class FileWrite {
                     //System.out.println(multilevelPropertyUrl + " " + column.getLang() + " column.separator=" + column.getSeparator());
                 }
             } else {
+                for(Value val: values){
+                    System.out.println("Value without language tag " + val.stringValue() + " in a column with language tah: " + column.getPropertyUrl() + " " + column.getLang());
+                }
                 // This should not happen
                 return "";
             }

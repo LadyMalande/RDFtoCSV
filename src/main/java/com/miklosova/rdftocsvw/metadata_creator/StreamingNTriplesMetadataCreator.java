@@ -114,6 +114,11 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         newColumn.setAboutUrl("{+Subject}");
         newColumn.setTitles(newColumn.createTitles(triple.predicate, triple.object));
         currentCSVName = getCSVNameIfSubjectOrPredicateKnown(triple.getSubject(), triple.getPredicate());
+        if(blankNodeRegisteredToConfig){
+            if(metadata.getTables().stream().filter(table -> table.getUrl().equalsIgnoreCase(currentCSVName)).findAny().isPresent()){
+                metadata.getTables().stream().filter(table -> table.getUrl().equalsIgnoreCase(currentCSVName)).findAny().get().addTransformations();
+            }
+        }
         // Find the tableSchema that describes either Subject or Predicate in the triple
         tableSchema = getTableSchemaOfMatchingMetadata(triple);
         // There is no matching column found in any existing metadata -> Add the column

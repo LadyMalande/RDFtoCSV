@@ -1,5 +1,9 @@
 package com.miklosova.rdftocsvw.support;
 
+/**
+ * Class that contains all keywords that help recognize a Standard Mode made RDF. The Standard mode is tied to conversion
+ * from CSV to RDF.
+ */
 public class StandardModeCsvwIris {
     private static final String csvwNamespace = "http://www.w3.org/ns/csvw#";
     public static String CSVW_TableGroup = csvwNamespace + "TableGroup";

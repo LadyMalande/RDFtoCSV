@@ -6,8 +6,7 @@
  *
  * <p>Modules required:</p>
  * <ul>
- *   <li>{@code rdf4j}: For .</li>
- *   <li>{@code java.xml}: For .</li>
+ *   <li>{@code rdf4j}: For utilizing methods regarding processing RDF resources.</li>
  * </ul>
  *
  * @version 1.0

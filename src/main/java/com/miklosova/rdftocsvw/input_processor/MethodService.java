@@ -2,6 +2,7 @@ package com.miklosova.rdftocsvw.input_processor;
 
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.RDF4JMethod;
 import com.miklosova.rdftocsvw.input_processor.streaming_methods.StreamingMethod;
+import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -10,9 +11,12 @@ import org.eclipse.rdf4j.rio.RDFParseException;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MethodService {
     private MethodGateway methodGateway;
+    private static final Logger logger = Logger.getLogger(FileWrite.class.getName());
 
     public RepositoryConnection processInput(String fileName, String methodChoice, Repository db) throws RDFParseException, IOException {
         methodGateway = new MethodGateway();
@@ -26,7 +30,14 @@ public class MethodService {
         System.out.println("fileName in MethodService.java processInput: " + fileName);
         File fileToRead = new File(fileName);
         System.out.println("fileName3 in MethodService.java processInput: " + fileToRead.getAbsolutePath());
-        return methodGateway.processInput(fileToRead, db);
+        try {
+            return methodGateway.processInput(fileToRead, db);
+        } catch(OutOfMemoryError err){
+            logger.log(Level.WARNING, "The data is too big to be processed by RDF4J method. The method has been changed to 'BigFileStreaming'. Continuing processing...");
+            methodGateway.setParsingMethod(new StreamingMethod());
+            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, "bigfilestreaming");
+            return methodGateway.processInput(fileToRead, db);
+        }
     }
 
     private String processFileOrIRI(String fileName) {
