@@ -483,7 +483,7 @@ public class ConfigurationManager {
         prop.setProperty(ConfigurationManager.INTERMEDIATE_FILE_NAMES, "");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
         prop.setProperty(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
-        prop.setProperty(ConfigurationManager.OUTPUT_ZIPFILE_NAME, "../" + baseFileName + "_CSVW.zip");
+        prop.setProperty(ConfigurationManager.OUTPUT_ZIPFILE_NAME,  baseFileName + "_CSVW.zip");
         System.out.println("OUTPUT_ZIPFILE_NAME " + "../" + baseFileName + "_CSVW.zip" + " baseFileName = " + baseFileName);
         System.out.println("property set prop.setProperty(ConfigurationManager.READ_METHOD," + parsingMethod);
         prop.setProperty(ConfigurationManager.READ_METHOD, parsingMethod);

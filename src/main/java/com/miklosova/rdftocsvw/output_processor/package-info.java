@@ -1,13 +1,8 @@
 /**
- * The `com.miklosova.rdftocsvw.output_processor` package contains the application logic
- * for other necessities tied to converting RDF to CSV on the Web format.
+ * The `com.miklosova.rdftocsvw.output_processor` package contains classes
+ * to output CSV files and metadata in JSON to complete RDF to CSV on the Web conversion.
  *
  *
- * <p>Modules required:</p>
- * <ul>
- *   <li>{@code rdf4j}: For .</li>
- *   <li>{@code java.xml}: For .</li>
- * </ul>
  *
  * @version 1.0
  * @author Tereza Miklóšová

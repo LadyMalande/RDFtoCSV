@@ -170,6 +170,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
 
     public void repairMetadataAndMakeItJsonld(Metadata metadata){
         metadata = makeMetadataNameUnique(metadata);
+        metadata.getTables().forEach(table -> table.getTableSchema().addRowTitles());
         if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES).equalsIgnoreCase(ConfigurationManager.ONE_TABLE)) {
 
             metadata = consolidateMetadataAndCSVs(metadata);
@@ -255,7 +256,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
             if (!col.getTitles().equalsIgnoreCase(newColumn.getTitles())) {
                 continue;
             }
-            if (!col.getPropertyUrl().equalsIgnoreCase(newColumn.getPropertyUrl())) {
+            if (col.getPropertyUrl() != null && newColumn.getPropertyUrl() != null && !col.getPropertyUrl().equalsIgnoreCase(newColumn.getPropertyUrl())) {
                 continue;
             }
             if (col.getLang() != null && newColumn.getLang() != null && !col.getLang().equalsIgnoreCase(newColumn.getLang())) {
@@ -264,7 +265,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
             if (col.getDatatype() != null && newColumn.getDatatype() != null && !col.getDatatype().equalsIgnoreCase(newColumn.getDatatype())) {
                 continue;
             }
-            if (!col.getAboutUrl().equalsIgnoreCase(newColumn.getAboutUrl())
+            if (col.getAboutUrl() != null && newColumn.getAboutUrl() != null && !col.getAboutUrl().equalsIgnoreCase(newColumn.getAboutUrl())
                     && (col.getAboutUrl().indexOf(triple.getSubject().getNamespace()) != 0 || col.getAboutUrl().length() != newColumn.getAboutUrl().length())) {
                 // Adjust the metadata so that they are general as the namespaces are not matching
 

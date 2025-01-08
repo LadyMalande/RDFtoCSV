@@ -114,7 +114,7 @@ public class TableSchema {
         // This only works for the tables that have different types of entities
         this.columns = createColumns(this.rows);
         //columns.forEach(column -> System.out.println("column " + column.getPropertyUrl()));
-        this.rowTitles = new ArrayList<>();
+
         if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.METADATA_ROWNUMS).equalsIgnoreCase("true")) {
             addRowNumsColumn();
         }
@@ -132,24 +132,13 @@ public class TableSchema {
         this.columns.add(rownumsColumn);
     }
 
-    private void addRowTitles() {
+    public void addRowTitles() {
+        this.rowTitles = new ArrayList<>();
         if (ConnectionChecker.checkConnection()) {
 
             this.columns.forEach(column -> {
 
                 if ((column.getVirtual() == null) || (column.getVirtual() != null && !column.getVirtual())) {
-                    /*
-                    Dereferencer dereferencer = new Dereferencer(column.getPropertyUrl());
-                    try {
-                        this.rowTitles.add(dereferencer.getTitle());
-                        //System.out.println("dereferencer.getTitle(): " + dereferencer.getTitle());
-
-                    } catch(NullPointerException | ValidationException noElement){
-                        //System.out.println("Row name in create rowTitles: " + column.getName() + ", column title: " + column.getTitles());
-                        this.rowTitles.add(column.getName());
-                    }
-
-                     */
                     this.rowTitles.add(column.getName());
                 }
             });
@@ -157,7 +146,6 @@ public class TableSchema {
         } else {
             this.columns.forEach(column -> {
                 if (column.getVirtual() == null || (column.getVirtual() != null && !column.getVirtual())) {
-                    //System.out.println("column name: " + column.getName() + " column title: " + column.getTitles());
                     this.rowTitles.add(column.getName());
                 }
             });

@@ -8,4 +8,4 @@
  * @see com.miklosova.rdftocsvw
  * @since 1.0
  */
-package com.miklosova.rdftocsvw.converter;
+package com.miklosova.rdftocsvw.input_processor.streaming_methods;

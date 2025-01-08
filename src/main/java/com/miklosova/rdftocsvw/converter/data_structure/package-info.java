@@ -1,0 +1,11 @@
+/**
+ * The `com.miklosova.rdftocsvw.convertor.data_structure` package contains classes
+ * representing a custom enhanced CSV structure.
+ *
+ *
+ * @version 1.0
+ * @author Tereza Miklóšová
+ * @see com.miklosova.rdftocsvw
+ * @since 1.0
+ */
+package com.miklosova.rdftocsvw.converter.data_structure;

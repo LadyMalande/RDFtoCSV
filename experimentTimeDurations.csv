@@ -234,3 +234,7 @@ duration (ms);size of RDF file (MB);conversion method;tables;first normal form;n
 2081372,1211.7833776474,splitQuery,more,true,3,soilc_2021.nt,20250108_032507,37206,1418811,48354,564476,12525
 2016355,1211.7833776474,splitQuery,more,true,3,soilc_2021.nt,20250108_052153,34663,1346518,52192,570575,12407
 2589860,19.256916999816895,bigfilestreaming,more,true,1,posudky-s-n1-t1.nt,20250108_070720,145,3,1233241,1356410,61
+25441,0.0077304840087890625,splitQuery,more,true,2,dny-v-týdnu.nq,20250108_112410,294,314,4775,20046,12
+293,null,streaming,more,true,1,pohlaví-r-n0-t00.nt,20250108_151125,52,2,217,2,20,8192 MB heap space
+380,null,bigfilestreaming,more,true,1,pohlaví-r-n0-t00.nt,20250108_153430,83,1,277,9,10,8192 MB heap space
+959578,0.40749454498291016,bigfilestreaming,more,true,1,dissesto_2k_triples.nt,20250108_175913,78,2,950520,8955,23

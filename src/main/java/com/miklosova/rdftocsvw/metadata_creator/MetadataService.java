@@ -46,7 +46,7 @@ public class MetadataService {
                 }
                 break;
             case "streaming":
-                if (!extension.equalsIgnoreCase("nt")) {
+                if (!extension.equalsIgnoreCase("nt") && ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.STREAMING_CONTINUOUS).equalsIgnoreCase("false")) {
                     throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);
                 } else {
                     metadataGateway.setMetadataCreator(new StreamingNTriplesMetadataCreator());
