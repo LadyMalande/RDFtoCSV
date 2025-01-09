@@ -7,7 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * The type Connection pool.
+ * The Connection pool for multiple threads handling the querying.
  */
 public class ConnectionPool {
     private final BlockingQueue<RepositoryConnection> connectionPool;
@@ -22,7 +22,6 @@ public class ConnectionPool {
     public ConnectionPool(Repository repository, int poolSize) {
         this.repository = repository;
         this.connectionPool = new ArrayBlockingQueue<>(poolSize);
-        System.out.println("poolSize " + poolSize);
         initializeConnections(poolSize);
     }
 
@@ -45,7 +44,7 @@ public class ConnectionPool {
     /**
      * Release connection.
      *
-     * @param conn the conn
+     * @param conn the connection for querying
      */
     public void releaseConnection(RepositoryConnection conn) {
         connectionPool.offer(conn);

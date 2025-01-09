@@ -15,7 +15,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class BigFileConversionTest extends BaseTest {
-    private String fileName = "soilc_2021.nt0.csv";
+    private String fileName = "/src/test/resources/CSVExactMatch/csvFileToTestSameCSV.csv";
     private String filePath;
     private static final String RESOURCES_PATH = "./";
     @Test
@@ -27,7 +27,6 @@ public class BigFileConversionTest extends BaseTest {
             args = new String[]{"-f", filePath, "-p", "rdf4j"};
             ConfigurationManager.loadSettingsFromInputToConfigFile(args);
             String stringRead = String.join("\n", Files.readLines(new File(filePath), Charsets.UTF_8) );
-            System.out.println(stringRead.substring(0,1000));
             assertNotNull(stringRead);
         } catch (IOException e) {
             throw new RuntimeException(e);

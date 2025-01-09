@@ -63,17 +63,7 @@ public class StreamingNTriplesCSVTest extends BaseTest {
     void createCSV() {
         System.out.println("LoadConfig");
         Main.main(new String[]{"-f", filePath, "-t", "-p", "streaming"});
-        /*
-        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{filePath, "streaming", "streaming", "true"});
 
-        RDFtoCSV rdFtoCSV = new RDFtoCSV(filePath);
-        try {
-            rdFtoCSV.getCSVTableAsString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-         */
     }
 
     @Test

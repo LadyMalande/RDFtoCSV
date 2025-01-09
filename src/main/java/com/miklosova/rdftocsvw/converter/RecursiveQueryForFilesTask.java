@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.RecursiveTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.miklosova.rdftocsvw.converter.SplitFilesQueryConverter.queryForSubjects;
 import static com.miklosova.rdftocsvw.support.ConverterHelper.rootHasThisType;
@@ -16,13 +18,15 @@ import static com.miklosova.rdftocsvw.support.ConverterHelper.rootHasThisType;
  * The type Recursive query for files task.
  */
 public class RecursiveQueryForFilesTask extends RecursiveTask<List<Row>> {
+    private static final Logger logger = Logger.getLogger(RecursiveQueryForFilesTask.class.getName());
+
     private final ConnectionPool connectionPool;
     private final Value dominantType;
     private final boolean askForTypes;
     private final Set<Value> roots;
     private final int start;
     private final int end;
-    private Set<Value> rootsThatHaveThisType;
+    private final Set<Value> rootsThatHaveThisType;
 
     /**
      * Instantiates a new Recursive query for files task.
@@ -56,16 +60,10 @@ public class RecursiveQueryForFilesTask extends RecursiveTask<List<Row>> {
                 return processBatch(rootsList.subList(start, end), rootsThatHaveThisType);
             } else {
                 int mid = (start + end) / 2;
-                //System.out.println("Dividing roots to half: " + start + "-" + end);
                 RecursiveQueryForFilesTask leftTask = new RecursiveQueryForFilesTask(connectionPool, dominantType, askForTypes, roots, start, mid, rootsThatHaveThisType);
                 RecursiveQueryForFilesTask rightTask = new RecursiveQueryForFilesTask(connectionPool, dominantType, askForTypes, roots, mid, end, rootsThatHaveThisType);
                 invokeAll(leftTask, rightTask);
-                if (end % 10 == 0) {
-                    //System.out.println("List<Row> rightResult = rightTask.join(); " + mid + "-" + end);
-                    //System.out.println("List<Row> leftResult = leftTask.join(); " + start + "-" + mid);
-                }
                 List<Row> leftResult = leftTask.join();
-                //System.out.println("List<Row> rightResult = rightTask.join(); " + mid + "-" + end);
                 List<Row> rightResult = rightTask.join();
                 leftResult.addAll(rightResult);
                 return leftResult;
@@ -84,10 +82,8 @@ public class RecursiveQueryForFilesTask extends RecursiveTask<List<Row>> {
                         rows.add(newRow);
                         connectionPool.releaseConnection(conn);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        logger.log(Level.SEVERE, "There was an error with Threading when converting RDF data to multiple tables in RDF4J conversion method.");
                     }
-                } else {
-                    //System.out.println("Root does not have this type");
                 }
             }
             return rows;

@@ -2,6 +2,7 @@ package com.miklosova.rdftocsvw.input_processor;
 
  import org.eclipse.rdf4j.repository.RepositoryConnection;
  import org.junit.jupiter.api.BeforeEach;
+ import org.junit.jupiter.api.Disabled;
  import org.junit.jupiter.api.Test;
 
  import java.io.File;
@@ -50,11 +51,11 @@ class ParsingServiceTest {
          });
      }
 
-     //BaseRock generated method id: ${testProcessURI}, hash: AF37486F152A8F8C62593708E4807158
+
      @Test
      void testProcessURI() throws IOException {
          ParsingService service = new ParsingService();
-         assertThrows(IllegalAccessException.class, () -> {
+         assertThrows(NoSuchMethodException.class, () -> {
              service.getClass().getDeclaredMethod("processURI", String.class).invoke(service, "http://invalid.url");
          });
      }

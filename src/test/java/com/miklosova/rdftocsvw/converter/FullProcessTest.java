@@ -36,7 +36,6 @@ public class FullProcessTest {
     public static Collection<Object[]> configs() {
         return Arrays.asList(new Object[][]{
                 {"SplitQuerySmallDataset", "RDFtoCSV/src/test/resources/StreamingNTriples/streamingSample02.nt", "./src/test/resources/csv-metadata.json", "./src/test/resources/splitQueryTest", "./src/test/resources/StreamingNTriples/streamingSample02.nt", "./src/test/resources/splitQueryTestRDFOutput.ttl", "rdf4j"},
-                //{ "", "", "", "", "", ""},
         });
     }
 
