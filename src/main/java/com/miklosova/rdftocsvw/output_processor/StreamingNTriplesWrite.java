@@ -58,14 +58,7 @@ public class StreamingNTriplesWrite {
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileToWriteTo.toString());
         this.metadata = metadata;
         String fileNameFromConfig = ConfigurationManager.getVariableFromConfigFile("input.inputFileName");
-        URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
-        File file;
-        try {
-            file = new File(location.toURI().getPath());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-        String jarDirectory = file.getParentFile().getName();
+
         this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) :  fileNameFromConfig;
         processedSubjects = new HashSet<>();
     }
