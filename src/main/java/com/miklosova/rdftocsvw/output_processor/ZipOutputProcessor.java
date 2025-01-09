@@ -12,23 +12,31 @@ import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+/**
+ * The class that zips the created CSV and CSVW metadata into one .ZIP file.
+ */
 public class ZipOutputProcessor implements IOutputProcessor {
-    private static final Logger logger = Logger.getLogger(FileWrite.class.getName());
+    private static final Logger logger = Logger.getLogger(ZipOutputProcessor.class.getName());
+
     @Override
     public FinalizedOutput<byte[]> processCSVToOutput(PrefinishedOutput<?> prefinishedOutput) {
 
-        ZipOutputStream zippedOutput = zipMultipleFiles(prefinishedOutput);
-        byte[] baos = createBAOSWithZips(prefinishedOutput);
+        zipMultipleFiles();
+        byte[] baos = createBAOSWithZips();
         return new FinalizedOutput<>(baos);
     }
 
-    private byte[] createBAOSWithZips(PrefinishedOutput<?> prefinishedOutput) {
+    /**
+     * Create the zip file which will contain the CSV and metadata
+     *
+     * @return the zipped file in bytes
+     */
+    private byte[] createBAOSWithZips() {
         String inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
         logger.log(Level.INFO, "inputFilesInString=" + inputFilesInString);
-        String filenameForZip = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME);
         String[] listOfFiles = inputFilesInString.split(",");
 
-        List<String> srcFiles = new ArrayList<String>(Arrays.asList(listOfFiles));
+        List<String> srcFiles = new ArrayList<>(Arrays.asList(listOfFiles));
         srcFiles.add(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
         logger.log(Level.INFO, "OUTPUT_METADATA_FILE_NAME=" + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -36,9 +44,8 @@ public class ZipOutputProcessor implements IOutputProcessor {
             ZipOutputStream zipOut = new ZipOutputStream(baos);
 
             for (String srcFile : srcFiles) {
-                File fileToZip = new File( srcFile);
+                File fileToZip = new File(srcFile);
                 FileInputStream fis = new FileInputStream(fileToZip);
-                System.out.println("createBAOSWithZips fileToZip " + fileToZip.getAbsolutePath());
                 ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
                 zipOut.putNextEntry(zipEntry);
 
@@ -57,73 +64,39 @@ public class ZipOutputProcessor implements IOutputProcessor {
             baos.close();
             return zipBytes;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "The file that was supposed to be zipped was not found. ");
+
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Other error occurred other than that the file to be zipped was not found. ");
         }
         return null;
 
     }
 
-    private ZipOutputStream zipPrefinishedOutput(PrefinishedOutput prefinishedOutput) {
-        String sourceFile = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-
-
-        try {
-            System.out.println("sourceFile: " + sourceFile);
-            String filenameForZip = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME);
-            System.out.println("fileOutputStream fileName for zip: " + sourceFile);
-            FileOutputStream fos = new FileOutputStream(filenameForZip);
-
-            ZipOutputStream zipOut = new ZipOutputStream(fos);
-
-            File fileToZip = new File(sourceFile);
-            FileInputStream fis = new FileInputStream(fileToZip);
-            ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
-            zipOut.putNextEntry(zipEntry);
-
-            byte[] bytes = new byte[1024];
-            int length;
-            while ((length = fis.read(bytes)) >= 0) {
-                zipOut.write(bytes, 0, length);
-            }
-
-            zipOut.close();
-            fis.close();
-            fos.close();
-            return null;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-
-    public ZipOutputStream zipMultipleFiles(PrefinishedOutput prefinishedOutput) {
+    /**
+     * Zip multiple files into zip output stream.
+     *
+     * @return the zip output stream to be given to the final .ZIP file
+     */
+    public ZipOutputStream zipMultipleFiles() {
         String inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-        System.out.println("ConfigurationManager.INTERMEDIATE_FILE_NAMES = " + inputFilesInString);
         String filenameForZip = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME);
-        System.out.println("ConfigurationManager.zipfileName = " + filenameForZip);
+        logger.log(Level.INFO, "zipFileName = " + filenameForZip);
         String[] listOfFiles = inputFilesInString.split(",");
         String[] newArray;
-        if(listOfFiles[listOfFiles.length-1].isEmpty()){
+        if (listOfFiles[listOfFiles.length - 1].isEmpty()) {
             newArray = Arrays.copyOf(listOfFiles, listOfFiles.length - 1);
-            System.out.println("The last from list of files is empty: " + Arrays.toString(listOfFiles));
         } else {
             newArray = listOfFiles;
-            System.out.println("List of files is OK: " + Arrays.toString(listOfFiles));
         }
-        List<String> srcFiles = new ArrayList<String>(Arrays.asList(newArray));
+        List<String> srcFiles = new ArrayList<>(Arrays.asList(newArray));
         srcFiles.add(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
-        System.out.println("fileToZip metadata " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
         try {
             final FileOutputStream fos = new FileOutputStream(filenameForZip);
             ZipOutputStream zipOut = new ZipOutputStream(fos);
 
             for (String srcFile : srcFiles) {
                 File fileToZip = new File(srcFile);
-                System.out.println("zipMultipleFiles fileToZip " + fileToZip.getAbsolutePath());
                 FileInputStream fis = new FileInputStream(fileToZip);
 
                 ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
@@ -141,9 +114,9 @@ public class ZipOutputProcessor implements IOutputProcessor {
             fos.close();
             return null;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "The file that was supposed to be zipped was not found. ");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Other error occurred other than that the file to be zipped was not found. ");
         }
         return null;
     }

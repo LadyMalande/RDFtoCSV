@@ -7,7 +7,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
+/**
+ * The HdtParser parser from RDF4J library. Did not work, but maybe will in the future.
+ */
+@Deprecated
 public class HdtParser implements IRDF4JParsingMethod {
     @Override
     public RepositoryConnection processInput(RepositoryConnection conn, File fileToParse) {

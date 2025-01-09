@@ -7,13 +7,14 @@ import org.eclipse.rdf4j.rio.RDFParseException;
 
 import java.io.*;
 import java.nio.file.Path;
-
+/**
+ * The Turtle parser from RDF4J library.
+ */
 public class TurtleParser implements IRDF4JParsingMethod {
     @Override
     public RepositoryConnection processInput(RepositoryConnection conn, File fileToParse) {
         RDFFormat fileFormat = RDFFormat.TURTLE;
         try {
-            System.out.println("File to process absolute path: " + fileToParse.getAbsolutePath());
             Path path = fileToParse.getAbsoluteFile().toPath();
             path = path.normalize();
             InputStream targetStream = new FileInputStream(path.toFile());
@@ -26,7 +27,6 @@ public class TurtleParser implements IRDF4JParsingMethod {
             InputStream targetStream;
             try {
                 targetStream = new FileInputStream(path.toFile());
-                //System.out.println("path.toFile(): " + path.toFile());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }

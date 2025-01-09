@@ -1,7 +1,7 @@
 package com.miklosova.rdftocsvw.converter.data_structure;
 
 /**
- * The type Prefinished output.
+ * The Prefinished output = inner CSV representation with types and other metadata.
  *
  * @param <T> the type parameter
  */
@@ -17,9 +17,7 @@ public class PrefinishedOutput<T> {
      * @param fact the fact
      */
     PrefinishedOutput(IFactory<T> fact) {
-        System.out.println("Constructor with IFactory<T> parameter start");
         prefinishedOutput = fact.factory();
-        System.out.println("Constructor with IFactory<T> parameter end");
     }
 
     /**
@@ -28,7 +26,6 @@ public class PrefinishedOutput<T> {
      * @param prefinishedOutput the prefinished output
      */
     public PrefinishedOutput(T prefinishedOutput) {
-        System.out.println("Constructor with T parameter");
         this.prefinishedOutput = prefinishedOutput;
     }
 

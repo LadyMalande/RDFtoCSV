@@ -7,12 +7,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.miklosova.rdftocsvw.output_processor.FileWrite.writeStringArrayAsCSVToFile;
+import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 
 /**
  * Main entry point for calling from command line.
@@ -22,7 +20,8 @@ public class Main {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
     /**
-     * The entry point of application.
+     * The entry point of application. The -f argument is mandatory to run the conversion successfully. If argument is missing,
+     * helpful guide is thrown to the standard output.
      *
      * @param args The input arguments.
      */
@@ -46,9 +45,11 @@ public class Main {
             } else {
                 fileInDirectory = jarDirectory + File.separator + fileArgFromArgs;
             }
+            if(isUrl(fileArgFromArgs)){
+                fileInDirectory = fileArgFromArgs;
+            }
 
             RDFFileToRead = fileInDirectory;
-            System.out.println("JAR Directory: " + jarDirectory + " fileInDirectory = " + fileInDirectory);
         } catch (URISyntaxException e) {
             logger.log(Level.SEVERE, e.getReason() + " " + e.getMessage());
         }
@@ -66,7 +67,7 @@ public class Main {
         try {
             rdFtoCSV.convertToZip();
         } catch (RDFParseException | IOException rdfParseException) {
-            System.out.println(rdfParseException.getMessage());
+            System.err.println(rdfParseException.getMessage());
         }
     }
 }

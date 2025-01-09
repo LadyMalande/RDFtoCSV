@@ -19,11 +19,11 @@ import java.util.Map;
 
 /**
  * Conforming to the must-have annotations for the Group of tables:
- * https://www.w3.org/TR/2015/REC-tabular-data-model-20151217/#dfn-group-of-tables
- * https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#table-groups - specifying only tables as REQUIRED PROPERTIES
+ * <a href="https://www.w3.org/TR/2015/REC-tabular-data-model-20151217/#dfn-group-of-tables">#dfn-group-of-tables</a>
+ * <a href="https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#table-groups">#table-groups</a> - specifying only tables as REQUIRED PROPERTIES
  * "notes" annotation is left out as it is not mandatory and may depend heavily on the inside knowledge of the data tables at hand.
  * <p>
- * "@context": "http://www.w3.org/ns/csvw" included on basis of: https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#top-level-properties
+ * "@context": "<a href="http://www.w3.org/ns/csvw">http://www.w3.org/ns/csvw</a>" included on basis of: <a href="https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#top-level-properties">#top-level-properties</a>
  */
 @JsonldType("TableGroup")
 public class Metadata {
@@ -32,10 +32,6 @@ public class Metadata {
      * Array of files tied to the metadata file
      */
     private final List<Table> tables;
-    /**
-     * an identifier for this group of tables, or null if this is undefined.
-     */
-    private String id;
 
     public Metadata() {
         this.tables = new ArrayList<>();
@@ -47,11 +43,8 @@ public class Metadata {
         SORTED_MAPPER.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         SORTED_MAPPER.registerModule(new JsonldModule());
 
-        String jsonWithContext = JsonUtil.serializeAndWriteToFile(this);
-
         // Print the resulting JSON
-        //System.out.println(jsonWithContext);
-        return jsonWithContext;
+        return JsonUtil.serializeAndWriteToFile(this);
     }
 
     public void addMetadata(String newFileName, ArrayList<Value> keys, ArrayList<Row> rows) {
@@ -70,7 +63,6 @@ public class Metadata {
         for (ArrayList<Row> rows : allRows) {
             Value id = rows.get(0).id;
             Value type = rows.get(0).type;
-            //System.out.println("Type in addForeignKeys: " + type.stringValue());
             String typeLocalName;
             try {
                 IRI typeIri = (IRI) type;

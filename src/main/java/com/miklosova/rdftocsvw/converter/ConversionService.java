@@ -7,7 +7,7 @@ import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 
 /**
- * The type Conversion service.
+ * The Conversion service. Part of Strategy design pattern.
  */
 public class ConversionService {
     /**
@@ -24,8 +24,8 @@ public class ConversionService {
     /**
      * Convert by query prefinished output.
      *
-     * @param rc the rc
-     * @param db the db
+     * @param rc the RepositoryConnection to make SPARQL queries on
+     * @param db the Repository
      * @return the prefinished output
      */
     public PrefinishedOutput<RowsAndKeys> convertByQuery(RepositoryConnection rc, Repository db) {
@@ -34,11 +34,13 @@ public class ConversionService {
         }
         conversionGateway = new ConversionGateway();
         processConversionType(db);
-        PrefinishedOutput<RowsAndKeys> convertedInput = conversionGateway.processInput(rc);
-        System.out.println("Processed file: \n" + convertedInput);
-        return convertedInput;
+        return conversionGateway.processInput(rc);
     }
 
+    /**
+     * Choose the correct converted according to how many tables are going to be made.
+     * @param db the Repository to make connection for querying on
+     */
     private void processConversionType(Repository db) {
         String conversionChoice = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD);
 

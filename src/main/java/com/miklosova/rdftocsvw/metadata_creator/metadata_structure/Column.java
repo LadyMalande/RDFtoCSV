@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The Column from CSVW Metadata specificaion.
+ */
 @SuppressWarnings("SpellCheckingInspection")
 @JsonldType("Column")
 public class Column {
@@ -42,8 +45,8 @@ public class Column {
     private String valueUrl;
     /**
      * datatype from the literal value. Helps with transforming the data back to JSON/RDF.
-     * By documentation: https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#built-in-datatypes
-     * Datatypes prefixed "with http://www.w3.org/2001/XMLSchema#".
+     * By documentation: <a href="https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#built-in-datatypes">Built in datatypes</a>
+     * Datatypes prefixed "with <a href="http://www.w3.org/2001/XMLSchema#">XMLSchema</a>".
      * Only Built-in Datatypes are supported: anyAtomicType and its children, number, binary, datetime,
      * any, xml, html, json.
      */
@@ -81,22 +84,36 @@ public class Column {
     private Map.Entry<Value, TypeIdAndValues> column;
     private Value originalColumnKey;
 
+    /**
+     * Instantiates a new Column.
+     */
     public Column() {
 
     }
 
+    /**
+     * Instantiates a new Column.
+     *
+     * @param column             the column to be created
+     * @param namespaceIsTheSame True if the namespace is the same forall rows ids
+     */
     public Column(Map.Entry<Value, TypeIdAndValues> column, boolean namespaceIsTheSame) {
         //assert column != null;
         this.column = column;
         this.isNamespaceTheSame = namespaceIsTheSame;
         if (column != null) {
             this.originalColumnKey = column.getKey();
-
-            //System.out.println("original column key = " + originalColumnKey);
         }
 
     }
 
+    /**
+     * Gets name from IRI and the object if its literal.
+     *
+     * @param predicate the predicate
+     * @param object    the object
+     * @return the name from iri, it has this form if the object is language literal: localName_(languageTag)
+     */
     public static String getNameFromIRI(IRI predicate, Value object) {
         // Create name without - and nonascii characters
         String safeName = createSafeName(predicate.getLocalName());
@@ -115,50 +132,108 @@ public class Column {
         }
     }
 
+    /**
+     * Create safe name string.
+     *
+     * @param localName the local name of IRI
+     * @return the string without any harmful characters
+     */
     public static String createSafeName(String localName) {
         // Replace all non-ASCII characters and hyphens
         return localName.replaceAll("[^\\x00-\\x7F-]", "").replace("-", "");
     }
 
+    /**
+     * Gets about url.
+     *
+     * @return the about url
+     */
     public String getAboutUrl() {
         return aboutUrl;
     }
 
+    /**
+     * Sets about url.
+     *
+     * @param aboutUrl the about url
+     */
     public void setAboutUrl(String aboutUrl) {
         this.aboutUrl = aboutUrl;
     }
 
+    /**
+     * Gets separator.
+     *
+     * @return the separator
+     */
     public String getSeparator() {
         return separator;
     }
 
+    /**
+     * Sets separator.
+     *
+     * @param separator the separator
+     */
     public void setSeparator(String separator) {
         this.separator = separator;
     }
 
+    /**
+     * Gets is namespace the same.
+     *
+     * @return the is namespace the same
+     */
     @JsonIgnore
     public boolean getIsNamespaceTheSame() {
         return isNamespaceTheSame;
     }
 
+    /**
+     * Gets column.
+     *
+     * @return the column
+     */
     @JsonIgnore
     public Map.Entry<Value, TypeIdAndValues> getColumn() {
         return column;
     }
 
+    /**
+     * Sets column.
+     *
+     * @param column the column
+     */
     public void setColumn(Map.Entry<Value, TypeIdAndValues> column) {
         this.column = column;
     }
 
+    /**
+     * Gets original column key.
+     *
+     * @return the original column key
+     */
     @JsonIgnore
     public Value getOriginalColumnKey() {
         return originalColumnKey;
     }
 
+    /**
+     * Gets lang.
+     *
+     * @return the lang
+     */
     public String getLang() {
         return lang;
     }
 
+    /**
+     * Create column.
+     *
+     * @param row              the row
+     * @param isSubjectTheSame the is subject the same
+     * @param rows             the rows
+     */
     public void createColumn(Row row, boolean isSubjectTheSame, List<Row> rows) {
         if (this.column != null) {
 
@@ -182,25 +257,19 @@ public class Column {
         boolean isRdfType = row.isRdfType;
         Value id = column.getValue().id;
         boolean isTypetheSame = TableSchema.isTypeTheSameForAllPrimary(rows);
-        //System.out.println("createAboutUrl: row.id=" + row.id + " row.type=" + row.type + " ");
 
-        //System.out.println("createAboutUrl: rows.get(0).type.stringValue() " + rows.get(0).type.stringValue() + " is it Literal? " + rows.get(0).type.isLiteral());
         IRI typeIri = null;
         if(isRdfType){
             typeIri = (IRI) rows.get(0).type;
         }
 
         if (this.name.contains("_MULTILEVEL_")) {
-            //System.out.println("making different aboutUrl for _MULTILEVEL_ column ");
             // Regex pattern
             String regex = id.stringValue();
-            //System.out.println("regex = " + regex);
 
             for (Map.Entry<Value, TypeIdAndValues> entry : row.columns.entrySet()) {
                 for (Value valueFromMap : entry.getValue().values) {
-                    //System.out.println("Matching value = " + valueFromMap + " with regex ");
                     if (valueFromMap.stringValue().matches(regex)) {
-                        //System.out.println("Found matching value: " + valueFromMap.stringValue());
                         // Optionally break out of the loop if you only want the first match
                         break;
                     }
@@ -220,7 +289,6 @@ public class Column {
                 if (isSubjectTheSame) {
                     if (isRdfType && isTypetheSame) {
                         // We don't know how aboutUrl is supposed to look like because we don't know semantic ties to the iris
-                        //this.aboutUrl = idIRI.getNamespace() + "{+" + createSafeName(((IRI) valueForAboutUrlPattern).getLocalName()) + "}";
                         assert typeIri != null;
                         this.aboutUrl = idIRI.getNamespace() + "{+" + typeIri.getLocalName() + "}";
                     } else {
@@ -241,7 +309,6 @@ public class Column {
     }
 
     private void createLang() {
-        //System.out.println("Column being made in createLang " + this.column.getKey().stringValue() + " size of values " + this.column.getValue().values.size());
         Value valueFromThisColumn = this.column.getValue().values.get(0);
         if (valueFromThisColumn.isLiteral()) {
             Literal literal = (Literal) valueFromThisColumn;
@@ -261,6 +328,11 @@ public class Column {
         }
     }
 
+    /**
+     * Create datatype from value.
+     *
+     * @param object the object
+     */
     public void createDatatypeFromValue(Value object) {
         if (object.isLiteral()) {
             Literal literal = (Literal) object;
@@ -286,6 +358,8 @@ public class Column {
 
         } else if (valueFromThisColumn.isBNode()) {
             this.valueUrl = "_:" + "{+" + safeNameOfTheColumn + "}";
+        } else {
+            this.valueUrl = "{+" + this.getName() + "}";
         }
 
     }
@@ -299,50 +373,110 @@ public class Column {
         this.propertyUrl = (delimiterIndex != -1) ? iri.substring(0, delimiterIndex) : iri;
     }
 
+    /**
+     * Gets titles.
+     *
+     * @return the titles
+     */
     public String getTitles() {
         return titles;
     }
 
+    /**
+     * Sets titles.
+     *
+     * @param titles the titles
+     */
     public void setTitles(String titles) {
         this.titles = titles;
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets property url.
+     *
+     * @return the property url
+     */
     public String getPropertyUrl() {
         return propertyUrl;
     }
 
+    /**
+     * Sets property url.
+     *
+     * @param propertyUrl the property url
+     */
     public void setPropertyUrl(String propertyUrl) {
         this.propertyUrl = propertyUrl;
     }
 
+    /**
+     * Gets value url.
+     *
+     * @return the value url
+     */
     public String getValueUrl() {
         return valueUrl;
     }
 
+    /**
+     * Sets value url.
+     *
+     * @param valueUrl the value url
+     */
     public void setValueUrl(String valueUrl) {
         this.valueUrl = valueUrl;
     }
 
+    /**
+     * Gets datatype.
+     *
+     * @return the datatype
+     */
     public String getDatatype() {
         return datatype;
     }
 
+    /**
+     * Sets datatype.
+     *
+     * @param datatype the datatype
+     */
     public void setDatatype(String datatype) {
         this.datatype = datatype;
     }
 
+    /**
+     * Gets virtual.
+     *
+     * @return the virtual
+     */
     public Boolean getVirtual() {
         return virtual;
     }
 
+    /**
+     * Sets virtual.
+     *
+     * @param virtual the virtual
+     */
     public void setVirtual(Boolean virtual) {
         this.virtual = virtual;
     }
@@ -359,6 +493,11 @@ public class Column {
         }
     }
 
+    /**
+     * Create name from iri.
+     *
+     * @param predicate the predicate
+     */
     public void createNameFromIRI(IRI predicate) {
         // Create name without - and nonascii characters
         String safeName = createSafeName(predicate.getLocalName());
@@ -369,8 +508,14 @@ public class Column {
         }
     }
 
+    /**
+     * Create titles string.
+     *
+     * @param predicate the predicate
+     * @param object    the object
+     * @return the string
+     */
     public String createTitles(Value predicate, Value object) {
-        //System.out.println("valueFromThisColumn from createTitles() = " + valueFromThisColumn.toString());
         IRI columnKeyIRI = (IRI) predicate;
         ValueFactory vf = SimpleValueFactory.getInstance();
         IRI propertyUrlIRI = vf.createIRI(this.getPropertyUrl());
@@ -379,9 +524,7 @@ public class Column {
 
         String delimiter = "_MULTILEVEL_";
         int delimiterIndex = columnKeyIRI.stringValue().indexOf(delimiter);
-        //System.out.println("The delimiterIndex is " + delimiterIndex + " for iri " + columnKeyIRI.stringValue());
         String prependix = (delimiterIndex != -1) ? columnKeyIRI.stringValue().substring(delimiterIndex + delimiter.length()) + "_" : "";
-        //System.out.println("prependix==" + prependix);
 
         if (ConnectionChecker.checkConnection()) {
             Dereferencer dereferencer = new Dereferencer(this.getPropertyUrl());
@@ -399,7 +542,6 @@ public class Column {
                 langTag = languageTag.get();
             }
             if (this.titles != null) {
-                //System.out.println("valueFromThisColumn from createTitles() isLiteral = " + this.titles);
                 return (langTag == null) ? prependix + this.titles : prependix + this.titles + " (" + langTag + ")";
             } else {
                 return (langTag == null) ? prependix + propertyUrlIRI.getLocalName() : prependix + propertyUrlIRI.getLocalName() + " (" + langTag + ")";
@@ -412,20 +554,37 @@ public class Column {
 
     }
 
+    /**
+     * Gets suppress output.
+     *
+     * @return the suppress output
+     */
     public Boolean getSuppressOutput() {
         return suppressOutput;
     }
 
+    /**
+     * Sets suppress output.
+     *
+     * @param suppressOutput the suppress output
+     */
     public void setSuppressOutput(Boolean suppressOutput) {
         this.suppressOutput = suppressOutput;
     }
 
+    /**
+     * Add first column.
+     *
+     * @param type               the type
+     * @param value              the value
+     * @param isRdfType          the is rdf type
+     * @param isNamespaceTheSame the is namespace the same
+     * @param typeIsTheSame      the type is the same
+     */
     public void addFirstColumn(Value type, Value value, boolean isRdfType, boolean isNamespaceTheSame, boolean typeIsTheSame) {
-        //System.out.println("addFirstColumn is typeIri string value " + typeIri.stringValue());
         if (isRdfType && typeIsTheSame) {
             IRI typeIri = (IRI) type;
 
-            //System.out.println("CONVERSION_HAS_RDF_TYPES is " + true);
             Dereferencer d = new Dereferencer(typeIri.toString());
 
             try {
@@ -442,14 +601,12 @@ public class Column {
 
 
         } else {
-            //System.out.println("CONVERSION_HAS_RDF_TYPES is " + false);
             this.titles = "Subject";
             this.name = "Subject";
         }
         if (!value.isBNode()) {
             if (isNamespaceTheSame) {
                 IRI valueIri = (IRI) value;
-                //System.out.println("isNamespaceTheSame is " + isNamespaceTheSame);
                 this.valueUrl = valueIri.getNamespace() + "{+" + this.name + "}";
             } else {
                 this.valueUrl = "{+" + this.name + "}";
@@ -461,6 +618,13 @@ public class Column {
 
     }
 
+    /**
+     * Add virtual type column.
+     *
+     * @param type          the type
+     * @param id            the id
+     * @param isTypeTheSame the is type the same
+     */
     public void addVirtualTypeColumn(Value type, Value id, boolean isTypeTheSame) {
         this.virtual = true;
         this.propertyUrl = "rdf:type";
@@ -476,6 +640,11 @@ public class Column {
         }
     }
 
+    /**
+     * Create lang from literal.
+     *
+     * @param object the object
+     */
     public void createLangFromLiteral(Value object) {
         if (object.isLiteral()) {
             Literal literal = (Literal) object;
@@ -484,6 +653,11 @@ public class Column {
         }
     }
 
+    /**
+     * Sets lang.
+     *
+     * @param lang the lang
+     */
     public void setLang(String lang) {
         this.lang = lang;
     }

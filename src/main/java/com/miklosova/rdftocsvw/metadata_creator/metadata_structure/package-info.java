@@ -1,4 +1,5 @@
 /**
+ * Metadata structure package according to CSVW specification.
  * The `com.miklosova.rdftocsvw.convertor` package contains the application logic
  * and other necessities tied to converting RDF model into custom enhanced CSV structure.
  *

@@ -27,24 +27,44 @@ import java.util.Map;
 import static com.miklosova.rdftocsvw.support.StandardModeCsvwIris.*;
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
+/**
+ * The type Standard mode converter.
+ */
 public class StandardModeConverter implements IQueryParser {
-    public Map<String, Integer> mapOfPredicatesAndTheirNumbers;
-    public Map<Value, Integer> mapOfTypesAndTheirNumbers;
+    /**
+     * The Roots.
+     */
     ArrayList<Value> roots;
+    /**
+     * The Rows.
+     */
     ArrayList<Row> rows;
+    /**
+     * The Keys.
+     */
     ArrayList<Value> keys;
+    /**
+     * The All rows.
+     */
     ArrayList<ArrayList<Row>> allRows;
+    /**
+     * The All keys.
+     */
     ArrayList<ArrayList<Value>> allKeys;
+    /**
+     * The Db.
+     */
     Repository db;
 
 
+    /**
+     * Instantiates a new Standard mode converter.
+     *
+     * @param db the db
+     */
     public StandardModeConverter(Repository db) {
         this.keys = new ArrayList<>();
         this.db = db;
-    }
-
-    private static int getRowNum(Value rowIri, Map<Value, Integer> map) {
-        return map.get(rowIri);
     }
 
     private static String getQueryForObjectBySubjectAndPredicate(Value s, String predicate) {
@@ -54,15 +74,13 @@ public class StandardModeConverter implements IQueryParser {
         Iri subjectIRI = iri(s.stringValue());
         Iri predicateIRI = iri(predicate);
         selectQuery.select(o).where(subjectIRI.has(predicateIRI, o));
-        System.out.println("getQueryForObjectBySubjectAndPredicate query string\n" + selectQuery.getQueryString());
         return selectQuery.getQueryString();
     }
 
     @Override
     public PrefinishedOutput<RowsAndKeys> convertWithQuery(RepositoryConnection rc) {
-        PrefinishedOutput<RowsAndKeys> gen = new PrefinishedOutput<RowsAndKeys>(new RowsAndKeys.RowsAndKeysFactory().factory());
+        PrefinishedOutput<RowsAndKeys> gen = new PrefinishedOutput<>(new RowsAndKeys.RowsAndKeysFactory().factory());
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(true));
-        System.out.println("CONVERSION_HAS_RDF_TYPES at the beginning " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES));
 
         allRows = new ArrayList<>();
         allKeys = new ArrayList<>();
@@ -75,12 +93,11 @@ public class StandardModeConverter implements IQueryParser {
 
                 @Override
                 public void statementRemoved(Statement removed) {
-                    System.out.println("removed: " + removed);
+
                 }
 
                 @Override
                 public void statementAdded(Statement added) {
-                    System.out.println("added: " + added);
                 }
             });
 
@@ -96,8 +113,6 @@ public class StandardModeConverter implements IQueryParser {
                     getTables(conn, solution.getValue("s"));
                 }
             }
-
-            rows.forEach(k -> System.out.println("Row: " + k.id.stringValue() + " " + k.columns.entrySet()));
         }
 
         for (int i = 0; i < allRows.size(); i++) {
@@ -114,7 +129,6 @@ public class StandardModeConverter implements IQueryParser {
             for (BindingSet solution : result) {
                 rows = new ArrayList<>();
                 keys = new ArrayList<>();
-                System.out.println("tableIRI: " + solution.getValue("o"));
                 Value tableIRI = solution.getValue("o");
                 makeTable(conn, tableIRI);
 
@@ -132,11 +146,6 @@ public class StandardModeConverter implements IQueryParser {
 
                 Value fileIRI = solution.getValue("o");
                 String fileName = extractFileName(fileIRI);
-                System.out.println("fileName extractFileName(fileIRI): " + solution.getValue("o"));
-                String fileNamesInConfig = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-                System.out.println("fileName in makeTable in StandardModeConverter " + fileName);
-                System.out.println("fileNamesInConfig in makeTable in StandardModeConverter " + fileNamesInConfig);
-                String valueToSave = (fileNamesInConfig == null) ? fileName : fileNamesInConfig + "," + fileName;
                 ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileName);
                 ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, fileName);
                 ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME,
@@ -151,9 +160,6 @@ public class StandardModeConverter implements IQueryParser {
         if (!rowNumsByRowIrisMap.isEmpty()) {
             ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.METADATA_ROWNUMS, "true");
         }
-        rowNumsByRowIrisMap.forEach((k, v) -> System.out.println(k.stringValue() + ": " + v));
-        //sortRowIRIsByRownums(rowIRIs, rowNumsByRowIrisMap);
-        rowIRIs.forEach(rowIri -> System.out.println("rowIri: " + rowIri + " rownum: " + getRowNum(rowIri, rowNumsByRowIrisMap)));
         for (Value rowIRI : rowIRIs) {
             addNewRow(conn, rowIRI);
         }
@@ -163,12 +169,11 @@ public class StandardModeConverter implements IQueryParser {
         // Get described columns with their values
         TupleQuery queryForDescribes = conn.prepareTupleQuery(getQueryForObjectBySubjectAndPredicate(rowIRI, CSVW_describes));
         try (TupleQueryResult result = queryForDescribes.evaluate()) {
-            Row newRow = null;
-            Value columnKey = null;
+            Row newRow;
+            Value columnKey;
             newRow = new Row(rowIRI, null, false);
             for (BindingSet solution : result) {
                 Value describesItemIRI = solution.getValue("o");
-                System.out.println("trying to find subject IRI for column/column value tuple" + describesItemIRI.stringValue());
                 TupleQuery queryForColumnValues = conn.prepareTupleQuery(getQueryForObjectAndPredBySubject(describesItemIRI));
 
                 try (TupleQueryResult resultForColumns = queryForColumnValues.evaluate()) {
@@ -179,11 +184,9 @@ public class StandardModeConverter implements IQueryParser {
                         columnKey = solutionForColumns.getValue("p");
                         Value columnValue = solutionForColumns.getValue("o");
                         if (firstEntry) {
-                            System.out.println("id for Row = " + rowIRI.stringValue());
 
                             firstEntry = false;
                         }
-                        System.out.println("The type of the row: " + newRow.type);
                         if (!keys.contains(columnKey)) {
                             keys.add(columnKey);
                         }
@@ -199,10 +202,6 @@ public class StandardModeConverter implements IQueryParser {
                         } else {
                             throw new UnsupportedOperationException("BNodes should not exist in this phase");
                         }
-                    }
-                    System.out.println("Newrow: " + newRow.id.stringValue() + ", type: " + newRow.type.stringValue() + " " + newRow.isRdfType);
-                    for (Map.Entry<Value, TypeIdAndValues> val : newRow.columns.entrySet()) {
-                        System.out.println(val.getKey().stringValue() + ": " + val.getValue().values.get(0) + "(" + val.getValue().type.toString() + ")");
                     }
                 }
             }
@@ -242,7 +241,6 @@ public class StandardModeConverter implements IQueryParser {
 
                     Literal rownumLiteral = (Literal) solutionForColumns.getValue("o");
                     Integer rownum = Integer.parseInt(rownumLiteral.getLabel());
-                    System.out.println("rownum " + rownumLiteral.getLabel() + " int " + rownum);
                     map.put(rowIri, rownum);
                 }
             }

@@ -5,7 +5,7 @@ import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 
 /**
- * The interface Query parser.
+ * The interface Query parser. Sets the method to be implemented by all converters.
  */
 public interface IQueryParser {
     /**

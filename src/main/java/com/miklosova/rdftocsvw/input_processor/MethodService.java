@@ -14,22 +14,32 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class loads the RDF data into the common RDF model. It runs the checks for which methods for conversion have been chosen and sets parsers accordingly.
+ * Part of Strategy pattern.
+ */
 public class MethodService {
     private MethodGateway methodGateway;
     private static final Logger logger = Logger.getLogger(FileWrite.class.getName());
 
+    /**
+     * Process input repository connection.
+     *
+     * @param fileName     the file name to convert
+     * @param methodChoice the method choice
+     * @param db           the Repository to establish RepositoryConnection Upon
+     * @return the repository connection to the Repository we will be asking SPARQL queries on
+     * @throws RDFParseException the rdf parse exception - thrown if the RDF file is corrupted or in a form that is unable to be parsed by RDF4J library
+     * @throws IOException       the io exception
+     */
     public RepositoryConnection processInput(String fileName, String methodChoice, Repository db) throws RDFParseException, IOException {
         methodGateway = new MethodGateway();
-        System.out.println("fileName in MethodService.java processInput1: " + fileName);
-        System.out.println("read method in processInput : " + methodChoice);
         processMethodChoice(methodChoice);
         fileName = processFileOrIRI(fileName);
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, fileName);
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME,  fileName+ ".csv-metadata.json");
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH,  fileName);
-        System.out.println("fileName in MethodService.java processInput: " + fileName);
         File fileToRead = new File(fileName);
-        System.out.println("fileName3 in MethodService.java processInput: " + fileToRead.getAbsolutePath());
         try {
             return methodGateway.processInput(fileToRead, db);
         } catch(OutOfMemoryError err){
@@ -40,8 +50,12 @@ public class MethodService {
         }
     }
 
+    /**
+     * Processes the File Name. If its URL and the connection enables the process to download it, it will do so.
+     * @param fileName the argument that is given when starting the program (-f parameter value)
+     * @return Name of the saved file (if URL is given to the converter, it downloads the file and takes only the file name to this output)
+     */
     private String processFileOrIRI(String fileName) {
-        System.out.println("fileName in processFileOrIRI fileName=: " + fileName);
         try {
             URL url = new URL(fileName);
 
@@ -64,16 +78,14 @@ public class MethodService {
 
             readr.close();
             writer.close();
-            System.out.println("Successfully Downloaded. NewFileName is " + newFileName);
+            logger.log(Level.INFO, "Successfully Downloaded. NewFileName is " + newFileName);
             return newFileName;
         } catch (MalformedURLException e) {
-            System.out.println("URL is invalid");
-            //e.printStackTrace();
+            System.err.println("URL is invalid");
             return fileName;
             // the URL is not in a valid form
         } catch (IOException ex) {
-            System.out.println("the connection couldn't be established");
-            //ex.printStackTrace();
+            System.err.println("the connection couldn't be established to download the URL");
             return fileName;
             // the connection couldn't be established
         }
@@ -81,7 +93,6 @@ public class MethodService {
     }
 
     private void processMethodChoice(String methodChoice) {
-        System.out.println("read method in processMethodChoice:" + methodChoice);
         switch (methodChoice.toLowerCase()) {
             case "rdf4j" -> methodGateway.setParsingMethod(new RDF4JMethod());
             case "streaming", "bigfilestreaming" -> methodGateway.setParsingMethod(new StreamingMethod());

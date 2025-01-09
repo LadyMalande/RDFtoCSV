@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static org.eclipse.rdf4j.rio.helpers.JSONLDSettings.SECURE_MODE;
-
+/**
+ * The Jsonld parser from RDF4J library.
+ */
 public class JsonldParser implements IRDF4JParsingMethod {
     @Override
     public RepositoryConnection processInput(RepositoryConnection conn, File fileToParse) {

@@ -1,4 +1,5 @@
 /**
+ * Output processor package, writes the objects into files and other.
  * The `com.miklosova.rdftocsvw.output_processor` package contains classes
  * to output CSV files and metadata in JSON to complete RDF to CSV on the Web conversion.
  *

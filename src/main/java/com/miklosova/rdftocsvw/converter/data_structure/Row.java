@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The type Row.
+ * The Row for inner CSV representation with types and values of data.
  */
 public class Row {
     /**
@@ -68,22 +68,25 @@ public class Row {
      * The Id.
      */
     public Value id;
+    /**
+     * The type of the row. Can be either rdf:type or a dominant predicate
+     */
     public Value type;
     /**
-     * The Is rdf type.
+     * The Is rdf type. True if the type of the row is from rdf:type
      */
     public boolean isRdfType;
     /**
-     * The Columns.
+     * The Columns. Represented by propertyUrl (predicate), and tied objects (type of the object, its subject and its value)
      */
     public Map<Value, TypeIdAndValues> columns;
 
     /**
      * Instantiates a new Row.
      *
-     * @param id      the id
-     * @param type    the type
-     * @param rdfType the rdf type
+     * @param id      the id = the subject of the row
+     * @param type    the type of the row is there is any
+     * @param rdfType the rdf type is true, if the type is tied to rdf:type
      */
     public Row(Value id, Value type, boolean rdfType) {
         this.id = id;
@@ -95,8 +98,8 @@ public class Row {
     /**
      * Instantiates a new Row.
      *
-     * @param id      the id
-     * @param rdfType the rdf type
+     * @param id      the id - the aboutUrl, the subject
+     * @param rdfType if the type of the row is rdf type
      */
     public Row(Value id, boolean rdfType) {
         this.id = id;

@@ -230,7 +230,7 @@ class StreamingMetadataCreatorTest {
         Table table = new Table();
         streamingMetadataCreator.metadata.getTables().add(table);
         streamingMetadataCreator.fileNameToRead = "test.nt";
-        String result = streamingMetadataCreator.createNewMetadata(1);
+        String result = streamingMetadataCreator.createNewMetadata();
         assertEquals("test.nt1.csv", result);
         assertEquals(2, streamingMetadataCreator.metadata.getTables().size());
         assertNotNull(streamingMetadataCreator.tableSchema);

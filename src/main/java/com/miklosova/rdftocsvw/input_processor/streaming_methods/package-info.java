@@ -1,6 +1,7 @@
 /**
- * The `com.miklosova.rdftocsvw.convertor` package contains the application logic
- * and other necessities tied to converting RDF model into custom enhanced CSV structure.
+ * Streaming methods package for input processing implementation that is mandatory in the pipeline.
+ * The `com.miklosova.rdftocsvw.input_processor.streaming_methods` package contains the implementation of Parsing method for streaming data that is
+ * mandatory for the inputs.
  *
  *
  * @version 1.0

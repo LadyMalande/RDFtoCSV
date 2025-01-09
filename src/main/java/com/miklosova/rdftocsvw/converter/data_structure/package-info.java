@@ -1,4 +1,5 @@
 /**
+ * The Data Structure package containing the classes for inner representation of CSV structure.
  * The `com.miklosova.rdftocsvw.convertor.data_structure` package contains classes
  * representing a custom enhanced CSV structure.
  *

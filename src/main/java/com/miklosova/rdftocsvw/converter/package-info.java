@@ -1,5 +1,6 @@
 /**
- * The `com.miklosova.rdftocsvw.convertor` package contains the application logic
+ * Converter package, creates an inner representation of CSV structure from RDF model.
+ * The `com.miklosova.rdftocsvw.converter` package contains the application logic
  * and other necessities tied to converting RDF model into custom enhanced CSV structure.
  *
  *

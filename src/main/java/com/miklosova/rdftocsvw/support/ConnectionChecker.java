@@ -6,7 +6,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * The type Connection checker.
+ * The Connection checker class.
  */
 public class ConnectionChecker {
     /**

@@ -1,9 +1,9 @@
 package com.miklosova.rdftocsvw.output_processor;
 
 
+import com.miklosova.rdftocsvw.metadata_creator.Triple;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
-import com.miklosova.rdftocsvw.metadata_creator.Triple;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.Main;
 import org.eclipse.rdf4j.model.IRI;
@@ -17,27 +17,45 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.miklosova.rdftocsvw.metadata_creator.StreamingMetadataCreator.processLineIntoTriple;
-import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 import static com.miklosova.rdftocsvw.output_processor.FileWrite.writeToTheFile;
+import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
+/**
+ * The class of Streaming methods with N-Triples and writing methods to CSV files.
+ */
 public class StreamingNTriplesWrite {
+
+    private static final Logger logger = Logger.getLogger(StreamingNTriplesWrite.class.getName());
+
     private final String fileNameToRead;
     private final Metadata metadata;
 
+    /**
+     * Serves for buffering output.
+     */
     private int lineIndexOfProcessed = 0;
 
-    private ArrayList<IRI> currentSubjects;
+    private Set<IRI> currentSubjects;
     private final Set<IRI> processedSubjects;
     private CSVOutputGrid bufferForCSVOutput;
 
     private final File fileToWriteTo;
 
+    /**
+     * Instantiates a new Streaming n triples write.
+     *
+     * @param metadata the metadata are already finished
+     * @param fileName the file name to write to
+     */
     public StreamingNTriplesWrite(Metadata metadata, String fileName) {
         fileToWriteTo = FileWrite.makeFileByNameAndExtension(fileName, "csv");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,fileToWriteTo.toString());
+        assert fileToWriteTo != null;
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileToWriteTo.toString());
         this.metadata = metadata;
         String fileNameFromConfig = ConfigurationManager.getVariableFromConfigFile("input.inputFileName");
         URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
@@ -50,9 +68,11 @@ public class StreamingNTriplesWrite {
         String jarDirectory = file.getParentFile().getName();
         this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) : (jarDirectory.equalsIgnoreCase("target")) ? fileNameFromConfig : "../" + fileNameFromConfig;
         processedSubjects = new HashSet<>();
-        //this.fileNameToWriteTo = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH);
     }
 
+    /**
+     * Write to CSV file using metadata information.
+     */
     public void writeToFileByMetadata() {
 
         writeToTheFile(fileToWriteTo, columnHeaders(), false);
@@ -65,17 +85,13 @@ public class StreamingNTriplesWrite {
                 // Read file line by line
                 while ((line = reader.readLine()) != null) {
                     // Skip lines until the desired line
-                    if (i < lineIndexOfProcessed) {
-                        System.out.println("DO NOTHING + i=" + i + " lineIndexOfProcessed=" + lineIndexOfProcessed); // do nothing
-                    } else {
-                        System.out.println("process line + i=" + i + " lineIndexOfProcessed=" + lineIndexOfProcessed); // do nothing
+                    if (i >= lineIndexOfProcessed) {
                         processLine(line, bufferForCSVOutput);
                     }
                     i++;
-                    //System.out.println(line);  // Process the line (e.g., print it)
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "There was an exception while writing to the CSV file using metadata in Streaming method ");
             }
             bufferForCSVOutput.print();
             writeToOutputFile(bufferForCSVOutput);
@@ -95,20 +111,18 @@ public class StreamingNTriplesWrite {
 
     private void writeToOutputFile(CSVOutputGrid bufferForCSVOutput) {
         String createdChunkOfCSV = parseOutputGridForCSV(bufferForCSVOutput);
-        //System.out.println("Chunk of CSV: \n" + createdChunkOfCSV);
         writeToTheFile(fileToWriteTo, createdChunkOfCSV, true);
     }
 
     private String parseOutputGridForCSV(CSVOutputGrid bufferForCSVOutput) {
         StringBuilder sb = new StringBuilder();
-        System.out.println("parseOutputGridForCSV");
         bufferForCSVOutput.print();
         for (IRI subject : currentSubjects) {
             for (Column column : metadata.getTables().get(0).getTableSchema().getColumns()) {
                 if (column.getName().equalsIgnoreCase("Subject")) {
                     // add subject
                     sb.append(subject.stringValue());
-                } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).isEmpty()) {
+
                 } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).size() == 1) {
                     if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isIRI()) {
                         sb.append(bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0));
@@ -135,7 +149,7 @@ public class StreamingNTriplesWrite {
     }
 
     private boolean gettingNewSubjects() {
-        currentSubjects = new ArrayList<>();
+        currentSubjects = new HashSet<>();
         bufferForCSVOutput = new CSVOutputGrid();
         int i = 1;
         try (BufferedReader reader = new BufferedReader(new FileReader(fileNameToRead))) {
@@ -153,9 +167,7 @@ public class StreamingNTriplesWrite {
                     }
                 }
                 // Skip lines until the desired line
-                if (i < lineIndexOfProcessed - 1) {
-                    System.out.println("do nothing i < lineIndexOfProcessed - 1    i = " + i);// do nothing
-                } else {
+                if (i >= lineIndexOfProcessed - 1) {
 
                     if (!processedSubjects.contains(triple.getSubject()) && !currentSubjects.contains(triple.getSubject())) {
                         if (!firstColumn.getValueUrl().startsWith("{")) {
@@ -170,9 +182,7 @@ public class StreamingNTriplesWrite {
                         HashMap<String, List<Value>> initialMap = new HashMap<>();
                         List<Value> valueList = new ArrayList<>();
                         valueList.add(triple.getObject());
-                        System.out.println("column triple: " + triple.getSubject() + " " + triple.getPredicate() + " " + triple.getObject());
                         initialMap.put(Column.getNameFromIRI(triple.getPredicate(), triple.getObject()), valueList);
-                        System.out.println("initialMap: " + Column.getNameFromIRI(triple.getPredicate(), triple.getObject()) + " : " + initialMap.get(Column.getNameFromIRI(triple.getPredicate(), triple.getObject())).get(0));
                         bufferForCSVOutput.csvOutputBuffer.put(triple.getSubject(), initialMap);
 
                     }
@@ -181,36 +191,35 @@ public class StreamingNTriplesWrite {
                 int maximumOfProcessedSubjects = 10;
                 if (currentSubjects.size() == maximumOfProcessedSubjects) {
                     lineIndexOfProcessed = i;
-                    System.out.println("lineIndexOfProcessed = " + i);
                     return true;
-                }
-                if (i % 100 == 0) {
-                    System.out.println("Processed " + i + " lines in gettingNewSubjects");
                 }
             }
             if (!currentSubjects.isEmpty()) {
                 return true;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "There was an exception while getting new subjects from the file.");
         }
         return false;
     }
 
+    /**
+     * Process the incoming line into the CSVOutputGrid Representation
+     *
+     * @param line Line of triple to process
+     * @param grid The temporary representation for the CSV
+     */
     private void processLine(String line, CSVOutputGrid grid) {
         Triple triple = processLineIntoTriple(line);
-        System.out.println("Processing line: " + line);
         if (currentSubjects.contains(triple.getSubject())) {
             String keyForColumn = Column.getNameFromIRI(triple.getPredicate(), triple.getObject());
             if (grid.getCsvOutputBuffer().get(triple.getSubject()).containsKey(keyForColumn)) {
                 grid.getCsvOutputBuffer().get(triple.getSubject()).get(keyForColumn).add(triple.getObject());
                 metadata.getTables().get(0).getTableSchema().getColumnByName(keyForColumn).setSeparator(",");
-                System.out.println("initialMap: " + keyForColumn + " : " + grid.getCsvOutputBuffer().get(triple.getSubject()).get(keyForColumn).get(1));
             } else {
                 ArrayList<Value> values = new ArrayList<>();
                 values.add(triple.getObject());
                 grid.getCsvOutputBuffer().get(triple.getSubject()).put(keyForColumn, values);
-                System.out.println("initialMap: " + keyForColumn + " : " + values.get(0));
             }
         }
     }

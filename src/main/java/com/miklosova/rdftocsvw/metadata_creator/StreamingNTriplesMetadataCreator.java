@@ -5,8 +5,8 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
+import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
@@ -17,22 +17,44 @@ import org.eclipse.rdf4j.model.Value;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+/**
+ * The Streaming n triples metadata creator.
+ */
 public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator implements IMetadataCreator {
+    private static final Logger logger = Logger.getLogger(StreamingNTriplesMetadataCreator.class.getName());
 
-    // <CSV file url, List of Subject IRIs>: the list of subjects that are used as IDs in a given csv file
+    /**
+     * The Map of known subjects. <CSV file url, List of Subject IRIs>: the list of subjects that are used as IDs in a given csv file
+     */
+
     Map<String, List<IRI>> mapOfKnownSubjects;
-    // <CSV file url, List of Predicate IRIs>: the list of predicates that are used as IDs in a given csv file
+    /**
+     * The Map of known predicates. <CSV file url, List of Predicate IRIs>: the list of predicates that are used as IDs in a given csv file
+     */
+
     Map<String, List<IRI>> mapOfKnownPredicates;
-    // Table Schema objects mapped to their CSV file urls
+    /**
+     * The Table schema by files. Table Schema objects mapped to their CSV file urls
+     */
     Map<String, TableSchema> tableSchemaByFiles;
 
-    // is the triple being unified by Subject or Predicate (if it's unified to previously known data)?
+    /**
+     * The Unified by subject. Is the triple being unified by Subject or Predicate (if it's unified to previously known data)?
+     */
     boolean unifiedBySubject = false;
 
-    // the url for the csv file name that the triple has been unified to
+    /**
+     * The Current csv name. The url for the csv file name that the triple has been unified to
+     */
+
     String currentCSVName = null;
 
+    /**
+     * Instantiates a new Streaming n triples metadata creator.
+     */
     public StreamingNTriplesMetadataCreator() {
         super();
         tableSchemaByFiles = new HashMap<>();
@@ -63,7 +85,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 processLine(line);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "There was an exception while trying to read file with method Streaming.");
         }
     }
 
@@ -94,7 +116,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         Statement statement = processNTripleLine(line);
         Statement statementWithIRIs = replaceBlankNodesWithIRI(statement, line);
         Triple triple = new Triple((IRI) statementWithIRIs.getSubject(), statementWithIRIs.getPredicate(), statementWithIRIs.getObject());
-        //System.out.println("Parsed Triple after bnode to iri: " + statementWithIRIs.getSubject() +" " +  statementWithIRIs.getPredicate() +" " + statementWithIRIs.getObject());
         addMetadataToTableSchema(triple);
         try {
             writeTripleToCSV(currentCSVName, triple);
@@ -114,8 +135,8 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         newColumn.setAboutUrl("{+Subject}");
         newColumn.setTitles(newColumn.createTitles(triple.predicate, triple.object));
         currentCSVName = getCSVNameIfSubjectOrPredicateKnown(triple.getSubject(), triple.getPredicate());
-        if(blankNodeRegisteredToConfig){
-            if(metadata.getTables().stream().filter(table -> table.getUrl().equalsIgnoreCase(currentCSVName)).findAny().isPresent()){
+        if (blankNodeRegisteredToConfig) {
+            if (metadata.getTables().stream().anyMatch(table -> table.getUrl().equalsIgnoreCase(currentCSVName))) {
                 metadata.getTables().stream().filter(table -> table.getUrl().equalsIgnoreCase(currentCSVName)).findAny().get().addTransformations();
             }
         }
@@ -176,7 +197,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         }
 
         for (Map.Entry<String, List<IRI>> entry : mapOfKnownPredicates.entrySet()) {
-            ////System.out.println("Is the predicate there? AlreadyThere = " + entry.getValue().get(0) + " | predicate = " + predicate.stringValue());
             if (entry.getValue().contains(predicate)) {
                 List<IRI> knownSubjects = mapOfKnownSubjects.get(entry.getKey());
                 knownSubjects.add(subject);
@@ -188,7 +208,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         String newCSVname = f.getName() + fileNumber + ".csv";
         String previousFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
         String allFilesUpToNow = (previousFiles.isEmpty()) ? newCSVname : previousFiles + "," + newCSVname;
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,allFilesUpToNow);
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, allFilesUpToNow);
         fileNumber++;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(newCSVname))) {
@@ -236,6 +256,14 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         return tableSchema;
     }
 
+    /**
+     * There is matching column already boolean.
+     *
+     * @param newColumn   the new column
+     * @param triple      the triple
+     * @param tableSchema the table schema that contains the new column
+     * @return the boolean
+     */
     boolean thereIsMatchingColumnAlready(Column newColumn, Triple triple, TableSchema tableSchema) {
 
         if (tableSchema.getColumns().isEmpty()) {
@@ -243,9 +271,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         }
         for (Column col : tableSchema.getColumns()) {
             if (!col.getName().equalsIgnoreCase("subject")) {
-                ////System.out.println("numberOfNotMatching in the loop = " + numberOfNotMatching);
                 if (!col.getName().equalsIgnoreCase(newColumn.getName())) {
-                    ////System.out.println("Name does not equal: " + col.getName() + " x " + newColumn.getName());
                     continue;
                 }
 
@@ -276,10 +302,16 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 return true;
             }
         }
-        ////System.out.println("numberOfNotMatching != tableSchema.getColumns().size() " + numberOfNotMatching + " != " + tableSchema.getColumns().size() + "\n");
         return false;
     }
 
+    /**
+     * Write triple to CSV.
+     *
+     * @param filePath the file path
+     * @param triple   the triple
+     * @throws IOException the io exception
+     */
     public void writeTripleToCSV(String filePath, Triple triple) throws IOException {
         List<String[]> rowDataVariationsForSubject = new ArrayList<>();
         boolean isNeedForAddingDataVariations = false;
@@ -295,25 +327,21 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             String[] line;
             boolean isFirstLine = true;
             while ((line = reader.readNext()) != null) {
-                //System.out.println("reading line to write to CSV = " + Arrays.toString(line));
                 if (isFirstLine) {
                     isFirstLine = false;
                 }
 
                 // Add the Object into the correct column in the line as there is already a line with this subject
-                //else if (!isModified && unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
                 else if (unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
                     // Add this line as a data variation to the data variation list
 
                     // Split the line into parts by commas
 
-                    //System.out.println(Arrays.toString(line) + " --- parts size " + line.length);
 
                     int indexOfChangeColumn = getIndexOfCurrentPredicate(triple.getPredicate(), triple.getObject());
 
                     // Insert the new value between two commas in the middle (adjust index as needed)
                     if (indexOfChangeColumn >= line.length) {
-                        //System.out.println(line + " line.length: " + line.length + " columnIndex: " + indexOfChangeColumn + " columns: " + lines.get(0));
                         // The subject has been matched but the line does not contain the predicate column yet -> add it to the end of the line
                         // Create a new array with one additional element
                         String[] extendedArray = Arrays.copyOf(line, line.length + 1);
@@ -322,7 +350,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                         extendedArray[line.length] = triple.object.stringValue();
                         line = extendedArray;
                         isModified = true;
-                        //System.out.println("1) " + line);
                     } else if (indexOfChangeColumn != -1 && !line[indexOfChangeColumn].equalsIgnoreCase("")) {
                         if (Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM))) {
                             // There is already a value in the column - add the value and add the separator to metadata
@@ -332,7 +359,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                             }
                             isNeedForAddingDataVariations = true;
                             indexOfDataVariationColumn = indexOfChangeColumn;
-                            //System.out.println("2) " + line[indexOfChangeColumn] + " already there for triple " + triple.getSubject().stringValue() + ", " + triple.getPredicate().stringValue() + ", " + triple.getObject().stringValue());
                             // Check whether the object is the same as the value that is already in the data - that would imply that
                             // I am trying to optimize the data, but that would modify it, so just make the same line duplicitly
                             // If those data really came from RDF
@@ -346,7 +372,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                         // Add new object at the end of the line
                         line[indexOfChangeColumn] = triple.getObject().stringValue();
                         isModified = true;  // Mark that the line has been modified
-                        //System.out.println("3) " + line[indexOfChangeColumn] + " the line: " + Arrays.toString(line));
                     }
 
                 }
@@ -357,12 +382,10 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
             if (isNeedForAddingDataVariations) {
                 // Add data variations for all the lines that have the same subject in the list
-                //System.out.println("isNeedForAddingDataVariations ");
                 appendDataVariationsToCSV(file, rowDataVariationsForSubject, indexOfDataVariationColumn, triple.getObject());
             } else if (!isModified && unifiedBySubject) {
                 // If the file is still unmodified, we need to add a new predicate column at the end of the row
                 lines.add(createLineStringListByMetadata(triple).toArray(new String[0]));
-                //System.out.println("!isModified && unifiedBySubject " + Arrays.toString(createLineStringListByMetadata(triple).toArray(new String[0])));
                 isModified = true;
             }
 
@@ -372,11 +395,11 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 // We can just append to the file - the lines wont be written again at the end of this writing modification
                 List<String[]> newLine = new ArrayList<>();
                 newLine.add(createLineStringListByMetadata(triple).toArray(new String[0]));
-                FileWrite.writeLinesToCSVFile(file, newLine , true);
+                FileWrite.writeLinesToCSVFile(file, newLine, true);
             }
 
         } catch (CsvValidationException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "There was an exception while trying to write CSV file from triple and there was a validation exception.");
 
         }
 
@@ -415,12 +438,11 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "There was an exception while trying to append data variations to CSV");
         }
     }
 
     private int getIndexOfCurrentPredicate(IRI predicate, Value object) {
-        //System.out.println("predicate " + predicate + " object " + object.stringValue());
         for (int i = 0; i < tableSchema.getColumns().size(); i++) {
             if (!tableSchema.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && isSameLanguagePredicate(tableSchema.getColumns().get(i).getPropertyUrl(), tableSchema.getColumns().get(i).getTitles(), predicate, object)) {
                 return i;
@@ -431,12 +453,10 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
     private boolean isSameLanguagePredicate(String predicateToCompare, String titlesToCompare, IRI predicate, Value object) {
         if (predicateToCompare.equalsIgnoreCase(predicate.stringValue())) {
-            //System.out.println("predicateToCompare=" + predicateToCompare + " " + predicate.stringValue() + " predicate");
             if (titlesToCompare.charAt(titlesToCompare.length() - 1) == ')' && object.isLiteral()) {
                 if (((Literal) object).getLanguage().isPresent()) {
                     String languageTagToCompare = titlesToCompare.substring(titlesToCompare.length() - 3, titlesToCompare.length() - 1);
                     String languageTag = ((Literal) object).getLanguage().get();
-                    //System.out.println("languageTagToCompare = " + languageTagToCompare + " " + languageTag + "(languageTag)");
                     return languageTagToCompare.equalsIgnoreCase(languageTag);
                 } else {
                     return false;
@@ -459,7 +479,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
         TableSchema relevantTS = tableSchemaByFiles.get(currentCSVName);
         for (int i = 0; i < relevantTS.getColumns().size(); i++) {
-            //System.out.println("relevantTS.getColumns().size() = " + relevantTS.getColumns().size());
             if (!relevantTS.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && relevantTS.getColumns().get(i).getPropertyUrl().equalsIgnoreCase(triple.getPredicate().stringValue())) {
                 list.add(triple.getObject().stringValue());
 
@@ -467,8 +486,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 list.add("");
             }
         }
-        //list.forEach(entity -> System.out.print(entity + " "));
-        //System.out.println();
         return list;
     }
 }

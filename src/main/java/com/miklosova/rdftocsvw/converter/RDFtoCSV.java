@@ -4,13 +4,13 @@ import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.converter.data_structure.RowAndKey;
 import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
-import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
+import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
+import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import com.miklosova.rdftocsvw.output_processor.FinalizedOutput;
 import com.miklosova.rdftocsvw.output_processor.StreamingNTriplesWrite;
 import com.miklosova.rdftocsvw.output_processor.ZipOutputProcessor;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import com.miklosova.rdftocsvw.support.JsonUtil;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -31,7 +30,6 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  * The main library class for requesting the RDF to CSVW conversion.
  */
 public class RDFtoCSV {
-    private static final Logger logger = Logger.getLogger(FileWrite.class.getName());
     private static final String STATIC_DELIMITER_FOR_CSVS_IN_ONE_STRING = """
                 
             -----------ANOTHER CSV TABLE-----------
@@ -39,11 +37,11 @@ public class RDFtoCSV {
             """;
 
     /**
-     * The Db.
+     * The Repository to make RepositoryConnection Upon.
      */
     Repository db;
     /**
-     * The Rc.
+     * The RepositoryConnection to ask SPARQL queries on.
      */
     RepositoryConnection rc;
     /**
@@ -81,27 +79,23 @@ public class RDFtoCSV {
         this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
-        if(isUrl(fileName)){
+        if (isUrl(fileName)) {
             this.filePathForOutput = iri(this.fileName).getLocalName();
         }
-        //ConfigurationManager.processConfigMap(fileName, null);
-        System.out.println("RDFtoCSV(String fileName) fileName isUrl(fileName)=" + isUrl(fileName));
     }
 
     /**
-     * Instantiates a new Rd fto csv.
+     * Instantiates a new RDFtoCSV from library perspective, the config map is necessary to establish the parameters instead of the args[] that would come from Command Line.
      *
      * @param fileName  the file name
      * @param configMap the config map
      */
     public RDFtoCSV(String fileName, Map<String, String> configMap) {
 
-        //this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
-        this.fileName = isUrl(fileName) ? fileName :  fileName;
-        System.out.println("Constructor for RDFtoCSV: isUrl(fileName) = " + isUrl(fileName) + " fileName = " + fileName);
+        this.fileName = fileName;
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
-        if(isUrl(fileName)){
+        if (isUrl(fileName)) {
             this.filePathForOutput = iri(this.fileName).getLocalName();
         }
         ConfigurationManager.processConfigMap(fileName, configMap);
@@ -115,7 +109,6 @@ public class RDFtoCSV {
      */
     @SuppressWarnings("unused")
     public FinalizedOutput<byte[]> convertToZip() throws IOException {
-        //ConfigurationManager.configure(metadataFilename, filePathForOutput);
 
         parseInput();
         ConfigurationManager.saveVariableToConfigFile("experiment.afterParsing", String.valueOf(System.currentTimeMillis()));
@@ -152,27 +145,22 @@ public class RDFtoCSV {
     }
 
     private String writeToStringTrivial(PrefinishedOutput<?> po) {
-        String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-        String[] files = allFiles.split(",");
         StringBuilder sb = new StringBuilder();
 
         RowAndKey rnk;
-        if(po.getPrefinishedOutput() instanceof RowsAndKeys){
-            rnk = (RowAndKey) ((RowsAndKeys) po.getPrefinishedOutput()).getRowsAndKeys().get(0);
-        } else if(po.getPrefinishedOutput() instanceof  RowAndKey){
+        if (po.getPrefinishedOutput() instanceof RowsAndKeys) {
+            rnk = ((RowsAndKeys) po.getPrefinishedOutput()).getRowsAndKeys().get(0);
+        } else if (po.getPrefinishedOutput() instanceof RowAndKey) {
             rnk = (RowAndKey) po.getPrefinishedOutput();
         } else {
             throw new IllegalArgumentException("The passed argument for writeToStringTrivial can only be of " +
                     "generic PrefinishedOutput<RowsAndKeys> or PrefinishedOutput<RowAndKey>");
         }
 
-        String newFileName = files[0];
-        System.out.println("ClassCastException FileWrite for newfilename= " + newFileName + " rowAndKey = ");
         sb.append(FileWrite.writeToString(rnk.getKeys(), rnk.getRows()));
 
         db.shutDown();
 
-        System.out.println("writeToStringTrivial : " + sb.toString());
         return sb.toString();
     }
 
@@ -184,9 +172,7 @@ public class RDFtoCSV {
      */
     public String getCSVTableAsString() throws IOException {
 
-        //ConfigurationManager.configure(metadataFilename, filePathForOutput);
         if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD).equalsIgnoreCase("trivial")) {
-            System.out.println("doing TRIVIAL ");
             return getTrivialCSVTableAsString();
         }
 
@@ -214,13 +200,12 @@ public class RDFtoCSV {
     }
 
     /**
-     * Gets metadata.
+     * Gets metadata as object.
      *
-     * @return the metadata
+     * @return the metadata as object
      * @throws IOException the io exception
      */
     public Metadata getMetadata() throws IOException {
-        //ConfigurationManager.configure(metadataFilename, filePathForOutput);
 
         parseInput();
 
@@ -238,12 +223,11 @@ public class RDFtoCSV {
     @SuppressWarnings("unused")
     public FinalizedOutput<byte[]> getCSVTableAsFile() throws IOException {
         String outputString = getCSVTableAsString();
-        if(fileName.startsWith("../")){
+        if (fileName.startsWith("../")) {
             fileName = fileName.substring(2);
         }
         //String fileNameSafe = isUrl(fileName) ? (iri(fileName).getLocalName()) : "../" + fileName;
         String fileNameSafe = isUrl(fileName) ? (iri(fileName).getLocalName()) : fileName;
-        System.out.println("getCSVTableAsFile: fileNameSafe = " + fileNameSafe);
         File f = FileWrite.makeFileByNameAndExtension(fileNameSafe, "csv");
         assert f != null;
         FileWrite.writeToTheFile(f, outputString, true);
@@ -278,7 +262,6 @@ public class RDFtoCSV {
             return processStreaming(metadata);
         }
         String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-        System.out.println("String allFiles= " + allFiles);
         String[] files = allFiles.split(",");
         StringBuilder sb = new StringBuilder();
         try {
@@ -291,7 +274,6 @@ public class RDFtoCSV {
                 }
 
                 String newFileName = files[i];
-                //System.out.println("FileWrite for i= " + i + " rowAndKey = " + rowAndKey.getKeys() + " getRows= " + rowAndKey.getRows() + " newFileName " + newFileName);
                 sb.append(FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata));
                 i++;
             }
@@ -299,7 +281,6 @@ public class RDFtoCSV {
             RowAndKey rnk = (RowAndKey) po.getPrefinishedOutput();
 
             String newFileName = files[0];
-            System.out.println("ClassCastException FileWrite for newfilename= " + newFileName + " rowAndKey = ");
             FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata);
         }
         db.shutDown();
@@ -308,10 +289,9 @@ public class RDFtoCSV {
     }
 
     private String processStreaming(Metadata metadata) {
-        if(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD).equalsIgnoreCase("bigFileStreaming")){
+        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD).equalsIgnoreCase("bigFileStreaming")) {
             processStreamingWrite(metadata, fileName);
         }
-        System.out.println("CSV written to the file by stream, the file is available here: " + fileName + ".csv");
         return "CSV written to the file by stream, the file is available here: " + fileName + ".csv";
     }
 
@@ -326,25 +306,20 @@ public class RDFtoCSV {
             processStreaming(metadata);
         } else {
             String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-            System.out.println("writeToCSV  + allFiles " + allFiles);
             String[] files = allFiles.split(",");
             try {
                 RowsAndKeys rnk = (RowsAndKeys) po.getPrefinishedOutput();
                 int i = 0;
 
                 for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
-                    System.out.println("FileWrite for i= " + i + " rowAndKey = " + rowAndKey.getKeys() + " getRows= " + rowAndKey.getRows());
                     String newFileName = files[i];
-                    System.out.println("writeToCSV for i= " + i + " newFileName = " + newFileName);
                     FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata);
                     i++;
                 }
             } catch (ClassCastException ex) {
                 RowAndKey rnk = (RowAndKey) po.getPrefinishedOutput();
 
-
                 String newFileName = files[0];
-                System.out.println("ClassCastException FileWrite for newfilename= " + newFileName + " rowAndKey = ");
                 FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata);
             } catch (NullPointerException ex2) {
                 // The po is null because the methods for processing didn't create po
@@ -354,6 +329,12 @@ public class RDFtoCSV {
         db.shutDown();
     }
 
+    /**
+     * Make zip from the files created during the conversion
+     *
+     * @param po prefinished output inner representation
+     * @return the .ZIP of CSV(s) and JSON metadata
+     */
     private FinalizedOutput<byte[]> finalizeOutput(PrefinishedOutput<?> po) {
         ZipOutputProcessor zop = new ZipOutputProcessor();
         return zop.processCSVToOutput(po);
@@ -362,8 +343,8 @@ public class RDFtoCSV {
     /**
      * Create metadata metadata.
      *
-     * @param po the po
-     * @return the metadata
+     * @param po the prefinished output
+     * @return the metadata created from the prefinished output
      */
     public Metadata createMetadata(PrefinishedOutput<RowsAndKeys> po) {
         // Convert intermediate data into basic metadata
@@ -396,7 +377,7 @@ public class RDFtoCSV {
     }
 
     /**
-     * Parse input.
+     * Parse input. Create Repository and set reading methods.
      *
      * @throws IOException the io exception
      */
@@ -407,13 +388,12 @@ public class RDFtoCSV {
         MethodService methodService = new MethodService();
 
         String readMethod = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD);
-        System.out.println("read method in parse input: " + readMethod);
         rc = methodService.processInput(fileName, readMethod, db);
 
     }
 
     /**
-     * Create repository connection repository connection.
+     * Create repository connection.
      *
      * @param repository the repository
      * @param filename   the filename
@@ -425,7 +405,6 @@ public class RDFtoCSV {
         // Parse input
         // Create a new Repository.
         MethodService methodService = new MethodService();
-        System.out.println("fileName in createRepositoryConnection = " + filename);
         return methodService.processInput(filename, readMethod, repository);
     }
 

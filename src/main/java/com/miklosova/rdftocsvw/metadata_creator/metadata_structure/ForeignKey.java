@@ -10,10 +10,20 @@ public class ForeignKey {
      */
     private final String columnReference;
 
+    /**
+     * Gets column reference.
+     *
+     * @return the column reference
+     */
     public String getColumnReference() {
         return columnReference;
     }
 
+    /**
+     * Gets reference.
+     *
+     * @return the reference
+     */
     public Reference getReference() {
         return reference;
     }
@@ -23,6 +33,12 @@ public class ForeignKey {
      */
     private final Reference reference;
 
+    /**
+     * Instantiates a new Foreign key.
+     *
+     * @param columnReference the column reference
+     * @param reference       the reference
+     */
     public ForeignKey(String columnReference, Reference reference) {
         this.columnReference = columnReference;
         this.reference = reference;

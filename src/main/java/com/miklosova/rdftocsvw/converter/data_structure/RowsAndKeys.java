@@ -4,11 +4,11 @@ package com.miklosova.rdftocsvw.converter.data_structure;
 import java.util.ArrayList;
 
 /**
- * The type Rows and keys.
+ * The inner representation of group of tables.
  */
 public class RowsAndKeys {
     /**
-     * The Rows and keys.
+     * The Rows and keys. All tables.
      */
     ArrayList<RowAndKey> rowsAndKeys;
 

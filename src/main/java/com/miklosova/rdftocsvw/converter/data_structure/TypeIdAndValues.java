@@ -6,28 +6,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The type Type id and values.
+ * The Type, id and values. Inner representation of a Cell inside a Row.
  */
 public class TypeIdAndValues {
     /**
-     * The Id.
+     * The Id. Subject of the value in the cell.
      */
     public Value id;
     /**
-     * The Type.
+     * The Type of the value in the cell.
      */
     public TypeOfValue type;
     /**
-     * The Values.
+     * The Values present in the cell.
      */
     public List<Value> values;
 
     /**
      * Instantiates a new Type id and values.
      *
-     * @param id      the id
+     * @param id      the id - the subject
      * @param newType the new type
-     * @param o       the o
+     * @param o       the objects
      */
     public TypeIdAndValues(Value id, TypeOfValue newType, ArrayList<Value> o) {
         this.type = newType;

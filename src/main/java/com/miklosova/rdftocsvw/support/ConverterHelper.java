@@ -154,12 +154,12 @@ public class ConverterHelper {
     }
 
     /**
-     * Entries sorted by values list.
+     * Entries sorted by values, returns list.
      *
      * @param <K> the type parameter
      * @param <V> the type parameter
      * @param map the map
-     * @return the list
+     * @return the list of sorted Map
      */
     static <K, V extends Comparable<? super V>>
     List<Map.Entry<K, V>> entriesSortedByValues(Map<K, V> map) {
@@ -289,17 +289,16 @@ public class ConverterHelper {
                 }
 
             } catch (QueryEvaluationException ex) {
-                System.out.println("There has been a problem with query evaluation ");
                 logger.log(Level.SEVERE, ex.getCause() + " " + ex.getLocalizedMessage());
             }
         }
     }
 
     /**
-     * Change IRI into BlankNode string.
+     * Change IRI into BlankNode string in a SPARQL query.
      *
-     * @param query the query
-     * @return the string
+     * @param query the query to change
+     * @return the string of adjusted query
      */
     public static String changeIRItoBNode(String query) {
         String newQuery = query.replace("<_:", "_:");

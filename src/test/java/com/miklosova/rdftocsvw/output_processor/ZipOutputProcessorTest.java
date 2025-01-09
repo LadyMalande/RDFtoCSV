@@ -54,7 +54,7 @@ class ZipOutputProcessorTest {
             mockedConfigManager.when(() -> ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES)).thenReturn("./src/test/resources/csvFileToTestSameCSVnq.csv,./src/test/resources/csvFileToTestSameCSV.csv");
             mockedConfigManager.when(() -> ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME)).thenReturn(tempDir.resolve("output.zip").toString());
             mockedConfigManager.when(() -> ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME)).thenReturn("./src/test/resources/test-002.csv-metadata.json");
-            assertNull(zipOutputProcessor.zipMultipleFiles(mockPrefinishedOutput));
+            assertNull(zipOutputProcessor.zipMultipleFiles());
             File zipFile = tempDir.resolve("output.zip").toFile();
             assertTrue(zipFile.exists());
             assertTrue(zipFile.length() > 0);

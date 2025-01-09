@@ -10,14 +10,15 @@ import org.eclipse.rdf4j.rio.RDFParseException;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The Streaming method that only acts as a filler for the sake of keeping the conversion pipeline the same for any kind of data.
+ */
 @Log
 public class StreamingMethod implements IInputParsingMethod {
     @Override
     public RepositoryConnection processInput(File fileToParse, Repository db) throws RDFParseException, IOException {
 
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, fileToParse.getAbsolutePath());
-        System.out.println("Saved input file name: " + fileToParse.getAbsolutePath());
-
         return null;
     }
 }

@@ -11,7 +11,10 @@ import org.eclipse.rdf4j.rio.helpers.RDFaParserSettings;
 import org.eclipse.rdf4j.rio.helpers.RDFaVersion;
 
 import java.io.*;
-
+/**
+ * The RDFa parser from RDF4J library. Did not work, but maybe will in the future.
+ */
+@Deprecated
 public class RdfaParser implements IRDF4JParsingMethod {
     @Override
     public RepositoryConnection processInput(RepositoryConnection conn, File fileToParse) {

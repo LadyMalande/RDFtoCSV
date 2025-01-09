@@ -149,7 +149,7 @@ class MetadataConsolidatorMethodsTest extends BaseTest {
         oldMetadata.getTables().add(table2);
         String csvContent1 = "subject,column1\nvalue1,value2\nvalue3,value4";
         String csvContent2 = "subject,column2\nvalue2,somedata\nvalue4,moredata";
-        Tuple<String, String> result = metadataConsolidator.firstColumnHasLinksToAnotherColumn(oldMetadata, subject, table1);
+        Tuple<String, String> result = metadataConsolidator.firstColumnHasLinksToAnotherColumn(oldMetadata, table1);
         assertNotNull(result);
         assertEquals("table2.csv", result.a);
         assertEquals("subject", result.b);

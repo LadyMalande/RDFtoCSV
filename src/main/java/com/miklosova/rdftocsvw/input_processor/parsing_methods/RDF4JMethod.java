@@ -9,6 +9,9 @@ import org.eclipse.rdf4j.rio.RDFParseException;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The type RDF4J method for parsing data. Chooses the correct RDF serialization parser. Returns connection ready for SPARQL querying.
+ */
 @Log
 public class RDF4JMethod implements IInputParsingMethod {
     @Override
@@ -22,7 +25,6 @@ public class RDF4JMethod implements IInputParsingMethod {
         RepositoryConnection conn = db.getConnection();
         //RDFFormat fileFormat = ps.processInput(conn, fileToParse);
         // add the RDF data from the inputstream directly to our database
-        System.out.println("ps.processInput(conn, fileToParse); " + fileToParse);
         conn = ps.processInput(conn, fileToParse);
         if (conn.isEmpty())
             throw new RuntimeException("No loader registered for file type \"." + fileToParse.getAbsolutePath() + "\" files OR 'NO TRIPLES FOUND'");

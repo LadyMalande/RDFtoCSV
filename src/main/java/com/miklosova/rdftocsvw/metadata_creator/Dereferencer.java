@@ -7,27 +7,53 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
+/**
+ * The Dereferencer class. Contains custom parsers for finding the label/name property of given IRI. If the pretty label exists, it will be used as titles attribute in the metadata which will be used as header of column in the CSV file
+ */
 public class Dereferencer {
+    private static final Logger logger = Logger.getLogger(Dereferencer.class.getName());
+
     //private final String CC_PREFIX = "http://web.resource.org/cc/"; - the web does not publish lables of given addresses such as https://web.resource.org/cc/Distribution
-    private final String GEO_PREFIX = "http://www.w3.org/2003/01/geo/wgs84_pos#";
 
     private String url;
 
+    /**
+     * Instantiates a new Dereferencer.
+     *
+     * @param url the IRI to parse into pretty label
+     */
     public Dereferencer(String url) {
         this.url = url;
     }
 
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Sets url.
+     *
+     * @param url the url
+     */
     public void setUrl(String url) {
         this.url = url;
     }
 
+    /**
+     * Gets title (human readable nice name/label).
+     *
+     * @return the title
+     */
     public String getTitle() {
         try {
             String SKOS_PREFIX = "http://www.w3.org/2004/02/skos/core#";
@@ -65,17 +91,14 @@ public class Dereferencer {
             IRI iri = iri(this.url);
             Document doc = Jsoup.connect(iri.getNamespace()).get();
 
-            //System.out.println("iri=" + this.url);
             String cssQuery = "h3[id=\"" + iri.getLocalName() + "\"]";
             // Find the <h3> element with id=<iriLocalName>
-            //System.out.println("cssQuery " + cssQuery);
             Element broaderTr = doc.select(cssQuery).first();
             if (broaderTr != null) {
-                //System.out.println("text of dereferenced " + broaderTr.text());
                 return broaderTr.text();
             }
         } catch (IOException e) {
-            //System.out.println("IOException in Dereferencer.");
+            logger.log(Level.INFO, "The dereferencer for vann namespace was unable to get a prettier label.");
         }
         throw new NullPointerException();
     }
@@ -96,13 +119,11 @@ public class Dereferencer {
 
 
                 assert elementEm != null;
-                //System.out.println("element em text = " + elementEm.text());
 
                 return elementEm.text();
             }
         } catch (IOException e) {
-            e.printStackTrace();
-        }
+            logger.log(Level.INFO, "The dereferencer for wot namespace was unable to get a prettier label.");        }
         throw new NullPointerException();
     }
 
@@ -121,8 +142,7 @@ public class Dereferencer {
                 return label.text();
             }
         } catch (IOException e) {
-            //System.out.println("IOException in Dereferencer.");
-        }
+            logger.log(Level.INFO, "The dereferencer for vs namespace was unable to get a prettier label.");        }
         throw new NullPointerException();
     }
 
@@ -153,6 +173,7 @@ public class Dereferencer {
                 nextTr = nextTr.nextElementSibling();
             }
         }
+        logger.log(Level.INFO, "The dereferencer for skos namespace was unable to get a prettier label.");
         throw new NullPointerException();
     }
 
@@ -162,7 +183,6 @@ public class Dereferencer {
         Document doc = Jsoup.connect(this.url).get();
         IRI iri = iri(this.url);
 
-        //System.out.println("iri=" + this.url);
         String xpath = "//td[text()='" + iri + "']";
         // Find the <tr> element with id="broader"
 
@@ -186,6 +206,7 @@ public class Dereferencer {
                 nextTr = nextTr.nextElementSibling();
             }
         }
+        logger.log(Level.INFO, "The dereferencer for dc namespace was unable to get a prettier label.");
         throw new NullPointerException();
     }
 
@@ -209,8 +230,7 @@ public class Dereferencer {
                 return elementEm.text();
             }
         } catch (IOException e) {
-            e.printStackTrace();
-        }
+            logger.log(Level.INFO, "The dereferencer for foaf namespace was unable to get a prettier label.");        }
         throw new NullPointerException();
     }
 }

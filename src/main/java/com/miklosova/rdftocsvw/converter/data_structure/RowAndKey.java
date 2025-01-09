@@ -5,15 +5,15 @@ import org.eclipse.rdf4j.model.Value;
 import java.util.ArrayList;
 
 /**
- * The type Row and key.
+ * The inner representation of a Table. Contains all table rows and all table headers.
  */
 public class RowAndKey {
     /**
-     * The Keys.
+     * The Keys. Predicates of all the Rows
      */
     ArrayList<Value> keys;
     /**
-     * The Rows.
+     * The Rows. All rows
      */
     ArrayList<Row> rows;
 

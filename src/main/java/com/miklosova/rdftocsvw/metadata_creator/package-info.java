@@ -1,4 +1,5 @@
 /**
+ * Metadata creator package. Its classes create the metadata object.
  * The `com.miklosova.rdftocsvw.metadata_creator` package contains the application logic
  * for other necessities tied to converting RDF to CSV on the Web format.
  *

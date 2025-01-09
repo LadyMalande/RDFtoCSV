@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
+/**
+ * The Turtlestar parser from RDF4J library.
+ */
 public class TurtlestarParser implements IRDF4JParsingMethod {
     @Override
     public RepositoryConnection processInput(RepositoryConnection conn, File fileToParse) {

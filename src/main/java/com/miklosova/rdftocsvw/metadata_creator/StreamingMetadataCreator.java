@@ -15,30 +15,56 @@ import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 
-import java.io.*;
+import java.io.File;
+import java.io.InvalidObjectException;
+import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
+/**
+ * The type Streaming metadata creator.
+ */
 public class StreamingMetadataCreator extends MetadataCreator {
+    private static final Logger logger = Logger.getLogger(StreamingMetadataCreator.class.getName());
 
+    /**
+     * The File name to read.
+     */
     protected String fileNameToRead;
+    /**
+     * The Table schema.
+     */
     protected TableSchema tableSchema;
+    /**
+     * The File number.
+     */
     int fileNumber = 0;
+    /**
+     * The Line counter.
+     */
     int lineCounter = 0;
 
+    /**
+     * The Blank node registered to config.
+     */
     static boolean blankNodeRegisteredToConfig;
-    private static Map<String, Value> mapOfBlanks = new HashMap<>();
+    private static final Map<String, Value> mapOfBlanks = new HashMap<>();
     private static int blankNodeCounter = 0;
 
+    /**
+     * Instantiates a new Streaming metadata creator.
+     */
     public StreamingMetadataCreator() {
 
         String fileNameFromConfig = ConfigurationManager.getVariableFromConfigFile("input.inputFileName");
@@ -52,47 +78,51 @@ public class StreamingMetadataCreator extends MetadataCreator {
         String jarDirectory = file.getParentFile().getName();
 
         this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) : (jarDirectory.equalsIgnoreCase("target")) ? fileNameFromConfig : fileNameFromConfig;
-                //"../"
+        //"../"
     }
 
 
-
+    /**
+     * Parse triple from line string [ ].
+     *
+     * @param line the line
+     * @return the string [ ]
+     * @throws InvalidObjectException the invalid object exception
+     */
     public static String[] parseTripleFromLine(String line) throws InvalidObjectException {
         // Updated regex to handle URIs, literals, and blank nodes
         String regex = "^(<[^>]*>|_:\\w+)\\s+<([^>]*)>\\s+(\".*?\"(?:@\\w+|\\^\\^<[^>]+>)?|<[^>]*>|_:\\w+)\\s+\\.$";
         Pattern pattern = Pattern.compile(regex);
 
-            Matcher matcher = pattern.matcher(line);
+        Matcher matcher = pattern.matcher(line);
 
-            if (matcher.matches()) {
-                String subject = matcher.group(1);
-                String predicate = matcher.group(2);
-                String object = matcher.group(3);
+        if (matcher.matches()) {
+            String subject = matcher.group(1);
+            String predicate = matcher.group(2);
+            String object = matcher.group(3);
 
-                // Save into String array
-                String[] triple = {subject, predicate, object};
-/*
-                // Print the results
-                System.out.println("Subject: " + triple[0]);
-                System.out.println("Predicate: " + triple[1]);
-                System.out.println("Object: " + triple[2]);
-                System.out.println("--------------------------");
+            // Save into String array
 
- */
-                return triple;
-            } else {
-                System.out.println("Invalid N-Triple line: " + line);
-                throw new InvalidObjectException("Invalid N-Triple line: " + line);
-            }
+            return new String[]{subject, predicate, object};
+        } else {
+            throw new InvalidObjectException("Invalid N-Triple line: " + line);
+        }
 
     }
 
-    public static Statement replaceBlankNodesWithIRI(Statement st, String line){
+    /**
+     * Replace blank nodes with iri statement.
+     *
+     * @param st   the st
+     * @param line the line
+     * @return the statement
+     */
+    public static Statement replaceBlankNodesWithIRI(Statement st, String line) {
         Resource subject;
         Value object;
         ValueFactory vf = SimpleValueFactory.getInstance();
-        String[] triple = {"","",""};
-        if(st.getSubject().isBNode() || st.getObject().isBNode()){
+        String[] triple = {"", "", ""};
+        if (st.getSubject().isBNode() || st.getObject().isBNode()) {
             try {
                 triple = parseTripleFromLine(line);
             } catch (InvalidObjectException e) {
@@ -100,13 +130,11 @@ public class StreamingMetadataCreator extends MetadataCreator {
             }
         }
 
-        if(st.getObject().isBNode()){
-            //System.out.println("Object is BNode");
+        if (st.getObject().isBNode()) {
             if (mapOfBlanks.get(triple[2]) != null) {
                 object = mapOfBlanks.get(triple[2]);
-                //System.out.println("Object is BNode was already in map " + object);
             } else {
-                if(!blankNodeRegisteredToConfig){
+                if (!blankNodeRegisteredToConfig) {
                     blankNodeRegisteredToConfig = true;
                     ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, String.valueOf(true));
                 }
@@ -115,18 +143,15 @@ public class StreamingMetadataCreator extends MetadataCreator {
                 mapOfBlanks.put(triple[2], v);
                 object = mapOfBlanks.get(triple[2]);
                 blankNodeCounter++;
-                //System.out.println("Object is BNode added new Bnode iri to map " + v.stringValue() + " object is " + object.stringValue());
             }
         } else {
             object = st.getObject();
         }
-        if(st.getSubject().isBNode()){
-            //System.out.println("Subject is BNode");
+        if (st.getSubject().isBNode()) {
             if (mapOfBlanks.get(triple[0]) != null) {
                 subject = (IRI) mapOfBlanks.get(triple[0]);
-                //System.out.println("Subject is BNode was already in map " + subject);
             } else {
-                if(!blankNodeRegisteredToConfig){
+                if (!blankNodeRegisteredToConfig) {
                     ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, String.valueOf(true));
                     blankNodeRegisteredToConfig = true;
                 }
@@ -134,7 +159,6 @@ public class StreamingMetadataCreator extends MetadataCreator {
                 blankNodeCounter++;
                 mapOfBlanks.put(triple[0], v);
                 subject = (IRI) mapOfBlanks.get(triple[0]);
-                //System.out.println("Subject is BNode added new Bnode iri to map " + v.stringValue() + " subject is " + subject.stringValue());
             }
         } else {
             subject = st.getSubject();
@@ -143,6 +167,12 @@ public class StreamingMetadataCreator extends MetadataCreator {
         return vf.createStatement(subject, st.getPredicate(), object);
     }
 
+    /**
+     * Process n triple line statement.
+     *
+     * @param line the line
+     * @return the statement
+     */
     static Statement processNTripleLine(String line) {
         AtomicReference<Statement> statementRef = new AtomicReference<>();
         try {
@@ -154,7 +184,6 @@ public class StreamingMetadataCreator extends MetadataCreator {
                 @Override
                 public void handleStatement(Statement st) {
                     // Custom processing logic for each statement
-                    //System.out.println("Parsed Triple: " + st);
                     statementRef.set(st);
                 }
             });
@@ -163,13 +192,18 @@ public class StreamingMetadataCreator extends MetadataCreator {
             parser.parse(new StringReader(line), "");
         } catch (Exception e) {
             System.err.println("Error parsing line: " + line);
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "There was an exception while processing a line in streaming metadata creator.");
         }
         return statementRef.get();
     }
 
-    public void repairMetadataAndMakeItJsonld(Metadata metadata){
-        metadata = makeMetadataNameUnique(metadata);
+    /**
+     * Repair metadata and make it jsonld.
+     *
+     * @param metadata the metadata
+     */
+    public void repairMetadataAndMakeItJsonld(Metadata metadata) {
+        makeMetadataNameUnique(metadata);
         metadata.getTables().forEach(table -> table.getTableSchema().addRowTitles());
         if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES).equalsIgnoreCase(ConfigurationManager.ONE_TABLE)) {
 
@@ -178,13 +212,15 @@ public class StreamingMetadataCreator extends MetadataCreator {
         metadata.jsonldMetadata();
     }
 
-    private Metadata makeMetadataNameUnique(Metadata metadata) {
+    private void makeMetadataNameUnique(Metadata metadata) {
         ArrayList<Column> allColumns = new ArrayList<>();
         metadata.getTables().forEach(t -> allColumns.addAll(t.getTableSchema().getColumns()));
         TableSchema.makeColumnNamesUnique(allColumns);
-        return metadata;
     }
 
+    /**
+     * Create first column.
+     */
     void createFirstColumn() {
         Column firstColumn = new Column();
 
@@ -197,27 +233,47 @@ public class StreamingMetadataCreator extends MetadataCreator {
         tableSchema.getColumns().add(firstColumn);
     }
 
+    /**
+     * Process line.
+     *
+     * @param line the line
+     */
     public void processLine(String line) {
         Statement statement = processNTripleLine(line);
         Statement statementWithIRIs = replaceBlankNodesWithIRI(statement, line);
         Triple triple = new Triple((IRI) statementWithIRIs.getSubject(), statementWithIRIs.getPredicate(), statementWithIRIs.getObject());
-        //System.out.println("processed triple before adding to metadata : " + statementWithIRIs.getSubject()+" "+statementWithIRIs.getPredicate()+" "+statementWithIRIs.getObject());
         addMetadataToTableSchema(triple);
         lineCounter++;
     }
-    // Process line into triple that certainly does not contain BNodes
-    public static Triple processLineIntoTripleIRIsOnly(String line)
-    {
+
+    /**
+     * Process line into triple that certainly does not contain BNodes
+     *
+     * @param line the line
+     * @return the triple
+     */
+    public static Triple processLineIntoTripleIRIsOnly(String line) {
         Statement statement = processNTripleLine(line);
         return new Triple((IRI) statement.getSubject(), statement.getPredicate(), statement.getObject());
     }
 
-    public static Triple processLineIntoTriple(String line)
-    {
+    /**
+     * Process line into triple triple.
+     *
+     * @param line the line
+     * @return the triple
+     */
+    public static Triple processLineIntoTriple(String line) {
         Statement statement = processNTripleLine(line);
         Statement statementWithIRIs = replaceBlankNodesWithIRI(statement, line);
         return new Triple((IRI) statementWithIRIs.getSubject(), statementWithIRIs.getPredicate(), statementWithIRIs.getObject());
     }
+
+    /**
+     * Add metadata to table schema.
+     *
+     * @param triple the triple
+     */
     void addMetadataToTableSchema(Triple triple) {
         Column newColumn = new Column();
         newColumn.createLangFromLiteral(triple.object);
@@ -225,7 +281,6 @@ public class StreamingMetadataCreator extends MetadataCreator {
         newColumn.setPropertyUrl(triple.predicate.stringValue());
         if (triple.object.isIRI()) {
             newColumn.setValueUrl(((IRI) triple.object).getNamespace() + "{+" + newColumn.getName() + "}");
-            //System.out.println("valueUrl= "+ newColumn.getValueUrl());
         } else if (triple.object.isBNode()) {
             newColumn.setValueUrl("{+" + newColumn.getName() + "}");
         }
@@ -237,6 +292,12 @@ public class StreamingMetadataCreator extends MetadataCreator {
         }
     }
 
+    /**
+     * Consolidate metadata and cs vs metadata.
+     *
+     * @param oldmeta the old metadata
+     * @return the metadata
+     */
     protected Metadata consolidateMetadataAndCSVs(Metadata oldmeta) {
         MetadataConsolidator mc = new MetadataConsolidator();
         Metadata consolidatedMetadata = mc.consolidateMetadata(oldmeta);
@@ -245,6 +306,13 @@ public class StreamingMetadataCreator extends MetadataCreator {
         return consolidatedMetadata;
     }
 
+    /**
+     * There is matching column already in the metadata table.
+     *
+     * @param newColumn the new column that we are trying to make
+     * @param triple    the triple
+     * @return the boolean
+     */
     boolean thereIsMatchingColumnAlready(Column newColumn, Triple triple) {
         if (tableSchema.getColumns().isEmpty()) {
             return false;
@@ -280,12 +348,17 @@ public class StreamingMetadataCreator extends MetadataCreator {
         return false;
     }
 
+    /**
+     * Create new metadata string.
+     *
+     * @return the string
+     */
     @SuppressWarnings("unused")
-    String createNewMetadata(int fileNumber) {
+    String createNewMetadata() {
 
 
         File f = new File(fileNameToRead);
-        String newCSVname = f.getName() + fileNumber + ".csv";
+        String newCSVname = f.getName() + 1 + ".csv";
         Table newTable = new Table(newCSVname);
 
 
