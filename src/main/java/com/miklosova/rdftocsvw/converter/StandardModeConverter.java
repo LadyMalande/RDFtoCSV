@@ -29,6 +29,7 @@ import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 /**
  * The type Standard mode converter.
+ * Works for the RDFs that are created by CSV to RDF algorithm in Standard mode. The structure is very specific, so parsing it with regular Basic query or splitFilesQuery does not yield good results.
  */
 public class StandardModeConverter implements IQueryParser {
     /**

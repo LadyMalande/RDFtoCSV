@@ -36,6 +36,8 @@ import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 /**
  * The type Split files query converter.
+ * This converter works best if the data is so big that the user wants to see in what parts and entities it is broken down into.
+ * This converter will not damage conversion of ONE entity CSV type. For one type CSV this converter produces the same output as the BasicQueryConverter.
  */
 @Log
 public class SplitFilesQueryConverter extends ConverterHelper implements IQueryParser {

@@ -61,6 +61,7 @@ public class JsonUtil {
     public static void writeJsonToFile(ObjectNode resultNode) {
         // Serialize the final object to a JSON string
         String metadataFilename = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
+        logger.log(Level.INFO, "metadataFilename = " + metadataFilename);
         FileWrite.deleteFile(metadataFilename);
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(metadataFilename), resultNode);

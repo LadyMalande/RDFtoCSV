@@ -27,9 +27,16 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 
 
 /**
- * The main library class for requesting the RDF to CSVW conversion.
+ * The main library class for requesting the RDF to CSVW conversion. The Web service operates on these methods.
  */
 public class RDFtoCSV {
+    /**
+     * Delimiter for answering /csv/string and /csv if the conversion method is set to MORE.
+     * The generated tables are written to one string after each other, and are delimited by this string to help the viewer
+     * see the ends of tables FAST.
+     * The proper experience and method to use for getting converted data is the convertToZip method, as it returns
+     * all of the generated data in its proper format.
+     */
     private static final String STATIC_DELIMITER_FOR_CSVS_IN_ONE_STRING = """
                 
             -----------ANOTHER CSV TABLE-----------
@@ -111,17 +118,16 @@ public class RDFtoCSV {
     public FinalizedOutput<byte[]> convertToZip() throws IOException {
 
         parseInput();
-        ConfigurationManager.saveVariableToConfigFile("experiment.afterParsing", String.valueOf(System.currentTimeMillis()));
 
         PrefinishedOutput<RowsAndKeys> po = convertData();
-        ConfigurationManager.saveVariableToConfigFile("experiment.afterConverting", String.valueOf(System.currentTimeMillis()));
+
+
         Metadata metadata = createMetadata(po);
-        ConfigurationManager.saveVariableToConfigFile("experiment.afterMetadata", String.valueOf(System.currentTimeMillis()));
+
 
         // Write data to CSV by the metadata prepared
 
         writeToCSV(po, metadata);
-        ConfigurationManager.saveVariableToConfigFile("experiment.afterFileWrite", String.valueOf(System.currentTimeMillis()));
 
         return finalizeOutput(po);
         // Finalize the output to .zip
@@ -158,6 +164,7 @@ public class RDFtoCSV {
         }
 
         sb.append(FileWrite.writeToString(rnk.getKeys(), rnk.getRows()));
+
 
         db.shutDown();
 

@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.converter;
 
 import com.miklosova.rdftocsvw.converter.data_structure.*;
+import com.miklosova.rdftocsvw.input_processor.MethodService;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.ConverterHelper;
 import lombok.extern.java.Log;
@@ -10,15 +11,18 @@ import org.eclipse.rdf4j.model.util.Values;
 import org.eclipse.rdf4j.query.*;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.repository.sail.SailRepositoryConnection;
 import org.eclipse.rdf4j.sail.NotifyingSailConnection;
 import org.eclipse.rdf4j.sail.SailConnectionListener;
+import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.eclipse.rdf4j.sparqlbuilder.core.SparqlBuilder;
 import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +32,12 @@ import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 /**
  * The Basic query converter. For RDF4J method, ONE table creation.
+ *
+ * The cascade solution, that is commented in the middle of the file is following:
+ *                 This solution works fine for shallow cascade, like Code lists, but it is not detailed enough for complex RDF structures with a lot of dependences between nodes.
+ * In this version, there is a simpler solution, with not as pretty CSV, but on the other hand 100% working and data safe.
+ *  This version is suitable for files with a lot of columns, but only one type of entity.
+ *  If the data is sparse in this table, the SplitFilesQueryConverter will suit data like that much better, as it reduces white spaces.
  */
 @Log
 public class BasicQueryConverter extends ConverterHelper implements IQueryParser {
@@ -154,7 +164,11 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                         roots.add(solution.getValue("s"));
 
                         Row newRow = new Row(solution.getValue("s"), solution.getValue("o"), askForTypes);
-                        queryForSubjects(conn, newRow, solution.getValue("s"), solution.getValue("s"), 0);
+                        PrefinishedOutput<RowAndKey> queryWasBig = queryForSubjects(conn, newRow, solution.getValue("s"), solution.getValue("s"), 0);
+                        if(queryWasBig!=null){
+                            return queryWasBig;
+                        }
+
 
                         deleteQueryToGetObjectsForRoot(solution.getValue("s"));
 
@@ -200,7 +214,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
         return gen;
     }
 
-    private void queryForSubjects(RepositoryConnection conn, Row newRow, Value root, Value subject, int level) {
+    private PrefinishedOutput<RowAndKey> queryForSubjects(RepositoryConnection conn, Row newRow, Value root, Value subject, int level) {
         String queryToGetAllPredicatesAndObjects = getQueryToGetObjectsForRoot(subject);
         TupleQuery query = conn.prepareTupleQuery(queryToGetAllPredicatesAndObjects);
         try (TupleQueryResult result = query.evaluate()) {
@@ -212,7 +226,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                 Value keyForColumnsMap = solution.getBinding("p").getValue();
                 if (level != 0) {
                     ValueFactory valueFactory = SimpleValueFactory.getInstance();
-
+//System.out.println("count of stream for p="+keyForColumnsMap.stringValue()+" and subject="+ subject.stringValue() +" " + result.);
                     // Create a new IRI
 
                     String newValueForMap = solution.getBinding("p").getValue().stringValue() + "_MULTILEVEL_";// + ((IRI) subject).getLocalName();
@@ -222,6 +236,10 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                         newRow.columns.get(keyForColumnsMap).type == TypeOfValue.IRI &&
                         solution.getBinding("o").getValue().isIRI()) {
                     List<Value> oldStringValue = newRow.columns.get(keyForColumnsMap).values;
+                    if(newRow.columns.entrySet().stream().anyMatch((column) -> oldStringValue.contains(column.getValue().id))){
+                        // If there is any value, that is having another chain of objects going from it, abort this chaining and make a new simpler csv
+                        return convertData();
+                    }
                     oldStringValue.add(solution.getBinding("o").getValue());
                     TypeIdAndValues oldTypeIdAndValues = newRow.columns.get(keyForColumnsMap);
                     oldTypeIdAndValues.values = oldStringValue;
@@ -239,18 +257,31 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                 } else { // There is no such key (column) in the map
                     TypeOfValue newType = (solution.getBinding("o").getValue().isIRI()) ? TypeOfValue.IRI :
                             (solution.getBinding("o").getValue().isBNode()) ? TypeOfValue.BNODE : TypeOfValue.LITERAL;
+
+                    if(newRow.columns.entrySet().stream().anyMatch((column) -> column.getValue().values.contains(subject) && column.getValue().values.size() > 1)){
+                        // If the subject is in a list of values, abort to avoid cross subject/object littering
+                        // Or if the object goes to a list that is not empty and any of its neighbors has a chain going {solved in branch above}
+                        // Process the data in a simple way to avoid nested values in nested values
+                        return convertData();
+                    }
                     newRow.columns.put(keyForColumnsMap, new TypeIdAndValues(subject, newType,
                             new ArrayList<>(List.of(solution.getBinding("o").getValue()))));
 
                 }
 
                 keys.add(keyForColumnsMap);
-
-                if (solution.getValue("o") != null && solution.getValue("o").isIRI()) {
-                    if (solution.getValue("o") != root) {
-                        queryForSubjects(conn, newRow, root, solution.getValue("o"), level + 1);
+                /*
+                // This route would make cascade header structure, but the problem is, when the data start to multiply and each of the contents starts having its own structure.
+                // This solution works fine for shallow cascade, like Code lists, but it is not detailed enough for complex RDF structures with a lot of dependences between nodes.
+                if(ConfigurationManager.getVariableFromConfigFile("simpleBasicQuery") != null && ConfigurationManager.getVariableFromConfigFile("simpleBasicQuery").equalsIgnoreCase("false")) {
+                    if (solution.getValue("o") != null && solution.getValue("o").isIRI()) {
+                        if (solution.getValue("o") != root) {
+                            queryForSubjects(conn, newRow, root, solution.getValue("o"), level + 1);
+                        }
                     }
                 }
+
+                 */
 
                 // Delete the triple from the storage
                 Resource subjectToDelete = Values.iri(subject.toString());
@@ -275,6 +306,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
         } catch (QueryEvaluationException ex) {
             logger.log(Level.SEVERE, "Ther was an error evaluation a SPARQL query while converting RDF data to one table.");
         }
+        return null;
     }
 
     private boolean subjectIsInOnlyOneTripleAsObject(RepositoryConnection conn, Resource subjectToDelete) {
@@ -330,6 +362,25 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
 
     }
 
+    public PrefinishedOutput<RowAndKey> convertData() {
+        // Convert the table to intermediate data for processing into metadata
+        ConversionService cs = new ConversionService();
+        Repository newdb = new SailRepository(new MemoryStore());
+        MethodService methodService = new MethodService();
 
+        String readMethod = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD);
+        try {
+            ConfigurationManager.saveVariableToConfigFile("simpleBasicQuery", "true");
+            RepositoryConnection newRc = methodService.processInput(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME), readMethod, newdb);
+            PrefinishedOutput<RowsAndKeys> rk = new PrefinishedOutput<>((new RowsAndKeys.RowsAndKeysFactory()).factory());
+            rk = cs.convertByQuery(newRc, newdb);
+            PrefinishedOutput<RowAndKey> rk1 = new PrefinishedOutput<>((new RowAndKey.RowAndKeyFactory()).factory());
+            rk1.setPrefinishedOutput(rk.getPrefinishedOutput().getRowsAndKeys().get(0));
+            return rk1;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
 

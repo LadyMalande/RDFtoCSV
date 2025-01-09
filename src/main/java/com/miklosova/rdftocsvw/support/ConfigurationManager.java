@@ -249,6 +249,7 @@ public class ConfigurationManager {
         saveVariableToConfigFile(FIRST_NORMAL_FORM, String.valueOf(firstNormalForm));
         saveVariableToConfigFile(READ_METHOD, readMethod);
         saveVariableToConfigFile(INPUT_FILENAME, fileName);
+        ConfigurationManager.saveVariableToConfigFile("simpleBasicQuery", "false");
 
         saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, fileName);
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.METADATA_ROWNUMS, "false");
@@ -450,6 +451,8 @@ public class ConfigurationManager {
         prop.setProperty(ConfigurationManager.METADATA_ROWNUMS, "false");
         prop.setProperty(ConfigurationManager.OUTPUT_FILE_PATH, "");
         prop.setProperty(ConfigurationManager.STREAMING_CONTINUOUS, String.valueOf(streaming));
+        prop.setProperty("simpleBasicQuery", "false");
+
 
         metadataFileName = DEFAULT_METADATA_FILENAME;
 

@@ -33,7 +33,10 @@ import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 /**
- * The type Streaming metadata creator.
+ * The Streaming metadata creator. It reads the triple from input and immediately it updates data object and writes the
+ * triples data into a CSV.
+ * Because of this approach, it is very slow for any data than small.
+ * This class contains shared method for BigFileStreaming and Streaming conversion methods.
  */
 public class StreamingMetadataCreator extends MetadataCreator {
     private static final Logger logger = Logger.getLogger(StreamingMetadataCreator.class.getName());

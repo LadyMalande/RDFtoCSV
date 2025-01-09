@@ -453,7 +453,7 @@ public class FileWrite {
             }
             FileWrite.deleteFile(newFile.getAbsolutePath());
             if (newFile.createNewFile()) {
-                logger.log(Level.INFO, "File created: " + newFile.getAbsolutePath());
+                logger.log(Level.INFO, "File created: " + newFile.getAbsolutePath() + ". Writing data...");
             } else {
                 logger.log(Level.INFO, "File already exists: " + newFile.getAbsolutePath());
             }
@@ -493,7 +493,7 @@ public class FileWrite {
     public static void deleteFile(String fileName) {
         File myObj = new File(fileName);
         if (myObj.delete()) {
-            logger.log(Level.INFO, "The file " + myObj.getAbsolutePath() + " was deleted.");
+            //logger.log(Level.INFO, "The file " + myObj.getAbsolutePath() + " was deleted.");
         }
     }
 

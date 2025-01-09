@@ -33,12 +33,12 @@ public class ZipOutputProcessor implements IOutputProcessor {
      */
     private byte[] createBAOSWithZips() {
         String inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-        logger.log(Level.INFO, "inputFilesInString=" + inputFilesInString);
+        //logger.log(Level.INFO, "inputFilesInString=" + inputFilesInString);
         String[] listOfFiles = inputFilesInString.split(",");
 
         List<String> srcFiles = new ArrayList<>(Arrays.asList(listOfFiles));
         srcFiles.add(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
-        logger.log(Level.INFO, "OUTPUT_METADATA_FILE_NAME=" + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
+        //logger.log(Level.INFO, "OUTPUT_METADATA_FILE_NAME=" + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             ZipOutputStream zipOut = new ZipOutputStream(baos);

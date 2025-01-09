@@ -12,7 +12,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * The type Split files metadata creator.
+ * The Split files metadata creator. It iteratively creates data for multiple tables.
+ * At the end it creates foreign keys between the tables.
  */
 public class SplitFilesMetadataCreator implements IMetadataCreator {
 

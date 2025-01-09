@@ -15,7 +15,10 @@ import static com.miklosova.rdftocsvw.converter.SplitFilesQueryConverter.queryFo
 import static com.miklosova.rdftocsvw.support.ConverterHelper.rootHasThisType;
 
 /**
- * The type Recursive query for files task.
+ * The Recursive query for files task.
+ * This optimization was implemented for SplitFilesQueryConverter seeking faster processing during the conversion to
+ * the inner CSV structure.
+ * It splits the analysis of each found type (per file) and dedicates a thread to counting it, if a thread is available.
  */
 public class RecursiveQueryForFilesTask extends RecursiveTask<List<Row>> {
     private static final Logger logger = Logger.getLogger(RecursiveQueryForFilesTask.class.getName());

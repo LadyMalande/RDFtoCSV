@@ -15,7 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The BigFileStreaming N-Triples metadata creator.
+ * The BigFileStreaming N-Triples metadata creator. First reads the data and creates metadata. During second read it
+ * writes the data according to metadata to files.
+ * This method is very slow for even a bit larger files.
  */
 public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCreator implements IMetadataCreator {
 
