@@ -227,7 +227,7 @@ public class ConfigurationManager {
         createConfigFile();
         String tables = ONE_TABLE;
         String readMethod = DEFAULT_PARSING_METHOD;
-        String conversionMethod = DEFAULT_PARSING_METHOD;
+        String conversionMethod = DEFAULT_CONVERSION_METHOD;
         String firstNormalForm = "false";
         if (configMap != null) {
             if (configMap.containsKey("table")) {
@@ -249,11 +249,14 @@ public class ConfigurationManager {
             case "streaming" -> "streaming";
             default -> conversionMethod;
         };
+        //System.out.print("conversion method = " + conversionMethod);
+        //System.out.print("read method = " + readMethod);
         saveVariableToConfigFile(CONVERSION_METHOD, conversionMethod);
         saveVariableToConfigFile(TABLES, tables);
         saveVariableToConfigFile(FIRST_NORMAL_FORM, String.valueOf(firstNormalForm));
         saveVariableToConfigFile(READ_METHOD, readMethod);
         saveVariableToConfigFile(INPUT_FILENAME, fileName);
+        saveVariableToConfigFile(STREAMING_CONTINUOUS, "false");
         ConfigurationManager.saveVariableToConfigFile("simpleBasicQuery", "false");
 
         saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, fileName);
