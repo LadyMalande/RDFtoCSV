@@ -71,16 +71,17 @@ public class StreamingMetadataCreator extends MetadataCreator {
     public StreamingMetadataCreator() {
 
         String fileNameFromConfig = ConfigurationManager.getVariableFromConfigFile("input.inputFileName");
-        URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
-        File file;
+        /*
+        //URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
+        //File file = new File("temp.csv");
         try {
             file = new File(location.toURI().getPath());
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
         String jarDirectory = file.getParentFile().getName();
-
-        this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) : (jarDirectory.equalsIgnoreCase("target")) ? fileNameFromConfig : fileNameFromConfig;
+*/
+        this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) : fileNameFromConfig;
         //"../"
     }
 
