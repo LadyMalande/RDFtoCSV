@@ -227,7 +227,7 @@ public class ConfigurationManager {
         createConfigFile();
         String tables = ONE_TABLE;
         String readMethod = DEFAULT_PARSING_METHOD;
-        String conversionMethod = QueryMethods.BASIC_QUERY.getValue();
+        String conversionMethod = DEFAULT_PARSING_METHOD;
         String firstNormalForm = "false";
         if (configMap != null) {
             if (configMap.containsKey("table")) {
@@ -239,11 +239,16 @@ public class ConfigurationManager {
             if (configMap.get("readMethod") != null) {
                 readMethod = configMap.get("readMethod");
             }
-            conversionMethod = (tables.equalsIgnoreCase(ONE_TABLE)) ? QueryMethods.BASIC_QUERY.getValue() : QueryMethods.SPLIT_QUERY.getValue();
+            conversionMethod = (tables.equalsIgnoreCase(ONE_TABLE)) ? DEFAULT_CONVERSION_METHOD : MULTIPLE_TABLES_CONVERSION_METHOD;
             if (configMap.containsKey("firstNormalForm")) {
                 firstNormalForm = configMap.get("firstNormalForm");
             }
         }
+        conversionMethod = switch (readMethod.toLowerCase()) {
+            case "bigfilestreaming" -> "bigfilestreaming";
+            case "streaming" -> "streaming";
+            default -> conversionMethod;
+        };
         saveVariableToConfigFile(CONVERSION_METHOD, conversionMethod);
         saveVariableToConfigFile(TABLES, tables);
         saveVariableToConfigFile(FIRST_NORMAL_FORM, String.valueOf(firstNormalForm));
