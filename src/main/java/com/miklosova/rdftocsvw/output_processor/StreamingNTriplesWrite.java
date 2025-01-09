@@ -66,7 +66,7 @@ public class StreamingNTriplesWrite {
             throw new RuntimeException(e);
         }
         String jarDirectory = file.getParentFile().getName();
-        this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) : (jarDirectory.equalsIgnoreCase("target")) ? fileNameFromConfig : "../" + fileNameFromConfig;
+        this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) :  fileNameFromConfig;
         processedSubjects = new HashSet<>();
     }
 

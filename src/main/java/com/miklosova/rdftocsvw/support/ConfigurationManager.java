@@ -257,9 +257,14 @@ public class ConfigurationManager {
         saveVariableToConfigFile(READ_METHOD, readMethod);
         saveVariableToConfigFile(INPUT_FILENAME, fileName);
         saveVariableToConfigFile(STREAMING_CONTINUOUS, "false");
+        saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, "");
+        saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "false");
+        saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, "true");
         ConfigurationManager.saveVariableToConfigFile("simpleBasicQuery", "false");
 
         saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, fileName);
+        saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH, "");
+        saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, DEFAULT_METADATA_FILENAME);
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.METADATA_ROWNUMS, "false");
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME, fileName + "_CSVW.zip");
 
