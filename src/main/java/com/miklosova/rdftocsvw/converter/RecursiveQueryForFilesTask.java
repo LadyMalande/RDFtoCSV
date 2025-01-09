@@ -12,6 +12,9 @@ import java.util.concurrent.RecursiveTask;
 import static com.miklosova.rdftocsvw.converter.SplitFilesQueryConverter.queryForSubjects;
 import static com.miklosova.rdftocsvw.support.ConverterHelper.rootHasThisType;
 
+/**
+ * The type Recursive query for files task.
+ */
 public class RecursiveQueryForFilesTask extends RecursiveTask<List<Row>> {
     private final ConnectionPool connectionPool;
     private final Value dominantType;
@@ -21,6 +24,17 @@ public class RecursiveQueryForFilesTask extends RecursiveTask<List<Row>> {
     private final int end;
     private Set<Value> rootsThatHaveThisType;
 
+    /**
+     * Instantiates a new Recursive query for files task.
+     *
+     * @param connectionPool        the connection pool
+     * @param dominantType          the dominant type
+     * @param askForTypes           the ask for types
+     * @param roots                 the roots
+     * @param start                 the start
+     * @param end                   the end
+     * @param rootsThatHaveThisType the roots that have this type
+     */
     public RecursiveQueryForFilesTask(ConnectionPool connectionPool, Value dominantType, boolean askForTypes, Set<Value> roots, int start, int end, Set<Value> rootsThatHaveThisType) {
         this.connectionPool = connectionPool;
         this.dominantType = dominantType;

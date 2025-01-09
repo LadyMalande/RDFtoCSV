@@ -34,38 +34,109 @@ import java.util.logging.Logger;
 import static com.miklosova.rdftocsvw.support.StandardModeCsvwIris.CSVW_TableGroup;
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
+/**
+ * The type Split files query converter.
+ */
 @Log
 public class SplitFilesQueryConverter extends ConverterHelper implements IQueryParser {
     private static final Logger logger = Logger.getLogger(FileWrite.class.getName());
 
+    /**
+     * The Result csv.
+     */
     String resultCSV;
 
+    /**
+     * The Start time.
+     */
     long startTime;
+    /**
+     * The After adding roots time.
+     */
     long afterAddingRootsTime;
+    /**
+     * The After count dominant type time.
+     */
     long afterCountDominantTypeTime;
+    /**
+     * The After get dominant type time.
+     */
     long afterGetDominantTypeTime;
 
+    /**
+     * The Adding roots time.
+     */
     long addingRootsTime;
+    /**
+     * The Count dominant type time.
+     */
     long countDominantTypeTime;
+    /**
+     * The Get dominant type time.
+     */
     long getDominantTypeTime;
 
+    /**
+     * The After recursive query time.
+     */
     long afterRecursiveQueryTime;
+    /**
+     * The Recursive query time.
+     */
     long recursiveQueryTime;
+    /**
+     * The Roots.
+     */
     Set<Value> roots;
+    /**
+     * The Rows.
+     */
     ArrayList<Row> rows;
+    /**
+     * The Keys.
+     */
     static Set<Value> keys;
+    /**
+     * The Synchronized keys.
+     */
     static Set<Value> synchronizedKeys;
+    /**
+     * The All rows.
+     */
     ArrayList<ArrayList<Row>> allRows;
+    /**
+     * The All keys.
+     */
     ArrayList<ArrayList<Value>> allKeys;
+    /**
+     * The Metadata.
+     */
     Metadata metadata;
+    /**
+     * The File names created.
+     */
     ArrayList<String> fileNamesCreated;
 
+    /**
+     * The Db.
+     */
     Repository db;
 
+    /**
+     * The Rc.
+     */
     RepositoryConnection rc;
 
+    /**
+     * The File number x.
+     */
     Integer fileNumberX;
 
+    /**
+     * Instantiates a new Split files query converter.
+     *
+     * @param db the db
+     */
     public SplitFilesQueryConverter(Repository db) {
         this.keys = new HashSet<>();
         this.db = db;
@@ -326,7 +397,16 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
     }
 
 
-        public List<Row> recursiveQueryForFiles (ConnectionPool connectionPool, Value dominantType,
+    /**
+     * Recursive query for files list.
+     *
+     * @param connectionPool the connection pool
+     * @param dominantType   the dominant type
+     * @param askForTypes    the ask for types
+     * @param roots          the roots
+     * @return the list
+     */
+    public List<Row> recursiveQueryForFiles (ConnectionPool connectionPool, Value dominantType,
         boolean askForTypes, Set<Value> roots) {
             ForkJoinPool forkJoinPool = new ForkJoinPool();
             Set<Value> rootsThatHaveThisType = null;
@@ -340,7 +420,16 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
             return forkJoinPool.invoke(task);
         }
 
-        public static void queryForSubjects (RepositoryConnection conn, Row newRow, Value root, Value dominantType,
+    /**
+     * Query for subjects.
+     *
+     * @param conn         the conn
+     * @param newRow       the new row
+     * @param root         the root
+     * @param dominantType the dominant type
+     * @param askForTypes  the ask for types
+     */
+    public static void queryForSubjects (RepositoryConnection conn, Row newRow, Value root, Value dominantType,
         boolean askForTypes){
             //System.out.println("Going throuugh queryForSubjects");
             String queryToGetAllPredicatesAndObjects = getQueryToGetObjectsForRoot(root, dominantType, askForTypes);

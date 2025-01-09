@@ -356,20 +356,20 @@ public class ConfigurationManager {
         Options options = addArgsOptions();
 
         CommandLineParser parser = new DefaultParser();
+        if(args.length == 1) {
+            throwAdviceInTheTerminal(options);
+        }
         try {
             CommandLine cmd = parser.parse(options, args);
             String inputFile = cmd.getOptionValue(argName);
             boolean streamingMethod = cmd.hasOption(CMD_OPTION_STREAMING);
             // Continue with processing...
-            if (inputFile == null && !streamingMethod) {
-                System.err.println("You must specify file input argument to the command line. ");
-                printHelpLine(options);
-                System.exit(1);
+            if ((inputFile == null && !streamingMethod)) {
+                throwAdviceInTheTerminal(options);
             }
             return inputFile;
         } catch (ParseException e) {
-            System.err.println("Error parsing options from arguments: " + e.getMessage());
-            System.exit(1);
+            throwAdviceInTheTerminal(options);
         }
 
         return null;
@@ -403,9 +403,7 @@ public class ConfigurationManager {
             }
             // Continue with processing...
             if (inputFile == null && !streamingMethod) {
-                System.err.println("You must specify file input argument to the command line. ");
-                printHelpLine(options);
-                System.exit(1);
+
             }
 
             try {
@@ -515,5 +513,11 @@ public class ConfigurationManager {
         options.addOption("s", "streaming", false, "Parse the file in streaming mode (continual parsing until stopped)");
         options.addOption("n", "firstNormalForm", false, "Put the output CSV data into first normal form (every cell contains only one entry, no lists of values)");
         return options;
+    }
+
+    private static void throwAdviceInTheTerminal(Options options){
+        System.err.println("You must specify file input argument to the command line. ");
+        printHelpLine(options);
+        System.exit(1);
     }
 }

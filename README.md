@@ -31,7 +31,6 @@
 <h3 align="center">RDFtoCSV library + command line conversion</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
     <br />
     <a href="https://github.com/LadyMalande/RDFtoCSV"><strong>Explore the docs »</strong></a>
     <br />
@@ -70,16 +69,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
-
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
-
-Use the `BLANK_README.md` to get started.
+The RDFtoCSV library converts RDF data to CSV on the Web.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -89,8 +79,8 @@ Use the `BLANK_README.md` to get started.
 
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-* [![Next][Java]][Java-url]
-* [![React][Maven]][Maven-url]
+* [![Next][Java]][Java-url] 17, 19
+* Maven
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -104,50 +94,189 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+Have Maven and Java 17 or 19 on your computer.
 
-### Installation for use
+Download some test data, for example here: [RDFtoCSVNotes Repository - test data directory](https://github.com/LadyMalande/RDFtoCSVNotes/tree/main/test_data)
 
-Prerequisities are having Maven and Java 17 or 19 on your device.
+Or from this list: 
 
-1. Get a JAR of this project (either build this one or get one [here](https://github.com/LadyMalande/RDFtoCSV-JAR))
+##### Test data
+Here are links to some test data that you can use for trying out the web service:
 
-To build the project yourself:
+* [Simpsons family (Turtle)](https://w3c.github.io/csvw/tests/test005.ttl)
+* [Events in Brno](https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/refs/heads/main/performance_tests_RDF_data/events_Brno.nt)
+* [Lombardy's Payment Portal Tickets](https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/refs/heads/main/performance_tests_RDF_data/lombardia.rdf)
+* [Museums in Würzburg](https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/refs/heads/main/performance_tests_RDF_data/museen.n3)
+* [Sexes Code List](https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/refs/heads/main/performance_tests_RDF_data/pohlav%C3%AD.nt)
+* [Types of trees Code List](https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/refs/heads/main/performance_tests_RDF_data/typy-d%C5%99evin.nt)
+* [Types of Work agreement Code List](https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/refs/heads/main/test_scenarios_data/typy-pracovn%C3%ADch-vztah%C5%AF.nt)
+* [Dissesto - places, curriencies, sparse data](https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/refs/heads/main/test_scenarios_data/dissesto_2k_triples.nt)
+* [Parking Data](https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/refs/heads/main/evaluation/1E%2B-GaragesGeo/parkovaci_garaze_r_n1_t1.rdf)
 
-1. Clone the repo
+Then if you do not want to build the latest version of this repository, simply download last JAR version from this webpage: [RDFtoCSV-JAR Repository](https://github.com/LadyMalande/RDFtoCSV-JAR)
+
+Have the test data and the JAR in the same directory.
+
+Now you are ready to proceed to Usage.
+#### Own build
+If you want to build your own version of JAR, clone the repository:
+
    ```sh
    git clone https://github.com/LadyMalande/RDFtoCSV.git
    ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
-3. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-4. Change git remote url to avoid accidental pushes to base project
-   ```sh
-   git remote set-url origin github_username/repo_name
-   git remote -v # confirm the changes
-   ```
 
+In the repository directory, run (skip the tests for faster packaging):
+
+```shell
+ mvn clean package -DskipTests
+```
+
+The ready version of the JAR is in **RDFtoCSV/target/RDFtoCSV-1.0/SNAPSHOT.jar**.
+
+### Usage
+
+Enter this into your command line (use any RDF file in correct format):
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.jsonld
+```
+
+### Variants to try
+Parameters:
+* **-p** conversion method (RDF4J/streaming/BigFileStreaming), RDF4J is default
+* **-n** either is present (true) or there is no -n in the command (false). If true, the data will be in first normal form. If false, the cells of the table can contain lists of values.
+* **-t** either is present (true) or there is no -n in the command (false). If present, data will be converted into X tables. The number depends on the structure of the data and their types. If not present, the data will be converted into one CSV table.
+* **-s** Truly streaming Streaming method experience. The data for the conversion are read from the Standard input. Works only with -p streaming.
+* **-h** Help. Write out the options.
+#### RDF4J method
+Compatible RDF formats:
+* .jsonld (JSON-LD)
+* .nq (N-Quads)
+* .nt (N-Triples)
+* .rdf (RDF/XML)
+* .trig (TriG)
+* .ttl (Turtle)
+##### 1 Table, First Normal Form, RDF4J method
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.jsonld -n
+```
+
+##### 1 Table, No First Normal Form, RDF4J method
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.jsonld 
+```
+
+##### X Tables, First Normal Form, RDF4J method
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.jsonld -n -t
+```
+
+##### X Tables, No First Normal Form, RDF4J method
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.jsonld -t 
+```
+#### Streaming method (from file)
+Only works with **N-Triples** data (.nt). For larger data takes a really long time. Good datasets for trying out are smaller than 100 kB.
+##### 1 Table, First Normal Form, Streaming method
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p streaming -n
+```
+
+##### 1 Table, No First Normal Form, Streaming method
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p streaming 
+```
+
+##### X Tables, First Normal Form, Streaming method
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p streaming -n -t
+```
+
+##### X Tables, No First Normal Form, Streaming method
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p streaming -t
+```
+
+#### BigFileStreaming method
+Only works with **N-Triples** data (.nt). For larger data takes a really long time. Good datasets for trying out are smaller than 100 kB.
+##### 1 Table, First Normal Form, BigFileStreaming method
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p BigFileStreaming -n
+```
+
+##### 1 Table, No First Normal Form, BigFileStreaming method
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p BigFileStreaming 
+```
+
+##### X Tables, First Normal Form, BigFileStreaming method
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p BigFileStreaming -n -t
+```
+
+##### X Tables, No First Normal Form, BigFileStreaming method
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p BigFileStreaming -t
+```
+
+#### Streaming method -s (from Standard Input)
+Only works with **N-Triples** data (.nt). 
+For larger data takes a really long time. Good datasets for trying out are smaller than 100 kB.
+Now you can input RDF statements in N-Triples format into the terminal.
+
+To end the stream input, write "END" into the terminal.
+
+Or you can feed the program a special file, that is N-Triples file and contains "END" at the last line of the file.
+That way you can simulate streaming input without writing out the triples into the terminal.
+You can download such a file here: [Work agreements with END at the end](https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/refs/heads/main/test_scenarios_data/typy-pracovn%C3%ADch-vztah%C5%AF.nt)
+##### 1 Table, First Normal Form, Streaming method -s
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p streaming -s -n
+```
+
+##### 1 Table, No First Normal Form, Streaming method -s
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p streaming -s  
+```
+
+##### X Tables, First Normal Form, Streaming method -s
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p streaming -s -n -t
+```
+
+##### X Tables, No First Normal Form, Streaming method -s
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p streaming -s -t
+```
+##### Streaming method -s with feeding changed .nt file to the conversion
+##### 1 Table, First Normal Form, Streaming method -s
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p streaming -s -n < typy-pracovních-vztahů.nt 
+```
+
+##### 1 Table, No First Normal Form, Streaming method -s
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p streaming -s < typy-pracovních-vztahů.nt   
+```
+
+##### X Tables, First Normal Form, Streaming method -s
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p streaming -s -n -t < typy-pracovních-vztahů.nt 
+```
+
+##### X Tables, No First Normal Form, Streaming method -s
+```shell
+java -jar RDFtoCSV-1.0-SNAPSHOT.jar -f testingInput.nt -p streaming -s -t < typy-pracovních-vztahů.nt 
+```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
 <!-- USAGE EXAMPLES -->
-## Usage
+## Usage links
 
 Project Link for web service using this library: [https://github.com/LadyMalande/RDFtoCSVWAPI](https://github.com/LadyMalande/RDFtoCSVWAPI)
 
 Project link for web application using the web service: [https://github.com/LadyMalande/rdf-to-csv.github.io](https://github.com/LadyMalande/rdf-to-csv.github.io)
 
-_For more examples, please refer to the [Documentation]()_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

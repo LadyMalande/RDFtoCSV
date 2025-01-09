@@ -27,6 +27,9 @@ import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 
+/**
+ * The main library class for requesting the RDF to CSVW conversion.
+ */
 public class RDFtoCSV {
     private static final Logger logger = Logger.getLogger(FileWrite.class.getName());
     private static final String STATIC_DELIMITER_FOR_CSVS_IN_ONE_STRING = """
@@ -35,7 +38,13 @@ public class RDFtoCSV {
                 
             """;
 
+    /**
+     * The Db.
+     */
     Repository db;
+    /**
+     * The Rc.
+     */
     RepositoryConnection rc;
     /**
      * Mandatory, sets the original RDF file to convert.
@@ -43,16 +52,31 @@ public class RDFtoCSV {
     private String fileName;
     private String filePathForOutput;
 
+    /**
+     * Gets file path for output.
+     *
+     * @return the file path for output
+     */
     public String getFilePathForOutput() {
         return filePathForOutput;
     }
 
+    /**
+     * Gets metadata filename.
+     *
+     * @return the metadata filename
+     */
     public String getMetadataFilename() {
         return metadataFilename;
     }
 
     private final String metadataFilename;
 
+    /**
+     * Instantiates a new Rd fto csv.
+     *
+     * @param fileName the file name
+     */
     public RDFtoCSV(String fileName) {
         this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
         this.metadataFilename = this.fileName + ".csv-metadata.json";
@@ -64,6 +88,12 @@ public class RDFtoCSV {
         System.out.println("RDFtoCSV(String fileName) fileName isUrl(fileName)=" + isUrl(fileName));
     }
 
+    /**
+     * Instantiates a new Rd fto csv.
+     *
+     * @param fileName  the file name
+     * @param configMap the config map
+     */
     public RDFtoCSV(String fileName, Map<String, String> configMap) {
 
         //this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
@@ -79,6 +109,9 @@ public class RDFtoCSV {
 
     /**
      * Default conversion method, returns zipped file
+     *
+     * @return the finalized output
+     * @throws IOException the io exception
      */
     @SuppressWarnings("unused")
     public FinalizedOutput<byte[]> convertToZip() throws IOException {
@@ -143,6 +176,12 @@ public class RDFtoCSV {
         return sb.toString();
     }
 
+    /**
+     * Gets csv table as string.
+     *
+     * @return the csv table as string
+     * @throws IOException the io exception
+     */
     public String getCSVTableAsString() throws IOException {
 
         //ConfigurationManager.configure(metadataFilename, filePathForOutput);
@@ -161,6 +200,12 @@ public class RDFtoCSV {
         return writeToString(po, metadata);
     }
 
+    /**
+     * Gets metadata as string.
+     *
+     * @return the metadata as string
+     * @throws IOException the io exception
+     */
     @SuppressWarnings("unused")
     public String getMetadataAsString() throws IOException {
         Metadata metadata = getMetadata();
@@ -168,6 +213,12 @@ public class RDFtoCSV {
         return JsonUtil.serializeAndReturnPrettyString(metadata);
     }
 
+    /**
+     * Gets metadata.
+     *
+     * @return the metadata
+     * @throws IOException the io exception
+     */
     public Metadata getMetadata() throws IOException {
         //ConfigurationManager.configure(metadataFilename, filePathForOutput);
 
@@ -178,6 +229,12 @@ public class RDFtoCSV {
         return createMetadata(po);
     }
 
+    /**
+     * Gets csv table as file.
+     *
+     * @return the csv table as file
+     * @throws IOException the io exception
+     */
     @SuppressWarnings("unused")
     public FinalizedOutput<byte[]> getCSVTableAsFile() throws IOException {
         String outputString = getCSVTableAsString();
@@ -195,6 +252,12 @@ public class RDFtoCSV {
         return new FinalizedOutput<>(fileBytes);
     }
 
+    /**
+     * Gets metadata as file.
+     *
+     * @return the metadata as file
+     * @throws IOException the io exception
+     */
     @SuppressWarnings("unused")
     public FinalizedOutput<byte[]> getMetadataAsFile() throws IOException {
         Metadata metadata = getMetadata();
@@ -266,7 +329,6 @@ public class RDFtoCSV {
             System.out.println("writeToCSV  + allFiles " + allFiles);
             String[] files = allFiles.split(",");
             try {
-                assert po != null;
                 RowsAndKeys rnk = (RowsAndKeys) po.getPrefinishedOutput();
                 int i = 0;
 
@@ -297,24 +359,47 @@ public class RDFtoCSV {
         return zop.processCSVToOutput(po);
     }
 
+    /**
+     * Create metadata metadata.
+     *
+     * @param po the po
+     * @return the metadata
+     */
     public Metadata createMetadata(PrefinishedOutput<RowsAndKeys> po) {
         // Convert intermediate data into basic metadata
         MetadataService ms = new MetadataService();
         return ms.createMetadata(po);
     }
 
+    /**
+     * Convert data prefinished output.
+     *
+     * @return the prefinished output
+     */
     public PrefinishedOutput<RowsAndKeys> convertData() {
         // Convert the table to intermediate data for processing into metadata
         ConversionService cs = new ConversionService();
         return cs.convertByQuery(rc, db);
     }
 
+    /**
+     * Convert data prefinished output.
+     *
+     * @param repositoryConnection the repository connection
+     * @param repository           the repository
+     * @return the prefinished output
+     */
     public PrefinishedOutput<?> convertData(RepositoryConnection repositoryConnection, Repository repository) {
         // Convert the table to intermediate data for processing into metadata
         ConversionService cs = new ConversionService();
         return cs.convertByQuery(repositoryConnection, repository);
     }
 
+    /**
+     * Parse input.
+     *
+     * @throws IOException the io exception
+     */
     public void parseInput() throws IOException {
         // Parse input
         // Create a new Repository.
@@ -327,14 +412,21 @@ public class RDFtoCSV {
 
     }
 
+    /**
+     * Create repository connection repository connection.
+     *
+     * @param repository the repository
+     * @param filename   the filename
+     * @param readMethod the read method
+     * @return the repository connection
+     * @throws IOException the io exception
+     */
     public RepositoryConnection createRepositoryConnection(Repository repository, String filename, String readMethod) throws IOException {
         // Parse input
         // Create a new Repository.
         MethodService methodService = new MethodService();
         System.out.println("fileName in createRepositoryConnection = " + filename);
-        RepositoryConnection repositoryConnection = methodService.processInput(filename, readMethod, repository);
-        //assert (repositoryConnection != null);
-        return repositoryConnection;
+        return methodService.processInput(filename, readMethod, repository);
     }
 
 }

@@ -33,7 +33,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
     /**
      * The Roots.
      */
-    ArrayList<Value> roots;
+    Set<Value> roots;
     /**
      * The Rows.
      */
@@ -41,9 +41,15 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
     /**
      * The Keys.
      */
-    ArrayList<Value> keys;
+    Set<Value> keys;
 
+    /**
+     * The Ir ialready processed times.
+     */
     Map<Value, Integer> IRIalreadyProcessedTimes;
+    /**
+     * The Already processed times.
+     */
     int alreadyProcessedTimes = 0;
     /**
      * The Db.
@@ -61,7 +67,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
      * @param db the db
      */
     public BasicQueryConverter(Repository db) {
-        this.keys = new ArrayList<>();
+        this.keys = new HashSet<>();
         this.db = db;
         this.IRIalreadyProcessedTimes = new HashMap<>();
     }
@@ -142,11 +148,9 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                         System.out.println("resultList.isEmpty() " + true);
                         throw new IndexOutOfBoundsException();
                     }
-                    roots = new ArrayList<>();
+                    roots = new HashSet<>();
                     for (BindingSet solution : resultList) {
                         // ... and print out the value of the variable binding for ?s and ?n
-                        //System.out.println("?subject = " + solution.getValue("s") + " is a o=" + solution.getValue("o") + " added to roots");
-                        //System.out.println("Table Group=" + CSVW_TableGroup);
                         if (solution.getValue("o").stringValue().equalsIgnoreCase(CSVW_TableGroup)) {
                             //System.out.println("Table Group, engaging in StandardModeConverter");
                             StandardModeConverter smc = new StandardModeConverter(db);
@@ -157,15 +161,11 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                             smcOutput.getPrefinishedOutput().getKeys().addAll(smcOutputRowAndKey.getKeys());
                             return smcOutput;
                         }
-                        if (!roots.contains(solution.getValue("s"))) {
-                            roots.add(solution.getValue("s"));
-                            //System.out.println("Root: " + solution.getValue("s"));
-                        }
+                        roots.add(solution.getValue("s"));
+
                         System.out.println("Root: " + solution.getValue("s"));
                         Row newRow = new Row(solution.getValue("s"), solution.getValue("o"), askForTypes);
                         queryForSubjects(conn, newRow, solution.getValue("s"), solution.getValue("s"),  0);
-                        //System.out.println();
-                        //System.out.println("askForTypes=" + askForTypes);
 
                         deleteQueryToGetObjectsForRoot(solution.getValue("s"));
                         System.out.println("Deleting triples with s = " + solution.getValue("s").stringValue());
@@ -184,7 +184,6 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                         }
 
                     }
-                    //System.out.println("After loop with results of query " + queryString);
                     //countDominantPredicates(conn, roots);
                     if (roots.isEmpty()) {
                         System.out.println("Roots is empty");
@@ -240,7 +239,6 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
         System.out.println("conn.size() " + conn.size() + " root("+ root.stringValue() +") subject = " + subject.stringValue()) ;
         TupleQuery query = conn.prepareTupleQuery(queryToGetAllPredicatesAndObjects);
         //System.out.println("tuple query:" + query.toString()) ;
-        assert root != null;
         try (TupleQueryResult result = query.evaluate()) {
 
 
@@ -286,7 +284,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                             (solution.getBinding("o").getValue().isBNode()) ? TypeOfValue.BNODE : TypeOfValue.LITERAL;
                     newRow.columns.put(keyForColumnsMap, new TypeIdAndValues(subject, newType,
                             new ArrayList<>(List.of(solution.getBinding("o").getValue()))));
-                    //System.out.println("There is no such key in columns map o Added to newRow.columns predicate = " + keyForColumnsMap + "  Value of = " + solution.getBinding("o").getValue());
+                    System.out.println("There is no such key in columns map o Added to newRow.columns predicate = " + keyForColumnsMap + "  Value of = " + solution.getBinding("o").getValue());
                     //}
                 }
 
@@ -298,7 +296,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                 if (solution.getValue("o") != null && solution.getValue("o").isIRI()) {
                     //System.out.println("Querying with queryForSubjects for o=" + solution.getValue("o").stringValue() + " level = " + level);
                     if(solution.getValue("o") != root) {
-                        //queryForSubjects(conn, newRow, root, solution.getValue("o"), level + 1);
+                        queryForSubjects(conn, newRow, root, solution.getValue("o"), level + 1);
                     } else {
                         //System.out.println("There is a cycle!");
                     }

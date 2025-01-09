@@ -28,10 +28,9 @@ public class Main {
      */
     public static void main(String[] args) {
         // Capture start time
-        long startTime = System.currentTimeMillis();
 
         if (args.length < 1) {
-            System.err.println("Usage: java -jar Main <filename>");
+            System.err.println("Usage: java -jar RDFtoCSV<vrsion>.jar -f <filename>\n for better explanation of arguments, run  java -jar RDFtoCSV<vrsion>.jar -f <filename> -h ");
             System.exit(1);
         }
 
@@ -69,76 +68,5 @@ public class Main {
         } catch (RDFParseException | IOException rdfParseException) {
             System.out.println(rdfParseException.getMessage());
         }
-
-        // Capture end time
-        long endTime = System.currentTimeMillis();
-
-        // Calculate total runtime
-        long totalTime = endTime - startTime;
-
-        int numberOfCreatedCSVs = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES).split(",").length;
-
-        File processedFile = new File("../" + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
-        if (processedFile.getAbsolutePath().contains("\\..\\..") || processedFile.getAbsolutePath().contains("..\\C")) {
-            processedFile = new File(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
-        }
-        System.out.println("INPUT_FILENAME : " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
-        String afterParsingMilis = ConfigurationManager.getVariableFromConfigFile("experiment.afterParsing");
-        String afterConvertingMilis = ConfigurationManager.getVariableFromConfigFile("experiment.afterConverting");
-        String afterMetadataMilis = ConfigurationManager.getVariableFromConfigFile("experiment.afterMetadata");
-        String afterFileWriteMilis = ConfigurationManager.getVariableFromConfigFile("experiment.afterFileWrite");
-        long timeInParsing = Long.parseLong(afterParsingMilis) - startTime;
-        long timeInConverting = Long.parseLong(afterConvertingMilis) - Long.parseLong(afterParsingMilis);
-        long timeInMetadata = Long.parseLong(afterMetadataMilis) - Long.parseLong(afterConvertingMilis);
-        long timeInFileWrite = Long.parseLong(afterFileWriteMilis) - Long.parseLong(afterMetadataMilis);
-        long timeInZipping = endTime - Long.parseLong(afterFileWriteMilis);
-
-        System.out.println("processedFile : " + processedFile.getAbsolutePath());
-        if (processedFile.exists() && processedFile.isFile()) {
-            long fileSizeInBytes = processedFile.length();
-            double fileSizeInKB = fileSizeInBytes / 1024.0;
-            double fileSizeInMB = fileSizeInKB / 1024.0;
-            System.out.println("Length of file in bytes: " + fileSizeInBytes);
-            System.out.println("Length of file in Kbytes: " + fileSizeInKB);
-            System.out.println("Length of file in Mbytes: " + fileSizeInMB);
-
-
-            writeStringArrayAsCSVToFile("experimentTimeDurations.csv", new String[]{String.valueOf(totalTime),
-                    String.valueOf(fileSizeInMB),
-                    ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD),
-                    ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES),
-                    ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM),
-                    String.valueOf(numberOfCreatedCSVs),
-                    processedFile.getName(),
-                    new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()),
-                    String.valueOf(timeInParsing),
-                    String.valueOf(timeInConverting),
-                    String.valueOf(timeInMetadata),
-                    String.valueOf(timeInFileWrite),
-                    String.valueOf(timeInZipping)
-            });
-
-            System.out.printf("File size: %d bytes (%.2f KB, %.2f MB)%n", fileSizeInBytes, fileSizeInKB, fileSizeInMB);
-        } else {
-            System.out.println("The file does not exist or is not a regular file.");
-            writeStringArrayAsCSVToFile("experimentTimeDurations.csv", new String[]{String.valueOf(totalTime),
-                    "null",
-                    ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD),
-                    ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES),
-                    ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM),
-                    String.valueOf(numberOfCreatedCSVs),
-                    processedFile.getName(),
-                    new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()),
-                    String.valueOf(timeInParsing),
-                    String.valueOf(timeInConverting),
-                    String.valueOf(timeInMetadata),
-                    String.valueOf(timeInFileWrite),
-                    String.valueOf(timeInZipping),
-                    "8192 MB heap space"});
-        }
-
-
-        // Output the total time
-        System.out.println("Program ran for " + totalTime + " milliseconds.");
     }
 }
