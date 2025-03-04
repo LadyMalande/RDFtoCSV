@@ -358,8 +358,6 @@ public class Column {
 
         } else if (valueFromThisColumn.isBNode()) {
             this.valueUrl = "_:" + "{+" + safeNameOfTheColumn + "}";
-        } else {
-            this.valueUrl = "{+" + this.getName() + "}";
         }
 
     }

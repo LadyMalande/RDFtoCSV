@@ -1,11 +1,15 @@
 package com.miklosova.rdftocsvw.converter;
 
+import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.Main;
+import com.miklosova.rdftocsvw.support.TestSupport;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -74,9 +78,9 @@ public class FullProcessTest {
             i++;
         }
 
+*/
 
-
-        //TestSupport.runToRDFConverter("fileNamesCreated.get(0)", filePathForMetadata, filePathForTestRDFOutput);
+        TestSupport.runToRDFConverter("fileNamesCreated.get(0)", filePathForMetadata, filePathForTestRDFOutput);
         //TestSupport.rubyRun(fileNamesCreated.get(0), filePathForMetadata, filePathForTestRDFOutput, "src/test/resources/script.rb");
 
         try {
@@ -85,6 +89,6 @@ public class FullProcessTest {
             e.printStackTrace();
             assert false;
         }
-*/
+
     }
 }

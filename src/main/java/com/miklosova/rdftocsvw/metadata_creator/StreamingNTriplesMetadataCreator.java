@@ -130,7 +130,9 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         newColumn.createLangFromLiteral(triple.object);
         newColumn.createNameFromIRI(triple.predicate);
         newColumn.setPropertyUrl(triple.predicate.stringValue());
-        newColumn.setValueUrl("{+" + newColumn.getName() + "}");
+        if(!triple.getObject().isLiteral()){
+            newColumn.setValueUrl("{+" + newColumn.getName() + "}");
+        }
         newColumn.createDatatypeFromValue(triple.object);
         newColumn.setAboutUrl("{+Subject}");
         newColumn.setTitles(newColumn.createTitles(triple.predicate, triple.object));

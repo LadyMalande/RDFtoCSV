@@ -64,9 +64,7 @@ public class TestSupport {
             //System.out.println("command line error " + process.errorReader().readLine());
             //process.waitFor();
             process2.waitFor();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
         System.out.println("run command line process");
