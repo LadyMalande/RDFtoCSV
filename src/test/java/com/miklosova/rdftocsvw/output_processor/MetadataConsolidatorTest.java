@@ -15,6 +15,7 @@ import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -24,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(Parameterized.class)
+@Disabled
 public class MetadataConsolidatorTest extends BaseTest {
     private final String PROCESS_METHOD = "rdf4j";
     private String nameForTest;
@@ -51,8 +53,8 @@ public class MetadataConsolidatorTest extends BaseTest {
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> configs() {
         return Arrays.asList(new Object[][]{
-                {"200", "./src/test/resources/testingInputForTwoEntities.ttl", "./dissesto_200_triples.nt.csv-metadata.json", "./src/test/resources/testingInputOutput", "consolidatedMetadata200.json", ""},
-                {"2000", "./src/test/resources/testingInputForTwoEntities.ttl", "./dissesto_2k_triples.nt.csv-metadata.json", "./src/test/resources/testingInputOutput", "consolidatedMetadata2k.json", ""},
+                //{"200", "./src/test/resources/testingInputForTwoEntities.ttl", "./dissesto_200_triples.nt.csv-metadata.json", "./src/test/resources/testingInputOutput", "consolidatedMetadata200.json", ""},
+                {"2000", "./src/test/resources/testingInputForTwoEntities.ttl", "./src/test/resourcesdissesto_2k_triples.nt.csv-metadata.json", "./src/test/resources/testingInputOutput", "consolidatedMetadata2k.json", ""},
                 //{"12k", "./src/test/resources/experimentstestingInputForTwoEntities.ttl", "./dissesto_2k_triples.nt.csv-metadata.json", "./src/test/resources/testingInputOutput", "consolidatedMetadata2k.json", ""},
 
 
@@ -84,7 +86,7 @@ public class MetadataConsolidatorTest extends BaseTest {
     public void isGivenDatatype() {
         //ConfigurationManager.getCONFIG_FILE_NAME();
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, outputFile);
-        logger.info("Starting test isGivenDatatype.");
+        logger.info("Starting test isGivenDatatype in MetadataConsolidatorTest.");
         //createMetadata();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

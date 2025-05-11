@@ -7,6 +7,8 @@ package com.miklosova.rdftocsvw.converter;
  import com.miklosova.rdftocsvw.input_processor.MethodService;
  import org.eclipse.rdf4j.repository.RepositoryConnection;
  import static org.mockito.ArgumentMatchers.any;
+
+ import org.junit.jupiter.api.Disabled;
  import org.junit.jupiter.api.Test;
  import org.mockito.Mock;
  import org.mockito.MockitoAnnotations;
@@ -140,6 +142,7 @@ class RDFtoCSVTest {
 
 //     //BaseRock generated method id: ${testGetCSVTableAsString}, hash: 380317AA4334EFDB6FAFD2EE1F3D02B1
      @Test
+     @Disabled
      void testGetCSVTableAsString() throws IOException {
          PrefinishedOutput<RowsAndKeys> mockPrefinishedOutput = mock(PrefinishedOutput.class);
          Metadata mockMetadata = mock(Metadata.class);

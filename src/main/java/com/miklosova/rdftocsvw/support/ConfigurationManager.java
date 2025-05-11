@@ -247,7 +247,7 @@ public class ConfigurationManager {
         conversionMethod = switch (readMethod.toLowerCase()) {
             case "bigfilestreaming" -> "bigfilestreaming";
             case "streaming" -> "streaming";
-            default -> conversionMethod;
+            default -> DEFAULT_PARSING_METHOD;
         };
         //System.out.print("conversion method = " + conversionMethod);
         //System.out.print("read method = " + readMethod);
@@ -451,7 +451,7 @@ public class ConfigurationManager {
         conversionMethod = switch (parsingMethod) {
             case "bigfilestreaming" -> "bigfilestreaming";
             case "streaming" -> "streaming";
-            default -> conversionMethod;
+            default -> parsingMethod;
         };
         prop.setProperty(ConfigurationManager.OUTPUT_FILENAME, baseFileName);
         prop.setProperty(ConfigurationManager.FIRST_NORMAL_FORM, String.valueOf(firstNormalForm));

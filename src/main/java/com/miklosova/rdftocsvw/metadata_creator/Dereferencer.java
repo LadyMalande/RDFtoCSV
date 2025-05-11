@@ -1,14 +1,28 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.vocabulary.RDFS;
 import org.eclipse.rdf4j.model.IRI;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
@@ -233,4 +247,133 @@ public class Dereferencer {
             logger.log(Level.INFO, "The dereferencer for foaf namespace was unable to get a prettier label.");        }
         throw new NullPointerException();
     }
+
+    public static String fetchLabel(String iri) throws IOException {
+        // Create HTTP client
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            HttpGet httpGet = new HttpGet(iri);
+
+            // Set Accept header for RDF formats
+            httpGet.addHeader("Accept",
+                    "application/rdf+xml, " +
+                            "text/turtle, " +
+                            "application/ld+json, " +
+                            "application/n-triples, " +
+                            "application/n-quads, " +
+                            "application/trig");
+
+            // Execute request
+            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+                int statusCode = response.getStatusLine().getStatusCode();
+                if (statusCode != 200) {
+                    throw new IOException("HTTP request failed with status code: " + statusCode);
+                }
+
+                // Get content type to determine RDF format
+                String contentType = response.getEntity().getContentType().getValue();
+                String rdfFormat = determineRDFFormat(contentType);
+/*
+                if (rdfFormat == null) {
+                    throw new IOException("Unsupported RDF format in response: " + contentType);
+                }
+*/
+                // Read response content
+                String content = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+
+                logger.log(Level.INFO, "rdfFormat="+rdfFormat);
+                logger.log(Level.INFO, content);
+
+                // Parse RDF
+                Model model = ModelFactory.createDefaultModel();
+
+                model.read(iri);
+
+/*                model.read(
+                        new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)),
+                        iri,
+                        rdfFormat
+                );*/
+
+
+
+                String label = findLabelForIRI(model, iri);
+
+                logger.log(Level.INFO, "label found? " + label);
+
+                return label;
+            }
+        }
+    }
+
+    private static String determineRDFFormat(String contentType) {
+        if (contentType == null) {
+            return null;
+        }
+
+        contentType = contentType.toLowerCase();
+
+        if (contentType.contains("rdf+xml")) {
+            return "RDF/XML";
+        } else if (contentType.contains("turtle") || contentType.contains("text/turtle")) {
+            return "TTL";  // Changed from "TURTLE" to "TTL"
+        } else if (contentType.contains("ld+json")) {
+            return "JSON-LD";
+        } else if (contentType.contains("n-triples")) {
+            return "N-TRIPLES";
+        } else if (contentType.contains("n-quads")) {
+            return "N-QUADS";
+        } else if (contentType.contains("trig")) {
+            return "TRIG";
+        } else if (contentType.contains("trix")) {
+            return "TRIX";
+        }
+        return null;
+    }
+
+    /**
+     * Finds the label for a given IRI in an RDF model.
+     *
+     * @param model The RDF model to search in
+     * @param iri The subject IRI to find labels for
+     * @return The label string if found, or null if no label exists
+     */
+    public static String findLabelForIRI(Model model, String iri) {
+        // Get the resource for the IRI
+        Resource resource = model.getResource(iri);
+
+        // Try standard label predicates in order of preference
+        String[] labelPredicates = {
+                RDFS.label.getURI(),        // rdfs:label
+                "http://www.w3.org/2000/01/rdf-schema#label",  // alternative form
+                "http://www.w3.org/2004/02/skos/core#prefLabel",  // skos:prefLabel
+                "http://purl.org/dc/elements/1.1/title",       // dc:title
+                "http://purl.org/dc/terms/title",              // dcterms:title
+                "http://www.w3.org/2000/01/rdf-schema#comment" // rdfs:comment (fallback)
+        };
+
+        // Check each predicate in order
+        for (String predicate : labelPredicates) {
+            Statement labelStmt = resource.getProperty(model.createProperty(predicate));
+            if (labelStmt != null) {
+                RDFNode object = labelStmt.getObject();
+                if (object.isLiteral()) {
+                    return object.asLiteral().getString();
+                }
+            }
+        }
+
+        // If no label was found with standard predicates, try any property ending with "label"
+        for (Statement stmt : resource.listProperties().toList()) {
+            String predicateURI = stmt.getPredicate().getURI();
+            if (predicateURI.toLowerCase().contains("label")) {
+                RDFNode object = stmt.getObject();
+                if (object.isLiteral()) {
+                    return object.asLiteral().getString();
+                }
+            }
+        }
+
+        return null; // No label found
+    }
+
 }

@@ -47,7 +47,7 @@ public class ConversionService {
         switch (conversionChoice) {
             case "basicQuery", "trivial" -> conversionGateway.setConversionMethod(new BasicQueryConverter(db));
             case "splitQuery" -> conversionGateway.setConversionMethod(new SplitFilesQueryConverter(db));
-            default -> throw new IllegalArgumentException("Invalid payment method");
+            default -> throw new IllegalArgumentException("Invalid conversion method: " + conversionChoice);
         }
     }
 }
