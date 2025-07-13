@@ -244,11 +244,14 @@ public class ConfigurationManager {
                 firstNormalForm = configMap.get("firstNormalForm");
             }
         }
+        /*
         conversionMethod = switch (readMethod.toLowerCase()) {
             case "bigfilestreaming" -> "bigfilestreaming";
             case "streaming" -> "streaming";
             default -> DEFAULT_PARSING_METHOD;
         };
+
+         */
         //System.out.print("conversion method = " + conversionMethod);
         //System.out.print("read method = " + readMethod);
         saveVariableToConfigFile(CONVERSION_METHOD, conversionMethod);
@@ -448,11 +451,14 @@ public class ConfigurationManager {
 
         conversionMethod = (!multipleTables) ? DEFAULT_CONVERSION_METHOD : MULTIPLE_TABLES_CONVERSION_METHOD;
         prop.setProperty(ConfigurationManager.TABLES, (!multipleTables) ? "one" : "more");
+        /*
         conversionMethod = switch (parsingMethod) {
             case "bigfilestreaming" -> "bigfilestreaming";
             case "streaming" -> "streaming";
             default -> parsingMethod;
         };
+
+         */
         prop.setProperty(ConfigurationManager.OUTPUT_FILENAME, baseFileName);
         prop.setProperty(ConfigurationManager.FIRST_NORMAL_FORM, String.valueOf(firstNormalForm));
         prop.setProperty(ConfigurationManager.CONVERSION_METHOD, conversionMethod);
@@ -491,7 +497,14 @@ public class ConfigurationManager {
         return options;
     }
 
-    private static void throwAdviceInTheTerminal(Options options){
+    public static void throwAdviceInTheTerminal(Options options){
+        System.err.println("You must specify file input argument to the command line. ");
+        printHelpLine(options);
+        System.exit(1);
+    }
+
+    public static void throwAdviceInTheTerminal(){
+        Options options = addArgsOptions();
         System.err.println("You must specify file input argument to the command line. ");
         printHelpLine(options);
         System.exit(1);

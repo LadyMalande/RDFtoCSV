@@ -66,7 +66,7 @@ class SplitFilesMetadataCreatorTest {
      void setUp() {
          rdfToCSV = new RDFtoCSV(fileName);
          db = new SailRepository(new MemoryStore());
-         args = new String[]{"-f", "test.rdf", "-p", "basicQuery"};
+         args = new String[]{"-f", "test.rdf", "-p", "rdf4j"};
          ConfigurationManager.loadSettingsFromInputToConfigFile(args);
          mockData = (PrefinishedOutput<RowsAndKeys>) mock(PrefinishedOutput.class);
 

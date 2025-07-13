@@ -93,10 +93,12 @@ public class MethodService {
     }
 
     private void processMethodChoice(String methodChoice) {
+        logger.info("methodChoice=" + methodChoice);
         switch (methodChoice.toLowerCase()) {
             case "rdf4j" -> methodGateway.setParsingMethod(new RDF4JMethod());
             case "streaming", "bigfilestreaming" -> methodGateway.setParsingMethod(new StreamingMethod());
-            default -> throw new IllegalArgumentException("Invalid reading method");
+            default -> {ConfigurationManager.throwAdviceInTheTerminal();
+                throw new IllegalArgumentException("Invalid reading method");}
         }
     }
 }

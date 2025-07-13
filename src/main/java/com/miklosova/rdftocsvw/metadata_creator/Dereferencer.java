@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
 import org.apache.jena.rdf.model.*;
+import org.apache.jena.shared.JenaException;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDFS;
 import org.eclipse.rdf4j.model.IRI;
@@ -11,6 +12,7 @@ import org.jsoup.select.Elements;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -331,11 +333,23 @@ public class Dereferencer {
 
                 logger.log(Level.INFO, "rdfFormat="+rdfFormat);
                 logger.log(Level.INFO, content);
-
+                Model model = null;
+                try {
                 // Parse RDF
-                Model model = ModelFactory.createDefaultModel();
+                 model = ModelFactory.createDefaultModel();
 
-                model.read(extractBaseUri(iri));
+
+                    model.read(extractBaseUri(iri));
+                } catch (JenaException timedOut){
+                    try {
+                        Thread.sleep(500);
+                        model = ModelFactory.createDefaultModel();
+
+                        model.read(extractBaseUri(iri));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
 /*                model.read(
                         new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)),
