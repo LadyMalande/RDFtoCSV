@@ -14,6 +14,7 @@ import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.jsoup.helper.ValidationException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -529,8 +530,9 @@ public class Column {
         if (ConnectionChecker.checkConnection()) {
             Dereferencer dereferencer = new Dereferencer(this.getPropertyUrl());
             try {
-                this.titles = dereferencer.getTitle();
-            } catch (NullPointerException noElement) {
+                //this.titles = dereferencer.getTitle();
+                Dereferencer.fetchLabel(this.getPropertyUrl());
+            } catch (IOException noElement) {
                 this.titles = propertyUrlIRI.getLocalName();
             }
         }
@@ -588,13 +590,14 @@ public class Column {
             Dereferencer d = new Dereferencer(typeIri.toString());
 
             try {
-                this.titles = d.getTitle();
+                //this.titles = d.getTitle();
+                this.titles = Dereferencer.fetchLabel(typeIri.toString());
                 if(this.titles == null){
                     this.titles = "Subject";
                 }
                 this.name = typeIri.getLocalName();
 
-            } catch(NullPointerException | ValidationException noElement){
+            } catch(NullPointerException | ValidationException | IOException noElement){
                 this.name = typeIri.getLocalName();
                 this.titles = this.name;
             }

@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
 import org.apache.jena.rdf.model.*;
+import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDFS;
 import org.eclipse.rdf4j.model.IRI;
 import org.jsoup.Jsoup;
@@ -10,7 +11,9 @@ import org.jsoup.select.Elements;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -31,7 +34,20 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  */
 public class Dereferencer {
     private static final Logger logger = Logger.getLogger(Dereferencer.class.getName());
+    private static final String WOT_RDF_FILE = "http://xmlns.com/wot/0.1/index.rdf";
+    private static final String VANN_RDF_FILE = "http://purl.org/vocab/vann/vann-vocab-20100607.rdf";
 
+    static String SKOS_PREFIX = "http://www.w3.org/2004/02/skos/core#";
+    static String WOT_PREFIX = "http://xmlns.com/wot/0.1/";
+    static String VS_PREFIX = "http://www.w3.org/2003/06/sw-vocab-status/ns#";
+    static String VANN_PREFIX = "http://purl.org/vocab/vann/";
+    static String DCTERMS_PREFIX = "http://purl.org/dc/terms/";
+    static String DC_PREFIX = "http://purl.org/dc/elements/1.1/";
+    static String FOAF_PREFIX = "http://xmlns.com/foaf/0.1/";
+    static String RDFSchema_PREFIX = "http://www.w3.org/2000/01/rdf-schema";
+    static String OWL_PREFIX = "http://www.w3.org/2002/07/owl";
+    static String SKOS_REFERENCE = "http://www.w3.org/2009/08/skos-reference/skos.rdf";
+    static String[] standardKnownPrefixes = {SKOS_PREFIX, WOT_PREFIX, VS_PREFIX, VANN_PREFIX, DCTERMS_PREFIX, DC_PREFIX, FOAF_PREFIX, RDFSchema_PREFIX, OWL_PREFIX, SKOS_REFERENCE};
     //private final String CC_PREFIX = "http://web.resource.org/cc/"; - the web does not publish lables of given addresses such as https://web.resource.org/cc/Distribution
 
     private String url;
@@ -68,27 +84,21 @@ public class Dereferencer {
      *
      * @return the title
      */
-    public String getTitle() {
+    public static String getTitle(String url) {
         try {
-            String SKOS_PREFIX = "http://www.w3.org/2004/02/skos/core#";
-            String WOT_PREFIX = "http://xmlns.com/wot/0.1/";
-            String VS_PREFIX = "http://www.w3.org/2003/06/sw-vocab-status/ns#";
-            String VANN_PREFIX = "http://purl.org/vocab/vann/";
-            String DCTERMS_PREFIX = "http://purl.org/dc/terms/";
-            String DC_PREFIX = "http://purl.org/dc/elements/1.1/";
-            String FOAF_PREFIX = "http://xmlns.com/foaf/0.1/";
-            if (this.url.startsWith(FOAF_PREFIX)) {
-                return foafDereference();
-            } else if (this.url.startsWith(DC_PREFIX) || this.url.startsWith(DCTERMS_PREFIX)) {
-                return dcDereference();
-            } else if (this.url.startsWith(VANN_PREFIX)) {
-                return vannDereference();
-            } else if (this.url.startsWith(VS_PREFIX)) {
-                return vsDereference();
-            } else if (this.url.startsWith(WOT_PREFIX)) {
-                return wotDereference();
-            } else if (this.url.startsWith(SKOS_PREFIX)) {
-                return skosDereference();
+
+            if (url.startsWith(FOAF_PREFIX)) {
+                return foafDereference(url);
+            } else if (url.startsWith(DC_PREFIX) || url.startsWith(DCTERMS_PREFIX)) {
+                return dcDereference(url);
+            } else if (url.startsWith(VANN_PREFIX)) {
+                return vannDereference(url);
+            } else if (url.startsWith(VS_PREFIX)) {
+                return vsDereference(url);
+            } else if (url.startsWith(WOT_PREFIX)) {
+                return wotDereference(url);
+            } else if (url.startsWith(SKOS_PREFIX)) {
+                return skosDereference(url);
             } else {
                 throw new NullPointerException();
             }
@@ -97,12 +107,12 @@ public class Dereferencer {
         }
     }
 
-    private String vannDereference() {
+    private static String vannDereference(String url) {
         try {
             // dereference for skos
             // Fetch the HTML page
 
-            IRI iri = iri(this.url);
+            IRI iri = iri(url);
             Document doc = Jsoup.connect(iri.getNamespace()).get();
 
             String cssQuery = "h3[id=\"" + iri.getLocalName() + "\"]";
@@ -117,12 +127,12 @@ public class Dereferencer {
         throw new NullPointerException();
     }
 
-    private String wotDereference() {
+    private static String wotDereference(String url) {
         try {
             // dereference for foaf prefix
             // Fetch the HTML page
-            Document doc = Jsoup.connect(this.url).get();
-            IRI iri = iri(this.url);
+            Document doc = Jsoup.connect(url).get();
+            IRI iri = iri(url);
 
             String cssQuery = "div[id=\"term_" + iri.getLocalName() + "\"]";
             // Find the <tr> element with id="broader"
@@ -141,12 +151,12 @@ public class Dereferencer {
         throw new NullPointerException();
     }
 
-    private String vsDereference() {
+    private static String vsDereference(String url) {
         try {
             // dereference for vs
             // Fetch the HTML page
-            Document doc = Jsoup.connect(this.url).get();
-            IRI iri = iri(this.url);
+            Document doc = Jsoup.connect(url).get();
+            IRI iri = iri(url);
             String xpath = "//rdf:Property[@rdf:about='#" + iri.getLocalName() + "']";
             // Find the <h3> element with id=<iriLocalName>
             Element broaderTr = doc.selectXpath(xpath).first();
@@ -160,11 +170,11 @@ public class Dereferencer {
         throw new NullPointerException();
     }
 
-    private String skosDereference() throws IOException {
+    private static String skosDereference(String url) throws IOException {
         // dereference for skos
         // Fetch the HTML page
-        Document doc = Jsoup.connect(this.url).get();
-        IRI iri = iri(this.url);
+        Document doc = Jsoup.connect(url).get();
+        IRI iri = iri(url);
 
         String cssQuery = "#" + iri.getLocalName();
         // Find the <tr> element with id="broader"
@@ -191,11 +201,11 @@ public class Dereferencer {
         throw new NullPointerException();
     }
 
-    private String dcDereference() throws IOException {
+    private static String dcDereference(String url) throws IOException {
         // dereference for dcterms for example http://purl.org/dc/terms/title
         // Fetch the HTML page
-        Document doc = Jsoup.connect(this.url).get();
-        IRI iri = iri(this.url);
+        Document doc = Jsoup.connect(url).get();
+        IRI iri = iri(url);
 
         String xpath = "//td[text()='" + iri + "']";
         // Find the <tr> element with id="broader"
@@ -224,12 +234,12 @@ public class Dereferencer {
         throw new NullPointerException();
     }
 
-    private String foafDereference() {
+    private static String foafDereference(String url) {
         try {
             // dereference for foaf prefix
             // Fetch the HTML page
-            Document doc = Jsoup.connect(this.url).get();
-            IRI iri = iri(this.url);
+            Document doc = Jsoup.connect(url).get();
+            IRI iri = iri(url);
 
             String cssQuery = "div[about=\"" + iri + "\"]";
             // Find the <tr> element with id="broader"
@@ -248,10 +258,49 @@ public class Dereferencer {
         throw new NullPointerException();
     }
 
+    public static boolean startsWithAny(String uri, String[] prefixes) {
+        for (String prefix : prefixes) {
+            if (uri.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static String extractBaseUri(String fullUri){
+
+            URI uri = URI.create(fullUri);
+            String path = uri.getPath();
+            logger.info("uri.getFragment(): " + uri.getFragment());
+            if(Arrays.asList(standardKnownPrefixes).contains(fullUri)){
+                return fullUri;
+            }
+            if(uri.getFragment() != null){
+                // The uri is ready to be fetched as is
+                return fullUri;
+            }
+            if(fullUri.startsWith(WOT_PREFIX)){
+                return WOT_RDF_FILE;
+            }
+        if(fullUri.startsWith(VANN_PREFIX)){
+            return VANN_RDF_FILE;
+        }
+            if(startsWithAny(fullUri, standardKnownPrefixes)){
+                int lastSlash = path.lastIndexOf('/');
+                String basePath = path.substring(0, lastSlash);
+                String baseUri = uri.getScheme() + "://" + uri.getHost() + basePath;
+                logger.info("baseUri: " + baseUri);
+                return baseUri;
+            }
+            else {return fullUri;}
+
+    }
+
     public static String fetchLabel(String iri) throws IOException {
         // Create HTTP client
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            HttpGet httpGet = new HttpGet(iri);
+
+            HttpGet httpGet = new HttpGet(extractBaseUri(iri));
 
             // Set Accept header for RDF formats
             httpGet.addHeader("Accept",
@@ -286,7 +335,7 @@ public class Dereferencer {
                 // Parse RDF
                 Model model = ModelFactory.createDefaultModel();
 
-                model.read(iri);
+                model.read(extractBaseUri(iri));
 
 /*                model.read(
                         new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)),
@@ -341,6 +390,8 @@ public class Dereferencer {
         // Get the resource for the IRI
         Resource resource = model.getResource(iri);
 
+        logger.info("resource in findLabelForIRI: " + resource.getURI() + " localName: " + resource.getLocalName() );
+
         // Try standard label predicates in order of preference
         String[] labelPredicates = {
                 RDFS.label.getURI(),        // rdfs:label
@@ -349,6 +400,7 @@ public class Dereferencer {
                 "http://purl.org/dc/elements/1.1/title",       // dc:title
                 "http://purl.org/dc/terms/title",              // dcterms:title
                 "http://www.w3.org/2000/01/rdf-schema#comment" // rdfs:comment (fallback)
+
         };
 
         // Check each predicate in order
