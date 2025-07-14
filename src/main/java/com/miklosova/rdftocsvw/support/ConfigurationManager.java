@@ -7,10 +7,12 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -442,12 +444,37 @@ public class ConfigurationManager {
         String baseFileName;
         if (outputFilename == null) {
             baseFileName = inputFile.split("\\.")[0];
+            System.out.println("inputFile in ConfigurationManager = " + inputFile);
+            for(String split : inputFile.split("\\.")){
+                System.out.println("inputFile.split in ConfigurationManager = " + split);
+
+            }
+            if(baseFileName.isEmpty()){
+                System.out.println("FileSystems.getDefault().getSeparator() in ConfigurationManager = " + FileSystems.getDefault().getSeparator());
+                String separator = FileSystems.getDefault().getSeparator();
+                if (inputFile.contains("/")) {
+                    separator = "/";
+                }
+                if (inputFile.contains("\\")) {
+                    separator = "\\";
+                }
+                String[] splitPath = inputFile.split(Pattern.quote(separator));
+                baseFileName = splitPath[splitPath.length-1];
+                for(String split : splitPath){
+                    System.out.println("inputFile.splitPath in ConfigurationManager = " + split);
+
+                }
+
+            }
         } else {
             baseFileName = outputFilename;
+            System.out.println("outputFilename != null in ConfigurationManager = " + outputFilename);
         }
         if (isUrl(inputFile)) {
             baseFileName = iri(inputFile).getLocalName();
+            System.out.println("isUrl(inputFile) in ConfigurationManager = " + baseFileName);
         }
+        System.out.println("baseFileName in ConfigurationManager = " + baseFileName);
 
         conversionMethod = (!multipleTables) ? DEFAULT_CONVERSION_METHOD : MULTIPLE_TABLES_CONVERSION_METHOD;
         prop.setProperty(ConfigurationManager.TABLES, (!multipleTables) ? "one" : "more");

@@ -1,8 +1,10 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
+import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.models.DereferencerTestParameters;
 import com.miklosova.rdftocsvw.support.BaseTest;
+import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.poiji.bind.Poiji;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
@@ -12,7 +14,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.jena.shared.JenaException;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,7 +39,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class DereferencerGetRdfTest extends BaseTest {
     private static final String PROCESS_METHOD = "rdf4j";
-    private static String filePath = "./src/test/resources/DereferenceTests/dereferenceTestInput.ttl";
+    private static String filePath = "./RDFtoCSV/src/test/resources/DereferenceTests/dereferenceTestInput.ttl";
     private static String filePathForMetadata = "./src/test/resources/DereferenceTests/dereferenceTestInput.csv-metadata.json";
     private static Metadata createdMetadata;
     private static Repository db;
@@ -115,6 +120,19 @@ public class DereferencerGetRdfTest extends BaseTest {
     void testFetchLabelWhenUnknownURIWithFragment() {
 
         assertThrows(IOException.class, () -> Dereferencer.fetchLabel("http://example.org/NotFound#unavailable"));
+    }
+
+    @Test
+    void createPrefinishedOutputAndMetadata() {
+        rdfToCSV = new RDFtoCSV(filePath);
+        db = new SailRepository(new MemoryStore());
+        args = new String[]{"-f", filePath, "-p", "rdf4j"};
+        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
+        try {
+            rdfToCSV.convertToZip();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

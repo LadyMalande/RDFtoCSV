@@ -49,6 +49,7 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
         this.allRows = new ArrayList<>();
         File f = new File(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILENAME));
         CSVFileTOWriteTo = f.getName();
+
     }
 
     @Override

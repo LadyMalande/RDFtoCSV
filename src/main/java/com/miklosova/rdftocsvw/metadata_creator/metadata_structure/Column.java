@@ -531,7 +531,7 @@ public class Column {
             Dereferencer dereferencer = new Dereferencer(this.getPropertyUrl());
             try {
                 //this.titles = dereferencer.getTitle();
-                Dereferencer.fetchLabel(this.getPropertyUrl());
+                this.titles = Dereferencer.fetchLabel(this.getPropertyUrl());
             } catch (IOException noElement) {
                 this.titles = propertyUrlIRI.getLocalName();
             }

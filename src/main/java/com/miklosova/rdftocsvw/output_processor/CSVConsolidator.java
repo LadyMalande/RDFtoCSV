@@ -105,6 +105,7 @@ public class CSVConsolidator {
                     throw new RuntimeException(e);
                 }
             }
+            System.out.println("newFileName writeToCSVFromOldMetadataToMerged   fileToWriteTo = " + fileToWriteTo.toString());
 
             ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileToWriteTo.toString());
         } catch (IOException e) {

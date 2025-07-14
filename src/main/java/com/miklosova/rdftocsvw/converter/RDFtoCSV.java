@@ -235,6 +235,7 @@ public class RDFtoCSV {
         }
         //String fileNameSafe = isUrl(fileName) ? (iri(fileName).getLocalName()) : "../" + fileName;
         String fileNameSafe = isUrl(fileName) ? (iri(fileName).getLocalName()) : fileName;
+        System.out.println("fileNameSafe for final .csv file in getCSVTableAsFile = " + fileNameSafe);
         File f = FileWrite.makeFileByNameAndExtension(fileNameSafe, "csv");
         assert f != null;
         FileWrite.writeToTheFile(f, outputString, true);
@@ -281,6 +282,7 @@ public class RDFtoCSV {
                 }
 
                 String newFileName = files[i];
+                System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
                 sb.append(FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata));
                 i++;
             }
@@ -288,6 +290,7 @@ public class RDFtoCSV {
             RowAndKey rnk = (RowAndKey) po.getPrefinishedOutput();
 
             String newFileName = files[0];
+            System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
             FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata);
         }
         db.shutDown();
@@ -320,6 +323,7 @@ public class RDFtoCSV {
 
                 for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
                     String newFileName = files[i];
+                    System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
                     FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata);
                     i++;
                 }
@@ -327,6 +331,7 @@ public class RDFtoCSV {
                 RowAndKey rnk = (RowAndKey) po.getPrefinishedOutput();
 
                 String newFileName = files[0];
+                System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
                 FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata);
             } catch (NullPointerException ex2) {
                 // The po is null because the methods for processing didn't create po

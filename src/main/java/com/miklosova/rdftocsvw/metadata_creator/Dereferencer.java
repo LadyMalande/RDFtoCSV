@@ -332,7 +332,10 @@ public class Dereferencer {
                 String content = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
 
                 logger.log(Level.INFO, "rdfFormat="+rdfFormat);
-                logger.log(Level.INFO, content);
+                if(rdfFormat == null){
+                    throw new IOException("No rdf format content was fetched for IRI "+iri+", create a column title from local name in the IRI.");
+                }
+                //logger.log(Level.INFO, content);
                 Model model = null;
                 try {
                 // Parse RDF
