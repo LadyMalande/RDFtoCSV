@@ -1,0 +1,48 @@
+@prefix ex: <http://example.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ex:book1 a ex:Book ;
+         dc:title "The Semantic Web for Beginners" ;
+         dc:creator ex:tom_clark ;
+         dcterms:issued "2021-09-01" ;
+         ex:isbn "978-1234567890" ;
+         rdfs:seeAlso ex:book3 .
+
+ex:book2 a ex:Book ;
+         dc:title "Advanced Linked Data" ;
+         dc:creator ex:lucy_chen ;
+         dcterms:issued "2019-05-22" ;
+         ex:isbn "978-0987654321" .
+
+ex:book3 a ex:Book ;
+         dc:title "RDF Best Practices" ;
+         dc:creator ex:jack_miller ;
+         dcterms:issued "2020-02-15" ;
+         ex:isbn "978-1111222231" ;
+         ex:relatedTo ex:book1 .
+
+ex:tom_clark a foaf:Person ;
+             foaf:name "Tom Clark" ;
+             ex:writesGenre "Non-fiction" ;
+             foaf:mbox <mailto:tom@clark.com> .
+
+ex:lucy_chen a foaf:Person ;
+             foaf:name "Lucy Chen" ;
+             ex:writesGenre "Academic" ;
+             foaf:mbox <mailto:lucy.chen@books.com> .
+
+ex:jack_miller a foaf:Person ;
+               foaf:name "Jack Miller" ;
+               ex:writesGenre "Tutorial" ;
+               foaf:mbox <mailto:jmiller@example.org> .
+
+ex:publisher1 a ex:Publisher ;
+              rdfs:label "Springer Press" ;
+              ex:publishes ex:book1, ex:book2 .
+
+ex:publisher2 a ex:Publisher ;
+              rdfs:label "Tech Book House" ;
+              ex:publishes ex:book3 .

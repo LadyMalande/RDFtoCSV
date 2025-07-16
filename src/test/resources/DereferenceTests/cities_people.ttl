@@ -1,0 +1,60 @@
+@prefix ex: <http://example.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+ex:paris a ex:City ;
+         ex:name "Paris" ;
+         ex:country "France" ;
+         ex:population 2161000 ;
+         skos:prefLabel "Paris"@en ;
+         dcterms:subject ex:france .
+
+ex:london a ex:City ;
+          ex:name "London" ;
+          ex:country "United Kingdom" ;
+          ex:population 8982000 ;
+          skos:prefLabel "London"@en ;
+          dcterms:subject ex:uk .
+
+ex:mary a foaf:Person ;
+        foaf:name "Mary Smith" ;
+        foaf:mbox <mailto:mary@smith.com> ;
+        ex:livesIn ex:paris ;
+        dcterms:created "2021-04-13"^^<http://www.w3.org/2001/XMLSchema#date> .
+
+ex:john a foaf:Person ;
+        foaf:name "John Doe" ;
+        foaf:mbox <mailto:jdoe@example.org> ;
+        ex:livesIn ex:london ;
+        dcterms:created "2022-01-02"^^<http://www.w3.org/2001/XMLSchema#date> .
+
+ex:paul a foaf:Person ;
+        foaf:name "Paul Brown" ;
+        foaf:mbox <mailto:paul@brown.com> ;
+        ex:livesIn ex:london ;
+        ex:knows ex:john, ex:mary ;
+        dcterms:created "2020-12-30"^^<http://www.w3.org/2001/XMLSchema#date> .
+
+ex:berlin a ex:City ;
+          ex:name "Berlin" ;
+          ex:country "Germany" ;
+          ex:population 3769000 ;
+          skos:prefLabel "Berlin"@en ;
+          dcterms:subject ex:germany .
+
+ex:lucia a foaf:Person ;
+         foaf:name "Lucia Martinez" ;
+         foaf:mbox <mailto:lucia.martinez@ex.org> ;
+         ex:livesIn ex:berlin ;
+         ex:knows ex:mary .
+
+ex:uk a ex:Country ;
+      ex:name "United Kingdom" ;
+      skos:altLabel "UK" .
+
+ex:france a ex:Country ;
+          ex:name "France" .
+
+ex:germany a ex:Country ;
+           ex:name "Germany" .

@@ -3,21 +3,19 @@ package com.miklosova.rdftocsvw.metadata_creator;
 import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.models.DereferencerTestParameters;
+import com.miklosova.rdftocsvw.models.FilesParameters;
 import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.poiji.bind.Poiji;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.message.BasicHeader;
 import org.apache.jena.shared.JenaException;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,14 +25,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class DereferencerGetRdfTest extends BaseTest {
@@ -76,25 +72,27 @@ public class DereferencerGetRdfTest extends BaseTest {
 
     }
 
+    public static Stream<FilesParameters> filesSource(){
+
+        File file = new File("src/test/resources/poiji_datasets/test_dataset.xlsx");
+        // Read the Excel file into a list of Person objects
+        return Poiji.fromExcel(file, FilesParameters.class).stream();
+
+    }
+
     @ParameterizedTest
     @MethodSource("dataSource")
     void testFetchLabelFromTurtle(DereferencerTestParameters line) throws IOException {
-        // Mock HTTP response with Turtle content
-        String turtleContent = """
-                @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-                @prefix ex: <http://example.org/> .
 
-                ex:Resource rdfs:label "Test Resource"@en .""";
 
-        String label = Dereferencer.fetchLabel(line.getUrl());
-        logger.info("line.getUrl(): " + line.getUrl());
+        String label = Dereferencer.fetchLabel(line.getIri());
+        logger.info("line.getUrl(): " + line.getIri());
         logger.info("label: " +  label);
         if(line.getPredicateName().equalsIgnoreCase("null")){
             Assertions.assertNull(label);
         } else {
             assertEquals(line.getPredicateName(), label);
         }
-        //   add to dataset?              DBpedia 	http://dbpedia.org/resource/Paris	 moreinfo	 moreinfo
     }
 
     @Test
@@ -122,11 +120,12 @@ public class DereferencerGetRdfTest extends BaseTest {
         assertThrows(IOException.class, () -> Dereferencer.fetchLabel("http://example.org/NotFound#unavailable"));
     }
 
-    @Test
-    void createPrefinishedOutputAndMetadata() {
-        rdfToCSV = new RDFtoCSV(filePath);
+    @ParameterizedTest
+    @MethodSource("filesSource")
+    void createPrefinishedOutputAndMetadata(FilesParameters line) throws IOException {
+        rdfToCSV = new RDFtoCSV(line.getFilePath());
         db = new SailRepository(new MemoryStore());
-        args = new String[]{"-f", filePath, "-p", "rdf4j"};
+        args = new String[]{"-f", line.getFilePath(), "-p", "rdf4j", "-output", line.getOutputPath()};
         ConfigurationManager.loadSettingsFromInputToConfigFile(args);
         try {
             rdfToCSV.convertToZip();

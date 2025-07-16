@@ -521,6 +521,7 @@ public class ConfigurationManager {
         options.addOption("f", "file", true, "File for conversion");
         options.addOption("s", "streaming", false, "Parse the file in streaming mode (continual parsing until stopped)");
         options.addOption("n", "firstNormalForm", false, "Put the output CSV data into first normal form (every cell contains only one entry, no lists of values)");
+        options.addOption("o", "output", true, "Put the output path for the file");
         return options;
     }
 

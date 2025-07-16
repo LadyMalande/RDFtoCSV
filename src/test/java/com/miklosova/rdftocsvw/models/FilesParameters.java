@@ -4,16 +4,17 @@ import com.poiji.annotation.ExcelCellName;
 import com.poiji.annotation.ExcelSheet;
 import lombok.Data;
 
-@ExcelSheet("rdf-dereferencer")
+@ExcelSheet("test-files")
 @Data
-public class DereferencerTestParameters {
+public class FilesParameters {
 
     @ExcelCellName("testName")
     public String testName;
 
-    @ExcelCellName("iri")
-    public String iri;
+    @ExcelCellName("filePath")
+    public String filePath;
 
-    @ExcelCellName("predicateName")
-    public String predicateName;
+    @ExcelCellName("outputPath")
+    public String outputPath;
+
 }

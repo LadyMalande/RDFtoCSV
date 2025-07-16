@@ -1,0 +1,48 @@
+
+@prefix ex: <http://example.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+ex:org1 a ex:Organization ;
+        dc:title "Open Data Initiative" ;
+        foaf:homepage <http://www.opendata.org/> ;
+        ex:country "USA" ;
+        ex:member ex:alice, ex:bob ;
+        ex:runsProject ex:projA .
+
+ex:org2 a ex:Organization ;
+        dc:title "Semantic Web Foundation" ;
+        foaf:homepage <http://www.semanticweb.org/> ;
+        ex:country "UK" ;
+        ex:member ex:paul ;
+        ex:runsProject ex:projB, ex:projC .
+
+ex:projA a ex:Project ;
+         dc:title "Linked Cities Dataset" ;
+         ex:lead ex:alice ;
+         ex:collaborator ex:bob .
+
+ex:projB a ex:Project ;
+         dc:title "Web Crawler for RDFa" ;
+         ex:lead ex:paul .
+
+ex:projC a ex:Project ;
+         dc:title "Ontology Visualizer" ;
+         ex:lead ex:susan ;
+         ex:collaborator ex:paul, ex:alice .
+
+ex:alice a foaf:Person ;
+         foaf:name "Alice Green" ;
+         foaf:mbox <mailto:alice@opendata.org> .
+
+ex:bob a foaf:Person ;
+       foaf:name "Bob Blue" ;
+       foaf:mbox <mailto:bob@opendata.org> .
+
+ex:paul a foaf:Person ;
+        foaf:name "Paul Black" ;
+        foaf:mbox <mailto:paul@semanticweb.org> .
+
+ex:susan a foaf:Person ;
+         foaf:name "Susan Yellow" ;
+         foaf:mbox <mailto:susan@semanticweb.org> .
