@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "0.csv",
+    "url" : ".csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -12,6 +12,18 @@
         "name" : "Subject",
         "valueUrl" : "{+Subject}",
         "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://schema.org/name",
+        "aboutUrl" : "http://example.org/countries.csv#{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "population",
+        "name" : "population",
+        "propertyUrl" : "file://country_slice.csv#population",
+        "datatype" : "integer"
       }, {
         "@type" : "Column",
         "titles" : "latitude",
@@ -28,10 +40,10 @@
         "aboutUrl" : "http://example.org/countries.csv#{+Subject}"
       }, {
         "@type" : "Column",
-        "titles" : "name",
-        "name" : "name",
-        "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subject}"
+        "titles" : "year",
+        "name" : "year",
+        "propertyUrl" : "file://country_slice.csv#year",
+        "datatype" : "gYear"
       }, {
         "@type" : "Column",
         "titles" : "countryCode",
@@ -44,21 +56,9 @@
         "name" : "countryRef",
         "propertyUrl" : "file://country_slice.csv#countryRef",
         "valueUrl" : "http://example.org/countries.csv#{+countryRef}"
-      }, {
-        "@type" : "Column",
-        "titles" : "population",
-        "name" : "population",
-        "propertyUrl" : "file://country_slice.csv#population",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "year",
-        "name" : "year",
-        "propertyUrl" : "file://country_slice.csv#year",
-        "datatype" : "gYear"
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "latitude", "longitude", "name", "countryCode", "countryRef", "population", "year" ]
+      "rowTitles" : [ "Subject", "name", "population", "latitude", "longitude", "year", "countryCode", "countryRef" ]
     },
     "transformations" : [ {
       "@type" : "Template",

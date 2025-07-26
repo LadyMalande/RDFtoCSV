@@ -78,7 +78,7 @@ public class FullProcessTest {
             i++;
         }
 
-*/
+
 
         TestSupport.runToRDFConverter("fileNamesCreated.get(0)", filePathForMetadata, filePathForTestRDFOutput);
         //TestSupport.rubyRun(fileNamesCreated.get(0), filePathForMetadata, filePathForTestRDFOutput, "src/test/resources/script.rb");
@@ -89,6 +89,8 @@ public class FullProcessTest {
             e.printStackTrace();
             assert false;
         }
+
+         */
 
     }
 }
