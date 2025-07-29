@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The Column from CSVW Metadata specificaion.
@@ -532,7 +533,7 @@ public class Column {
             try {
                 //this.titles = dereferencer.getTitle();
                 this.titles = Dereferencer.fetchLabel(this.getPropertyUrl());
-            } catch (IOException noElement) {
+            } catch (IOException | ExecutionException noElement) {
                 this.titles = propertyUrlIRI.getLocalName();
             }
         }
@@ -597,7 +598,7 @@ public class Column {
                 }
                 this.name = typeIri.getLocalName();
 
-            } catch(NullPointerException | ValidationException | IOException noElement){
+            } catch(NullPointerException | ValidationException | IOException | ExecutionException noElement){
                 this.name = typeIri.getLocalName();
                 this.titles = this.name;
             }

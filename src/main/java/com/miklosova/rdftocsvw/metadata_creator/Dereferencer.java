@@ -1,6 +1,12 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import org.apache.http.Header;
 import org.apache.jena.rdf.model.*;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.shared.JenaException;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDFS;
@@ -10,12 +16,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.ConnectException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -29,6 +36,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import static org.apache.jena.vocabulary.RDF.Nodes.language;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 /**
@@ -285,6 +293,7 @@ public class Dereferencer {
                 return WOT_RDF_FILE;
             }
         if(fullUri.startsWith(VANN_PREFIX)){
+            logger.log(Level.INFO, "IRI starts with VANN_PREFIX");
             return VANN_RDF_FILE;
         }
             if(startsWithAny(fullUri, standardKnownPrefixes)){
@@ -298,7 +307,8 @@ public class Dereferencer {
 
     }
 
-    public static String fetchLabel(String iri) throws IOException {
+/*    public static String fetchLabel(String iri) throws IOException {
+        long startTime = System.currentTimeMillis();
         // Create HTTP client
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 
@@ -323,11 +333,11 @@ public class Dereferencer {
                 // Get content type to determine RDF format
                 String contentType = response.getEntity().getContentType().getValue();
                 String rdfFormat = determineRDFFormat(contentType);
-/*
+*//*
                 if (rdfFormat == null) {
                     throw new IOException("Unsupported RDF format in response: " + contentType);
                 }
-*/
+*//*
                 // Read response content
                 String content = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
 
@@ -354,11 +364,11 @@ public class Dereferencer {
                     }
                 }
 
-/*                model.read(
+*//*                model.read(
                         new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)),
                         iri,
                         rdfFormat
-                );*/
+                );*//*
 
 
 
@@ -366,9 +376,204 @@ public class Dereferencer {
 
                 logger.log(Level.INFO, "label found? " + label);
 
+                long endTime = System.currentTimeMillis();
+                long duration = endTime - startTime;
+                logger.log(Level.WARNING, "Method execution time: " + duration + "ms");
+
                 return label;
             }
         }
+    }*/
+
+    private static Lang determineLang(String contentType) {
+        logger.info("IN determineLang( " + contentType + " ) ");
+
+        if (contentType == null) return null;
+        contentType = contentType.toLowerCase();
+
+        if (contentType.contains("rdf+xml")) return Lang.RDFXML;
+        if (contentType.contains("turtle")) return Lang.TTL;
+        if (contentType.contains("ld+json")) return Lang.JSONLD;
+        if (contentType.contains("n-triples")) return Lang.NTRIPLES;
+        if (contentType.contains("n-quads")) return Lang.NQUADS;
+        if (contentType.contains("trig")) return Lang.TRIG;
+        return null;
+    }
+
+    // Reuse HTTP client (add at class level)
+    private static final CloseableHttpClient httpClient = HttpClients.custom()
+            .setConnectionTimeToLive(30, TimeUnit.SECONDS)
+            .setMaxConnTotal(100)
+            .setMaxConnPerRoute(10)
+            .build();
+
+    private static final LoadingCache<String, String> labelCache = CacheBuilder.newBuilder()
+            .maximumSize(1000)
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .build(new CacheLoader<String, String>() {
+                @Override
+                public String load(String iri) throws Exception {
+                    try {
+
+                        return fetchLabelUncached(iri);
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to fetch label for IRI: " + iri, e);
+                    }
+                }
+            });
+
+    public static String fetchLabel(String iri) throws IOException, ExecutionException {
+        return labelCache.getUnchecked(iri);
+    }
+
+    private static String fetchLabelUncached(String iri) throws IOException {
+        long startTime = System.currentTimeMillis();
+        HttpGet httpGet = new HttpGet(extractBaseUri(iri));
+        long startTime1 = System.currentTimeMillis();
+        // More focused Accept header
+        httpGet.addHeader("Accept", "text/turtle, application/rdf+xml, application/ld+json");
+        long startTime2 = System.currentTimeMillis();
+        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+            long startTime3 = System.currentTimeMillis();
+            if (response.getStatusLine().getStatusCode() != 200) {
+                throw new IOException("HTTP request failed: " + response.getStatusLine());
+            }
+            long startTime4 = System.currentTimeMillis();
+            // Get content as bytes to avoid double conversion
+            Header contentLengthHeader = response.getFirstHeader("Content-Length");
+            if (contentLengthHeader != null) {
+                long size = Long.parseLong(contentLengthHeader.getValue());
+                logger.info("Content size from header: " + size + " bytes for iri " + extractBaseUri(iri));
+            } else {
+                logger.warning("Content-Length header not available");
+                Arrays.stream(response.getAllHeaders()).toList().forEach(header -> logger.info(header.getName() + ": " + header.getValue()));
+            }
+
+            byte[] content = EntityUtils.toByteArray(response.getEntity());
+            long startTime5 = System.currentTimeMillis();
+            String contentType = response.getEntity().getContentType().getValue();
+            long startTime6 = System.currentTimeMillis();
+            Lang lang = determineLang(contentType);
+            long startTime7 = System.currentTimeMillis();
+
+            if (lang == null) {
+                throw new IOException("Unsupported RDF format: " + contentType);
+            }
+            long startTime8 = System.currentTimeMillis();
+            Model model = ModelFactory.createDefaultModel();
+            long startTime9 = System.currentTimeMillis();
+            long startTime10 = 0;
+            try (InputStream in = new ByteArrayInputStream(content)) {
+                startTime10 = System.currentTimeMillis();
+                // Using RDFDataMgr for faster parsing
+                if(iri.startsWith(VANN_PREFIX)){
+                    RDFDataMgr.read(model, in, VANN_RDF_FILE, lang);
+                } else {
+                    RDFDataMgr.read(model, in, lang);
+                }
+            }
+            long startTime11 = System.currentTimeMillis();
+            String label = findLabelForIRI(model, iri);
+            long startTime12 = System.currentTimeMillis();
+
+            logger.log(Level.INFO, "Fetched label for " + iri + " in "+ (System.currentTimeMillis() - startTime) + "ms");
+            logger.log(Level.INFO, "HttpGet httpGet = new HttpGet(extractBaseUri(iri)); in "+ (startTime1 - startTime) + "ms");
+            logger.log(Level.INFO, "Fetched label for " + iri + " in "+ (startTime2 - startTime1) + "ms");
+            logger.log(Level.INFO, "----------------------" + iri + "---------------------------------------");
+            logger.log(Level.INFO, "try (CloseableHttpResponse response = httpClient.execute(httpGet)) { in "+ (startTime3 - startTime2) + "ms");
+            logger.log(Level.INFO, "----------------------" + iri + "---------------------------------");
+            logger.log(Level.INFO, "Fetched label for " + iri + " in "+ (startTime4 - startTime3) + "ms");
+            logger.log(Level.INFO, "byte[] content = EntityUtils.toByteArray(response.getEntity()); in "+ (startTime5 - startTime4) + "ms");
+            logger.log(Level.INFO, "String contentType = response.getEntity().getContentType().getValue(); in "+ (startTime6 - startTime5) + "ms");
+            logger.log(Level.INFO, "Lang lang = determineLang(contentType); in "+ (startTime7 - startTime6) + "ms");
+            logger.log(Level.INFO, "Fetched label for " + iri + " in "+ (startTime8 - startTime7) + "ms");
+            logger.log(Level.INFO, "Model model = ModelFactory.createDefaultModel(); in "+ (startTime9 - startTime8) + "ms");
+            logger.log(Level.INFO, "try (InputStream in = new ByteArrayInputStream(content)) { in "+ (startTime10 - startTime9) + "ms");
+            logger.log(Level.INFO, "RDFDataMgr.read(model, in, lang); in "+ (startTime11 - startTime10) + "ms");
+            logger.log(Level.INFO, "String label = findLabelForIRI(model, iri); in "+ (startTime12 - startTime11) + "ms");
+
+            return label;
+        }
+/*        logger.log(Level.INFO, "Beginning fetchLabelUncached");
+        long startTime = System.currentTimeMillis();
+        HttpGet httpGet = new HttpGet(extractBaseUri(iri));
+        logger.log(Level.INFO, "HttpGet got");
+        // Create HTTP client
+
+
+
+
+            // Set Accept header for RDF formats
+            httpGet.addHeader("Accept",
+                    "application/rdf+xml, " +
+                            "text/turtle, " +
+                            "application/ld+json, " +
+                            "application/n-triples, " +
+                            "application/n-quads, " +
+                            "application/trig");
+
+            // Execute request
+            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+                logger.log(Level.INFO, "Executed CloseableHttpResponse response = httpClient.execute(httpGet)");
+                int statusCode = response.getStatusLine().getStatusCode();
+                logger.log(Level.INFO, "Got status code " + statusCode);
+                if (statusCode != 200) {
+                    throw new IOException("HTTP request failed with status code: " + statusCode);
+                }
+
+                // Get content type to determine RDF format
+                String contentType = response.getEntity().getContentType().getValue();
+                String rdfFormat = determineRDFFormat(contentType);
+                logger.log(Level.INFO, "Determined RDFFormat " + rdfFormat);
+*//*
+                if (rdfFormat == null) {
+                    throw new IOException("Unsupported RDF format in response: " + contentType);
+                }
+*//*
+
+                logger.log(Level.INFO, "rdfFormat="+rdfFormat);
+                if(rdfFormat == null){
+                    throw new IOException("No rdf format content was fetched for IRI "+iri+", create a column title from local name in the IRI.");
+                }
+                //logger.log(Level.INFO, content);
+                Model model = null;
+                try {
+                    // Parse RDF
+                    model = ModelFactory.createDefaultModel();
+
+                    logger.log(Level.INFO, "Before model.read(extractBaseUri(iri)); level 1");
+                    model.read(extractBaseUri(iri));
+                    logger.log(Level.INFO, "After model.read(extractBaseUri(iri)); level 1");
+                } catch (JenaException timedOut){
+                    try {
+
+                        model = ModelFactory.createDefaultModel();
+
+                        model.read(extractBaseUri(iri));
+                    } catch (JenaException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+*//*                model.read(
+                        new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)),
+                        iri,
+                        rdfFormat
+                );*//*
+
+
+
+                String label = findLabelForIRI(model, iri);
+
+                logger.log(Level.INFO, "label found? " + label);
+
+                long endTime = System.currentTimeMillis();
+                long duration = endTime - startTime;
+                logger.log(Level.WARNING, "Method execution time: " + duration + "ms");
+
+                return label;
+
+        }*/
     }
 
     private static String determineRDFFormat(String contentType) {
@@ -381,7 +586,7 @@ public class Dereferencer {
         if (contentType.contains("rdf+xml")) {
             return "RDF/XML";
         } else if (contentType.contains("turtle") || contentType.contains("text/turtle")) {
-            return "TTL";  // Changed from "TURTLE" to "TTL"
+            return "TURTLE";  // Changed from "TURTLE" to "TTL"
         } else if (contentType.contains("ld+json")) {
             return "JSON-LD";
         } else if (contentType.contains("n-triples")) {
@@ -407,6 +612,9 @@ public class Dereferencer {
         // Get the resource for the IRI
         Resource resource = model.getResource(iri);
 
+        logger.log(Level.INFO, "---------------------------findLabelForIRI for " + iri );
+
+
         logger.info("resource in findLabelForIRI: " + resource.getURI() + " localName: " + resource.getLocalName() );
 
         // Try standard label predicates in order of preference
@@ -426,6 +634,7 @@ public class Dereferencer {
             if (labelStmt != null) {
                 RDFNode object = labelStmt.getObject();
                 if (object.isLiteral()) {
+                    logger.info("object.isLiteral() in findLabelForIRI: " + resource.getURI() + " localName: " + resource.getLocalName() );
                     return object.asLiteral().getString();
                 }
             }
@@ -437,10 +646,12 @@ public class Dereferencer {
             if (predicateURI.toLowerCase().contains("label")) {
                 RDFNode object = stmt.getObject();
                 if (object.isLiteral()) {
+                    logger.info("Found alternative object for alternative label predicate findLabelForIRI:"+ object.asLiteral().getString());
                     return object.asLiteral().getString();
                 }
             }
         }
+        logger.info("No object found that seems like a label in findLabelForIRI. " );
 
         return null; // No label found
     }

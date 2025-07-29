@@ -25,11 +25,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
@@ -84,19 +84,22 @@ public class DereferencerGetRdfTest extends BaseTest {
     @MethodSource("dataSource")
     void testFetchLabelFromTurtle(DereferencerTestParameters line) throws IOException {
 
-
-        String label = Dereferencer.fetchLabel(line.getIri());
-        logger.info("line.getUrl(): " + line.getIri());
-        logger.info("label: " +  label);
-        if(line.getPredicateName().equalsIgnoreCase("null")){
-            Assertions.assertNull(label);
-        } else {
-            assertEquals(line.getPredicateName(), label);
+        try {
+            String label = Dereferencer.fetchLabel(line.getIri());
+            logger.info("line.getUrl(): " + line.getIri());
+            logger.info("label: " + label);
+            if (line.getPredicateName().equalsIgnoreCase("null")) {
+                Assertions.assertNull(label);
+            } else {
+                assertEquals(line.getPredicateName(), label);
+            }
+        } catch(ExecutionException ex){
+            logger.log(Level.SEVERE, ex.getMessage());
         }
     }
 
     @Test
-    void testFetchLabelFromRDFXML() throws IOException {
+    void testFetchLabelFromRDFXML() throws IOException, ExecutionException {
 
         //String label1 = Dereferencer.fetchLabel("http://purl.org/dc/elements/1.1/publisher");
         String label2 = Dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
@@ -106,6 +109,58 @@ public class DereferencerGetRdfTest extends BaseTest {
 
         assertEquals("Creator", label2);
 
+    }
+
+    @Test
+    void testCacheIsFaster() throws IOException, ExecutionException {
+        long startTime1 = System.nanoTime();
+        String label1 = Dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
+        long endTime1 = System.nanoTime();
+
+
+        long startTime2 = System.nanoTime();
+        String label2 = Dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
+        long endTime2 = System.nanoTime();
+
+        long startTime3 = System.nanoTime();
+        String label3 = Dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
+        long endTime3 = System.nanoTime();
+
+        long firstDereferencerCallInMilis = endTime1 - startTime1;
+        long secondDereferencerCallInMilis =  endTime2 - startTime2;
+        long thirdDereferencerCallInMilis =  endTime3 - startTime3;
+
+        logger.log(Level.INFO, label1 +": " + firstDereferencerCallInMilis + " ns");
+        logger.log(Level.INFO, label2 +": " + secondDereferencerCallInMilis + " ns");
+        logger.log(Level.INFO, label3 +": " + thirdDereferencerCallInMilis + " ns");
+
+        assertTrue(firstDereferencerCallInMilis > secondDereferencerCallInMilis);
+    }
+
+    @Test
+    void testSubsequentHttpClientIsFaster() throws IOException, ExecutionException {
+        long startTime1 = System.nanoTime();
+        String label1 = Dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
+        long endTime1 = System.nanoTime();
+
+
+        long startTime2 = System.nanoTime();
+        String label2 = Dereferencer.fetchLabel("http://purl.org/vocab/vann/preferredNamespaceUri");
+        long endTime2 = System.nanoTime();
+
+        long startTime3 = System.nanoTime();
+        String label3 = Dereferencer.fetchLabel("http://xmlns.com/wot/0.1/pubkeyAddress");
+        long endTime3 = System.nanoTime();
+
+        long firstDereferencerCallInMilis = endTime1 - startTime1;
+        long secondDereferencerCallInMilis =  endTime2 - startTime2;
+        long thirdDereferencerCallInMilis =  endTime3 - startTime3;
+
+        logger.log(Level.INFO, label1 +": " + firstDereferencerCallInMilis + " ns" + " = " + (firstDereferencerCallInMilis/1000000) + " ms");
+        logger.log(Level.INFO, label2 +": " + secondDereferencerCallInMilis + " ns" + " = " + (secondDereferencerCallInMilis/1000000) + " ms");
+        logger.log(Level.INFO, label3 +": " + thirdDereferencerCallInMilis + " ns" + " = " + (thirdDereferencerCallInMilis/1000000) + " ms");
+
+        assertTrue(firstDereferencerCallInMilis > secondDereferencerCallInMilis);
     }
 
     @Test
