@@ -1,5 +1,7 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
+import com.google.common.cache.CacheLoader;
+import com.google.common.util.concurrent.UncheckedExecutionException;
 import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.models.DereferencerTestParameters;
@@ -95,6 +97,8 @@ public class DereferencerGetRdfTest extends BaseTest {
             }
         } catch(ExecutionException ex){
             logger.log(Level.SEVERE, ex.getMessage());
+        } catch(CacheLoader.InvalidCacheLoadException exNull){
+            assertTrue(line.getPredicateName().equals("null"));
         }
     }
 
@@ -164,15 +168,20 @@ public class DereferencerGetRdfTest extends BaseTest {
     }
 
     @Test
-    void testFetchLabelWhenUnknownURIWithoutFragment() throws JenaException {
-
-        assertThrows(IOException.class, () -> Dereferencer.fetchLabel("http://example.org/NotFound"));
+    void testFetchLabelWhenUnknownURIWithoutFragment() throws JenaException, IOException, ExecutionException {
+        String label = Dereferencer.fetchLabel("http://example.org/NotFound");
+        assertEquals("NotFound", label);
+       /* assertThrows(IOException.class, () -> {String label = Dereferencer.fetchLabel("http://example.org/NotFound");
+            logger.info("label fetched = " + label);
+        });*/
     }
 
     @Test
-    void testFetchLabelWhenUnknownURIWithFragment() {
-
-        assertThrows(IOException.class, () -> Dereferencer.fetchLabel("http://example.org/NotFound#unavailable"));
+    void testFetchLabelWhenUnknownURIWithFragment() throws IOException, ExecutionException {
+        String label = Dereferencer.fetchLabel("http://example.org/NotFound#unavailable");
+        assertEquals("unavailable", label);
+        /*assertThrows(UncheckedExecutionException.class, () -> { String label = Dereferencer.fetchLabel("http://example.org/NotFound#unavailable");
+            logger.info("label fetched = " + label);} );*/
     }
 
     @ParameterizedTest

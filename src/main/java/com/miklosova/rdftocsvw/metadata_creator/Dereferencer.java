@@ -11,6 +11,8 @@ import org.apache.jena.shared.JenaException;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDFS;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -417,25 +419,45 @@ public class Dereferencer {
 
                         return fetchLabelUncached(iri);
                     } catch (IOException e) {
-                        throw new RuntimeException("Failed to fetch label for IRI: " + iri, e);
+                        ValueFactory vf = SimpleValueFactory.getInstance();
+                        IRI propertyUrlIRI = vf.createIRI(iri);
+                        logger.info("--------After IOException is caught in fetchLabelUncached, trying to get LocalName...");
+                        return propertyUrlIRI.getLocalName();
+                        //throw new RuntimeException("Failed to fetch label for IRI: " + iri, e);
                     }
                 }
             });
 
     public static String fetchLabel(String iri) throws IOException, ExecutionException {
-        return labelCache.getUnchecked(iri);
+            return labelCache.getUnchecked(iri);
     }
 
     private static String fetchLabelUncached(String iri) throws IOException {
         long startTime = System.currentTimeMillis();
+        logger.info("--------Before new HttpGet(extractBaseUri("+iri+"));");
+
         HttpGet httpGet = new HttpGet(extractBaseUri(iri));
         long startTime1 = System.currentTimeMillis();
         // More focused Accept header
-        httpGet.addHeader("Accept", "text/turtle, application/rdf+xml, application/ld+json");
+        //httpGet.addHeader("Accept", "text/turtle, application/rdf+xml, application/ld+json");
+        // Set Accept header for RDF formats
+        httpGet.addHeader("Accept",
+                "application/rdf+xml, " +
+                        "text/turtle, " +
+                        "application/ld+json, " +
+                        "application/n-triples, " +
+                        "application/n-quads, " +
+                        "application/trig");
         long startTime2 = System.currentTimeMillis();
+        Arrays.stream(httpGet.getAllHeaders()).toList().forEach(header -> logger.info("request header -- " + header.getName() + ": " + header.getValue()));
+
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             long startTime3 = System.currentTimeMillis();
+            logger.info("--------STATUS CODE = " + response.getStatusLine().getStatusCode());
+
             if (response.getStatusLine().getStatusCode() != 200) {
+                Arrays.stream(response.getAllHeaders()).toList().forEach(header -> logger.info(header.getName() + ": " + header.getValue()));
+                logger.warning(response.getEntity().getContent().toString());
                 throw new IOException("HTTP request failed: " + response.getStatusLine());
             }
             long startTime4 = System.currentTimeMillis();
@@ -448,10 +470,12 @@ public class Dereferencer {
                 logger.warning("Content-Length header not available");
                 Arrays.stream(response.getAllHeaders()).toList().forEach(header -> logger.info(header.getName() + ": " + header.getValue()));
             }
-
+            logger.info("Before setting the response to content in byte[]");
             byte[] content = EntityUtils.toByteArray(response.getEntity());
             long startTime5 = System.currentTimeMillis();
+            logger.info("Before response.getEntity().getContentType().getValue();");
             String contentType = response.getEntity().getContentType().getValue();
+            logger.info("After response.getEntity().getContentType().getValue();");
             long startTime6 = System.currentTimeMillis();
             Lang lang = determineLang(contentType);
             long startTime7 = System.currentTimeMillis();
@@ -491,6 +515,8 @@ public class Dereferencer {
             logger.log(Level.INFO, "try (InputStream in = new ByteArrayInputStream(content)) { in "+ (startTime10 - startTime9) + "ms");
             logger.log(Level.INFO, "RDFDataMgr.read(model, in, lang); in "+ (startTime11 - startTime10) + "ms");
             logger.log(Level.INFO, "String label = findLabelForIRI(model, iri); in "+ (startTime12 - startTime11) + "ms");
+
+            logger.log(Level.INFO, "LABEL = "+ label);
 
             return label;
         }
