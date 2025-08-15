@@ -518,6 +518,8 @@ public class Dereferencer {
 
             logger.log(Level.INFO, "LABEL = "+ label);
 
+            label = LabelFormatter.changeLabelToTheConfiguredFormat(label);
+
             return label;
         }
 /*        logger.log(Level.INFO, "Beginning fetchLabelUncached");

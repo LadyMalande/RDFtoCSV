@@ -32,4 +32,11 @@ public class ConfigurationManagerTest {
         System.out.println(result);
 
     }
+
+    @Test
+    public void loadConfigTest(){
+        ConfigurationManager.loadConfig();
+
+
+    }
 }

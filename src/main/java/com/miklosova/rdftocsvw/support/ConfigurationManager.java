@@ -1,6 +1,8 @@
 package com.miklosova.rdftocsvw.support;
 
 import com.miklosova.rdftocsvw.converter.QueryMethods;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import org.apache.commons.cli.*;
 
 import java.io.*;
@@ -536,5 +538,26 @@ public class ConfigurationManager {
         System.err.println("You must specify file input argument to the command line. ");
         printHelpLine(options);
         System.exit(1);
+    }
+
+    public static void loadConfig() {
+        // Load configuration (merges `application.conf`, `reference.conf`, system properties)
+        Config config = ConfigFactory.load();
+
+        // Read values
+        String appcolumnNamingConvention = config.getString("app.columnNamingConvention");
+        String missingValue = config.hasPath("missing.key")
+                ? config.getString("missing.key")
+                : "default_value";
+        boolean dbUrl = config.getBoolean("database.exists");
+
+        System.out.println("App columnNamingConvention: " + appcolumnNamingConvention);
+        System.out.println("DB exists: " + dbUrl);
+        System.out.println("nonexisting config: " + missingValue);
+    }
+
+    public static String loadConfig(String key){
+        Config config = ConfigFactory.load();
+        return config.getString(key);
     }
 }
