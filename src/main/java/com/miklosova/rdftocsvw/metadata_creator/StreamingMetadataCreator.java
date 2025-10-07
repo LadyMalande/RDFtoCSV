@@ -7,7 +7,6 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
 import com.miklosova.rdftocsvw.output_processor.CSVConsolidator;
 import com.miklosova.rdftocsvw.output_processor.MetadataConsolidator;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.miklosova.rdftocsvw.support.Main;
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -18,8 +17,6 @@ import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 import java.io.File;
 import java.io.InvalidObjectException;
 import java.io.StringReader;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +37,12 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  */
 public class StreamingMetadataCreator extends MetadataCreator {
     private static final Logger logger = Logger.getLogger(StreamingMetadataCreator.class.getName());
-
+    private static final Map<String, Value> mapOfBlanks = new HashMap<>();
+    /**
+     * The Blank node registered to config.
+     */
+    static boolean blankNodeRegisteredToConfig;
+    private static int blankNodeCounter = 0;
     /**
      * The File name to read.
      */
@@ -57,13 +59,6 @@ public class StreamingMetadataCreator extends MetadataCreator {
      * The Line counter.
      */
     int lineCounter = 0;
-
-    /**
-     * The Blank node registered to config.
-     */
-    static boolean blankNodeRegisteredToConfig;
-    private static final Map<String, Value> mapOfBlanks = new HashMap<>();
-    private static int blankNodeCounter = 0;
 
     /**
      * Instantiates a new Streaming metadata creator.
@@ -202,6 +197,29 @@ public class StreamingMetadataCreator extends MetadataCreator {
     }
 
     /**
+     * Process line into triple that certainly does not contain BNodes
+     *
+     * @param line the line
+     * @return the triple
+     */
+    public static Triple processLineIntoTripleIRIsOnly(String line) {
+        Statement statement = processNTripleLine(line);
+        return new Triple((IRI) statement.getSubject(), statement.getPredicate(), statement.getObject());
+    }
+
+    /**
+     * Process line into triple triple.
+     *
+     * @param line the line
+     * @return the triple
+     */
+    public static Triple processLineIntoTriple(String line) {
+        Statement statement = processNTripleLine(line);
+        Statement statementWithIRIs = replaceBlankNodesWithIRI(statement, line);
+        return new Triple((IRI) statementWithIRIs.getSubject(), statementWithIRIs.getPredicate(), statementWithIRIs.getObject());
+    }
+
+    /**
      * Repair metadata and make it jsonld.
      *
      * @param metadata the metadata
@@ -248,29 +266,6 @@ public class StreamingMetadataCreator extends MetadataCreator {
         Triple triple = new Triple((IRI) statementWithIRIs.getSubject(), statementWithIRIs.getPredicate(), statementWithIRIs.getObject());
         addMetadataToTableSchema(triple);
         lineCounter++;
-    }
-
-    /**
-     * Process line into triple that certainly does not contain BNodes
-     *
-     * @param line the line
-     * @return the triple
-     */
-    public static Triple processLineIntoTripleIRIsOnly(String line) {
-        Statement statement = processNTripleLine(line);
-        return new Triple((IRI) statement.getSubject(), statement.getPredicate(), statement.getObject());
-    }
-
-    /**
-     * Process line into triple triple.
-     *
-     * @param line the line
-     * @return the triple
-     */
-    public static Triple processLineIntoTriple(String line) {
-        Statement statement = processNTripleLine(line);
-        Statement statementWithIRIs = replaceBlankNodesWithIRI(statement, line);
-        return new Triple((IRI) statementWithIRIs.getSubject(), statementWithIRIs.getPredicate(), statementWithIRIs.getObject());
     }
 
     /**

@@ -3,8 +3,8 @@ package com.miklosova.rdftocsvw.metadata_creator;
 import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
+import com.miklosova.rdftocsvw.support.ConfigurationManager;
 
 /**
  * The Metadata service. Chooses correct Metadata creator according to chosen conversion method.
@@ -27,6 +27,7 @@ public class MetadataService {
 
     /**
      * Choose the Metadata creator according to the conversion method set.
+     *
      * @param data data in inner CSV representation. They are null for streaming methods.
      */
     private void processMetadataCreation(PrefinishedOutput<RowsAndKeys> data) {

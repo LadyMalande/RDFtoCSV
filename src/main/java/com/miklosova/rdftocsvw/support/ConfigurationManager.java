@@ -418,31 +418,7 @@ public class ConfigurationManager {
         formatter.printHelp("Command line syntax:", options);
     }
 
-    /**
-     * Sets the configuration for run started in Main. For command line story.
-     * @param multipleTables true / false. True if multiple tables are supposed to be made.
-     * @param parsingMethod RDF4J STREAMING or BIGFILESTREAMING
-     * @param inputFile the input file to parse
-     * @param streaming the -s parameter. If true and parsing method is STREAMING, the triples will be read from stdin.
-     * @param firstNormalForm If true the output CSV will contain only atomic values in its cells.
-     * @param outputFilename The name for output file
-     */
-    private static void writeOptionsToConfigFile(boolean multipleTables, String parsingMethod, String inputFile, boolean streaming, boolean firstNormalForm, String outputFilename) {
-        String conversionMethod;
-        File finalConfigFile = new File(currentConfigFileName);
-
-        Properties prop = new Properties();
-
-        try (FileInputStream fis = new FileInputStream(finalConfigFile)) {
-            prop.load(fis);
-        } catch (IOException ex) {
-            logger.log(Level.SEVERE, ex.getCause() + " " + ex.getLocalizedMessage());
-            System.err.println("Trouble reading config file for the first time");
-            System.exit(1);
-        }
-
-        String metadataFileName;
-        parsingMethod = (parsingMethod != null) ? parsingMethod.toLowerCase() : DEFAULT_PARSING_METHOD;
+    public static String getBaseFileName(String inputFile, String outputFilename){
         String baseFileName;
         if (outputFilename == null) {
             baseFileName = inputFile.split("\\.")[0];
@@ -476,6 +452,36 @@ public class ConfigurationManager {
             baseFileName = iri(inputFile).getLocalName();
             System.out.println("isUrl(inputFile) in ConfigurationManager = " + baseFileName);
         }
+        return baseFileName;
+    }
+
+    /**
+     * Sets the configuration for run started in Main. For command line story.
+     * @param multipleTables true / false. True if multiple tables are supposed to be made.
+     * @param parsingMethod RDF4J STREAMING or BIGFILESTREAMING
+     * @param inputFile the input file to parse
+     * @param streaming the -s parameter. If true and parsing method is STREAMING, the triples will be read from stdin.
+     * @param firstNormalForm If true the output CSV will contain only atomic values in its cells.
+     * @param outputFilename The name for output file
+     */
+    private static void writeOptionsToConfigFile(boolean multipleTables, String parsingMethod, String inputFile, boolean streaming, boolean firstNormalForm, String outputFilename) {
+        String conversionMethod;
+        File finalConfigFile = new File(currentConfigFileName);
+
+        Properties prop = new Properties();
+
+        try (FileInputStream fis = new FileInputStream(finalConfigFile)) {
+            prop.load(fis);
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, ex.getCause() + " " + ex.getLocalizedMessage());
+            System.err.println("Trouble reading config file for the first time");
+            System.exit(1);
+        }
+
+        String metadataFileName;
+        parsingMethod = (parsingMethod != null) ? parsingMethod.toLowerCase() : DEFAULT_PARSING_METHOD;
+        String baseFileName = getBaseFileName(inputFile, outputFilename);
+
         System.out.println("baseFileName in ConfigurationManager = " + baseFileName);
 
         conversionMethod = (!multipleTables) ? DEFAULT_CONVERSION_METHOD : MULTIPLE_TABLES_CONVERSION_METHOD;

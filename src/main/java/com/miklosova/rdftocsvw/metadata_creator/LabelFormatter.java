@@ -17,28 +17,36 @@ public class LabelFormatter {
     public static final String TITLE_CASE_CONFIG_STRING = "Title Case";
     public static final String DOT_NOTATION_CASE_CONFIG_STRING = "dot.notation";
 
-    public static String changeLabelToTheConfiguredFormat(String originalLabel){
+    public static String changeLabelToTheConfiguredFormat(String originalLabel) {
         String formattedLabel = null;
         String formatting = ConfigurationManager.loadConfig("app.columnNamingConvention");
 
         logger.info("Configuration for app.columnNamingConvention = " + formatting);
 
-        switch(formatting){
-            case CAMEL_CASE_CONFIG_STRING: formattedLabel = toCamelCase(originalLabel);
+        switch (formatting) {
+            case CAMEL_CASE_CONFIG_STRING:
+                formattedLabel = toCamelCase(originalLabel);
                 break;
-            case PASCAL_CASE_CONFIG_STRING: formattedLabel = toPascalCase(originalLabel);
+            case PASCAL_CASE_CONFIG_STRING:
+                formattedLabel = toPascalCase(originalLabel);
                 break;
-            case SNAKE_CASE_CONFIG_STRING: formattedLabel = toSnakeCase(originalLabel);
+            case SNAKE_CASE_CONFIG_STRING:
+                formattedLabel = toSnakeCase(originalLabel);
                 break;
-            case SCREAMING_SNAKE_CASE_CONFIG_STRING: formattedLabel = toScreamingSnakeCase(originalLabel);
+            case SCREAMING_SNAKE_CASE_CONFIG_STRING:
+                formattedLabel = toScreamingSnakeCase(originalLabel);
                 break;
-            case KEBAB_CASE_CONFIG_STRING: formattedLabel = toKebabCase(originalLabel);
+            case KEBAB_CASE_CONFIG_STRING:
+                formattedLabel = toKebabCase(originalLabel);
                 break;
-            case TITLE_CASE_CONFIG_STRING: formattedLabel = toTitleCase(originalLabel);
+            case TITLE_CASE_CONFIG_STRING:
+                formattedLabel = toTitleCase(originalLabel);
                 break;
-            case DOT_NOTATION_CASE_CONFIG_STRING: formattedLabel = toDotNotation(originalLabel);
+            case DOT_NOTATION_CASE_CONFIG_STRING:
+                formattedLabel = toDotNotation(originalLabel);
                 break;
-            default: formattedLabel = originalLabel;
+            default:
+                formattedLabel = originalLabel;
         }
 
         return formattedLabel;

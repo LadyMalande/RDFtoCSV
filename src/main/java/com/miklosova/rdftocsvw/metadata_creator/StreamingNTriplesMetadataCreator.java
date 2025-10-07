@@ -207,7 +207,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         File f = new File(fileNameToRead);
         String newCSVname = f.getName() + fileNumber + ".csv";
         String previousFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-        String allFilesUpToNow = (previousFiles!= null && previousFiles.isEmpty()) ? newCSVname : previousFiles + "," + newCSVname;
+        String allFilesUpToNow = (previousFiles != null && previousFiles.isEmpty()) ? newCSVname : previousFiles + "," + newCSVname;
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, allFilesUpToNow);
         fileNumber++;
 

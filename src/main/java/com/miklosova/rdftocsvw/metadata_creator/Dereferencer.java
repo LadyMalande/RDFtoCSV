@@ -5,11 +5,14 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import org.apache.http.Header;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
-import org.apache.jena.shared.JenaException;
-import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDFS;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.ValueFactory;
@@ -19,29 +22,18 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.*;
-import java.net.ConnectException;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import static org.apache.jena.vocabulary.RDF.Nodes.language;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 /**
@@ -56,6 +48,13 @@ public class Dereferencer {
     private static final String SCHEMA_PREFIX = "http://schema.org";
 
     private static final String SCHEMA_RDF_FILE = "https://schema.org/version/latest/schemaorg-all-https.ttl";
+    private static final String DEFAULT_LANGUAGE = "en"; // Your default language code
+    // Reuse HTTP client (add at class level)
+    private static final CloseableHttpClient httpClient = HttpClients.custom()
+            .setConnectionTimeToLive(30, TimeUnit.SECONDS)
+            .setMaxConnTotal(100)
+            .setMaxConnPerRoute(10)
+            .build();
     static String SKOS_PREFIX = "http://www.w3.org/2004/02/skos/core#";
     static String WOT_PREFIX = "http://xmlns.com/wot/0.1/";
     static String VS_PREFIX = "http://www.w3.org/2003/06/sw-vocab-status/ns#";
@@ -65,24 +64,30 @@ public class Dereferencer {
     static String FOAF_PREFIX = "http://xmlns.com/foaf/0.1/";
     static String RDFSchema_PREFIX = "http://www.w3.org/2000/01/rdf-schema";
     static String OWL_PREFIX = "http://www.w3.org/2002/07/owl";
+    //private final String CC_PREFIX = "http://web.resource.org/cc/"; - the web does not publish lables of given addresses such as https://web.resource.org/cc/Distribution
     static String SKOS_REFERENCE = "http://www.w3.org/2009/08/skos-reference/skos.rdf";
     static String[] standardKnownPrefixes = {SKOS_PREFIX, WOT_PREFIX, VS_PREFIX, VANN_PREFIX, DCTERMS_PREFIX, DC_PREFIX, FOAF_PREFIX, RDFSchema_PREFIX, OWL_PREFIX, SKOS_REFERENCE};
-    //private final String CC_PREFIX = "http://web.resource.org/cc/"; - the web does not publish lables of given addresses such as https://web.resource.org/cc/Distribution
-
     // Define language preferences (order matters: first is most desired)
     private static List<String> PREFERRED_LANGUAGES = loadPreferredLanguages(); // Example: Prefer English, then German, then French
-    private static final String DEFAULT_LANGUAGE = "en"; // Your default language code
+    private static final LoadingCache<String, String> labelCache = CacheBuilder.newBuilder()
+            .maximumSize(1000)
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .build(new CacheLoader<String, String>() {
+                @Override
+                public String load(String iri) throws Exception {
+                    try {
 
+                        return fetchLabelUncached(iri);
+                    } catch (IOException e) {
+                        ValueFactory vf = SimpleValueFactory.getInstance();
+                        IRI propertyUrlIRI = vf.createIRI(iri);
+                        logger.info("--------After IOException is caught in fetchLabelUncached, trying to get LocalName...");
+                        return propertyUrlIRI.getLocalName();
+                        //throw new RuntimeException("Failed to fetch label for IRI: " + iri, e);
+                    }
+                }
+            });
     private String url;
-    // Package-private setter for testing
-    static void setPreferredLanguagesForTesting(List<String> languages) {
-        PREFERRED_LANGUAGES = languages;
-    }
-
-    // Reset method for tests
-    static void resetPreferredLanguages() {
-        PREFERRED_LANGUAGES = loadPreferredLanguages();
-    }
 
     /**
      * Instantiates a new Dereferencer.
@@ -93,22 +98,14 @@ public class Dereferencer {
         this.url = url;
     }
 
-    /**
-     * Gets url.
-     *
-     * @return the url
-     */
-    public String getUrl() {
-        return url;
+    // Package-private setter for testing
+    static void setPreferredLanguagesForTesting(List<String> languages) {
+        PREFERRED_LANGUAGES = languages;
     }
 
-    /**
-     * Sets url.
-     *
-     * @param url the url
-     */
-    public void setUrl(String url) {
-        this.url = url;
+    // Reset method for tests
+    static void resetPreferredLanguages() {
+        PREFERRED_LANGUAGES = loadPreferredLanguages();
     }
 
     /**
@@ -179,7 +176,8 @@ public class Dereferencer {
                 return elementEm.text();
             }
         } catch (IOException e) {
-            logger.log(Level.INFO, "The dereferencer for wot namespace was unable to get a prettier label.");        }
+            logger.log(Level.INFO, "The dereferencer for wot namespace was unable to get a prettier label.");
+        }
         throw new NullPointerException();
     }
 
@@ -198,7 +196,8 @@ public class Dereferencer {
                 return label.text();
             }
         } catch (IOException e) {
-            logger.log(Level.INFO, "The dereferencer for vs namespace was unable to get a prettier label.");        }
+            logger.log(Level.INFO, "The dereferencer for vs namespace was unable to get a prettier label.");
+        }
         throw new NullPointerException();
     }
 
@@ -286,7 +285,8 @@ public class Dereferencer {
                 return elementEm.text();
             }
         } catch (IOException e) {
-            logger.log(Level.INFO, "The dereferencer for foaf namespace was unable to get a prettier label.");        }
+            logger.log(Level.INFO, "The dereferencer for foaf namespace was unable to get a prettier label.");
+        }
         throw new NullPointerException();
     }
 
@@ -299,37 +299,38 @@ public class Dereferencer {
         return false;
     }
 
-    public static String extractBaseUri(String fullUri){
+    public static String extractBaseUri(String fullUri) {
 
-            URI uri = URI.create(fullUri);
-            String path = uri.getPath();
-            logger.info("uri.getFragment(): " + uri.getFragment());
-            if(Arrays.asList(standardKnownPrefixes).contains(fullUri)){
-                return fullUri;
-            }
-            if(uri.getFragment() != null){
-                // The uri is ready to be fetched as is
-                return fullUri;
-            }
-            if(fullUri.startsWith(WOT_PREFIX)){
-                return WOT_RDF_FILE;
-            }
-        if(fullUri.startsWith(VANN_PREFIX)){
+        URI uri = URI.create(fullUri);
+        String path = uri.getPath();
+        logger.info("uri.getFragment(): " + uri.getFragment());
+        if (Arrays.asList(standardKnownPrefixes).contains(fullUri)) {
+            return fullUri;
+        }
+        if (uri.getFragment() != null) {
+            // The uri is ready to be fetched as is
+            return fullUri;
+        }
+        if (fullUri.startsWith(WOT_PREFIX)) {
+            return WOT_RDF_FILE;
+        }
+        if (fullUri.startsWith(VANN_PREFIX)) {
             logger.log(Level.INFO, "IRI starts with VANN_PREFIX");
             return VANN_RDF_FILE;
         }
-        if(fullUri.startsWith(SCHEMA_PREFIX)){
+        if (fullUri.startsWith(SCHEMA_PREFIX)) {
             logger.log(Level.INFO, "IRI starts with SCHEMA_PREFIX");
             return SCHEMA_RDF_FILE;
         }
-            if(startsWithAny(fullUri, standardKnownPrefixes)){
-                int lastSlash = path.lastIndexOf('/');
-                String basePath = path.substring(0, lastSlash);
-                String baseUri = uri.getScheme() + "://" + uri.getHost() + basePath;
-                logger.info("baseUri: " + baseUri);
-                return baseUri;
-            }
-            else {return fullUri;}
+        if (startsWithAny(fullUri, standardKnownPrefixes)) {
+            int lastSlash = path.lastIndexOf('/');
+            String basePath = path.substring(0, lastSlash);
+            String baseUri = uri.getScheme() + "://" + uri.getHost() + basePath;
+            logger.info("baseUri: " + baseUri);
+            return baseUri;
+        } else {
+            return fullUri;
+        }
 
     }
 
@@ -418,8 +419,8 @@ public class Dereferencer {
         contentType = contentType.toLowerCase();
 
         if (contentType.contains("rdf+xml")) return Lang.RDFXML;
-        if(contentType.contains("text/xml")) return Lang.RDFXML;
-        if(contentType.contains("text/html")) return Lang.RDFXML;
+        if (contentType.contains("text/xml")) return Lang.RDFXML;
+        if (contentType.contains("text/html")) return Lang.RDFXML;
         if (contentType.contains("turtle")) return Lang.TTL;
         if (contentType.contains("ld+json")) return Lang.JSONLD;
         if (contentType.contains("n-triples")) return Lang.NTRIPLES;
@@ -428,39 +429,13 @@ public class Dereferencer {
         return null;
     }
 
-    // Reuse HTTP client (add at class level)
-    private static final CloseableHttpClient httpClient = HttpClients.custom()
-            .setConnectionTimeToLive(30, TimeUnit.SECONDS)
-            .setMaxConnTotal(100)
-            .setMaxConnPerRoute(10)
-            .build();
-
-    private static final LoadingCache<String, String> labelCache = CacheBuilder.newBuilder()
-            .maximumSize(1000)
-            .expireAfterWrite(1, TimeUnit.HOURS)
-            .build(new CacheLoader<String, String>() {
-                @Override
-                public String load(String iri) throws Exception {
-                    try {
-
-                        return fetchLabelUncached(iri);
-                    } catch (IOException e) {
-                        ValueFactory vf = SimpleValueFactory.getInstance();
-                        IRI propertyUrlIRI = vf.createIRI(iri);
-                        logger.info("--------After IOException is caught in fetchLabelUncached, trying to get LocalName...");
-                        return propertyUrlIRI.getLocalName();
-                        //throw new RuntimeException("Failed to fetch label for IRI: " + iri, e);
-                    }
-                }
-            });
-
     public static String fetchLabel(String iri) throws IOException, ExecutionException {
-            return labelCache.getUnchecked(iri);
+        return labelCache.getUnchecked(iri);
     }
 
     static String fetchLabelUncached(String iri) throws IOException {
         long startTime = System.currentTimeMillis();
-        logger.info("--------Before new HttpGet(extractBaseUri("+iri+"));");
+        logger.info("--------Before new HttpGet(extractBaseUri(" + iri + "));");
 
         HttpGet httpGet = new HttpGet(extractBaseUri(iri));
         long startTime1 = System.currentTimeMillis();
@@ -517,9 +492,9 @@ public class Dereferencer {
             try (InputStream in = new ByteArrayInputStream(content)) {
                 startTime10 = System.currentTimeMillis();
                 // Using RDFDataMgr for faster parsing
-                if(iri.startsWith(VANN_PREFIX)){
+                if (iri.startsWith(VANN_PREFIX)) {
                     RDFDataMgr.read(model, in, VANN_RDF_FILE, lang);
-                } else if(iri.startsWith(SCHEMA_PREFIX)){
+                } else if (iri.startsWith(SCHEMA_PREFIX)) {
                     logger.info("Logged in with SCHEMA_PREFIX -----------------------------------*-*-*-*-*-*");
                     RDFDataMgr.read(model, in, SCHEMA_RDF_FILE, lang);
                 } else {
@@ -530,23 +505,23 @@ public class Dereferencer {
             String label = findLabelForIRI(model, iri);
             long startTime12 = System.currentTimeMillis();
 
-            logger.log(Level.INFO, "Fetched label for " + iri + " in "+ (System.currentTimeMillis() - startTime) + "ms");
-            logger.log(Level.INFO, "HttpGet httpGet = new HttpGet(extractBaseUri(iri)); in "+ (startTime1 - startTime) + "ms");
-            logger.log(Level.INFO, "Fetched label for " + iri + " in "+ (startTime2 - startTime1) + "ms");
+            logger.log(Level.INFO, "Fetched label for " + iri + " in " + (System.currentTimeMillis() - startTime) + "ms");
+            logger.log(Level.INFO, "HttpGet httpGet = new HttpGet(extractBaseUri(iri)); in " + (startTime1 - startTime) + "ms");
+            logger.log(Level.INFO, "Fetched label for " + iri + " in " + (startTime2 - startTime1) + "ms");
             logger.log(Level.INFO, "----------------------" + iri + "---------------------------------------");
-            logger.log(Level.INFO, "try (CloseableHttpResponse response = httpClient.execute(httpGet)) { in "+ (startTime3 - startTime2) + "ms");
+            logger.log(Level.INFO, "try (CloseableHttpResponse response = httpClient.execute(httpGet)) { in " + (startTime3 - startTime2) + "ms");
             logger.log(Level.INFO, "----------------------" + iri + "---------------------------------");
-            logger.log(Level.INFO, "Fetched label for " + iri + " in "+ (startTime4 - startTime3) + "ms");
-            logger.log(Level.INFO, "byte[] content = EntityUtils.toByteArray(response.getEntity()); in "+ (startTime5 - startTime4) + "ms");
-            logger.log(Level.INFO, "String contentType = response.getEntity().getContentType().getValue(); in "+ (startTime6 - startTime5) + "ms");
-            logger.log(Level.INFO, "Lang lang = determineLang(contentType); in "+ (startTime7 - startTime6) + "ms");
-            logger.log(Level.INFO, "Fetched label for " + iri + " in "+ (startTime8 - startTime7) + "ms");
-            logger.log(Level.INFO, "Model model = ModelFactory.createDefaultModel(); in "+ (startTime9 - startTime8) + "ms");
-            logger.log(Level.INFO, "try (InputStream in = new ByteArrayInputStream(content)) { in "+ (startTime10 - startTime9) + "ms");
-            logger.log(Level.INFO, "RDFDataMgr.read(model, in, lang); in "+ (startTime11 - startTime10) + "ms");
-            logger.log(Level.INFO, "String label = findLabelForIRI(model, iri); in "+ (startTime12 - startTime11) + "ms");
+            logger.log(Level.INFO, "Fetched label for " + iri + " in " + (startTime4 - startTime3) + "ms");
+            logger.log(Level.INFO, "byte[] content = EntityUtils.toByteArray(response.getEntity()); in " + (startTime5 - startTime4) + "ms");
+            logger.log(Level.INFO, "String contentType = response.getEntity().getContentType().getValue(); in " + (startTime6 - startTime5) + "ms");
+            logger.log(Level.INFO, "Lang lang = determineLang(contentType); in " + (startTime7 - startTime6) + "ms");
+            logger.log(Level.INFO, "Fetched label for " + iri + " in " + (startTime8 - startTime7) + "ms");
+            logger.log(Level.INFO, "Model model = ModelFactory.createDefaultModel(); in " + (startTime9 - startTime8) + "ms");
+            logger.log(Level.INFO, "try (InputStream in = new ByteArrayInputStream(content)) { in " + (startTime10 - startTime9) + "ms");
+            logger.log(Level.INFO, "RDFDataMgr.read(model, in, lang); in " + (startTime11 - startTime10) + "ms");
+            logger.log(Level.INFO, "String label = findLabelForIRI(model, iri); in " + (startTime12 - startTime11) + "ms");
 
-            logger.log(Level.INFO, "LABEL = "+ label);
+            logger.log(Level.INFO, "LABEL = " + label);
 
             label = LabelFormatter.changeLabelToTheConfiguredFormat(label);
 
@@ -660,62 +635,6 @@ public class Dereferencer {
     }
 
     /**
-     * Finds the label for a given IRI in an RDF model.
-     *
-     * @param model The RDF model to search in
-     * @param iri The subject IRI to find labels for
-     * @return The label string if found, or null if no label exists
-     */
-/*    public static String findLabelForIRI(Model model, String iri) {
-        // Get the resource for the IRI
-        Resource resource = model.getResource(iri);
-
-        logger.log(Level.INFO, "---------------------------findLabelForIRI for " + iri );
-
-
-        logger.info("resource in findLabelForIRI: " + resource.getURI() + " localName: " + resource.getLocalName() );
-
-        // Try standard label predicates in order of preference
-        String[] labelPredicates = {
-                RDFS.label.getURI(),        // rdfs:label
-                "http://www.w3.org/2000/01/rdf-schema#label",  // alternative form
-                "http://www.w3.org/2004/02/skos/core#prefLabel",  // skos:prefLabel
-                "http://purl.org/dc/elements/1.1/title",       // dc:title
-                "http://purl.org/dc/terms/title",              // dcterms:title
-                "http://www.w3.org/2000/01/rdf-schema#comment" // rdfs:comment (fallback)
-
-        };
-
-        // Check each predicate in order
-        for (String predicate : labelPredicates) {
-            Statement labelStmt = resource.getProperty(model.createProperty(predicate));
-            if (labelStmt != null) {
-                RDFNode object = labelStmt.getObject();
-                if (object.isLiteral()) {
-                    logger.info("object.isLiteral() in findLabelForIRI: " + resource.getURI() + " localName: " + resource.getLocalName() );
-                    return object.asLiteral().getString();
-                }
-            }
-        }
-
-        // If no label was found with standard predicates, try any property ending with "label"
-        for (Statement stmt : resource.listProperties().toList()) {
-            String predicateURI = stmt.getPredicate().getURI();
-            if (predicateURI.toLowerCase().contains("label")) {
-                RDFNode object = stmt.getObject();
-                if (object.isLiteral()) {
-                    logger.info("Found alternative object for alternative label predicate findLabelForIRI:"+ object.asLiteral().getString());
-                    return object.asLiteral().getString();
-                }
-            }
-        }
-        logger.info("No object found that seems like a label in findLabelForIRI. " );
-
-        return null; // No label found
-    }*/
-
-
-    /**
      * Finds a label for a resource, respecting language preferences.
      * Strategy:
      * 1. Prefer a literal in the most desired language from PREFERRED_LANGUAGES.
@@ -724,7 +643,7 @@ public class Dereferencer {
      * 4. If no literal is found, return null or the local name.
      *
      * @param model The model containing the resource.
-     * @param iri The IRI of the resource to get the label for.
+     * @param iri   The IRI of the resource to get the label for.
      * @return The selected label string, or null if no label was found.
      */
     public static String findLabelForIRI(Model model, String iri) {
@@ -755,7 +674,7 @@ public class Dereferencer {
             while (labelStmts.hasNext()) {
                 Statement stmt = labelStmts.nextStatement();
                 RDFNode object = stmt.getObject();
-                logger.info("object of <"+stmt.getString()+">: " + object.toString());
+                logger.info("object of <" + stmt.getString() + ">: " + object.toString());
                 if (object.isLiteral()) {
                     Literal literal = object.asLiteral();
                     String lang = literal.getLanguage(); // Get language tag (can be empty string "")
@@ -819,6 +738,61 @@ public class Dereferencer {
         return 0;
     }
 
+    /**
+     * Finds the label for a given IRI in an RDF model.
+     *
+     * @param model The RDF model to search in
+     * @param iri The subject IRI to find labels for
+     * @return The label string if found, or null if no label exists
+     */
+/*    public static String findLabelForIRI(Model model, String iri) {
+        // Get the resource for the IRI
+        Resource resource = model.getResource(iri);
+
+        logger.log(Level.INFO, "---------------------------findLabelForIRI for " + iri );
+
+
+        logger.info("resource in findLabelForIRI: " + resource.getURI() + " localName: " + resource.getLocalName() );
+
+        // Try standard label predicates in order of preference
+        String[] labelPredicates = {
+                RDFS.label.getURI(),        // rdfs:label
+                "http://www.w3.org/2000/01/rdf-schema#label",  // alternative form
+                "http://www.w3.org/2004/02/skos/core#prefLabel",  // skos:prefLabel
+                "http://purl.org/dc/elements/1.1/title",       // dc:title
+                "http://purl.org/dc/terms/title",              // dcterms:title
+                "http://www.w3.org/2000/01/rdf-schema#comment" // rdfs:comment (fallback)
+
+        };
+
+        // Check each predicate in order
+        for (String predicate : labelPredicates) {
+            Statement labelStmt = resource.getProperty(model.createProperty(predicate));
+            if (labelStmt != null) {
+                RDFNode object = labelStmt.getObject();
+                if (object.isLiteral()) {
+                    logger.info("object.isLiteral() in findLabelForIRI: " + resource.getURI() + " localName: " + resource.getLocalName() );
+                    return object.asLiteral().getString();
+                }
+            }
+        }
+
+        // If no label was found with standard predicates, try any property ending with "label"
+        for (Statement stmt : resource.listProperties().toList()) {
+            String predicateURI = stmt.getPredicate().getURI();
+            if (predicateURI.toLowerCase().contains("label")) {
+                RDFNode object = stmt.getObject();
+                if (object.isLiteral()) {
+                    logger.info("Found alternative object for alternative label predicate findLabelForIRI:"+ object.asLiteral().getString());
+                    return object.asLiteral().getString();
+                }
+            }
+        }
+        logger.info("No object found that seems like a label in findLabelForIRI. " );
+
+        return null; // No label found
+    }*/
+
     private static List<String> loadPreferredLanguages() {
         String configValue = ConfigurationManager.loadConfig("app.preferredLanguages");
         if (configValue == null || configValue.trim().isEmpty()) {
@@ -837,6 +811,24 @@ public class Dereferencer {
         }
 
         return languages;
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * Sets url.
+     *
+     * @param url the url
+     */
+    public void setUrl(String url) {
+        this.url = url;
     }
 
 }
