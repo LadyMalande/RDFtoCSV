@@ -10,6 +10,7 @@ import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import com.miklosova.rdftocsvw.output_processor.FinalizedOutput;
 import com.miklosova.rdftocsvw.output_processor.StreamingNTriplesWrite;
 import com.miklosova.rdftocsvw.output_processor.ZipOutputProcessor;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.JsonUtil;
 import org.eclipse.rdf4j.repository.Repository;
@@ -51,6 +52,12 @@ public class RDFtoCSV {
      * The RepositoryConnection to ask SPARQL queries on.
      */
     RepositoryConnection rc;
+    
+    /**
+     * Configuration for the conversion process.
+     */
+    private AppConfig config;
+    
     /**
      * Mandatory, sets the original RDF file to convert.
      */
@@ -78,17 +85,48 @@ public class RDFtoCSV {
     private final String metadataFilename;
 
     /**
+     * Gets the current configuration.
+     *
+     * @return the AppConfig instance
+     */
+    public AppConfig getConfig() {
+        return config;
+    }
+
+    /**
+     * Instantiates a new RDFtoCSV with AppConfig (recommended approach).
+     *
+     * @param config The application configuration containing all conversion parameters
+     */
+    public RDFtoCSV(AppConfig config) {
+        this.config = config;
+        this.fileName = isUrl(config.getFile()) ? config.getFile() : "../" + config.getFile();
+        this.metadataFilename = this.fileName + ".csv-metadata.json";
+        this.filePathForOutput = this.fileName;
+        if (isUrl(config.getFile())) {
+            this.filePathForOutput = iri(this.fileName).getLocalName();
+        }
+    }
+
+    /**
      * Instantiates a new Rd fto csv.
      *
      * @param fileName the file name
+     * @deprecated Use {@link #RDFtoCSV(AppConfig)} instead
      */
+    @Deprecated
     public RDFtoCSV(String fileName) {
+        // Create default config for backward compatibility
+        this.config = new AppConfig.Builder(fileName).build();
         this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
         if (isUrl(fileName)) {
             this.filePathForOutput = iri(this.fileName).getLocalName();
         }
+        // For backward compatibility, also save to ConfigurationManager
+        ConfigurationManager.createConfigFile();
+        ConfigurationManager.processConfigMap(fileName, null);
     }
 
     /**
@@ -96,15 +134,36 @@ public class RDFtoCSV {
      *
      * @param fileName  the file name
      * @param configMap the config map
+     * @deprecated Use {@link #RDFtoCSV(AppConfig)} instead
      */
+    @Deprecated
     public RDFtoCSV(String fileName, Map<String, String> configMap) {
-
+        // Build AppConfig from configMap for backward compatibility
+        AppConfig.Builder builder = new AppConfig.Builder(fileName);
+        
+        if (configMap != null) {
+            if (configMap.containsKey("table")) {
+                boolean multipleTables = "splitQuery".equalsIgnoreCase(configMap.get("table")) 
+                    || "MORE".equalsIgnoreCase(configMap.get("table")) 
+                    || "more".equalsIgnoreCase(configMap.get("table"));
+                builder.multipleTables(multipleTables);
+            }
+            if (configMap.containsKey("readMethod")) {
+                builder.parsing(configMap.get("readMethod"));
+            }
+            if (configMap.containsKey("firstNormalForm")) {
+                builder.firstNormalForm(Boolean.parseBoolean(configMap.get("firstNormalForm")));
+            }
+        }
+        
+        this.config = builder.build();
         this.fileName = fileName;
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
         if (isUrl(fileName)) {
             this.filePathForOutput = iri(this.fileName).getLocalName();
         }
+        // For backward compatibility, also save to ConfigurationManager
         ConfigurationManager.processConfigMap(fileName, configMap);
     }
 
@@ -179,7 +238,7 @@ public class RDFtoCSV {
      */
     public String getCSVTableAsString() throws IOException {
 
-        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD).equalsIgnoreCase("trivial")) {
+        if (config.getConversionMethod().equalsIgnoreCase("trivial")) {
             return getTrivialCSVTableAsString();
         }
 
@@ -254,8 +313,8 @@ public class RDFtoCSV {
     public FinalizedOutput<byte[]> getMetadataAsFile() throws IOException {
         Metadata metadata = getMetadata();
 
-        JsonUtil.serializeAndWriteToFile(metadata);
-        File f = new File(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
+        JsonUtil.serializeAndWriteToFile(metadata, config);
+        File f = new File(metadataFilename);
         // Read the file into a byte array
         byte[] fileBytes = Files.readAllBytes(f.toPath());
         return new FinalizedOutput<>(fileBytes);
@@ -264,12 +323,12 @@ public class RDFtoCSV {
 
     private String writeToString(PrefinishedOutput<?> po, Metadata metadata) {
         if (po == null) {
-            if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD).equalsIgnoreCase("streaming")) {
+            if (config.getConversionMethod().equalsIgnoreCase("streaming")) {
                 return "";
             }
             return processStreaming(metadata);
         }
-        String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+        String allFiles = config.getIntermediateFileNames();
         String[] files = allFiles.split(",");
         StringBuilder sb = new StringBuilder();
         try {
@@ -299,7 +358,7 @@ public class RDFtoCSV {
     }
 
     private String processStreaming(Metadata metadata) {
-        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD).equalsIgnoreCase("bigFileStreaming")) {
+        if (config.getConversionMethod().equalsIgnoreCase("bigFileStreaming")) {
             processStreamingWrite(metadata, fileName);
         }
         return "CSV written to the file by stream, the file is available here: " + fileName + ".csv";
@@ -315,7 +374,7 @@ public class RDFtoCSV {
         if (po == null) {
             processStreaming(metadata);
         } else {
-            String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+            String allFiles = config.getIntermediateFileNames();
             String[] files = allFiles.split(",");
             try {
                 RowsAndKeys rnk = (RowsAndKeys) po.getPrefinishedOutput();
@@ -348,7 +407,7 @@ public class RDFtoCSV {
      * @return the .ZIP of CSV(s) and JSON metadata
      */
     private FinalizedOutput<byte[]> finalizeOutput(PrefinishedOutput<?> po) {
-        ZipOutputProcessor zop = new ZipOutputProcessor();
+        ZipOutputProcessor zop = new ZipOutputProcessor(config);
         return zop.processCSVToOutput(po);
     }
 
@@ -360,7 +419,7 @@ public class RDFtoCSV {
      */
     public Metadata createMetadata(PrefinishedOutput<RowsAndKeys> po) {
         // Convert intermediate data into basic metadata
-        MetadataService ms = new MetadataService();
+        MetadataService ms = new MetadataService(config);
         return ms.createMetadata(po);
     }
 
@@ -371,7 +430,7 @@ public class RDFtoCSV {
      */
     public PrefinishedOutput<RowsAndKeys> convertData() {
         // Convert the table to intermediate data for processing into metadata
-        ConversionService cs = new ConversionService();
+        ConversionService cs = new ConversionService(config);
         return cs.convertByQuery(rc, db);
     }
 
@@ -384,7 +443,7 @@ public class RDFtoCSV {
      */
     public PrefinishedOutput<?> convertData(RepositoryConnection repositoryConnection, Repository repository) {
         // Convert the table to intermediate data for processing into metadata
-        ConversionService cs = new ConversionService();
+        ConversionService cs = new ConversionService(config);
         return cs.convertByQuery(repositoryConnection, repository);
     }
 
@@ -397,9 +456,9 @@ public class RDFtoCSV {
         // Parse input
         // Create a new Repository.
         db = new SailRepository(new MemoryStore());
-        MethodService methodService = new MethodService();
+        MethodService methodService = new MethodService(config);
 
-        String readMethod = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD);
+        String readMethod = config.getReadMethod();
         rc = methodService.processInput(fileName, readMethod, db);
 
     }
@@ -416,7 +475,7 @@ public class RDFtoCSV {
     public RepositoryConnection createRepositoryConnection(Repository repository, String filename, String readMethod) throws IOException {
         // Parse input
         // Create a new Repository.
-        MethodService methodService = new MethodService();
+        MethodService methodService = new MethodService(config);
         return methodService.processInput(filename, readMethod, repository);
     }
 

@@ -2,6 +2,7 @@ package com.miklosova.rdftocsvw.converter;
 
 import com.miklosova.rdftocsvw.converter.data_structure.*;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.ConverterHelper;
 import lombok.extern.java.Log;
@@ -75,14 +76,35 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
     RepositoryConnection rc;
 
     /**
+     * The AppConfig instance.
+     */
+    private AppConfig config;
+
+    /**
      * Instantiates a new Basic query converter.
      *
      * @param db the db
+     * @deprecated Use {@link #BasicQueryConverter(Repository, AppConfig)} instead
      */
+    @Deprecated
     public BasicQueryConverter(Repository db) {
         this.keys = new HashSet<>();
         this.db = db;
         this.IRIalreadyProcessedTimes = new HashMap<>();
+        this.config = null;
+    }
+
+    /**
+     * Instantiates a new Basic query converter with AppConfig.
+     *
+     * @param db the db
+     * @param config the application configuration
+     */
+    public BasicQueryConverter(Repository db, AppConfig config) {
+        this.keys = new HashSet<>();
+        this.db = db;
+        this.IRIalreadyProcessedTimes = new HashMap<>();
+        this.config = config;
     }
 
     @Override
@@ -112,6 +134,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
 
     private PrefinishedOutput<RowAndKey> queryRDFModel(String queryString, boolean askForTypes) throws IndexOutOfBoundsException {
         PrefinishedOutput<RowAndKey> gen = new PrefinishedOutput<>((new RowAndKey.RowAndKeyFactory()).factory());
+        // For backward compatibility, also save to ConfigurationManager
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
         // Query the data and pass the result as String
 
@@ -152,7 +175,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                     for (BindingSet solution : resultList) {
                         // ... and print out the value of the variable binding for ?s and ?n
                         if (solution.getValue("o").stringValue().equalsIgnoreCase(CSVW_TableGroup)) {
-                            StandardModeConverter smc = new StandardModeConverter(db);
+                            StandardModeConverter smc = new StandardModeConverter(db, config);
                             new RowAndKey();
                             RowAndKey smcOutputRowAndKey;
                             PrefinishedOutput<RowAndKey> smcOutput = new PrefinishedOutput<>((new RowAndKey.RowAndKeyFactory()).factory());
@@ -203,6 +226,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                 queryString = getQueryForSubstituteRoots(askForTypes);
             }
 
+            // For backward compatibility, also save to ConfigurationManager
             ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
         } catch (IndexOutOfBoundsException ex) {
             throw new IndexOutOfBoundsException();
@@ -364,14 +388,18 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
 
     public PrefinishedOutput<RowAndKey> convertData() {
         // Convert the table to intermediate data for processing into metadata
-        ConversionService cs = new ConversionService();
+        ConversionService cs = new ConversionService(config);
         Repository newdb = new SailRepository(new MemoryStore());
-        MethodService methodService = new MethodService();
+        MethodService methodService = new MethodService(config);
 
-        String readMethod = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD);
+        String readMethod = (config != null) ? config.getParsing() : 
+            ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD);
+        String inputFilename = (config != null) ? config.getFile() : 
+            ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME);
         try {
+            // For backward compatibility, also save to ConfigurationManager
             ConfigurationManager.saveVariableToConfigFile("simpleBasicQuery", "true");
-            RepositoryConnection newRc = methodService.processInput(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME), readMethod, newdb);
+            RepositoryConnection newRc = methodService.processInput(inputFilename, readMethod, newdb);
             PrefinishedOutput<RowsAndKeys> rk = new PrefinishedOutput<>((new RowsAndKeys.RowsAndKeysFactory()).factory());
             rk = cs.convertByQuery(newRc, newdb);
             PrefinishedOutput<RowAndKey> rk1 = new PrefinishedOutput<>((new RowAndKey.RowAndKeyFactory()).factory());

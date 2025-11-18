@@ -4,6 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -68,8 +69,8 @@ public class Dereferencer {
     static String SKOS_REFERENCE = "http://www.w3.org/2009/08/skos-reference/skos.rdf";
     static String[] standardKnownPrefixes = {SKOS_PREFIX, WOT_PREFIX, VS_PREFIX, VANN_PREFIX, DCTERMS_PREFIX, DC_PREFIX, FOAF_PREFIX, RDFSchema_PREFIX, OWL_PREFIX, SKOS_REFERENCE};
     // Define language preferences (order matters: first is most desired)
-    private static List<String> PREFERRED_LANGUAGES = loadPreferredLanguages(); // Example: Prefer English, then German, then French
-    private static final LoadingCache<String, String> labelCache = CacheBuilder.newBuilder()
+    private List<String> PREFERRED_LANGUAGES = loadPreferredLanguages(); // Example: Prefer English, then German, then French
+    private final LoadingCache<String, String> labelCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build(new CacheLoader<String, String>() {
@@ -89,22 +90,25 @@ public class Dereferencer {
             });
     private String url;
 
+    private AppConfig config;
+
     /**
      * Instantiates a new Dereferencer.
      *
      * @param url the IRI to parse into pretty label
      */
-    public Dereferencer(String url) {
+    public Dereferencer(String url, AppConfig config) {
         this.url = url;
+        this.config = config;
     }
 
     // Package-private setter for testing
-    static void setPreferredLanguagesForTesting(List<String> languages) {
+    void setPreferredLanguagesForTesting(List<String> languages) {
         PREFERRED_LANGUAGES = languages;
     }
 
     // Reset method for tests
-    static void resetPreferredLanguages() {
+    void resetPreferredLanguages() {
         PREFERRED_LANGUAGES = loadPreferredLanguages();
     }
 
@@ -429,11 +433,13 @@ public class Dereferencer {
         return null;
     }
 
-    public static String fetchLabel(String iri) throws IOException, ExecutionException {
+    public String fetchLabel(String iri) throws IOException, ExecutionException {
+        logger.info("The config before fetching label file: " + this.config.getFile());
+        logger.info("The config before fetching label: " + this.config.getColumnNamingConvention());
         return labelCache.getUnchecked(iri);
     }
 
-    static String fetchLabelUncached(String iri) throws IOException {
+    String fetchLabelUncached(String iri) throws IOException {
         long startTime = System.currentTimeMillis();
         logger.info("--------Before new HttpGet(extractBaseUri(" + iri + "));");
 
@@ -523,7 +529,7 @@ public class Dereferencer {
 
             logger.log(Level.INFO, "LABEL = " + label);
 
-            label = LabelFormatter.changeLabelToTheConfiguredFormat(label);
+            label = LabelFormatter.changeLabelToTheConfiguredFormat(label, config);
 
             return label;
         }
@@ -646,7 +652,7 @@ public class Dereferencer {
      * @param iri   The IRI of the resource to get the label for.
      * @return The selected label string, or null if no label was found.
      */
-    public static String findLabelForIRI(Model model, String iri) {
+    public String findLabelForIRI(Model model, String iri) {
 
         // Get the resource for the IRI
         Resource resource = model.getResource(iri);
@@ -716,7 +722,7 @@ public class Dereferencer {
      * @param lang The language tag from the literal (e.g., "en", "de", "").
      * @return A score representing the preference for this language.
      */
-    private static int scoreLanguage(String lang) {
+    private int scoreLanguage(String lang) {
         // 1. Highest priority: Check if it's a preferred language.
         //    The index in the list determines priority (earlier = higher score).
         int preferredIndex = PREFERRED_LANGUAGES.indexOf(lang.toLowerCase());
@@ -793,8 +799,24 @@ public class Dereferencer {
         return null; // No label found
     }*/
 
-    private static List<String> loadPreferredLanguages() {
-        String configValue = ConfigurationManager.loadConfig("app.preferredLanguages");
+    /**
+     * Load preferred languages from configuration.
+     * @return list of preferred language codes
+     * @deprecated Use {@link #loadPreferredLanguages(AppConfig)} instead
+     */
+    @Deprecated
+    private List<String> loadPreferredLanguages() {
+        return loadPreferredLanguages(this.config);
+    }
+
+    /**
+     * Load preferred languages from AppConfig or configuration.
+     * @param config the application configuration
+     * @return list of preferred language codes
+     */
+    private List<String> loadPreferredLanguages(AppConfig config) {
+        String configValue = (config != null) ? config.getPreferredLanguages() : 
+            ConfigurationManager.loadConfig("app.preferredLanguages");
         if (configValue == null || configValue.trim().isEmpty()) {
             return Arrays.asList("en", "cs"); // default fallback
         }

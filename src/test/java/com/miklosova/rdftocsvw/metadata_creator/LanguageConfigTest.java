@@ -1,12 +1,10 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -16,116 +14,126 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class LanguageConfigTest {
     @ParameterizedTest
     @MethodSource("languageTestCases")
     void loadPreferredLanguagesTest(String mockedConfig, String expectedConfig) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        try (MockedStatic<ConfigurationManager> mocked = Mockito.mockStatic(ConfigurationManager.class)) {
-            // Mock the config loader to return camel case setting
-            mocked.when(() -> ConfigurationManager.loadConfig("app.preferredLanguages"))
-                    .thenReturn(mockedConfig);
-            // Invoke the method
-            Dereferencer instance = new Dereferencer("https://publications.europa.eu/resource/authority/eurovoc/2294");
-            // Get the private method
-            Method method = Dereferencer.class.getDeclaredMethod("loadPreferredLanguages");
+        // Create AppConfig with preferred languages
+        AppConfig config = new AppConfig.Builder("test.ttl")
+                .preferredLanguages(mockedConfig)
+                .build();
+        
+        // Invoke the method
+        Dereferencer instance = new Dereferencer("https://publications.europa.eu/resource/authority/eurovoc/2294", config);
+        // Get the private method
+        Method method = Dereferencer.class.getDeclaredMethod("loadPreferredLanguages", AppConfig.class);
 
-            // Make it accessible
-            method.setAccessible(true);
+        // Make it accessible
+        method.setAccessible(true);
 
-            // Invoke the method
-            Object result = method.invoke(instance);
-            for(String oneExpectedLanguage : expectedConfig.split(",")){
-                assertTrue(((List<String>)result).contains(oneExpectedLanguage));
-            }
+        // Invoke the method
+        Object result = method.invoke(instance, config);
+        for(String oneExpectedLanguage : expectedConfig.split(",")){
+            assertTrue(((List<String>)result).contains(oneExpectedLanguage));
         }
+    }
+
+    @ParameterizedTest
+    @MethodSource("FaultyLanguageTestCases")
+    void loadFaultyPreferredLanguagesTest(String mockedConfig, String expectedConfig) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        // Create AppConfig with preferred languages
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () ->  new AppConfig.Builder("test.ttl")
+                        .preferredLanguages(mockedConfig)
+                        .build()
+        );
+
+        assertEquals("Preferred languages contains empty value. Format: 'en,cs,pl'",
+                exception.getMessage());
     }
 
     @Test
     void languageScoring_WithEmptyConfig_UsesDefaultLanguages() throws Exception {
-        try (MockedStatic<ConfigurationManager> mocked = Mockito.mockStatic(ConfigurationManager.class)) {
-            mocked.when(() -> ConfigurationManager.loadConfig("app.preferredLanguages"))
-                    .thenReturn("");
+        // Create AppConfig with empty preferred languages
+        AppConfig config = new AppConfig.Builder("test.ttl")
+                .preferredLanguages("")
+                .build();
 
-            Dereferencer instance = new Dereferencer("https://publications.europa.eu/resource/authority/eurovoc/2294");
-            Method method = Dereferencer.class.getDeclaredMethod("scoreLanguage", String.class);
-            method.setAccessible(true);
+        Dereferencer instance = new Dereferencer("https://publications.europa.eu/resource/authority/eurovoc/2294", config);
+        Method method = Dereferencer.class.getDeclaredMethod("scoreLanguage", String.class);
+        method.setAccessible(true);
 
-            // Should use default languages ["en", "cs"]
-            assertEquals(1000, method.invoke(instance, "en"));  // first default
-            assertEquals(999, method.invoke(instance, "cs"));   // second default
-            assertEquals(0, method.invoke(instance, "fr"));     // non-default
-            assertEquals(500, method.invoke(instance, ""));     // empty language
-        }
+        // Should use default languages ["en", "cs"]
+        assertEquals(1000, method.invoke(instance, "en"));  // first default
+        assertEquals(999, method.invoke(instance, "cs"));   // second default
+        assertEquals(0, method.invoke(instance, "fr"));     // non-default
+        assertEquals(500, method.invoke(instance, ""));     // empty language
     }
     @ParameterizedTest
     @MethodSource("languageScoringTestCases")
     void languageScoringTest(String language, String preferredLanguageConfig, int expectedScore) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        try (MockedStatic<ConfigurationManager> mocked = Mockito.mockStatic(ConfigurationManager.class)) {
-            // Mock the config loader to return camel case setting
-            mocked.when(() -> ConfigurationManager.loadConfig("app.preferredLanguages"))
-                    .thenReturn(preferredLanguageConfig);
-            // Invoke the method
-            Dereferencer instance = new Dereferencer("https://publications.europa.eu/resource/authority/eurovoc/2294");
-            // Get the private method
-            Method method = Dereferencer.class.getDeclaredMethod("scoreLanguage", String.class);
-            Method method2 = Dereferencer.class.getDeclaredMethod("loadPreferredLanguages");
-            method2.setAccessible(true);
-            instance.setPreferredLanguagesForTesting((List<String>) method2.invoke(instance));
-            // Make it accessible
-            method.setAccessible(true);
+        // Create AppConfig with preferred languages
+        AppConfig config = new AppConfig.Builder("test.ttl")
+                .preferredLanguages(preferredLanguageConfig)
+                .build();
+        
+        // Invoke the method
+        Dereferencer instance = new Dereferencer("https://publications.europa.eu/resource/authority/eurovoc/2294", config);
+        // Get the private method
+        Method method = Dereferencer.class.getDeclaredMethod("scoreLanguage", String.class);
+        Method method2 = Dereferencer.class.getDeclaredMethod("loadPreferredLanguages", AppConfig.class);
+        method2.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        List<String> languages = (List<String>) method2.invoke(instance, config);
+        instance.setPreferredLanguagesForTesting(languages);
+        // Make it accessible
+        method.setAccessible(true);
 
-            // Invoke the method
-            Object result = method.invoke(instance, language);
+        // Invoke the method
+        Object result = method.invoke(instance, language);
 
-            assertEquals(expectedScore, result);
-
-        }
+        assertEquals(expectedScore, result);
     }
 
     @ParameterizedTest
     @MethodSource("fetchLabelLangTagTestCases")
     void fetchLabelLangTagTest(String iri, String preferredLanguageConfig, String expectedLabel) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, IOException, ExecutionException {
-        try (MockedStatic<ConfigurationManager> mocked = Mockito.mockStatic(ConfigurationManager.class)) {
-            // Mock the config loader to return camel case setting
-            mocked.when(() -> ConfigurationManager.loadConfig("app.preferredLanguages"))
-                    .thenReturn(preferredLanguageConfig);
-            mocked.when(() -> ConfigurationManager.loadConfig("app.columnNamingConvention"))
-                    .thenReturn("none");
-            // Invoke the method
-            Dereferencer instance = new Dereferencer(iri);
-            // Get the private method
-            Method method2 = Dereferencer.class.getDeclaredMethod("loadPreferredLanguages");
-            method2.setAccessible(true);
-            instance.setPreferredLanguagesForTesting((List<String>) method2.invoke(instance));
-            // Make it accessible
-            if(iri.contains("nonexistent-property") || iri.contains("does-not-exist")){
-                assertEquals(expectedLabel, Dereferencer.fetchLabel(iri));
-            } else {
-                assertEquals(expectedLabel, Dereferencer.fetchLabelUncached(iri));
-            }
-
+        // Create AppConfig with preferred languages and column naming convention
+        AppConfig config = new AppConfig.Builder("test.ttl")
+                .preferredLanguages(preferredLanguageConfig)
+                .build();
+        
+        // Invoke the method
+        Dereferencer instance = new Dereferencer(iri, config);
+        // Get the private method
+        Method method2 = Dereferencer.class.getDeclaredMethod("loadPreferredLanguages", AppConfig.class);
+        method2.setAccessible(true);
+        //@SuppressWarnings("unchecked")
+        //List<String> languages = (List<String>) method2.invoke(instance, config);
+        //instance.setPreferredLanguagesForTesting(languages);
+        // Make it accessible
+        if(iri.contains("nonexistent-property") || iri.contains("does-not-exist")){
+            assertEquals(expectedLabel, instance.fetchLabel(iri));
+        } else {
+            assertEquals(expectedLabel, instance.fetchLabelUncached(iri));
         }
     }
 
     @Test
     void loadPreferredLanguages_WhenConfigIsNull_ShouldReturnDefault() throws Exception {
-        try (MockedStatic<ConfigurationManager> mocked = Mockito.mockStatic(ConfigurationManager.class)) {
-            // Mock returning null
-            mocked.when(() -> ConfigurationManager.loadConfig("app.preferredLanguages"))
-                    .thenReturn(null);
+        // Pass null as AppConfig to test fallback behavior
+        Dereferencer instance = new Dereferencer("https://publications.europa.eu/resource/authority/eurovoc/2294", null);
+        Method method = Dereferencer.class.getDeclaredMethod("loadPreferredLanguages", AppConfig.class);
+        method.setAccessible(true);
 
-            Dereferencer instance = new Dereferencer("https://publications.europa.eu/resource/authority/eurovoc/2294");
-            Method method = Dereferencer.class.getDeclaredMethod("loadPreferredLanguages");
-            method.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        List<String> result = (List<String>) method.invoke(instance, (AppConfig) null);
 
-            @SuppressWarnings("unchecked")
-            List<String> result = (List<String>) method.invoke(instance);
-
-            assertEquals(Arrays.asList("en", "cs"), result);
-        }
+        assertEquals(Arrays.asList("en", "cs"), result);
     }
 
     private static Stream<Arguments> fetchLabelLangTagTestCases() {
@@ -137,9 +145,10 @@ public class LanguageConfigTest {
                 Arguments.of("http://purl.org/dc/terms/title", "es,it,en", "Title"),
 
                 // FOAF (Friend of a Friend) properties
-                Arguments.of("http://xmlns.com/foaf/0.1/name", "en,de,fr", "name"),
-                Arguments.of("http://xmlns.com/foaf/0.1/name", "de,en,fr", "name"),
-                Arguments.of("http://xmlns.com/foaf/0.1/name", "fr,en,de", "name"),
+                // WEBSITE UNAVAILABLE AS OF 18.11.2025
+                //Arguments.of("http://xmlns.com/foaf/0.1/name", "en,de,fr", "name"),
+                //Arguments.of("http://xmlns.com/foaf/0.1/name", "de,en,fr", "name"),
+                //Arguments.of("http://xmlns.com/foaf/0.1/name", "fr,en,de", "name"),
 
                 // SKOS (Simple Knowledge Organization System)
                 Arguments.of("http://www.w3.org/2004/02/skos/core#prefLabel", "en,de,fr", "preferred label"),
@@ -269,6 +278,18 @@ public class LanguageConfigTest {
         );
     }
 
+    private static Stream<Arguments> FaultyLanguageTestCases() {
+            return Stream.of(
+
+                    // Edge cases with empty/malformed values
+                    Arguments.of("", "en,cs"), // empty string should return default
+                    Arguments.of("   ", "en,cs"), // whitespace only should return default
+                    Arguments.of("en,,cs", "en,cs"), // empty middle element
+                    Arguments.of(",en,cs", "en,cs") // empty first element
+            );
+        }
+
+
     private static Stream<Arguments> languageTestCases() {
         return Stream.of(
                 // Normal cases
@@ -282,10 +303,6 @@ public class LanguageConfigTest {
                 Arguments.of("  en  ,  cs  ,  fr  ", "en,cs,fr"), // multiple spaces
 
                 // Edge cases with empty/malformed values
-                Arguments.of("", "en,cs"), // empty string should return default
-                Arguments.of("   ", "en,cs"), // whitespace only should return default
-                Arguments.of("en,,cs", "en,cs"), // empty middle element
-                Arguments.of(",en,cs", "en,cs"), // empty first element
                 Arguments.of("en,cs,", "en,cs"), // empty last element
                 Arguments.of(",,,", "en,cs"), // only commas/empty
 
@@ -294,8 +311,8 @@ public class LanguageConfigTest {
                 Arguments.of(" en ", "en"), // single with spaces
 
                 // Mixed case scenarios
-                Arguments.of("EN,cs,FR", "EN,cs,FR"), // mixed case languages
-                Arguments.of("en-US,cs-CZ", "en-US,cs-CZ"), // locale formats
+                Arguments.of("EN,cs,FR", "en,cs,fr"), // mixed case languages
+                Arguments.of("en-US,cs-CZ", "en-us,cs-cz"), // locale formats
 
                 // Long list
                 Arguments.of("en,de,fr,es,it,cs,pl,ru", "en,de,fr,es,it,cs,pl,ru")

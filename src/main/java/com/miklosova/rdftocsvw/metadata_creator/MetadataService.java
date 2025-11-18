@@ -4,6 +4,7 @@ import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 
 /**
@@ -11,6 +12,24 @@ import com.miklosova.rdftocsvw.support.ConfigurationManager;
  */
 public class MetadataService {
     private MetadataGateway metadataGateway;
+    private AppConfig config;
+
+    /**
+     * Default constructor for backward compatibility.
+     * @deprecated Use {@link #MetadataService(AppConfig)} instead
+     */
+    @Deprecated
+    public MetadataService() {
+        this.config = null;
+    }
+
+    /**
+     * Constructor with AppConfig.
+     * @param config The application configuration
+     */
+    public MetadataService(AppConfig config) {
+        this.config = config;
+    }
 
     /**
      * Create metadata metadata.
@@ -31,8 +50,20 @@ public class MetadataService {
      * @param data data in inner CSV representation. They are null for streaming methods.
      */
     private void processMetadataCreation(PrefinishedOutput<RowsAndKeys> data) {
-        String conversionChoice = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD);
-        String extension = FileWrite.getFileExtension(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
+        String conversionChoice;
+        String extension;
+        String streamingContinuous;
+        
+        if (config != null) {
+            conversionChoice = config.getConversionMethod();
+            extension = FileWrite.getFileExtension(config.getFile());
+            streamingContinuous = config.getStreamingContinuous().toString();
+        } else {
+            // Backward compatibility - use ConfigurationManager
+            conversionChoice = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD);
+            extension = FileWrite.getFileExtension(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
+            streamingContinuous = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.STREAMING_CONTINUOUS);
+        }
 
         switch (conversionChoice.toLowerCase()) {
             case "basicquery":
@@ -58,7 +89,7 @@ public class MetadataService {
                 }
                 break;
             case "streaming":
-                if (!extension.equalsIgnoreCase("nt") && ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.STREAMING_CONTINUOUS).equalsIgnoreCase("false")) {
+                if (!extension.equalsIgnoreCase("nt") && streamingContinuous.equalsIgnoreCase("false")) {
                     throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);
                 } else {
                     metadataGateway.setMetadataCreator(new StreamingNTriplesMetadataCreator());

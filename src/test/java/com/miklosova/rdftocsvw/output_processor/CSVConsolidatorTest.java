@@ -7,6 +7,7 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.BaseTest;
 import com.opencsv.CSVReader;
 
@@ -217,5 +218,73 @@ class CSVConsolidatorTest extends BaseTest {
             }
             assertThrows(RuntimeException.class, () -> csvConsolidator.writeToCSVFromOldMetadataToMerged(oldMetadata, newMetadata, newFile));
 }
+    }
+
+    // AppConfig-based test methods
+
+    @Test
+    void testConsolidateCSVsWithAppConfig() throws IOException {
+        AppConfig config = new AppConfig.Builder("test.rdf")
+                .parsing("rdf4j")
+                .build();
+
+        Table table = new Table();
+        table.setUrl("test.csv");
+        Column column1 = new Column();
+        column1.setTitles("Column1");
+        Column column2 = new Column();
+        column2.setTitles("Column2");
+        table.setTableSchema(new TableSchema());
+        oldMetadata.getTables().add(table);
+
+        File tempFile = tempDir.resolve("test.csv").toFile();
+
+        ArrayList<String[]> lines = new ArrayList<>();
+        String[] line = new String[2];
+        line[0] = "Column1";
+        line[1] = "Column2";
+        String[] line2 = new String[2];
+        line2[0] = "Value1";
+        line2[1] = "Value2";
+        lines.add(line);
+        lines.add(line2);
+
+        MetadataConsolidator mc = new MetadataConsolidator(config);
+        newMetadata = mc.consolidateMetadata(oldMetadata);
+
+        FileWrite.writeLinesToCSVFile(tempFile, lines, false);
+        config.setIntermediateFileNames(tempFile.getAbsolutePath());
+
+        File newTempFile = new File(newMetadata.getTables().get(0).getUrl());
+        CSVConsolidator consolidator = new CSVConsolidator(config);
+        consolidator.consolidateCSVs(oldMetadata, newMetadata);
+        assertTrue(tempFile.exists());
+        assertTrue(newTempFile.exists());
+    }
+
+    @Test
+    void testCreateHeadersLineForCSVWithAppConfig() throws IOException, CsvValidationException {
+        AppConfig config = new AppConfig.Builder("test.rdf")
+                .parsing("rdf4j")
+                .build();
+
+        Table table = new Table();
+        Column column1 = new Column();
+        column1.setTitles("Column1");
+        Column column2 = new Column();
+        column2.setTitles("Column2");
+        table.setTableSchema(new TableSchema());
+        table.getTableSchema().setColumns(Arrays.asList(column1, column2));
+
+        File tempFile = tempDir.resolve("test.csv").toFile();
+        newMetadata.getTables().add(table);
+
+        CSVConsolidator consolidator = new CSVConsolidator(config);
+        consolidator.createHeadersLineForCSV(newMetadata, tempFile);
+
+        try (CSVReader reader = new CSVReader(new FileReader(tempFile))) {
+            String[] header = reader.readNext();
+            assertArrayEquals(new String[]{"Column1", "Column2"}, header);
+        }
     }
 }

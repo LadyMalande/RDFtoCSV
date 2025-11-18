@@ -555,10 +555,8 @@ public class ConfigurationManager {
         String missingValue = config.hasPath("missing.key")
                 ? config.getString("missing.key")
                 : "default_value";
-        boolean dbUrl = config.getBoolean("database.exists");
 
         System.out.println("App columnNamingConvention: " + appcolumnNamingConvention);
-        System.out.println("DB exists: " + dbUrl);
         System.out.println("nonexisting config: " + missingValue);
     }
 

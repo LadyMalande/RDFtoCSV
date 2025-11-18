@@ -4,6 +4,7 @@ package com.miklosova.rdftocsvw.output_processor;
 import com.miklosova.rdftocsvw.metadata_creator.Triple;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.Main;
 import org.eclipse.rdf4j.model.IRI;
@@ -45,19 +46,40 @@ public class StreamingNTriplesWrite {
     private CSVOutputGrid bufferForCSVOutput;
 
     private final File fileToWriteTo;
+    
+    /**
+     * The AppConfig instance.
+     */
+    private AppConfig config;
 
     /**
      * Instantiates a new Streaming n triples write.
      *
      * @param metadata the metadata are already finished
      * @param fileName the file name to write to
+     * @deprecated Use {@link #StreamingNTriplesWrite(Metadata, String, AppConfig)} instead
      */
+    @Deprecated
     public StreamingNTriplesWrite(Metadata metadata, String fileName) {
+        this(metadata, fileName, null);
+    }
+
+    /**
+     * Instantiates a new Streaming n triples write with AppConfig.
+     *
+     * @param metadata the metadata are already finished
+     * @param fileName the file name to write to
+     * @param config the application configuration
+     */
+    public StreamingNTriplesWrite(Metadata metadata, String fileName, AppConfig config) {
+        this.config = config;
         fileToWriteTo = FileWrite.makeFileByNameAndExtension(fileName, "csv");
         assert fileToWriteTo != null;
+        // For backward compatibility, also save to ConfigurationManager
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileToWriteTo.toString());
         this.metadata = metadata;
-        String fileNameFromConfig = ConfigurationManager.getVariableFromConfigFile("input.inputFileName");
+        String fileNameFromConfig = (config != null && config.getFile() != null) ? config.getFile() :
+            ConfigurationManager.getVariableFromConfigFile("input.inputFileName");
 
         this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) :  fileNameFromConfig;
         processedSubjects = new HashSet<>();

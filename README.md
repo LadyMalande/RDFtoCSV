@@ -278,6 +278,31 @@ Project Link for web service using this library: [https://github.com/LadyMalande
 Project link for web application using the web service: [https://github.com/LadyMalande/rdf-to-csv.github.io](https://github.com/LadyMalande/rdf-to-csv.github.io)
 
 
+<!-- NEW CONFIGURATION USAGE -->
+## New configuration usage
+### Build from code
+```java
+// Build configuration using Builder pattern
+AppConfig config = new AppConfig.Builder("input.ttl")
+    .parsing("rdf4j")
+    .multipleTables(true)
+    .firstNormalForm(true)
+    .output("output.csv")
+    .preferredLanguages("en,cs")
+    .columnNamingConvention("Title case")
+    .logLevel("INFO")
+    .build();
+
+// Create RDFtoCSV with config
+RDFtoCSV converter = new RDFtoCSV(config);
+converter.convertToZip();
+```
+
+### Command line
+```shell
+java -jar RDFtoCSV.jar -f input.ttl -t -n -p rdf4j -o output.csv 
+```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -299,4 +324,6 @@ Project Link for this library: [https://github.com/LadyMalande/RDFtoCSV](https:/
 [linkedin-url]: https://www.linkedin.com/in/tereza-miklosova/
 [Java]: https://img.shields.io/badge/Java-%23ED8B00.svg?logo=openjdk&logoColor=white
 [Java-url]: https://www.java.com/en/
+
+
 

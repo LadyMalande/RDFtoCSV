@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.output_processor;
 
 import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.nio.file.Path;
@@ -60,5 +61,37 @@ class ZipOutputProcessorTest {
             assertTrue(zipFile.exists());
             assertTrue(zipFile.length() > 0);
         }
+    }
+
+    // AppConfig-based test methods
+
+    @Test
+    void testProcessCSVToOutputWithAppConfig() throws IOException {
+        AppConfig config = new AppConfig.Builder("test.ttl")
+                .output("./src/test/resources/test-002")
+                .build();
+        config.setIntermediateFileNames("./src/test/resources/test-002TestOutput0.csv,./src/test/resources/test-003TestOutput0.csv");
+        //config.setOutputZipFileName("output.zip");
+
+        ZipOutputProcessor processor = new ZipOutputProcessor(config);
+        FinalizedOutput<byte[]> result = processor.processCSVToOutput(mockPrefinishedOutput);
+        assertNotNull(result);
+        assertTrue(result.getOutputData().length > 0);
+    }
+
+    @Test
+    void testZipMultipleFilesWithAppConfig() throws IOException {
+        String zipPath = tempDir.resolve("output.zip").toString();
+        AppConfig config = new AppConfig.Builder("test.ttl")
+                //.output("./src/test/resources/test-002")
+                .build();
+        config.setIntermediateFileNames("./src/test/resources/test-002TestOutput0.csv,./src/test/resources/test-003TestOutput0.csv");
+        config.setOutputZipFileName(zipPath);
+
+        ZipOutputProcessor processor = new ZipOutputProcessor(config);
+        assertNull(processor.zipMultipleFiles());
+        File zipFile = new File(zipPath);
+        assertTrue(zipFile.exists());
+        assertTrue(zipFile.length() > 0);
     }
 }

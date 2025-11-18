@@ -1,5 +1,6 @@
 package com.miklosova.rdftocsvw.support;
 
+import com.miklosova.rdftocsvw.support.AppConfig;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
@@ -122,6 +123,7 @@ public class ConverterHelper {
                 }
             }
             if (statement != null) {
+                // For backward compatibility, also save to ConfigurationManager
                 ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "true");
                 rc.add(statement);
             }

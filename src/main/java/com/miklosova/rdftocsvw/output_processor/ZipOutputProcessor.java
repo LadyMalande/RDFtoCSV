@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.output_processor;
 
 import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 
 import java.io.*;
@@ -17,6 +18,24 @@ import java.util.zip.ZipOutputStream;
  */
 public class ZipOutputProcessor implements IOutputProcessor {
     private static final Logger logger = Logger.getLogger(ZipOutputProcessor.class.getName());
+    private AppConfig config;
+
+    /**
+     * Default constructor for backward compatibility.
+     * @deprecated Use {@link #ZipOutputProcessor(AppConfig)} instead
+     */
+    @Deprecated
+    public ZipOutputProcessor() {
+        this.config = null;
+    }
+
+    /**
+     * Constructor with AppConfig.
+     * @param config The application configuration
+     */
+    public ZipOutputProcessor(AppConfig config) {
+        this.config = config;
+    }
 
     @Override
     public FinalizedOutput<byte[]> processCSVToOutput(PrefinishedOutput<?> prefinishedOutput) {
@@ -32,13 +51,24 @@ public class ZipOutputProcessor implements IOutputProcessor {
      * @return the zipped file in bytes
      */
     private byte[] createBAOSWithZips() {
-        String inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+        String inputFilesInString;
+        String metadataFileName;
+        
+        if (config != null) {
+            inputFilesInString = config.getIntermediateFileNames();
+            metadataFileName = config.getOutputFilePath() + ".csv-metadata.json";
+        } else {
+            // Backward compatibility
+            inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+            metadataFileName = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
+        }
+        
         //logger.log(Level.INFO, "inputFilesInString=" + inputFilesInString);
         String[] listOfFiles = inputFilesInString.split(",");
 
         List<String> srcFiles = new ArrayList<>(Arrays.asList(listOfFiles));
-        srcFiles.add(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
-        //logger.log(Level.INFO, "OUTPUT_METADATA_FILE_NAME=" + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
+        srcFiles.add(metadataFileName);
+        //logger.log(Level.INFO, "OUTPUT_METADATA_FILE_NAME=" + metadataFileName);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             ZipOutputStream zipOut = new ZipOutputStream(baos);
@@ -79,8 +109,21 @@ public class ZipOutputProcessor implements IOutputProcessor {
      * @return the zip output stream to be given to the final .ZIP file
      */
     public ZipOutputStream zipMultipleFiles() {
-        String inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-        String filenameForZip = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME);
+        String inputFilesInString;
+        String filenameForZip;
+        String metadataFileName;
+        
+        if (config != null) {
+            inputFilesInString = config.getIntermediateFileNames();
+            filenameForZip = config.getOutputZipFileName();
+            metadataFileName = config.getOutputFilePath() + ".csv-metadata.json";
+        } else {
+            // Backward compatibility
+            inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+            filenameForZip = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME);
+            metadataFileName = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
+        }
+        
         logger.log(Level.INFO, "zipFileName = " + filenameForZip);
         String[] listOfFiles = inputFilesInString.split(",");
         String[] newArray;
@@ -90,7 +133,7 @@ public class ZipOutputProcessor implements IOutputProcessor {
             newArray = listOfFiles;
         }
         List<String> srcFiles = new ArrayList<>(Arrays.asList(newArray));
-        srcFiles.add(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME));
+        srcFiles.add(metadataFileName);
         try {
             final FileOutputStream fos = new FileOutputStream(filenameForZip);
             ZipOutputStream zipOut = new ZipOutputStream(fos);

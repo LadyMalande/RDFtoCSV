@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.miklosova.rdftocsvw.converter.data_structure.Row;
 import com.miklosova.rdftocsvw.converter.data_structure.TypeIdAndValues;
 import com.miklosova.rdftocsvw.converter.data_structure.TypeOfValue;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.ConnectionChecker;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
@@ -18,6 +19,8 @@ import java.util.*;
  */
 @JsonldType("Schema")
 public class TableSchema {
+    @JsonIgnore
+    private AppConfig config;
     /**
      * Array of column objects containing information about each column
      */
@@ -62,11 +65,24 @@ public class TableSchema {
      *
      * @param keys the keys
      * @param rows the rows
+     * @deprecated Use {@link #TableSchema(List, List, AppConfig)} instead
      */
+    @Deprecated
     public TableSchema(List<Value> keys, List<Row> rows) {
+        this(keys, rows, null);
+    }
+
+    /**
+     * Instantiates a new Table schema with AppConfig.
+     *
+     * @param keys the keys
+     * @param rows the rows
+     * @param config the application configuration
+     */
+    public TableSchema(List<Value> keys, List<Row> rows, AppConfig config) {
         this.keys = keys;
         this.rows = rows;
-
+        this.config = config;
     }
 
     /**
@@ -156,19 +172,36 @@ public class TableSchema {
 
     /**
      * Add table schema metadata.
+     * @deprecated Use {@link #addTableSchemaMetadata(AppConfig)} instead
      */
+    @Deprecated
     public void addTableSchemaMetadata() {
+        addTableSchemaMetadata(null);
+    }
+
+    /**
+     * Add table schema metadata with AppConfig.
+     * @param config the application configuration
+     */
+    public void addTableSchemaMetadata(AppConfig config) {
+        // Use provided config or instance config
+        AppConfig effectiveConfig = (config != null) ? config : this.config;
+        this.config = effectiveConfig; // Store for use in other methods
+        
         // This only works for the tables that have different types of entities
         this.columns = createColumns(this.rows);
 
-        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.METADATA_ROWNUMS).equalsIgnoreCase("true")) {
+        String metadataRownums = (effectiveConfig != null && effectiveConfig.getMetadataRowNums() != null) ? 
+            String.valueOf(effectiveConfig.getMetadataRowNums()) :
+            ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.METADATA_ROWNUMS);
+        if (metadataRownums != null && metadataRownums.equalsIgnoreCase("true")) {
             addRowNumsColumn();
         }
         addRowTitles();
     }
 
     private void addRowNumsColumn() {
-        Column rownumsColumn = new Column(null, false);
+        Column rownumsColumn = new Column(null, false, config);
         rownumsColumn.setName("rowNum");
         rownumsColumn.setTitles("Row Number");
         rownumsColumn.setDatatype("integer");
@@ -219,7 +252,7 @@ public class TableSchema {
 
         for (Map.Entry<Value, TypeIdAndValues> column : columns) {
             boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, column.getKey());
-            Column newColumn = new Column(column, namespaceIsTheSame);
+            Column newColumn = new Column(column, namespaceIsTheSame, config);
             boolean subjectNamespaceIsTheSame = isNamespaceTheSameForAllSubjects(rows, column.getKey());
             newColumn.createColumn(rows.get(0), subjectNamespaceIsTheSame, this.rows);
             if (newColumn.getLang() != null) {
@@ -382,7 +415,7 @@ public class TableSchema {
         for (Map.Entry<String, Row> entry : rowsByLangOccurance.entrySet()) {
             boolean namespaceIsTheSame = isNamespaceTheSameForAllRows(rows, langVariations.get(entry.getKey()).getKey());
 
-            Column newColumn = new Column(langVariations.get(entry.getKey()), namespaceIsTheSame);
+            Column newColumn = new Column(langVariations.get(entry.getKey()), namespaceIsTheSame, config);
             newColumn.createColumn(entry.getValue(), isNamespaceTheSameForAllSubjects(rows, langVariations.get(entry.getKey()).getKey()), this.rows);
 
             listOfColumns.add(newColumn);
@@ -394,7 +427,7 @@ public class TableSchema {
         boolean namespaceIsTheSame = isNamespaceTheSameForAllPrimary(rows);
         Row row = new Row(null, true);
         row.columns = new HashMap<>();
-        Column newColumn = new Column(null, namespaceIsTheSame);
+        Column newColumn = new Column(null, namespaceIsTheSame, config);
         boolean isTypeSame = isTypeTheSameForAllPrimary(rows);
         newColumn.addVirtualTypeColumn(type, id, isTypeSame);
         return newColumn;
@@ -405,7 +438,7 @@ public class TableSchema {
         Value value = rows.get(0).id;
         boolean isRdfType = rows.get(0).isRdfType;
         boolean namespaceIsTheSame = isNamespaceTheSameForAllPrimary(rows);
-        Column newColumn = new Column(null, namespaceIsTheSame);
+        Column newColumn = new Column(null, namespaceIsTheSame, config);
         boolean typeIsTheSame = isTypeTheSameForAllPrimary(rows);
 
         newColumn.addFirstColumn(type, value, isRdfType, namespaceIsTheSame, typeIsTheSame);

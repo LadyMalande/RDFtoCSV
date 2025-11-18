@@ -27,7 +27,7 @@ public class BaseTest {
 
     public String[] args;
     public RDFtoCSV rdfToCSV;
-    public String fileName;
+    public String fileName = "test.rdf";
     public ArrayList<Value> keys, keys1;
 
     public Row firstRow, secondRow, thirdRow, fourthRow;

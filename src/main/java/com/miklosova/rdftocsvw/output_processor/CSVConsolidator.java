@@ -3,6 +3,7 @@ package com.miklosova.rdftocsvw.output_processor;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
@@ -24,6 +25,22 @@ import static com.miklosova.rdftocsvw.output_processor.MetadataConsolidator.getF
  */
 public class CSVConsolidator {
     private static final Logger logger = Logger.getLogger(CSVConsolidator.class.getName());
+    private AppConfig config;
+
+    /**
+     * Default constructor for backward compatibility.
+     */
+    public CSVConsolidator() {
+        this.config = null;
+    }
+
+    /**
+     * Constructor with AppConfig.
+     * @param config The application configuration
+     */
+    public CSVConsolidator(AppConfig config) {
+        this.config = config;
+    }
 
     /**
      * Consolidate CSVd.
@@ -64,15 +81,29 @@ public class CSVConsolidator {
      * @param oldMetadata   the old metadata
      * @param newMetadata   the new metadata
      * @param fileToWriteTo the file to write to
+     * @deprecated Use {@link #writeToCSVFromOldMetadataToMerged(Metadata, Metadata, File, AppConfig)} instead
      */
+    @Deprecated
     public void writeToCSVFromOldMetadataToMerged(Metadata oldMetadata, Metadata newMetadata, File fileToWriteTo) {
+        writeToCSVFromOldMetadataToMerged(oldMetadata, newMetadata, fileToWriteTo, null);
+    }
+
+    /**
+     * Write to csv from old metadata to merged CSV with AppConfig.
+     *
+     * @param oldMetadata   the old metadata
+     * @param newMetadata   the new metadata
+     * @param fileToWriteTo the file to write to
+     * @param config the application configuration
+     */
+    public void writeToCSVFromOldMetadataToMerged(Metadata oldMetadata, Metadata newMetadata, File fileToWriteTo, AppConfig config) {
 
         try (CSVWriter writer = new CSVWriter(new FileWriter(fileToWriteTo, true))) {
             // Appends to the file instead of overwriting
             String[] lineToWrite = new String[newMetadata.getTables().get(0).getTableSchema().getColumns().size()];
 
             for (Table t : oldMetadata.getTables()) {
-                String fullFilePath = getFilePathForFileName(t.getUrl());
+                String fullFilePath = getFilePathForFileName(t.getUrl(), config);
                 assert fullFilePath != null;
                 File fileToWrite = new File(fullFilePath);
                 try (CSVReader reader = new CSVReader(new FileReader(fileToWrite))) {
@@ -107,6 +138,7 @@ public class CSVConsolidator {
             }
             System.out.println("newFileName writeToCSVFromOldMetadataToMerged   fileToWriteTo = " + fileToWriteTo.toString());
 
+            // For backward compatibility, also save to ConfigurationManager
             ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileToWriteTo.toString());
         } catch (IOException e) {
             logger.log(Level.SEVERE, "There was an exception while trying to write data into new merged CSV.");

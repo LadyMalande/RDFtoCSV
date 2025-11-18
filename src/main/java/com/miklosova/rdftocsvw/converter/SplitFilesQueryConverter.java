@@ -3,6 +3,7 @@ package com.miklosova.rdftocsvw.converter;
 import com.miklosova.rdftocsvw.converter.data_structure.*;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.ConverterHelper;
 import lombok.extern.java.Log;
@@ -96,16 +97,39 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
     Integer fileNumberX;
 
     /**
+     * The AppConfig instance.
+     */
+    private AppConfig config;
+
+    /**
      * Instantiates a new Split files query converter.
      *
      * @param db the db
+     * @deprecated Use {@link #SplitFilesQueryConverter(Repository, AppConfig)} instead
      */
+    @Deprecated
     public SplitFilesQueryConverter(Repository db) {
         keys = new HashSet<>();
         this.db = db;
         this.fileNumberX = 0;
         this.fileNamesCreated = new ArrayList<>();
         this.metadata = new Metadata();
+        this.config = null;
+    }
+
+    /**
+     * Instantiates a new Split files query converter with AppConfig.
+     *
+     * @param db the db
+     * @param config the application configuration
+     */
+    public SplitFilesQueryConverter(Repository db, AppConfig config) {
+        keys = new HashSet<>();
+        this.db = db;
+        this.fileNumberX = 0;
+        this.fileNamesCreated = new ArrayList<>();
+        this.metadata = new Metadata();
+        this.config = config;
     }
 
 
@@ -131,6 +155,7 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
     private PrefinishedOutput<RowsAndKeys> queryRDFModel(String queryString, boolean askForTypes) {
         rows = new ArrayList<>();
         PrefinishedOutput<RowsAndKeys> gen = new PrefinishedOutput<>((new RowsAndKeys.RowsAndKeysFactory()).factory());
+        // For backward compatibility, also save to ConfigurationManager
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
         // Query the data and pass the result as String
         ConnectionPool connectionPool = new ConnectionPool(db, Runtime.getRuntime().availableProcessors());
@@ -165,7 +190,7 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
                     for (BindingSet solution : result) {
                         // ... and print out the value of the variable binding for ?s and ?n
                         if (solution.getValue("o").stringValue().equalsIgnoreCase(CSVW_TableGroup)) {
-                            StandardModeConverter smc = new StandardModeConverter(db);
+                            StandardModeConverter smc = new StandardModeConverter(db, config);
                             return smc.convertWithQuery(this.rc);
                         }
 
@@ -198,6 +223,7 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
             for (int i = 0; i < allRows.size(); i++) {
                 gen.getPrefinishedOutput().getRowsAndKeys().add(new RowAndKey(allKeys.get(i), allRows.get(i)));
             }
+            // For backward compatibility, also save to ConfigurationManager
             ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
 
 

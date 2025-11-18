@@ -2,6 +2,7 @@ package com.miklosova.rdftocsvw.converter;
 
  import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
  import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
+ import com.miklosova.rdftocsvw.support.AppConfig;
  import com.miklosova.rdftocsvw.support.BaseTest;
  import org.eclipse.rdf4j.repository.sail.SailRepository;
  import org.eclipse.rdf4j.sail.memory.MemoryStore;
@@ -102,5 +103,54 @@ class ConversionServiceTest extends BaseTest {
              mockedStatic.when(() -> ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD)).thenReturn("invalidChoice");
              assertThrows(IllegalArgumentException.class, () -> rdfToCSV.createRepositoryConnection(db, fileName, "invalidChoice"));
          }
+     }
+
+     // AppConfig-based test methods
+
+     @Test
+     void testConvertByQueryWithAppConfigBasicQuery() throws Exception {
+         AppConfig config = new AppConfig.Builder("test.rdf")
+                 .parsing("rdf4j")
+                 .build();
+         config.setConversionMethod("basicQuery");
+
+         ConversionService service = new ConversionService(config);
+         conn = rdfToCSV.createRepositoryConnection(db, "./src/test/resources/differentSerializations/testingInput.nt", "rdf4j");
+
+         if (conn != null) {
+             PrefinishedOutput<RowsAndKeys> result = service.convertByQuery(conn, db);
+             assertNotNull(result);
+             assertTrue(service.getConversionGateway().getConversionMethod() instanceof BasicQueryConverter);
+         }
+     }
+
+     @Test
+     void testConvertByQueryWithAppConfigSplitQuery() throws Exception {
+         AppConfig config = new AppConfig.Builder("test.rdf")
+                 .parsing("rdf4j")
+                 .build();
+         config.setConversionMethod("splitQuery");
+
+         ConversionService service = new ConversionService(config);
+         conn = rdfToCSV.createRepositoryConnection(db, "./src/test/resources/differentSerializations/testingInput.nt", "rdf4j");
+
+         if (conn != null) {
+             PrefinishedOutput<RowsAndKeys> result = service.convertByQuery(conn, db);
+             assertNotNull(result);
+             assertTrue(service.getConversionGateway().getConversionMethod() instanceof SplitFilesQueryConverter);
+         }
+     }
+
+     @Test
+     void testConvertByQueryWithAppConfigInvalidMethod() {
+         AppConfig config = new AppConfig.Builder("test.rdf")
+                 .parsing("rdf4j")
+                 .build();
+         config.setConversionMethod("invalidMethod");
+
+         ConversionService service = new ConversionService(config);
+         assertThrows(IllegalArgumentException.class, () -> {
+             service.convertByQuery(mockRepositoryConnection, mockRepository);
+         });
      }
 }

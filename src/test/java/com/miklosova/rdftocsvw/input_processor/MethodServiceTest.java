@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.input_processor;
 
 import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.TestSupport;
@@ -65,19 +66,22 @@ public class MethodServiceTest extends BaseTest {
 
     @Before
     public void createDbAndMethodService() {
-        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{"-f",filePath, "-p",processMethod});
+        // Don't use loadSettingsFromInputToConfigFile as it contains System.exit() calls
+        // Instead, directly save the needed config values
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, filePath);
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.READ_METHOD, processMethod);
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePath + ".csv-metadata.json");
+        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH, filePath);
+        
         db = new SailRepository(new MemoryStore());
         methodService = new MethodService();
         System.out.println("Before test done ");
-
-
     }
 
     @Test
     public void isGivenDatatype() {
-        createDbAndMethodService();
-
+        // createDbAndMethodService() is already called by @Before, don't call it again
+        
         try {
             Model m = TestSupport.parseInputByRio(filePath);
             TestSupport.createSerialization(null, null, m);

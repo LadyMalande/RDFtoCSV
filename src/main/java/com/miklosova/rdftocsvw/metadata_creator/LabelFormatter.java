@@ -1,10 +1,13 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 
 import java.util.Arrays;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import static com.miklosova.rdftocsvw.support.AppConfig.ORIGINAL_NAMING_NOTATION;
 
 public class LabelFormatter {
 
@@ -17,9 +20,17 @@ public class LabelFormatter {
     public static final String TITLE_CASE_CONFIG_STRING = "Title Case";
     public static final String DOT_NOTATION_CASE_CONFIG_STRING = "dot.notation";
 
-    public static String changeLabelToTheConfiguredFormat(String originalLabel) {
+    /**
+     * Change label to the configured format with AppConfig.
+     * @param originalLabel the original label
+     * @param config the application configuration
+     * @return the formatted label
+     */
+    public static String changeLabelToTheConfiguredFormat(String originalLabel, AppConfig config) {
         String formattedLabel = null;
-        String formatting = ConfigurationManager.loadConfig("app.columnNamingConvention");
+        logger.info("Configuration for app.columnNamingConvention in changeLabelToTheConfiguredFormat = " + config.getColumnNamingConvention());
+        String formatting = (config != null) ? config.getColumnNamingConvention() : 
+            ConfigurationManager.loadConfig("app.columnNamingConvention");
 
         logger.info("Configuration for app.columnNamingConvention = " + formatting);
 
@@ -45,6 +56,7 @@ public class LabelFormatter {
             case DOT_NOTATION_CASE_CONFIG_STRING:
                 formattedLabel = toDotNotation(originalLabel);
                 break;
+            case ORIGINAL_NAMING_NOTATION:
             default:
                 formattedLabel = originalLabel;
         }
@@ -52,7 +64,7 @@ public class LabelFormatter {
         return formattedLabel;
     }
 
-    public static String toPascalCase(String input) {
+    private static String toPascalCase(String input) {
         if (input == null || input.isEmpty()) {
             return input;
         }
@@ -112,7 +124,7 @@ public class LabelFormatter {
         // Process remaining words
         String camelCase = Arrays.stream(words, 1, words.length)
                 .map(word -> {
-                    if (word.length() == 0) return "";
+                    if (word.isEmpty()) return "";
                     // Check if word is all uppercase (acronym)
                     if (word.equals(word.toUpperCase())) {
                         return word.charAt(0) + word.substring(1).toLowerCase();
@@ -124,7 +136,7 @@ public class LabelFormatter {
         return firstWord + camelCase;
     }
 
-    public static String toSnakeCase(String input) {
+    private static String toSnakeCase(String input) {
         if (input == null) {
             return null;
         }
@@ -151,7 +163,7 @@ public class LabelFormatter {
                 .replaceAll("_+", "_");    // Collapse underscores again
     }
 
-    public static String toKebabCase(String input) {
+    private static String toKebabCase(String input) {
         if (input == null || input.isEmpty()) {
             return input;
         }
@@ -173,7 +185,7 @@ public class LabelFormatter {
                 .replaceAll("^-|-$", "");
     }
 
-    public static String toTitleCase(String input) {
+    private static String toTitleCase(String input) {
         if (input == null || input.isEmpty()) {
             return input;
         }
@@ -216,7 +228,7 @@ public class LabelFormatter {
                 word.substring(1).toLowerCase();
     }
 
-    public static String toScreamingSnakeCase(String input) {
+    private static String toScreamingSnakeCase(String input) {
         if (input == null || input.isEmpty()) {
             return input;
         }
@@ -243,7 +255,7 @@ public class LabelFormatter {
                 .toUpperCase();
     }
 
-    public static String toDotNotation(String input) {
+    private static String toDotNotation(String input) {
         if (input == null || input.isEmpty()) {
             return input;
         }

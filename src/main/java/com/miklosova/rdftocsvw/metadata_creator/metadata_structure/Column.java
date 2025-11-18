@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.miklosova.rdftocsvw.converter.data_structure.Row;
 import com.miklosova.rdftocsvw.converter.data_structure.TypeIdAndValues;
 import com.miklosova.rdftocsvw.metadata_creator.Dereferencer;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.BuiltInDatatypes;
 import com.miklosova.rdftocsvw.support.ConnectionChecker;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
@@ -26,6 +27,8 @@ import java.util.concurrent.ExecutionException;
 @SuppressWarnings("SpellCheckingInspection")
 @JsonldType("Column")
 public class Column {
+    @JsonIgnore
+    private AppConfig config;
     @JsonIgnore
     private boolean isNamespaceTheSame;
     /**
@@ -98,15 +101,28 @@ public class Column {
      *
      * @param column             the column to be created
      * @param namespaceIsTheSame True if the namespace is the same forall rows ids
+     * @deprecated Use {@link #Column(Map.Entry, boolean, AppConfig)} instead
      */
+    @Deprecated
     public Column(Map.Entry<Value, TypeIdAndValues> column, boolean namespaceIsTheSame) {
+        this(column, namespaceIsTheSame, null);
+    }
+
+    /**
+     * Instantiates a new Column with AppConfig.
+     *
+     * @param column             the column to be created
+     * @param namespaceIsTheSame True if the namespace is the same forall rows ids
+     * @param config             the application configuration
+     */
+    public Column(Map.Entry<Value, TypeIdAndValues> column, boolean namespaceIsTheSame, AppConfig config) {
         //assert column != null;
         this.column = column;
         this.isNamespaceTheSame = namespaceIsTheSame;
+        this.config = config;
         if (column != null) {
             this.originalColumnKey = column.getKey();
         }
-
     }
 
     /**
@@ -529,10 +545,10 @@ public class Column {
         String prependix = (delimiterIndex != -1) ? columnKeyIRI.stringValue().substring(delimiterIndex + delimiter.length()) + "_" : "";
 
         if (ConnectionChecker.checkConnection()) {
-            Dereferencer dereferencer = new Dereferencer(this.getPropertyUrl());
+            Dereferencer dereferencer = new Dereferencer(this.getPropertyUrl(), config);
             try {
                 //this.titles = dereferencer.getTitle();
-                this.titles = Dereferencer.fetchLabel(this.getPropertyUrl());
+                this.titles = dereferencer.fetchLabel(this.getPropertyUrl());
             } catch (IOException | ExecutionException noElement) {
                 this.titles = propertyUrlIRI.getLocalName();
             }
@@ -588,11 +604,11 @@ public class Column {
         if (isRdfType && typeIsTheSame) {
             IRI typeIri = (IRI) type;
 
-            Dereferencer d = new Dereferencer(typeIri.toString());
+            Dereferencer d = new Dereferencer(typeIri.toString(), config);
 
             try {
                 //this.titles = d.getTitle();
-                this.titles = Dereferencer.fetchLabel(typeIri.toString());
+                this.titles = d.fetchLabel(typeIri.toString());
                 if(this.titles == null){
                     this.titles = "Subject";
                 }

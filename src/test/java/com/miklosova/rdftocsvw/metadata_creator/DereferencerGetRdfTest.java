@@ -6,6 +6,7 @@ import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.models.DereferencerTestParameters;
 import com.miklosova.rdftocsvw.models.FilesParameters;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.BaseTest;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.poiji.bind.Poiji;
@@ -85,9 +86,10 @@ public class DereferencerGetRdfTest extends BaseTest {
     @ParameterizedTest
     @MethodSource("dataSource")
     void testFetchLabelFromTurtle(DereferencerTestParameters line) throws IOException {
+        Dereferencer dereferencer = new Dereferencer(line.getIri(), new AppConfig.Builder("test.ttl").build());
 
         try {
-            String label = Dereferencer.fetchLabel(line.getIri());
+            String label = dereferencer.fetchLabel(line.getIri());
             logger.info("line.getUrl(): " + line.getIri());
             logger.info("label: " + label);
             if (line.getPredicateName().equalsIgnoreCase("null")) {
@@ -104,9 +106,10 @@ public class DereferencerGetRdfTest extends BaseTest {
 
     @Test
     void testFetchLabelFromRDFXML() throws IOException, ExecutionException {
+        Dereferencer dereferencer = new Dereferencer("http://purl.org/dc/terms/creator", new AppConfig.Builder("test.ttl").build());
 
         //String label1 = Dereferencer.fetchLabel("http://purl.org/dc/elements/1.1/publisher");
-        String label2 = Dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
+        String label2 = dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
         System.out.println(label2);
         //logger.log(Level.INFO, label1);
         logger.log(Level.INFO, label2);
@@ -117,17 +120,19 @@ public class DereferencerGetRdfTest extends BaseTest {
 
     @Test
     void testCacheIsFaster() throws IOException, ExecutionException {
+        Dereferencer dereferencer = new Dereferencer("http://example.org/NotFound#unavailable", new AppConfig.Builder("test.ttl").build());
+
         long startTime1 = System.nanoTime();
-        String label1 = Dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
+        String label1 = dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
         long endTime1 = System.nanoTime();
 
 
         long startTime2 = System.nanoTime();
-        String label2 = Dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
+        String label2 = dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
         long endTime2 = System.nanoTime();
 
         long startTime3 = System.nanoTime();
-        String label3 = Dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
+        String label3 = dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
         long endTime3 = System.nanoTime();
 
         long firstDereferencerCallInMilis = endTime1 - startTime1;
@@ -143,17 +148,18 @@ public class DereferencerGetRdfTest extends BaseTest {
 
     @Test
     void testSubsequentHttpClientIsFaster() throws IOException, ExecutionException {
+        Dereferencer dereferencer = new Dereferencer("http://example.org/NotFound#unavailable", new AppConfig.Builder("test.ttl").build());
         long startTime1 = System.nanoTime();
-        String label1 = Dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
+        String label1 = dereferencer.fetchLabel("http://purl.org/dc/terms/creator");
         long endTime1 = System.nanoTime();
 
 
         long startTime2 = System.nanoTime();
-        String label2 = Dereferencer.fetchLabel("http://purl.org/vocab/vann/preferredNamespaceUri");
+        String label2 = dereferencer.fetchLabel("http://purl.org/vocab/vann/preferredNamespaceUri");
         long endTime2 = System.nanoTime();
 
         long startTime3 = System.nanoTime();
-        String label3 = Dereferencer.fetchLabel("http://xmlns.com/wot/0.1/pubkeyAddress");
+        String label3 = dereferencer.fetchLabel("http://xmlns.com/wot/0.1/pubkeyAddress");
         long endTime3 = System.nanoTime();
 
         long firstDereferencerCallInMilis = endTime1 - startTime1;
@@ -169,7 +175,8 @@ public class DereferencerGetRdfTest extends BaseTest {
 
     @Test
     void testFetchLabelWhenUnknownURIWithoutFragment() throws JenaException, IOException, ExecutionException {
-        String label = Dereferencer.fetchLabel("http://example.org/NotFound");
+        Dereferencer dereferencer = new Dereferencer("http://example.org/NotFound", new AppConfig.Builder("test.ttl").build());
+        String label = dereferencer.fetchLabel("http://example.org/NotFound");
         assertEquals("NotFound", label);
        /* assertThrows(IOException.class, () -> {String label = Dereferencer.fetchLabel("http://example.org/NotFound");
             logger.info("label fetched = " + label);
@@ -178,7 +185,8 @@ public class DereferencerGetRdfTest extends BaseTest {
 
     @Test
     void testFetchLabelWhenUnknownURIWithFragment() throws IOException, ExecutionException {
-        String label = Dereferencer.fetchLabel("http://example.org/NotFound#unavailable");
+        Dereferencer dereferencer = new Dereferencer("http://example.org/NotFound#unavailable", new AppConfig.Builder("test.ttl").build());
+        String label = dereferencer.fetchLabel("http://example.org/NotFound#unavailable");
         assertEquals("unavailable", label);
         /*assertThrows(UncheckedExecutionException.class, () -> { String label = Dereferencer.fetchLabel("http://example.org/NotFound#unavailable");
             logger.info("label fetched = " + label);} );*/

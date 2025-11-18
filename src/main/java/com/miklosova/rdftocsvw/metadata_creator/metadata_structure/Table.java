@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.metadata_creator.metadata_structure;
 
 import com.miklosova.rdftocsvw.converter.data_structure.Row;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.Value;
@@ -114,9 +115,22 @@ public class Table {
 
     /**
      * Add transformations. They are added to the Table if there are blank nodes present.
+     * @deprecated Use {@link #addTransformations(AppConfig)} instead
      */
+    @Deprecated
     public void addTransformations() {
-        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES) != null && ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES).equalsIgnoreCase("true")) {
+        addTransformations(null);
+    }
+
+    /**
+     * Add transformations with AppConfig. They are added to the Table if there are blank nodes present.
+     * @param config the application configuration
+     */
+    public void addTransformations(AppConfig config) {
+        String hasBlankNodes = (config != null && config.getConversionHasBlankNodes() != null) ? 
+            String.valueOf(config.getConversionHasBlankNodes()) :
+            ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES);
+        if (hasBlankNodes != null && hasBlankNodes.equalsIgnoreCase("true")) {
             this.transformations = new ArrayList<>();
             this.transformations.add(new Transformation(
                     "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",

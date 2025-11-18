@@ -3,6 +3,7 @@ package com.miklosova.rdftocsvw.input_processor;
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.RDF4JMethod;
 import com.miklosova.rdftocsvw.input_processor.streaming_methods.StreamingMethod;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -21,6 +22,24 @@ import java.util.logging.Logger;
 public class MethodService {
     private MethodGateway methodGateway;
     private static final Logger logger = Logger.getLogger(FileWrite.class.getName());
+    private AppConfig config;
+
+    /**
+     * Default constructor for backward compatibility.
+     * @deprecated Use {@link #MethodService(AppConfig)} instead
+     */
+    @Deprecated
+    public MethodService() {
+        this.config = null;
+    }
+
+    /**
+     * Constructor with AppConfig.
+     * @param config The application configuration
+     */
+    public MethodService(AppConfig config) {
+        this.config = config;
+    }
 
     /**
      * Process input repository connection.
@@ -36,16 +55,29 @@ public class MethodService {
         methodGateway = new MethodGateway();
         processMethodChoice(methodChoice);
         fileName = processFileOrIRI(fileName);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, fileName);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME,  fileName+ ".csv-metadata.json");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH,  fileName);
+        
+        // Update config if available, otherwise use ConfigurationManager for backward compatibility
+        if (config != null) {
+            config.setOutputFilePath(fileName);
+            // Note: IntermediateFileNames and other runtime values are set elsewhere during conversion
+        } else {
+            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, fileName);
+            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME,  fileName+ ".csv-metadata.json");
+            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH,  fileName);
+        }
+        
         File fileToRead = new File(fileName);
         try {
             return methodGateway.processInput(fileToRead, db);
         } catch(OutOfMemoryError err){
             logger.log(Level.WARNING, "The data is too big to be processed by RDF4J method. The method has been changed to 'BigFileStreaming'. Continuing processing...");
             methodGateway.setParsingMethod(new StreamingMethod());
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, "bigfilestreaming");
+            
+            if (config != null) {
+                config.setConversionMethod("bigfilestreaming");
+            } else {
+                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, "bigfilestreaming");
+            }
             return methodGateway.processInput(fileToRead, db);
         }
     }

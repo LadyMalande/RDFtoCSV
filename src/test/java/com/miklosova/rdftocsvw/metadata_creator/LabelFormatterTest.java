@@ -1,18 +1,10 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
-import com.miklosova.rdftocsvw.converter.RDFtoCSV;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
-import com.typesafe.config.ConfigValueFactory;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -21,100 +13,93 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class LabelFormatterTest {
 
     @ParameterizedTest
     @MethodSource("labelFormatterTestCases")
     void testLabelFormatter(String input, String format, String expected) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, IOException, InterruptedException {
-        try (MockedStatic<ConfigurationManager> mocked = Mockito.mockStatic(ConfigurationManager.class)) {
-            // Mock the config loader to return camel case setting
-            mocked.when(() -> ConfigurationManager.loadConfig("app.columnNamingConvention"))
-                    .thenReturn(format);
-            // Invoke the method
-            Object result = LabelFormatter.changeLabelToTheConfiguredFormat(input);
-            assertEquals(expected, result);
-        }
+        // Create AppConfig with the specified column naming convention
+        AppConfig config = new AppConfig.Builder("test.ttl")
+                .columnNamingConvention(format)
+                .build();
+        
+        // Invoke the method with AppConfig
+        Object result = LabelFormatter.changeLabelToTheConfiguredFormat(input, config);
+        assertEquals(expected, result);
     }
     @ParameterizedTest
     @NullAndEmptySource
     void testNullAndEmpty(String input) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        LabelFormatter instance = new LabelFormatter();
         // Get the private method
         Method method = LabelFormatter.class.getDeclaredMethod("toCamelCase", String.class);
 
         // Make it accessible
         method.setAccessible(true);
 
-        // Invoke the method
-        Object result = method.invoke(instance, input);
+        // Invoke the static method (null for static methods)
+        Object result = method.invoke(null, input);
         assertEquals(input, result);
     }
 
     @ParameterizedTest
     @MethodSource("camelCaseTestCases")
     void testToCamelCase(String input, String expected) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        LabelFormatter instance = new LabelFormatter();
         // Get the private method
         Method method = LabelFormatter.class.getDeclaredMethod("toCamelCase", String.class);
 
         // Make it accessible
         method.setAccessible(true);
 
-        // Invoke the method
-        Object result = method.invoke(instance, input);
+        // Invoke the static method (null for static methods)
+        Object result = method.invoke(null, input);
         assertEquals(expected, result);
     }
 
     @ParameterizedTest
     @MethodSource("outOfScopeCamelCaseTestCases")
     void testToCamelCaseEdgeCases(String input, String expected) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        LabelFormatter instance = new LabelFormatter();
         // Get the private method
         Method method = LabelFormatter.class.getDeclaredMethod("toCamelCase", String.class);
 
         // Make it accessible
         method.setAccessible(true);
 
-        // Invoke the method
-        Object result = method.invoke(instance, input);
+        // Invoke the static method (null for static methods)
+        Object result = method.invoke(null, input);
         assertNotEquals(expected, result);
     }
 
     @ParameterizedTest
     @NullAndEmptySource
     void testNullAndEmptyPascalCase(String input) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        LabelFormatter instance = new LabelFormatter();
         // Get the private method
         Method method = LabelFormatter.class.getDeclaredMethod("toPascalCase", String.class);
 
         // Make it accessible
         method.setAccessible(true);
 
-        // Invoke the method
-        Object result = method.invoke(instance, input);
+        // Invoke the static method (null for static methods)
+        Object result = method.invoke(null, input);
         assertEquals(input, result);
     }
 
     @ParameterizedTest
     @MethodSource("pascalCaseTestCases")
     void testToPascalCase(String input, String expected) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        LabelFormatter instance = new LabelFormatter();
         // Get the private method
         Method method = LabelFormatter.class.getDeclaredMethod("toPascalCase", String.class);
 
         // Make it accessible
         method.setAccessible(true);
 
-        // Invoke the method
-        Object result = method.invoke(instance, input);
+        // Invoke the static method (null for static methods)
+        Object result = method.invoke(null, input);
         assertEquals(expected, result);
     }
 
@@ -122,44 +107,91 @@ public class LabelFormatterTest {
     @ParameterizedTest
     @MethodSource("screamingSnakeCaseTestCases")
     void testToScreamingSnakeCase(String input, String expected) {
-        assertEquals(expected, LabelFormatter.toScreamingSnakeCase(input));
+        AppConfig config = new AppConfig.Builder("test.ttl")
+                .columnNamingConvention(AppConfig.COLUMN_NAMING_SCREAMING_SNAKE_CASE)
+                .build();
+
+        assertEquals(expected, LabelFormatter.changeLabelToTheConfiguredFormat(input, config));
     }
 
     @ParameterizedTest
     @MethodSource("dotNotationTestCases")
     void testToDotNotation(String input, String expected) {
-        assertEquals(expected, LabelFormatter.toDotNotation(input));
+        AppConfig config = new AppConfig.Builder("test.ttl")
+                .columnNamingConvention(AppConfig.COLUMN_NAMING_DOT_NOTATION)
+                .build();
+
+        assertEquals(expected, LabelFormatter.changeLabelToTheConfiguredFormat(input, config));
     }
 
     @ParameterizedTest
     @NullAndEmptySource
     void testNullAndEmptyAllCases(String input) {
-        assertEquals(input, LabelFormatter.toSnakeCase(input));
-        assertEquals(input, LabelFormatter.toKebabCase(input));
-        assertEquals(input, LabelFormatter.toTitleCase(input));
-        assertEquals(input, LabelFormatter.toScreamingSnakeCase(input));
-        assertEquals(input, LabelFormatter.toDotNotation(input));
+        // Test all naming conventions with null/empty input
+        AppConfig snakeConfig = new AppConfig.Builder("test.ttl")
+                .columnNamingConvention(AppConfig.COLUMN_NAMING_SNAKE_CASE)
+                .build();
+        AppConfig camelConfig = new AppConfig.Builder("test.ttl")
+                .columnNamingConvention(AppConfig.COLUMN_NAMING_CAMEL_CASE)
+                .build();
+        AppConfig pascalConfig = new AppConfig.Builder("test.ttl")
+                .columnNamingConvention(AppConfig.COLUMN_NAMING_PASCAL_CASE)
+                .build();
+        AppConfig kebabConfig = new AppConfig.Builder("test.ttl")
+                .columnNamingConvention(AppConfig.COLUMN_NAMING_KEBAB_CASE)
+                .build();
+        AppConfig titleConfig = new AppConfig.Builder("test.ttl")
+                .columnNamingConvention(AppConfig.COLUMN_NAMING_TITLE_CASE)
+                .build();
+        AppConfig screamingSnakeConfig = new AppConfig.Builder("test.ttl")
+                .columnNamingConvention(AppConfig.COLUMN_NAMING_SCREAMING_SNAKE_CASE)
+                .build();
+        AppConfig dotNotationConfig = new AppConfig.Builder("test.ttl")
+                .columnNamingConvention(AppConfig.COLUMN_NAMING_DOT_NOTATION)
+                .build();
+
+        // All naming conventions should return input unchanged for null/empty
+        assertEquals(input, LabelFormatter.changeLabelToTheConfiguredFormat(input, snakeConfig));
+        assertEquals(input, LabelFormatter.changeLabelToTheConfiguredFormat(input, camelConfig));
+        assertEquals(input, LabelFormatter.changeLabelToTheConfiguredFormat(input, pascalConfig));
+        assertEquals(input, LabelFormatter.changeLabelToTheConfiguredFormat(input, kebabConfig));
+        assertEquals(input, LabelFormatter.changeLabelToTheConfiguredFormat(input, titleConfig));
+        assertEquals(input, LabelFormatter.changeLabelToTheConfiguredFormat(input, screamingSnakeConfig));
+        assertEquals(input, LabelFormatter.changeLabelToTheConfiguredFormat(input, dotNotationConfig));
     }
 
     // Snake Case Tests
     @ParameterizedTest
     @MethodSource("snakeCaseTestCases")
     void testToSnakeCase(String input, String expected) {
-        assertEquals(expected, LabelFormatter.toSnakeCase(input));
+
+        AppConfig config = new AppConfig.Builder("test.ttl")
+                .columnNamingConvention(AppConfig.COLUMN_NAMING_SNAKE_CASE)
+                .build();
+
+        assertEquals(expected, LabelFormatter.changeLabelToTheConfiguredFormat(input, config));
     }
 
     // Kebab Case Tests
     @ParameterizedTest
     @MethodSource("kebabCaseTestCases")
     void testToKebabCase(String input, String expected) {
-        assertEquals(expected, LabelFormatter.toKebabCase(input));
+        AppConfig config = new AppConfig.Builder("test.ttl")
+                .columnNamingConvention(AppConfig.COLUMN_NAMING_KEBAB_CASE)
+                .build();
+
+        assertEquals(expected, LabelFormatter.changeLabelToTheConfiguredFormat(input, config));
     }
 
     // Title Case Tests
     @ParameterizedTest
     @MethodSource("titleCaseTestCases")
     void testToTitleCase(String input, String expected) {
-        assertEquals(expected, LabelFormatter.toTitleCase(input));
+        AppConfig config = new AppConfig.Builder("test.ttl")
+                .columnNamingConvention(AppConfig.COLUMN_NAMING_TITLE_CASE)
+                .build();
+
+        assertEquals(expected, LabelFormatter.changeLabelToTheConfiguredFormat(input, config));
     }
 
     private static Stream<Arguments> labelFormatterTestCases() {

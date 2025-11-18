@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.input_processor.streaming_methods;
 
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.IInputParsingMethod;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import lombok.extern.java.Log;
 import org.eclipse.rdf4j.repository.Repository;
@@ -18,6 +19,7 @@ public class StreamingMethod implements IInputParsingMethod {
     @Override
     public RepositoryConnection processInput(File fileToParse, Repository db) throws RDFParseException, IOException {
 
+        // For backward compatibility, also save to ConfigurationManager
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, fileToParse.getAbsolutePath());
         return null;
     }
