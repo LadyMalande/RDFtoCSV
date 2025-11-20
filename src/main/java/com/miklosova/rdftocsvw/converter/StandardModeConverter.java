@@ -169,12 +169,16 @@ public class StandardModeConverter implements IQueryParser {
                 Value fileIRI = solution.getValue("o");
                 String fileName = extractFileName(fileIRI);
                 // For backward compatibility, also save to ConfigurationManager
+                config.setIntermediateFileNames(fileName);
+                config.setOutputFileName(fileName);
+
                 ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileName);
                 ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, fileName);
                 String outputFilePath = (config != null) ? config.getOutputFilePath() : 
                     ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH);
                 ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME,
                         outputFilePath + fileName + "-metadata.json");
+                config.setOutputMetadataFileName(outputFilePath + fileName + "-metadata.json");
             }
         }
 

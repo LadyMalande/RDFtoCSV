@@ -56,7 +56,8 @@ public class MetadataService {
         
         if (config != null) {
             conversionChoice = config.getConversionMethod();
-            extension = FileWrite.getFileExtension(config.getFile());
+            String inputFile = (config.getInputFileName() != null) ? config.getInputFileName() : config.getFile();
+            extension = FileWrite.getFileExtension(inputFile);
             streamingContinuous = config.getStreamingContinuous().toString();
         } else {
             // Backward compatibility - use ConfigurationManager
@@ -68,14 +69,18 @@ public class MetadataService {
         switch (conversionChoice.toLowerCase()) {
             case "basicquery":
                 if (data != null && data.getPrefinishedOutput() != null) {
-                    metadataGateway.setMetadataCreator(new BasicQueryMetadataCreator(data));
+                    metadataGateway.setMetadataCreator(config != null ? 
+                        new BasicQueryMetadataCreator(data, config) : 
+                        new BasicQueryMetadataCreator(data));
                 } else {
                     throw new IllegalArgumentException("Invalid data type for basicQuery");
                 }
                 break;
             case "splitquery":
                 if (data != null && data.getPrefinishedOutput() != null) {
-                    metadataGateway.setMetadataCreator(new SplitFilesMetadataCreator(data));
+                    metadataGateway.setMetadataCreator(config != null ? 
+                        new SplitFilesMetadataCreator(data, config) : 
+                        new SplitFilesMetadataCreator(data));
                 } else {
                     throw new IllegalArgumentException("Invalid data type for splitQuery");
                 }
@@ -85,14 +90,18 @@ public class MetadataService {
                 if (!extension.equalsIgnoreCase("nt")) {
                     throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);
                 } else {
-                    metadataGateway.setMetadataCreator(new BigFileStreamingNTriplesMetadataCreator(null));
+                    metadataGateway.setMetadataCreator(config != null ? 
+                        new BigFileStreamingNTriplesMetadataCreator(null, config) : 
+                        new BigFileStreamingNTriplesMetadataCreator(null));
                 }
                 break;
             case "streaming":
                 if (!extension.equalsIgnoreCase("nt") && streamingContinuous.equalsIgnoreCase("false")) {
                     throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);
                 } else {
-                    metadataGateway.setMetadataCreator(new StreamingNTriplesMetadataCreator());
+                    metadataGateway.setMetadataCreator(config != null ? 
+                        new StreamingNTriplesMetadataCreator(config) : 
+                        new StreamingNTriplesMetadataCreator());
                 }
                 break;
             default:

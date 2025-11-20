@@ -9,6 +9,7 @@ import com.miklosova.rdftocsvw.converter.data_structure.TypeIdAndValues;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.JsonUtil;
 import com.opencsv.CSVWriter;
@@ -80,12 +81,28 @@ public class FileWrite {
      * Creates a one line of file names of created CSVs separated by commas and writes it to a config file.
      *
      * @param fileNamesCreated array list of created CSV file names
+     * @deprecated Use {@link #writeFilesToConfigFile(ArrayList, AppConfig)} instead
      */
+    @Deprecated
     public static void writeFilesToConfigFile(ArrayList<String> fileNamesCreated) {
+        writeFilesToConfigFile(fileNamesCreated, null);
+    }
+
+    /**
+     * Creates a one line of file names of created CSVs separated by commas and writes it to a config or AppConfig.
+     *
+     * @param fileNamesCreated array list of created CSV file names
+     * @param config the application configuration
+     */
+    public static void writeFilesToConfigFile(ArrayList<String> fileNamesCreated, AppConfig config) {
         StringBuilder sb = new StringBuilder();
         fileNamesCreated.forEach(fileName -> sb.append(fileName).append(","));
         System.out.println("newFileName writeFilesToConfigFile   allFileNames = " + sb.toString());
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, sb.toString());
+        if (config != null) {
+            config.setIntermediateFileNames(sb.toString());
+        } else {
+            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, sb.toString());
+        }
     }
 
     /**
@@ -95,8 +112,23 @@ public class FileWrite {
      * @param rows     ArrayList of Rows created by conversion by rdf4j method.
      * @param metadata Metadata created during the rdf4j method.
      * @return The contents of the file with headers as String.
+     * @deprecated Use {@link #saveCSVFileFromRows(String, ArrayList, Metadata, AppConfig)} instead
      */
+    @Deprecated
     public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata) {
+        return saveCSVFileFromRows(fileName, rows, metadata, null);
+    }
+
+    /**
+     * Save the CSV file from ArrayList of Rows created during conversion.
+     *
+     * @param fileName The name for the created CSV file.
+     * @param rows     ArrayList of Rows created by conversion by rdf4j method.
+     * @param metadata Metadata created during the rdf4j method.
+     * @param config   the application configuration
+     * @return The contents of the file with headers as String.
+     */
+    public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata, AppConfig config) {
         logger.info("fileName for final .csv file before changing = " + fileName);
         fileName = (fileName.split("/"))[fileName.split("/").length - 1];
         logger.info("fileName for final .csv file after changing = " + fileName);
@@ -112,7 +144,7 @@ public class FileWrite {
         File f = FileWrite.makeFileByNameAndExtension(fileName, null);
 
         List<String[]> lines = new ArrayList<>();
-        List<Column> orderOfColumnKeys = addHeadersFromMetadata(fileName, metadata, lines);
+        List<Column> orderOfColumnKeys = addHeadersFromMetadata(fileName, metadata, lines, config);
 
         for (Row row : rows) {
 
@@ -121,7 +153,7 @@ public class FileWrite {
                     .filter(entry -> (entry.getValue().values.size() > 1))
                     .toList();
 
-            List<Map<Value, Value>> combinations = generateCombinations(multivalues);
+            List<Map<Value, Value>> combinations = generateCombinations(multivalues, config);
 
             String[] line = new String[lines.get(0).length];
             int i = 0;
@@ -142,7 +174,10 @@ public class FileWrite {
                         if (column.getPropertyUrl() != null) {
                             multilevelPropertyUrl = column.getOriginalColumnKey().stringValue();
                         }
-                        if (!Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES)) && firstColumn) {
+                        boolean hasRdfTypes = (config != null && config.getConversionHasRdfTypes() != null) ? 
+                            config.getConversionHasRdfTypes() : 
+                            Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES));
+                        if (!hasRdfTypes && firstColumn) {
                             firstColumn = false;
                             i--;
                         } else {
@@ -170,8 +205,10 @@ public class FileWrite {
                 i++;
                 firstColumn = true;
                 for (Column column : orderOfColumnKeys) {
-
-                    if (!Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES)) && firstColumn) {
+                    boolean hasRdfTypes = (config != null && config.getConversionHasRdfTypes() != null) ? 
+                        config.getConversionHasRdfTypes() : 
+                        Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES));
+                    if (!hasRdfTypes && firstColumn) {
                         firstColumn = false;
                         i--;
                     } else {
@@ -241,9 +278,25 @@ public class FileWrite {
      *
      * @param listOfLists the list of lists
      * @return the list of generated combinations
+     * @deprecated Use {@link #generateCombinations(List, AppConfig)} instead
      */
+    @Deprecated
     public static List<Map<Value, Value>> generateCombinations(List<Map.Entry<Value, TypeIdAndValues>> listOfLists) {
-        if (Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM))) {
+        return generateCombinations(listOfLists, null);
+    }
+
+    /**
+     * Generate combinations from the Columns containing multiple values in one cell.
+     *
+     * @param listOfLists the list of lists
+     * @param config the application configuration
+     * @return the list of generated combinations
+     */
+    public static List<Map<Value, Value>> generateCombinations(List<Map.Entry<Value, TypeIdAndValues>> listOfLists, AppConfig config) {
+        boolean firstNormalForm = (config != null && config.getFirstNormalForm() != null) ? 
+            config.getFirstNormalForm() : 
+            Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM));
+        if (firstNormalForm) {
             // Map of predicatesOfColumns and Values in the Column
             List<Map<Value, Value>> resultingRowOfFormerMultivalues = new ArrayList<>();
             if (!listOfLists.isEmpty() && listOfLists.get(0).getValue().values.get(0).isLiteral() && ((Literal) listOfLists.get(0).getValue().values.get(0)).getLanguage().isPresent()) {
@@ -394,24 +447,42 @@ public class FileWrite {
         }
     }
 
-    private static List<Column> addHeadersFromMetadata(String fileName, Metadata metadata, List<String[]> lines) {
+    private static List<Column> addHeadersFromMetadata(String fileName, Metadata metadata, List<String[]> lines, AppConfig config) {
+        logger.info("fileName in addHeadersFromMetadata: " + fileName);
+
         List<Column> orderOfColumns = new ArrayList<>();
 
         File fileObject = new File(fileName);
         Optional<Table> findTable = metadata.getTables().stream().filter(tables -> tables.getUrl().equals(fileObject.getName())).findFirst();
         Table fud = findTable.orElse(null);
+        
+        if (fud == null) {
+            logger.log(Level.SEVERE, "Table not found in metadata for file: " + fileObject.getName());
+            logger.log(Level.SEVERE, "Available tables in metadata: " + 
+                metadata.getTables().stream().map(Table::getUrl).collect(java.util.stream.Collectors.joining(", ")));
+            throw new IllegalStateException("Table not found in metadata for file: " + fileObject.getName() + 
+                ". Available tables: " + metadata.getTables().stream().map(Table::getUrl).collect(java.util.stream.Collectors.joining(", ")));
+        }
+        
         List<String> headersBuffer = new ArrayList<>();
 
         Column firstColumn = null;
-        if (Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))) {
-
-            assert fud != null;
-            firstColumn = fud.getTableSchema().getColumns().stream().filter(column -> column.getPropertyUrl() == null).findFirst().get();
-            headersBuffer.add(firstColumn.getTitles());
+        boolean hasRdfTypes = (config != null && config.getConversionHasRdfTypes() != null) ? 
+            config.getConversionHasRdfTypes() : 
+            Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES));
+        if (hasRdfTypes) {
+            Optional<Column> firstColOpt = fud.getTableSchema().getColumns().stream()
+                .filter(column -> column.getPropertyUrl() == null)
+                .findFirst();
+            
+            if (firstColOpt.isPresent()) {
+                firstColumn = firstColOpt.get();
+                headersBuffer.add(firstColumn.getTitles());
+            } else {
+                logger.log(Level.WARNING, "No first column (with null propertyUrl) found in table: " + fud.getUrl());
+            }
         }
 
-
-        assert fud != null;
         for (Column column : fud.getTableSchema().getColumns()) {
             if (column != firstColumn && column.getVirtual() == null) {
                 headersBuffer.add(column.getTitles());

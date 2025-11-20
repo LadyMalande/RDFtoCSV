@@ -56,7 +56,7 @@ public class RDFtoCSV {
     /**
      * Configuration for the conversion process.
      */
-    private AppConfig config;
+    private final AppConfig config;
     
     /**
      * Mandatory, sets the original RDF file to convert.
@@ -342,7 +342,7 @@ public class RDFtoCSV {
 
                 String newFileName = files[i];
                 System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
-                sb.append(FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata));
+                sb.append(FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata, config));
                 i++;
             }
         } catch (ClassCastException ex) {
@@ -350,7 +350,7 @@ public class RDFtoCSV {
 
             String newFileName = files[0];
             System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
-            FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata);
+            FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata, config);
         }
         db.shutDown();
 
@@ -365,7 +365,7 @@ public class RDFtoCSV {
     }
 
     private void processStreamingWrite(Metadata metadata, String fileName) {
-        StreamingNTriplesWrite streamingWrite = new StreamingNTriplesWrite(metadata, fileName);
+        StreamingNTriplesWrite streamingWrite = new StreamingNTriplesWrite(metadata, fileName, config);
         streamingWrite.writeToFileByMetadata();
     }
 
@@ -374,6 +374,8 @@ public class RDFtoCSV {
         if (po == null) {
             processStreaming(metadata);
         } else {
+            System.out.println("writeToCSV config.getIntermediateFileNames() = " + config.getIntermediateFileNames());
+
             String allFiles = config.getIntermediateFileNames();
             String[] files = allFiles.split(",");
             try {
@@ -383,7 +385,7 @@ public class RDFtoCSV {
                 for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
                     String newFileName = files[i];
                     System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
-                    FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata);
+                    FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata, config);
                     i++;
                 }
             } catch (ClassCastException ex) {
@@ -391,7 +393,7 @@ public class RDFtoCSV {
 
                 String newFileName = files[0];
                 System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
-                FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata);
+                FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata, config);
             } catch (NullPointerException ex2) {
                 // The po is null because the methods for processing didn't create po
                 return;

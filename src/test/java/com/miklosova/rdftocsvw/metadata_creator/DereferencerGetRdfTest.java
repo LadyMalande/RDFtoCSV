@@ -47,6 +47,8 @@ public class DereferencerGetRdfTest extends BaseTest {
     private String expectedName;
     private String url;
 
+    private AppConfig config;
+
 
     @Mock
     private CloseableHttpClient httpClient;
@@ -195,7 +197,7 @@ public class DereferencerGetRdfTest extends BaseTest {
     @ParameterizedTest
     @MethodSource("filesSource")
     void createPrefinishedOutputAndMetadata(FilesParameters line) throws IOException {
-        rdfToCSV = new RDFtoCSV(line.getFilePath());
+        rdfToCSV = new RDFtoCSV( new AppConfig.Builder(line.getFilePath()).parsing("rdf4j").output(line.getOutputPath()).build());
         db = new SailRepository(new MemoryStore());
         args = new String[]{"-f", line.getFilePath(), "-p", "rdf4j", "-output", line.getOutputPath()};
         ConfigurationManager.loadSettingsFromInputToConfigFile(args);

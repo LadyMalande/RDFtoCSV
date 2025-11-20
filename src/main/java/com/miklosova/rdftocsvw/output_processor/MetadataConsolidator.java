@@ -87,7 +87,7 @@ public class MetadataConsolidator {
      * @return the metadata
      */
     public Metadata consolidateMetadata(Metadata oldMetadata, AppConfig config) {
-        Metadata newMetadata = new Metadata();
+        Metadata newMetadata = new Metadata(config);
         Map<String, Integer> occurrencesOfColumnName = new HashMap<>();
         // Use provided config, or instance config, or fall back to ConfigurationManager
         AppConfig effectiveConfig = (config != null) ? config : this.config;
@@ -96,7 +96,7 @@ public class MetadataConsolidator {
         File f = new File(outputFilename);
 
         String nameExtension = "_merged.csv";
-        Table table = new Table(f.getName() + nameExtension);
+        Table table = new Table(f.getName() + nameExtension, config);
         newMetadata.getTables().add(table);
         TableSchema tableSchema = new TableSchema();
         table.setTableSchema(tableSchema);

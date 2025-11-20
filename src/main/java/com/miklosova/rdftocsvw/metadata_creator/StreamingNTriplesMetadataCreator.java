@@ -6,6 +6,7 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
@@ -54,13 +55,23 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
     /**
      * Instantiates a new Streaming n triples metadata creator.
+     * @deprecated Use {@link #StreamingNTriplesMetadataCreator(AppConfig)} instead
      */
+    @Deprecated
     public StreamingNTriplesMetadataCreator() {
-        super();
+        this(null);
+    }
+
+    /**
+     * Instantiates a new Streaming n triples metadata creator with AppConfig.
+     * @param config the application configuration
+     */
+    public StreamingNTriplesMetadataCreator(AppConfig config) {
+        super(config);
         tableSchemaByFiles = new HashMap<>();
         mapOfKnownPredicates = new HashMap<>();
         mapOfKnownSubjects = new HashMap<>();
-        this.metadata = new Metadata();
+        this.metadata = new Metadata(config);
     }
 
     @Override
@@ -209,6 +220,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         String previousFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
         String allFilesUpToNow = (previousFiles != null && previousFiles.isEmpty()) ? newCSVname : previousFiles + "," + newCSVname;
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, allFilesUpToNow);
+        config.setIntermediateFileNames(allFilesUpToNow);
         fileNumber++;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(newCSVname))) {

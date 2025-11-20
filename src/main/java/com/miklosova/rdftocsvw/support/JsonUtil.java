@@ -57,7 +57,9 @@ public class JsonUtil {
      * Write json to file.
      *
      * @param resultNode The serialized object to write to file.
+     * @deprecated Use {@link #writeJsonToFile(ObjectNode, AppConfig)} instead
      */
+    @Deprecated
     public static void writeJsonToFile(ObjectNode resultNode) {
         // Serialize the final object to a JSON string
         String metadataFilename = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
@@ -78,7 +80,9 @@ public class JsonUtil {
      */
     public static void writeJsonToFile(ObjectNode resultNode, AppConfig config) {
         // Serialize the final object to a JSON string
-        String metadataFilename = config.getOutputFilePath() + ".csv-metadata.json";
+        String metadataFilename = (config != null && config.getOutputMetadataFileName() != null) ? 
+            config.getOutputMetadataFileName() : 
+            ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
         logger.log(Level.INFO, "metadataFilename = " + metadataFilename);
         FileWrite.deleteFile(metadataFilename);
         try {

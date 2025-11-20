@@ -59,6 +59,11 @@ public class TableSchema {
         this.columns = new ArrayList<>();
     }
 
+    public TableSchema(AppConfig config) {
+        this.columns = new ArrayList<>();
+        this.config = config;
+    }
+
 
     /**
      * Instantiates a new Table schema.

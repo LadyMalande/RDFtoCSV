@@ -113,7 +113,7 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
         this.db = db;
         this.fileNumberX = 0;
         this.fileNamesCreated = new ArrayList<>();
-        this.metadata = new Metadata();
+        this.metadata = new Metadata(null);
         this.config = null;
     }
 
@@ -128,7 +128,7 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
         this.db = db;
         this.fileNumberX = 0;
         this.fileNamesCreated = new ArrayList<>();
-        this.metadata = new Metadata();
+        this.metadata = new Metadata(config);
         this.config = config;
     }
 

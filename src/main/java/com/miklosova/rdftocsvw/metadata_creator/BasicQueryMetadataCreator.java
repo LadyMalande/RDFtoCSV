@@ -6,6 +6,7 @@ import com.miklosova.rdftocsvw.converter.data_structure.RowAndKey;
 import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 
 import java.io.File;
@@ -24,6 +25,10 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
      */
     PrefinishedOutput<RowsAndKeys> data;
     /**
+     * The application configuration.
+     */
+    AppConfig config;
+    /**
      * The Csv file to write to.
      */
     String CSVFileTOWriteTo;
@@ -41,15 +46,30 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
      * Instantiates a new Basic query metadata creator.
      *
      * @param data the data
+     * @deprecated Use {@link #BasicQueryMetadataCreator(PrefinishedOutput, AppConfig)} instead
      */
+    @Deprecated
     public BasicQueryMetadataCreator(PrefinishedOutput<RowsAndKeys> data) {
-        this.allFileNames = new ArrayList<>();
-        this.metadata = new Metadata();
-        this.data = data;
-        this.allRows = new ArrayList<>();
-        File f = new File(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILENAME));
-        CSVFileTOWriteTo = f.getName();
+        this(data, null);
+    }
 
+    /**
+     * Instantiates a new Basic query metadata creator with AppConfig.
+     *
+     * @param data the data
+     * @param config the application configuration
+     */
+    public BasicQueryMetadataCreator(PrefinishedOutput<RowsAndKeys> data, AppConfig config) {
+        this.allFileNames = new ArrayList<>();
+        this.metadata = new Metadata(config);
+        this.data = data;
+        this.config = config;
+        this.allRows = new ArrayList<>();
+        String outputFilename = (config != null && config.getOutputFileName() != null) ? 
+            config.getOutputFileName() : 
+            ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILENAME);
+        File f = new File(outputFilename);
+        CSVFileTOWriteTo = f.getName();
     }
 
     @Override
@@ -60,7 +80,9 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
             RowsAndKeys rnks = (RowsAndKeys) info.getPrefinishedOutput();
             rnk = rnks.getRowsAndKeys().get(0);
         } catch (ClassCastException ex) {
-            SplitFilesMetadataCreator smc = new SplitFilesMetadataCreator(null);
+            SplitFilesMetadataCreator smc = config != null ? 
+                new SplitFilesMetadataCreator(null, config) : 
+                new SplitFilesMetadataCreator(null);
             return smc.addMetadata(info);
         }
         String newFileName;
@@ -78,7 +100,7 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
         allRows.add(rnk.getRows());
         allFileNames.add(newFileName);
 
-        FileWrite.writeFilesToConfigFile(allFileNames);
+        FileWrite.writeFilesToConfigFile(allFileNames, config);
 
         metadata.addForeignKeys(allRows);
         metadata.jsonldMetadata();

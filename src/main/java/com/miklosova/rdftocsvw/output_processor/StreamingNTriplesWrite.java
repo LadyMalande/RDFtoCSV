@@ -77,6 +77,7 @@ public class StreamingNTriplesWrite {
         assert fileToWriteTo != null;
         // For backward compatibility, also save to ConfigurationManager
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileToWriteTo.toString());
+        config.setIntermediateFileNames(fileToWriteTo.toString());
         this.metadata = metadata;
         String fileNameFromConfig = (config != null && config.getFile() != null) ? config.getFile() :
             ConfigurationManager.getVariableFromConfigFile("input.inputFileName");

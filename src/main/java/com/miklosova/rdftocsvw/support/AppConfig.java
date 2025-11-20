@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 /**
  * Configuration class for RDF to CSVW conversion.
  * This class holds all parameters needed for the conversion process.
- * 
+ *
  * User-provided parameters:
  * - file (required): Input RDF file path or URL
  * - parsing (optional): Parsing method (default: "rdf4j")
@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * - preferredLanguages (optional): Comma-separated language codes (default: "cs,en,pl")
  * - columnNamingConvention (optional): Column naming style (default: "Title Case")
  * - logLevel (optional): Logging level (default: "INFO")
- * 
+ *
  * Runtime parameters (set during execution):
  * - intermediateFileNames: Files created during processing
  * - conversionHasBlankNodes: Whether conversion contains blank nodes
@@ -27,10 +27,13 @@ import java.util.logging.Logger;
  * - outputFilePath: Path for output files
  * - streamingContinuous: Whether streaming is continuous
  * - simpleBasicQuery: Whether to use simple basic query
+ * - outputMetadataFileName: Name of the output metadata file
+ * - outputFileName: Name of the output file (can be dynamically set)
+ * - inputFileName: Name of the input file (defaults to file parameter)
  */
 public class AppConfig {
     private static final Logger LOGGER = Logger.getLogger(AppConfig.class.getName());
-    
+
     // Valid column naming conventions (must match LabelFormatter constants)
     public static final String COLUMN_NAMING_CAMEL_CASE = "camelCase";
     public static final String COLUMN_NAMING_PASCAL_CASE = "PascalCase";
@@ -41,7 +44,7 @@ public class AppConfig {
     public static final String COLUMN_NAMING_DOT_NOTATION = "dot.notation";
 
     public static final String ORIGINAL_NAMING_NOTATION = "original";
-    
+
     // Default values for optional parameters
     private static final String DEFAULT_PARSING = "rdf4j";
     private static final String DEFAULT_CONVERSION_METHOD = "basicQuery";
@@ -57,7 +60,7 @@ public class AppConfig {
     private static final Boolean DEFAULT_FIRST_NORMAL_FORM = true;
     private static final Boolean DEFAULT_CONVERSION_HAS_RDF_TYPES = true;
     private static final String DEFAULT_COLUMN_NAMING_CONVENTION = ORIGINAL_NAMING_NOTATION;
-    private static final String DEFAULT_PREFERRED_LANGUAGES = "cs,en,pl";
+    private static final String DEFAULT_PREFERRED_LANGUAGES = "en,cs";
 
     // User-provided parameters (required)
     private final String file;
@@ -81,8 +84,12 @@ public class AppConfig {
     private String readMethod;
     private Boolean metadataRowNums;
     private String outputFilePath;
+
+    private String outputMetadataFileName;
+    private String outputFileName;
     private Boolean streamingContinuous;
     private Boolean simpleBasicQuery;
+    private String inputFileName;
 
 
     // Getters for user-provided parameters
@@ -203,6 +210,30 @@ public class AppConfig {
         this.simpleBasicQuery = simpleBasicQuery;
     }
 
+    public String getOutputFileName() {
+        return outputFileName;
+    }
+
+    public void setOutputFileName(String outputFileName) {
+        this.outputFileName = outputFileName;
+    }
+
+    public String getInputFileName() {
+        return inputFileName;
+    }
+
+    public void setInputFileName(String inputFileName) {
+        this.inputFileName = inputFileName;
+    }
+
+    public String getOutputMetadataFileName() {
+        return outputMetadataFileName;
+    }
+
+    public void setOutputMetadataFileName(String outputMetadataFileName) {
+        this.outputMetadataFileName = outputMetadataFileName;
+    }
+
     // Private constructor - use Builder to create instances
     private AppConfig(Builder builder) {
         // Required parameter
@@ -243,6 +274,12 @@ public class AppConfig {
         String baseFileName = ConfigurationManager.getBaseFileName(file, output);
         this.outputFilePath = output != null ? output : baseFileName;
         this.outputZipFileName = baseFileName + "_CSVW.zip";
+        this.outputFileName = baseFileName; // Initialize to base file name
+        this.inputFileName = file; // Initialize to input file name
+        this.outputMetadataFileName = this.outputFilePath + ".csv-metadata.json"; // Initialize to base file name + metadata extension
+
+
+
     }
 
     /**
@@ -353,7 +390,7 @@ public class AppConfig {
          * - COLUMN_NAMING_KEBAB_CASE ("kebab-case")
          * - COLUMN_NAMING_TITLE_CASE ("Title Case")
          * - COLUMN_NAMING_DOT_NOTATION ("dot.notation")
-         * 
+         *
          * @param columnNamingConvention Column naming convention (case-sensitive)
          * @return this Builder instance
          * @throws IllegalArgumentException if the convention is not one of the valid values
@@ -401,10 +438,10 @@ public class AppConfig {
             // Validate parsing method
             if (parsing != null) {
                 String parsingLower = parsing.toLowerCase();
-                if (!parsingLower.equals("rdf4j") && 
-                    !parsingLower.equals("streaming") && 
+                if (!parsingLower.equals("rdf4j") &&
+                    !parsingLower.equals("streaming") &&
                     !parsingLower.equals("bigfilestreaming")) {
-                    throw new IllegalArgumentException("Invalid parsing method: " + parsing + 
+                    throw new IllegalArgumentException("Invalid parsing method: " + parsing +
                         ". Valid values are: rdf4j, streaming, bigfilestreaming");
                 }
             }
@@ -412,16 +449,16 @@ public class AppConfig {
             // Validate log level
             if (logLevel != null) {
                 String levelUpper = logLevel.toUpperCase();
-                if (!levelUpper.equals("SEVERE") && 
-                    !levelUpper.equals("WARNING") && 
-                    !levelUpper.equals("INFO") && 
-                    !levelUpper.equals("CONFIG") && 
-                    !levelUpper.equals("FINE") && 
-                    !levelUpper.equals("FINER") && 
+                if (!levelUpper.equals("SEVERE") &&
+                    !levelUpper.equals("WARNING") &&
+                    !levelUpper.equals("INFO") &&
+                    !levelUpper.equals("CONFIG") &&
+                    !levelUpper.equals("FINE") &&
+                    !levelUpper.equals("FINER") &&
                     !levelUpper.equals("FINEST") &&
                     !levelUpper.equals("ALL") &&
                     !levelUpper.equals("OFF")) {
-                    throw new IllegalArgumentException("Invalid log level: " + logLevel + 
+                    throw new IllegalArgumentException("Invalid log level: " + logLevel +
                         ". Valid values are: SEVERE, WARNING, INFO, CONFIG, FINE, FINER, FINEST, ALL, OFF");
                 }
             }
@@ -431,7 +468,7 @@ public class AppConfig {
                 if (columnNamingConvention.isEmpty()) {
                     throw new IllegalArgumentException("Column naming convention cannot be empty");
                 }
-                
+
                 // Valid naming conventions based on LabelFormatter
                 boolean isValid = columnNamingConvention.equals(COLUMN_NAMING_CAMEL_CASE) ||
                                   columnNamingConvention.equals(COLUMN_NAMING_PASCAL_CASE) ||
@@ -440,11 +477,11 @@ public class AppConfig {
                                   columnNamingConvention.equals(COLUMN_NAMING_KEBAB_CASE) ||
                                   columnNamingConvention.equals(COLUMN_NAMING_TITLE_CASE) ||
                                   columnNamingConvention.equals(COLUMN_NAMING_DOT_NOTATION);
-                
+
                 if (!isValid) {
                     throw new IllegalArgumentException(
                         "Invalid column naming convention: '" + columnNamingConvention + "'. " +
-                        "Valid values are: '" + COLUMN_NAMING_CAMEL_CASE + "', '" + 
+                        "Valid values are: '" + COLUMN_NAMING_CAMEL_CASE + "', '" +
                         COLUMN_NAMING_PASCAL_CASE + "', '" + COLUMN_NAMING_SNAKE_CASE + "', '" +
                         COLUMN_NAMING_SCREAMING_SNAKE_CASE + "', '" + COLUMN_NAMING_KEBAB_CASE + "', '" +
                         COLUMN_NAMING_TITLE_CASE + "', '" + COLUMN_NAMING_DOT_NOTATION + "'"

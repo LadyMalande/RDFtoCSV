@@ -29,6 +29,11 @@ public class Table {
      */
     private List<Transformation> transformations;
 
+    /**
+     * Application configuration
+     */
+    private AppConfig config;
+
 
     /**
      * Instantiates a new Table.
@@ -36,13 +41,29 @@ public class Table {
      * @param url the url
      */
     public Table(String url) {
+        this(url, null);
+    }
+
+    public Table(AppConfig config) {
+        this.config = config;
+    }
+
+    /**
+     * Instantiates a new Table with AppConfig.
+     *
+     * @param url the url
+     * @param config the application configuration
+     */
+    public Table(String url, AppConfig config) {
         this.url = url;
+        this.config = config;
     }
 
     /**
      * Instantiates a new Table.
      */
     public Table() {
+        this(null, null);
     }
 
     /**
@@ -100,16 +121,33 @@ public class Table {
     }
 
     /**
+     * Gets application configuration.
+     *
+     * @return the application configuration
+     */
+    public AppConfig getConfig() {
+        return config;
+    }
+
+    /**
+     * Sets application configuration.
+     *
+     * @param config the application configuration
+     */
+    public void setConfig(AppConfig config) {
+        this.config = config;
+    }
+
+    /**
      * Add table metadata.
      *
      * @param keys the keys (headers)
      * @param rows the rows of the inner CSV representation
      */
     public void addTableMetadata(ArrayList<Value> keys, ArrayList<Row> rows) {
-
-        this.tableSchema = new TableSchema(keys, rows);
+        this.tableSchema = new TableSchema(keys, rows, this.config);
         this.tableSchema.addTableSchemaMetadata();
-        addTransformations();
+        addTransformations(this.config);
     }
 
 

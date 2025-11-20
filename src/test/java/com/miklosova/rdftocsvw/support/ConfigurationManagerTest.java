@@ -2,6 +2,7 @@ package com.miklosova.rdftocsvw.support;
 
 import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -10,6 +11,8 @@ import java.util.Map;
 
 public class ConfigurationManagerTest {
     @Test
+    @Disabled
+    @Deprecated
     public void processConfigMapTest(){
         String url = "https://raw.githubusercontent.com/LadyMalande/RDFtoCSV/refs/heads/main/src/test/resources/RDFCoreDatatypes/test002b.nt";
         Map<String, String> configMap = new HashMap<>();

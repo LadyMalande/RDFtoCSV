@@ -6,6 +6,7 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
 import com.miklosova.rdftocsvw.output_processor.CSVConsolidator;
 import com.miklosova.rdftocsvw.output_processor.MetadataConsolidator;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
@@ -44,6 +45,10 @@ public class StreamingMetadataCreator extends MetadataCreator {
     static boolean blankNodeRegisteredToConfig;
     private static int blankNodeCounter = 0;
     /**
+     * The application configuration.
+     */
+    protected AppConfig config;
+    /**
      * The File name to read.
      */
     protected String fileNameToRead;
@@ -62,10 +67,21 @@ public class StreamingMetadataCreator extends MetadataCreator {
 
     /**
      * Instantiates a new Streaming metadata creator.
+     * @deprecated Use {@link #StreamingMetadataCreator(AppConfig)} instead
      */
+    @Deprecated
     public StreamingMetadataCreator() {
+        this(null);
+    }
 
-        String fileNameFromConfig = ConfigurationManager.getVariableFromConfigFile("input.inputFileName");
+    /**
+     * Instantiates a new Streaming metadata creator with AppConfig.
+     * @param config the application configuration
+     */
+    public StreamingMetadataCreator(AppConfig config) {
+        this.config = config;
+        String fileNameFromConfig = (config != null) ? config.getFile() : 
+            ConfigurationManager.getVariableFromConfigFile("input.inputFileName");
         /*
         //URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
         //File file = new File("temp.csv");
@@ -78,6 +94,14 @@ public class StreamingMetadataCreator extends MetadataCreator {
 */
         this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) : fileNameFromConfig;
         //"../"
+    }
+
+    /**
+     * Get the AppConfig instance.
+     * @return the application configuration
+     */
+    public AppConfig getConfig() {
+        return config;
     }
 
 
@@ -274,7 +298,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
      * @param triple the triple
      */
     void addMetadataToTableSchema(Triple triple) {
-        Column newColumn = new Column();
+        Column newColumn = new Column(config);
         newColumn.createLangFromLiteral(triple.object);
         newColumn.createNameFromIRI(triple.predicate);
         newColumn.setPropertyUrl(triple.predicate.stringValue());
@@ -298,9 +322,9 @@ public class StreamingMetadataCreator extends MetadataCreator {
      * @return the metadata
      */
     protected Metadata consolidateMetadataAndCSVs(Metadata oldmeta) {
-        MetadataConsolidator mc = new MetadataConsolidator();
-        Metadata consolidatedMetadata = mc.consolidateMetadata(oldmeta);
-        CSVConsolidator cc = new CSVConsolidator();
+        MetadataConsolidator mc = new MetadataConsolidator(config);
+        Metadata consolidatedMetadata = mc.consolidateMetadata(oldmeta, config);
+        CSVConsolidator cc = new CSVConsolidator(config);
         cc.consolidateCSVs(oldmeta, consolidatedMetadata);
         return consolidatedMetadata;
     }

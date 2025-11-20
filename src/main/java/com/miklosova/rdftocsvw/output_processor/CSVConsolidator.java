@@ -85,7 +85,7 @@ public class CSVConsolidator {
      */
     @Deprecated
     public void writeToCSVFromOldMetadataToMerged(Metadata oldMetadata, Metadata newMetadata, File fileToWriteTo) {
-        writeToCSVFromOldMetadataToMerged(oldMetadata, newMetadata, fileToWriteTo, null);
+        writeToCSVFromOldMetadataToMerged(oldMetadata, newMetadata, fileToWriteTo, config);
     }
 
     /**
@@ -140,6 +140,7 @@ public class CSVConsolidator {
 
             // For backward compatibility, also save to ConfigurationManager
             ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileToWriteTo.toString());
+            config.setIntermediateFileNames(fileToWriteTo.toString());
         } catch (IOException e) {
             logger.log(Level.SEVERE, "There was an exception while trying to write data into new merged CSV.");
         }

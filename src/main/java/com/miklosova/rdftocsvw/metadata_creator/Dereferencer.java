@@ -42,6 +42,12 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  */
 public class Dereferencer {
     private static final Logger logger = Logger.getLogger(Dereferencer.class.getName());
+    
+    // Suppress Jena XML parser warnings about StAX properties
+    static {
+        Logger.getLogger("org.apache.jena.util.JenaXMLInput").setLevel(Level.OFF);
+    }
+    
     private static final String WOT_RDF_FILE = "http://xmlns.com/wot/0.1/index.rdf";
     private static final String VANN_RDF_FILE = "http://purl.org/vocab/vann/vann-vocab-20100607.rdf";
 
@@ -69,7 +75,7 @@ public class Dereferencer {
     static String SKOS_REFERENCE = "http://www.w3.org/2009/08/skos-reference/skos.rdf";
     static String[] standardKnownPrefixes = {SKOS_PREFIX, WOT_PREFIX, VS_PREFIX, VANN_PREFIX, DCTERMS_PREFIX, DC_PREFIX, FOAF_PREFIX, RDFSchema_PREFIX, OWL_PREFIX, SKOS_REFERENCE};
     // Define language preferences (order matters: first is most desired)
-    private List<String> PREFERRED_LANGUAGES = loadPreferredLanguages(); // Example: Prefer English, then German, then French
+    private List<String> PREFERRED_LANGUAGES; // Initialized in constructor after config is set
     private final LoadingCache<String, String> labelCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(1, TimeUnit.HOURS)
@@ -96,10 +102,13 @@ public class Dereferencer {
      * Instantiates a new Dereferencer.
      *
      * @param url the IRI to parse into pretty label
+     * @param config the application configuration
      */
     public Dereferencer(String url, AppConfig config) {
         this.url = url;
         this.config = config;
+        // Initialize PREFERRED_LANGUAGES after config is set
+        this.PREFERRED_LANGUAGES = loadPreferredLanguages();
     }
 
     // Package-private setter for testing
@@ -434,6 +443,7 @@ public class Dereferencer {
     }
 
     public String fetchLabel(String iri) throws IOException, ExecutionException {
+        logger.info("The iri in fetchLabel = " + iri);
         logger.info("The config before fetching label file: " + this.config.getFile());
         logger.info("The config before fetching label: " + this.config.getColumnNamingConvention());
         return labelCache.getUnchecked(iri);
@@ -442,6 +452,7 @@ public class Dereferencer {
     String fetchLabelUncached(String iri) throws IOException {
         long startTime = System.currentTimeMillis();
         logger.info("--------Before new HttpGet(extractBaseUri(" + iri + "));");
+        logger.info("Config language tags: " + config.getPreferredLanguages() );
 
         HttpGet httpGet = new HttpGet(extractBaseUri(iri));
         long startTime1 = System.currentTimeMillis();
@@ -498,13 +509,22 @@ public class Dereferencer {
             try (InputStream in = new ByteArrayInputStream(content)) {
                 startTime10 = System.currentTimeMillis();
                 // Using RDFDataMgr for faster parsing
-                if (iri.startsWith(VANN_PREFIX)) {
-                    RDFDataMgr.read(model, in, VANN_RDF_FILE, lang);
-                } else if (iri.startsWith(SCHEMA_PREFIX)) {
-                    logger.info("Logged in with SCHEMA_PREFIX -----------------------------------*-*-*-*-*-*");
-                    RDFDataMgr.read(model, in, SCHEMA_RDF_FILE, lang);
-                } else {
-                    RDFDataMgr.read(model, in, lang);
+                try {
+                    if (iri.startsWith(VANN_PREFIX)) {
+                        RDFDataMgr.read(model, in, VANN_RDF_FILE, lang);
+                    } else if (iri.startsWith(SCHEMA_PREFIX)) {
+                        logger.info("Logged in with SCHEMA_PREFIX -----------------------------------*-*-*-*-*-*");
+                        RDFDataMgr.read(model, in, SCHEMA_RDF_FILE, lang);
+                    } else {
+                        RDFDataMgr.read(model, in, lang);
+                    }
+                } catch (org.apache.jena.riot.RiotException e) {
+                    logger.log(Level.WARNING, "RiotException while parsing RDF for " + iri + ": " + e.getMessage());
+                    logger.log(Level.INFO, "Falling back to local name for IRI: " + iri);
+                    // Return local name as fallback when RDF parsing fails
+                    ValueFactory vf = SimpleValueFactory.getInstance();
+                    IRI propertyUrlIRI = vf.createIRI(iri);
+                    return propertyUrlIRI.getLocalName();
                 }
             }
             long startTime11 = System.currentTimeMillis();
@@ -815,6 +835,7 @@ public class Dereferencer {
      * @return list of preferred language codes
      */
     private List<String> loadPreferredLanguages(AppConfig config) {
+        logger.info("loadPreferredLanguages config: " + config.getPreferredLanguages());
         String configValue = (config != null) ? config.getPreferredLanguages() : 
             ConfigurationManager.loadConfig("app.preferredLanguages");
         if (configValue == null || configValue.trim().isEmpty()) {

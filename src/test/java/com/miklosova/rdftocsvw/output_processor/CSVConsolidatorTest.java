@@ -51,12 +51,15 @@ class CSVConsolidatorTest extends BaseTest {
     @TempDir
     Path tempDir;
 
+    AppConfig config;
+
     @BeforeEach
     void setUp() {
-        csvConsolidator = new CSVConsolidator();
-        oldMetadata = new Metadata();
-        newMetadata = new Metadata();
-        rdfToCSV = new RDFtoCSV(fileName);
+        config = new AppConfig.Builder(fileName).parsing("rdf4j").build();
+        csvConsolidator = new CSVConsolidator(config);
+        oldMetadata = new Metadata(config);
+        newMetadata = new Metadata(config);
+        rdfToCSV = new RDFtoCSV(config);
         db = new SailRepository(new MemoryStore());
         args = new String[]{"-f", "test.rdf", "-p", "rdf4j"};
         ConfigurationManager.loadSettingsFromInputToConfigFile(args);
@@ -73,13 +76,13 @@ class CSVConsolidatorTest extends BaseTest {
     //BaseRock generated method id: ${testConsolidateCSVs}, hash: E8BB2DB378F9ED35DF1628A0294727C6
     @Test
     void testConsolidateCSVs() throws IOException {
-        Table table = new Table();
+        Table table = new Table(config);
         table.setUrl("test.csv");
-        Column column1 = new Column();
+        Column column1 = new Column(config);
         column1.setTitles("Column1");
-        Column column2 = new Column();
+        Column column2 = new Column(config);
         column2.setTitles("Column2");
-        table.setTableSchema(new TableSchema());
+        table.setTableSchema(new TableSchema(config));
         oldMetadata.getTables().add(table);
 
         File tempFile = tempDir.resolve("test.csv").toFile();
@@ -92,12 +95,13 @@ class CSVConsolidatorTest extends BaseTest {
         line2[0] = "Value1";
         line2[1] = "Value2";
         lines.add(line);lines.add(line2);
-        MetadataConsolidator mc = new MetadataConsolidator();
-        newMetadata = mc.consolidateMetadata(oldMetadata);
+        MetadataConsolidator mc = new MetadataConsolidator(config);
+        newMetadata = mc.consolidateMetadata(oldMetadata, config);
         //File newTempFile = tempDir.resolve(newMetadata.getTables().get(0).getUrl()).toFile();
         System.out.println("newTempFile = " + newMetadata.getTables().get(0).getUrl());
 
         FileWrite.writeLinesToCSVFile(tempFile,lines,false);
+        config.setIntermediateFileNames(tempFile.getAbsolutePath());
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,tempFile.getAbsolutePath());
         File newTempFile = new File(newMetadata.getTables().get(0).getUrl());
     csvConsolidator.consolidateCSVs(oldMetadata, newMetadata);
@@ -152,6 +156,7 @@ class CSVConsolidatorTest extends BaseTest {
         newMetadata.getTables().add(newTable);
         File oldFile = tempDir.resolve("old.csv").toFile();
         System.out.println("old.csv path = " + oldFile.getAbsolutePath());
+        config.setIntermediateFileNames(oldFile.getAbsolutePath());
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,oldFile.getAbsolutePath());
         try (CSVWriter writer = new CSVWriter(new FileWriter(oldFile))) {
     writer.writeNext(new String[] { "Header1", "Header2" });
@@ -159,12 +164,11 @@ class CSVConsolidatorTest extends BaseTest {
 }
         File newFile = tempDir.resolve("new.csv").toFile();
 
-    csvConsolidator.writeToCSVFromOldMetadataToMerged(oldMetadata, newMetadata, newFile);
+    csvConsolidator.writeToCSVFromOldMetadataToMerged(oldMetadata, newMetadata, newFile, config);
     try (CSVReader reader = new CSVReader(new FileReader(newFile))) {
         String[] line = reader.readNext();
         assertArrayEquals(new String[] { "Value1", "Value2" }, line);
     }
-
     }
 
     //BaseRock generated method id: ${testIsMergeable}, hash: 08AA314B774CBD58DAEC8EC836207443
@@ -250,7 +254,7 @@ class CSVConsolidatorTest extends BaseTest {
         lines.add(line2);
 
         MetadataConsolidator mc = new MetadataConsolidator(config);
-        newMetadata = mc.consolidateMetadata(oldMetadata);
+        newMetadata = mc.consolidateMetadata(oldMetadata, config);
 
         FileWrite.writeLinesToCSVFile(tempFile, lines, false);
         config.setIntermediateFileNames(tempFile.getAbsolutePath());

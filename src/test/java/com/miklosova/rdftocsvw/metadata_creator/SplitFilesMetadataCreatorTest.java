@@ -9,6 +9,7 @@ package com.miklosova.rdftocsvw.metadata_creator;
  import com.miklosova.rdftocsvw.converter.data_structure.RowAndKey;
  import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
  import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
+ import com.miklosova.rdftocsvw.support.AppConfig;
  import org.eclipse.rdf4j.model.Value;
  import org.eclipse.rdf4j.repository.Repository;
  import org.eclipse.rdf4j.repository.sail.SailRepository;
@@ -37,7 +38,6 @@ class SplitFilesMetadataCreatorTest {
     @Mock
     private RowsAndKeys mockRowsAndKeys;
 
-    private PrefinishedOutput<RowsAndKeys> realData;
      @Mock
      private Metadata mockMetadata;
 
@@ -62,23 +62,25 @@ class SplitFilesMetadataCreatorTest {
     private Repository db;
     private String fileName = "/RDFtoCSV/src/test/resources/differentSerializations/testingInput.nt";
 
+    AppConfig config;
+
      @BeforeEach
      void setUp() {
-         rdfToCSV = new RDFtoCSV(fileName);
+         config = new AppConfig.Builder("test.rdf")
+                 .parsing("rdf4j")
+                 .output("test")
+                 .build();
+         rdfToCSV = new RDFtoCSV(config);
          db = new SailRepository(new MemoryStore());
          args = new String[]{"-f", "test.rdf", "-p", "rdf4j"};
          ConfigurationManager.loadSettingsFromInputToConfigFile(args);
+         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, "test");
          mockData = (PrefinishedOutput<RowsAndKeys>) mock(PrefinishedOutput.class);
 
          when(mockData.getPrefinishedOutput()).thenReturn(new RowsAndKeys());
          mockMetadata =  mock(Metadata.class);
 
-             try{
-                 rdfToCSV.parseInput();
-
-             realData = rdfToCSV.convertData();
-
-         creator = new SplitFilesMetadataCreator(mockData);
+         creator = new SplitFilesMetadataCreator(mockData, config);
          creator.metadata = mockMetadata;
          keys = new ArrayList<>();
          keys.add(iri("http://predicate1.cz"));
@@ -101,13 +103,9 @@ class SplitFilesMetadataCreatorTest {
          foreignKeys.add(rows);
          fileNames = new ArrayList<>();
          fileNames.add("test0.csv");
-                 fileNames.add("test1.csv");
-                 oneFileNames = new ArrayList<>();
-                 oneFileNames.add("test0.csv");
-
-         } catch (IOException e) {
-             throw new RuntimeException(e);
-         }
+         fileNames.add("test1.csv");
+         oneFileNames = new ArrayList<>();
+         oneFileNames.add("test0.csv");
      }
 
      //BaseRock generated method id: ${testConstructor}, hash: 06806DE2C2593F7D3A31DD018B067B0A
@@ -133,7 +131,7 @@ class SplitFilesMetadataCreatorTest {
             System.out.println();
              verify(mockMetadata).addForeignKeys(foreignKeys);
              verify(mockMetadata).jsonldMetadata();
-             fileWriteMockedStatic.verify(() -> FileWrite.writeFilesToConfigFile(fileNames));
+             fileWriteMockedStatic.verify(() -> FileWrite.writeFilesToConfigFile(fileNames, config));
          }
      }
 
@@ -147,7 +145,7 @@ class SplitFilesMetadataCreatorTest {
          try (MockedStatic<FileWrite> fileWriteMockedStatic = mockStatic(FileWrite.class)) {
              creator.addMetadata(mockData);
              verify(mockMetadata).addMetadata("test0.csv", keys, rows);
-             fileWriteMockedStatic.verify(() -> FileWrite.writeFilesToConfigFile(oneFileNames));
+             fileWriteMockedStatic.verify(() -> FileWrite.writeFilesToConfigFile(oneFileNames, config));
          }
      }
 
@@ -164,7 +162,7 @@ class SplitFilesMetadataCreatorTest {
              verify(mockMetadata, never()).addMetadata(anyString(), eq(keys), eq(rows));
              verify(mockMetadata).addForeignKeys(emptyForeignKeys);
              verify(mockMetadata).jsonldMetadata();
-             fileWriteMockedStatic.verify(() -> FileWrite.writeFilesToConfigFile(emptyFileNames));
+             fileWriteMockedStatic.verify(() -> FileWrite.writeFilesToConfigFile(emptyFileNames, config));
          }
      }
 }

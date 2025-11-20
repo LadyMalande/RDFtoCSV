@@ -5,6 +5,7 @@ import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.ConfigurationManager;
 
 import java.io.BufferedReader;
@@ -35,16 +36,29 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
      * Instantiates a new Big file streaming n triples metadata creator.
      *
      * @param data the data
+     * @deprecated Use {@link #BigFileStreamingNTriplesMetadataCreator(PrefinishedOutput, AppConfig)} instead
      */
+    @Deprecated
     public BigFileStreamingNTriplesMetadataCreator(PrefinishedOutput<RowsAndKeys> data) {
-        super();
-        this.metadata = new Metadata();
+        this(data, null);
+    }
+
+    /**
+     * Instantiates a new Big file streaming n triples metadata creator with AppConfig.
+     *
+     * @param data the data
+     * @param config the application configuration
+     */
+    public BigFileStreamingNTriplesMetadataCreator(PrefinishedOutput<RowsAndKeys> data, AppConfig config) {
+        super(config);
+        this.metadata = new Metadata(config);
     }
 
     @Override
     public Metadata addMetadata(PrefinishedOutput<?> info) {
         File f = new File(fileNameToRead);
         Table newTable = new Table(f.getName() + ".csv");
+        config.setIntermediateFileNames(f.getName() + ".csv");
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, f.getName() + ".csv");
         metadata.getTables().add(newTable);
         tableSchema = new TableSchema();

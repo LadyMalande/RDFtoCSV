@@ -6,6 +6,7 @@ import com.miklosova.rdftocsvw.converter.data_structure.Row;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Transformation;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.BaseTest;
 
 import java.util.List;
@@ -27,10 +28,14 @@ class TableTest extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        rdfToCSV = new RDFtoCSV(fileName);
+
+        AppConfig config = new AppConfig.Builder(fileName)
+                .parsing("rdf4j").build();
+
+        rdfToCSV = new RDFtoCSV(config);
         table = new Table();
-        args = new String[]{"-f", "test.rdf", "-p", "rdf4j"};
-        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
+        //args = new String[]{"-f", "test.rdf", "-p", "rdf4j"};
+        //ConfigurationManager.loadSettingsFromInputToConfigFile(args);
         keys = new ArrayList<>();
         keys.add(iri("http://predicate1.cz"));
         keys.add(iri("http://predicate2.cz"));
@@ -82,28 +87,35 @@ class TableTest extends BaseTest {
     @ParameterizedTest
     @CsvSource({ "true", "false" })
     void testAddTableMetadata(String hasBlankNodes) throws Exception {
-        //ArrayList<Value> keys = new ArrayList<>();
-        //ArrayList<Row> rows = new ArrayList<>();
+        // Use AppConfig instead of ConfigurationManager
+        AppConfig config = new AppConfig.Builder("test.ttl")
+                .build();
+        
         if (Boolean.parseBoolean(hasBlankNodes)) {
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "true");
+            config.setConversionHasBlankNodes(true);
+        } else {
+            config.setConversionHasBlankNodes(false);
         }
-    table.addTableMetadata(keys, rows);
-    assertNotNull(table.getTableSchema());
-    assertEquals(keys, table.getTableSchema().getKeys());
-    assertEquals(rows, table.getTableSchema().getRows());
-    if (Boolean.parseBoolean(hasBlankNodes)) {
-
-        assertNotNull(table.getTransformations());
-        assertEquals(1, table.getTransformations().size());
-        Transformation transformation = table.getTransformations().get(0);
-        assertEquals("https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js", transformation.getUrl());
-        assertEquals("http://www.iana.org/assignments/media-types/application/javascript", transformation.getScriptFormat());
-        assertEquals("http://www.iana.org/assignments/media-types/turtle", transformation.getTargetFormat());
-        assertEquals("rdf", transformation.getSource());
-        assertEquals("RDF format used as the output format in the transformation from CSV to RDF", transformation.getTitles());
-    } else {
-        assertNull(table.getTransformations());
-    }
-
+        
+        // Set config on table
+        table.setConfig(config);
+        
+        table.addTableMetadata(keys, rows);
+        assertNotNull(table.getTableSchema());
+        assertEquals(keys, table.getTableSchema().getKeys());
+        assertEquals(rows, table.getTableSchema().getRows());
+        
+        if (Boolean.parseBoolean(hasBlankNodes)) {
+            assertNotNull(table.getTransformations());
+            assertEquals(1, table.getTransformations().size());
+            Transformation transformation = table.getTransformations().get(0);
+            assertEquals("https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js", transformation.getUrl());
+            assertEquals("http://www.iana.org/assignments/media-types/application/javascript", transformation.getScriptFormat());
+            assertEquals("http://www.iana.org/assignments/media-types/turtle", transformation.getTargetFormat());
+            assertEquals("rdf", transformation.getSource());
+            assertEquals("RDF format used as the output format in the transformation from CSV to RDF", transformation.getTitles());
+        } else {
+            assertNull(table.getTransformations());
+        }
     }
 }

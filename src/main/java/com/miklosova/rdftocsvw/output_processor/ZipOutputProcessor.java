@@ -56,7 +56,9 @@ public class ZipOutputProcessor implements IOutputProcessor {
         
         if (config != null) {
             inputFilesInString = config.getIntermediateFileNames();
-            metadataFileName = config.getOutputFilePath() + ".csv-metadata.json";
+            metadataFileName = (config.getOutputMetadataFileName() != null) ? 
+                config.getOutputMetadataFileName() : 
+                ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
         } else {
             // Backward compatibility
             inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
@@ -69,30 +71,26 @@ public class ZipOutputProcessor implements IOutputProcessor {
         List<String> srcFiles = new ArrayList<>(Arrays.asList(listOfFiles));
         srcFiles.add(metadataFileName);
         //logger.log(Level.INFO, "OUTPUT_METADATA_FILE_NAME=" + metadataFileName);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try {
-            ZipOutputStream zipOut = new ZipOutputStream(baos);
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             ZipOutputStream zipOut = new ZipOutputStream(baos)) {
 
             for (String srcFile : srcFiles) {
                 File fileToZip = new File(srcFile);
-                FileInputStream fis = new FileInputStream(fileToZip);
-                ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
-                zipOut.putNextEntry(zipEntry);
+                try (FileInputStream fis = new FileInputStream(fileToZip)) {
+                    ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+                    zipOut.putNextEntry(zipEntry);
 
-                byte[] bytes = new byte[1024];
-                int length;
-                while ((length = fis.read(bytes)) >= 0) {
-                    zipOut.write(bytes, 0, length);
+                    byte[] bytes = new byte[1024];
+                    int length;
+                    while ((length = fis.read(bytes)) >= 0) {
+                        zipOut.write(bytes, 0, length);
+                    }
                 }
-                fis.close();
             }
 
-            zipOut.close();
-
+            zipOut.finish();
             // Now, you can retrieve the byte array containing the zip data
-            byte[] zipBytes = baos.toByteArray();
-            baos.close();
-            return zipBytes;
+            return baos.toByteArray();
         } catch (FileNotFoundException e) {
             logger.log(Level.SEVERE, "The file that was supposed to be zipped was not found. ");
 
@@ -116,7 +114,9 @@ public class ZipOutputProcessor implements IOutputProcessor {
         if (config != null) {
             inputFilesInString = config.getIntermediateFileNames();
             filenameForZip = config.getOutputZipFileName();
-            metadataFileName = config.getOutputFilePath() + ".csv-metadata.json";
+            metadataFileName = (config.getOutputMetadataFileName() != null) ? 
+                config.getOutputMetadataFileName() : 
+                ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
         } else {
             // Backward compatibility
             inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
@@ -134,27 +134,23 @@ public class ZipOutputProcessor implements IOutputProcessor {
         }
         List<String> srcFiles = new ArrayList<>(Arrays.asList(newArray));
         srcFiles.add(metadataFileName);
-        try {
-            final FileOutputStream fos = new FileOutputStream(filenameForZip);
-            ZipOutputStream zipOut = new ZipOutputStream(fos);
+        try (FileOutputStream fos = new FileOutputStream(filenameForZip);
+             ZipOutputStream zipOut = new ZipOutputStream(fos)) {
 
             for (String srcFile : srcFiles) {
                 File fileToZip = new File(srcFile);
-                FileInputStream fis = new FileInputStream(fileToZip);
+                try (FileInputStream fis = new FileInputStream(fileToZip)) {
+                    ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+                    zipOut.putNextEntry(zipEntry);
 
-                ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
-                zipOut.putNextEntry(zipEntry);
-
-                byte[] bytes = new byte[1024];
-                int length;
-                while ((length = fis.read(bytes)) >= 0) {
-                    zipOut.write(bytes, 0, length);
+                    byte[] bytes = new byte[1024];
+                    int length;
+                    while ((length = fis.read(bytes)) >= 0) {
+                        zipOut.write(bytes, 0, length);
+                    }
                 }
-                fis.close();
             }
 
-            zipOut.close();
-            fos.close();
             return null;
         } catch (FileNotFoundException e) {
             logger.log(Level.SEVERE, "The file that was supposed to be zipped was not found. ");

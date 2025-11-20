@@ -89,6 +89,7 @@ public class Column {
     private Map.Entry<Value, TypeIdAndValues> column;
     private Value originalColumnKey;
 
+
     /**
      * Instantiates a new Column.
      */
@@ -123,6 +124,11 @@ public class Column {
         if (column != null) {
             this.originalColumnKey = column.getKey();
         }
+    }
+
+    public Column(AppConfig config) {
+        this.config = config;
+
     }
 
     /**
