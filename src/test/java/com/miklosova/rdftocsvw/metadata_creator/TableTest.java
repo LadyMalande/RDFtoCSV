@@ -13,7 +13,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import java.util.ArrayList;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -47,7 +46,6 @@ class TableTest extends BaseTest {
         rows = new ArrayList<>();
         rows.add(firstRow);
         rows.add(secondRow);
-        System.out.println("CONFIGURATION ROWNUMS " + ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.METADATA_ROWNUMS));
     }
 
     //BaseRock generated method id: ${testTableConstructorWithUrl}, hash: 206520DA09663338B6B1A5B79EBF7A57

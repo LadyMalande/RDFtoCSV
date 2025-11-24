@@ -3,7 +3,7 @@ package com.miklosova.rdftocsvw.converter;
 import com.miklosova.rdftocsvw.converter.data_structure.*;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+
 import com.miklosova.rdftocsvw.support.ConverterHelper;
 import lombok.extern.java.Log;
 import org.eclipse.rdf4j.model.*;
@@ -105,6 +105,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
         this.db = db;
         this.IRIalreadyProcessedTimes = new HashMap<>();
         this.config = config;
+        super.config = config; // Set parent's config field
     }
 
     @Override
@@ -134,8 +135,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
 
     private PrefinishedOutput<RowAndKey> queryRDFModel(String queryString, boolean askForTypes) throws IndexOutOfBoundsException {
         PrefinishedOutput<RowAndKey> gen = new PrefinishedOutput<>((new RowAndKey.RowAndKeyFactory()).factory());
-        // For backward compatibility, also save to ConfigurationManager
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
+        config.setConversionHasRdfTypes(askForTypes);
         // Query the data and pass the result as String
 
         // Query in rdf4j
@@ -226,8 +226,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                 queryString = getQueryForSubstituteRoots(askForTypes);
             }
 
-            // For backward compatibility, also save to ConfigurationManager
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
+            config.setConversionHasRdfTypes(askForTypes);
         } catch (IndexOutOfBoundsException ex) {
             throw new IndexOutOfBoundsException();
         }
@@ -297,8 +296,8 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                 /*
                 // This route would make cascade header structure, but the problem is, when the data start to multiply and each of the contents starts having its own structure.
                 // This solution works fine for shallow cascade, like Code lists, but it is not detailed enough for complex RDF structures with a lot of dependences between nodes.
-                if(ConfigurationManager.getVariableFromConfigFile("simpleBasicQuery") != null && ConfigurationManager.getVariableFromConfigFile("simpleBasicQuery").equalsIgnoreCase("false")) {
-                    if (solution.getValue("o") != null && solution.getValue("o").isIRI()) {
+                // Note: simpleBasicQuery check removed with ConfigurationManager
+                if (solution.getValue("o") != null && solution.getValue("o").isIRI()) {
                         if (solution.getValue("o") != root) {
                             queryForSubjects(conn, newRow, root, solution.getValue("o"), level + 1);
                         }
@@ -392,13 +391,13 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
         Repository newdb = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService(config);
 
-        String readMethod = (config != null) ? config.getParsing() : 
-            ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD);
-        String inputFilename = (config != null) ? config.getFile() : 
-            ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME);
+        if (config == null) {
+            throw new IllegalStateException("AppConfig is required");
+        }
+        String readMethod = config.getParsing();
+        String inputFilename = config.getFile();
         try {
-            // For backward compatibility, also save to ConfigurationManager
-            ConfigurationManager.saveVariableToConfigFile("simpleBasicQuery", "true");
+            config.setSimpleBasicQuery(true);
             RepositoryConnection newRc = methodService.processInput(inputFilename, readMethod, newdb);
             PrefinishedOutput<RowsAndKeys> rk = new PrefinishedOutput<>((new RowsAndKeys.RowsAndKeysFactory()).factory());
             rk = cs.convertByQuery(newRc, newdb);

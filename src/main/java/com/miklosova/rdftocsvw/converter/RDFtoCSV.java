@@ -11,7 +11,6 @@ import com.miklosova.rdftocsvw.output_processor.FinalizedOutput;
 import com.miklosova.rdftocsvw.output_processor.StreamingNTriplesWrite;
 import com.miklosova.rdftocsvw.output_processor.ZipOutputProcessor;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.JsonUtil;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -124,9 +123,6 @@ public class RDFtoCSV {
         if (isUrl(fileName)) {
             this.filePathForOutput = iri(this.fileName).getLocalName();
         }
-        // For backward compatibility, also save to ConfigurationManager
-        ConfigurationManager.createConfigFile();
-        ConfigurationManager.processConfigMap(fileName, null);
     }
 
     /**
@@ -163,8 +159,6 @@ public class RDFtoCSV {
         if (isUrl(fileName)) {
             this.filePathForOutput = iri(this.fileName).getLocalName();
         }
-        // For backward compatibility, also save to ConfigurationManager
-        ConfigurationManager.processConfigMap(fileName, configMap);
     }
 
     /**

@@ -3,7 +3,6 @@ package com.miklosova.rdftocsvw.metadata_creator;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.AppConfig;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -836,8 +835,7 @@ public class Dereferencer {
      */
     private List<String> loadPreferredLanguages(AppConfig config) {
         logger.info("loadPreferredLanguages config: " + config.getPreferredLanguages());
-        String configValue = (config != null) ? config.getPreferredLanguages() : 
-            ConfigurationManager.loadConfig("app.preferredLanguages");
+        String configValue = config.getPreferredLanguages();
         if (configValue == null || configValue.trim().isEmpty()) {
             return Arrays.asList("en", "cs"); // default fallback
         }

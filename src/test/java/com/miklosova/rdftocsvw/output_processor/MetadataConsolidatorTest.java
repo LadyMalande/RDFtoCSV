@@ -6,7 +6,7 @@ import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.support.BaseTest;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.JsonUtil;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
@@ -45,9 +45,13 @@ public class MetadataConsolidatorTest extends BaseTest {
         this.filePathForOutput = filePathForOutput;
         this.outputFile = outputFile;
         this.expectedMetadataFile = expectedMetadataFile;
-        rdfToCSV = new RDFtoCSV(filePath);
+        AppConfig config = new AppConfig.Builder(filePath)
+                .parsing(PROCESS_METHOD)
+                .output(filePathForOutput)
+                .outputMetadata(filePathForMetadata)
+                .build();
+        rdfToCSV = new RDFtoCSV(config);
         db = new SailRepository(new MemoryStore());
-        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{"-f", filePath});
     }
 
     @Parameterized.Parameters(name = "{0}")
@@ -68,9 +72,12 @@ public class MetadataConsolidatorTest extends BaseTest {
     @BeforeEach
     void loadMetadata() {
         System.out.println("load metadata from file " + expectedMetadataFile);
-
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
-        MethodService methodService = new MethodService();
+        AppConfig config = new AppConfig.Builder(filePath)
+                .parsing(PROCESS_METHOD)
+                .output(filePathForOutput)
+                .outputMetadata(filePathForMetadata)
+                .build();
+        MethodService methodService = new MethodService(config);
         RepositoryConnection rc = null;
         try {
             rc = methodService.processInput(filePath, PROCESS_METHOD, db);
@@ -78,24 +85,25 @@ public class MetadataConsolidatorTest extends BaseTest {
             throw new RuntimeException(e);
         }
         assert (rc != null);
-
         this.expectedMetadata = metadata;
     }
 
     @Test
     public void isGivenDatatype() {
-        //ConfigurationManager.getCONFIG_FILE_NAME();
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, outputFile);
         logger.info("Starting test isGivenDatatype in MetadataConsolidatorTest.");
-        //createMetadata();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Metadata unconsolidatedMetadata = null;
+        AppConfig config = new AppConfig.Builder(filePath)
+                .parsing(PROCESS_METHOD)
+                .output(filePathForOutput)
+                .outputMetadata(filePathForMetadata)
+                .build();
         try {
             unconsolidatedMetadata = objectMapper.readValue(new File(filePathForMetadata), Metadata.class);
-            MetadataConsolidator mc = new MetadataConsolidator();
-            Metadata consolidatedMetadata = mc.consolidateMetadata(unconsolidatedMetadata);
-            JsonUtil.serializeAndWriteToFile(consolidatedMetadata);
+            MetadataConsolidator mc = new MetadataConsolidator(config);
+            Metadata consolidatedMetadata = mc.consolidateMetadata(unconsolidatedMetadata, config);
+            JsonUtil.serializeAndWriteToFile(consolidatedMetadata, config);
             JSONObject jsonObject = readJSONFile(filePathForMetadata);
             System.out.println(jsonObject.toJSONString());
         } catch (IOException e) {

@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 
 public class BaseTest {
     public static final Logger logger = Logger.getLogger(BaseTest.class.getName());
-    private static final Logger LOGGER = Logger.getLogger(BaseTest.class.getName());
     public Metadata testMetadata;
     public Repository db;
     public RepositoryConnection conn;
@@ -33,13 +32,17 @@ public class BaseTest {
     public Row firstRow, secondRow, thirdRow, fourthRow;
 
     public ArrayList<Row> rows, rows1;
+    public AppConfig config;
 
     @BeforeEach
     public void initialize() {
-        rdfToCSV = new RDFtoCSV(fileName);
         db = new SailRepository(new MemoryStore());
         args = new String[]{"-f", "test.rdf", "-p", "rdf4j"};
-        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
+        config = new AppConfig.Builder(fileName)
+                .parsing(PROCESS_METHOD)
+                .build();
+        rdfToCSV = new RDFtoCSV(config);
+
     }
 
     @AfterEach

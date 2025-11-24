@@ -72,6 +72,7 @@ public class AppConfig {
     private final Boolean streaming;
     private final Boolean firstNormalForm;
     private final String output;
+    private final String outputMetadata;
     private String columnNamingConvention;
     private final String preferredLanguages;
 
@@ -246,6 +247,7 @@ public class AppConfig {
         this.streaming = builder.streaming != null ? builder.streaming : DEFAULT_STREAMING;
         this.firstNormalForm = builder.firstNormalForm != null ? builder.firstNormalForm : DEFAULT_FIRST_NORMAL_FORM;
         this.output = builder.output; // Can be null - handled in initializeRuntimeParameters
+        this.outputMetadata = builder.outputMetadata;
         this.columnNamingConvention = builder.columnNamingConvention != null ? builder.columnNamingConvention : DEFAULT_COLUMN_NAMING_CONVENTION;
         this.preferredLanguages = builder.preferredLanguages != null ? builder.preferredLanguages : DEFAULT_PREFERRED_LANGUAGES;
 
@@ -271,7 +273,7 @@ public class AppConfig {
         this.simpleBasicQuery = DEFAULT_SIMPLE_BASIC_QUERY;
 
         // Calculate output file path and zip file name
-        String baseFileName = ConfigurationManager.getBaseFileName(file, output);
+        String baseFileName = getBaseFileName(file, output);
         this.outputFilePath = output != null ? output : baseFileName;
         this.outputZipFileName = baseFileName + "_CSVW.zip";
         this.outputFileName = baseFileName; // Initialize to base file name
@@ -304,6 +306,7 @@ public class AppConfig {
         private Boolean streaming = DEFAULT_STREAMING;
         private Boolean firstNormalForm = DEFAULT_FIRST_NORMAL_FORM;
         private String output = null;
+        private String outputMetadata = null;
         private String columnNamingConvention;
         private String preferredLanguages = DEFAULT_PREFERRED_LANGUAGES;
 
@@ -365,6 +368,16 @@ public class AppConfig {
          */
         public Builder output(String output) {
             this.output = output;
+            return this;
+        }
+
+        /**
+         * Sets the output metadata file path.
+         * @param outputMetadata The output metadata file path.
+         * @return The builder instance.
+         */
+        public Builder outputMetadata(String outputMetadata) {
+            this.outputMetadata = outputMetadata;
             return this;
         }
 
@@ -526,6 +539,7 @@ public class AppConfig {
         this.streaming = DEFAULT_STREAMING;
         this.firstNormalForm = DEFAULT_FIRST_NORMAL_FORM;
         this.output = DEFAULT_OUTPUT;
+        this.outputMetadata = null;
         this.preferredLanguages = DEFAULT_PREFERRED_LANGUAGES;
         initializeRuntimeParameters();
     }
@@ -543,6 +557,7 @@ public class AppConfig {
         this.streaming = DEFAULT_STREAMING;
         this.firstNormalForm = DEFAULT_FIRST_NORMAL_FORM;
         this.output = DEFAULT_OUTPUT;
+        this.outputMetadata = null;
         //this.columnNamingConvention = DEFAULT_COLUMN_NAMING_CONVENTION;
         this.preferredLanguages = DEFAULT_PREFERRED_LANGUAGES;
         initializeRuntimeParameters();
@@ -599,5 +614,27 @@ public class AppConfig {
 
     public Boolean getDEFAULT_CONVERSION_HAS_RDF_TYPES() {
         return DEFAULT_CONVERSION_HAS_RDF_TYPES;
+    }
+
+    /**
+     * Returns the base file name (without extension) for the given input file and output file.
+     * If output is provided, uses its base name; otherwise, uses the input file's base name.
+     * @param inputFile The input file path or URL
+     * @param outputFile The output file path (optional)
+     * @return The base file name without extension
+     */
+    public static String getBaseFileName(String inputFile, String outputFile) {
+        String fileName = (outputFile != null && !outputFile.isEmpty()) ? outputFile : inputFile;
+        // Remove any path
+        int lastSlash = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
+        if (lastSlash >= 0) {
+            fileName = fileName.substring(lastSlash + 1);
+        }
+        // Remove extension
+        int lastDot = fileName.lastIndexOf('.');
+        if (lastDot > 0) {
+            fileName = fileName.substring(0, lastDot);
+        }
+        return fileName;
     }
 }

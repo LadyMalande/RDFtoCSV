@@ -15,15 +15,12 @@ import org.eclipse.rdf4j.sparqlbuilder.core.SparqlBuilder;
 import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-
-import static com.miklosova.rdftocsvw.support.ConfigurationManager.getCONFIG_FILE_NAME;
 
 public class FormatsProcessingTest extends BaseTest {
 
@@ -52,7 +49,7 @@ public class FormatsProcessingTest extends BaseTest {
     @BeforeEach
     public void prepareConnectionAndResult() {
         valuesFromTurtle = new HashSet<>();
-        msForTurtle = new MethodService();
+        msForTurtle = new MethodService(config);
         dbForTurtle = new SailRepository(new MemoryStore());
         try (RepositoryConnection rcForTurtle = msForTurtle.processInput(filePathForTurtle, inputProcessingMethod, dbForTurtle)) {
             queryString = prepareQuery();
@@ -73,10 +70,9 @@ public class FormatsProcessingTest extends BaseTest {
 
     @BeforeEach
     public void setUp() {
-        getCONFIG_FILE_NAME();
-        String filePath = "src/test/resources/differentSerializations/testingInput.ttl";
-        String fileOutput = "src/test/resources/csvFileToTestSameCSV";
-        ms = new MethodService();
+        //String filePath = "src/test/resources/differentSerializations/testingInput.ttl";
+        //String fileOutput = "src/test/resources/csvFileToTestSameCSV";
+        ms = new MethodService(config);
         db = new SailRepository(new MemoryStore());
 
         SelectQuery selectQuery = Queries.SELECT();

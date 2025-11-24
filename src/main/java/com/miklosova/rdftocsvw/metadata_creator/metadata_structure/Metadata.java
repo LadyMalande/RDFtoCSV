@@ -63,7 +63,7 @@ public class Metadata {
         SORTED_MAPPER.registerModule(new JsonldModule());
 
         // Print the resulting JSON
-        return JsonUtil.serializeAndWriteToFile(this);
+        return JsonUtil.serializeAndWriteToFile(this, this.config);
     }
 
     public void addMetadata(String newFileName, ArrayList<Value> keys, ArrayList<Row> rows) {

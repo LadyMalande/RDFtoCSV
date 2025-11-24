@@ -1,78 +1,136 @@
 {
-  "@context": "http://www.w3.org/ns/csvw",
-  "@type": "TableGroup",
-  "tables": [
-    {
-      "@type": "Table",
-      "url": "0.csv",
-      "tableSchema": {
-        "@type": "Schema",
-        "columns": [
-          {
-            "@type": "Column",
-            "titles": "Subject",
-            "name": "Subject",
-            "valueUrl": "http://example.org/{+Subject}",
-            "suppressOutput": true
-          },
-          {
-            "@type": "Column",
-            "titles": "type",
-            "name": "type",
-            "propertyUrl": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-            "valueUrl": "{+type}",
-            "aboutUrl": "http://example.org/{+Subject}"
-          },
-          {
-            "@type": "Column",
-            "titles": "Creator",
-            "name": "creator",
-            "propertyUrl": "http://purl.org/dc/terms/creator",
-            "valueUrl": "http://example.org/{+creator}",
-            "aboutUrl": "http://example.org/{+Subject}"
-          },
-          {
-            "@type": "Column",
-            "titles": "Title (cs)",
-            "name": "title_cs",
-            "propertyUrl": "http://purl.org/dc/terms/title",
-            "aboutUrl": "http://example.org/{+Subject}",
-            "lang": "cs"
-          },
-          {
-            "@type": "Column",
-            "titles": "Title (en)",
-            "name": "title_en",
-            "propertyUrl": "http://purl.org/dc/terms/title",
-            "aboutUrl": "http://example.org/{+Subject}",
-            "lang": "en"
-          },
-          {
-            "@type": "Column",
-            "titles": "datatypeTest",
-            "name": "datatypeTest",
-            "propertyUrl": "http://example.org/datatypeTest",
-            "datatype": "integer",
-            "aboutUrl": "http://example.org/{+Subject}"
-          },
-          {
-            "@type": "Column",
-            "propertyUrl": "rdf:type",
-            "valueUrl": "{+type}",
-            "aboutUrl": "http://example.org/{+Text}",
-            "virtual": true
-          }
-        ],
-        "primaryKey": "Subject",
-        "rowTitles": [
-          "Subject",
-          "type",
-          "creator",
-          "title_cs",
-          "title_en",
-          "datatypeTest"
-        ]
-      }
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "testingInputForTwoEntities.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "http://example.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "datatypeTest",
+        "name" : "datatypeTest",
+        "propertyUrl" : "http://example.org/datatypeTest",
+        "valueUrl" : "{+datatypeTest}",
+        "datatype" : "integer",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Creator",
+        "name" : "creator",
+        "propertyUrl" : "http://purl.org/dc/terms/creator",
+        "valueUrl" : "http://example.org/{+creator}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (cs)",
+        "name" : "title_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "valueUrl" : "{+title_cs}",
+        "aboutUrl" : "http://example.org/{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (en)",
+        "name" : "title_en",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "valueUrl" : "{+title_en}",
+        "aboutUrl" : "http://example.org/{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "http://example.org/{+Text}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "datatypeTest", "creator", "title_cs", "title_en", "type" ]
+    },
+    "config" : {
+      "file" : "./src/test/resources/testingInputForTwoEntities.ttl",
+      "logLevel" : "INFO",
+      "multipleTables" : false,
+      "parsing" : "rdf4j",
+      "streaming" : false,
+      "firstNormalForm" : true,
+      "columnNamingConvention" : "original",
+      "preferredLanguages" : "en,cs",
+      "conversionMethod" : "basicQuery",
+      "intermediateFileNames" : "testingInputForTwoEntities.csv,",
+      "conversionHasBlankNodes" : false,
+      "conversionHasRdfTypes" : true,
+      "outputZipFileName" : "testingInputForTwoEntities_CSVW.zip",
+      "readMethod" : "rdf4j",
+      "metadataRowNums" : false,
+      "outputFilePath" : "./src/test/resources/testingInputForTwoEntities.ttl",
+      "outputMetadataFileName" : "./src/test/resources/testingInput.csv-metadata.json",
+      "outputFileName" : "testingInputForTwoEntities",
+      "streamingContinuous" : false,
+      "simpleBasicQuery" : false,
+      "inputFileName" : "./src/test/resources/testingInputForTwoEntities.ttl",
+      "default_CONVERSION_HAS_RDF_TYPES" : true,
+      "default_CONVERSION_HAS_BLANK_NODES" : false,
+      "default_PARSING" : "rdf4j",
+      "default_OUTPUT" : "RDFtoCSVOutput.csv",
+      "default_MULTIPLE_TABLES" : false,
+      "default_CONVERSION_METHOD" : "basicQuery",
+      "default_METADATA_ROWNUMS" : false,
+      "default_READ_METHOD" : "rdf4j",
+      "default_STREAMING" : false,
+      "default_LOG_LEVEL" : "INFO",
+      "default_STREAMING_CONTINUOUS" : false,
+      "default_SIMPLE_BASIC_QUERY" : false,
+      "default_FIRST_NORMAL_FORM" : true
     }
-  ]
+  } ],
+  "config" : {
+    "file" : "./src/test/resources/testingInputForTwoEntities.ttl",
+    "logLevel" : "INFO",
+    "multipleTables" : false,
+    "parsing" : "rdf4j",
+    "streaming" : false,
+    "firstNormalForm" : true,
+    "columnNamingConvention" : "original",
+    "preferredLanguages" : "en,cs",
+    "conversionMethod" : "basicQuery",
+    "intermediateFileNames" : "testingInputForTwoEntities.csv,",
+    "conversionHasBlankNodes" : false,
+    "conversionHasRdfTypes" : true,
+    "outputZipFileName" : "testingInputForTwoEntities_CSVW.zip",
+    "readMethod" : "rdf4j",
+    "metadataRowNums" : false,
+    "outputFilePath" : "./src/test/resources/testingInputForTwoEntities.ttl",
+    "outputMetadataFileName" : "./src/test/resources/testingInput.csv-metadata.json",
+    "outputFileName" : "testingInputForTwoEntities",
+    "streamingContinuous" : false,
+    "simpleBasicQuery" : false,
+    "inputFileName" : "./src/test/resources/testingInputForTwoEntities.ttl",
+    "default_CONVERSION_HAS_RDF_TYPES" : true,
+    "default_CONVERSION_HAS_BLANK_NODES" : false,
+    "default_PARSING" : "rdf4j",
+    "default_OUTPUT" : "RDFtoCSVOutput.csv",
+    "default_MULTIPLE_TABLES" : false,
+    "default_CONVERSION_METHOD" : "basicQuery",
+    "default_METADATA_ROWNUMS" : false,
+    "default_READ_METHOD" : "rdf4j",
+    "default_STREAMING" : false,
+    "default_LOG_LEVEL" : "INFO",
+    "default_STREAMING_CONTINUOUS" : false,
+    "default_SIMPLE_BASIC_QUERY" : false,
+    "default_FIRST_NORMAL_FORM" : true
+  }
 }

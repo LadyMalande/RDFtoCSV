@@ -1,11 +1,12 @@
 package com.miklosova.rdftocsvw.output_processor;
 
 
+import com.miklosova.rdftocsvw.metadata_creator.StreamingMetadataCreator;
 import com.miklosova.rdftocsvw.metadata_creator.Triple;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+
 import com.miklosova.rdftocsvw.support.Main;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
@@ -21,7 +22,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.miklosova.rdftocsvw.metadata_creator.StreamingMetadataCreator.processLineIntoTriple;
 import static com.miklosova.rdftocsvw.output_processor.FileWrite.writeToTheFile;
 import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -51,6 +51,11 @@ public class StreamingNTriplesWrite {
      * The AppConfig instance.
      */
     private AppConfig config;
+    
+    /**
+     * Helper for processing triples with blank node handling.
+     */
+    private StreamingMetadataCreator metadataCreator;
 
     /**
      * Instantiates a new Streaming n triples write.
@@ -75,15 +80,12 @@ public class StreamingNTriplesWrite {
         this.config = config;
         fileToWriteTo = FileWrite.makeFileByNameAndExtension(fileName, "csv");
         assert fileToWriteTo != null;
-        // For backward compatibility, also save to ConfigurationManager
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileToWriteTo.toString());
         config.setIntermediateFileNames(fileToWriteTo.toString());
         this.metadata = metadata;
-        String fileNameFromConfig = (config != null && config.getFile() != null) ? config.getFile() :
-            ConfigurationManager.getVariableFromConfigFile("input.inputFileName");
-
+        String fileNameFromConfig = config.getFile();
         this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) :  fileNameFromConfig;
         processedSubjects = new HashSet<>();
+        this.metadataCreator = new StreamingMetadataCreator(config);
     }
 
     /**
@@ -174,7 +176,7 @@ public class StreamingNTriplesWrite {
             Column firstColumn = metadata.getTables().get(0).getTableSchema().getColumns().get(0);
 
             while ((line = reader.readLine()) != null) {
-                Triple triple = processLineIntoTriple(line);
+                Triple triple = metadataCreator.processLineIntoTriple(line);
                 if (firstColumn.getValueUrl() == null) {
                     if (triple.getSubject().isBNode()) {
                         firstColumn.setValueUrl("{+Subject}");
@@ -226,7 +228,7 @@ public class StreamingNTriplesWrite {
      * @param grid The temporary representation for the CSV
      */
     private void processLine(String line, CSVOutputGrid grid) {
-        Triple triple = processLineIntoTriple(line);
+        Triple triple = metadataCreator.processLineIntoTriple(line);
         if (currentSubjects.contains(triple.getSubject())) {
             String keyForColumn = Column.getNameFromIRI(triple.getPredicate(), triple.getObject());
             if (grid.getCsvOutputBuffer().get(triple.getSubject()).containsKey(keyForColumn)) {

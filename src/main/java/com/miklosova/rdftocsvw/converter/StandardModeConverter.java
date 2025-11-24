@@ -2,7 +2,7 @@ package com.miklosova.rdftocsvw.converter;
 
 import com.miklosova.rdftocsvw.converter.data_structure.*;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Statement;
@@ -101,8 +101,7 @@ public class StandardModeConverter implements IQueryParser {
     @Override
     public PrefinishedOutput<RowsAndKeys> convertWithQuery(RepositoryConnection rc) {
         PrefinishedOutput<RowsAndKeys> gen = new PrefinishedOutput<>(new RowsAndKeys.RowsAndKeysFactory().factory());
-        // For backward compatibility, also save to ConfigurationManager
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(true));
+        config.setConversionHasRdfTypes(true);
 
         allRows = new ArrayList<>();
         allKeys = new ArrayList<>();
@@ -168,16 +167,10 @@ public class StandardModeConverter implements IQueryParser {
 
                 Value fileIRI = solution.getValue("o");
                 String fileName = extractFileName(fileIRI);
-                // For backward compatibility, also save to ConfigurationManager
                 config.setIntermediateFileNames(fileName);
                 config.setOutputFileName(fileName);
 
-                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileName);
-                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, fileName);
-                String outputFilePath = (config != null) ? config.getOutputFilePath() : 
-                    ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH);
-                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME,
-                        outputFilePath + fileName + "-metadata.json");
+                String outputFilePath = config.getOutputFilePath();
                 config.setOutputMetadataFileName(outputFilePath + fileName + "-metadata.json");
             }
         }
@@ -187,8 +180,7 @@ public class StandardModeConverter implements IQueryParser {
 
         Map<Value, Integer> rowNumsByRowIrisMap = buildRownumMap(conn, rowIRIs);
         if (!rowNumsByRowIrisMap.isEmpty()) {
-            // For backward compatibility, also save to ConfigurationManager
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.METADATA_ROWNUMS, "true");
+            config.setMetadataRowNums(true);
         }
         for (Value rowIRI : rowIRIs) {
             addNewRow(conn, rowIRI);

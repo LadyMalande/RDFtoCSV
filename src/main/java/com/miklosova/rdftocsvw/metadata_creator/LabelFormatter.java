@@ -1,7 +1,7 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+
 
 import java.util.Arrays;
 import java.util.logging.Logger;
@@ -29,8 +29,10 @@ public class LabelFormatter {
     public static String changeLabelToTheConfiguredFormat(String originalLabel, AppConfig config) {
         String formattedLabel = null;
         logger.info("Configuration for app.columnNamingConvention in changeLabelToTheConfiguredFormat = " + config.getColumnNamingConvention());
-        String formatting = (config != null) ? config.getColumnNamingConvention() : 
-            ConfigurationManager.loadConfig("app.columnNamingConvention");
+        if (config == null) {
+            return originalLabel; // Return original if no config
+        }
+        String formatting = config.getColumnNamingConvention();
 
         logger.info("Configuration for app.columnNamingConvention = " + formatting);
 
@@ -56,7 +58,7 @@ public class LabelFormatter {
             case DOT_NOTATION_CASE_CONFIG_STRING:
                 formattedLabel = toDotNotation(originalLabel);
                 break;
-            case ORIGINAL_NAMING_NOTATION:
+            case AppConfig.ORIGINAL_NAMING_NOTATION:
             default:
                 formattedLabel = originalLabel;
         }

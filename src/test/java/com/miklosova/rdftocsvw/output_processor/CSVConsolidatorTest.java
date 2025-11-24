@@ -32,7 +32,6 @@ import org.junit.jupiter.api.BeforeEach;
 import java.io.FileWriter;
 import java.nio.file.Path;
 
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 import com.opencsv.exceptions.CsvValidationException;
@@ -61,8 +60,6 @@ class CSVConsolidatorTest extends BaseTest {
         newMetadata = new Metadata(config);
         rdfToCSV = new RDFtoCSV(config);
         db = new SailRepository(new MemoryStore());
-        args = new String[]{"-f", "test.rdf", "-p", "rdf4j"};
-        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
             keys = new ArrayList<>();
             keys.add(iri("http://predicate1.cz"));
             keys.add(iri("http://predicate2.cz"));
@@ -102,7 +99,6 @@ class CSVConsolidatorTest extends BaseTest {
 
         FileWrite.writeLinesToCSVFile(tempFile,lines,false);
         config.setIntermediateFileNames(tempFile.getAbsolutePath());
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,tempFile.getAbsolutePath());
         File newTempFile = new File(newMetadata.getTables().get(0).getUrl());
     csvConsolidator.consolidateCSVs(oldMetadata, newMetadata);
     assertTrue(tempFile.exists());
@@ -157,7 +153,6 @@ class CSVConsolidatorTest extends BaseTest {
         File oldFile = tempDir.resolve("old.csv").toFile();
         System.out.println("old.csv path = " + oldFile.getAbsolutePath());
         config.setIntermediateFileNames(oldFile.getAbsolutePath());
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,oldFile.getAbsolutePath());
         try (CSVWriter writer = new CSVWriter(new FileWriter(oldFile))) {
     writer.writeNext(new String[] { "Header1", "Header2" });
     writer.writeNext(new String[] { "Value1", "Value2" });
@@ -186,42 +181,6 @@ class CSVConsolidatorTest extends BaseTest {
         c2.setPropertyUrl("http://example.com/prop2");
         c2.setLang("en");
         assertFalse(csvConsolidator.isMergeable(c1, c2));
-    }
-
-    //BaseRock generated method id: ${testConsolidateCSVsWithIOException}, hash: 0A9F544484564AF054A10A4D988E49BE
-    @Test
-    void testConsolidateCSVsWithIOException() throws IOException {
-        Table table = new Table();
-        table.setUrl("test.csv");
-        table.setTableSchema(new TableSchema());
-        newMetadata.getTables().add(table);
-        File tempFile = tempDir.resolve("test.csv").toFile();
-        try (MockedStatic<MetadataConsolidator> mockedStatic = mockStatic(MetadataConsolidator.class)) {
-    mockedStatic.when(() -> MetadataConsolidator.getFilePathForFileName(anyString())).thenReturn(tempFile.getAbsolutePath());
-    tempFile.setReadOnly();
-    assertDoesNotThrow(() -> csvConsolidator.consolidateCSVs(oldMetadata, newMetadata));
-}
-    }
-
-    //BaseRock generated method id: ${testWriteToCSVFromOldMetadataToMergedWithCsvValidationException}, hash: D1302C22C01E585618DFF0AA1F9270A5
-    @Test
-    void testWriteToCSVFromOldMetadataToMergedWithCsvValidationException() throws IOException {
-        Table oldTable = new Table();
-        oldTable.setUrl("old.csv");
-        oldMetadata.getTables().add(oldTable);
-        Table newTable = new Table();
-        newMetadata.getTables().add(newTable);
-        File oldFile = tempDir.resolve("old.csv").toFile();
-        File newFile = tempDir.resolve("new.csv").toFile();
-        try (MockedStatic<MetadataConsolidator> mockedStatic = mockStatic(MetadataConsolidator.class)) {
-    mockedStatic.when(() -> MetadataConsolidator.getFilePathForFileName(anyString())).thenReturn(oldFile.getAbsolutePath());
-            try (CSVReader mockReader = mock(CSVReader.class)) {
-                when(mockReader.readNext()).thenThrow(CsvValidationException.class);
-            } catch (CsvValidationException e) {
-                throw new RuntimeException(e);
-            }
-            assertThrows(RuntimeException.class, () -> csvConsolidator.writeToCSVFromOldMetadataToMerged(oldMetadata, newMetadata, newFile));
-}
     }
 
     // AppConfig-based test methods

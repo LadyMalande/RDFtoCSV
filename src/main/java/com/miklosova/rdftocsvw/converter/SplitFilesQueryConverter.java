@@ -4,7 +4,7 @@ import com.miklosova.rdftocsvw.converter.data_structure.*;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+
 import com.miklosova.rdftocsvw.support.ConverterHelper;
 import lombok.extern.java.Log;
 import org.eclipse.rdf4j.model.*;
@@ -130,6 +130,7 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
         this.fileNamesCreated = new ArrayList<>();
         this.metadata = new Metadata(config);
         this.config = config;
+        super.config = config; // Set parent's config field
     }
 
 
@@ -155,8 +156,7 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
     private PrefinishedOutput<RowsAndKeys> queryRDFModel(String queryString, boolean askForTypes) {
         rows = new ArrayList<>();
         PrefinishedOutput<RowsAndKeys> gen = new PrefinishedOutput<>((new RowsAndKeys.RowsAndKeysFactory()).factory());
-        // For backward compatibility, also save to ConfigurationManager
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
+        config.setConversionHasRdfTypes(askForTypes);
         // Query the data and pass the result as String
         ConnectionPool connectionPool = new ConnectionPool(db, Runtime.getRuntime().availableProcessors());
         // Query in rdf4j
@@ -223,8 +223,7 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
             for (int i = 0; i < allRows.size(); i++) {
                 gen.getPrefinishedOutput().getRowsAndKeys().add(new RowAndKey(allKeys.get(i), allRows.get(i)));
             }
-            // For backward compatibility, also save to ConfigurationManager
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
+            config.setConversionHasRdfTypes(askForTypes);
 
 
         }

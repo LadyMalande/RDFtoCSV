@@ -4,7 +4,7 @@ import com.miklosova.rdftocsvw.input_processor.parsing_methods.RDF4JMethod;
 import com.miklosova.rdftocsvw.input_processor.streaming_methods.StreamingMethod;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFParseException;
@@ -56,28 +56,20 @@ public class MethodService {
         processMethodChoice(methodChoice);
         fileName = processFileOrIRI(fileName);
         
-        // Update config if available, otherwise use ConfigurationManager for backward compatibility
-        if (config != null) {
-            config.setOutputFilePath(fileName);
-            // Note: IntermediateFileNames and other runtime values are set elsewhere during conversion
-        } else {
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, fileName);
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME,  fileName+ ".csv-metadata.json");
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH,  fileName);
+        if (config == null) {
+            throw new IllegalStateException("AppConfig is required");
         }
+        config.setOutputFilePath(fileName);
+        // Note: IntermediateFileNames and other runtime values are set elsewhere during conversion
         
         File fileToRead = new File(fileName);
         try {
             return methodGateway.processInput(fileToRead, db);
         } catch(OutOfMemoryError err){
             logger.log(Level.WARNING, "The data is too big to be processed by RDF4J method. The method has been changed to 'BigFileStreaming'. Continuing processing...");
-            methodGateway.setParsingMethod(new StreamingMethod());
+            methodGateway.setParsingMethod(new StreamingMethod(config));
             
-            if (config != null) {
-                config.setConversionMethod("bigfilestreaming");
-            } else {
-                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, "bigfilestreaming");
-            }
+            config.setConversionMethod("bigfilestreaming");
             return methodGateway.processInput(fileToRead, db);
         }
     }
@@ -128,9 +120,8 @@ public class MethodService {
         logger.info("methodChoice=" + methodChoice);
         switch (methodChoice.toLowerCase()) {
             case "rdf4j" -> methodGateway.setParsingMethod(new RDF4JMethod());
-            case "streaming", "bigfilestreaming" -> methodGateway.setParsingMethod(new StreamingMethod());
-            default -> {ConfigurationManager.throwAdviceInTheTerminal();
-                throw new IllegalArgumentException("Invalid reading method");}
+            case "streaming", "bigfilestreaming" -> methodGateway.setParsingMethod(new StreamingMethod(config));
+            default -> throw new IllegalArgumentException("Invalid reading method: " + methodChoice);
         }
     }
 }

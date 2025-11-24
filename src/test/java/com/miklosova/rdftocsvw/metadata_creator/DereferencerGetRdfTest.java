@@ -8,7 +8,6 @@ import com.miklosova.rdftocsvw.models.DereferencerTestParameters;
 import com.miklosova.rdftocsvw.models.FilesParameters;
 import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.BaseTest;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.poiji.bind.Poiji;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
@@ -199,8 +198,6 @@ public class DereferencerGetRdfTest extends BaseTest {
     void createPrefinishedOutputAndMetadata(FilesParameters line) throws IOException {
         rdfToCSV = new RDFtoCSV( new AppConfig.Builder(line.getFilePath()).parsing("rdf4j").output(line.getOutputPath()).build());
         db = new SailRepository(new MemoryStore());
-        args = new String[]{"-f", line.getFilePath(), "-p", "rdf4j", "-output", line.getOutputPath()};
-        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
         try {
             rdfToCSV.convertToZip();
         } catch (IOException e) {

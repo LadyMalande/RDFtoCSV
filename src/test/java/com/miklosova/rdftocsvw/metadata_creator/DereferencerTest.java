@@ -6,7 +6,6 @@ import com.miklosova.rdftocsvw.input_processor.MethodService;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.BaseTest;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
@@ -85,45 +84,32 @@ public class DereferencerTest extends BaseTest {
     @BeforeAll
     static void createMetadata() {
 
-        AppConfig config = new AppConfig.Builder(filePath).build();
+        AppConfig config = new AppConfig.Builder(filePath)
+                .output("output.csv")
+                .outputMetadata(filePathForMetadata)
+                .build();
 
-        System.out.println("Override before each");
-        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{"-f", filePath});
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
+        config.setConversionMethod("basicQuery");
+        config.setMetadataRowNums(false);
+        config.setOutputMetadataFileName("../RDFtoCSV/src/test/resources/StreamingNTriples/testingInput.nt.csv-metadata.json");
+
 
         db = new SailRepository(new MemoryStore());
         MethodService methodService = new MethodService(config);
         RepositoryConnection rc = null;
-        try (MockedStatic<ConfigurationManager> mockedConfigManager = mockStatic(ConfigurationManager.class)) {
-            config.setOutputFilePath("output.csv");
-            config.setConversionMethod("basicQuery");
-            config.setMetadataRowNums(false);
-            config.setOutputMetadataFileName("../RDFtoCSV/src/test/resources/StreamingNTriples/testingInput.nt.csv-metadata.json");
-            config.setInputFileName("dereferenceTestInput.ttl");
-
-            mockedConfigManager.when(() -> ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILENAME)).thenReturn("output.csv");
-            mockedConfigManager.when(() -> ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME)).thenReturn("../RDFtoCSV/src/test/resources/StreamingNTriples/testingInput.nt.csv-metadata.json");
-
-            mockedConfigManager.when(() -> ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD)).thenReturn("basicQuery");
-
-            mockedConfigManager.when(() -> ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME)).thenReturn("dereferenceTestInput.ttl");
-
-            mockedConfigManager.when(() -> ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.METADATA_ROWNUMS)).thenReturn("false");
-
-            try {
-                rc = methodService.processInput(filePath, PROCESS_METHOD, db);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            assert (rc != null);
-            // Convert the table to intermediate data for processing into metadata
-            ConversionService cs = new ConversionService(config);
-            System.out.println("createMetadata @BeforeEach");
-            PrefinishedOutput prefinishedOutput = cs.convertByQuery(rc, db);
-            // Convert intermediate data into basic metadata
-            MetadataService ms = new MetadataService(config);
-            createdMetadata = ms.createMetadata(prefinishedOutput);
+        try {
+            rc = methodService.processInput(filePath, PROCESS_METHOD, db);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        assert (rc != null);
+        // Convert the table to intermediate data for processing into metadata
+        ConversionService cs = new ConversionService(config);
+        System.out.println("createMetadata @BeforeEach");
+        PrefinishedOutput prefinishedOutput = cs.convertByQuery(rc, db);
+        // Convert intermediate data into basic metadata
+        MetadataService ms = new MetadataService(config);
+        createdMetadata = ms.createMetadata(prefinishedOutput);
 
     }
 

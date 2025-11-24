@@ -18,7 +18,7 @@ package com.miklosova.rdftocsvw.metadata_creator;
  import org.junit.jupiter.api.Test;
  import org.mockito.Mock;
  import com.miklosova.rdftocsvw.output_processor.FileWrite;
- import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
  import java.util.ArrayList;
 
  import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -41,8 +41,7 @@ class SplitFilesMetadataCreatorTest {
      @Mock
      private Metadata mockMetadata;
 
-     @Mock
-     private ConfigurationManager mockConfigurationManager;
+    // Removed ConfigurationManager mock
 
      @Mock
      private FileWrite mockFileWrite;
@@ -64,49 +63,47 @@ class SplitFilesMetadataCreatorTest {
 
     AppConfig config;
 
-     @BeforeEach
-     void setUp() {
-         config = new AppConfig.Builder("test.rdf")
-                 .parsing("rdf4j")
-                 .output("test")
-                 .build();
-         rdfToCSV = new RDFtoCSV(config);
-         db = new SailRepository(new MemoryStore());
-         args = new String[]{"-f", "test.rdf", "-p", "rdf4j"};
-         ConfigurationManager.loadSettingsFromInputToConfigFile(args);
-         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, "test");
-         mockData = (PrefinishedOutput<RowsAndKeys>) mock(PrefinishedOutput.class);
+    @BeforeEach
+    void setUp() {
+        config = new AppConfig.Builder("test.rdf")
+                .parsing("rdf4j")
+                .output("test")
+                .build();
+        config.setIntermediateFileNames("test0.csv,test1.csv");
+        rdfToCSV = new RDFtoCSV(config);
+        db = new SailRepository(new MemoryStore());
+        mockData = (PrefinishedOutput<RowsAndKeys>) mock(PrefinishedOutput.class);
 
-         when(mockData.getPrefinishedOutput()).thenReturn(new RowsAndKeys());
-         mockMetadata =  mock(Metadata.class);
+        when(mockData.getPrefinishedOutput()).thenReturn(new RowsAndKeys());
+        mockMetadata =  mock(Metadata.class);
 
-         creator = new SplitFilesMetadataCreator(mockData, config);
-         creator.metadata = mockMetadata;
-         keys = new ArrayList<>();
-         keys.add(iri("http://predicate1.cz"));
-         keys.add(iri("http://predicate2.cz"));
-         keys1 = new ArrayList<>();
-         keys1.add(iri("http://predicate3.cz"));
-         keys1.add(iri("http://predicate4.cz"));
-         firstRow = new Row(iri("http://subject1.cz"), true);
-         secondRow = new Row(iri("http://subject2.cz"), iri("http://predicate1.cz") , true);
-         rows = new ArrayList<>();
-         rows.add(firstRow);
-         rows.add(secondRow);
-         thirdRow = new Row(iri("http://subject3.cz"), true);
-         fourthRow = new Row(iri("http://subject4.cz"), iri("http://predicate2.cz") , true);
-         rows1 = new ArrayList<>();
-         rows1.add(thirdRow);
-         rows1.add(fourthRow);
-         foreignKeys = new ArrayList<>();
-         foreignKeys.add(rows1);
-         foreignKeys.add(rows);
-         fileNames = new ArrayList<>();
-         fileNames.add("test0.csv");
-         fileNames.add("test1.csv");
-         oneFileNames = new ArrayList<>();
-         oneFileNames.add("test0.csv");
-     }
+        creator = new SplitFilesMetadataCreator(mockData, config);
+        creator.metadata = mockMetadata;
+        keys = new ArrayList<>();
+        keys.add(iri("http://predicate1.cz"));
+        keys.add(iri("http://predicate2.cz"));
+        keys1 = new ArrayList<>();
+        keys1.add(iri("http://predicate3.cz"));
+        keys1.add(iri("http://predicate4.cz"));
+        firstRow = new Row(iri("http://subject1.cz"), true);
+        secondRow = new Row(iri("http://subject2.cz"), iri("http://predicate1.cz") , true);
+        rows = new ArrayList<>();
+        rows.add(firstRow);
+        rows.add(secondRow);
+        thirdRow = new Row(iri("http://subject3.cz"), true);
+        fourthRow = new Row(iri("http://subject4.cz"), iri("http://predicate2.cz") , true);
+        rows1 = new ArrayList<>();
+        rows1.add(thirdRow);
+        rows1.add(fourthRow);
+        foreignKeys = new ArrayList<>();
+        foreignKeys.add(rows1);
+        foreignKeys.add(rows);
+        fileNames = new ArrayList<>();
+        fileNames.add("test0.csv");
+        fileNames.add("test1.csv");
+        oneFileNames = new ArrayList<>();
+        oneFileNames.add("test0.csv");
+    }
 
      //BaseRock generated method id: ${testConstructor}, hash: 06806DE2C2593F7D3A31DD018B067B0A
      @Test

@@ -7,7 +7,7 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
 import com.miklosova.rdftocsvw.output_processor.CSVConsolidator;
 import com.miklosova.rdftocsvw.output_processor.MetadataConsolidator;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -38,12 +38,12 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  */
 public class StreamingMetadataCreator extends MetadataCreator {
     private static final Logger logger = Logger.getLogger(StreamingMetadataCreator.class.getName());
-    private static final Map<String, Value> mapOfBlanks = new HashMap<>();
+    private final Map<String, Value> mapOfBlanks = new HashMap<>();
     /**
      * The Blank node registered to config.
      */
-    static boolean blankNodeRegisteredToConfig;
-    private static int blankNodeCounter = 0;
+    boolean blankNodeRegisteredToConfig;
+    private int blankNodeCounter = 0;
     /**
      * The application configuration.
      */
@@ -80,8 +80,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
      */
     public StreamingMetadataCreator(AppConfig config) {
         this.config = config;
-        String fileNameFromConfig = (config != null) ? config.getFile() : 
-            ConfigurationManager.getVariableFromConfigFile("input.inputFileName");
+        String fileNameFromConfig = config.getFile();
         /*
         //URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
         //File file = new File("temp.csv");
@@ -140,7 +139,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
      * @param line the line
      * @return the statement
      */
-    public static Statement replaceBlankNodesWithIRI(Statement st, String line) {
+    public Statement replaceBlankNodesWithIRI(Statement st, String line) {
         Resource subject;
         Value object;
         ValueFactory vf = SimpleValueFactory.getInstance();
@@ -159,7 +158,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
             } else {
                 if (!blankNodeRegisteredToConfig) {
                     blankNodeRegisteredToConfig = true;
-                    ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, String.valueOf(true));
+                    this.config.setConversionHasBlankNodes(true);
                 }
                 IRI v = vf.createIRI("https://blank_Nodes_IRI.org/" + blankNodeCounter);
 
@@ -175,7 +174,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
                 subject = (IRI) mapOfBlanks.get(triple[0]);
             } else {
                 if (!blankNodeRegisteredToConfig) {
-                    ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, String.valueOf(true));
+                    this.config.setConversionHasBlankNodes(true);
                     blankNodeRegisteredToConfig = true;
                 }
                 IRI v = vf.createIRI("https://blank_Nodes_IRI.org/" + blankNodeCounter);
@@ -237,7 +236,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
      * @param line the line
      * @return the triple
      */
-    public static Triple processLineIntoTriple(String line) {
+    public Triple processLineIntoTriple(String line) {
         Statement statement = processNTripleLine(line);
         Statement statementWithIRIs = replaceBlankNodesWithIRI(statement, line);
         return new Triple((IRI) statementWithIRIs.getSubject(), statementWithIRIs.getPredicate(), statementWithIRIs.getObject());
@@ -251,8 +250,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
     public void repairMetadataAndMakeItJsonld(Metadata metadata) {
         makeMetadataNameUnique(metadata);
         metadata.getTables().forEach(table -> table.getTableSchema().addRowTitles());
-        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.TABLES).equalsIgnoreCase(ConfigurationManager.ONE_TABLE)) {
-
+        if (!config.getMultipleTables()) {
             metadata = consolidateMetadataAndCSVs(metadata);
         }
         metadata.jsonldMetadata();

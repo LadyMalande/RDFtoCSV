@@ -5,7 +5,6 @@ import com.miklosova.rdftocsvw.converter.data_structure.Row;
 import com.miklosova.rdftocsvw.converter.data_structure.TypeIdAndValues;
 import com.miklosova.rdftocsvw.converter.data_structure.TypeOfValue;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.ConnectionChecker;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.IRI;
@@ -197,8 +196,7 @@ public class TableSchema {
         this.columns = createColumns(this.rows);
 
         String metadataRownums = (effectiveConfig != null && effectiveConfig.getMetadataRowNums() != null) ? 
-            String.valueOf(effectiveConfig.getMetadataRowNums()) :
-            ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.METADATA_ROWNUMS);
+            String.valueOf(effectiveConfig.getMetadataRowNums()) : "false";
         if (metadataRownums != null && metadataRownums.equalsIgnoreCase("true")) {
             addRowNumsColumn();
         }

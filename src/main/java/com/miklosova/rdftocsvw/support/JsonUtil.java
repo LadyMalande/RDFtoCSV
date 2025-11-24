@@ -53,24 +53,7 @@ public class JsonUtil {
 
     }
 
-    /**
-     * Write json to file.
-     *
-     * @param resultNode The serialized object to write to file.
-     * @deprecated Use {@link #writeJsonToFile(ObjectNode, AppConfig)} instead
-     */
-    @Deprecated
-    public static void writeJsonToFile(ObjectNode resultNode) {
-        // Serialize the final object to a JSON string
-        String metadataFilename = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
-        logger.log(Level.INFO, "metadataFilename = " + metadataFilename);
-        FileWrite.deleteFile(metadataFilename);
-        try {
-            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(metadataFilename), resultNode);
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getCause() + " " + e.getLocalizedMessage());
-        }
-    }
+
 
     /**
      * Write json to file using AppConfig.
@@ -79,10 +62,11 @@ public class JsonUtil {
      * @param config The application configuration
      */
     public static void writeJsonToFile(ObjectNode resultNode, AppConfig config) {
+        if (config == null) {
+            throw new IllegalArgumentException("AppConfig cannot be null");
+        }
         // Serialize the final object to a JSON string
-        String metadataFilename = (config != null && config.getOutputMetadataFileName() != null) ? 
-            config.getOutputMetadataFileName() : 
-            ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
+        String metadataFilename = config.getOutputMetadataFileName();
         logger.log(Level.INFO, "metadataFilename = " + metadataFilename);
         FileWrite.deleteFile(metadataFilename);
         try {
@@ -97,21 +81,11 @@ public class JsonUtil {
      *
      * @param obj The object to serialize and write to file.
      * @return The serialized JSON object String.
+     * @deprecated Use {@link #serializeAndWriteToFile(Object, AppConfig)} instead
      */
+    @Deprecated
     public static String serializeAndWriteToFile(Object obj) {
-        ObjectNode resultNode = null;
-        try {
-            resultNode = serializeWithContext(obj);
-        } catch (JsonProcessingException e) {
-            logger.log(Level.SEVERE, e.getCause() + " " + e.getLocalizedMessage());
-        }
-        writeJsonToFile(resultNode);
-        try {
-            return mapper.writeValueAsString(resultNode);
-        } catch (JsonProcessingException e) {
-            logger.log(Level.SEVERE, e.getCause() + " " + e.getLocalizedMessage());
-            return null;
-        }
+        throw new UnsupportedOperationException("serializeAndWriteToFile requires AppConfig. Use serializeAndWriteToFile(obj, config) instead.");
     }
 
     /**

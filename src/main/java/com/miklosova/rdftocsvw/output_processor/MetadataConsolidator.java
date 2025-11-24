@@ -5,7 +5,6 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.opencsv.CSVReader;
 import org.jruby.ir.Tuple;
 
@@ -22,20 +21,16 @@ import java.util.logging.Logger;
  */
 public class MetadataConsolidator {
     private static final Logger logger = Logger.getLogger(MetadataConsolidator.class.getName());
-    private AppConfig config;
-
-    /**
-     * Default constructor for backward compatibility.
-     */
-    public MetadataConsolidator() {
-        this.config = null;
-    }
+    private final AppConfig config;
 
     /**
      * Constructor with AppConfig.
      * @param config The application configuration
      */
     public MetadataConsolidator(AppConfig config) {
+        if (config == null) {
+            throw new IllegalArgumentException("AppConfig cannot be null");
+        }
         this.config = config;
     }
 
@@ -67,19 +62,6 @@ public class MetadataConsolidator {
     }
 
     /**
-     * Consolidate metadata metadata.
-     *
-     * @param oldMetadata the old metadata
-     * @return the metadata
-     * @deprecated Use {@link #consolidateMetadata(Metadata, AppConfig)} instead
-     */
-    @Deprecated
-    public Metadata consolidateMetadata(Metadata oldMetadata) {
-        AppConfig appConfig = (this.config != null) ? this.config : null;
-        return consolidateMetadata(oldMetadata, appConfig);
-    }
-
-    /**
      * Consolidate metadata metadata with AppConfig.
      *
      * @param oldMetadata the old metadata
@@ -89,10 +71,8 @@ public class MetadataConsolidator {
     public Metadata consolidateMetadata(Metadata oldMetadata, AppConfig config) {
         Metadata newMetadata = new Metadata(config);
         Map<String, Integer> occurrencesOfColumnName = new HashMap<>();
-        // Use provided config, or instance config, or fall back to ConfigurationManager
         AppConfig effectiveConfig = (config != null) ? config : this.config;
-        String outputFilename = (effectiveConfig != null) ? effectiveConfig.getOutputFilePath() :
-            ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILENAME);
+        String outputFilename = effectiveConfig.getOutputFilePath();
         File f = new File(outputFilename);
 
         String nameExtension = "_merged.csv";
@@ -126,19 +106,6 @@ public class MetadataConsolidator {
     }
 
     /**
-     * First column has links to another column tuple.
-     *
-     * @param oldMetadata the old metadata
-     * @param table       the table
-     * @return the tuple
-     * @deprecated Use {@link #firstColumnHasLinksToAnotherColumn(Metadata, Table, AppConfig)} instead
-     */
-    @Deprecated
-    public Tuple<String, String> firstColumnHasLinksToAnotherColumn(Metadata oldMetadata, Table table) {
-        return firstColumnHasLinksToAnotherColumn(oldMetadata, table, null);
-    }
-
-    /**
      * First column has links to another column tuple with AppConfig.
      *
      * @param oldMetadata the old metadata
@@ -147,7 +114,6 @@ public class MetadataConsolidator {
      * @return the tuple
      */
     public Tuple<String, String> firstColumnHasLinksToAnotherColumn(Metadata oldMetadata, Table table, AppConfig config) {
-        // Use provided config, or instance config, or fall back to ConfigurationManager
         AppConfig effectiveConfig = (config != null) ? config : this.config;
         for (Table t : oldMetadata.getTables()) {
             if (t != table) {
@@ -194,18 +160,6 @@ public class MetadataConsolidator {
     }
 
     /**
-     * Gets file path for file name.
-     *
-     * @param url the url
-     * @return the file path for file name
-     * @deprecated Use {@link #getFilePathForFileName(String, AppConfig)} instead
-     */
-    @Deprecated
-    public static String getFilePathForFileName(String url) {
-        return getFilePathForFileName(url, null);
-    }
-
-    /**
      * Gets file path for file name with AppConfig.
      *
      * @param url the url
@@ -213,8 +167,10 @@ public class MetadataConsolidator {
      * @return the file path for file name
      */
     public static String getFilePathForFileName(String url, AppConfig config) {
-        String intermediateFiles = (config != null) ? config.getIntermediateFileNames() : 
-            ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+        if (config == null) {
+            throw new IllegalArgumentException("AppConfig cannot be null");
+        }
+        String intermediateFiles = config.getIntermediateFileNames();
         String[] files = intermediateFiles.split(",");
         for (String file : files) {
             if (file.endsWith(url)) {

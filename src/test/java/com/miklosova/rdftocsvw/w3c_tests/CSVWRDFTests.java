@@ -3,7 +3,7 @@ package com.miklosova.rdftocsvw.w3c_tests;
 import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 import com.miklosova.rdftocsvw.support.BaseTest;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.TestSupport;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
@@ -38,6 +38,7 @@ public class CSVWRDFTests extends BaseTest {
     private String filePathForOutput;
     private String expectedDatatype;
     private PrefinishedOutput prefinishedOutput;
+    private AppConfig config;
     private String expectedException;
     private RepositoryConnection repositoryConnection;
 
@@ -100,18 +101,19 @@ public class CSVWRDFTests extends BaseTest {
 
     @BeforeEach
     void createPrefinishedOutputAndMetadata() {
-        rdfToCSV = new RDFtoCSV(this.filePath);
+        config = new AppConfig.Builder(this.filePath)
+                .parsing(READ_METHOD)
+                .output(this.filePathForOutput)
+                .build();
+        config.setIntermediateFileNames(this.filePathForOutput);
+        rdfToCSV = new RDFtoCSV(config);
         db = new SailRepository(new MemoryStore());
-        args = new String[]{"-f", this.filePath, "-p", "rdf4j"};
-        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
-
         try {
             repositoryConnection = rdfToCSV.createRepositoryConnection(db, this.filePath, READ_METHOD);
             this.prefinishedOutput = rdfToCSV.convertData(repositoryConnection, db);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //this.prefinishedOutput = TestSupport.createPrefinishedOutput(this.filePath, this.filePathForMetadata, this.filePathForOutput, this.PROCESS_METHOD, this.db, new String[]{this.filePath});
         this.testMetadata = rdfToCSV.createMetadata(this.prefinishedOutput);
     }
 
@@ -135,13 +137,13 @@ public class CSVWRDFTests extends BaseTest {
 
             TestSupport.writeToFile(this.prefinishedOutput, this.testMetadata);
 
-            String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+            String allFiles = config.getIntermediateFileNames();
             for (String filename : allFiles.split(",")) {
                 logger.log(Level.INFO, filename + " should not be empty for this test to pass.");
                 Assert.assertFalse(TestSupport.isFileEmpty(filename));
             }
-            logger.log(Level.INFO, ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME) + " metadata should not be empty for this test to pass.");
-            Assert.assertFalse(TestSupport.isFileEmpty(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME)));
+            logger.log(Level.INFO, this.filePathForMetadata + " metadata should not be empty for this test to pass.");
+            Assert.assertFalse(TestSupport.isFileEmpty(this.filePathForMetadata));
         }
     }
 }

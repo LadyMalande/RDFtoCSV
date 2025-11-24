@@ -7,7 +7,7 @@ import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,9 +65,10 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
         this.data = data;
         this.config = config;
         this.allRows = new ArrayList<>();
-        String outputFilename = (config != null && config.getOutputFileName() != null) ? 
-            config.getOutputFileName() : 
-            ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILENAME);
+        if (config == null || config.getOutputFileName() == null) {
+            throw new IllegalStateException("AppConfig with outputFileName is required");
+        }
+        String outputFilename = config.getOutputFileName();
         File f = new File(outputFilename);
         CSVFileTOWriteTo = f.getName();
     }

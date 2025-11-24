@@ -3,7 +3,7 @@ package com.miklosova.rdftocsvw.w3c_tests;
 import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 import com.miklosova.rdftocsvw.support.BaseTest;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.TestSupport;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
@@ -39,6 +39,7 @@ public class CSVWValidatorTests extends BaseTest {
     private String filePathForOutput;
     private String expectedDatatype;
     private PrefinishedOutput prefinishedOutput;
+    private AppConfig config;
     private String expectedException;
     private RepositoryConnection repositoryConnection;
 
@@ -80,18 +81,19 @@ public class CSVWValidatorTests extends BaseTest {
 
     @BeforeEach
     void createPrefinishedOutputAndMetadata() {
-        rdfToCSV = new RDFtoCSV(filePath);
+        config = new AppConfig.Builder(filePath)
+                .parsing(READ_METHOD)
+                .output(filePathForOutput)
+                .build();
+        config.setIntermediateFileNames(filePathForOutput);
+        rdfToCSV = new RDFtoCSV(config);
         db = new SailRepository(new MemoryStore());
-        args = new String[]{"-f", filePath, "-p", "rdf4j", "-t"};
-        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
-        //ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH, RESOURCES_PATH);
         try {
             repositoryConnection = rdfToCSV.createRepositoryConnection(db, this.filePath, READ_METHOD);
             this.prefinishedOutput = rdfToCSV.convertData(repositoryConnection, db);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //this.prefinishedOutput = TestSupport.createPrefinishedOutput(this.filePath, this.filePathForMetadata, this.filePathForOutput, this.PROCESS_METHOD, this.db, new String[]{this.filePath});
         this.testMetadata = rdfToCSV.createMetadata(this.prefinishedOutput);
     }
 
@@ -112,12 +114,11 @@ public class CSVWValidatorTests extends BaseTest {
 
             TestSupport.writeToFile(this.prefinishedOutput, this.testMetadata);
 
-            String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+            String allFiles = config.getIntermediateFileNames();
             for (String filename : allFiles.split(",")) {
-                Assert.assertFalse(TestSupport.isFileEmpty(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH)));
+                Assert.assertFalse(TestSupport.isFileEmpty(filename));
             }
-
-            Assert.assertFalse(TestSupport.isFileEmpty(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME)));
+            Assert.assertFalse(TestSupport.isFileEmpty(this.filePathForMetadata));
         }
     }
 }

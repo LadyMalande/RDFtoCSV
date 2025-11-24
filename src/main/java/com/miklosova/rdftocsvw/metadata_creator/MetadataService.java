@@ -5,29 +5,22 @@ import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 
 /**
  * The Metadata service. Chooses correct Metadata creator according to chosen conversion method.
  */
 public class MetadataService {
     private MetadataGateway metadataGateway;
-    private AppConfig config;
-
-    /**
-     * Default constructor for backward compatibility.
-     * @deprecated Use {@link #MetadataService(AppConfig)} instead
-     */
-    @Deprecated
-    public MetadataService() {
-        this.config = null;
-    }
+    private final AppConfig config;
 
     /**
      * Constructor with AppConfig.
      * @param config The application configuration
      */
     public MetadataService(AppConfig config) {
+        if (config == null) {
+            throw new IllegalArgumentException("AppConfig cannot be null");
+        }
         this.config = config;
     }
 
@@ -50,58 +43,37 @@ public class MetadataService {
      * @param data data in inner CSV representation. They are null for streaming methods.
      */
     private void processMetadataCreation(PrefinishedOutput<RowsAndKeys> data) {
-        String conversionChoice;
-        String extension;
-        String streamingContinuous;
-        
-        if (config != null) {
-            conversionChoice = config.getConversionMethod();
-            String inputFile = (config.getInputFileName() != null) ? config.getInputFileName() : config.getFile();
-            extension = FileWrite.getFileExtension(inputFile);
-            streamingContinuous = config.getStreamingContinuous().toString();
-        } else {
-            // Backward compatibility - use ConfigurationManager
-            conversionChoice = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD);
-            extension = FileWrite.getFileExtension(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME));
-            streamingContinuous = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.STREAMING_CONTINUOUS);
-        }
+        String conversionChoice = config.getConversionMethod();
+        String extension = FileWrite.getFileExtension(config.getFile());
+        String streamingContinuous = config.getStreamingContinuous().toString();
 
         switch (conversionChoice.toLowerCase()) {
             case "basicquery":
                 if (data != null && data.getPrefinishedOutput() != null) {
-                    metadataGateway.setMetadataCreator(config != null ? 
-                        new BasicQueryMetadataCreator(data, config) : 
-                        new BasicQueryMetadataCreator(data));
+                    metadataGateway.setMetadataCreator(new BasicQueryMetadataCreator(data, config));
                 } else {
                     throw new IllegalArgumentException("Invalid data type for basicQuery");
                 }
                 break;
             case "splitquery":
                 if (data != null && data.getPrefinishedOutput() != null) {
-                    metadataGateway.setMetadataCreator(config != null ? 
-                        new SplitFilesMetadataCreator(data, config) : 
-                        new SplitFilesMetadataCreator(data));
+                    metadataGateway.setMetadataCreator(new SplitFilesMetadataCreator(data, config));
                 } else {
                     throw new IllegalArgumentException("Invalid data type for splitQuery");
                 }
                 break;
             case "bigfilestreaming":
-
                 if (!extension.equalsIgnoreCase("nt")) {
                     throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);
                 } else {
-                    metadataGateway.setMetadataCreator(config != null ? 
-                        new BigFileStreamingNTriplesMetadataCreator(null, config) : 
-                        new BigFileStreamingNTriplesMetadataCreator(null));
+                    metadataGateway.setMetadataCreator(new BigFileStreamingNTriplesMetadataCreator(null, config));
                 }
                 break;
             case "streaming":
                 if (!extension.equalsIgnoreCase("nt") && streamingContinuous.equalsIgnoreCase("false")) {
                     throw new IllegalArgumentException("Invalid file extension for parsing streaming data. Expecting extension .nt, was " + extension);
                 } else {
-                    metadataGateway.setMetadataCreator(config != null ? 
-                        new StreamingNTriplesMetadataCreator(config) : 
-                        new StreamingNTriplesMetadataCreator());
+                    metadataGateway.setMetadataCreator(new StreamingNTriplesMetadataCreator(config));
                 }
                 break;
             default:

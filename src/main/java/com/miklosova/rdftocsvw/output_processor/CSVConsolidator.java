@@ -4,7 +4,7 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
@@ -138,8 +138,6 @@ public class CSVConsolidator {
             }
             System.out.println("newFileName writeToCSVFromOldMetadataToMerged   fileToWriteTo = " + fileToWriteTo.toString());
 
-            // For backward compatibility, also save to ConfigurationManager
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileToWriteTo.toString());
             config.setIntermediateFileNames(fileToWriteTo.toString());
         } catch (IOException e) {
             logger.log(Level.SEVERE, "There was an exception while trying to write data into new merged CSV.");

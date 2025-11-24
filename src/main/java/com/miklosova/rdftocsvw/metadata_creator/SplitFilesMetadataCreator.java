@@ -7,7 +7,7 @@ import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -72,8 +72,10 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
         this.config = config;
         this.allRows = new ArrayList<>();
         this.fileNumberX = 0;
-        String outputFilename = (config != null) ? config.getOutput() : 
-            ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILENAME);
+        if (config == null) {
+            throw new IllegalStateException("AppConfig is required");
+        }
+        String outputFilename = config.getOutput();
         File f = new File(outputFilename);
         CSVFileTOWriteTo = f.getName();
     }

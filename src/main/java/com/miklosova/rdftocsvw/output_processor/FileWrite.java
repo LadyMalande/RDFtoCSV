@@ -10,7 +10,6 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.JsonUtil;
 import com.opencsv.CSVWriter;
 import org.eclipse.rdf4j.model.IRI;
@@ -95,14 +94,13 @@ public class FileWrite {
      * @param config the application configuration
      */
     public static void writeFilesToConfigFile(ArrayList<String> fileNamesCreated, AppConfig config) {
+        if (config == null) {
+            throw new IllegalArgumentException("AppConfig cannot be null");
+        }
         StringBuilder sb = new StringBuilder();
         fileNamesCreated.forEach(fileName -> sb.append(fileName).append(","));
         System.out.println("newFileName writeFilesToConfigFile   allFileNames = " + sb.toString());
-        if (config != null) {
-            config.setIntermediateFileNames(sb.toString());
-        } else {
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, sb.toString());
-        }
+        config.setIntermediateFileNames(sb.toString());
     }
 
     /**
@@ -175,8 +173,7 @@ public class FileWrite {
                             multilevelPropertyUrl = column.getOriginalColumnKey().stringValue();
                         }
                         boolean hasRdfTypes = (config != null && config.getConversionHasRdfTypes() != null) ? 
-                            config.getConversionHasRdfTypes() : 
-                            Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES));
+                            config.getConversionHasRdfTypes() : true;
                         if (!hasRdfTypes && firstColumn) {
                             firstColumn = false;
                             i--;
@@ -206,8 +203,7 @@ public class FileWrite {
                 firstColumn = true;
                 for (Column column : orderOfColumnKeys) {
                     boolean hasRdfTypes = (config != null && config.getConversionHasRdfTypes() != null) ? 
-                        config.getConversionHasRdfTypes() : 
-                        Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES));
+                        config.getConversionHasRdfTypes() : true;
                     if (!hasRdfTypes && firstColumn) {
                         firstColumn = false;
                         i--;
@@ -233,8 +229,7 @@ public class FileWrite {
         }
 
         if (originalMetadataJSON != metadataNow) {
-            JsonUtil.serializeAndWriteToFile(metadata);
-
+            JsonUtil.serializeAndWriteToFile(metadata, config);
         }
         FileWrite.writeLinesToCSVFile(f, lines, true);
         try {
@@ -294,8 +289,7 @@ public class FileWrite {
      */
     public static List<Map<Value, Value>> generateCombinations(List<Map.Entry<Value, TypeIdAndValues>> listOfLists, AppConfig config) {
         boolean firstNormalForm = (config != null && config.getFirstNormalForm() != null) ? 
-            config.getFirstNormalForm() : 
-            Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM));
+            config.getFirstNormalForm() : true;
         if (firstNormalForm) {
             // Map of predicatesOfColumns and Values in the Column
             List<Map<Value, Value>> resultingRowOfFormerMultivalues = new ArrayList<>();
@@ -468,8 +462,7 @@ public class FileWrite {
 
         Column firstColumn = null;
         boolean hasRdfTypes = (config != null && config.getConversionHasRdfTypes() != null) ? 
-            config.getConversionHasRdfTypes() : 
-            Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES));
+            config.getConversionHasRdfTypes() : true;
         if (hasRdfTypes) {
             Optional<Column> firstColOpt = fud.getTableSchema().getColumns().stream()
                 .filter(column -> column.getPropertyUrl() == null)

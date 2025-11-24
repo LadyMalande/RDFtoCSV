@@ -63,9 +63,6 @@ public class Main {
             // Build AppConfig from command line arguments
             AppConfig config = buildConfigFromArgs(cmd, RDFFileToRead);
             
-            // For backward compatibility, also save to ConfigurationManager
-            ConfigurationManager.loadSettingsFromInputToConfigFile(args);
-            
             // Create RDFtoCSV with the new config
             RDFtoCSV rdFtoCSV = new RDFtoCSV(config);
             

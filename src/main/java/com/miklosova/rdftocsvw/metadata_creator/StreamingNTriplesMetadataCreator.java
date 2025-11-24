@@ -7,7 +7,7 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
@@ -77,7 +77,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     @Override
     public Metadata addMetadata(PrefinishedOutput<?> info) {
 
-        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.STREAMING_CONTINUOUS).equalsIgnoreCase("true")) {
+        if (config.getStreamingContinuous()) {
             readInputStream();
         } else {
             readFileWithStreaming();
@@ -217,9 +217,8 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         // Neither subject nor predicate are known, create new CSVName and add new table to metadata;
         File f = new File(fileNameToRead);
         String newCSVname = f.getName() + fileNumber + ".csv";
-        String previousFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-        String allFilesUpToNow = (previousFiles != null && previousFiles.isEmpty()) ? newCSVname : previousFiles + "," + newCSVname;
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, allFilesUpToNow);
+        String previousFiles = config.getIntermediateFileNames();
+        String allFilesUpToNow = (previousFiles != null && !previousFiles.isEmpty()) ? previousFiles + "," + newCSVname : newCSVname;
         config.setIntermediateFileNames(allFilesUpToNow);
         fileNumber++;
 
@@ -363,7 +362,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                         line = extendedArray;
                         isModified = true;
                     } else if (indexOfChangeColumn != -1 && !line[indexOfChangeColumn].equalsIgnoreCase("")) {
-                        if (Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM))) {
+                        if (config.getFirstNormalForm()) {
                             // There is already a value in the column - add the value and add the separator to metadata
                             // Create a new line with the data variation
                             if (dataLineVariationIsNotPresent(rowDataVariationsForSubject, line, indexOfChangeColumn)) {

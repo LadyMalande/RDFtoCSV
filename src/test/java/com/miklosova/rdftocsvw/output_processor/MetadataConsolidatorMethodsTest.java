@@ -18,8 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import org.jruby.ir.Tuple;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import java.util.ArrayList;
+import com.miklosova.rdftocsvw.support.AppConfig ;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import org.junit.jupiter.params.provider.CsvSource;
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,8 +35,8 @@ class MetadataConsolidatorMethodsTest extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        metadataConsolidator = new MetadataConsolidator();
-        rdfToCSV = new RDFtoCSV(fileName);
+        metadataConsolidator = new MetadataConsolidator(config);
+        rdfToCSV = new RDFtoCSV(config);
         db = new SailRepository(new MemoryStore());
     }
 
@@ -95,38 +95,37 @@ class MetadataConsolidatorMethodsTest extends BaseTest {
         table2.setTableSchema(schema2);
         oldMetadata.getTables().add(table1);
         oldMetadata.getTables().add(table2);
-        try (MockedStatic<ConfigurationManager> mockedConfigManager = mockStatic(ConfigurationManager.class)) {
-    mockedConfigManager.when(() -> ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILENAME)).thenReturn("output.csv");
-            mockedConfigManager.when(() -> ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME)).thenReturn("../RDFtoCSV/src/test/resources/StreamingNTriples/testingInput.nt.csv-metadata.json");
+        // Setup AppConfig for output file and metadata file
+        config.setOutputFilePath("output.csv");
 
-            Metadata newMetadata = metadataConsolidator.consolidateMetadata(oldMetadata);
-    assertNotNull(newMetadata);
-    assertEquals(1, newMetadata.getTables().size());
-    Table consolidatedTable = newMetadata.getTables().get(0);
-    assertEquals("output.csv_merged.csv", consolidatedTable.getUrl());
-    assertEquals(3, consolidatedTable.getTableSchema().getColumns().size());
-    List<String> columnNames = new ArrayList<>();
-    for (Column column : consolidatedTable.getTableSchema().getColumns()) {
-        columnNames.add(column.getName());
-    }
-    assertTrue(columnNames.contains("column1"));
-    assertTrue(columnNames.contains("column2"));
-    assertTrue(columnNames.contains("column1_1"));
-}
+        config.setOutputMetadataFileName("../RDFtoCSV/src/test/resources/StreamingNTriples/testingInput.nt.csv-metadata.json");
+        metadataConsolidator = new MetadataConsolidator(config);
+        Metadata newMetadata = metadataConsolidator.consolidateMetadata(oldMetadata, config);
+        assertNotNull(newMetadata);
+        assertEquals(1, newMetadata.getTables().size());
+        Table consolidatedTable = newMetadata.getTables().get(0);
+        assertEquals("output.csv_merged.csv", consolidatedTable.getUrl());
+        assertEquals(3, consolidatedTable.getTableSchema().getColumns().size());
+        List<String> columnNames = new ArrayList<>();
+        for (Column column : consolidatedTable.getTableSchema().getColumns()) {
+            columnNames.add(column.getName());
+        }
+        assertTrue(columnNames.contains("column1"));
+        assertTrue(columnNames.contains("column2"));
+        assertTrue(columnNames.contains("column1_1"));
     }
 
     //BaseRock generated method id: ${testGetFilePathForFileName}, hash: 39EF3D411B874EA5AA76861DADF028E8
     @ParameterizedTest
     @CsvSource({ "file1.csv,/path/to/file1.csv,/path/to/file1.csv", "file2.csv,/path/to/file2.csv,/path/to/file2.csv", "nonexistent.csv,/path/to/file1.csv;/path/to/file2.csv,null" })
     void testGetFilePathForFileName(String url, String intermediateFiles, String expectedResult) {
-        try (MockedStatic<ConfigurationManager> mockedConfigManager = mockStatic(ConfigurationManager.class)) {
-            mockedConfigManager.when(() -> ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES)).thenReturn(intermediateFiles);
-            String result = MetadataConsolidator.getFilePathForFileName(url);
-            if ("null".equals(expectedResult)) {
-                assertNull(result);
-            } else {
-                assertEquals(expectedResult, result);
-            }
+        AppConfig appConfig = new AppConfig.Builder("dummyInputFile").build();
+        appConfig.setIntermediateFileNames(intermediateFiles);
+        String result = MetadataConsolidator.getFilePathForFileName(url, appConfig);
+        if ("null".equals(expectedResult)) {
+            assertNull(result);
+        } else {
+            assertEquals(expectedResult, result);
         }
     }
 
@@ -149,7 +148,7 @@ class MetadataConsolidatorMethodsTest extends BaseTest {
         oldMetadata.getTables().add(table2);
         String csvContent1 = "subject,column1\nvalue1,value2\nvalue3,value4";
         String csvContent2 = "subject,column2\nvalue2,somedata\nvalue4,moredata";
-        Tuple<String, String> result = metadataConsolidator.firstColumnHasLinksToAnotherColumn(oldMetadata, table1);
+        Tuple<String, String> result = metadataConsolidator.firstColumnHasLinksToAnotherColumn(oldMetadata, table1, config);
         assertNotNull(result);
         assertEquals("table2.csv", result.a);
         assertEquals("subject", result.b);

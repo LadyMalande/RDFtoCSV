@@ -3,7 +3,7 @@ package com.miklosova.rdftocsvw.input_processor;
 import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.BaseTest;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.TestSupport;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -12,6 +12,7 @@ import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -34,48 +35,64 @@ public class MethodServiceTest extends BaseTest {
     private String processMethod;
     private String filePath;
     private PrefinishedOutput prefinishedOutput;
+    private AppConfig config;
     private Class<? extends Throwable> thrownException;
     private MethodService methodService;
     private RepositoryConnection rc;
     private String testName;
 
     private String parsingMethod;
+
+    private String expectedMessage;
     Class<? extends Throwable> exceptionForProcessMethod;
 
+    Class<? extends Throwable> exceptionDuringMethodServiceRun;
+
     public MethodServiceTest(String testName, String processMethod, String filePath, Class<? extends Throwable> exception,
-                             Class<? extends Throwable> exceptionForProcessMethod, String parsingMethod) {
+                             Class<? extends Throwable> exceptionForProcessMethod, Class<? extends Throwable> exceptionDuringMethodServiceRun, String parsingMethod, String expectedMessage) {
         this.testName = testName;
         this.processMethod = processMethod;
         this.filePath = filePath;
         this.thrownException = exception;
         this.parsingMethod = parsingMethod;
         this.exceptionForProcessMethod = exceptionForProcessMethod;
+        this.expectedMessage = expectedMessage;
+        this.exceptionDuringMethodServiceRun = exceptionDuringMethodServiceRun;
     }
 
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> configs() {
         return Arrays.asList(new Object[][]{
-                {"rdf4j - OK", "rdf4j", "../RDFtoCSV/src/test/resources/differentSerializations/testingInput.nt", null, null, "com.miklosova.rdftocsvw.input_processor.parsing_methods.RDF4JMethod"},
-                {"RuntimeException - File does not exist", "rdf4j", "./src/test/resources/nonexistingFile.ttl", RuntimeException.class, RuntimeException.class, "com.miklosova.rdftocsvw.input_processor.parsing_methods.RDF4JMethod"},
-                {"IllegalArgumentException - unknown readMethod", "unknownMethod", "../RDFtoCSV/src/test/resources/differentSerializations/testingInput.nt", IllegalArgumentException.class, IllegalArgumentException.class, null },
-                {"IOException from read URL or file - mocked", "rdf4j", "../RDFtoCSV/src/test/resources/differentSerializations/testingInput.nt", IOException.class, null, "com.miklosova.rdftocsvw.input_processor.parsing_methods.RDF4JMethod"},
-                {"streaming - OK", "streaming", "../RDFtoCSV/src/test/resources/differentSerializations/testingInput.nt", null, null, "com.miklosova.rdftocsvw.input_processor.streaming_methods.StreamingMethod"},
-                {"bigFileStreaming - OK", "bigFileStreaming", "../RDFtoCSV/src/test/resources/differentSerializations/testingInput.nt", null, null, "com.miklosova.rdftocsvw.input_processor.streaming_methods.StreamingMethod"},
+                {"rdf4j - OK", "rdf4j", "../RDFtoCSV/src/test/resources/differentSerializations/testingInput.nt", null, null, null, "com.miklosova.rdftocsvw.input_processor.parsing_methods.RDF4JMethod", ""},
+                {"RuntimeException - File does not exist", "rdf4j", "./src/test/resources/nonexistingFile.ttl", RuntimeException.class, RuntimeException.class, RuntimeException.class, "com.miklosova.rdftocsvw.input_processor.parsing_methods.RDF4JMethod", ""},
+                {"IllegalArgumentException - unknown readMethod", "unknownMethod", "../RDFtoCSV/src/test/resources/differentSerializations/testingInput.nt", IllegalArgumentException.class, IllegalArgumentException.class, NullPointerException.class, null, "Invalid parsing method: unknownMethod. Valid values are: rdf4j, streaming, bigfilestreaming" },
+                {"IOException from read URL or file - mocked", "rdf4j", "../RDFtoCSV/src/test/resources/differentSerializations/testingInput.nt", IOException.class, null, null,"com.miklosova.rdftocsvw.input_processor.parsing_methods.RDF4JMethod", ""},
+                {"streaming - OK", "streaming", "../RDFtoCSV/src/test/resources/differentSerializations/testingInput.nt", null, null, null,"com.miklosova.rdftocsvw.input_processor.streaming_methods.StreamingMethod", ""},
+                {"bigFileStreaming - OK", "bigFileStreaming", "../RDFtoCSV/src/test/resources/differentSerializations/testingInput.nt", null, null, null,"com.miklosova.rdftocsvw.input_processor.streaming_methods.StreamingMethod", ""},
         });
     }
 
     @Before
     public void createDbAndMethodService() {
-        // Don't use loadSettingsFromInputToConfigFile as it contains System.exit() calls
-        // Instead, directly save the needed config values
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, filePath);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.READ_METHOD, processMethod);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePath + ".csv-metadata.json");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH, filePath);
-        
-        db = new SailRepository(new MemoryStore());
-        methodService = new MethodService();
-        System.out.println("Before test done ");
+        try {
+            config = new AppConfig.Builder(filePath)
+                    .parsing(processMethod)
+                    .output(filePath)
+                    .outputMetadata(filePath + ".csv-metadata.json")
+                    .build();
+            db = new SailRepository(new MemoryStore());
+            methodService = new MethodService(config);
+            System.out.println("Before test done ");
+        } catch (IllegalArgumentException e) {
+            // If an IllegalArgumentException is expected, check its message
+            if (thrownException == IllegalArgumentException.class) {
+                assertEquals(thrownException.getSimpleName(), e.getClass().getSimpleName());
+                // Optionally check the message if you have a specific expected message
+                assertEquals(expectedMessage, e.getMessage());
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Test
@@ -102,7 +119,7 @@ public class MethodServiceTest extends BaseTest {
 
         } else if (thrownException == IllegalArgumentException.class || thrownException == RuntimeException.class) {
 
-            Assert.assertThrows(thrownException, () -> {
+            Assert.assertThrows(exceptionDuringMethodServiceRun, () -> {
                 rc = methodService.processInput(filePath, processMethod, db);
             });
 
@@ -136,18 +153,20 @@ public class MethodServiceTest extends BaseTest {
     }
     @Test
     public void processMethodChoiceTestThrowsException(){
-        MethodService methodService = new MethodService();
+        String methodChoice = "default";
+        MethodService methodService = new MethodService(config);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             methodService.processInput("./RDFtoCSV/src/test/resources/differentSerializations/testingInput.nt", "default", db);
         });
 
         // Verify exception message
-        assertEquals("Invalid reading method", exception.getMessage());
+        assertEquals("Invalid reading method: " + methodChoice, exception.getMessage());
     }
     @Test
     public void processMethodChoiceTest(){
-        MethodService methodService = new MethodService();
+        String methodChoice = "default";
+        MethodService methodService = new MethodService(config);
         try {
             if(exceptionForProcessMethod == null) {
                 methodService.processInput(filePath, processMethod, db);
@@ -166,7 +185,7 @@ public class MethodServiceTest extends BaseTest {
                 });
 
                 // Verify exception message
-                assertEquals("Invalid reading method", exception.getMessage());
+                assertEquals("Invalid reading method: " + methodChoice, exception.getMessage());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

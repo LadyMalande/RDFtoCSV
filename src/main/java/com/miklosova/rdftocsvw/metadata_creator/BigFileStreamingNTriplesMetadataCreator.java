@@ -6,7 +6,7 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -59,7 +59,6 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
         File f = new File(fileNameToRead);
         Table newTable = new Table(f.getName() + ".csv");
         config.setIntermediateFileNames(f.getName() + ".csv");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, f.getName() + ".csv");
         metadata.getTables().add(newTable);
         tableSchema = new TableSchema();
         tableSchema.setPrimaryKey("Subject");

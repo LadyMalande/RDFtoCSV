@@ -35,24 +35,26 @@ class JsonUtilTest {
 
      private ObjectMapper mockMapper;
 
-     private ConfigurationManager mockConfigManager;
+     // Removed ConfigurationManager mock
 
      private FileWrite mockFileWrite;
     Metadata metadata;
     RDFtoCSV rdfToCSV;
     Repository db;
     String[] args;
+    AppConfig config;
 
     private String fileName = "/RDFtoCSV/src/test/resources/differentSerializations/testingInput.nt";
 
      @BeforeEach
      void setUp() {
-         rdfToCSV = new RDFtoCSV(fileName);
+        config = new AppConfig.Builder(fileName)
+                 .parsing("rdf4j").build();
+         rdfToCSV = new RDFtoCSV(config);
          db = new SailRepository(new MemoryStore());
-         args = new String[]{"-f", "test.rdf", "-p", "rdf4j"};
-         ConfigurationManager.loadSettingsFromInputToConfigFile(args);
+        
 
-         metadata = new Metadata();
+         metadata = new Metadata(config);
          Table table = new Table("test.csv");
 
          ArrayList<Value> keys = new ArrayList<>();
@@ -66,11 +68,11 @@ class JsonUtilTest {
          ArrayList<Row> rows = new ArrayList<>();
          rows.add(firstRow);
          rows.add(secondRow);
-         TableSchema tableSchema = new TableSchema(keys,rows);
-         tableSchema.addTableSchemaMetadata();
+         TableSchema tableSchema = new TableSchema(keys,rows, config);
+         tableSchema.addTableSchemaMetadata(config);
          table.setTableSchema(tableSchema);
          mockMapper = mock(ObjectMapper.class);
-         mockConfigManager = mock(ConfigurationManager.class);
+         // Removed ConfigurationManager mock
          mockFileWrite = mock(FileWrite.class);
      }
 
@@ -81,7 +83,7 @@ class JsonUtilTest {
          String expectedResult = "{\"@context\":\"http://www.w3.org/ns/csvw\",\"@type\":\"TableGroup\",\"tables\":[]}";
          ObjectNode mockResultNode = mock(ObjectNode.class);
          try (MockedStatic<JsonUtil> mockedJsonUtil = Mockito.mockStatic(JsonUtil.class);
-             MockedStatic<ConfigurationManager> mockedConfigManager = Mockito.mockStatic(ConfigurationManager.class)) {
+             MockedStatic<AppConfig> mockedConfigManager = Mockito.mockStatic(AppConfig.class)) { // Updated to use AppConfig
              mockedJsonUtil.when(() -> JsonUtil.serializeWithContext(any())).thenCallRealMethod();
              //when(mockMapper.valueToTree(testObj)).thenReturn(mockJsonObject);
              when(mockMapper.createObjectNode()).thenReturn(mockResultNode);
@@ -98,10 +100,9 @@ class JsonUtilTest {
          String testFileName = "test.json";
          Path testFilePath = tempDir.resolve(testFileName);
          ObjectNode mockResultNode = mock(ObjectNode.class);
-         try (MockedStatic<ConfigurationManager> mockedConfigManager = Mockito.mockStatic(ConfigurationManager.class);
+         try (MockedStatic<AppConfig> mockedConfigManager = Mockito.mockStatic(AppConfig.class); // Updated to use AppConfig
              MockedStatic<FileWrite> mockedFileWrite = Mockito.mockStatic(FileWrite.class)) {
-             mockedConfigManager.when(() -> ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME)).thenReturn(testFilePath.toString());
-             JsonUtil.writeJsonToFile(mockResultNode);
+             JsonUtil.writeJsonToFile(mockResultNode, config);
              mockedFileWrite.verify(() -> FileWrite.deleteFile(testFilePath.toString()));
              //verify(mockMapper.writerWithDefaultPrettyPrinter()).writeValue(eq(new File(testFilePath.toString())), eq(mockResultNode));
          }
@@ -112,7 +113,7 @@ class JsonUtilTest {
      void testSerializeAndWriteToFile() throws JsonProcessingException {
          String expectedJson = "{\"@context\":\"http://www.w3.org/ns/csvw\",\"@type\":\"TableGroup\",\"tables\":[]}";
 
-             String result = JsonUtil.serializeAndWriteToFile(metadata);
+             String result = JsonUtil.serializeAndWriteToFile(metadata, config);
              assertEquals(expectedJson, result);
 
      }

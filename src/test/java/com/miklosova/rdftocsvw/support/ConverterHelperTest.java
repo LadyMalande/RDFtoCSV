@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.eclipse.rdf4j.rio.*;
 
-import static com.miklosova.rdftocsvw.support.ConfigurationManager.getCONFIG_FILE_NAME;
 import static com.miklosova.rdftocsvw.support.TestSupport.assertFilesEqual;
 import static com.miklosova.rdftocsvw.support.TestSupport.isFile1ContainedInFile2;
 import static org.mockito.Mockito.*;
@@ -39,9 +38,11 @@ class ConverterHelperTest {
     Repository db;
     @BeforeEach
     public void setUp() throws IOException {
-        getCONFIG_FILE_NAME();
         String filePath = "src/test/resources/differentSerializations/testingInput.ttl";
-        ms = new MethodService();
+        AppConfig config = new AppConfig.Builder(filePath)
+                .parsing("rdf4j")
+                .build();
+        ms = new MethodService(config);
         db = new SailRepository(new MemoryStore());
 
     }

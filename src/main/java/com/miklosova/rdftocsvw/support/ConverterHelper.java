@@ -31,6 +31,11 @@ public class ConverterHelper {
      * The Map of types and their number of occurrences.
      */
     public Map<Value, Integer> mapOfTypesAndTheirNumbers;
+    
+    /**
+     * The application configuration.
+     */
+    protected AppConfig config;
 
     /**
      * Root has this type boolean.
@@ -123,8 +128,9 @@ public class ConverterHelper {
                 }
             }
             if (statement != null) {
-                // For backward compatibility, also save to ConfigurationManager
-                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "true");
+                if (config != null) {
+                    config.setConversionHasBlankNodes(true);
+                }
                 rc.add(statement);
             }
             counter = counter + 1;

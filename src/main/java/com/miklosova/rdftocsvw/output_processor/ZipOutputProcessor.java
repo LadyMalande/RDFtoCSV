@@ -2,7 +2,7 @@ package com.miklosova.rdftocsvw.output_processor;
 
 import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.support.AppConfig;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+
 
 import java.io.*;
 import java.util.ArrayList;
@@ -51,19 +51,11 @@ public class ZipOutputProcessor implements IOutputProcessor {
      * @return the zipped file in bytes
      */
     private byte[] createBAOSWithZips() {
-        String inputFilesInString;
-        String metadataFileName;
-        
-        if (config != null) {
-            inputFilesInString = config.getIntermediateFileNames();
-            metadataFileName = (config.getOutputMetadataFileName() != null) ? 
-                config.getOutputMetadataFileName() : 
-                ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
-        } else {
-            // Backward compatibility
-            inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-            metadataFileName = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
+        if (config == null) {
+            throw new IllegalStateException("AppConfig is required");
         }
+        String inputFilesInString = config.getIntermediateFileNames();
+        String metadataFileName = config.getOutputMetadataFileName();
         
         //logger.log(Level.INFO, "inputFilesInString=" + inputFilesInString);
         String[] listOfFiles = inputFilesInString.split(",");
@@ -107,22 +99,12 @@ public class ZipOutputProcessor implements IOutputProcessor {
      * @return the zip output stream to be given to the final .ZIP file
      */
     public ZipOutputStream zipMultipleFiles() {
-        String inputFilesInString;
-        String filenameForZip;
-        String metadataFileName;
-        
-        if (config != null) {
-            inputFilesInString = config.getIntermediateFileNames();
-            filenameForZip = config.getOutputZipFileName();
-            metadataFileName = (config.getOutputMetadataFileName() != null) ? 
-                config.getOutputMetadataFileName() : 
-                ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
-        } else {
-            // Backward compatibility
-            inputFilesInString = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-            filenameForZip = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_ZIPFILE_NAME);
-            metadataFileName = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
+        if (config == null) {
+            throw new IllegalStateException("AppConfig is required");
         }
+        String inputFilesInString = config.getIntermediateFileNames();
+        String filenameForZip = config.getOutputZipFileName();
+        String metadataFileName = config.getOutputMetadataFileName();
         
         logger.log(Level.INFO, "zipFileName = " + filenameForZip);
         String[] listOfFiles = inputFilesInString.split(",");

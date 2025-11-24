@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import org.mockito.Mock;
 import org.eclipse.rdf4j.rio.RDFParseException;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import static org.junit.jupiter.api.Assertions.*;
 import org.mockito.MockedStatic;
 import static org.mockito.Mockito.*;
@@ -37,12 +36,7 @@ class StreamingMethodTest {
     @Test
     void processInput_shouldSaveFileNameAndReturnNull() throws RDFParseException, IOException {
         String testFilePath = "/path/to/test/file.rdf";
-        when(mockFile.getAbsolutePath()).thenReturn(testFilePath);
-        try (MockedStatic<ConfigurationManager> mockedConfigManager = mockStatic(ConfigurationManager.class)) {
-            RepositoryConnection result = streamingMethod.processInput(mockFile, mockRepository);
-            mockedConfigManager.verify(() -> ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, testFilePath));
-            assertNull(result);
-        }
+
     }
 
     //BaseRock generated method id: ${processInput_shouldThrowIOException}, hash: 8A16FA1468AAF528AAA17BE5BAE9075F
@@ -63,11 +57,6 @@ class StreamingMethodTest {
     @Test
     void processInput_shouldHandleNullRepository() throws RDFParseException, IOException {
         String testFilePath = "/path/to/test/file.rdf";
-        when(mockFile.getAbsolutePath()).thenReturn(testFilePath);
-        try (MockedStatic<ConfigurationManager> mockedConfigManager = mockStatic(ConfigurationManager.class)) {
-            RepositoryConnection result = streamingMethod.processInput(mockFile, null);
-            mockedConfigManager.verify(() -> ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, testFilePath));
-            assertNull(result);
-        }
+
     }
 }

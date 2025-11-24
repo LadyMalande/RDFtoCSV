@@ -32,7 +32,6 @@ import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 import java.util.ArrayList;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -40,9 +39,6 @@ import static org.mockito.ArgumentMatchers.eq;
 class StreamingMetadataCreatorTest {
 
     private StreamingMetadataCreator streamingMetadataCreator;
-
-    @Mock
-    private ConfigurationManager configurationManager;
 
     @Mock
     private Main main;
@@ -57,7 +53,6 @@ class StreamingMetadataCreatorTest {
     void setUp() {
 
         args = new String[]{"-f", "test.rdf", "-p", "rdf4j"};
-        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
         config = new AppConfig.Builder("test.rdf").parsing("rdf4j").build();
         rdfToCSV = new RDFtoCSV(config);
         db = new SailRepository(new MemoryStore());
@@ -69,7 +64,6 @@ class StreamingMetadataCreatorTest {
     void testConstructor() throws URISyntaxException, MalformedURLException {
         String fileNameFromConfig = "test.nt";
         URL mockLocation = new URL("file:/path/to/jar");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, fileNameFromConfig);
         AppConfig testConfig = new AppConfig.Builder(fileNameFromConfig).parsing("rdf4j").build();
         File mockFile = mock(File.class);
         StreamingMetadataCreator creator = new StreamingMetadataCreator(testConfig);
@@ -97,7 +91,7 @@ class StreamingMetadataCreatorTest {
         ValueFactory vf = SimpleValueFactory.getInstance();
         Statement st = vf.createStatement(vf.createBNode("node1"), vf.createIRI("http://example.com/predicate"), vf.createBNode("node2"));
         String line = "_:node1 <http://example.com/predicate> _:node2 .";
-        Statement result = StreamingMetadataCreator.replaceBlankNodesWithIRI(st, line);
+        Statement result = streamingMetadataCreator.replaceBlankNodesWithIRI(st, line);
         assertTrue(result.getSubject().isIRI());
         assertTrue(result.getObject().isIRI());
         assertEquals("http://example.com/predicate", result.getPredicate().stringValue());
@@ -124,7 +118,6 @@ class StreamingMetadataCreatorTest {
         table.setTableSchema(schema);
         metadata.getTables().add(table);
         File f = new File("test.csv");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,f.getAbsolutePath());
         config.setIntermediateFileNames(f.getAbsolutePath());
         streamingMetadataCreator.repairMetadataAndMakeItJsonld(metadata);
         //verify(metadata).jsonldMetadata();
@@ -172,7 +165,7 @@ class StreamingMetadataCreatorTest {
     @Test
     void testProcessLineIntoTriple() {
         String line = "<http://example.com/subject> <http://example.com/predicate> \"object\" .";
-        Triple result = StreamingMetadataCreator.processLineIntoTriple(line);
+        Triple result = streamingMetadataCreator.processLineIntoTriple(line);
         assertNotNull(result);
         assertTrue(result.subject instanceof IRI);
         assertTrue(result.predicate instanceof IRI);
