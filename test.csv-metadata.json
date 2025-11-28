@@ -1,0 +1,48 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test_merged.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ ]
+    },
+    "config" : {
+      "file" : "test.rdf",
+      "logLevel" : "INFO",
+      "multipleTables" : false,
+      "parsing" : "rdf4j",
+      "streaming" : false,
+      "firstNormalForm" : true,
+      "columnNamingConvention" : "original",
+      "preferredLanguages" : "en,cs",
+      "conversionMethod" : "basicQuery",
+      "intermediateFileNames" : "",
+      "conversionHasBlankNodes" : false,
+      "conversionHasRdfTypes" : true,
+      "outputZipFileName" : "test_CSVW.zip",
+      "readMethod" : "rdf4j",
+      "metadataRowNums" : false,
+      "outputFilePath" : "test",
+      "outputMetadataFileName" : "test.csv-metadata.json",
+      "outputFileName" : "test",
+      "streamingContinuous" : false,
+      "simpleBasicQuery" : false,
+      "inputFileName" : "test.rdf",
+      "default_OUTPUT" : "RDFtoCSVOutput.csv",
+      "default_PARSING" : "rdf4j",
+      "default_STREAMING" : false,
+      "default_METADATA_ROWNUMS" : false,
+      "default_FIRST_NORMAL_FORM" : true,
+      "default_MULTIPLE_TABLES" : false,
+      "default_STREAMING_CONTINUOUS" : false,
+      "default_SIMPLE_BASIC_QUERY" : false,
+      "default_CONVERSION_METHOD" : "basicQuery",
+      "default_READ_METHOD" : "rdf4j",
+      "default_LOG_LEVEL" : "INFO",
+      "default_CONVERSION_HAS_BLANK_NODES" : false,
+      "default_CONVERSION_HAS_RDF_TYPES" : true
+    }
+  } ]
+}

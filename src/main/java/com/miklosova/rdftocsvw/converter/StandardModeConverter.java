@@ -170,8 +170,12 @@ public class StandardModeConverter implements IQueryParser {
                 config.setIntermediateFileNames(fileName);
                 config.setOutputFileName(fileName);
 
-                String outputFilePath = config.getOutputFilePath();
-                config.setOutputMetadataFileName(outputFilePath + fileName + "-metadata.json");
+                // Only set output metadata filename if not already explicitly set
+                String currentMetadataFileName = config.getOutputMetadataFileName();
+                if (currentMetadataFileName == null || currentMetadataFileName.isEmpty()) {
+                    String outputFilePath = config.getOutputFilePath();
+                    config.setOutputMetadataFileName(outputFilePath + fileName + "-metadata.json");
+                }
             }
         }
 

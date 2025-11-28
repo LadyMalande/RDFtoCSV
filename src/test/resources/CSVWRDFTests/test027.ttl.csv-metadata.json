@@ -1,0 +1,94 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test027.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "file://tree-ops.csv#{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "on_street",
+        "name" : "on_street",
+        "propertyUrl" : "file://tree-ops.csv#on_street",
+        "valueUrl" : "{+on_street}",
+        "aboutUrl" : "file://tree-ops.csv#{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "species",
+        "name" : "species",
+        "propertyUrl" : "file://tree-ops.csv#species",
+        "valueUrl" : "{+species}",
+        "aboutUrl" : "file://tree-ops.csv#{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "GID",
+        "name" : "GID",
+        "propertyUrl" : "file://tree-ops.csv#GID",
+        "valueUrl" : "{+GID}",
+        "aboutUrl" : "file://tree-ops.csv#{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "trim_cycle",
+        "name" : "trim_cycle",
+        "propertyUrl" : "file://tree-ops.csv#trim_cycle",
+        "valueUrl" : "{+trim_cycle}",
+        "aboutUrl" : "file://tree-ops.csv#{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "inventory_date",
+        "name" : "inventory_date",
+        "propertyUrl" : "file://tree-ops.csv#inventory_date",
+        "valueUrl" : "{+inventory_date}",
+        "datatype" : "date",
+        "aboutUrl" : "file://tree-ops.csv#{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "on_street", "species", "GID", "trim_cycle", "inventory_date" ]
+    },
+    "config" : {
+      "file" : "./src/test/resources/CSVWRDFTests/test027.ttl",
+      "logLevel" : "INFO",
+      "multipleTables" : false,
+      "parsing" : "rdf4j",
+      "streaming" : false,
+      "firstNormalForm" : true,
+      "output" : "./src/test/resources/CSVWRDFTests/test027.ttl",
+      "outputMetadata" : "./src/test/resources/CSVWRDFTests/test027.ttl.csv-metadata.json",
+      "columnNamingConvention" : "original",
+      "preferredLanguages" : "en,cs",
+      "conversionMethod" : "basicQuery",
+      "intermediateFileNames" : "test027.csv,",
+      "conversionHasBlankNodes" : false,
+      "conversionHasRdfTypes" : false,
+      "outputZipFileName" : "test027_CSVW.zip",
+      "readMethod" : "rdf4j",
+      "metadataRowNums" : false,
+      "outputFilePath" : "./src/test/resources/CSVWRDFTests/test027.ttl",
+      "outputMetadataFileName" : "./src/test/resources/CSVWRDFTests/test027.ttl.csv-metadata.json",
+      "outputFileName" : "test027",
+      "streamingContinuous" : false,
+      "simpleBasicQuery" : false,
+      "inputFileName" : "./src/test/resources/CSVWRDFTests/test027.ttl",
+      "default_OUTPUT" : "RDFtoCSVOutput.csv",
+      "default_PARSING" : "rdf4j",
+      "default_STREAMING" : false,
+      "default_METADATA_ROWNUMS" : false,
+      "default_FIRST_NORMAL_FORM" : true,
+      "default_MULTIPLE_TABLES" : false,
+      "default_STREAMING_CONTINUOUS" : false,
+      "default_SIMPLE_BASIC_QUERY" : false,
+      "default_CONVERSION_METHOD" : "basicQuery",
+      "default_READ_METHOD" : "rdf4j",
+      "default_LOG_LEVEL" : "INFO",
+      "default_CONVERSION_HAS_BLANK_NODES" : false,
+      "default_CONVERSION_HAS_RDF_TYPES" : true
+    }
+  } ]
+}

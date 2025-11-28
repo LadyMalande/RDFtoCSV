@@ -1,0 +1,70 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test007TestOutput.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "valueUrl" : "http://example.org/{+type}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type_1",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://example.org/{+type}",
+        "aboutUrl" : "http://example.org/{+type}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://example.org/type",
+        "aboutUrl" : "http://example.org/{+type}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "type",
+      "rowTitles" : [ "type", "type_1" ]
+    },
+    "config" : {
+      "file" : "./src/test/resources/XMLBaseTests/test007.rdf",
+      "logLevel" : "INFO",
+      "multipleTables" : false,
+      "parsing" : "rdf4j",
+      "streaming" : false,
+      "firstNormalForm" : true,
+      "output" : "./src/test/resources/XMLBaseTests/test007TestOutput",
+      "columnNamingConvention" : "original",
+      "preferredLanguages" : "en,cs",
+      "conversionMethod" : "basicQuery",
+      "intermediateFileNames" : "test007TestOutput.csv,",
+      "conversionHasBlankNodes" : false,
+      "conversionHasRdfTypes" : true,
+      "outputZipFileName" : "test007TestOutput_CSVW.zip",
+      "readMethod" : "rdf4j",
+      "metadataRowNums" : false,
+      "outputFilePath" : "./src/test/resources/XMLBaseTests/test007.rdf",
+      "outputMetadataFileName" : "./src/test/resources/XMLBaseTests/test007.rdf.csv-metadata.json",
+      "outputFileName" : "./src/test/resources/XMLBaseTests/test007TestOutput",
+      "streamingContinuous" : false,
+      "simpleBasicQuery" : false,
+      "inputFileName" : "./src/test/resources/XMLBaseTests/test007.rdf",
+      "default_OUTPUT" : "RDFtoCSVOutput.csv",
+      "default_PARSING" : "rdf4j",
+      "default_STREAMING" : false,
+      "default_METADATA_ROWNUMS" : false,
+      "default_FIRST_NORMAL_FORM" : true,
+      "default_MULTIPLE_TABLES" : false,
+      "default_STREAMING_CONTINUOUS" : false,
+      "default_SIMPLE_BASIC_QUERY" : false,
+      "default_CONVERSION_METHOD" : "basicQuery",
+      "default_READ_METHOD" : "rdf4j",
+      "default_LOG_LEVEL" : "INFO",
+      "default_CONVERSION_HAS_BLANK_NODES" : false,
+      "default_CONVERSION_HAS_RDF_TYPES" : true
+    }
+  } ]
+}

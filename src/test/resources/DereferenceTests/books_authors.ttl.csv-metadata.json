@@ -1,0 +1,111 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "books_authorsOUT.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "http://example.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Title",
+        "name" : "title",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/title",
+        "valueUrl" : "{+title}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "writesGenre",
+        "name" : "writesGenre",
+        "propertyUrl" : "http://example.org/writesGenre",
+        "valueUrl" : "{+writesGenre}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "publishes",
+        "name" : "publishes",
+        "propertyUrl" : "http://example.org/publishes",
+        "valueUrl" : "http://example.org/{+publishes}",
+        "aboutUrl" : "http://example.org/{+Subject}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
+        "valueUrl" : "{+name}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "isbn",
+        "name" : "isbn",
+        "propertyUrl" : "http://example.org/isbn",
+        "valueUrl" : "{+isbn}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Date Issued",
+        "name" : "issued",
+        "propertyUrl" : "http://purl.org/dc/terms/issued",
+        "valueUrl" : "{+issued}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "relatedTo",
+        "name" : "relatedTo",
+        "propertyUrl" : "http://example.org/relatedTo",
+        "valueUrl" : "http://example.org/{+relatedTo}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Label",
+        "name" : "label",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#label",
+        "valueUrl" : "{+label}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "See Also",
+        "name" : "seeAlso",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#seeAlso",
+        "valueUrl" : "http://example.org/{+seeAlso}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "mbox",
+        "name" : "mbox",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/mbox",
+        "valueUrl" : "mailto:{+mbox}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Creator",
+        "name" : "creator",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/creator",
+        "valueUrl" : "http://example.org/{+creator}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "http://example.org/{+Publisher}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "title", "writesGenre", "publishes", "name", "isbn", "issued", "relatedTo", "label", "seeAlso", "mbox", "type", "creator" ]
+    }
+  } ]
+}

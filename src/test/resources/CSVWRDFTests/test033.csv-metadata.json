@@ -1,0 +1,115 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test033.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "file://events-listing.csv#{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "offers",
+        "name" : "offers",
+        "propertyUrl" : "http://schema.org/offers",
+        "valueUrl" : "file://events-listing.csv#{+offers}",
+        "aboutUrl" : "file://events-listing.csv#{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "startDate",
+        "name" : "startDate",
+        "propertyUrl" : "http://schema.org/startDate",
+        "valueUrl" : "{+startDate}",
+        "datatype" : "dateTime",
+        "aboutUrl" : "file://events-listing.csv#{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "location",
+        "name" : "location",
+        "propertyUrl" : "http://schema.org/location",
+        "valueUrl" : "file://events-listing.csv#{+location}",
+        "aboutUrl" : "file://events-listing.csv#{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://schema.org/name",
+        "valueUrl" : "{+name}",
+        "aboutUrl" : "file://events-listing.csv#{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "address",
+        "name" : "address",
+        "propertyUrl" : "http://schema.org/address",
+        "valueUrl" : "{+address}",
+        "aboutUrl" : "file://events-listing.csv#{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "url",
+        "name" : "url",
+        "propertyUrl" : "http://schema.org/url",
+        "valueUrl" : "{+url}",
+        "datatype" : "anyURI",
+        "aboutUrl" : "file://events-listing.csv#{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://schema.org/{+type}",
+        "aboutUrl" : "file://events-listing.csv#{+Subject}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "file://events-listing.csv#{+MusicEvent}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "offers", "startDate", "location", "name", "address", "url", "type" ]
+    },
+    "config" : {
+      "file" : "./src/test/resources/CSVWRDFTests/test033.ttl",
+      "logLevel" : "INFO",
+      "multipleTables" : false,
+      "parsing" : "rdf4j",
+      "streaming" : false,
+      "firstNormalForm" : true,
+      "output" : "./src/test/resources/CSVWRDFTests/test033",
+      "outputMetadata" : "./src/test/resources/CSVWRDFTests/test033.ttl.csv-metadata.json",
+      "columnNamingConvention" : "original",
+      "preferredLanguages" : "en,cs",
+      "conversionMethod" : "basicQuery",
+      "intermediateFileNames" : "test033.csv,",
+      "conversionHasBlankNodes" : false,
+      "conversionHasRdfTypes" : true,
+      "outputZipFileName" : "test033_CSVW.zip",
+      "readMethod" : "rdf4j",
+      "metadataRowNums" : false,
+      "outputFilePath" : "./src/test/resources/CSVWRDFTests/test033.ttl",
+      "outputMetadataFileName" : "./src/test/resources/CSVWRDFTests/test033.csv-metadata.json",
+      "outputFileName" : "test033",
+      "streamingContinuous" : false,
+      "simpleBasicQuery" : false,
+      "inputFileName" : "./src/test/resources/CSVWRDFTests/test033.ttl",
+      "default_OUTPUT" : "RDFtoCSVOutput.csv",
+      "default_PARSING" : "rdf4j",
+      "default_CONVERSION_HAS_RDF_TYPES" : true,
+      "default_CONVERSION_HAS_BLANK_NODES" : false,
+      "default_CONVERSION_METHOD" : "basicQuery",
+      "default_LOG_LEVEL" : "INFO",
+      "default_MULTIPLE_TABLES" : false,
+      "default_READ_METHOD" : "rdf4j",
+      "default_STREAMING" : false,
+      "default_METADATA_ROWNUMS" : false,
+      "default_STREAMING_CONTINUOUS" : false,
+      "default_SIMPLE_BASIC_QUERY" : false,
+      "default_FIRST_NORMAL_FORM" : true
+    }
+  } ]
+}

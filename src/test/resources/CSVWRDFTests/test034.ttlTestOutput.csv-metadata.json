@@ -1,0 +1,121 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "junior-roles.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Identifier",
+        "name" : "identifier",
+        "propertyUrl" : "http://purl.org/dc/terms/identifier",
+        "valueUrl" : "{+identifier}"
+      }, {
+        "@type" : "Column",
+        "titles" : "held by",
+        "name" : "heldBy",
+        "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
+        "valueUrl" : "http://example.org/organization/hefce.ac.uk/person/{+heldBy}"
+      }, {
+        "@type" : "Column",
+        "titles" : "grade",
+        "name" : "grade",
+        "propertyUrl" : "http://example.org/gov.uk/def/grade",
+        "valueUrl" : "{+grade}"
+      }, {
+        "@type" : "Column",
+        "titles" : "job",
+        "name" : "job",
+        "propertyUrl" : "http://example.org/gov.uk/def/job",
+        "valueUrl" : "{+job}"
+      }, {
+        "@type" : "Column",
+        "titles" : "reports to",
+        "name" : "reportsTo",
+        "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
+        "valueUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo}"
+      }, {
+        "@type" : "Column",
+        "titles" : "profession",
+        "name" : "profession",
+        "propertyUrl" : "http://example.org/gov.uk/def/profession",
+        "valueUrl" : "{+profession}"
+      }, {
+        "@type" : "Column",
+        "titles" : "post in",
+        "name" : "postIn",
+        "propertyUrl" : "http://www.w3.org/ns/org#postIn",
+        "valueUrl" : "http://example.org/organization/{+postIn}"
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
+        "valueUrl" : "{+name}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "identifier", "heldBy", "grade", "job", "reportsTo", "profession", "postIn", "name" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ],
+    "config" : {
+      "file" : "./src/test/resources/CSVWRDFTests/test034.ttl",
+      "logLevel" : "INFO",
+      "multipleTables" : false,
+      "parsing" : "rdf4j",
+      "streaming" : false,
+      "firstNormalForm" : true,
+      "output" : "./src/test/resources/CSVWRDFTests/test034.ttlTestOutput",
+      "outputMetadata" : "./src/test/resources/CSVWRDFTests/test034.ttl.csv-metadata.json",
+      "columnNamingConvention" : "original",
+      "preferredLanguages" : "en,cs",
+      "conversionMethod" : "basicQuery",
+      "intermediateFileNames" : "junior-roles.csv,",
+      "conversionHasBlankNodes" : true,
+      "conversionHasRdfTypes" : true,
+      "outputZipFileName" : "test034_CSVW.zip",
+      "readMethod" : "rdf4j",
+      "metadataRowNums" : true,
+      "outputFilePath" : "./src/test/resources/CSVWRDFTests/test034.ttl",
+      "outputMetadataFileName" : "./src/test/resources/CSVWRDFTests/test034.ttlTestOutput.csv-metadata.json",
+      "outputFileName" : "junior-roles.csv",
+      "streamingContinuous" : false,
+      "simpleBasicQuery" : false,
+      "inputFileName" : "./src/test/resources/CSVWRDFTests/test034.ttl",
+      "default_READ_METHOD" : "rdf4j",
+      "default_MULTIPLE_TABLES" : false,
+      "default_CONVERSION_METHOD" : "basicQuery",
+      "default_LOG_LEVEL" : "INFO",
+      "default_SIMPLE_BASIC_QUERY" : false,
+      "default_FIRST_NORMAL_FORM" : true,
+      "default_STREAMING" : false,
+      "default_METADATA_ROWNUMS" : false,
+      "default_STREAMING_CONTINUOUS" : false,
+      "default_CONVERSION_HAS_BLANK_NODES" : false,
+      "default_CONVERSION_HAS_RDF_TYPES" : true,
+      "default_OUTPUT" : "RDFtoCSVOutput.csv",
+      "default_PARSING" : "rdf4j"
+    }
+  } ]
+}

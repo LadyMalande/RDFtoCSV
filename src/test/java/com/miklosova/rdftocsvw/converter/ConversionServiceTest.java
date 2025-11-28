@@ -106,12 +106,14 @@ class ConversionServiceTest extends BaseTest {
      //BaseRock generated method id: ${testProcessConversionTypeWithInvalidInput}, hash: 1D9713266D9D8E7955E88244475D5B46
      @Test
      void testProcessConversionTypeWithInvalidInput() throws Exception {
-         AppConfig config = new AppConfig.Builder(fileName)
-                 .parsing("invalidChoice")
-                 .build();
-         config.setConversionMethod("invalidChoice");
-         ConversionService service = new ConversionService(config);
-         assertThrows(IllegalArgumentException.class, () -> rdfToCSV.createRepositoryConnection(db, fileName, "invalidChoice"));
+         assertThrows(IllegalArgumentException.class, () -> {
+             AppConfig config = new AppConfig.Builder(fileName)
+                     .parsing("invalidChoice")
+                     .build();
+             config.setConversionMethod("invalidChoice");
+             ConversionService service = new ConversionService(config);
+             rdfToCSV.createRepositoryConnection(db, fileName, "invalidChoice");
+         });
      }
 
      // AppConfig-based test methods

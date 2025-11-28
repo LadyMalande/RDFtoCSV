@@ -87,7 +87,7 @@ public class Dereferencer {
                     } catch (IOException e) {
                         ValueFactory vf = SimpleValueFactory.getInstance();
                         IRI propertyUrlIRI = vf.createIRI(iri);
-                        logger.info("--------After IOException is caught in fetchLabelUncached, trying to get LocalName...");
+                        //logger.warning("--------After IOException is caught in fetchLabelUncached, trying to get LocalName...");
                         return propertyUrlIRI.getLocalName();
                         //throw new RuntimeException("Failed to fetch label for IRI: " + iri, e);
                     }
@@ -315,7 +315,7 @@ public class Dereferencer {
 
         URI uri = URI.create(fullUri);
         String path = uri.getPath();
-        logger.info("uri.getFragment(): " + uri.getFragment());
+        //logger.info("uri.getFragment(): " + uri.getFragment());
         if (Arrays.asList(standardKnownPrefixes).contains(fullUri)) {
             return fullUri;
         }
@@ -338,7 +338,7 @@ public class Dereferencer {
             int lastSlash = path.lastIndexOf('/');
             String basePath = path.substring(0, lastSlash);
             String baseUri = uri.getScheme() + "://" + uri.getHost() + basePath;
-            logger.info("baseUri: " + baseUri);
+            logger.info("baseUri starts with any STANDARDKNOWNPREFIXES: " + baseUri);
             return baseUri;
         } else {
             return fullUri;
@@ -442,16 +442,16 @@ public class Dereferencer {
     }
 
     public String fetchLabel(String iri) throws IOException, ExecutionException {
-        logger.info("The iri in fetchLabel = " + iri);
-        logger.info("The config before fetching label file: " + this.config.getFile());
-        logger.info("The config before fetching label: " + this.config.getColumnNamingConvention());
+        //logger.info("The iri in fetchLabel = " + iri);
+        //logger.info("The config before fetching label file: " + this.config.getFile());
+        //logger.info("The config before fetching label: " + this.config.getColumnNamingConvention());
         return labelCache.getUnchecked(iri);
     }
 
     String fetchLabelUncached(String iri) throws IOException {
         long startTime = System.currentTimeMillis();
-        logger.info("--------Before new HttpGet(extractBaseUri(" + iri + "));");
-        logger.info("Config language tags: " + config.getPreferredLanguages() );
+        //logger.info("--------Before new HttpGet(extractBaseUri(" + iri + "));");
+        //logger.info("Config language tags: " + config.getPreferredLanguages() );
 
         HttpGet httpGet = new HttpGet(extractBaseUri(iri));
         long startTime1 = System.currentTimeMillis();
@@ -466,11 +466,11 @@ public class Dereferencer {
                         "application/n-quads, " +
                         "application/trig");
         long startTime2 = System.currentTimeMillis();
-        Arrays.stream(httpGet.getAllHeaders()).toList().forEach(header -> logger.info("request header -- " + header.getName() + ": " + header.getValue()));
+        //Arrays.stream(httpGet.getAllHeaders()).toList().forEach(header -> logger.info("request header -- " + header.getName() + ": " + header.getValue()));
 
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             long startTime3 = System.currentTimeMillis();
-            logger.info("--------STATUS CODE = " + response.getStatusLine().getStatusCode());
+            //logger.info("--------STATUS CODE = " + response.getStatusLine().getStatusCode());
 
             if (response.getStatusLine().getStatusCode() != 200) {
                 Arrays.stream(response.getAllHeaders()).toList().forEach(header -> logger.info(header.getName() + ": " + header.getValue()));
@@ -834,7 +834,7 @@ public class Dereferencer {
      * @return list of preferred language codes
      */
     private List<String> loadPreferredLanguages(AppConfig config) {
-        logger.info("loadPreferredLanguages config: " + config.getPreferredLanguages());
+        //logger.info("loadPreferredLanguages config: " + config.getPreferredLanguages());
         String configValue = config.getPreferredLanguages();
         if (configValue == null || configValue.trim().isEmpty()) {
             return Arrays.asList("en", "cs"); // default fallback

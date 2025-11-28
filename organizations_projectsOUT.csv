@@ -1,0 +1,13 @@
+Subject,Title,name,country,runsProject,member,collaborator,lead,homepage,mbox,type
+http://example.org/org1,Open Data Initiative,,USA,projA,alice,,,http://www.opendata.org/,,http://example.org/Organization
+http://example.org/org1,Open Data Initiative,,USA,projA,bob,,,http://www.opendata.org/,,http://example.org/Organization
+http://example.org/org2,Semantic Web Foundation,,UK,projB,paul,,,http://www.semanticweb.org/,,http://example.org/Organization
+http://example.org/org2,Semantic Web Foundation,,UK,projC,paul,,,http://www.semanticweb.org/,,http://example.org/Organization
+http://example.org/projA,Linked Cities Dataset,,,,,bob,alice,,,http://example.org/Project
+http://example.org/projB,Web Crawler for RDFa,,,,,,paul,,,http://example.org/Project
+http://example.org/projC,Ontology Visualizer,,,,,paul,susan,,,http://example.org/Project
+http://example.org/projC,Ontology Visualizer,,,,,alice,susan,,,http://example.org/Project
+http://example.org/alice,,Alice Green,,,,,,,alice@opendata.org,http://xmlns.com/foaf/0.1/Person
+http://example.org/bob,,Bob Blue,,,,,,,bob@opendata.org,http://xmlns.com/foaf/0.1/Person
+http://example.org/paul,,Paul Black,,,,,,,paul@semanticweb.org,http://xmlns.com/foaf/0.1/Person
+http://example.org/susan,,Susan Yellow,,,,,,,susan@semanticweb.org,http://xmlns.com/foaf/0.1/Person

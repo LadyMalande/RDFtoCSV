@@ -105,7 +105,7 @@ public class MethodService {
             logger.log(Level.INFO, "Successfully Downloaded. NewFileName is " + newFileName);
             return newFileName;
         } catch (MalformedURLException e) {
-            System.err.println("URL is invalid");
+            System.err.println("URL is invalid: " + fileName + ". Returns original filename in processFileOrIRI method.");
             return fileName;
             // the URL is not in a valid form
         } catch (IOException ex) {

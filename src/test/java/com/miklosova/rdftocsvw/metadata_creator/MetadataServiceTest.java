@@ -16,7 +16,6 @@ package com.miklosova.rdftocsvw.metadata_creator;
  import org.mockito.MockedStatic;
  import org.mockito.MockitoAnnotations;
  import com.miklosova.rdftocsvw.output_processor.FileWrite;
- import org.mockito.InjectMocks;
  import org.junit.jupiter.params.provider.CsvSource;
  import static org.junit.jupiter.api.Assertions.*;
  import static org.mockito.Mockito.*;
@@ -25,7 +24,6 @@ package com.miklosova.rdftocsvw.metadata_creator;
 
 class MetadataServiceTest extends BaseTest {
 
-     @InjectMocks
      private MetadataService metadataService;
 
      @Mock
@@ -38,9 +36,15 @@ class MetadataServiceTest extends BaseTest {
      @Mock
      private FileWrite fileWrite;
 
+     private AppConfig testConfig;
+
      @BeforeEach
      void setUp() throws Exception {
          MockitoAnnotations.openMocks(this);
+         testConfig = new AppConfig.Builder("test.nt")
+                 .parsing("rdf4j")
+                 .build();
+         metadataService = new MetadataService(testConfig);
          rdfToCSV = new RDFtoCSV(config);
          db = new SailRepository(new MemoryStore());
      }

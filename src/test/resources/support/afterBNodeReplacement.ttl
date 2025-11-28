@@ -1,0 +1,17 @@
+@prefix ex: <http://example.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+_:genid-82d4e4975fc943508de5e1f146a3af00232-b0 a <http://purl.org/dc/dcmitype/Text>;
+  dcterms:creator ex:TerezaMiklóšová;
+  dcterms:title "Automatický převod RDF dat do CSV"@cs, "Jiný název"@cs, "Automated transformation of RDF data to CSV"@en .
+
+ex:yourThesis a <http://purl.org/dc/dcmitype/Text>;
+  dcterms:creator ex:LenkaHoráková;
+  dcterms:title "Tvoje diplomová práce"@cs, "Twoja praca magisterska"@pl .
+
+ex:myGraph a rdf:Graph .
+
+<https://blank_Nodes_IRI.org/0> a <http://purl.org/dc/dcmitype/Text>;
+  dcterms:creator ex:TerezaMiklóšová;
+  dcterms:title "Automatický převod RDF dat do CSV"@cs, "Jiný název"@cs, "Automated transformation of RDF data to CSV"@en .

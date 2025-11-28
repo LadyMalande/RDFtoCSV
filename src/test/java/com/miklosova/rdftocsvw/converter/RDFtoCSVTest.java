@@ -89,8 +89,9 @@ class RDFtoCSVTest {
             .parsing("rdf4j")
             .build();
         RDFtoCSV instance = new RDFtoCSV(testConfig);
-        assertEquals("test.rdf", instance.getFilePathForOutput());
-        assertEquals("test.rdf.csv-metadata.json", instance.getMetadataFilename());
+        // RDFtoCSV constructor adds "../" prefix for non-URL file paths
+        assertEquals("../test.rdf", instance.getFilePathForOutput());
+        assertEquals("../test.rdf.csv-metadata.json", instance.getMetadataFilename());
      }
 
      @Test

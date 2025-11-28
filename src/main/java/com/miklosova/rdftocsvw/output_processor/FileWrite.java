@@ -99,7 +99,7 @@ public class FileWrite {
         }
         StringBuilder sb = new StringBuilder();
         fileNamesCreated.forEach(fileName -> sb.append(fileName).append(","));
-        System.out.println("newFileName writeFilesToConfigFile   allFileNames = " + sb.toString());
+        //System.out.println("newFileName writeFilesToConfigFile   allFileNames = " + sb.toString());
         config.setIntermediateFileNames(sb.toString());
     }
 
@@ -127,11 +127,11 @@ public class FileWrite {
      * @return The contents of the file with headers as String.
      */
     public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata, AppConfig config) {
-        logger.info("fileName for final .csv file before changing = " + fileName);
+        //logger.info("fileName for final .csv file before changing = " + fileName);
         fileName = (fileName.split("/"))[fileName.split("/").length - 1];
-        logger.info("fileName for final .csv file after changing = " + fileName);
+        //logger.info("fileName for final .csv file after changing = " + fileName);
         fileName = getFullPathOfFile(fileName);
-        logger.info("fileName for final .csv file = " + fileName);
+        //logger.info("fileName for final .csv file = " + fileName);
         ObjectNode originalMetadataJSON = null;
         try {
             originalMetadataJSON = JsonUtil.serializeWithContext(metadata);

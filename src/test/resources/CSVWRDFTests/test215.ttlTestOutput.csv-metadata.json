@@ -1,0 +1,114 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test215.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "maxExclusive",
+        "name" : "maxExclusive",
+        "propertyUrl" : "file://test215.csv#maxExclusive",
+        "valueUrl" : "{+maxExclusive}"
+      }, {
+        "@type" : "Column",
+        "titles" : "maxInclusive",
+        "name" : "maxInclusive",
+        "propertyUrl" : "file://test215.csv#maxInclusive",
+        "valueUrl" : "{+maxInclusive}",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "maximum",
+        "name" : "maximum",
+        "propertyUrl" : "file://test215.csv#maximum",
+        "valueUrl" : "{+maximum}",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "minExclusive",
+        "name" : "minExclusive",
+        "propertyUrl" : "file://test215.csv#minExclusive",
+        "valueUrl" : "{+minExclusive}",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "minInclusive",
+        "name" : "minInclusive",
+        "propertyUrl" : "file://test215.csv#minInclusive",
+        "valueUrl" : "{+minInclusive}",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "minimum",
+        "name" : "minimum",
+        "propertyUrl" : "file://test215.csv#minimum",
+        "valueUrl" : "{+minimum}",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "maxExclusive", "maxInclusive", "maximum", "minExclusive", "minInclusive", "minimum" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ],
+    "config" : {
+      "file" : "./src/test/resources/CSVWRDFTests/test215.ttl",
+      "logLevel" : "INFO",
+      "multipleTables" : false,
+      "parsing" : "rdf4j",
+      "streaming" : false,
+      "firstNormalForm" : true,
+      "output" : "./src/test/resources/CSVWRDFTests/test215.ttlTestOutput",
+      "outputMetadata" : "./src/test/resources/CSVWRDFTests/test215.ttl.csv-metadata.json",
+      "columnNamingConvention" : "original",
+      "preferredLanguages" : "en,cs",
+      "conversionMethod" : "basicQuery",
+      "intermediateFileNames" : "test215.csv,",
+      "conversionHasBlankNodes" : true,
+      "conversionHasRdfTypes" : true,
+      "outputZipFileName" : "test215_CSVW.zip",
+      "readMethod" : "rdf4j",
+      "metadataRowNums" : true,
+      "outputFilePath" : "./src/test/resources/CSVWRDFTests/test215.ttl",
+      "outputMetadataFileName" : "./src/test/resources/CSVWRDFTests/test215.ttlTestOutput.csv-metadata.json",
+      "outputFileName" : "test215.csv",
+      "streamingContinuous" : false,
+      "simpleBasicQuery" : false,
+      "inputFileName" : "./src/test/resources/CSVWRDFTests/test215.ttl",
+      "default_CONVERSION_HAS_RDF_TYPES" : true,
+      "default_CONVERSION_HAS_BLANK_NODES" : false,
+      "default_OUTPUT" : "RDFtoCSVOutput.csv",
+      "default_PARSING" : "rdf4j",
+      "default_STREAMING_CONTINUOUS" : false,
+      "default_SIMPLE_BASIC_QUERY" : false,
+      "default_CONVERSION_METHOD" : "basicQuery",
+      "default_MULTIPLE_TABLES" : false,
+      "default_READ_METHOD" : "rdf4j",
+      "default_METADATA_ROWNUMS" : false,
+      "default_STREAMING" : false,
+      "default_LOG_LEVEL" : "INFO",
+      "default_FIRST_NORMAL_FORM" : true
+    }
+  } ]
+}

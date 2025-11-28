@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.metadata_creator.metadata_structure;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -36,6 +37,7 @@ public class Metadata {
     /**
      * Application configuration
      */
+    @JsonIgnore
     private AppConfig config;
 
     /**

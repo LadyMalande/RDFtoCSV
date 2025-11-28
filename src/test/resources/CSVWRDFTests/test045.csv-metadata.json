@@ -1,0 +1,133 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test045.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "aboutUrl",
+        "name" : "aboutUrl",
+        "propertyUrl" : "file://test045.csv#aboutUrl",
+        "valueUrl" : "{+aboutUrl}"
+      }, {
+        "@type" : "Column",
+        "titles" : "datatype",
+        "name" : "datatype",
+        "propertyUrl" : "file://test045.csv#datatype",
+        "valueUrl" : "{+datatype}"
+      }, {
+        "@type" : "Column",
+        "titles" : "default",
+        "name" : "default",
+        "propertyUrl" : "file://test045.csv#default",
+        "valueUrl" : "{+default}"
+      }, {
+        "@type" : "Column",
+        "titles" : "lang",
+        "name" : "lang",
+        "propertyUrl" : "file://test045.csv#lang",
+        "valueUrl" : "{+lang}"
+      }, {
+        "@type" : "Column",
+        "titles" : "null",
+        "name" : "null",
+        "propertyUrl" : "file://test045.csv#null",
+        "valueUrl" : "{+null}"
+      }, {
+        "@type" : "Column",
+        "titles" : "ordered",
+        "name" : "ordered",
+        "propertyUrl" : "file://test045.csv#ordered",
+        "valueUrl" : "{+ordered}"
+      }, {
+        "@type" : "Column",
+        "titles" : "propertyUrl",
+        "name" : "propertyUrl",
+        "propertyUrl" : "file://test045.csv#propertyUrl",
+        "valueUrl" : "{+propertyUrl}"
+      }, {
+        "@type" : "Column",
+        "titles" : "separator",
+        "name" : "separator",
+        "propertyUrl" : "file://test045.csv#separator",
+        "valueUrl" : "{+separator}"
+      }, {
+        "@type" : "Column",
+        "titles" : "textDirection",
+        "name" : "textDirection",
+        "propertyUrl" : "file://test045.csv#textDirection",
+        "valueUrl" : "{+textDirection}"
+      }, {
+        "@type" : "Column",
+        "titles" : "valueUrl",
+        "name" : "valueUrl",
+        "propertyUrl" : "file://test045.csv#valueUrl",
+        "valueUrl" : "{+valueUrl}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "aboutUrl", "datatype", "default", "lang", "null", "ordered", "propertyUrl", "separator", "textDirection", "valueUrl" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ],
+    "config" : {
+      "file" : "./src/test/resources/CSVWRDFTests/test045.ttl",
+      "logLevel" : "INFO",
+      "multipleTables" : false,
+      "parsing" : "rdf4j",
+      "streaming" : false,
+      "firstNormalForm" : true,
+      "output" : "./src/test/resources/CSVWRDFTests/test045",
+      "outputMetadata" : "./src/test/resources/CSVWRDFTests/test045.ttl.csv-metadata.json",
+      "columnNamingConvention" : "original",
+      "preferredLanguages" : "en,cs",
+      "conversionMethod" : "basicQuery",
+      "intermediateFileNames" : "test045.csv,",
+      "conversionHasBlankNodes" : true,
+      "conversionHasRdfTypes" : true,
+      "outputZipFileName" : "test045_CSVW.zip",
+      "readMethod" : "rdf4j",
+      "metadataRowNums" : true,
+      "outputFilePath" : "./src/test/resources/CSVWRDFTests/test045.ttl",
+      "outputMetadataFileName" : "./src/test/resources/CSVWRDFTests/test045.csv-metadata.json",
+      "outputFileName" : "test045.csv",
+      "streamingContinuous" : false,
+      "simpleBasicQuery" : false,
+      "inputFileName" : "./src/test/resources/CSVWRDFTests/test045.ttl",
+      "default_OUTPUT" : "RDFtoCSVOutput.csv",
+      "default_PARSING" : "rdf4j",
+      "default_CONVERSION_HAS_RDF_TYPES" : true,
+      "default_CONVERSION_HAS_BLANK_NODES" : false,
+      "default_CONVERSION_METHOD" : "basicQuery",
+      "default_LOG_LEVEL" : "INFO",
+      "default_MULTIPLE_TABLES" : false,
+      "default_READ_METHOD" : "rdf4j",
+      "default_STREAMING" : false,
+      "default_METADATA_ROWNUMS" : false,
+      "default_STREAMING_CONTINUOUS" : false,
+      "default_SIMPLE_BASIC_QUERY" : false,
+      "default_FIRST_NORMAL_FORM" : true
+    }
+  } ]
+}

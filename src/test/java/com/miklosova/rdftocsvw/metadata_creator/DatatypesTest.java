@@ -89,7 +89,7 @@ public class DatatypesTest extends BaseTest {
         String allFiles = config.getIntermediateFileNames();
         for (String filename : allFiles.split(",")) {
             String newFileName = filePathForOutput + i + ".csv";
-            System.out.println("newFileName " + filename);
+            //System.out.println("newFileName " + filename);
             FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), this.testMetadata, config);
         }
 

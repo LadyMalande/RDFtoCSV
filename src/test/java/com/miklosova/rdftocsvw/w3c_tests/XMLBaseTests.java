@@ -118,7 +118,7 @@ public class XMLBaseTests extends BaseTest {
             ArrayList<String> fileNamesCreated = new ArrayList<>();
             String allFiles = config.getIntermediateFileNames();
             for (String filename : allFiles.split(",")) {
-                System.out.println("newFileName " + filename);
+                //System.out.println("newFileName " + filename);
                 FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), this.testMetadata, config);
                 Assert.assertFalse(TestSupport.isFileEmpty(filename));
             }

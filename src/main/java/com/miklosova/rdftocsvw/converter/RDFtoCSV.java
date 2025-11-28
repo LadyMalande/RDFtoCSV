@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -30,6 +31,8 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  * The main library class for requesting the RDF to CSVW conversion. The Web service operates on these methods.
  */
 public class RDFtoCSV {
+    private static final Logger logger = Logger.getLogger(RDFtoCSV.class.getName());
+    
     /**
      * Delimiter for answering /csv/string and /csv if the conversion method is set to MORE.
      * The generated tables are written to one string after each other, and are delimited by this string to help the viewer
@@ -100,6 +103,7 @@ public class RDFtoCSV {
     public RDFtoCSV(AppConfig config) {
         this.config = config;
         this.fileName = isUrl(config.getFile()) ? config.getFile() : "../" + config.getFile();
+        logger.info("Input file for conversion from RDFtoCSV: " + this.fileName);
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
         if (isUrl(config.getFile())) {
@@ -154,8 +158,12 @@ public class RDFtoCSV {
         
         this.config = builder.build();
         this.fileName = fileName;
+        logger.info("Input file for conversion from RDFtoCSV: " + this.fileName);
+
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
+        logger.info("this.metadataFilename = this.fileName + .csv-metadata.json;" + this.metadataFilename);
+
         if (isUrl(fileName)) {
             this.filePathForOutput = iri(this.fileName).getLocalName();
         }
@@ -335,7 +343,7 @@ public class RDFtoCSV {
                 }
 
                 String newFileName = files[i];
-                System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
+                //System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
                 sb.append(FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata, config));
                 i++;
             }
@@ -343,7 +351,7 @@ public class RDFtoCSV {
             RowAndKey rnk = (RowAndKey) po.getPrefinishedOutput();
 
             String newFileName = files[0];
-            System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
+            //System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
             FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata, config);
         }
         db.shutDown();
@@ -378,7 +386,7 @@ public class RDFtoCSV {
 
                 for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
                     String newFileName = files[i];
-                    System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
+                    //System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
                     FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata, config);
                     i++;
                 }
@@ -386,7 +394,7 @@ public class RDFtoCSV {
                 RowAndKey rnk = (RowAndKey) po.getPrefinishedOutput();
 
                 String newFileName = files[0];
-                System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
+                //System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
                 FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata, config);
             } catch (NullPointerException ex2) {
                 // The po is null because the methods for processing didn't create po

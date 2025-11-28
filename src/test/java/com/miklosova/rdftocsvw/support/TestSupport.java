@@ -122,7 +122,7 @@ public class TestSupport {
         } catch (ClassCastException ex) {
             RowAndKey rnk = (RowAndKey) prefinishedOutput.getPrefinishedOutput();
             String filename = allFiles.split(",")[0];
-            System.out.println("newFileName " + filename);
+            //System.out.println("newFileName " + filename);
             FileWrite.saveCSVFileFromRows(filename, rnk.getRows(), metadata, metadata.getConfig());
         }
 

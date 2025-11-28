@@ -61,8 +61,7 @@ public class StreamingNTriplesCSVTest extends BaseTest {
     }
 
     void createCSV() {
-        System.out.println("LoadConfig");
-        Main.main(new String[]{"-f", filePath, "-t", "-p", "streaming"});
+        Main.main(new String[]{"-f", filePath, "-p", "streaming"});
 
     }
 

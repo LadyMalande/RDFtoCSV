@@ -11,8 +11,8 @@ import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.junit.Assert;
 import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -47,7 +47,9 @@ public class CSVWRDFTests extends BaseTest {
         this.nameForTest = nameForTest;
         this.filePath = RESOURCES_PATH + nameForTest;
         this.filePathForMetadata = RESOURCES_PATH + nameForTest + ".csv-metadata.json";
-        this.filePathForOutput = RESOURCES_PATH + nameForTest + "TestOutput";
+        // Remove .ttl extension from output path to avoid duplication
+        String baseNameWithoutExtension = nameForTest.substring(0, nameForTest.lastIndexOf('.'));
+        this.filePathForOutput = RESOURCES_PATH + nameForTest;// + baseNameWithoutExtension;
         this.expectedException = expectedException;
     }
 
@@ -55,6 +57,8 @@ public class CSVWRDFTests extends BaseTest {
     public static Collection<Object[]> configs() {
         Collection<Object[]> conf = new ArrayList<>();
         for (int i = 1; i < 249; i++) {
+        //for (int i = 39; i < 40; i++) {
+
                 //308; i++) {
             Object[] array = new Object[3];
             String extra = "";
@@ -99,13 +103,23 @@ public class CSVWRDFTests extends BaseTest {
 */
     }
 
-    @BeforeEach
-    void createPrefinishedOutputAndMetadata() {
+    @Before
+    public void createPrefinishedOutputAndMetadata() {
+        // Skip setup for tests that should be skipped
+        int testNum = Integer.parseInt(nameForTest.substring(4, 7));
+        Assume.assumeFalse("Skipping test because there is no file defined for this test", NO_FILE.contains(testNum));
+        Assume.assumeFalse("Skipping test because the test is not defined", NOT_DEFINED.contains(testNum));
+        
+        // Skip if expecting exception - setup will be called in test method
+        if (expectedException != null) {
+            return;
+        }
+        
         config = new AppConfig.Builder(this.filePath)
                 .parsing(READ_METHOD)
                 .output(this.filePathForOutput)
+                .outputMetadata(this.filePathForMetadata)
                 .build();
-        config.setIntermediateFileNames(this.filePathForOutput);
         rdfToCSV = new RDFtoCSV(config);
         db = new SailRepository(new MemoryStore());
         try {
@@ -130,7 +144,7 @@ public class CSVWRDFTests extends BaseTest {
             }
             //Assert.assertTrue(exception.getMessage().contains(EXCEPTION_MESSAGE));
         } else {
-            System.out.println("Integer.getInteger(nameForTest.substring(4,7))) " + Integer.parseInt(nameForTest.substring(4,7))+ " nameForTest.substring(4,7)) " + nameForTest.substring(4,7));
+            //System.out.println("Integer.getInteger(nameForTest.substring(4,7))) " + Integer.parseInt(nameForTest.substring(4,7))+ " nameForTest.substring(4,7)) " + nameForTest.substring(4,7));
             Assume.assumeFalse("Skipping test because there is no file defined for this test", (NO_FILE.contains(Integer.parseInt(nameForTest.substring(4,7)))));
             Assume.assumeFalse("Skipping test because the test is not defined", (NOT_DEFINED.contains(Integer.parseInt(nameForTest.substring(4,7)))));
             createPrefinishedOutputAndMetadata();

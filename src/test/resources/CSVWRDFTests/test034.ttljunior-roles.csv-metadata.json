@@ -1,0 +1,70 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "senior-roles.csv,junior-roles.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Identifier",
+        "name" : "identifier",
+        "propertyUrl" : "http://purl.org/dc/terms/identifier"
+      }, {
+        "@type" : "Column",
+        "titles" : "heldBy",
+        "name" : "heldBy",
+        "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
+        "valueUrl" : "{+heldBy}"
+      }, {
+        "@type" : "Column",
+        "titles" : "grade",
+        "name" : "grade",
+        "propertyUrl" : "http://example.org/gov.uk/def/grade"
+      }, {
+        "@type" : "Column",
+        "titles" : "job",
+        "name" : "job",
+        "propertyUrl" : "http://example.org/gov.uk/def/job"
+      }, {
+        "@type" : "Column",
+        "titles" : "reportsTo",
+        "name" : "reportsTo",
+        "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
+        "valueUrl" : "{+reportsTo}"
+      }, {
+        "@type" : "Column",
+        "titles" : "profession",
+        "name" : "profession",
+        "propertyUrl" : "http://example.org/gov.uk/def/profession"
+      }, {
+        "@type" : "Column",
+        "titles" : "postIn",
+        "name" : "postIn",
+        "propertyUrl" : "http://www.w3.org/ns/org#postIn",
+        "valueUrl" : "{+postIn}"
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/name"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "identifier", "heldBy", "grade", "job", "reportsTo", "profession", "postIn", "name" ]
+    }
+  } ]
+}

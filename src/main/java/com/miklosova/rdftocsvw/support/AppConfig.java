@@ -263,7 +263,8 @@ public class AppConfig {
      * This method is called during construction and sets up derived/runtime values.
      */
     private void initializeRuntimeParameters() {
-        this.conversionMethod = multipleTables ? "splitQuery" : DEFAULT_CONVERSION_METHOD;
+        //this.conversionMethod = multipleTables ? "splitQuery" : DEFAULT_CONVERSION_METHOD;
+        this.conversionMethod = (parsing.equalsIgnoreCase("rdf4j") && multipleTables) ? "splitQuery" : (parsing.equalsIgnoreCase("rdf4j") && !multipleTables) ? "basicQuery": (parsing.equalsIgnoreCase("streaming")) ? "streaming" : "bigfilestreaming";
         this.intermediateFileNames = "";
         this.conversionHasBlankNodes = DEFAULT_CONVERSION_HAS_BLANK_NODES;
         this.conversionHasRdfTypes = DEFAULT_CONVERSION_HAS_RDF_TYPES;
@@ -279,8 +280,11 @@ public class AppConfig {
         this.outputFileName = baseFileName; // Initialize to base file name
         this.inputFileName = file; // Initialize to input file name
         this.outputMetadataFileName = this.outputFilePath + ".csv-metadata.json"; // Initialize to base file name + metadata extension
-
-
+        LOGGER.info("+++this.baseFileName = getBaseFileName(file, output); = " + baseFileName);
+        LOGGER.info("+++this.outputFilePath = output != null ? output : baseFileName; = " + this.outputFilePath);
+        LOGGER.info("+++this.outputMetadataFileName = this.outputFilePath + .csv-metadata.json; = " + this.outputMetadataFileName);
+        LOGGER.info("this.outputZipFileName = baseFileName + _CSVW.zip; = " + outputZipFileName);
+        LOGGER.info("+++this.inputFileName = file; = " + this.inputFileName);
 
     }
 
@@ -508,7 +512,7 @@ public class AppConfig {
                 // Use split with -1 to preserve trailing empty strings
                 String[] langs = preferredLanguages.split(",");
                 for (String lang : langs) {
-                    LOGGER.info("lang while parsed from the string array: '" + lang + "'");
+                    //LOGGER.info("lang while parsed from the string array: '" + lang + "'");
                     if (lang.trim().isEmpty()) {
                         throw new IllegalArgumentException("Preferred languages contains empty value. Format: 'en,cs,pl'");
                     }
@@ -625,6 +629,8 @@ public class AppConfig {
      */
     public static String getBaseFileName(String inputFile, String outputFile) {
         String fileName = (outputFile != null && !outputFile.isEmpty()) ? outputFile : inputFile;
+        LOGGER.info("String fileName = (outputFile != null && !outputFile.isEmpty()) ? outputFile : inputFile;");
+        LOGGER.info("+++getBaseFileName --> fileName: " + fileName + ", outputFile = " + outputFile + ", inputFile = " + inputFile);
         // Remove any path
         int lastSlash = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
         if (lastSlash >= 0) {

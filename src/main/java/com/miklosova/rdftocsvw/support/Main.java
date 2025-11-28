@@ -61,7 +61,14 @@ public class Main {
             }
             
             // Build AppConfig from command line arguments
-            AppConfig config = buildConfigFromArgs(cmd, RDFFileToRead);
+            AppConfig config;
+            try {
+                config = buildConfigFromArgs(cmd, RDFFileToRead);
+            } catch (IllegalArgumentException e) {
+                System.err.println("Error: " + e.getMessage());
+                System.exit(1);
+                return;
+            }
             
             // Create RDFtoCSV with the new config
             RDFtoCSV rdFtoCSV = new RDFtoCSV(config);
