@@ -98,7 +98,24 @@ public class FileWrite {
             throw new IllegalArgumentException("AppConfig cannot be null");
         }
         StringBuilder sb = new StringBuilder();
-        fileNamesCreated.forEach(fileName -> sb.append(fileName).append(","));
+        String outputPath = config.getOutputFilePath();
+        
+        for (String fileName : fileNamesCreated) {
+            // If fileName is not an absolute path and we have an output path, build full path
+            boolean isAbsolutePath = (fileName.length() >= 3 && Character.isLetter(fileName.charAt(0)) && 
+                                      fileName.charAt(1) == ':') || fileName.startsWith("/");
+            
+            if (!isAbsolutePath && outputPath != null && !outputPath.isEmpty()) {
+                // Prepend output directory to relative filename
+                File outputFile = new File(outputPath);
+                File parentDir = outputFile.getParentFile();
+                if (parentDir != null) {
+                    fileName = new File(parentDir, fileName).getAbsolutePath();
+                }
+            }
+            
+            sb.append(fileName).append(",");
+        }
         //System.out.println("newFileName writeFilesToConfigFile   allFileNames = " + sb.toString());
         config.setIntermediateFileNames(sb.toString());
     }
@@ -128,7 +145,13 @@ public class FileWrite {
      */
     public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata, AppConfig config) {
         //logger.info("fileName for final .csv file before changing = " + fileName);
-        fileName = (fileName.split("/"))[fileName.split("/").length - 1];
+        // Only extract basename if this is a relative path with / separator (URL or Unix-style path from old code)
+        // Don't strip path if it's an absolute Windows path (C:\...) or Unix path (starts with /)
+        boolean isAbsolutePath = (fileName.length() >= 3 && Character.isLetter(fileName.charAt(0)) && 
+                                  fileName.charAt(1) == ':') || fileName.startsWith("/");
+        if (!isAbsolutePath && fileName.contains("/")) {
+            fileName = (fileName.split("/"))[fileName.split("/").length - 1];
+        }
         //logger.info("fileName for final .csv file after changing = " + fileName);
         fileName = getFullPathOfFile(fileName);
         //logger.info("fileName for final .csv file = " + fileName);

@@ -74,7 +74,8 @@ public class Main {
             RDFtoCSV rdFtoCSV = new RDFtoCSV(config);
             
             try {
-                rdFtoCSV.convertToZip();
+                // Use convertToZipFile() for CLI - creates physical ZIP file on disk
+                rdFtoCSV.convertToZipFile();
             } catch (RDFParseException | IOException rdfParseException) {
                 System.err.println(rdfParseException.getMessage());
             }
@@ -113,10 +114,13 @@ public class Main {
             builder.output(cmd.getOptionValue("o"));
         }
         
-        // Additional parameters could be added here for:
-        // - preferredLanguages
-        // - columnNamingConvention  
-        // - logLevel
+        if (cmd.hasOption("l")) {
+            builder.preferredLanguages(cmd.getOptionValue("l"));
+        }
+        
+        if (cmd.hasOption("c")) {
+            builder.columnNamingConvention(cmd.getOptionValue("c"));
+        }
         
         return builder.build();
     }
@@ -155,12 +159,14 @@ public class Main {
     private static Options createOptions() {
         Options options = new Options();
         options.addOption("t", "multipleTables", false, "Enable creation of multiple tables during conversion");
-        options.addOption("p", "parsing", true, "Specify the parsing method");
+        options.addOption("p", "parsing", true, "Specify the parsing method (rdf4j, streaming, bigfilestreaming)");
         options.addOption("h", "help", false, "Show the command line options");
         options.addOption("f", "file", true, "File for conversion");
         options.addOption("s", "streaming", false, "Parse the file in streaming mode (continual parsing until stopped)");
         options.addOption("n", "firstNormalForm", false, "Put the output CSV data into first normal form (every cell contains only one entry, no lists of values)");
         options.addOption("o", "output", true, "Put the output path for the file");
+        options.addOption("l", "languages", true, "Comma-separated list of preferred languages for labels (e.g., 'en,cs,de'). Default: 'en,cs'");
+        options.addOption("c", "convention", true, "Column naming convention (camelCase, PascalCase, snake_case, SCREAMING_SNAKE_CASE, kebab-case, Title Case, dot.notation, original). Default: 'original'");
         return options;
     }
     

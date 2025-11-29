@@ -57,7 +57,7 @@ public class AppConfig {
     private static final Boolean DEFAULT_METADATA_ROWNUMS = false;
     private static final Boolean DEFAULT_STREAMING_CONTINUOUS = false;
     private static final Boolean DEFAULT_SIMPLE_BASIC_QUERY = false;
-    private static final Boolean DEFAULT_FIRST_NORMAL_FORM = true;
+    private static final Boolean DEFAULT_FIRST_NORMAL_FORM = false;
     private static final Boolean DEFAULT_CONVERSION_HAS_RDF_TYPES = true;
     private static final String DEFAULT_COLUMN_NAMING_CONVENTION = ORIGINAL_NAMING_NOTATION;
     private static final String DEFAULT_PREFERRED_LANGUAGES = "en,cs";
@@ -276,7 +276,8 @@ public class AppConfig {
         // Calculate output file path and zip file name
         String baseFileName = getBaseFileName(file, output);
         this.outputFilePath = output != null ? output : baseFileName;
-        this.outputZipFileName = baseFileName + "_CSVW.zip";
+        // Use full output path for ZIP file, not just base filename
+        this.outputZipFileName = this.outputFilePath + "_CSVW.zip";
         this.outputFileName = baseFileName; // Initialize to base file name
         this.inputFileName = file; // Initialize to input file name
         this.outputMetadataFileName = this.outputFilePath + ".csv-metadata.json"; // Initialize to base file name + metadata extension
@@ -493,7 +494,8 @@ public class AppConfig {
                                   columnNamingConvention.equals(COLUMN_NAMING_SCREAMING_SNAKE_CASE) ||
                                   columnNamingConvention.equals(COLUMN_NAMING_KEBAB_CASE) ||
                                   columnNamingConvention.equals(COLUMN_NAMING_TITLE_CASE) ||
-                                  columnNamingConvention.equals(COLUMN_NAMING_DOT_NOTATION);
+                                  columnNamingConvention.equals(COLUMN_NAMING_DOT_NOTATION) ||
+                                  columnNamingConvention.equals(ORIGINAL_NAMING_NOTATION);
 
                 if (!isValid) {
                     throw new IllegalArgumentException(
@@ -501,7 +503,8 @@ public class AppConfig {
                         "Valid values are: '" + COLUMN_NAMING_CAMEL_CASE + "', '" +
                         COLUMN_NAMING_PASCAL_CASE + "', '" + COLUMN_NAMING_SNAKE_CASE + "', '" +
                         COLUMN_NAMING_SCREAMING_SNAKE_CASE + "', '" + COLUMN_NAMING_KEBAB_CASE + "', '" +
-                        COLUMN_NAMING_TITLE_CASE + "', '" + COLUMN_NAMING_DOT_NOTATION + "'"
+                        COLUMN_NAMING_TITLE_CASE + "', '" + COLUMN_NAMING_DOT_NOTATION + "', '" +
+                        ORIGINAL_NAMING_NOTATION + "'"
                     );
                 }
             }

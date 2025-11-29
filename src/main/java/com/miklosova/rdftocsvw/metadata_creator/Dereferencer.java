@@ -5,6 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.miklosova.rdftocsvw.support.AppConfig;
 import org.apache.http.Header;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -73,6 +74,13 @@ public class Dereferencer {
     //private final String CC_PREFIX = "http://web.resource.org/cc/"; - the web does not publish lables of given addresses such as https://web.resource.org/cc/Distribution
     static String SKOS_REFERENCE = "http://www.w3.org/2009/08/skos-reference/skos.rdf";
     static String[] standardKnownPrefixes = {SKOS_PREFIX, WOT_PREFIX, VS_PREFIX, VANN_PREFIX, DCTERMS_PREFIX, DC_PREFIX, FOAF_PREFIX, RDFSchema_PREFIX, OWL_PREFIX, SKOS_REFERENCE};
+    // Marker for failed dereferencing attempts - stored in cache to prevent retries
+    private static final String FETCH_FAILED_MARKER = "__FETCH_FAILED__";
+    // Timeout configuration for HTTP requests (in milliseconds)
+    // These are intentionally conservative to handle external vocabulary servers
+    private static final int CONNECTION_TIMEOUT = 3000; // 3 seconds to establish connection
+    private static final int SOCKET_TIMEOUT = 7000; // 7 seconds to wait for data
+    private static final int CONNECTION_REQUEST_TIMEOUT = 2000; // 2 seconds to get connection from pool
     // Define language preferences (order matters: first is most desired)
     private List<String> PREFERRED_LANGUAGES; // Initialized in constructor after config is set
     private final LoadingCache<String, String> labelCache = CacheBuilder.newBuilder()
@@ -82,14 +90,21 @@ public class Dereferencer {
                 @Override
                 public String load(String iri) throws Exception {
                     try {
-
                         return fetchLabelUncached(iri);
+                    } catch (java.net.SocketTimeoutException | java.net.ConnectException | org.apache.http.conn.ConnectTimeoutException e) {
+                        // Connection failed or timed out - cache the failure to avoid retrying
+                        logger.log(Level.WARNING, "Connection failed/timed out for IRI: " + iri + " - " + e.getMessage());
+                        ValueFactory vf = SimpleValueFactory.getInstance();
+                        IRI propertyUrlIRI = vf.createIRI(iri);
+                        String localName = propertyUrlIRI.getLocalName();
+                        // Store the local name in cache so we don't retry this URL
+                        return localName;
                     } catch (IOException e) {
                         ValueFactory vf = SimpleValueFactory.getInstance();
                         IRI propertyUrlIRI = vf.createIRI(iri);
-                        //logger.warning("--------After IOException is caught in fetchLabelUncached, trying to get LocalName...");
-                        return propertyUrlIRI.getLocalName();
-                        //throw new RuntimeException("Failed to fetch label for IRI: " + iri, e);
+                        String localName = propertyUrlIRI.getLocalName();
+                        logger.log(Level.WARNING, "IOException while fetching label for IRI: " + iri + " - " + e.getMessage() + ", using local name: " + localName);
+                        return localName;
                     }
                 }
             });
@@ -454,6 +469,15 @@ public class Dereferencer {
         //logger.info("Config language tags: " + config.getPreferredLanguages() );
 
         HttpGet httpGet = new HttpGet(extractBaseUri(iri));
+        
+        // Configure request timeouts
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(CONNECTION_TIMEOUT)
+                .setSocketTimeout(SOCKET_TIMEOUT)
+                .setConnectionRequestTimeout(CONNECTION_REQUEST_TIMEOUT)
+                .build();
+        httpGet.setConfig(requestConfig);
+        
         long startTime1 = System.currentTimeMillis();
         // More focused Accept header
         //httpGet.addHeader("Accept", "text/turtle, application/rdf+xml, application/ld+json");

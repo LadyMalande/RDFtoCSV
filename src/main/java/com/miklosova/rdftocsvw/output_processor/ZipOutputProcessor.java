@@ -39,10 +39,36 @@ public class ZipOutputProcessor implements IOutputProcessor {
 
     @Override
     public FinalizedOutput<byte[]> processCSVToOutput(PrefinishedOutput<?> prefinishedOutput) {
+        // For web service: only create byte array (faster, no disk I/O)
+        return processCSVToOutputBytes();
+    }
 
-        zipMultipleFiles();
+    /**
+     * Create ZIP as byte array only (for web service responses).
+     * Does not create a file on disk - fastest option for API responses.
+     * 
+     * @return ZIP file contents as byte array
+     */
+    public FinalizedOutput<byte[]> processCSVToOutputBytes() {
+        logger.log(Level.INFO, "Creating ZIP byte array for web service response...");
         byte[] baos = createBAOSWithZips();
+        logger.log(Level.INFO, "ZIP byte array created successfully");
         return new FinalizedOutput<>(baos);
+    }
+
+    /**
+     * Create ZIP file on disk (for command-line usage).
+     * Creates physical file at location specified in config.getOutputZipFileName().
+     * Does NOT create byte array - the file on disk is what CLI users need.
+     * 
+     * @return Empty FinalizedOutput (the real output is the file on disk)
+     */
+    public FinalizedOutput<byte[]> processCSVToOutputFile() {
+        logger.log(Level.INFO, "Creating ZIP file on disk for command-line usage...");
+        zipMultipleFiles();
+        logger.log(Level.INFO, "ZIP file created on disk successfully");
+        // Return empty byte array - CLI doesn't use the return value, only the disk file
+        return new FinalizedOutput<>(new byte[0]);
     }
 
     /**
@@ -116,10 +142,12 @@ public class ZipOutputProcessor implements IOutputProcessor {
         }
         List<String> srcFiles = new ArrayList<>(Arrays.asList(newArray));
         srcFiles.add(metadataFileName);
+        logger.log(Level.INFO, "Files to zip: " + srcFiles);
         try (FileOutputStream fos = new FileOutputStream(filenameForZip);
              ZipOutputStream zipOut = new ZipOutputStream(fos)) {
 
             for (String srcFile : srcFiles) {
+                logger.log(Level.INFO, "Zipping file: " + srcFile);
                 File fileToZip = new File(srcFile);
                 try (FileInputStream fis = new FileInputStream(fileToZip)) {
                     ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
@@ -135,9 +163,10 @@ public class ZipOutputProcessor implements IOutputProcessor {
 
             return null;
         } catch (FileNotFoundException e) {
-            logger.log(Level.SEVERE, "The file that was supposed to be zipped was not found. ");
+            logger.log(Level.SEVERE, "The file that was supposed to be zipped was not found: " + e.getMessage());
+            logger.log(Level.SEVERE, "Attempted to create ZIP at: " + filenameForZip);
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Other error occurred other than that the file to be zipped was not found. ");
+            logger.log(Level.SEVERE, "Other error occurred: " + e.getMessage());
         }
         return null;
     }

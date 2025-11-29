@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import static com.miklosova.rdftocsvw.support.ConnectionChecker.isAbsolutePath;
 import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
@@ -102,7 +103,15 @@ public class RDFtoCSV {
      */
     public RDFtoCSV(AppConfig config) {
         this.config = config;
-        this.fileName = isUrl(config.getFile()) ? config.getFile() : "../" + config.getFile();
+        // Only add "../" prefix if not a URL and not an absolute path
+        String filePath = config.getFile();
+        if (isUrl(filePath)) {
+            this.fileName = filePath;
+        } else if (isAbsolutePath(filePath)) {
+            this.fileName = filePath;
+        } else {
+            this.fileName = "../" + filePath;
+        }
         logger.info("Input file for conversion from RDFtoCSV: " + this.fileName);
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
@@ -121,7 +130,14 @@ public class RDFtoCSV {
     public RDFtoCSV(String fileName) {
         // Create default config for backward compatibility
         this.config = new AppConfig.Builder(fileName).build();
-        this.fileName = isUrl(fileName) ? fileName : "../" + fileName;
+        // Only add "../" prefix if not a URL and not an absolute path
+        if (isUrl(fileName)) {
+            this.fileName = fileName;
+        } else if (isAbsolutePath(fileName)) {
+            this.fileName = fileName;
+        } else {
+            this.fileName = "../" + fileName;
+        }
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
         if (isUrl(fileName)) {
@@ -170,9 +186,11 @@ public class RDFtoCSV {
     }
 
     /**
-     * Default conversion method, returns zipped file
+     * Default conversion method, returns zipped file.
+     * Creates ZIP as byte array only (for web service use).
+     * Does NOT create a physical ZIP file on disk.
      *
-     * @return the finalized output
+     * @return the finalized output as byte array
      * @throws IOException the io exception
      */
     @SuppressWarnings("unused")
@@ -190,8 +208,35 @@ public class RDFtoCSV {
 
         writeToCSV(po, metadata);
 
-        return finalizeOutput(po);
-        // Finalize the output to .zip
+        return finalizeOutputBytes(po);
+        // Finalize the output to .zip byte array
+
+    }
+
+    /**
+     * Conversion method for command-line usage.
+     * Creates both a physical ZIP file on disk AND returns the byte array.
+     * The ZIP file is created at the location specified by outputPath + "_CSVW.zip".
+     *
+     * @return the finalized output as byte array (also saved to disk)
+     * @throws IOException the io exception
+     */
+    public FinalizedOutput<byte[]> convertToZipFile() throws IOException {
+
+        parseInput();
+
+        PrefinishedOutput<RowsAndKeys> po = convertData();
+
+
+        Metadata metadata = createMetadata(po);
+
+
+        // Write data to CSV by the metadata prepared
+
+        writeToCSV(po, metadata);
+
+        return finalizeOutputFile(po);
+        // Finalize the output to .zip file on disk
 
     }
 
@@ -405,14 +450,27 @@ public class RDFtoCSV {
     }
 
     /**
-     * Make zip from the files created during the conversion
+     * Make zip from the files created during the conversion (byte array only, for web service).
+     * Does NOT create a physical file on disk.
      *
      * @param po prefinished output inner representation
-     * @return the .ZIP of CSV(s) and JSON metadata
+     * @return the .ZIP of CSV(s) and JSON metadata as byte array
      */
-    private FinalizedOutput<byte[]> finalizeOutput(PrefinishedOutput<?> po) {
+    private FinalizedOutput<byte[]> finalizeOutputBytes(PrefinishedOutput<?> po) {
         ZipOutputProcessor zop = new ZipOutputProcessor(config);
-        return zop.processCSVToOutput(po);
+        return zop.processCSVToOutputBytes();
+    }
+
+    /**
+     * Make zip from the files created during the conversion (creates file on disk, for CLI).
+     * Creates a physical ZIP file at the location specified in config.getOutputZipFileName().
+     *
+     * @param po prefinished output inner representation
+     * @return the .ZIP of CSV(s) and JSON metadata as byte array (also saved to disk)
+     */
+    private FinalizedOutput<byte[]> finalizeOutputFile(PrefinishedOutput<?> po) {
+        ZipOutputProcessor zop = new ZipOutputProcessor(config);
+        return zop.processCSVToOutputFile();
     }
 
     /**
