@@ -1,0 +1,4 @@
+Subject,bar,type
+http://example.org/foo,0,
+https://blank_Nodes_IRI.org/0,,1
+https://blank_Nodes_IRI.org/1,,Datatype

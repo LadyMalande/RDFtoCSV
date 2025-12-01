@@ -17,7 +17,7 @@ class AppConfigTest {
         assertEquals("rdf4j", config.getParsing());
         assertEquals(false, config.getMultipleTables());
         assertEquals(false, config.getStreaming());
-        assertEquals(true, config.getFirstNormalForm());
+        assertEquals(false, config.getFirstNormalForm());
         assertEquals("INFO", config.getLogLevel());
         assertEquals("original", config.getColumnNamingConvention());
         assertEquals("en,cs", config.getPreferredLanguages());

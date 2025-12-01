@@ -1,4 +1,4 @@
 Subject,PK1,PK2
-2,foo,bar
-4,foo,baz
-6,baz,bar
+https://blank_Nodes_IRI.org/2,foo,bar
+https://blank_Nodes_IRI.org/4,foo,baz
+https://blank_Nodes_IRI.org/6,baz,bar

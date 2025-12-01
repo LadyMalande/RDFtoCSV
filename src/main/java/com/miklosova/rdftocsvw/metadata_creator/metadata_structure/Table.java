@@ -1,5 +1,6 @@
 package com.miklosova.rdftocsvw.metadata_creator.metadata_structure;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.miklosova.rdftocsvw.converter.data_structure.Row;
 import com.miklosova.rdftocsvw.support.AppConfig;
 
@@ -32,6 +33,7 @@ public class Table {
     /**
      * Application configuration
      */
+    @JsonIgnore
     private AppConfig config;
 
 
@@ -146,7 +148,7 @@ public class Table {
      */
     public void addTableMetadata(ArrayList<Value> keys, ArrayList<Row> rows) {
         this.tableSchema = new TableSchema(keys, rows, this.config);
-        this.tableSchema.addTableSchemaMetadata();
+        this.tableSchema.addTableSchemaMetadata(this.config);
         addTransformations(this.config);
     }
 

@@ -1,2 +1,2 @@
 Subject,NMTOKEN,anyUri,normalizedString,string1,string2,string3
-2,foobar,http://example.org,bar,AaAaA,GED,foo bar
+https://blank_Nodes_IRI.org/2,foobar,http://example.org,bar,AaAaA,GED,foo bar

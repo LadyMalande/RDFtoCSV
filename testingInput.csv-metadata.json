@@ -7,42 +7,6 @@
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ ]
-    },
-    "config" : {
-      "file" : "./RDFtoCSV/src/test/resources/StreamingNTriples/testingInput.nt",
-      "logLevel" : "INFO",
-      "multipleTables" : false,
-      "parsing" : "streaming",
-      "streaming" : false,
-      "firstNormalForm" : true,
-      "columnNamingConvention" : "original",
-      "preferredLanguages" : "en,cs",
-      "conversionMethod" : "streaming",
-      "intermediateFileNames" : "testingInput.nt_merged.csv",
-      "conversionHasBlankNodes" : false,
-      "conversionHasRdfTypes" : true,
-      "outputZipFileName" : "testingInput_CSVW.zip",
-      "readMethod" : "streaming",
-      "metadataRowNums" : false,
-      "outputFilePath" : ".././RDFtoCSV/src/test/resources/StreamingNTriples/testingInput.nt",
-      "outputMetadataFileName" : "testingInput.csv-metadata.json",
-      "outputFileName" : "testingInput",
-      "streamingContinuous" : false,
-      "simpleBasicQuery" : false,
-      "inputFileName" : "./RDFtoCSV/src/test/resources/StreamingNTriples/testingInput.nt",
-      "default_OUTPUT" : "RDFtoCSVOutput.csv",
-      "default_PARSING" : "rdf4j",
-      "default_STREAMING" : false,
-      "default_METADATA_ROWNUMS" : false,
-      "default_FIRST_NORMAL_FORM" : true,
-      "default_MULTIPLE_TABLES" : false,
-      "default_STREAMING_CONTINUOUS" : false,
-      "default_SIMPLE_BASIC_QUERY" : false,
-      "default_CONVERSION_METHOD" : "basicQuery",
-      "default_READ_METHOD" : "rdf4j",
-      "default_LOG_LEVEL" : "INFO",
-      "default_CONVERSION_HAS_BLANK_NODES" : false,
-      "default_CONVERSION_HAS_RDF_TYPES" : true
     }
   } ]
 }

@@ -1,6 +1,6 @@
 Subject,Family%20Name,Surname
-2,Simpson,Homer
-4,Simpson,Marge
-6,Simpson,Bart
-8,Simpson,Lisa
-10,Simpson,Maggie
+https://blank_Nodes_IRI.org/2,Simpson,Homer
+https://blank_Nodes_IRI.org/4,Simpson,Marge
+https://blank_Nodes_IRI.org/6,Simpson,Bart
+https://blank_Nodes_IRI.org/8,Simpson,Lisa
+https://blank_Nodes_IRI.org/10,Simpson,Maggie

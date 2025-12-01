@@ -1,2 +1,2 @@
 Subject,aboutUrl,datatype,default,lang,null,ordered,propertyUrl,separator,textDirection,valueUrl
-2,about,string,def,en,empty,true,prop,-,ltr,value
+https://blank_Nodes_IRI.org/2,about,string,def,en,empty,true,prop,-,ltr,value

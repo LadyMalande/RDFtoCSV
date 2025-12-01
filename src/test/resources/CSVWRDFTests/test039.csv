@@ -1,2 +1,2 @@
 Subject,COL=propertyUrl (en),col=datatype,col=default (en),col=lang (en-US),col=null (en),col=ordered (en),col=separator (en),col=textDirection (en),col=valueUrl,col=aboutUrl (en)
-2,prop,string,def,,empty,true,-,ltr,http://www.w3.org/1999/02/22-rdf-syntax-ns#value,about
+https://blank_Nodes_IRI.org/2,prop,string,def,,empty,true,-,ltr,value,about

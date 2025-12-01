@@ -115,10 +115,12 @@ class CommandLineIntegrationTest {
         
         // Verify it's used for actual processing
         try {
-            converter.convertToZip();
+            converter.convertToZipFile();
             
             // Check that output was created (conversion succeeded with this parsing method)
             File zipFile = new File(outputPath + "_CSVW.zip");
+            System.out.println("parsingMethod_shouldBePreserved => Checking for outputPath + _CSVW.zip: " + outputPath + "_CSVW.zip");
+
             assertTrue(zipFile.exists() || new File(outputPath).exists(),
                     "Output should be created with parsing method: " + parsingMethod);
         } catch (Exception e) {
@@ -206,7 +208,9 @@ class CommandLineIntegrationTest {
             // Check metadata file for column naming
             String metadataPath = outputPath + ".csv-metadata.json";
             File metadataFile = new File(metadataPath);
-            
+            System.out.println("namingConvention_shouldBePreservedAndApplied => Checking for outputPath + .csv-metadata.json: " + outputPath + ".csv-metadata.json");
+
+
             if (metadataFile.exists()) {
                 JsonNode metadata = objectMapper.readTree(metadataFile);
                 assertTrue(metadata.has("tables"), "Metadata should contain tables");
@@ -296,7 +300,7 @@ class CommandLineIntegrationTest {
                 "First normal form flag should be preserved");
         
         try {
-            converter.convertToZip();
+            converter.convertToZipFile();
             assertEquals(fnfFlag, retrievedConfig.getFirstNormalForm(),
                     "Flag should not change during conversion");
         } catch (Exception e) {
@@ -329,7 +333,7 @@ class CommandLineIntegrationTest {
                 "Custom output path should be preserved");
         
         try {
-            converter.convertToZip();
+            converter.convertToZipFile();
             
             // Verify output created at custom location
             File zipFile = new File(customOutput + "_CSVW.zip");
@@ -446,7 +450,7 @@ class CommandLineIntegrationTest {
         );
         
         // Perform conversion
-        converter.convertToZip();
+        converter.convertToZipFile();
         
         // After conversion
         AppConfig afterConfig = converter.getConfig();
@@ -460,6 +464,9 @@ class CommandLineIntegrationTest {
         
         // Verify output was created
         File zipFile = new File(outputPath + "_CSVW.zip");
+        System.out.println("Checking for outputPath + _CSVW.zip: " + outputPath + "_CSVW.zip");
+
+        System.out.println("Checking for output ZIP at: " + zipFile.getAbsolutePath());
         assertTrue(zipFile.exists(), "ZIP output should be created");
         
         // Verify metadata file contains expected structure

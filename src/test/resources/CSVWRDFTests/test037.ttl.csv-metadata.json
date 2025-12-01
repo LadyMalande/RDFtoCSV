@@ -19,7 +19,8 @@
         "propertyUrl" : "file://tree-ops-ext.csv#comments",
         "valueUrl" : "{+comments}",
         "datatype" : "normalizedString",
-        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subject}"
+        "aboutUrl" : "http://example.org/tree-ops-ext#{+Subject}",
+        "separator" : ","
       }, {
         "@type" : "Column",
         "titles" : "trim_cycle (en)",
@@ -77,44 +78,6 @@
       } ],
       "primaryKey" : "Subject",
       "rowTitles" : [ "Subject", "comments", "trim_cycle_en", "protected", "species", "dbh", "kml", "on_street", "inventory_date" ]
-    },
-    "config" : {
-      "file" : "./src/test/resources/CSVWRDFTests/test037.ttl",
-      "logLevel" : "INFO",
-      "multipleTables" : false,
-      "parsing" : "rdf4j",
-      "streaming" : false,
-      "firstNormalForm" : true,
-      "output" : "./src/test/resources/CSVWRDFTests/test037.ttl",
-      "outputMetadata" : "./src/test/resources/CSVWRDFTests/test037.ttl.csv-metadata.json",
-      "columnNamingConvention" : "original",
-      "preferredLanguages" : "en,cs",
-      "conversionMethod" : "basicQuery",
-      "intermediateFileNames" : "test037.csv,",
-      "conversionHasBlankNodes" : false,
-      "conversionHasRdfTypes" : false,
-      "outputZipFileName" : "test037_CSVW.zip",
-      "readMethod" : "rdf4j",
-      "metadataRowNums" : false,
-      "outputFilePath" : "./src/test/resources/CSVWRDFTests/test037.ttl",
-      "outputMetadataFileName" : "./src/test/resources/CSVWRDFTests/test037.ttl.csv-metadata.json",
-      "outputFileName" : "test037",
-      "streamingContinuous" : false,
-      "simpleBasicQuery" : false,
-      "inputFileName" : "./src/test/resources/CSVWRDFTests/test037.ttl",
-      "default_OUTPUT" : "RDFtoCSVOutput.csv",
-      "default_PARSING" : "rdf4j",
-      "default_STREAMING" : false,
-      "default_METADATA_ROWNUMS" : false,
-      "default_FIRST_NORMAL_FORM" : true,
-      "default_MULTIPLE_TABLES" : false,
-      "default_STREAMING_CONTINUOUS" : false,
-      "default_SIMPLE_BASIC_QUERY" : false,
-      "default_CONVERSION_METHOD" : "basicQuery",
-      "default_READ_METHOD" : "rdf4j",
-      "default_LOG_LEVEL" : "INFO",
-      "default_CONVERSION_HAS_BLANK_NODES" : false,
-      "default_CONVERSION_HAS_RDF_TYPES" : true
     }
   } ]
 }

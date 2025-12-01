@@ -1,2 +1,2 @@
 Subject,col=aboutUrl,col=datatype,col=default,col=lang (en),col=null,col=ordered,col=propertyUrl,col=separator,col=textDirection,col=valueUrl
-2,about,string,def,en,empty,true,prop,-,ltr,http://schema.org/about
+https://blank_Nodes_IRI.org/2,about,string,def,en,empty,true,prop,-,ltr,about

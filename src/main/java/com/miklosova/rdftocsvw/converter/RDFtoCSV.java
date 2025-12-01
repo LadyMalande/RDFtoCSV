@@ -12,6 +12,7 @@ import com.miklosova.rdftocsvw.output_processor.StreamingNTriplesWrite;
 import com.miklosova.rdftocsvw.output_processor.ZipOutputProcessor;
 import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.JsonUtil;
+import com.miklosova.rdftocsvw.support.PerformanceLogger;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
@@ -33,6 +34,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  */
 public class RDFtoCSV {
     private static final Logger logger = Logger.getLogger(RDFtoCSV.class.getName());
+    private PerformanceLogger performanceLogger;
     
     /**
      * Delimiter for answering /csv/string and /csv if the conversion method is set to MORE.
@@ -103,6 +105,7 @@ public class RDFtoCSV {
      */
     public RDFtoCSV(AppConfig config) {
         this.config = config;
+        this.performanceLogger = new PerformanceLogger();
         // Only add "../" prefix if not a URL and not an absolute path
         String filePath = config.getFile();
         if (isUrl(filePath)) {
@@ -113,6 +116,10 @@ public class RDFtoCSV {
             this.fileName = "../" + filePath;
         }
         logger.info("Input file for conversion from RDFtoCSV: " + this.fileName);
+        
+        // Set file info in performance logger
+        setFileInfoInPerformanceLogger();
+        
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
         if (isUrl(config.getFile())) {
@@ -130,6 +137,7 @@ public class RDFtoCSV {
     public RDFtoCSV(String fileName) {
         // Create default config for backward compatibility
         this.config = new AppConfig.Builder(fileName).build();
+        this.performanceLogger = new PerformanceLogger();
         // Only add "../" prefix if not a URL and not an absolute path
         if (isUrl(fileName)) {
             this.fileName = fileName;
@@ -138,6 +146,10 @@ public class RDFtoCSV {
         } else {
             this.fileName = "../" + fileName;
         }
+        
+        // Set file info in performance logger
+        setFileInfoInPerformanceLogger();
+        
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
         if (isUrl(fileName)) {
@@ -173,8 +185,12 @@ public class RDFtoCSV {
         }
         
         this.config = builder.build();
+        this.performanceLogger = new PerformanceLogger();
         this.fileName = fileName;
         logger.info("Input file for conversion from RDFtoCSV: " + this.fileName);
+        
+        // Set file info in performance logger
+        setFileInfoInPerformanceLogger();
 
         this.metadataFilename = this.fileName + ".csv-metadata.json";
         this.filePathForOutput = this.fileName;
@@ -200,6 +216,13 @@ public class RDFtoCSV {
 
         PrefinishedOutput<RowsAndKeys> po = convertData();
 
+        // Close repository connection and shutdown repository immediately after data extraction
+        if (rc != null) {
+            rc.close();
+        }
+        if (db != null) {
+            db.shutDown();
+        }
 
         Metadata metadata = createMetadata(po);
 
@@ -222,20 +245,51 @@ public class RDFtoCSV {
      * @throws IOException the io exception
      */
     public FinalizedOutput<byte[]> convertToZipFile() throws IOException {
-
+        performanceLogger.checkpoint("Program initialization complete");
+        
         parseInput();
+        performanceLogger.checkpoint("Parse input - RDF file loaded into repository");
 
         PrefinishedOutput<RowsAndKeys> po = convertData();
+        performanceLogger.checkpoint("Convert data - SPARQL queries executed, data extracted");
 
+        // Close repository connection and shutdown repository immediately after data extraction
+        if (rc != null) {
+            rc.close();
+        }
+        if (db != null) {
+            db.shutDown();
+        }
+        performanceLogger.checkpoint("Repository shutdown - memory released");
 
         Metadata metadata = createMetadata(po);
-
+        performanceLogger.checkpoint("Create metadata - JSON metadata structure built");
 
         // Write data to CSV by the metadata prepared
-
         writeToCSV(po, metadata);
+        performanceLogger.checkpoint("Write CSV files - Data written to disk");
 
-        return finalizeOutputFile(po);
+        FinalizedOutput<byte[]> result = finalizeOutputFile(po);
+        performanceLogger.checkpoint("Finalize output - ZIP file created on disk");
+        
+        // Set configuration info in performance logger (must be done at the end when all intermediate files are known)
+        performanceLogger.setConfigInfo(
+            config.getReadMethod(),
+            config.getStreamingContinuous(),
+            config.getColumnNamingConvention(),
+            config.getPreferredLanguages(),
+            config.getFirstNormalForm(),
+            config.getIntermediateFileNames()
+        );
+        
+        // Calculate output file sizes before writing log
+        performanceLogger.calculateOutputSizes();
+        
+        // Write comprehensive performance log to file
+        performanceLogger.writeLogToFile();
+        performanceLogger.printSummary();
+        
+        return result;
         // Finalize the output to .zip file on disk
 
     }
@@ -252,6 +306,14 @@ public class RDFtoCSV {
         parseInput();
 
         PrefinishedOutput<RowsAndKeys> po = convertData();
+        
+        // Close repository connection and shutdown repository immediately after data extraction
+        if (rc != null) {
+            rc.close();
+        }
+        if (db != null) {
+            db.shutDown();
+        }
 
         return writeToStringTrivial(po);
     }
@@ -271,9 +333,6 @@ public class RDFtoCSV {
 
         sb.append(FileWrite.writeToString(rnk.getKeys(), rnk.getRows()));
 
-
-        db.shutDown();
-
         return sb.toString();
     }
 
@@ -292,6 +351,14 @@ public class RDFtoCSV {
         parseInput();
 
         PrefinishedOutput<RowsAndKeys> po = convertData();
+        
+        // Close repository connection and shutdown repository immediately after data extraction
+        if (rc != null) {
+            rc.close();
+        }
+        if (db != null) {
+            db.shutDown();
+        }
 
         Metadata metadata = createMetadata(po);
 
@@ -323,6 +390,14 @@ public class RDFtoCSV {
         parseInput();
 
         PrefinishedOutput<RowsAndKeys> po = convertData();
+        
+        // Close repository connection and shutdown repository immediately after data extraction
+        if (rc != null) {
+            rc.close();
+        }
+        if (db != null) {
+            db.shutDown();
+        }
 
         return createMetadata(po);
     }
@@ -446,7 +521,6 @@ public class RDFtoCSV {
                 return;
             }
         }
-        db.shutDown();
     }
 
     /**
@@ -539,6 +613,40 @@ public class RDFtoCSV {
         // Create a new Repository.
         MethodService methodService = new MethodService(config);
         return methodService.processInput(filename, readMethod, repository);
+    }
+    
+    /**
+     * Helper method to set file information in the performance logger.
+     * Extracts absolute path and calculates file size in KB.
+     */
+    private void setFileInfoInPerformanceLogger() {
+        if (performanceLogger == null) {
+            return;
+        }
+        
+        try {
+            // For URLs, just use the URL string
+            if (isUrl(this.fileName)) {
+                performanceLogger.setFileInfo(this.fileName, 0L);
+                return;
+            }
+            
+            // For local files, get absolute path and size
+            File inputFile = new File(this.fileName);
+            String absolutePath = inputFile.getAbsolutePath();
+            long fileSizeKB = 0L;
+            
+            if (inputFile.exists() && inputFile.isFile()) {
+                long fileSizeBytes = inputFile.length();
+                fileSizeKB = fileSizeBytes / 1024;
+            }
+            
+            performanceLogger.setFileInfo(absolutePath, fileSizeKB);
+            
+        } catch (Exception e) {
+            // If anything goes wrong, just set the fileName as-is with 0 size
+            performanceLogger.setFileInfo(this.fileName, 0L);
+        }
     }
 
 }

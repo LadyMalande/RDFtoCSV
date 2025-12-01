@@ -27,6 +27,9 @@ public class Main {
      * @param args The input arguments.
      */
     public static void main(String[] args) {
+        long overallStartTime = System.currentTimeMillis();
+        System.out.println("=== RDFtoCSV Conversion Started ===");
+        
         if (args.length < 1) {
             System.err.println("Usage: java -jar RDFtoCSV<version>.jar -f <filename>\n for better explanation of arguments, run  java -jar RDFtoCSV<version>.jar -f <filename> -h ");
             System.exit(1);
@@ -76,6 +79,11 @@ public class Main {
             try {
                 // Use convertToZipFile() for CLI - creates physical ZIP file on disk
                 rdFtoCSV.convertToZipFile();
+                
+                long overallEndTime = System.currentTimeMillis();
+                System.out.println("=== RDFtoCSV Conversion Completed Successfully ===");
+                System.out.println("Total execution time: " + (overallEndTime - overallStartTime) + "ms");
+                
             } catch (RDFParseException | IOException rdfParseException) {
                 System.err.println(rdfParseException.getMessage());
             }
