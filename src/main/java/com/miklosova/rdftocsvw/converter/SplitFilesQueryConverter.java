@@ -136,11 +136,16 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
 
     @Override
     public PrefinishedOutput<RowsAndKeys> convertWithQuery(RepositoryConnection rc) {
+        com.miklosova.rdftocsvw.support.ProgressLogger.startStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING);
+        
         this.rc = rc;
         allKeys = new ArrayList<>();
         allRows = new ArrayList<>();
         changeBNodesForIri(rc);
         deleteBlankNodes(rc);
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 25, "Executing SPARQL queries");
+        
         PrefinishedOutput<RowsAndKeys> queryResult;
         String query = getCSVTableQueryForModel(true);
         try {
@@ -149,6 +154,8 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
             query = getCSVTableQueryForModel(false);
             queryResult = queryRDFModel(query, false);
         }
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.completeStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING);
         return queryResult;
     }
 
@@ -161,6 +168,10 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
         ConnectionPool connectionPool = new ConnectionPool(db, Runtime.getRuntime().availableProcessors());
         // Query in rdf4j
         // Create a new Repository.
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+            com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 30, "Initializing connection pool"
+        );
 
         try (SailRepositoryConnection conn = (SailRepositoryConnection) db.getConnection()) {
 
@@ -178,6 +189,10 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
                 }
             });
             while (!conn.isEmpty()) {
+                
+                com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                    com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 40, "Executing SPARQL query"
+                );
 
                 TupleQuery query = conn.prepareTupleQuery(queryString);
                 // A QueryResult is also an AutoCloseable resource, so make sure it gets closed when done.
@@ -210,8 +225,18 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
                             }
                         }
                     }
+                    
+                    com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                        com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 50,
+                        String.format("Found %d root entities", roots.size())
+                    );
+                    
                     countDominantTypes(conn, roots, askForTypes);
                     Value dominantType = getDominantType();
+                    
+                    com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                        com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 60, "Processing entity types"
+                    );
 
                     recursiveQueryForFiles(connectionPool, dominantType, askForTypes);
 

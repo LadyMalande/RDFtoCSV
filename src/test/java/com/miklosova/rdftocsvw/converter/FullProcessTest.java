@@ -87,4 +87,10 @@ public class FullProcessTest {
         }
 */
     }
+    
+    @Test
+    public void RDFtoCSVWithURL() {
+    String[] args = new String[]{"-f", "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/refs/heads/main/test_data/testingInput.ttl", "-p", methodName};
+    Main.main(args);
+}
 }

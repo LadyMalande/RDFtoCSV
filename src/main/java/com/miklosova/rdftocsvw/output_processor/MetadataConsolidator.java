@@ -5,8 +5,8 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
 import com.miklosova.rdftocsvw.support.AppConfig;
+import com.miklosova.rdftocsvw.support.Pair;
 import com.opencsv.CSVReader;
-import org.jruby.ir.Tuple;
 
 import java.io.File;
 import java.io.FileReader;
@@ -106,14 +106,14 @@ public class MetadataConsolidator {
     }
 
     /**
-     * First column has links to another column tuple with AppConfig.
+     * First column has links to another column pair with AppConfig.
      *
      * @param oldMetadata the old metadata
      * @param table       the table
      * @param config      the application configuration
-     * @return the tuple
+     * @return the pair of table URL and column name
      */
-    public Tuple<String, String> firstColumnHasLinksToAnotherColumn(Metadata oldMetadata, Table table, AppConfig config) {
+    public Pair<String, String> firstColumnHasLinksToAnotherColumn(Metadata oldMetadata, Table table, AppConfig config) {
         AppConfig effectiveConfig = (config != null) ? config : this.config;
         for (Table t : oldMetadata.getTables()) {
             if (t != table) {
@@ -145,7 +145,7 @@ public class MetadataConsolidator {
 
 
                                     if (!cellValue.isEmpty() && !subjectOfGivenTable.isEmpty() && cellValue.equalsIgnoreCase(subjectOfGivenTable)) {
-                                        return new Tuple<>(t.getUrl(), t.getTableSchema().getColumns().get(i).getName());
+                                        return new Pair<>(t.getUrl(), t.getTableSchema().getColumns().get(i).getName());
                                     }
                                 }
                             }

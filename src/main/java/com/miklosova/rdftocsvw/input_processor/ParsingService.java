@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.input_processor;
 
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.*;
+import com.miklosova.rdftocsvw.support.ProgressLogger;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFParseException;
 
@@ -24,12 +25,16 @@ public class ParsingService {
      * @throws IOException       the io exception
      */
     public RepositoryConnection processInput(RepositoryConnection conn, File fileToRead) throws RDFParseException, IOException {
+        ProgressLogger.startStage(ProgressLogger.Stage.PARSING);
+        
         String fileName = fileToRead.getName();
         inputGateway = new InputGateway();
 
         processExtension(fileName);
 
         conn = inputGateway.processInput(conn, fileToRead);
+        
+        ProgressLogger.completeStage(ProgressLogger.Stage.PARSING);
         return conn;
     }
 

@@ -75,6 +75,10 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
 
     @Override
     public Metadata addMetadata(PrefinishedOutput<?> info) {
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+            com.miklosova.rdftocsvw.support.ProgressLogger.Stage.METADATA, 10, "Extracting table data"
+        );
+        
         RowAndKey rnk;
 
         try {
@@ -93,17 +97,35 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
             newFileName = CSVFileTOWriteTo + ".csv";
         }
 
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+            com.miklosova.rdftocsvw.support.ProgressLogger.Stage.METADATA, 30,
+            String.format("Building metadata for %d rows", rnk.getRows().size())
+        );
 
         // Write the rows with respective keys to the current file
 
         //ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES) + "," + newFileName);
         metadata.addMetadata(newFileName, rnk.getKeys(), rnk.getRows());
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+            com.miklosova.rdftocsvw.support.ProgressLogger.Stage.METADATA, 60, "Creating table schema"
+        );
+        
         allRows.add(rnk.getRows());
         allFileNames.add(newFileName);
 
         FileWrite.writeFilesToConfigFile(allFileNames, config);
 
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+            com.miklosova.rdftocsvw.support.ProgressLogger.Stage.METADATA, 80, "Adding foreign keys"
+        );
+        
         metadata.addForeignKeys(allRows);
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+            com.miklosova.rdftocsvw.support.ProgressLogger.Stage.METADATA, 90, "Generating JSON-LD context"
+        );
+        
         metadata.jsonldMetadata();
         return metadata;
     }

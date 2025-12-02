@@ -92,6 +92,24 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>com.github.ozlerhakan</groupId>
+      <artifactId>poiji</artifactId>
+      <version>4.9.0</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>poi-ooxml</artifactId>
+          <groupId>org.apache.poi</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j2-impl</artifactId>
+      <version>2.23.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.18.32</version>

@@ -92,11 +92,20 @@ public class StreamingNTriplesWrite {
      * Write to CSV file using metadata information.
      */
     public void writeToFileByMetadata() {
+        com.miklosova.rdftocsvw.support.ProgressLogger.startStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING);
 
         writeToTheFile(fileToWriteTo, columnHeaders(), false);
 
         bufferForCSVOutput = new CSVOutputGrid();
+        int batchCount = 0;
         while (gettingNewSubjects()) {
+            batchCount++;
+            com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING, 
+                Math.min(90, batchCount * 10), 
+                String.format("Writing batch %d (subjects: %d)", batchCount, currentSubjects.size())
+            );
+            
             int i = 1;
             try (BufferedReader reader = new BufferedReader(new FileReader(fileNameToRead))) {
                 String line;
@@ -115,6 +124,8 @@ public class StreamingNTriplesWrite {
             writeToOutputFile(bufferForCSVOutput);
             processedSubjects.addAll(currentSubjects);
         }
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.completeStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING);
     }
 
     private Object columnHeaders() {

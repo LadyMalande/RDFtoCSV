@@ -110,6 +110,8 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
 
     @Override
     public PrefinishedOutput<RowsAndKeys> convertWithQuery(RepositoryConnection rc) {
+        com.miklosova.rdftocsvw.support.ProgressLogger.startStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING);
+        
         this.rc = rc;
         changeBNodesForIri(rc);
         deleteBlankNodes(rc);
@@ -117,6 +119,9 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
         new PrefinishedOutput<>((new RowAndKey.RowAndKeyFactory()).factory());
         PrefinishedOutput<RowAndKey> queryResult;
         String query = getCSVTableQueryForModel(true);
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 25, "Executing SPARQL queries");
+        
         try {
             queryResult = queryRDFModel(query, true);
 
@@ -124,11 +129,16 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
             query = getCSVTableQueryForModel(false);
             queryResult = queryRDFModel(query, false);
         }
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 75, "Processing query results");
+        
         RowsAndKeys rak = new RowsAndKeys();
         ArrayList<RowAndKey> rakArray = new ArrayList<>();
         assert queryResult != null;
         rakArray.add(queryResult.getPrefinishedOutput());
         rak.setRowsAndKeys(rakArray);
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.completeStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING);
         return new PrefinishedOutput<>(rak);
     }
 
@@ -140,6 +150,10 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
 
         // Query in rdf4j
         // Create a new Repository.
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+            com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 30, "Preparing SPARQL queries"
+        );
 
         try (SailRepositoryConnection conn = (SailRepositoryConnection) db.getConnection()) {
 
@@ -159,6 +173,10 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
             });
 
             while (!conn.isEmpty()) {
+                com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                    com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 40, "Executing SPARQL query"
+                );
+                
                 TupleQuery query = conn.prepareTupleQuery(queryString);
                 // A QueryResult is also an AutoCloseable resource, so make sure it gets closed when done.
                 try (TupleQueryResult result = query.evaluate()) {
@@ -171,8 +189,24 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                     if (resultList.isEmpty() && askForTypes) {
                         throw new IndexOutOfBoundsException();
                     }
+                    
+                    com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                        com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 50, 
+                        String.format("Processing %d query results", resultList.size())
+                    );
+                    
                     roots = new HashSet<>();
+                    int processedCount = 0;
+                    int totalResults = resultList.size();
                     for (BindingSet solution : resultList) {
+                        processedCount++;
+                        if (processedCount % Math.max(1, totalResults / 5) == 0) {
+                            int progress = 50 + (processedCount * 20 / totalResults);
+                            com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                                com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, progress,
+                                String.format("Processing row %d/%d", processedCount, totalResults)
+                            );
+                        }
                         // ... and print out the value of the variable binding for ?s and ?n
                         if (solution.getValue("o").stringValue().equalsIgnoreCase(CSVW_TableGroup)) {
                             StandardModeConverter smc = new StandardModeConverter(db, config);

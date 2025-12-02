@@ -493,6 +493,8 @@ public class RDFtoCSV {
 
 
     private void writeToCSV(PrefinishedOutput<?> po, Metadata metadata) {
+        com.miklosova.rdftocsvw.support.ProgressLogger.startStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING);
+        
         if (po == null) {
             processStreaming(metadata);
         } else {
@@ -503,12 +505,19 @@ public class RDFtoCSV {
             try {
                 RowsAndKeys rnk = (RowsAndKeys) po.getPrefinishedOutput();
                 int i = 0;
+                int totalFiles = rnk.getRowsAndKeys().size();
 
                 for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
                     String newFileName = files[i];
                     //System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
                     FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata, config);
                     i++;
+                    
+                    int progress = (int) ((i * 100.0) / totalFiles);
+                    com.miklosova.rdftocsvw.support.ProgressLogger.logProgressWithCount(
+                        com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING,
+                        i, totalFiles, "CSV files"
+                    );
                 }
             } catch (ClassCastException ex) {
                 RowAndKey rnk = (RowAndKey) po.getPrefinishedOutput();
@@ -516,11 +525,16 @@ public class RDFtoCSV {
                 String newFileName = files[0];
                 //System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
                 FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata, config);
+                com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                    com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING, 100, "1 CSV file"
+                );
             } catch (NullPointerException ex2) {
                 // The po is null because the methods for processing didn't create po
                 return;
             }
         }
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.completeStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING);
     }
 
     /**
@@ -543,8 +557,13 @@ public class RDFtoCSV {
      * @return the .ZIP of CSV(s) and JSON metadata as byte array (also saved to disk)
      */
     private FinalizedOutput<byte[]> finalizeOutputFile(PrefinishedOutput<?> po) {
+        com.miklosova.rdftocsvw.support.ProgressLogger.startStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.FINALIZING);
+        
         ZipOutputProcessor zop = new ZipOutputProcessor(config);
-        return zop.processCSVToOutputFile();
+        FinalizedOutput<byte[]> result = zop.processCSVToOutputFile();
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.completeStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.FINALIZING);
+        return result;
     }
 
     /**
@@ -554,9 +573,14 @@ public class RDFtoCSV {
      * @return the metadata created from the prefinished output
      */
     public Metadata createMetadata(PrefinishedOutput<RowsAndKeys> po) {
+        com.miklosova.rdftocsvw.support.ProgressLogger.startStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.METADATA);
+        
         // Convert intermediate data into basic metadata
         MetadataService ms = new MetadataService(config);
-        return ms.createMetadata(po);
+        Metadata result = ms.createMetadata(po);
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.completeStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.METADATA);
+        return result;
     }
 
     /**

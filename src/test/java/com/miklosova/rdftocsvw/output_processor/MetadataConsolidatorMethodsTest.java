@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
-import org.jruby.ir.Tuple;
+import com.miklosova.rdftocsvw.support.Pair;
 import java.util.ArrayList;
 import com.miklosova.rdftocsvw.support.AppConfig ;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
@@ -148,10 +148,10 @@ class MetadataConsolidatorMethodsTest extends BaseTest {
         oldMetadata.getTables().add(table2);
         String csvContent1 = "subject,column1\nvalue1,value2\nvalue3,value4";
         String csvContent2 = "subject,column2\nvalue2,somedata\nvalue4,moredata";
-        Tuple<String, String> result = metadataConsolidator.firstColumnHasLinksToAnotherColumn(oldMetadata, table1, config);
+        Pair<String, String> result = metadataConsolidator.firstColumnHasLinksToAnotherColumn(oldMetadata, table1, config);
         assertNotNull(result);
-        assertEquals("table2.csv", result.a);
-        assertEquals("subject", result.b);
+        assertEquals("table2.csv", result.getFirst());
+        assertEquals("subject", result.getSecond());
 
 
     }

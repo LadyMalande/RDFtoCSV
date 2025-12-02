@@ -82,8 +82,21 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
 
     @Override
     public Metadata addMetadata(PrefinishedOutput<?> info) {
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+            com.miklosova.rdftocsvw.support.ProgressLogger.Stage.METADATA, 10, "Extracting table data"
+        );
+        
         RowsAndKeys rnk = (RowsAndKeys) info.getPrefinishedOutput();
+        int totalTables = rnk.getRowsAndKeys().size();
+        int currentTable = 0;
+        
         for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
+            currentTable++;
+            int progress = 10 + (currentTable * 50 / totalTables);
+            com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                com.miklosova.rdftocsvw.support.ProgressLogger.Stage.METADATA, progress,
+                String.format("Building metadata for table %d/%d (%d rows)", currentTable, totalTables, rowAndKey.getRows().size())
+            );
 
             String newFileName;
             if (FileWrite.hasExtension(CSVFileTOWriteTo, "csv")) {
@@ -98,9 +111,24 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
             allRows.add(rowAndKey.getRows());
             allFileNames.add(newFileName);
         }
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+            com.miklosova.rdftocsvw.support.ProgressLogger.Stage.METADATA, 70, 
+            String.format("Writing %d file names to config", allFileNames.size())
+        );
+        
         FileWrite.writeFilesToConfigFile(allFileNames, config);
 
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+            com.miklosova.rdftocsvw.support.ProgressLogger.Stage.METADATA, 80, "Adding foreign keys"
+        );
+        
         metadata.addForeignKeys(allRows);
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+            com.miklosova.rdftocsvw.support.ProgressLogger.Stage.METADATA, 90, "Generating JSON-LD context"
+        );
+        
         metadata.jsonldMetadata();
         return metadata;
     }

@@ -83,9 +83,25 @@ public class Dereferencer {
     private static final int CONNECTION_REQUEST_TIMEOUT = 2000; // 2 seconds to get connection from pool
     // Define language preferences (order matters: first is most desired)
     private List<String> PREFERRED_LANGUAGES; // Initialized in constructor after config is set
+    
+    // Cache for vocabulary RDF models - shared across all Dereferencer instances
+    // Key: base vocabulary URI (e.g., "http://www.w3.org/2004/02/skos/core")
+    // Value: parsed Jena Model containing the entire vocabulary
+    private static final LoadingCache<String, Model> vocabularyCache = CacheBuilder.newBuilder()
+            .maximumSize(50)  // Cache up to 50 different vocabularies
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .recordStats()  // Enable statistics tracking
+            .build(new CacheLoader<String, Model>() {
+                @Override
+                public Model load(String vocabularyUri) throws Exception {
+                    return fetchVocabularyModel(vocabularyUri);
+                }
+            });
+    
     private final LoadingCache<String, String> labelCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(1, TimeUnit.HOURS)
+            .recordStats()  // Enable statistics tracking
             .build(new CacheLoader<String, String>() {
                 @Override
                 public String load(String iri) throws Exception {
@@ -335,8 +351,10 @@ public class Dereferencer {
             return fullUri;
         }
         if (uri.getFragment() != null) {
-            // The uri is ready to be fetched as is
-            return fullUri;
+            // Strip fragment to get base vocabulary URI (e.g., http://...skos/core#prefLabel → http://...skos/core)
+            String baseUri = uri.getScheme() + "://" + uri.getHost() + uri.getPath();
+            logger.info("Stripped fragment from " + fullUri + " → base: " + baseUri);
+            return baseUri;
         }
         if (fullUri.startsWith(WOT_PREFIX)) {
             return WOT_RDF_FILE;
@@ -465,10 +483,64 @@ public class Dereferencer {
 
     String fetchLabelUncached(String iri) throws IOException {
         long startTime = System.currentTimeMillis();
-        //logger.info("--------Before new HttpGet(extractBaseUri(" + iri + "));");
-        //logger.info("Config language tags: " + config.getPreferredLanguages() );
-
-        HttpGet httpGet = new HttpGet(extractBaseUri(iri));
+        
+        // Extract the base vocabulary URI
+        String vocabularyUri = extractBaseUri(iri);
+        
+        try {
+            // Check if vocabulary is already in cache
+            boolean isCached = vocabularyCache.getIfPresent(vocabularyUri) != null;
+            
+            if (isCached) {
+                logger.info("✓ CACHED vocab: " + vocabularyUri + " → IRI: " + iri);
+            } else {
+                logger.warning("✗ NEW vocab fetch needed: " + vocabularyUri + " → IRI: " + iri);
+            }
+            
+            // Get or fetch the vocabulary model from cache
+            Model model = vocabularyCache.get(vocabularyUri);
+            
+            // Find the label in the model
+            String label = findLabelForIRI(model, iri);
+            
+            long duration = System.currentTimeMillis() - startTime;
+            logger.log(Level.INFO, "Label '" + label + "' retrieved in " + duration + "ms (cached vocab: " + isCached + ")");
+            
+            // Log cache statistics periodically
+            if (vocabularyCache.size() > 0) {
+                logger.info("📊 Vocab cache: Size=" + vocabularyCache.size() + 
+                           ", Hits=" + vocabularyCache.stats().hitCount() + 
+                           ", Misses=" + vocabularyCache.stats().missCount() +
+                           ", HitRate=" + String.format("%.1f%%", vocabularyCache.stats().hitRate() * 100));
+            }
+            
+            label = LabelFormatter.changeLabelToTheConfiguredFormat(label, config);
+            return label;
+            
+        } catch (ExecutionException e) {
+            logger.log(Level.WARNING, "Failed to fetch vocabulary for " + vocabularyUri + ": " + e.getMessage());
+            // Fall back to local name
+            ValueFactory vf = SimpleValueFactory.getInstance();
+            IRI propertyUrlIRI = vf.createIRI(iri);
+            return propertyUrlIRI.getLocalName();
+        }
+    }
+    
+    /**
+     * Fetch and parse an RDF vocabulary from its base URI.
+     * This method is called by the vocabulary cache when a vocabulary hasn't been loaded yet.
+     * 
+     * @param vocabularyUri The base URI of the vocabulary to fetch
+     * @return Parsed Jena Model containing the vocabulary
+     * @throws IOException if fetching or parsing fails
+     */
+    private static Model fetchVocabularyModel(String vocabularyUri) throws IOException {
+        long startTime = System.currentTimeMillis();
+        logger.warning("========================================");
+        logger.warning("FETCHING NEW VOCABULARY: " + vocabularyUri);
+        logger.warning("========================================");
+        
+        HttpGet httpGet = new HttpGet(vocabularyUri);
         
         // Configure request timeouts
         RequestConfig requestConfig = RequestConfig.custom()
@@ -478,184 +550,59 @@ public class Dereferencer {
                 .build();
         httpGet.setConfig(requestConfig);
         
-        long startTime1 = System.currentTimeMillis();
-        // More focused Accept header
-        //httpGet.addHeader("Accept", "text/turtle, application/rdf+xml, application/ld+json");
         // Set Accept header for RDF formats
         httpGet.addHeader("Accept",
                 "application/rdf+xml, " +
-                        "text/turtle, " +
-                        "application/ld+json, " +
-                        "application/n-triples, " +
-                        "application/n-quads, " +
-                        "application/trig");
-        long startTime2 = System.currentTimeMillis();
-        //Arrays.stream(httpGet.getAllHeaders()).toList().forEach(header -> logger.info("request header -- " + header.getName() + ": " + header.getValue()));
+                "text/turtle, " +
+                "application/ld+json, " +
+                "application/n-triples, " +
+                "application/n-quads, " +
+                "application/trig");
 
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-            long startTime3 = System.currentTimeMillis();
-            //logger.info("--------STATUS CODE = " + response.getStatusLine().getStatusCode());
-
             if (response.getStatusLine().getStatusCode() != 200) {
-                Arrays.stream(response.getAllHeaders()).toList().forEach(header -> logger.info(header.getName() + ": " + header.getValue()));
-                logger.warning(response.getEntity().getContent().toString());
+                logger.warning("HTTP request failed for vocabulary " + vocabularyUri + ": " + response.getStatusLine());
                 throw new IOException("HTTP request failed: " + response.getStatusLine());
             }
-            long startTime4 = System.currentTimeMillis();
-            // Get content as bytes to avoid double conversion
+            
+            // Get content as bytes
             Header contentLengthHeader = response.getFirstHeader("Content-Length");
             if (contentLengthHeader != null) {
                 long size = Long.parseLong(contentLengthHeader.getValue());
-                logger.info("Content size from header: " + size + " bytes for iri " + extractBaseUri(iri));
-            } else {
-                logger.warning("Content-Length header not available");
-                Arrays.stream(response.getAllHeaders()).toList().forEach(header -> logger.info(header.getName() + ": " + header.getValue()));
+                logger.info("Vocabulary size: " + size + " bytes for " + vocabularyUri);
             }
-            logger.info("Before setting the response to content in byte[]");
+            
             byte[] content = EntityUtils.toByteArray(response.getEntity());
-            long startTime5 = System.currentTimeMillis();
-            logger.info("Before response.getEntity().getContentType().getValue();");
             String contentType = response.getEntity().getContentType().getValue();
-            logger.info("After response.getEntity().getContentType().getValue();");
-            long startTime6 = System.currentTimeMillis();
             Lang lang = determineLang(contentType);
-            long startTime7 = System.currentTimeMillis();
-            logger.info("lang = " + lang);
+            
             if (lang == null) {
                 throw new IOException("Unsupported RDF format: " + contentType);
             }
-            long startTime8 = System.currentTimeMillis();
+            
             Model model = ModelFactory.createDefaultModel();
-            long startTime9 = System.currentTimeMillis();
-            long startTime10 = 0;
-            logger.info("iri -----------------------------------*-*-*-*-*-*" + iri);
+            
             try (InputStream in = new ByteArrayInputStream(content)) {
-                startTime10 = System.currentTimeMillis();
-                // Using RDFDataMgr for faster parsing
+                // Using RDFDataMgr for parsing
                 try {
-                    if (iri.startsWith(VANN_PREFIX)) {
+                    if (vocabularyUri.startsWith(VANN_PREFIX)) {
                         RDFDataMgr.read(model, in, VANN_RDF_FILE, lang);
-                    } else if (iri.startsWith(SCHEMA_PREFIX)) {
-                        logger.info("Logged in with SCHEMA_PREFIX -----------------------------------*-*-*-*-*-*");
+                    } else if (vocabularyUri.startsWith(SCHEMA_PREFIX)) {
                         RDFDataMgr.read(model, in, SCHEMA_RDF_FILE, lang);
                     } else {
                         RDFDataMgr.read(model, in, lang);
                     }
                 } catch (org.apache.jena.riot.RiotException e) {
-                    logger.log(Level.WARNING, "RiotException while parsing RDF for " + iri + ": " + e.getMessage());
-                    logger.log(Level.INFO, "Falling back to local name for IRI: " + iri);
-                    // Return local name as fallback when RDF parsing fails
-                    ValueFactory vf = SimpleValueFactory.getInstance();
-                    IRI propertyUrlIRI = vf.createIRI(iri);
-                    return propertyUrlIRI.getLocalName();
+                    logger.log(Level.WARNING, "RiotException while parsing vocabulary " + vocabularyUri + ": " + e.getMessage());
+                    throw new IOException("Failed to parse vocabulary RDF", e);
                 }
             }
-            long startTime11 = System.currentTimeMillis();
-            String label = findLabelForIRI(model, iri);
-            long startTime12 = System.currentTimeMillis();
-
-            logger.log(Level.INFO, "Fetched label for " + iri + " in " + (System.currentTimeMillis() - startTime) + "ms");
-            logger.log(Level.INFO, "HttpGet httpGet = new HttpGet(extractBaseUri(iri)); in " + (startTime1 - startTime) + "ms");
-            logger.log(Level.INFO, "Fetched label for " + iri + " in " + (startTime2 - startTime1) + "ms");
-            logger.log(Level.INFO, "----------------------" + iri + "---------------------------------------");
-            logger.log(Level.INFO, "try (CloseableHttpResponse response = httpClient.execute(httpGet)) { in " + (startTime3 - startTime2) + "ms");
-            logger.log(Level.INFO, "----------------------" + iri + "---------------------------------");
-            logger.log(Level.INFO, "Fetched label for " + iri + " in " + (startTime4 - startTime3) + "ms");
-            logger.log(Level.INFO, "byte[] content = EntityUtils.toByteArray(response.getEntity()); in " + (startTime5 - startTime4) + "ms");
-            logger.log(Level.INFO, "String contentType = response.getEntity().getContentType().getValue(); in " + (startTime6 - startTime5) + "ms");
-            logger.log(Level.INFO, "Lang lang = determineLang(contentType); in " + (startTime7 - startTime6) + "ms");
-            logger.log(Level.INFO, "Fetched label for " + iri + " in " + (startTime8 - startTime7) + "ms");
-            logger.log(Level.INFO, "Model model = ModelFactory.createDefaultModel(); in " + (startTime9 - startTime8) + "ms");
-            logger.log(Level.INFO, "try (InputStream in = new ByteArrayInputStream(content)) { in " + (startTime10 - startTime9) + "ms");
-            logger.log(Level.INFO, "RDFDataMgr.read(model, in, lang); in " + (startTime11 - startTime10) + "ms");
-            logger.log(Level.INFO, "String label = findLabelForIRI(model, iri); in " + (startTime12 - startTime11) + "ms");
-
-            logger.log(Level.INFO, "LABEL = " + label);
-
-            label = LabelFormatter.changeLabelToTheConfiguredFormat(label, config);
-
-            return label;
+            
+            long duration = System.currentTimeMillis() - startTime;
+            logger.log(Level.INFO, "Successfully fetched and parsed vocabulary " + vocabularyUri + " in " + duration + "ms");
+            
+            return model;
         }
-/*        logger.log(Level.INFO, "Beginning fetchLabelUncached");
-        long startTime = System.currentTimeMillis();
-        HttpGet httpGet = new HttpGet(extractBaseUri(iri));
-        logger.log(Level.INFO, "HttpGet got");
-        // Create HTTP client
-
-
-
-
-            // Set Accept header for RDF formats
-            httpGet.addHeader("Accept",
-                    "application/rdf+xml, " +
-                            "text/turtle, " +
-                            "application/ld+json, " +
-                            "application/n-triples, " +
-                            "application/n-quads, " +
-                            "application/trig");
-
-            // Execute request
-            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-                logger.log(Level.INFO, "Executed CloseableHttpResponse response = httpClient.execute(httpGet)");
-                int statusCode = response.getStatusLine().getStatusCode();
-                logger.log(Level.INFO, "Got status code " + statusCode);
-                if (statusCode != 200) {
-                    throw new IOException("HTTP request failed with status code: " + statusCode);
-                }
-
-                // Get content type to determine RDF format
-                String contentType = response.getEntity().getContentType().getValue();
-                String rdfFormat = determineRDFFormat(contentType);
-                logger.log(Level.INFO, "Determined RDFFormat " + rdfFormat);
-*//*
-                if (rdfFormat == null) {
-                    throw new IOException("Unsupported RDF format in response: " + contentType);
-                }
-*//*
-
-                logger.log(Level.INFO, "rdfFormat="+rdfFormat);
-                if(rdfFormat == null){
-                    throw new IOException("No rdf format content was fetched for IRI "+iri+", create a column title from local name in the IRI.");
-                }
-                //logger.log(Level.INFO, content);
-                Model model = null;
-                try {
-                    // Parse RDF
-                    model = ModelFactory.createDefaultModel();
-
-                    logger.log(Level.INFO, "Before model.read(extractBaseUri(iri)); level 1");
-                    model.read(extractBaseUri(iri));
-                    logger.log(Level.INFO, "After model.read(extractBaseUri(iri)); level 1");
-                } catch (JenaException timedOut){
-                    try {
-
-                        model = ModelFactory.createDefaultModel();
-
-                        model.read(extractBaseUri(iri));
-                    } catch (JenaException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-*//*                model.read(
-                        new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)),
-                        iri,
-                        rdfFormat
-                );*//*
-
-
-
-                String label = findLabelForIRI(model, iri);
-
-                logger.log(Level.INFO, "label found? " + label);
-
-                long endTime = System.currentTimeMillis();
-                long duration = endTime - startTime;
-                logger.log(Level.WARNING, "Method execution time: " + duration + "ms");
-
-                return label;
-
-        }*/
     }
 
     private static String determineRDFFormat(String contentType) {
