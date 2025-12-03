@@ -28,13 +28,13 @@ public class LabelFormatter {
      */
     public static String changeLabelToTheConfiguredFormat(String originalLabel, AppConfig config) {
         String formattedLabel = null;
-        logger.info("Configuration for app.columnNamingConvention in changeLabelToTheConfiguredFormat = " + config.getColumnNamingConvention());
+        //logger.fine("Configuration for app.columnNamingConvention in changeLabelToTheConfiguredFormat = " + config.getColumnNamingConvention());
         if (config == null) {
             return originalLabel; // Return original if no config
         }
         String formatting = config.getColumnNamingConvention();
 
-        logger.info("Configuration for app.columnNamingConvention = " + formatting);
+        //logger.fine("Configuration for app.columnNamingConvention = " + formatting);
 
         switch (formatting) {
             case CAMEL_CASE_CONFIG_STRING:

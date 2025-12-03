@@ -102,7 +102,7 @@ public class MethodService {
 
             readr.close();
             writer.close();
-            logger.log(Level.INFO, "Successfully Downloaded. NewFileName is " + newFileName);
+            logger.info( "Successfully Downloaded. NewFileName is " + newFileName);
             return newFileName;
         } catch (MalformedURLException e) {
             System.err.println("URL is invalid: " + fileName + ". Returns original filename in processFileOrIRI method.");

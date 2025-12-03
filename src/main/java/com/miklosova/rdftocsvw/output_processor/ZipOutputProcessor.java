@@ -147,7 +147,7 @@ public class ZipOutputProcessor implements IOutputProcessor {
              ZipOutputStream zipOut = new ZipOutputStream(fos)) {
 
             for (String srcFile : srcFiles) {
-                logger.log(Level.INFO, "Zipping file: " + srcFile);
+                //logger.log(Level.INFO, "Zipping file: " + srcFile);
                 File fileToZip = new File(srcFile);
                 try (FileInputStream fis = new FileInputStream(fileToZip)) {
                     ZipEntry zipEntry = new ZipEntry(fileToZip.getName());

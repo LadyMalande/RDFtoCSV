@@ -120,7 +120,7 @@ public class LanguageConfigTest {
         if(iri.contains("nonexistent-property") || iri.contains("does-not-exist")){
             assertEquals(expectedLabel, instance.fetchLabel(iri));
         } else {
-            assertEquals(expectedLabel, instance.fetchLabelUncached(iri));
+            assertEquals(expectedLabel, instance.fetchLabelUncached(iri, config));
         }
     }
 

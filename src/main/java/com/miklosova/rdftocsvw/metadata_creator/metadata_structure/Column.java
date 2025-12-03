@@ -550,7 +550,10 @@ public class Column {
         int delimiterIndex = columnKeyIRI.stringValue().indexOf(delimiter);
         String prependix = (delimiterIndex != -1) ? columnKeyIRI.stringValue().substring(delimiterIndex + delimiter.length()) + "_" : "";
 
-        if (ConnectionChecker.checkConnection()) {
+        // Check if dereferencing should be skipped
+        boolean skipDeref = (config != null && config.getSkipDereferencing() != null && config.getSkipDereferencing());
+        
+        if (!skipDeref && ConnectionChecker.checkConnection()) {
             Dereferencer dereferencer = new Dereferencer(this.getPropertyUrl(), config);
             try {
                 //this.titles = dereferencer.getTitle();

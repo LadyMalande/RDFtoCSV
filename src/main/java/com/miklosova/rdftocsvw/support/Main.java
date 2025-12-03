@@ -130,6 +130,10 @@ public class Main {
             builder.columnNamingConvention(cmd.getOptionValue("c"));
         }
         
+        if (cmd.hasOption("skip-deref")) {
+            builder.skipDereferencing(true);
+        }
+        
         return builder.build();
     }
     
@@ -175,6 +179,7 @@ public class Main {
         options.addOption("o", "output", true, "Put the output path for the file");
         options.addOption("l", "languages", true, "Comma-separated list of preferred languages for labels (e.g., 'en,cs,de'). Default: 'en,cs'");
         options.addOption("c", "convention", true, "Column naming convention (camelCase, PascalCase, snake_case, SCREAMING_SNAKE_CASE, kebab-case, Title Case, dot.notation, original). Default: 'original'");
+        options.addOption(null, "skip-deref", false, "Skip vocabulary dereferencing and use IRI local names for column titles (significantly improves performance)");
         return options;
     }
     

@@ -80,7 +80,7 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
             while ((line = reader.readLine()) != null) {
                 processLine(line);
                 if (counter % 10000 == 0) {
-                    logger.log(Level.INFO, "counter of processed triples " + counter);
+                    logger.fine( "counter of processed triples " + counter);
                 }
                 counter++;
             }

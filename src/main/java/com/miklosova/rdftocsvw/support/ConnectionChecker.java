@@ -9,18 +9,36 @@ import java.net.URLConnection;
  * The Connection checker class.
  */
 public class ConnectionChecker {
+    private static Boolean cachedConnectionStatus = null;
+    private static long lastCheckTime = 0;
+    private static final long CACHE_DURATION_MS = 60000; // Cache for 60 seconds
+    
     /**
      * Check if there is internet connection.
+     * Result is cached for 60 seconds to avoid repeated network requests.
      *
      * @return True if the default URL is reachable.
      */
     public static boolean checkConnection() {
+        long currentTime = System.currentTimeMillis();
+        
+        // Return cached result if still valid
+        if (cachedConnectionStatus != null && (currentTime - lastCheckTime) < CACHE_DURATION_MS) {
+            return cachedConnectionStatus;
+        }
+        
+        // Perform actual connection check
         try {
             URL url = new URL("http://www.google.com");
             URLConnection connection = url.openConnection();
+            connection.setConnectTimeout(2000); // 2 second timeout
             connection.connect();
+            cachedConnectionStatus = true;
+            lastCheckTime = currentTime;
             return true;
         } catch (IOException e) {
+            cachedConnectionStatus = false;
+            lastCheckTime = currentTime;
             return false;
         }
     }

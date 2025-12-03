@@ -41,6 +41,11 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
      * The Table schema by files. Table Schema objects mapped to their CSV file urls
      */
     Map<String, TableSchema> tableSchemaByFiles;
+    
+    /**
+     * Counter for processed triples (for timing output only)
+     */
+    private int processedTriplesCount = 0;
 
     /**
      * The Unified by subject. Is the triple being unified by Subject or Predicate (if it's unified to previously known data)?
@@ -96,7 +101,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 processLine(line);
             }
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "There was an exception while trying to read file with method Streaming.");
+            logger.log(Level.SEVERE, "There was an exception while trying to read file with method Streaming. File: " + fileNameToRead, e);
         }
     }
 
@@ -133,28 +138,64 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        lineCounter++;
     }
 
     @Override
     void addMetadataToTableSchema(Triple triple) {
-        Column newColumn = new Column();
+        processedTriplesCount++;
+        
+        // Debug output every 500 triples
+        if (processedTriplesCount % 500 == 0) {
+            System.err.println("[DEBUG-NT] Processing triple #" + processedTriplesCount);
+        }
+        
+        long startTotal = System.nanoTime();
+        
+        if (config == null) {
+            throw new IllegalStateException("Config is null in StreamingNTriplesMetadataCreator.addMetadataToTableSchema! This should never happen.");
+        }
+        
+        long afterConfigCheck = System.nanoTime();
+        
+        Column newColumn = new Column(config);
+        long afterColumnCreation = System.nanoTime();
+        
         newColumn.createLangFromLiteral(triple.object);
+        long afterLang = System.nanoTime();
+        
         newColumn.createNameFromIRI(triple.predicate);
+        long afterName = System.nanoTime();
+        
         newColumn.setPropertyUrl(triple.predicate.stringValue());
         newColumn.setValueUrl("{+" + newColumn.getName() + "}");
+        long afterUrls = System.nanoTime();
+        
         newColumn.createDatatypeFromValue(triple.object);
+        long afterDatatype = System.nanoTime();
+        
         newColumn.setAboutUrl("{+Subject}");
+        
         newColumn.setTitles(newColumn.createTitles(triple.predicate, triple.object));
+        long afterTitles = System.nanoTime();
+        
         currentCSVName = getCSVNameIfSubjectOrPredicateKnown(triple.getSubject(), triple.getPredicate());
+        long afterCSVName = System.nanoTime();
+        
         if (blankNodeRegisteredToConfig) {
             if (metadata.getTables().stream().anyMatch(table -> table.getUrl().equalsIgnoreCase(currentCSVName))) {
-                metadata.getTables().stream().filter(table -> table.getUrl().equalsIgnoreCase(currentCSVName)).findAny().get().addTransformations();
+                metadata.getTables().stream().filter(table -> table.getUrl().equalsIgnoreCase(currentCSVName)).findAny().get().addTransformations(config);
             }
         }
+        long afterBlankNode = System.nanoTime();
+        
         // Find the tableSchema that describes either Subject or Predicate in the triple
         tableSchema = getTableSchemaOfMatchingMetadata(triple);
+        long afterTableSchema = System.nanoTime();
+        
         // There is no matching column found in any existing metadata -> Add the column
         if (!thereIsMatchingColumnAlready(newColumn, triple, tableSchema)) {
+            long afterMatching = System.nanoTime();
 
             tableSchema.getColumns().add(newColumn);
 
@@ -162,6 +203,40 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 rewriteTheHeadersInCSV(currentCSVName, newColumn.getTitles());
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            }
+            long afterRewrite = System.nanoTime();
+            
+            // Detailed timing output every 500 triples
+            if (processedTriplesCount % 500 == 0) {
+                long configMicros = (afterConfigCheck - startTotal) / 1000;
+                long columnMicros = (afterColumnCreation - afterConfigCheck) / 1000;
+                long langMicros = (afterLang - afterColumnCreation) / 1000;
+                long nameMicros = (afterName - afterLang) / 1000;
+                long urlsMicros = (afterUrls - afterName) / 1000;
+                long datatypeMicros = (afterDatatype - afterUrls) / 1000;
+                long titlesMicros = (afterTitles - afterDatatype) / 1000;
+                long csvNameMicros = (afterCSVName - afterTitles) / 1000;
+                long blankNodeMicros = (afterBlankNode - afterCSVName) / 1000;
+                long tableSchemaMicros = (afterTableSchema - afterBlankNode) / 1000;
+                long matchingMicros = (afterMatching - afterTableSchema) / 1000;
+                long rewriteMicros = (afterRewrite - afterMatching) / 1000;
+                long totalMicros = (afterRewrite - startTotal) / 1000;
+                
+                System.err.println(String.format("[TIMING-NT] Triple %d: TOTAL=%dμs", processedTriplesCount, totalMicros));
+                System.err.println(String.format("  Config=%dμs, Column=%dμs, Lang=%dμs, Name=%dμs", 
+                    configMicros, columnMicros, langMicros, nameMicros));
+                System.err.println(String.format("  URLs=%dμs, Datatype=%dμs, Titles=%dμs, CSVName=%dμs", 
+                    urlsMicros, datatypeMicros, titlesMicros, csvNameMicros));
+                System.err.println(String.format("  BlankNode=%dμs, TableSchema=%dμs, Matching=%dμs, Rewrite=%dμs", 
+                    blankNodeMicros, tableSchemaMicros, matchingMicros, rewriteMicros));
+                System.err.flush();
+            }
+        } else {
+            // Column already exists - just timing
+            if (processedTriplesCount % 500 == 0) {
+                long totalMicros = (System.nanoTime() - startTotal) / 1000;
+                System.err.println(String.format("[TIMING-NT] Triple %d: TOTAL=%dμs (column already exists)", processedTriplesCount, totalMicros));
+                System.err.flush();
             }
         }
     }
@@ -324,14 +399,18 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
      * @throws IOException the io exception
      */
     public void writeTripleToCSV(String filePath, Triple triple) throws IOException {
+        long startWrite = System.nanoTime();
+        
         List<String[]> rowDataVariationsForSubject = new ArrayList<>();
         boolean isNeedForAddingDataVariations = false;
         int indexOfDataVariationColumn = -1;
         File file = new File(filePath);
         List<String[]> lines = new ArrayList<>();
         boolean isModified = false;
+        long afterInit = System.nanoTime();
 
         unifiedBySubject = isThereTheSameSubject(triple.getSubject());
+        long afterUnified = System.nanoTime();
 
         // Read the file and process it line by line
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
@@ -417,6 +496,19 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         // Write the updated content back to the file
         if (isModified) {
             FileWrite.writeLinesToCSVFile(file, lines, false);
+        }
+        
+        long endWrite = System.nanoTime();
+        
+        // Detailed timing every 500 triples
+        if (processedTriplesCount % 500 == 0) {
+            long totalMicros = (endWrite - startWrite) / 1000;
+            long initMicros = (afterInit - startWrite) / 1000;
+            long unifiedMicros = (afterUnified - afterInit) / 1000;
+            System.err.println(String.format("[TIMING-WRITE] Triple %d: TOTAL=%dμs (Init=%dμs, Unified=%dμs, Rest=%dμs)",
+                processedTriplesCount, totalMicros, initMicros, unifiedMicros, 
+                totalMicros - initMicros - unifiedMicros));
+            System.err.flush();
         }
     }
 

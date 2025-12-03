@@ -61,6 +61,7 @@ public class AppConfig {
     private static final Boolean DEFAULT_CONVERSION_HAS_RDF_TYPES = true;
     private static final String DEFAULT_COLUMN_NAMING_CONVENTION = ORIGINAL_NAMING_NOTATION;
     private static final String DEFAULT_PREFERRED_LANGUAGES = "en,cs";
+    private static final Boolean DEFAULT_SKIP_DEREFERENCING = false;
 
     // User-provided parameters (required)
     private final String file;
@@ -75,6 +76,7 @@ public class AppConfig {
     private final String outputMetadata;
     private String columnNamingConvention;
     private final String preferredLanguages;
+    private final Boolean skipDereferencing;
 
     // Runtime/derived parameters (set during execution or in constructor)
     private String conversionMethod;
@@ -128,6 +130,10 @@ public class AppConfig {
 
     public String getPreferredLanguages() {
         return preferredLanguages;
+    }
+
+    public Boolean getSkipDereferencing() {
+        return skipDereferencing;
     }
 
     // Getters and setters for runtime parameters
@@ -250,12 +256,11 @@ public class AppConfig {
         this.outputMetadata = builder.outputMetadata;
         this.columnNamingConvention = builder.columnNamingConvention != null ? builder.columnNamingConvention : DEFAULT_COLUMN_NAMING_CONVENTION;
         this.preferredLanguages = builder.preferredLanguages != null ? builder.preferredLanguages : DEFAULT_PREFERRED_LANGUAGES;
+        this.skipDereferencing = builder.skipDereferencing != null ? builder.skipDereferencing : DEFAULT_SKIP_DEREFERENCING;
 
         // Initialize runtime parameters with defaults
         initializeRuntimeParameters();
 
-        // Initialize runtime parameters with defaults
-        initializeRuntimeParameters();
     }
 
     /**
@@ -275,7 +280,15 @@ public class AppConfig {
 
         // Calculate output file path and zip file name
         String baseFileName = getBaseFileName(file, output);
-        this.outputFilePath = output != null ? output : baseFileName;
+        
+        // For both URLs and local files without explicit output, prepend ../ to place output alongside input file
+        if (output != null) {
+            this.outputFilePath = output;
+        } else {
+            // Prepend ../ for both local files and URLs to output alongside the input file
+            this.outputFilePath = "../" + baseFileName;
+        }
+        
         // Use full output path for ZIP file, not just base filename
         this.outputZipFileName = this.outputFilePath + "_CSVW.zip";
         this.outputFileName = baseFileName; // Initialize to base file name
@@ -314,6 +327,7 @@ public class AppConfig {
         private String outputMetadata = null;
         private String columnNamingConvention;
         private String preferredLanguages = DEFAULT_PREFERRED_LANGUAGES;
+        private Boolean skipDereferencing = DEFAULT_SKIP_DEREFERENCING;
 
         /**
          * Create a new builder with the required file parameter.
@@ -395,6 +409,18 @@ public class AppConfig {
             LOGGER.info("preferred languages that got into AppConfig Builder: '" + preferredLanguages + "'");
             this.preferredLanguages = preferredLanguages != null ? preferredLanguages : DEFAULT_PREFERRED_LANGUAGES;
             LOGGER.info("preferred languages after handling their setup in AppConfig Builder: '" + this.preferredLanguages + "'");
+            return this;
+        }
+
+        /**
+         * Set whether to skip dereferencing and use local names instead.
+         * When enabled, vocabulary lookups are skipped and IRI local names are used for column titles.
+         * This significantly improves performance by avoiding network requests.
+         * @param skipDereferencing true to skip vocabulary lookups and use IRI local names
+         * @return this Builder instance
+         */
+        public Builder skipDereferencing(Boolean skipDereferencing) {
+            this.skipDereferencing = skipDereferencing != null ? skipDereferencing : DEFAULT_SKIP_DEREFERENCING;
             return this;
         }
 
@@ -548,6 +574,7 @@ public class AppConfig {
         this.output = DEFAULT_OUTPUT;
         this.outputMetadata = null;
         this.preferredLanguages = DEFAULT_PREFERRED_LANGUAGES;
+        this.skipDereferencing = DEFAULT_SKIP_DEREFERENCING;
         initializeRuntimeParameters();
     }
 
@@ -567,6 +594,7 @@ public class AppConfig {
         this.outputMetadata = null;
         //this.columnNamingConvention = DEFAULT_COLUMN_NAMING_CONVENTION;
         this.preferredLanguages = DEFAULT_PREFERRED_LANGUAGES;
+        this.skipDereferencing = DEFAULT_SKIP_DEREFERENCING;
         initializeRuntimeParameters();
     }
 
@@ -634,11 +662,31 @@ public class AppConfig {
         String fileName = (outputFile != null && !outputFile.isEmpty()) ? outputFile : inputFile;
         LOGGER.info("String fileName = (outputFile != null && !outputFile.isEmpty()) ? outputFile : inputFile;");
         LOGGER.info("+++getBaseFileName --> fileName: " + fileName + ", outputFile = " + outputFile + ", inputFile = " + inputFile);
-        // Remove any path
-        int lastSlash = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
-        if (lastSlash >= 0) {
-            fileName = fileName.substring(lastSlash + 1);
+        
+        // If it's a URL, extract just the filename from the URL path
+        if (ConnectionChecker.isUrl(fileName)) {
+            try {
+                java.net.URL url = new java.net.URL(fileName);
+                String path = url.getPath();
+                // Get the last segment of the path (the filename)
+                int lastSlash = path.lastIndexOf('/');
+                if (lastSlash >= 0) {
+                    fileName = path.substring(lastSlash + 1);
+                } else {
+                    fileName = path;
+                }
+                LOGGER.info("+++Extracted filename from URL: " + fileName);
+            } catch (java.net.MalformedURLException e) {
+                LOGGER.warning("Failed to parse URL: " + fileName);
+            }
+        } else {
+            // Remove any path for local files
+            int lastSlash = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
+            if (lastSlash >= 0) {
+                fileName = fileName.substring(lastSlash + 1);
+            }
         }
+        
         // Remove extension
         int lastDot = fileName.lastIndexOf('.');
         if (lastDot > 0) {

@@ -34,6 +34,7 @@ public class PerformanceLogger {
     private String namingConvention;
     private String languagePreference;
     private boolean firstNormalForm;
+    private boolean skipDereferencing;
     private int intermediateFilesCount;
     private String intermediateFileNames;
     private long totalOutputSizeKB;
@@ -102,15 +103,17 @@ public class PerformanceLogger {
      * @param namingConvention The column naming convention
      * @param languagePreference Preferred languages for labels
      * @param firstNormalForm Whether first normal form is enabled
+     * @param skipDereferencing Whether vocabulary dereferencing is skipped
      * @param intermediateFileNames Comma-separated list of intermediate file names
      */
     public void setConfigInfo(String parsingMethod, boolean streaming, String namingConvention, 
-                              String languagePreference, boolean firstNormalForm, String intermediateFileNames) {
+                              String languagePreference, boolean firstNormalForm, boolean skipDereferencing, String intermediateFileNames) {
         this.parsingMethod = parsingMethod;
         this.streaming = streaming;
         this.namingConvention = namingConvention;
         this.languagePreference = languagePreference;
         this.firstNormalForm = firstNormalForm;
+        this.skipDereferencing = skipDereferencing;
         this.intermediateFileNames = intermediateFileNames;
         
         // Count intermediate files
@@ -192,6 +195,7 @@ public class PerformanceLogger {
                 writer.println("  Naming Convention: " + (namingConvention != null ? namingConvention : "default"));
                 writer.println("  Language Preference: " + (languagePreference != null ? languagePreference : "default"));
                 writer.println("  First Normal Form: " + (firstNormalForm ? "Yes" : "No"));
+                writer.println("  Skip Dereferencing: " + (skipDereferencing ? "Yes" : "No"));
                 writer.println("  Intermediate Files Count: " + intermediateFilesCount);
                 writer.println("  Total Output Size: " + totalOutputSizeKB + " KB");
             }
@@ -252,6 +256,7 @@ public class PerformanceLogger {
             System.out.println("  Naming Convention: " + (namingConvention != null ? namingConvention : "default"));
             System.out.println("  Language Preference: " + (languagePreference != null ? languagePreference : "default"));
             System.out.println("  First Normal Form: " + (firstNormalForm ? "Yes" : "No"));
+            System.out.println("  Skip Dereferencing: " + (skipDereferencing ? "Yes" : "No"));
             System.out.println("  Intermediate Files Count: " + intermediateFilesCount);
             System.out.println("  Total Output Size: " + totalOutputSizeKB + " KB");
         }

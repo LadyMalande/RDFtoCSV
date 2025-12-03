@@ -40,6 +40,18 @@ public class StreamingMetadataCreator extends MetadataCreator {
     private static final Logger logger = Logger.getLogger(StreamingMetadataCreator.class.getName());
     private final Map<String, Value> mapOfBlanks = new HashMap<>();
     /**
+     * Cache for fast column lookup by composite key (name + titles + propertyUrl + lang + datatype).
+     * Maps composite key to the matching Column, avoiding O(n²) linear search.
+     */
+    private final Map<String, Column> columnCache = new HashMap<>();
+    
+    /**
+     * Cache for titles by predicate IRI to avoid repeated dereferencing.
+     * Maps predicate IRI to its fetched title/label.
+     */
+    private final Map<String, String> predicateTitlesCache = new HashMap<>();
+    
+    /**
      * The Blank node registered to config.
      */
     boolean blankNodeRegisteredToConfig;
@@ -79,8 +91,10 @@ public class StreamingMetadataCreator extends MetadataCreator {
      * @param config the application configuration
      */
     public StreamingMetadataCreator(AppConfig config) {
+        super(config);  // Pass config to parent MetadataCreator
         this.config = config;
-        String fileNameFromConfig = config.getFile();
+        // Use the resolved input file name which includes path adjustments (like ../ prefix)
+        String fileNameFromConfig = config != null ? config.getInputFileName() : null;
         /*
         //URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
         //File file = new File("temp.csv");
@@ -91,7 +105,15 @@ public class StreamingMetadataCreator extends MetadataCreator {
         }
         String jarDirectory = file.getParentFile().getName();
 */
-        this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) : fileNameFromConfig;
+        // For streaming, we need the actual file to read, not the library-relative path
+        // If it's a URL, extract local name; otherwise use the path as-is
+        // For relative paths, they are relative to user's working directory
+        if (isUrl(fileNameFromConfig)) {
+            this.fileNameToRead = iri(fileNameFromConfig).getLocalName();
+        } else {
+            // Use the file path as provided - it's either absolute or relative to user's current directory
+            this.fileNameToRead = fileNameFromConfig;
+        }
         //"../"
     }
 
@@ -296,20 +318,74 @@ public class StreamingMetadataCreator extends MetadataCreator {
      * @param triple the triple
      */
     void addMetadataToTableSchema(Triple triple) {
+        // Debug: Print every 500 triples to track progress
+        if (lineCounter == 0 || lineCounter % 500 == 0) {
+            logger.info("[DEBUG] Processing triple #" + lineCounter);
+        }
+        
+        long startTotal = System.nanoTime();
+        
         Column newColumn = new Column(config);
+        long afterColumnCreate = System.nanoTime();
+        
         newColumn.createLangFromLiteral(triple.object);
+        long afterLang = System.nanoTime();
+        
         newColumn.createNameFromIRI(triple.predicate);
+        long afterName = System.nanoTime();
+        
         newColumn.setPropertyUrl(triple.predicate.stringValue());
         if (triple.object.isIRI()) {
             newColumn.setValueUrl(((IRI) triple.object).getNamespace() + "{+" + newColumn.getName() + "}");
         } else if (triple.object.isBNode()) {
             newColumn.setValueUrl("{+" + newColumn.getName() + "}");
         }
+        long afterValueUrl = System.nanoTime();
+        
         newColumn.createDatatypeFromValue(triple.object);
+        long afterDatatype = System.nanoTime();
+        
         newColumn.setAboutUrl(triple.subject.getNamespace() + "{+Subject}");
-        newColumn.setTitles(newColumn.createTitles(triple.predicate, triple.object));
+        long afterAboutUrl = System.nanoTime();
+        
+        // Check cache first before calling expensive createTitles()
+        // Cache key includes predicate IRI + language tag (since title includes language)
+        String predicateIri = triple.predicate.stringValue();
+        String langTag = "";
+        if (triple.object.isLiteral()) {
+            Literal literal = (Literal) triple.object;
+            java.util.Optional<String> languageTag = literal.getLanguage();
+            if (languageTag.isPresent()) {
+                langTag = languageTag.get();
+            }
+        }
+        String cacheKey = predicateIri + "|" + langTag;
+        
+        String titles = predicateTitlesCache.get(cacheKey);
+        if (titles == null) {
+            // Cache miss - fetch and store
+            titles = newColumn.createTitles(triple.predicate, triple.object);
+            predicateTitlesCache.put(cacheKey, titles);
+        }
+        newColumn.setTitles(titles);
+        long afterTitles = System.nanoTime();
+        
         if (!thereIsMatchingColumnAlready(newColumn, triple)) {
             tableSchema.getColumns().add(newColumn);
+            // Add to cache for future fast lookups
+            String columnCacheKey = getColumnCacheKey(newColumn);
+            columnCache.put(columnCacheKey, newColumn);
+        }
+        long afterMatching = System.nanoTime();
+        
+        // Log detailed timing every 500 triples to track performance trends
+        if (lineCounter % 500 == 0 && lineCounter > 0) {
+            long totalMicros = (afterMatching - startTotal) / 1000;
+            long titlesMicros = (afterTitles - afterAboutUrl) / 1000;
+            long matchingMicros = (afterMatching - afterTitles) / 1000;
+            logger.info(String.format("[TIMING] Triple %d: TOTAL=%dus (Titles=%dus, Matching=%dus)", 
+                lineCounter, totalMicros, titlesMicros, matchingMicros));
+            
         }
     }
 
@@ -328,6 +404,18 @@ public class StreamingMetadataCreator extends MetadataCreator {
     }
 
     /**
+     * Generate a composite cache key for fast column lookup.
+     * Key format: name|titles|propertyUrl|lang|datatype
+     */
+    private String getColumnCacheKey(Column column) {
+        return (column.getName() != null ? column.getName().toLowerCase() : "") + "|" +
+               (column.getTitles() != null ? column.getTitles().toLowerCase() : "") + "|" +
+               (column.getPropertyUrl() != null ? column.getPropertyUrl().toLowerCase() : "") + "|" +
+               (column.getLang() != null ? column.getLang().toLowerCase() : "") + "|" +
+               (column.getDatatype() != null ? column.getDatatype().toLowerCase() : "");
+    }
+
+    /**
      * There is matching column already in the metadata table.
      *
      * @param newColumn the new column that we are trying to make
@@ -338,6 +426,29 @@ public class StreamingMetadataCreator extends MetadataCreator {
         if (tableSchema.getColumns().isEmpty()) {
             return false;
         }
+        
+        // Fast path: Check cache first using composite key
+        String cacheKey = getColumnCacheKey(newColumn);
+        Column cachedColumn = columnCache.get(cacheKey);
+        
+        if (cachedColumn != null) {
+            // Found exact match in cache - update aboutUrl/valueUrl if needed
+            if (cachedColumn.getAboutUrl() != null && newColumn.getAboutUrl() != null && 
+                !cachedColumn.getAboutUrl().equalsIgnoreCase(newColumn.getAboutUrl()) &&
+                (cachedColumn.getAboutUrl().indexOf(triple.getSubject().getNamespace()) != 0 || 
+                 cachedColumn.getAboutUrl().length() != newColumn.getAboutUrl().length())) {
+                cachedColumn.setAboutUrl("{+Subject}");
+            }
+            if (cachedColumn.getValueUrl() != null && newColumn.getValueUrl() != null && 
+                !cachedColumn.getValueUrl().equalsIgnoreCase(newColumn.getValueUrl()) && 
+                (cachedColumn.getValueUrl().indexOf(triple.getSubject().getNamespace()) != 0 || 
+                 cachedColumn.getValueUrl().length() != newColumn.getValueUrl().length())) {
+                cachedColumn.setValueUrl("{+" + cachedColumn.getName() + "}");
+            }
+            return true;
+        }
+        
+        // Slow path: Linear search (only happens on cache miss)
         for (Column col : tableSchema.getColumns()) {
             if (!col.getName().equalsIgnoreCase(newColumn.getName())) {
                 continue;
@@ -364,6 +475,9 @@ public class StreamingMetadataCreator extends MetadataCreator {
                 // Adjust the metadata so that they are general as the namespaces are not matching
                 col.setValueUrl("{+" + col.getName() + "}");
             }
+            
+            // Add to cache for future lookups
+            columnCache.put(cacheKey, col);
             return true;
         }
         return false;

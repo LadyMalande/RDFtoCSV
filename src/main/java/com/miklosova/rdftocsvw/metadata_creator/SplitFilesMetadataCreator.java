@@ -75,7 +75,8 @@ public class SplitFilesMetadataCreator implements IMetadataCreator {
         if (config == null) {
             throw new IllegalStateException("AppConfig is required");
         }
-        String outputFilename = config.getOutput();
+        // Use getOutputFilePath() which is always initialized, not getOutput() which can be null
+        String outputFilename = config.getOutputFilePath();
         File f = new File(outputFilename);
         CSVFileTOWriteTo = f.getName();
     }

@@ -117,13 +117,24 @@ public class RDFtoCSV {
         }
         logger.info("Input file for conversion from RDFtoCSV: " + this.fileName);
         
+        // Update config with the resolved input file path for streaming parsers
+        config.setInputFileName(this.fileName);
+        
         // Set file info in performance logger
         setFileInfoInPerformanceLogger();
         
-        this.metadataFilename = this.fileName + ".csv-metadata.json";
-        this.filePathForOutput = this.fileName;
+        // For URLs, use local name for metadata filename; otherwise use full path
         if (isUrl(config.getFile())) {
-            this.filePathForOutput = iri(this.fileName).getLocalName();
+            String localName = iri(this.fileName).getLocalName();
+            logger.info("localName for metadata filename creation: " + localName);
+            this.metadataFilename = localName + ".csv-metadata.json";
+            this.filePathForOutput = localName;
+        } else {
+            // Use outputFilePath from config which already has extension stripped
+            String baseFilePath = config.getOutputFilePath();
+            logger.info("baseFilePath for metadata filename creation: " + baseFilePath);
+            this.metadataFilename = baseFilePath + ".csv-metadata.json";
+            this.filePathForOutput = baseFilePath;
         }
     }
 
@@ -147,13 +158,22 @@ public class RDFtoCSV {
             this.fileName = "../" + fileName;
         }
         
+        // Update config with the resolved input file path for streaming parsers
+        config.setInputFileName(this.fileName);
+        
         // Set file info in performance logger
         setFileInfoInPerformanceLogger();
         
-        this.metadataFilename = this.fileName + ".csv-metadata.json";
-        this.filePathForOutput = this.fileName;
+        // For URLs, use local name for metadata filename; otherwise use full path
         if (isUrl(fileName)) {
-            this.filePathForOutput = iri(this.fileName).getLocalName();
+            String localName = iri(this.fileName).getLocalName();
+            this.metadataFilename = localName + ".csv-metadata.json";
+            this.filePathForOutput = localName;
+        } else {
+            // Use outputFilePath from config which already has extension stripped
+            String baseFilePath = config.getOutputFilePath();
+            this.metadataFilename = baseFilePath + ".csv-metadata.json";
+            this.filePathForOutput = baseFilePath;
         }
     }
 
@@ -189,15 +209,24 @@ public class RDFtoCSV {
         this.fileName = fileName;
         logger.info("Input file for conversion from RDFtoCSV: " + this.fileName);
         
+        // Update config with the resolved input file path for streaming parsers
+        config.setInputFileName(this.fileName);
+        
         // Set file info in performance logger
         setFileInfoInPerformanceLogger();
 
-        this.metadataFilename = this.fileName + ".csv-metadata.json";
-        this.filePathForOutput = this.fileName;
-        logger.info("this.metadataFilename = this.fileName + .csv-metadata.json;" + this.metadataFilename);
-
+        // For URLs, use local name for metadata filename; otherwise use full path
         if (isUrl(fileName)) {
-            this.filePathForOutput = iri(this.fileName).getLocalName();
+            String localName = iri(this.fileName).getLocalName();
+            this.metadataFilename = localName + ".csv-metadata.json";
+            this.filePathForOutput = localName;
+            logger.info("this.metadataFilename = localName + .csv-metadata.json;" + this.metadataFilename);
+        } else {
+            // Use outputFilePath from config which already has extension stripped
+            String baseFilePath = config.getOutputFilePath();
+            this.metadataFilename = baseFilePath + ".csv-metadata.json";
+            this.filePathForOutput = baseFilePath;
+            logger.info("this.metadataFilename = baseFilePath + .csv-metadata.json;" + this.metadataFilename);
         }
     }
 
@@ -279,6 +308,7 @@ public class RDFtoCSV {
             config.getColumnNamingConvention(),
             config.getPreferredLanguages(),
             config.getFirstNormalForm(),
+            config.getSkipDereferencing() != null ? config.getSkipDereferencing() : false,
             config.getIntermediateFileNames()
         );
         

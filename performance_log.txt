@@ -508,6 +508,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -543,6 +544,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -578,6 +580,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -613,6 +616,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: Yes
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -648,6 +652,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -683,6 +688,7 @@ Configuration:
   Naming Convention: snake_case
   Language Preference: en,de,fr
   First Normal Form: Yes
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -718,6 +724,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -753,6 +760,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -788,6 +796,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -823,6 +832,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -858,6 +868,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: Yes
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -893,6 +904,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -928,6 +940,7 @@ Configuration:
   Naming Convention: snake_case
   Language Preference: en,de,fr
   First Normal Form: Yes
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -963,6 +976,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -998,6 +1012,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -1033,6 +1048,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -1068,6 +1084,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -1103,6 +1120,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -1138,6 +1156,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -1173,6 +1192,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -1208,6 +1228,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: Yes
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -1243,6 +1264,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -1278,6 +1300,7 @@ Configuration:
   Naming Convention: snake_case
   Language Preference: en,de,fr
   First Normal Form: Yes
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -1313,6 +1336,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -1348,6 +1372,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -1383,6 +1408,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1418,6 +1444,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1453,6 +1480,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1488,6 +1516,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1523,6 +1552,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -1558,6 +1588,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1593,6 +1624,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1628,6 +1660,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1663,6 +1696,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1698,6 +1732,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1733,6 +1768,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1768,6 +1804,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1803,6 +1840,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1838,6 +1876,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1873,6 +1912,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1908,6 +1948,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1943,6 +1984,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -1978,6 +2020,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -2013,6 +2056,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -2048,6 +2092,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -2083,6 +2128,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -2118,6 +2164,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -2153,6 +2200,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -2188,6 +2236,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -2223,6 +2272,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: Yes
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -2258,6 +2308,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -2293,6 +2344,7 @@ Configuration:
   Naming Convention: snake_case
   Language Preference: en,de,fr
   First Normal Form: Yes
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -2328,6 +2380,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 1 KB
 ---------------------------------------------------------------------------------
@@ -2363,6 +2416,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -2398,6 +2452,7 @@ Configuration:
   Naming Convention: original
   Language Preference: en,cs
   First Normal Form: No
+  Skip Dereferencing: No
   Intermediate Files Count: 1
   Total Output Size: 0 KB
 ---------------------------------------------------------------------------------
@@ -2413,6 +2468,1586 @@ Write CSV files - Data written to disk                      0ms          8ms    
 Finalize output - ZIP file created on disk                  2ms         10ms       20,00%
 ---------------------------------------------------------------------------------
 TOTAL                                                      10ms
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 15:24:23.905
+End Time: 2025-12-02 15:24:27.953
+Total Duration: 4,05s
+---------------------------------------------------------------------------------
+Input File: https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/refs/heads/main/test_data/testingInput.ttl
+Input File Size: 0 KB
+
+Configuration:
+  Parsing Method: rdf4j
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 2
+  Total Output Size: 0 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                            68ms         68ms        1,68%
+Parse input - RDF file loaded into repository             1,17s        1,24s       28,93%
+Convert data - SPARQL queries executed, data ex...        261ms        1,50s        6,45%
+Repository shutdown - memory released                       1ms        1,50s        0,02%
+Create metadata - JSON metadata structure built           2,51s        4,02s       62,10%
+Write CSV files - Data written to disk                     27ms        4,04s        0,67%
+Finalize output - ZIP file created on disk                  5ms        4,05s        0,12%
+---------------------------------------------------------------------------------
+TOTAL                                                     4,05s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 15:52:37.057
+End Time: 2025-12-02 15:52:42.273
+Total Duration: 5,22s
+---------------------------------------------------------------------------------
+Input File: https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/refs/heads/main/test_data/testingInput.ttl
+Input File Size: 0 KB
+
+Configuration:
+  Parsing Method: rdf4j
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 2
+  Total Output Size: 0 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                            72ms         72ms        1,38%
+Parse input - RDF file loaded into repository             1,21s        1,28s       23,14%
+Convert data - SPARQL queries executed, data ex...        264ms        1,54s        5,06%
+Repository shutdown - memory released                       1ms        1,54s        0,02%
+Create metadata - JSON metadata structure built           3,64s        5,18s       69,69%
+Write CSV files - Data written to disk                     30ms        5,21s        0,58%
+Finalize output - ZIP file created on disk                  6ms        5,22s        0,12%
+---------------------------------------------------------------------------------
+TOTAL                                                     5,22s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 16:12:08.898
+End Time: 2025-12-02 16:12:14.049
+Total Duration: 5,15s
+---------------------------------------------------------------------------------
+Input File: https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/refs/heads/main/test_data/testingInput.ttl
+Input File Size: 0 KB
+
+Configuration:
+  Parsing Method: rdf4j
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 2
+  Total Output Size: 0 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                            73ms         73ms        1,42%
+Parse input - RDF file loaded into repository             917ms        990ms       17,80%
+Convert data - SPARQL queries executed, data ex...        506ms        1,50s        9,82%
+Repository shutdown - memory released                       1ms        1,50s        0,02%
+Create metadata - JSON metadata structure built           3,62s        5,12s       70,28%
+Write CSV files - Data written to disk                     26ms        5,14s        0,50%
+Finalize output - ZIP file created on disk                  8ms        5,15s        0,16%
+---------------------------------------------------------------------------------
+TOTAL                                                     5,15s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 16:17:55.434
+End Time: 2025-12-02 16:22:23.049
+Total Duration: 4m 27s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\random_sample_1000MTriples.nt
+Input File Size: 116800684 KB
+
+Configuration:
+  Parsing Method: rdf4j
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 1
+  Total Output Size: 0 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                            43ms         43ms        0,02%
+Parse input - RDF file loaded into repository             4m 6s        4m 6s       92,17%
+Convert data - SPARQL queries executed, data ex...          3ms        4m 6s        0,00%
+Repository shutdown - memory released                    20,07s       4m 26s        7,50%
+Create metadata - JSON metadata structure built           787ms       4m 27s        0,29%
+Write CSV files - Data written to disk                     13ms       4m 27s        0,00%
+Finalize output - ZIP file created on disk                 55ms       4m 27s        0,02%
+---------------------------------------------------------------------------------
+TOTAL                                                    4m 27s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 17:10:16.695
+End Time: 2025-12-02 17:10:17.295
+Total Duration: 600ms
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\random_sample_1000MTriples.nt
+Input File Size: 116800684 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 0
+  Total Output Size: 0 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                            12ms         12ms        2,00%
+Parse input - RDF file loaded into repository              55ms         67ms        9,17%
+Convert data - SPARQL queries executed, data ex...         12ms         79ms        2,00%
+Repository shutdown - memory released                       2ms         81ms        0,33%
+Create metadata - JSON metadata structure built           507ms        588ms       84,50%
+Write CSV files - Data written to disk                      1ms        589ms        0,17%
+Finalize output - ZIP file created on disk                 11ms        600ms        1,83%
+---------------------------------------------------------------------------------
+TOTAL                                                     600ms
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 17:26:01.329
+End Time: 2025-12-02 17:26:01.620
+Total Duration: 291ms
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\random_sample_1000MTriples.nt
+Input File Size: 116800684 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 0
+  Total Output Size: 0 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             4ms          4ms        1,37%
+Parse input - RDF file loaded into repository              26ms         30ms        8,93%
+Convert data - SPARQL queries executed, data ex...          1ms         31ms        0,34%
+Repository shutdown - memory released                       0ms         31ms        0,00%
+Create metadata - JSON metadata structure built           254ms        285ms       87,29%
+Write CSV files - Data written to disk                      1ms        286ms        0,34%
+Finalize output - ZIP file created on disk                  5ms        291ms        1,72%
+---------------------------------------------------------------------------------
+TOTAL                                                     291ms
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 17:33:11.394
+End Time: 2025-12-02 17:33:12.414
+Total Duration: 1,02s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\..\random_sample_1000MTriples.nt
+Input File Size: 0 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 0
+  Total Output Size: 0 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,20%
+Parse input - RDF file loaded into repository              56ms         58ms        5,49%
+Convert data - SPARQL queries executed, data ex...          1ms         59ms        0,10%
+Repository shutdown - memory released                       1ms         60ms        0,10%
+Create metadata - JSON metadata structure built           519ms        579ms       50,88%
+Write CSV files - Data written to disk                      1ms        580ms        0,10%
+Finalize output - ZIP file created on disk                439ms        1,02s       43,04%
+---------------------------------------------------------------------------------
+TOTAL                                                     1,02s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 20:25:20.021
+End Time: 2025-12-02 20:25:23.455
+Total Duration: 3,43s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\streamingSample3vrstvy.nt
+Input File Size: 0 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 1
+  Total Output Size: 0 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             3ms          3ms        0,09%
+Parse input - RDF file loaded into repository              39ms         42ms        1,14%
+Convert data - SPARQL queries executed, data ex...          2ms         44ms        0,06%
+Repository shutdown - memory released                       1ms         45ms        0,03%
+Create metadata - JSON metadata structure built           3,38s        3,43s       98,43%
+Write CSV files - Data written to disk                      1ms        3,43s        0,03%
+Finalize output - ZIP file created on disk                  8ms        3,43s        0,23%
+---------------------------------------------------------------------------------
+TOTAL                                                     3,43s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 20:27:26.439
+End Time: 2025-12-02 20:27:26.828
+Total Duration: 389ms
+---------------------------------------------------------------------------------
+Input File: C:\typy-dřevin.nt
+Input File Size: 0 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 0
+  Total Output Size: 0 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,51%
+Parse input - RDF file loaded into repository              26ms         28ms        6,68%
+Convert data - SPARQL queries executed, data ex...          2ms         30ms        0,51%
+Repository shutdown - memory released                       1ms         31ms        0,26%
+Create metadata - JSON metadata structure built           347ms        378ms       89,20%
+Write CSV files - Data written to disk                      1ms        379ms        0,26%
+Finalize output - ZIP file created on disk                 10ms        389ms        2,57%
+---------------------------------------------------------------------------------
+TOTAL                                                     389ms
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 20:28:15.338
+End Time: 2025-12-02 20:28:19.329
+Total Duration: 3,99s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\typy-dřevin.nt
+Input File Size: 8 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 1
+  Total Output Size: 2 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,05%
+Parse input - RDF file loaded into repository              26ms         28ms        0,65%
+Convert data - SPARQL queries executed, data ex...          2ms         30ms        0,05%
+Repository shutdown - memory released                       0ms         30ms        0,00%
+Create metadata - JSON metadata structure built           3,95s        3,98s       99,07%
+Write CSV files - Data written to disk                      0ms        3,98s        0,00%
+Finalize output - ZIP file created on disk                  7ms        3,99s        0,18%
+---------------------------------------------------------------------------------
+TOTAL                                                     3,99s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 20:31:04.711
+End Time: 2025-12-02 20:32:55.045
+Total Duration: 1m 50s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,00%
+Parse input - RDF file loaded into repository              30ms         32ms        0,03%
+Convert data - SPARQL queries executed, data ex...          1ms         33ms        0,00%
+Repository shutdown - memory released                       1ms         34ms        0,00%
+Create metadata - JSON metadata structure built          1m 50s       1m 50s       99,93%
+Write CSV files - Data written to disk                      0ms       1m 50s        0,00%
+Finalize output - ZIP file created on disk                 37ms       1m 50s        0,03%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 50s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 21:17:30.658
+End Time: 2025-12-02 21:21:49.281
+Total Duration: 4m 18s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             3ms          3ms        0,00%
+Parse input - RDF file loaded into repository              35ms         38ms        0,01%
+Convert data - SPARQL queries executed, data ex...          2ms         40ms        0,00%
+Repository shutdown - memory released                       1ms         41ms        0,00%
+Create metadata - JSON metadata structure built          4m 18s       4m 18s       99,96%
+Write CSV files - Data written to disk                      1ms       4m 18s        0,00%
+Finalize output - ZIP file created on disk                 70ms       4m 18s        0,03%
+---------------------------------------------------------------------------------
+TOTAL                                                    4m 18s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 21:26:30.808
+End Time: 2025-12-02 21:28:30.743
+Total Duration: 1m 59s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             3ms          3ms        0,00%
+Parse input - RDF file loaded into repository              30ms         33ms        0,03%
+Convert data - SPARQL queries executed, data ex...          2ms         35ms        0,00%
+Repository shutdown - memory released                       1ms         36ms        0,00%
+Create metadata - JSON metadata structure built          1m 59s       1m 59s       99,94%
+Write CSV files - Data written to disk                      1ms       1m 59s        0,00%
+Finalize output - ZIP file created on disk                 32ms       1m 59s        0,03%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 59s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 21:35:54.597
+End Time: 2025-12-02 21:37:41.393
+Total Duration: 1m 46s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,00%
+Parse input - RDF file loaded into repository              60ms         62ms        0,06%
+Convert data - SPARQL queries executed, data ex...          9ms         71ms        0,01%
+Repository shutdown - memory released                       0ms         71ms        0,00%
+Create metadata - JSON metadata structure built          1m 46s       1m 46s       99,89%
+Write CSV files - Data written to disk                      0ms       1m 46s        0,00%
+Finalize output - ZIP file created on disk                 39ms       1m 46s        0,04%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 46s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 21:41:59.873
+End Time: 2025-12-02 21:43:59.440
+Total Duration: 1m 59s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,00%
+Parse input - RDF file loaded into repository              28ms         30ms        0,02%
+Convert data - SPARQL queries executed, data ex...          1ms         31ms        0,00%
+Repository shutdown - memory released                       1ms         32ms        0,00%
+Create metadata - JSON metadata structure built          1m 59s       1m 59s       99,94%
+Write CSV files - Data written to disk                      1ms       1m 59s        0,00%
+Finalize output - ZIP file created on disk                 41ms       1m 59s        0,03%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 59s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 21:47:12.386
+End Time: 2025-12-02 21:49:11.858
+Total Duration: 1m 59s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,00%
+Parse input - RDF file loaded into repository              35ms         37ms        0,03%
+Convert data - SPARQL queries executed, data ex...          2ms         39ms        0,00%
+Repository shutdown - memory released                       1ms         40ms        0,00%
+Create metadata - JSON metadata structure built          1m 59s       1m 59s       99,93%
+Write CSV files - Data written to disk                      1ms       1m 59s        0,00%
+Finalize output - ZIP file created on disk                 44ms       1m 59s        0,04%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 59s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 21:58:01.144
+End Time: 2025-12-02 21:59:44.521
+Total Duration: 1m 43s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             3ms          3ms        0,00%
+Parse input - RDF file loaded into repository              29ms         32ms        0,03%
+Convert data - SPARQL queries executed, data ex...          1ms         33ms        0,00%
+Repository shutdown - memory released                       1ms         34ms        0,00%
+Create metadata - JSON metadata structure built          1m 43s       1m 43s       99,92%
+Write CSV files - Data written to disk                      1ms       1m 43s        0,00%
+Finalize output - ZIP file created on disk                 47ms       1m 43s        0,05%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 43s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 22:24:02.557
+End Time: 2025-12-02 22:25:49.905
+Total Duration: 1m 47s=================================================================================
+
+                      PERFORMANCE SUMMARY
+                      Total Duration: 1m 26s
+                      ---------------------------------------------------------------------------------
+                      Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+                      Input File Size: 417 KB
+
+                      Configuration:
+                        Parsing Method: streaming
+                        Streaming Mode: No
+                        Naming Convention: original
+                        Language Preference: en,cs
+                        First Normal Form: No
+                        Intermediate Files Count: 43
+                        Total Output Size: 256 KB
+                      ---------------------------------------------------------------------------------
+                      Checkpoint                                             Duration   % of Total
+                      ---------------------------------------------------------------------------------
+                      Program initialization complete                             2ms        0,00%
+                      Parse input - RDF file loaded into repository              29ms        0,03%
+                      Convert data - SPARQL queries executed, data ex...          2ms        0,00%
+                      Repository shutdown - memory released                       0ms        0,00%
+                      Create metadata - JSON metadata structure built          1m 26s       99,91%
+                      Write CSV files - Data written to disk                      0ms        0,00%
+                      Finalize output - ZIP file created on disk                 36ms        0,04%
+                      ---------------------------------------------------------------------------------
+                      TOTAL                                                    1m 26s
+                      =================================================================================
+
+
+                      === RDFtoCSV Conversion Completed Successfully ===
+                      Total execution time: 86879ms
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             4ms          4ms        0,00%
+Parse input - RDF file loaded into repository              34ms         38ms        0,03%
+Convert data - SPARQL queries executed, data ex...         11ms         49ms        0,01%
+Repository shutdown - memory released                       1ms         50ms        0,00%
+Create metadata - JSON metadata structure built          1m 47s       1m 47s       99,92%
+Write CSV files - Data written to disk                      1ms       1m 47s        0,00%
+Finalize output - ZIP file created on disk                 36ms       1m 47s        0,03%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 47s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 22:33:42.607
+End Time: 2025-12-02 22:35:25.653
+Total Duration: 1m 43s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,00%
+Parse input - RDF file loaded into repository              53ms         55ms        0,05%
+Convert data - SPARQL queries executed, data ex...          2ms         57ms        0,00%
+Repository shutdown - memory released                       1ms         58ms        0,00%
+Create metadata - JSON metadata structure built          1m 42s       1m 42s       99,87%
+Write CSV files - Data written to disk                      2ms       1m 42s        0,00%
+Finalize output - ZIP file created on disk                 68ms       1m 43s        0,07%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 43s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 22:49:27.497
+End Time: 2025-12-02 22:50:58.289
+Total Duration: 1m 30s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,00%
+Parse input - RDF file loaded into repository              29ms         31ms        0,03%
+Convert data - SPARQL queries executed, data ex...          1ms         32ms        0,00%
+Repository shutdown - memory released                       1ms         33ms        0,00%
+Create metadata - JSON metadata structure built          1m 30s       1m 30s       99,93%
+Write CSV files - Data written to disk                      0ms       1m 30s        0,00%
+Finalize output - ZIP file created on disk                 26ms       1m 30s        0,03%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 30s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 22:52:47.021
+End Time: 2025-12-02 22:54:13.794
+Total Duration: 1m 26s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,00%
+Parse input - RDF file loaded into repository              29ms         31ms        0,03%
+Convert data - SPARQL queries executed, data ex...          2ms         33ms        0,00%
+Repository shutdown - memory released                       0ms         33ms        0,00%
+Create metadata - JSON metadata structure built          1m 26s       1m 26s       99,92%
+Write CSV files - Data written to disk                      0ms       1m 26s        0,00%
+Finalize output - ZIP file created on disk                 36ms       1m 26s        0,04%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 26s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-02 23:35:02.035
+End Time: 2025-12-02 23:35:34.256
+Total Duration: 32,22s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,01%
+Parse input - RDF file loaded into repository              37ms         39ms        0,11%
+Convert data - SPARQL queries executed, data ex...          2ms         41ms        0,01%
+Repository shutdown - memory released                       0ms         41ms        0,00%
+Create metadata - JSON metadata structure built          32,01s       32,05s       99,33%
+Write CSV files - Data written to disk                      1ms       32,05s        0,00%
+Finalize output - ZIP file created on disk                170ms       32,22s        0,53%
+---------------------------------------------------------------------------------
+TOTAL                                                    32,22s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 00:44:57.129
+End Time: 2025-12-03 00:45:26.756
+Total Duration: 29,63s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             3ms          3ms        0,01%
+Parse input - RDF file loaded into repository              32ms         35ms        0,11%
+Convert data - SPARQL queries executed, data ex...          2ms         37ms        0,01%
+Repository shutdown - memory released                       0ms         37ms        0,00%
+Create metadata - JSON metadata structure built          29,56s       29,59s       99,76%
+Write CSV files - Data written to disk                      0ms       29,59s        0,00%
+Finalize output - ZIP file created on disk                 30ms       29,62s        0,10%
+---------------------------------------------------------------------------------
+TOTAL                                                    29,63s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 01:09:07.470
+End Time: 2025-12-03 01:09:31.050
+Total Duration: 23,58s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,01%
+Parse input - RDF file loaded into repository              28ms         30ms        0,12%
+Convert data - SPARQL queries executed, data ex...          2ms         32ms        0,01%
+Repository shutdown - memory released                       0ms         32ms        0,00%
+Create metadata - JSON metadata structure built          23,52s       23,55s       99,72%
+Write CSV files - Data written to disk                      0ms       23,55s        0,00%
+Finalize output - ZIP file created on disk                 29ms       23,58s        0,12%
+---------------------------------------------------------------------------------
+TOTAL                                                    23,58s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 01:22:45.361
+End Time: 2025-12-03 01:23:12.514
+Total Duration: 27,15s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,01%
+Parse input - RDF file loaded into repository              31ms         33ms        0,11%
+Convert data - SPARQL queries executed, data ex...          2ms         35ms        0,01%
+Repository shutdown - memory released                       1ms         36ms        0,00%
+Create metadata - JSON metadata structure built          27,09s       27,12s       99,75%
+Write CSV files - Data written to disk                      1ms       27,12s        0,00%
+Finalize output - ZIP file created on disk                 27ms       27,15s        0,10%
+---------------------------------------------------------------------------------
+TOTAL                                                    27,15s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 01:23:36.615
+End Time: 2025-12-03 01:23:58.576
+Total Duration: 21,96s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,01%
+Parse input - RDF file loaded into repository              28ms         30ms        0,13%
+Convert data - SPARQL queries executed, data ex...          1ms         31ms        0,00%
+Repository shutdown - memory released                       1ms         32ms        0,00%
+Create metadata - JSON metadata structure built          21,90s       21,93s       99,72%
+Write CSV files - Data written to disk                      0ms       21,93s        0,00%
+Finalize output - ZIP file created on disk                 27ms       21,96s        0,12%
+---------------------------------------------------------------------------------
+TOTAL                                                    21,96s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 01:24:27.351
+End Time: 2025-12-03 01:24:48.616
+Total Duration: 21,27s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             3ms          3ms        0,01%
+Parse input - RDF file loaded into repository              27ms         30ms        0,13%
+Convert data - SPARQL queries executed, data ex...          1ms         31ms        0,00%
+Repository shutdown - memory released                       0ms         31ms        0,00%
+Create metadata - JSON metadata structure built          21,21s       21,24s       99,72%
+Write CSV files - Data written to disk                      0ms       21,24s        0,00%
+Finalize output - ZIP file created on disk                 26ms       21,26s        0,12%
+---------------------------------------------------------------------------------
+TOTAL                                                    21,27s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 01:25:20.190
+End Time: 2025-12-03 01:25:42.412
+Total Duration: 22,22s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,01%
+Parse input - RDF file loaded into repository              27ms         29ms        0,12%
+Convert data - SPARQL queries executed, data ex...          1ms         30ms        0,00%
+Repository shutdown - memory released                       0ms         30ms        0,00%
+Create metadata - JSON metadata structure built          22,16s       22,19s       99,70%
+Write CSV files - Data written to disk                      1ms       22,19s        0,00%
+Finalize output - ZIP file created on disk                 31ms       22,22s        0,14%
+---------------------------------------------------------------------------------
+TOTAL                                                    22,22s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 01:31:49.688
+End Time: 2025-12-03 01:32:12.676
+Total Duration: 22,99s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,01%
+Parse input - RDF file loaded into repository              33ms         35ms        0,14%
+Convert data - SPARQL queries executed, data ex...          1ms         36ms        0,00%
+Repository shutdown - memory released                       1ms         37ms        0,00%
+Create metadata - JSON metadata structure built          22,69s       22,73s       98,71%
+Write CSV files - Data written to disk                      0ms       22,73s        0,00%
+Finalize output - ZIP file created on disk                255ms       22,98s        1,11%
+---------------------------------------------------------------------------------
+TOTAL                                                    22,99s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 01:48:04.785
+End Time: 2025-12-03 01:48:53.329
+Total Duration: 48,54s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,00%
+Parse input - RDF file loaded into repository              37ms         39ms        0,08%
+Convert data - SPARQL queries executed, data ex...          2ms         41ms        0,00%
+Repository shutdown - memory released                       0ms         41ms        0,00%
+Create metadata - JSON metadata structure built          48,44s       48,48s       99,78%
+Write CSV files - Data written to disk                      0ms       48,48s        0,00%
+Finalize output - ZIP file created on disk                 63ms       48,54s        0,13%
+---------------------------------------------------------------------------------
+TOTAL                                                    48,54s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 01:49:24.217
+End Time: 2025-12-03 01:49:47.865
+Total Duration: 23,65s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,01%
+Parse input - RDF file loaded into repository              35ms         37ms        0,15%
+Convert data - SPARQL queries executed, data ex...          3ms         40ms        0,01%
+Repository shutdown - memory released                       1ms         41ms        0,00%
+Create metadata - JSON metadata structure built          23,57s       23,61s       99,67%
+Write CSV files - Data written to disk                      1ms       23,61s        0,00%
+Finalize output - ZIP file created on disk                 32ms       23,64s        0,14%
+---------------------------------------------------------------------------------
+TOTAL                                                    23,65s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 01:50:53.559
+End Time: 2025-12-03 01:51:18.011
+Total Duration: 24,45s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             3ms          3ms        0,01%
+Parse input - RDF file loaded into repository              31ms         34ms        0,13%
+Convert data - SPARQL queries executed, data ex...          2ms         36ms        0,01%
+Repository shutdown - memory released                       0ms         36ms        0,00%
+Create metadata - JSON metadata structure built          24,38s       24,42s       99,72%
+Write CSV files - Data written to disk                      1ms       24,42s        0,00%
+Finalize output - ZIP file created on disk                 28ms       24,45s        0,11%
+---------------------------------------------------------------------------------
+TOTAL                                                    24,45s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 02:00:27.400
+End Time: 2025-12-03 02:00:30.934
+Total Duration: 3,53s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: Yes
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,06%
+Parse input - RDF file loaded into repository              28ms         30ms        0,79%
+Convert data - SPARQL queries executed, data ex...          2ms         32ms        0,06%
+Repository shutdown - memory released                       0ms         32ms        0,00%
+Create metadata - JSON metadata structure built           3,47s        3,50s       98,10%
+Write CSV files - Data written to disk                      2ms        3,50s        0,06%
+Finalize output - ZIP file created on disk                 28ms        3,53s        0,79%
+---------------------------------------------------------------------------------
+TOTAL                                                     3,53s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 02:00:38.105
+End Time: 2025-12-03 02:00:41.021
+Total Duration: 2,92s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\dissesto_2k_triples.nt
+Input File Size: 417 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: Yes
+  Intermediate Files Count: 43
+  Total Output Size: 256 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,07%
+Parse input - RDF file loaded into repository              32ms         34ms        1,10%
+Convert data - SPARQL queries executed, data ex...          2ms         36ms        0,07%
+Repository shutdown - memory released                       0ms         36ms        0,00%
+Create metadata - JSON metadata structure built           2,85s        2,88s       97,63%
+Write CSV files - Data written to disk                      1ms        2,88s        0,03%
+Finalize output - ZIP file created on disk                 28ms        2,91s        0,96%
+---------------------------------------------------------------------------------
+TOTAL                                                     2,92s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 02:21:40.195
+End Time: 2025-12-03 02:23:52.939
+Total Duration: 2m 12s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\events_Brno.nt
+Input File Size: 1511 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: No
+  Intermediate Files Count: 3
+  Total Output Size: 1013 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,00%
+Parse input - RDF file loaded into repository              29ms         31ms        0,02%
+Convert data - SPARQL queries executed, data ex...          2ms         33ms        0,00%
+Repository shutdown - memory released                       0ms         33ms        0,00%
+Create metadata - JSON metadata structure built          2m 12s       2m 12s       99,94%
+Write CSV files - Data written to disk                      1ms       2m 12s        0,00%
+Finalize output - ZIP file created on disk                 47ms       2m 12s        0,04%
+---------------------------------------------------------------------------------
+TOTAL                                                    2m 12s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 02:24:29.703
+End Time: 2025-12-03 02:26:14.958
+Total Duration: 1m 45s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\events_Brno.nt
+Input File Size: 1511 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: Yes
+  Intermediate Files Count: 3
+  Total Output Size: 1013 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             3ms          3ms        0,00%
+Parse input - RDF file loaded into repository              25ms         28ms        0,02%
+Convert data - SPARQL queries executed, data ex...          1ms         29ms        0,00%
+Repository shutdown - memory released                       0ms         29ms        0,00%
+Create metadata - JSON metadata structure built          1m 45s       1m 45s       99,94%
+Write CSV files - Data written to disk                      1ms       1m 45s        0,00%
+Finalize output - ZIP file created on disk                 33ms       1m 45s        0,03%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 45s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 02:40:39.816
+End Time: 2025-12-03 02:42:37.649
+Total Duration: 1m 57s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\events_Brno.nt
+Input File Size: 1511 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: Yes
+  Intermediate Files Count: 3
+  Total Output Size: 1013 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             3ms          3ms        0,00%
+Parse input - RDF file loaded into repository              34ms         37ms        0,03%
+Convert data - SPARQL queries executed, data ex...          1ms         38ms        0,00%
+Repository shutdown - memory released                       0ms         38ms        0,00%
+Create metadata - JSON metadata structure built          1m 57s       1m 57s       99,93%
+Write CSV files - Data written to disk                      2ms       1m 57s        0,00%
+Finalize output - ZIP file created on disk                 41ms       1m 57s        0,03%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 57s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 02:53:25.955
+End Time: 2025-12-03 02:55:25.108
+Total Duration: 1m 59s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\events_Brno.nt
+Input File Size: 1511 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: Yes
+  Intermediate Files Count: 3
+  Total Output Size: 1013 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,00%
+Parse input - RDF file loaded into repository              31ms         33ms        0,03%
+Convert data - SPARQL queries executed, data ex...          1ms         34ms        0,00%
+Repository shutdown - memory released                       1ms         35ms        0,00%
+Create metadata - JSON metadata structure built          1m 59s       1m 59s       99,94%
+Write CSV files - Data written to disk                      1ms       1m 59s        0,00%
+Finalize output - ZIP file created on disk                 39ms       1m 59s        0,03%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 59s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 03:04:36.302
+End Time: 2025-12-03 03:06:37.566
+Total Duration: 2m 1s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\events_Brno.nt
+Input File Size: 1511 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: Yes
+  Intermediate Files Count: 3
+  Total Output Size: 1013 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             3ms          3ms        0,00%
+Parse input - RDF file loaded into repository              36ms         39ms        0,03%
+Convert data - SPARQL queries executed, data ex...          2ms         41ms        0,00%
+Repository shutdown - memory released                       1ms         42ms        0,00%
+Create metadata - JSON metadata structure built           2m 1s        2m 1s       99,93%
+Write CSV files - Data written to disk                      2ms        2m 1s        0,00%
+Finalize output - ZIP file created on disk                 37ms        2m 1s        0,03%
+---------------------------------------------------------------------------------
+TOTAL                                                     2m 1s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 03:16:25.682
+End Time: 2025-12-03 03:18:56.215
+Total Duration: 2m 30s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\events_Brno.nt
+Input File Size: 1511 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: Yes
+  Intermediate Files Count: 3
+  Total Output Size: 1013 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             6ms          6ms        0,00%
+Parse input - RDF file loaded into repository              43ms         49ms        0,03%
+Convert data - SPARQL queries executed, data ex...          1ms         50ms        0,00%
+Repository shutdown - memory released                       1ms         51ms        0,00%
+Create metadata - JSON metadata structure built          2m 30s       2m 30s       99,87%
+Write CSV files - Data written to disk                      2ms       2m 30s        0,00%
+Finalize output - ZIP file created on disk                144ms       2m 30s        0,10%
+---------------------------------------------------------------------------------
+TOTAL                                                    2m 30s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 03:31:05.533
+End Time: 2025-12-03 03:32:46.955
+Total Duration: 1m 41s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\events_Brno.nt
+Input File Size: 1511 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: Yes
+  Intermediate Files Count: 3
+  Total Output Size: 1013 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             3ms          3ms        0,00%
+Parse input - RDF file loaded into repository              25ms         28ms        0,02%
+Convert data - SPARQL queries executed, data ex...          1ms         29ms        0,00%
+Repository shutdown - memory released                       0ms         29ms        0,00%
+Create metadata - JSON metadata structure built          1m 41s       1m 41s       99,93%
+Write CSV files - Data written to disk                      1ms       1m 41s        0,00%
+Finalize output - ZIP file created on disk                 36ms       1m 41s        0,04%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 41s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 03:53:26.064
+End Time: 2025-12-03 03:55:04.138
+Total Duration: 1m 38s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\events_Brno.nt
+Input File Size: 1511 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: Yes
+  Intermediate Files Count: 3
+  Total Output Size: 1013 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,00%
+Parse input - RDF file loaded into repository              26ms         28ms        0,03%
+Convert data - SPARQL queries executed, data ex...          1ms         29ms        0,00%
+Repository shutdown - memory released                       0ms         29ms        0,00%
+Create metadata - JSON metadata structure built          1m 38s       1m 38s       99,94%
+Write CSV files - Data written to disk                      1ms       1m 38s        0,00%
+Finalize output - ZIP file created on disk                 31ms       1m 38s        0,03%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 38s
+
+=================================================================================
+
+
+=================================================================================
+
+PERFORMANCE LOG - Program Run
+Start Time: 2025-12-03 03:57:32.722
+End Time: 2025-12-03 03:59:17.401
+Total Duration: 1m 44s
+---------------------------------------------------------------------------------
+Input File: C:\Users\terka\RDFtoCSV\..\events_Brno.nt
+Input File Size: 1511 KB
+
+Configuration:
+  Parsing Method: streaming
+  Streaming Mode: No
+  Naming Convention: original
+  Language Preference: en,cs
+  First Normal Form: No
+  Skip Dereferencing: Yes
+  Intermediate Files Count: 3
+  Total Output Size: 1013 KB
+---------------------------------------------------------------------------------
+
+Checkpoint                                             Duration   Cumulative   % of Total
+---------------------------------------------------------------------------------
+Program initialization complete                             2ms          2ms        0,00%
+Parse input - RDF file loaded into repository              28ms         30ms        0,03%
+Convert data - SPARQL queries executed, data ex...          2ms         32ms        0,00%
+Repository shutdown - memory released                       0ms         32ms        0,00%
+Create metadata - JSON metadata structure built          1m 44s       1m 44s       99,94%
+Write CSV files - Data written to disk                      1ms       1m 44s        0,00%
+Finalize output - ZIP file created on disk                 34ms       1m 44s        0,03%
+---------------------------------------------------------------------------------
+TOTAL                                                    1m 44s
 
 =================================================================================
 

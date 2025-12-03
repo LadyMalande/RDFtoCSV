@@ -203,10 +203,11 @@ public class FileWrite {
                         } else {
                             if (combination.get(iri(multilevelPropertyUrl)) != null) {
                                 if (combination.get(iri(multilevelPropertyUrl)).isIRI()) {
-                                    if (column.getValueUrl().startsWith("{")) {
-                                        line[i] = combination.get(iri(multilevelPropertyUrl)).stringValue();
-                                    } else {
+                                    // If valueUrl contains a template variable {+...}, extract local name to fill the template
+                                    if (column.getValueUrl() != null && column.getValueUrl().contains("{+")) {
                                         line[i] = ((IRI) combination.get(iri(multilevelPropertyUrl))).getLocalName();
+                                    } else {
+                                        line[i] = combination.get(iri(multilevelPropertyUrl)).stringValue();
                                     }
                                 } else if (combination.get(iri(multilevelPropertyUrl)).isLiteral()) {
                                     line[i] = safeLiteral((Literal) combination.get(iri(multilevelPropertyUrl)));
@@ -452,15 +453,25 @@ public class FileWrite {
     }
 
     private static String appendIdByValuePattern(Row row, Column column) {
-        if (column.getValueUrl().startsWith("{")) {
-            return row.id.stringValue();
-        } else {
+        // Handle blank nodes (including those with blank_Nodes_IRI prefix)
+        if (row.id.isBNode() || row.id.stringValue().startsWith("https://blank_Nodes_IRI")) {
             if (row.id.isBNode()) {
                 return row.id.stringValue();
             } else {
+                // For blank_Nodes_IRI, extract just the local part (the number)
                 IRI iri = (IRI) row.id;
                 return iri.getLocalName();
             }
+        }
+        
+        // Handle regular IRIs with valueUrl
+        // If valueUrl contains a template variable {+...}, extract local name to fill the template
+        // Otherwise return full IRI
+        if (column.getValueUrl() != null && column.getValueUrl().contains("{+")) {
+            IRI iri = (IRI) row.id;
+            return iri.getLocalName();
+        } else {
+            return row.id.stringValue();
         }
     }
 

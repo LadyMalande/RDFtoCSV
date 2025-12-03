@@ -98,7 +98,7 @@ public class Dereferencer {
                 }
             });
     
-    private final LoadingCache<String, String> labelCache = CacheBuilder.newBuilder()
+    private static final LoadingCache<String, String> labelCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(1, TimeUnit.HOURS)
             .recordStats()  // Enable statistics tracking
@@ -106,7 +106,7 @@ public class Dereferencer {
                 @Override
                 public String load(String iri) throws Exception {
                     try {
-                        return fetchLabelUncached(iri);
+                        return fetchLabelUncached(iri, null);
                     } catch (java.net.SocketTimeoutException | java.net.ConnectException | org.apache.http.conn.ConnectTimeoutException e) {
                         // Connection failed or timed out - cache the failure to avoid retrying
                         logger.log(Level.WARNING, "Connection failed/timed out for IRI: " + iri + " - " + e.getMessage());
@@ -138,7 +138,7 @@ public class Dereferencer {
         this.url = url;
         this.config = config;
         // Initialize PREFERRED_LANGUAGES after config is set
-        this.PREFERRED_LANGUAGES = loadPreferredLanguages();
+        this.PREFERRED_LANGUAGES = loadPreferredLanguages(config);
     }
 
     // Package-private setter for testing
@@ -353,7 +353,7 @@ public class Dereferencer {
         if (uri.getFragment() != null) {
             // Strip fragment to get base vocabulary URI (e.g., http://...skos/core#prefLabel → http://...skos/core)
             String baseUri = uri.getScheme() + "://" + uri.getHost() + uri.getPath();
-            logger.info("Stripped fragment from " + fullUri + " → base: " + baseUri);
+            logger.finest("Stripped fragment from " + fullUri + " → base: " + baseUri);
             return baseUri;
         }
         if (fullUri.startsWith(WOT_PREFIX)) {
@@ -371,7 +371,7 @@ public class Dereferencer {
             int lastSlash = path.lastIndexOf('/');
             String basePath = path.substring(0, lastSlash);
             String baseUri = uri.getScheme() + "://" + uri.getHost() + basePath;
-            logger.info("baseUri starts with any STANDARDKNOWNPREFIXES: " + baseUri);
+            logger.finest("baseUri starts with any STANDARDKNOWNPREFIXES: " + baseUri);
             return baseUri;
         } else {
             return fullUri;
@@ -458,7 +458,7 @@ public class Dereferencer {
     }*/
 
     private static Lang determineLang(String contentType) {
-        logger.info("IN determineLang( " + contentType + " ) ");
+        logger.finest("IN determineLang( " + contentType + " ) ");
 
         if (contentType == null) return null;
         contentType = contentType.toLowerCase();
@@ -475,13 +475,14 @@ public class Dereferencer {
     }
 
     public String fetchLabel(String iri) throws IOException, ExecutionException {
-        //logger.info("The iri in fetchLabel = " + iri);
-        //logger.info("The config before fetching label file: " + this.config.getFile());
-        //logger.info("The config before fetching label: " + this.config.getColumnNamingConvention());
-        return labelCache.getUnchecked(iri);
+        boolean wasCached = labelCache.getIfPresent(iri) != null;
+        //logger.info((wasCached ? "✓ CACHE HIT" : "✗ CACHE MISS") + " for IRI: " + iri);
+        String label = labelCache.getUnchecked(iri);
+        // Apply formatting based on this instance's config
+        return LabelFormatter.changeLabelToTheConfiguredFormat(label, config);
     }
 
-    String fetchLabelUncached(String iri) throws IOException {
+    public static String fetchLabelUncached(String iri, AppConfig config) throws IOException {
         long startTime = System.currentTimeMillis();
         
         // Extract the base vocabulary URI
@@ -489,10 +490,20 @@ public class Dereferencer {
         
         try {
             // Check if vocabulary is already in cache
-            boolean isCached = vocabularyCache.getIfPresent(vocabularyUri) != null;
+            Model cachedModel = vocabularyCache.getIfPresent(vocabularyUri);
+            boolean isCached = cachedModel != null;
+            
+            // Check if this vocabulary was previously marked as failed (empty model)
+            if (isCached && cachedModel.isEmpty()) {
+                // Vocabulary fetch failed before - return local name immediately
+                 logger.fine("✓ CACHED (failed vocab): " + vocabularyUri + " → using local name for: " + iri);
+                ValueFactory vf = SimpleValueFactory.getInstance();
+                IRI propertyUrlIRI = vf.createIRI(iri);
+                return propertyUrlIRI.getLocalName();
+            }
             
             if (isCached) {
-                logger.info("✓ CACHED vocab: " + vocabularyUri + " → IRI: " + iri);
+                 logger.fine("✓ CACHED vocab: " + vocabularyUri + " → IRI: " + iri);
             } else {
                 logger.warning("✗ NEW vocab fetch needed: " + vocabularyUri + " → IRI: " + iri);
             }
@@ -500,25 +511,48 @@ public class Dereferencer {
             // Get or fetch the vocabulary model from cache
             Model model = vocabularyCache.get(vocabularyUri);
             
-            // Find the label in the model
-            String label = findLabelForIRI(model, iri);
-            
-            long duration = System.currentTimeMillis() - startTime;
-            logger.log(Level.INFO, "Label '" + label + "' retrieved in " + duration + "ms (cached vocab: " + isCached + ")");
-            
-            // Log cache statistics periodically
-            if (vocabularyCache.size() > 0) {
-                logger.info("📊 Vocab cache: Size=" + vocabularyCache.size() + 
-                           ", Hits=" + vocabularyCache.stats().hitCount() + 
-                           ", Misses=" + vocabularyCache.stats().missCount() +
-                           ", HitRate=" + String.format("%.1f%%", vocabularyCache.stats().hitRate() * 100));
+            // Check again if the newly fetched model is empty (fetch failed)
+            if (model.isEmpty()) {
+                // Fetch failed - return local name
+                // logger.fine("Vocabulary fetch resulted in empty model: " + vocabularyUri);
+                ValueFactory vf = SimpleValueFactory.getInstance();
+                IRI propertyUrlIRI = vf.createIRI(iri);
+                return propertyUrlIRI.getLocalName();
             }
             
-            label = LabelFormatter.changeLabelToTheConfiguredFormat(label, config);
+            // PERFORMANCE: Skip label lookup for very large vocabularies (e.g., QUDT with 3.8MB)
+            // Searching through thousands of statements for a label that probably doesn't exist is extremely slow
+            /* 
+            long modelSize = model.size();
+            if (modelSize > 5000) {  // If vocabulary has more than 5000 statements
+                logger.info("Skipping label lookup for large vocabulary (" + modelSize + " statements): " + vocabularyUri);
+                ValueFactory vf = SimpleValueFactory.getInstance();
+                IRI propertyUrlIRI = vf.createIRI(iri);
+                return propertyUrlIRI.getLocalName();
+            }
+            */
+            // Find the label in the model
+            String label = findLabelForIRI(model, iri, config);
+            
+            // long duration = System.currentTimeMillis() - startTime;
+            // logger.fine( "Label '" + label + "' retrieved in " + duration + "ms (cached vocab: " + isCached + ")");
+            
+            // Log cache statistics periodically
+            // if (vocabularyCache.size() > 0) {
+            //     logger.fine(" Vocab cache: Size=" + vocabularyCache.size() + 
+            //                ", Hits=" + vocabularyCache.stats().hitCount() + 
+            //                ", Misses=" + vocabularyCache.stats().missCount() +
+            //                ", HitRate=" + String.format("%.1f%%", vocabularyCache.stats().hitRate() * 100));
+            // }
+            
+            // Note: Label formatting now happens in fetchLabel() per-instance
             return label;
             
         } catch (ExecutionException e) {
             logger.log(Level.WARNING, "Failed to fetch vocabulary for " + vocabularyUri + ": " + e.getMessage());
+            // Cache an empty model to prevent retrying this vocabulary
+            vocabularyCache.put(vocabularyUri, ModelFactory.createDefaultModel());
+            // logger.fine("Cached empty model for failed vocabulary: " + vocabularyUri);
             // Fall back to local name
             ValueFactory vf = SimpleValueFactory.getInstance();
             IRI propertyUrlIRI = vf.createIRI(iri);
@@ -536,9 +570,9 @@ public class Dereferencer {
      */
     private static Model fetchVocabularyModel(String vocabularyUri) throws IOException {
         long startTime = System.currentTimeMillis();
-        logger.warning("========================================");
-        logger.warning("FETCHING NEW VOCABULARY: " + vocabularyUri);
-        logger.warning("========================================");
+        //logger.warning("========================================");
+        //logger.warning("FETCHING NEW VOCABULARY: " + vocabularyUri);
+        //logger.warning("========================================");
         
         HttpGet httpGet = new HttpGet(vocabularyUri);
         
@@ -562,7 +596,9 @@ public class Dereferencer {
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             if (response.getStatusLine().getStatusCode() != 200) {
                 logger.warning("HTTP request failed for vocabulary " + vocabularyUri + ": " + response.getStatusLine());
-                throw new IOException("HTTP request failed: " + response.getStatusLine());
+                logger.fine("Returning empty model to cache this failed vocabulary fetch");
+                // Return empty model to cache the failure - prevents retrying for all IRIs from this vocabulary
+                return ModelFactory.createDefaultModel();
             }
             
             // Get content as bytes
@@ -580,17 +616,18 @@ public class Dereferencer {
                 throw new IOException("Unsupported RDF format: " + contentType);
             }
             
-            Model model = ModelFactory.createDefaultModel();
+            // Parse into a temporary full model
+            Model fullModel = ModelFactory.createDefaultModel();
             
             try (InputStream in = new ByteArrayInputStream(content)) {
                 // Using RDFDataMgr for parsing
                 try {
                     if (vocabularyUri.startsWith(VANN_PREFIX)) {
-                        RDFDataMgr.read(model, in, VANN_RDF_FILE, lang);
+                        RDFDataMgr.read(fullModel, in, VANN_RDF_FILE, lang);
                     } else if (vocabularyUri.startsWith(SCHEMA_PREFIX)) {
-                        RDFDataMgr.read(model, in, SCHEMA_RDF_FILE, lang);
+                        RDFDataMgr.read(fullModel, in, SCHEMA_RDF_FILE, lang);
                     } else {
-                        RDFDataMgr.read(model, in, lang);
+                        RDFDataMgr.read(fullModel, in, lang);
                     }
                 } catch (org.apache.jena.riot.RiotException e) {
                     logger.log(Level.WARNING, "RiotException while parsing vocabulary " + vocabularyUri + ": " + e.getMessage());
@@ -598,10 +635,39 @@ public class Dereferencer {
                 }
             }
             
-            long duration = System.currentTimeMillis() - startTime;
-            logger.log(Level.INFO, "Successfully fetched and parsed vocabulary " + vocabularyUri + " in " + duration + "ms");
+            long parseTime = System.currentTimeMillis() - startTime;
+            logger.log(Level.INFO, "Parsed vocabulary " + vocabularyUri + " in " + parseTime + "ms");
             
-            return model;
+            // Filter: keep ONLY label-related triples to reduce memory and search time
+            Model filteredModel = ModelFactory.createDefaultModel();
+            String[] labelPredicates = {
+                RDFS.label.getURI(),
+                "http://www.w3.org/2000/01/rdf-schema#label",
+                "http://www.w3.org/2004/02/skos/core#prefLabel",
+                "http://purl.org/dc/elements/1.1/title",
+                "http://purl.org/dc/terms/title",
+                "http://www.w3.org/2000/01/rdf-schema#comment"
+            };
+            
+            long filterStart = System.currentTimeMillis();
+            for (String labelPredicate : labelPredicates) {
+                Property predicate = fullModel.createProperty(labelPredicate);
+                StmtIterator iter = fullModel.listStatements(null, predicate, (RDFNode) null);
+                while (iter.hasNext()) {
+                    filteredModel.add(iter.nextStatement());
+                }
+                iter.close();
+            }
+            
+            long originalSize = fullModel.size();
+            long filteredSize = filteredModel.size();
+            long filterTime = System.currentTimeMillis() - filterStart;
+            long totalTime = System.currentTimeMillis() - startTime;
+            
+            logger.log(Level.INFO, "Filtered vocabulary from " + originalSize + " to " + filteredSize + 
+                      " triples (filtered in " + filterTime + "ms, total " + totalTime + "ms)");
+            
+            return filteredModel;
         }
     }
 
@@ -642,10 +708,18 @@ public class Dereferencer {
      * @param iri   The IRI of the resource to get the label for.
      * @return The selected label string, or null if no label was found.
      */
-    public String findLabelForIRI(Model model, String iri) {
+    private static String findLabelForIRI(Model model, String iri, AppConfig config) {
+        // Fast path: If model is empty (failed vocabulary), return local name immediately
+        if (model.isEmpty()) {
+            return SimpleValueFactory.getInstance().createIRI(iri).getLocalName();
+        }
 
         // Get the resource for the IRI
         Resource resource = model.getResource(iri);
+        
+        // Load preferred languages from config (or use defaults)
+        List<String> preferredLanguages = (config != null) ? loadPreferredLanguagesStatic(config) : Arrays.asList("en", "cs");
+        
         // Try standard label predicates in order of preference
         String[] labelPredicates = {
                 RDFS.label.getURI(),        // rdfs:label
@@ -656,12 +730,19 @@ public class Dereferencer {
                 "http://www.w3.org/2000/01/rdf-schema#comment" // rdfs:comment (fallback)
 
         };
+        
         // Check each predicate in order (e.g., rdfs:label, skos:prefLabel, etc.)
         for (String predicateURI : labelPredicates) {
             Property predicateProperty = model.createProperty(predicateURI);
 
             // Get all statements for this predicate
             StmtIterator labelStmts = resource.listProperties(predicateProperty);
+            
+            // Fast check: if no statements at all, skip to next predicate
+            if (!labelStmts.hasNext()) {
+                labelStmts.close();
+                continue;
+            }
 
             // Variables to store the best candidate found for this predicate
             Literal bestLiteralForPredicate = null;
@@ -670,16 +751,16 @@ public class Dereferencer {
             while (labelStmts.hasNext()) {
                 Statement stmt = labelStmts.nextStatement();
                 RDFNode object = stmt.getObject();
-                logger.info("object of <" + stmt.getString() + ">: " + object.toString());
+                // logger.finest("object of <" + stmt.getString() + ">: " + object.toString());
                 if (object.isLiteral()) {
                     Literal literal = object.asLiteral();
                     String lang = literal.getLanguage(); // Get language tag (can be empty string "")
                     String lexicalForm = literal.getLexicalForm();
 
-                    logger.info("Found literal for predicate " + predicateURI + ": '" + lexicalForm + "'@" + lang);
+                    // logger.finest("Found literal for predicate " + predicateURI + ": '" + lexicalForm + "'@" + lang);
 
                     // Score this literal's language
-                    int currentScore = scoreLanguage(lang);
+                    int currentScore = scoreLanguage(lang, preferredLanguages);
 
                     // Check if this literal is better than the current best for this predicate
                     if (currentScore > bestLanguageScore) {
@@ -696,12 +777,12 @@ public class Dereferencer {
             // "Good enough" means we found at least one literal for this predicate.
             // Our scoring system ensures the best one was chosen.
             if (bestLiteralForPredicate != null) {
-                logger.info("Selected label: '" + bestLiteralForPredicate.getLexicalForm() + "'@" + bestLiteralForPredicate.getLanguage() + " for predicate " + predicateURI);
+                // logger.finest("Selected label: '" + bestLiteralForPredicate.getLexicalForm() + "'@" + bestLiteralForPredicate.getLanguage() + " for predicate " + predicateURI);
                 return bestLiteralForPredicate.getLexicalForm();
             }
         }
         // If no label was found in any predicate, you could return the local name or null.
-        logger.info("No suitable label found for resource: " + resource.getURI());
+        // logger.fine("No suitable label found for resource: " + resource.getURI());
         return resource.getLocalName(); // Fallback to the URI's local part
     }
 
@@ -712,12 +793,12 @@ public class Dereferencer {
      * @param lang The language tag from the literal (e.g., "en", "de", "").
      * @return A score representing the preference for this language.
      */
-    private int scoreLanguage(String lang) {
+    private static int scoreLanguage(String lang, List<String> preferredLanguages) {
         // 1. Highest priority: Check if it's a preferred language.
         //    The index in the list determines priority (earlier = higher score).
-        int preferredIndex = PREFERRED_LANGUAGES.indexOf(lang.toLowerCase());
-        logger.info("PREFERRED_LANGUAGES = [" + String.join(", ", PREFERRED_LANGUAGES) + "]");
-        logger.info("PREFERRED_LANGUAGES.indexOf(lang) = " + preferredIndex);
+        int preferredIndex = preferredLanguages.indexOf(lang.toLowerCase());
+        // logger.finest("PREFERRED_LANGUAGES = [" + String.join(", ", PREFERRED_LANGUAGES) + "]");
+        // logger.finest("PREFERRED_LANGUAGES.indexOf(lang) = " + preferredIndex);
         if (preferredIndex != -1) {
             // Return a high score, inversely proportional to its position in the list.
             // "en" (index 0) -> 1000, "de" (index 1) -> 999, "fr" (index 2) -> 998
@@ -745,10 +826,10 @@ public class Dereferencer {
         // Get the resource for the IRI
         Resource resource = model.getResource(iri);
 
-        logger.log(Level.INFO, "---------------------------findLabelForIRI for " + iri );
+        logger.log(Level.FINEST, "---------------------------findLabelForIRI for " + iri );
 
 
-        logger.info("resource in findLabelForIRI: " + resource.getURI() + " localName: " + resource.getLocalName() );
+        logger.finest("resource in findLabelForIRI: " + resource.getURI() + " localName: " + resource.getLocalName() );
 
         // Try standard label predicates in order of preference
         String[] labelPredicates = {
@@ -797,6 +878,32 @@ public class Dereferencer {
     @Deprecated
     private List<String> loadPreferredLanguages() {
         return loadPreferredLanguages(this.config);
+    }
+
+    /**
+     * Load preferred languages from AppConfig or configuration (static version).
+     * @param config the application configuration
+     * @return list of preferred language codes
+     */
+    private static List<String> loadPreferredLanguagesStatic(AppConfig config) {
+        //logger.info("loadPreferredLanguages config: " + config.getPreferredLanguages());
+        String configValue = config.getPreferredLanguages();
+        if (configValue == null || configValue.trim().isEmpty()) {
+            return Arrays.asList("en", "cs"); // default fallback
+        }
+
+        List<String> languages = Arrays.stream(configValue.split(","))
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
+
+        // Additional safety check: if processing results in empty list, return default
+        if (languages.isEmpty()) {
+            return Arrays.asList("en", "cs");
+        }
+
+        return languages;
     }
 
     /**
