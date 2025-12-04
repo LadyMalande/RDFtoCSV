@@ -271,10 +271,19 @@ public class StreamingMetadataCreator extends MetadataCreator {
      */
     public void repairMetadataAndMakeItJsonld(Metadata metadata) {
         makeMetadataNameUnique(metadata);
-        metadata.getTables().forEach(table -> table.getTableSchema().addRowTitles());
         if (!config.getMultipleTables()) {
-            metadata = consolidateMetadataAndCSVs(metadata);
+            // Consolidate first, then add properties to the consolidated metadata
+            Metadata consolidatedMetadata = consolidateMetadataAndCSVs(metadata);
+            // Copy consolidated tables back to original metadata
+            metadata.getTables().clear();
+            metadata.getTables().addAll(consolidatedMetadata.getTables());
         }
+        // Add properties after consolidation
+        metadata.getTables().forEach(table -> {
+            table.getTableSchema().addRowTitles();
+            table.getTableSchema().setPrimaryKey("Subject");
+            table.addTransformations(config);
+        });
         metadata.jsonldMetadata();
     }
 

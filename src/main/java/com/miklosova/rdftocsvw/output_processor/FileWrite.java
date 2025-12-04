@@ -2,8 +2,6 @@ package com.miklosova.rdftocsvw.output_processor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
 import com.miklosova.rdftocsvw.converter.data_structure.Row;
 import com.miklosova.rdftocsvw.converter.data_structure.TypeIdAndValues;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
@@ -20,6 +18,8 @@ import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
@@ -256,13 +256,49 @@ public class FileWrite {
             JsonUtil.serializeAndWriteToFile(metadata, config);
         }
         FileWrite.writeLinesToCSVFile(f, lines, true);
-        try {
-            assert f != null;
-            return String.join("\n", Files.readLines(f, Charsets.UTF_8));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        
+        // Return filename instead of reading entire file into memory
+        return fileName;
+    }
 
+    /**
+     * Read CSV file contents as a string. Use cautiously with large files.
+     * For web service use only - CLI should use file-based operations.
+     *
+     * @param fileName the file name to read
+     * @param maxLines maximum number of lines to read (0 = unlimited, but risky for large files)
+     * @return the file contents as string
+     */
+    public static String readCSVFileAsString(String fileName, int maxLines) {
+        fileName = getFullPathOfFile(fileName);
+        File f = new File(fileName);
+        
+        if (!f.exists()) {
+            return "Error: File not found: " + fileName;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(f))) {
+            String line;
+            int lineCount = 0;
+            while ((line = reader.readLine()) != null) {
+                if (sb.length() > 0) {
+                    sb.append('\n');
+                }
+                sb.append(line);
+                lineCount++;
+                
+                if (maxLines > 0 && lineCount >= maxLines) {
+                    sb.append("\n... (truncated at ").append(maxLines).append(" lines)");
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Error reading CSV file: " + fileName, e);
+            return "Error reading file: " + e.getMessage();
+        }
+        
+        return sb.toString();
     }
 
     /**
@@ -464,15 +500,16 @@ public class FileWrite {
             }
         }
         
-        // Handle regular IRIs with valueUrl
-        // If valueUrl contains a template variable {+...}, extract local name to fill the template
-        // Otherwise return full IRI
-        if (column.getValueUrl() != null && column.getValueUrl().contains("{+")) {
+        // Check if the valueUrl is a partial pattern (e.g., "https://example.com/{+Concept}")
+        // If so, we need to extract the local name to fill the pattern
+        if (column.getValueUrl() != null && column.getValueUrl().contains("{+") && !column.getValueUrl().startsWith("{+")) {
+            // Partial pattern - extract local name
             IRI iri = (IRI) row.id;
             return iri.getLocalName();
-        } else {
-            return row.id.stringValue();
         }
+        
+        // For simple pattern {+Subject} or no pattern, return the full IRI
+        return row.id.stringValue();
     }
 
     private static List<Column> addHeadersFromMetadata(String fileName, Metadata metadata, List<String[]> lines, AppConfig config) {
@@ -512,11 +549,14 @@ public class FileWrite {
 
         for (Column column : fud.getTableSchema().getColumns()) {
             if (column != firstColumn && column.getVirtual() == null) {
-                headersBuffer.add(column.getTitles());
+                String columnTitle = column.getTitles();
+                logger.info("Column header - name: " + column.getName() + ", title: " + columnTitle);
+                headersBuffer.add(columnTitle);
                 orderOfColumns.add(column);
             }
         }
         String[] headers = headersBuffer.toArray(new String[0]);
+        logger.info("Final CSV headers: " + String.join(", ", headers));
         lines.add(headers);
         return orderOfColumns;
     }

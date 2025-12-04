@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.miklosova.rdftocsvw.converter.data_structure.Row;
 import com.miklosova.rdftocsvw.converter.data_structure.TypeIdAndValues;
 import com.miklosova.rdftocsvw.metadata_creator.Dereferencer;
+import com.miklosova.rdftocsvw.metadata_creator.LabelFormatter;
 import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.BuiltInDatatypes;
 import com.miklosova.rdftocsvw.support.ConnectionChecker;
@@ -312,12 +313,12 @@ public class Column {
             } else {
                 if (isSubjectTheSame) {
                     if (isRdfType && isTypetheSame) {
-                        // We don't know how aboutUrl is supposed to look like because we don't know semantic ties to the iris
+                        // Type is the same for all rows, so we can use the type IRI's namespace
                         assert typeIri != null;
                         this.aboutUrl = idIRI.getNamespace() + "{+" + typeIri.getLocalName() + "}";
                     } else {
-                        // We don't know how aboutUrl is supposed to look like because we don't know semantic ties to the iris
-                        this.aboutUrl = idIRI.getNamespace() + "{+" + "Subject" + "}";
+                        // Reference the Subject column's valueUrl directly
+                        this.aboutUrl = "{+" + "Subject" + "}";
                     }
                 } else {
                     if (isRdfType && isTypetheSame) {
@@ -382,10 +383,8 @@ public class Column {
 
         } else if (valueFromThisColumn.isBNode()) {
             this.valueUrl = "_:" + "{+" + safeNameOfTheColumn + "}";
-        } else {
-            this.valueUrl = "{+" + this.getName() + "}";
         }
-
+        // For literals: leave valueUrl as null (CSVW spec - literals use cell values directly)
     }
 
     private void createPropertyUrl() {
@@ -562,21 +561,23 @@ public class Column {
                 this.titles = propertyUrlIRI.getLocalName();
             }
         }
+        System.out.println("Column title fetched: " + this.titles);
+        
+        // Apply naming convention formatting
+        String baseTitle = (this.titles != null) ? this.titles : propertyUrlIRI.getLocalName();
+        String formattedTitle = LabelFormatter.changeLabelToTheConfiguredFormat(baseTitle, config);
+        
         if (object.isLiteral()) {
             Literal literal = (Literal) object;
             Optional<String> languageTag = literal.getLanguage();
             String langTag = null;
+            System.out.println("Column title fetched: " + formattedTitle + " is literal");
             if (languageTag.isPresent()) {
                 langTag = languageTag.get();
             }
-            if (this.titles != null) {
-                return (langTag == null) ? prependix + this.titles : prependix + this.titles + " (" + langTag + ")";
-            } else {
-                return (langTag == null) ? prependix + propertyUrlIRI.getLocalName() : prependix + propertyUrlIRI.getLocalName() + " (" + langTag + ")";
-            }
-
+            return (langTag == null) ? prependix + formattedTitle : prependix + formattedTitle + " (" + langTag + ")";
         } else {
-            return (this.titles == null) ? prependix + propertyUrlIRI.getLocalName() : prependix + this.titles;
+            return prependix + formattedTitle;
         }
 
 
@@ -617,20 +618,22 @@ public class Column {
 
             try {
                 //this.titles = d.getTitle();
-                this.titles = d.fetchLabel(typeIri.toString());
-                if(this.titles == null){
-                    this.titles = "Subject";
+                String fetchedLabel = d.fetchLabel(typeIri.toString());
+                if(fetchedLabel == null){
+                    this.titles = LabelFormatter.changeLabelToTheConfiguredFormat("Subject", config);
+                } else {
+                    this.titles = LabelFormatter.changeLabelToTheConfiguredFormat(fetchedLabel, config);
                 }
                 this.name = typeIri.getLocalName();
 
             } catch(NullPointerException | ValidationException | IOException | ExecutionException noElement){
                 this.name = typeIri.getLocalName();
-                this.titles = this.name;
+                this.titles = LabelFormatter.changeLabelToTheConfiguredFormat(this.name, config);
             }
 
 
         } else {
-            this.titles = "Subject";
+            this.titles = LabelFormatter.changeLabelToTheConfiguredFormat("Subject", config);
             this.name = "Subject";
         }
         if (!value.isBNode()) {

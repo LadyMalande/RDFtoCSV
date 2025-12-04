@@ -285,8 +285,8 @@ public class AppConfig {
         if (output != null) {
             this.outputFilePath = output;
         } else {
-            // Prepend ../ for both local files and URLs to output alongside the input file
-            this.outputFilePath = "../" + baseFileName;
+            // Use just the base filename (no ../ prefix) so output is created in current directory
+            this.outputFilePath = baseFileName;
         }
         
         // Use full output path for ZIP file, not just base filename

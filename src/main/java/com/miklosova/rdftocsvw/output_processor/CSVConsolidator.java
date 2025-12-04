@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -115,16 +116,33 @@ public class CSVConsolidator {
                             isFirstLine = false;
                         } else {
                             List<Column> columns = newMetadata.getTables().get(0).getTableSchema().getColumns();
+                            // Initialize all cells to empty string
+                            Arrays.fill(lineToWrite, "");
+                            
                             for (int i = 0; i < columns.size(); i++) {
                                 if (i == 0) {
-                                    lineToWrite[i] = line[0];
+                                    // Subject column - always use first column from source
+                                    lineToWrite[i] = (line.length > 0) ? line[0] : "";
                                 } else {
                                     int finalI = i;
                                     if (t.getTableSchema().getColumns().stream().anyMatch(
                                             column -> isMergeable(columns.get(finalI), column))) {
                                         Optional<Column> columnOptional = t.getTableSchema().getColumns().stream().filter(
                                                 column -> (isMergeable(columns.get(finalI), column))).findFirst();
-                                        lineToWrite[i] = (columnOptional.isPresent()) ? line[t.getTableSchema().getColumns().indexOf(columnOptional.get())] : "";
+                                        if (columnOptional.isPresent()) {
+                                            int sourceColumnIndex = t.getTableSchema().getColumns().indexOf(columnOptional.get());
+                                            // Safe array access - check bounds before reading
+                                            String cellValue = (sourceColumnIndex < line.length) ? line[sourceColumnIndex] : "";
+                                            
+                                            // Apply valueUrl pattern extraction if needed
+                                            Column targetColumn = columns.get(finalI);
+                                            if (targetColumn.getValueUrl() != null && targetColumn.getValueUrl().contains("{+") 
+                                                && !cellValue.isEmpty()) {
+                                                cellValue = extractValueWithPattern(cellValue, targetColumn.getValueUrl());
+                                            }
+                                            
+                                            lineToWrite[i] = cellValue;
+                                        }
                                     }
                                 }
                             }
@@ -159,5 +177,37 @@ public class CSVConsolidator {
                 && c2.getPropertyUrl().equalsIgnoreCase(c1.getPropertyUrl()) &&
                 ((c1.getLang() == null && c2.getLang() == null) ||
                         (c1.getLang().equalsIgnoreCase(c2.getLang())));
+    }
+
+    /**
+     * Extract the appropriate value based on valueUrl pattern.
+     * For partial patterns like "https://example.com/#{+var}", extracts the local name by removing the prefix.
+     * For full patterns like "{+var}", returns the complete value.
+     *
+     * @param cellValue the full IRI value from the CSV cell
+     * @param valueUrlPattern the valueUrl pattern from column metadata (e.g., "https://data.mvcr.gov.cz/zdroj/číselníky/{+inScheme}")
+     * @return the extracted value according to the pattern
+     */
+    private String extractValueWithPattern(String cellValue, String valueUrlPattern) {
+        // Check if it's a full pattern like {+variableName}
+        boolean isFullPattern = valueUrlPattern.trim().startsWith("{+");
+        
+        if (isFullPattern) {
+            // Full pattern: use complete value as-is
+            return cellValue;
+        } else {
+            // Partial pattern like "https://example.com/vocab#{+var}"
+            // Extract the prefix (everything before {+)
+            int patternStart = valueUrlPattern.indexOf("{+");
+            if (patternStart > 0) {
+                String prefix = valueUrlPattern.substring(0, patternStart);
+                // Remove the prefix from the cell value
+                if (cellValue.startsWith(prefix)) {
+                    return cellValue.substring(prefix.length());
+                }
+            }
+            // Fallback: return as-is if pattern doesn't match
+            return cellValue;
+        }
     }
 }

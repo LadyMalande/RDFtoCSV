@@ -494,7 +494,10 @@ public class RDFtoCSV {
 
                 String newFileName = files[i];
                 //System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
-                sb.append(FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata, config));
+                // Write the CSV file
+                FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata, config);
+                // Read it back for web service response (0 = read entire file)
+                sb.append(FileWrite.readCSVFileAsString(newFileName, 0));
                 i++;
             }
         } catch (ClassCastException ex) {
@@ -502,7 +505,10 @@ public class RDFtoCSV {
 
             String newFileName = files[0];
             //System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
+            // Write the CSV file
             FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata, config);
+            // Read it back for web service response (0 = read entire file)
+            sb.append(FileWrite.readCSVFileAsString(newFileName, 0));
         }
         db.shutDown();
 
@@ -539,7 +545,7 @@ public class RDFtoCSV {
 
                 for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
                     String newFileName = files[i];
-                    //System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
+                    System.out.println("for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) { in newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
                     FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata, config);
                     i++;
                     
@@ -553,7 +559,7 @@ public class RDFtoCSV {
                 RowAndKey rnk = (RowAndKey) po.getPrefinishedOutput();
 
                 String newFileName = files[0];
-                //System.out.println("newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
+                System.out.println("in catch ClassCastException newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
                 FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata, config);
                 com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
                     com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING, 100, "1 CSV file"

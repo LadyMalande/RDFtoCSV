@@ -63,15 +63,20 @@ public class LanguageConfigTest {
         AppConfig config = new AppConfig.Builder("test.ttl")
                 .build();
 
-        Dereferencer instance = new Dereferencer("https://publications.europa.eu/resource/authority/eurovoc/2294", config);
-        Method method = Dereferencer.class.getDeclaredMethod("scoreLanguage", String.class);
+        Method method = Dereferencer.class.getDeclaredMethod("scoreLanguage", String.class, List.class);
         method.setAccessible(true);
 
+        // Get default languages using static method
+        Method loadLanguagesMethod = Dereferencer.class.getDeclaredMethod("loadPreferredLanguagesStatic", AppConfig.class);
+        loadLanguagesMethod.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        List<String> defaultLanguages = (List<String>) loadLanguagesMethod.invoke(null, config);
+
         // Should use default languages ["en", "cs"]
-        assertEquals(1000, method.invoke(instance, "en"));  // first default
-        assertEquals(999, method.invoke(instance, "cs"));   // second default
-        assertEquals(0, method.invoke(instance, "fr"));     // non-default
-        assertEquals(500, method.invoke(instance, ""));     // empty language
+        assertEquals(1000, method.invoke(null, "en", defaultLanguages));  // first default
+        assertEquals(999, method.invoke(null, "cs", defaultLanguages));   // second default
+        assertEquals(0, method.invoke(null, "fr", defaultLanguages));     // non-default
+        assertEquals(500, method.invoke(null, "", defaultLanguages));     // empty language
     }
     @ParameterizedTest
     @MethodSource("languageScoringTestCases")
@@ -81,20 +86,17 @@ public class LanguageConfigTest {
                 .preferredLanguages(preferredLanguageConfig)
                 .build();
         
-        // Invoke the method
-        Dereferencer instance = new Dereferencer("https://publications.europa.eu/resource/authority/eurovoc/2294", config);
-        // Get the private method
-        Method method = Dereferencer.class.getDeclaredMethod("scoreLanguage", String.class);
-        Method method2 = Dereferencer.class.getDeclaredMethod("loadPreferredLanguages", AppConfig.class);
-        method2.setAccessible(true);
-        @SuppressWarnings("unchecked")
-        List<String> languages = (List<String>) method2.invoke(instance, config);
-        instance.setPreferredLanguagesForTesting(languages);
-        // Make it accessible
+        // Get the private static method with correct signature
+        Method method = Dereferencer.class.getDeclaredMethod("scoreLanguage", String.class, List.class);
         method.setAccessible(true);
+        
+        Method loadLanguagesMethod = Dereferencer.class.getDeclaredMethod("loadPreferredLanguagesStatic", AppConfig.class);
+        loadLanguagesMethod.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        List<String> languages = (List<String>) loadLanguagesMethod.invoke(null, config);
 
-        // Invoke the method
-        Object result = method.invoke(instance, language);
+        // Invoke the static method
+        Object result = method.invoke(null, language, languages);
 
         assertEquals(expectedScore, result);
     }
@@ -120,18 +122,17 @@ public class LanguageConfigTest {
         if(iri.contains("nonexistent-property") || iri.contains("does-not-exist")){
             assertEquals(expectedLabel, instance.fetchLabel(iri));
         } else {
-            assertEquals(expectedLabel, instance.fetchLabelUncached(iri, config));
+            assertEquals(expectedLabel, Dereferencer.fetchLabelUncached(iri, config));
         }
     }
 
     @Test
     void loadPreferredLanguages_WhenConfigIsNull_ShouldReturnDefault() throws Exception {
         // Pass null as AppConfig to test Assertions warning about null configuration
-        NullPointerException exception = assertThrows(
+        assertThrows(
                 NullPointerException.class,
                 () ->  new Dereferencer("https://publications.europa.eu/resource/authority/eurovoc/2294", null)
         );
-
     }
 
     private static Stream<Arguments> fetchLabelLangTagTestCases() {

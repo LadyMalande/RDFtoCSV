@@ -75,6 +75,10 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
 
     @Override
     public Metadata addMetadata(PrefinishedOutput<?> info) {
+        // Clear failed hosts cache at the start of metadata creation
+        // This prevents stale failures from persisting across multiple runs in the same JVM
+        Dereferencer.clearFailedHostsCache();
+        
         com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
             com.miklosova.rdftocsvw.support.ProgressLogger.Stage.METADATA, 10, "Extracting table data"
         );

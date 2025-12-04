@@ -84,6 +84,19 @@ public class Dereferencer {
     // Define language preferences (order matters: first is most desired)
     private List<String> PREFERRED_LANGUAGES; // Initialized in constructor after config is set
     
+    // Cache for failed hosts - prevents repeated attempts to unreachable domains
+    // Key: hostname (e.g., "slovník.gov.cz")
+    // Value: true (indicates this host failed with UnknownHostException or connection error)
+    private static final LoadingCache<String, Boolean> failedHostsCache = CacheBuilder.newBuilder()
+            .maximumSize(100)
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .build(new CacheLoader<String, Boolean>() {
+                @Override
+                public Boolean load(String host) {
+                    return false; // Default: host not failed
+                }
+            });
+    
     // Cache for vocabulary RDF models - shared across all Dereferencer instances
     // Key: base vocabulary URI (e.g., "http://www.w3.org/2004/02/skos/core")
     // Value: parsed Jena Model containing the entire vocabulary
@@ -127,6 +140,42 @@ public class Dereferencer {
     private String url;
 
     private AppConfig config;
+
+    /**
+     * Get statistics about cached failed hosts for debugging.
+     * @return Summary string of failed hosts cache
+     */
+    public static String getFailedHostsCacheStats() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Failed Hosts Cache: ").append(failedHostsCache.size()).append(" entries\n");
+        for (String host : failedHostsCache.asMap().keySet()) {
+            sb.append("  - ").append(host).append("\n");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Clear the failed hosts cache AND vocabulary cache AND label cache.
+     * Should be called at the start of each conversion to avoid persisting stale failures
+     * across multiple runs in the same JVM session (e.g., when running from IntelliJ).
+     */
+    public static void clearFailedHostsCache() {
+        int hostsSize = failedHostsCache.asMap().size();
+        int vocabSize = vocabularyCache.asMap().size();
+        int labelSize = labelCache.asMap().size();
+        
+        if (hostsSize > 0 || vocabSize > 0 || labelSize > 0) {
+            logger.info("Clearing ALL caches - Failed hosts: " + hostsSize + " entries " + 
+                       (hostsSize > 0 ? "(" + String.join(", ", failedHostsCache.asMap().keySet()) + ")" : "") +
+                       ", Vocabularies: " + vocabSize + " entries" +
+                       ", Labels: " + labelSize + " entries");
+            failedHostsCache.invalidateAll();
+            vocabularyCache.invalidateAll();
+            labelCache.invalidateAll();
+        } else {
+            logger.info("All three caches already empty (no stale entries to clear)");
+        }
+    }
 
     /**
      * Instantiates a new Dereferencer.
@@ -474,10 +523,85 @@ public class Dereferencer {
         return null;
     }
 
+    /**
+     * Safely extract the host from a URI that may contain Unicode characters.
+     * For URIs with Unicode in the hostname (like slovník.gov.cz), manually extracts the host.
+     * 
+     * @param uriString The URI string to extract host from
+     * @return The host portion of the URI, or null if extraction fails
+     */
+    private static String extractHost(String uriString) {
+        try {
+            // First try java.net.URL which handles some Unicode cases better
+            try {
+                java.net.URL url = new java.net.URL(uriString);
+                String host = url.getHost();
+                if (host != null && !host.isEmpty()) {
+                    return host;
+                }
+            } catch (java.net.MalformedURLException e) {
+                // Fall through to manual extraction
+            }
+            
+            // Try standard URI parsing (works for ASCII URIs)
+            try {
+                java.net.URI uri = new java.net.URI(uriString);
+                String host = uri.getHost();
+                if (host != null && !host.isEmpty()) {
+                    return host;
+                }
+            } catch (java.net.URISyntaxException e) {
+                // Fall through to manual extraction
+            }
+            
+            // Manual extraction for URIs with Unicode in hostname
+            // Extract hostname from "protocol://hostname/path" or "protocol://hostname:port/path"
+            int protocolEnd = uriString.indexOf("://");
+            if (protocolEnd > 0) {
+                String afterProtocol = uriString.substring(protocolEnd + 3);
+                
+                // Find the end of hostname (first /, :, ?, or #)
+                int pathStart = afterProtocol.length();
+                int slashPos = afterProtocol.indexOf('/');
+                int colonPos = afterProtocol.indexOf(':');
+                int queryPos = afterProtocol.indexOf('?');
+                int fragmentPos = afterProtocol.indexOf('#');
+                
+                if (slashPos >= 0) pathStart = Math.min(pathStart, slashPos);
+                if (colonPos >= 0) pathStart = Math.min(pathStart, colonPos);
+                if (queryPos >= 0) pathStart = Math.min(pathStart, queryPos);
+                if (fragmentPos >= 0) pathStart = Math.min(pathStart, fragmentPos);
+                
+                String host = afterProtocol.substring(0, pathStart);
+                if (!host.isEmpty()) {
+                    logger.fine("Manually extracted host: " + host + " from URI: " + uriString);
+                    return host;
+                }
+            }
+            
+            return null;
+        } catch (Exception e) {
+            logger.fine("Could not extract host from URI: " + uriString + " - " + e.getMessage());
+            return null;
+        }
+    }
+
     public String fetchLabel(String iri) throws IOException, ExecutionException {
-        boolean wasCached = labelCache.getIfPresent(iri) != null;
-        //logger.info((wasCached ? "✓ CACHE HIT" : "✗ CACHE MISS") + " for IRI: " + iri);
-        String label = labelCache.getUnchecked(iri);
+        // Create cache key that includes language preferences
+        String languages = (config != null && config.getPreferredLanguages() != null) 
+            ? config.getPreferredLanguages() 
+            : "en,cs";
+        String cacheKey = iri + "|langs:" + languages;
+        
+        // Check if already cached with this language preference
+        String label = labelCache.getIfPresent(cacheKey);
+        if (label == null) {
+            // Not in cache - fetch it with proper config
+            label = fetchLabelUncached(iri, config);
+            // Store in cache with language-specific key
+            labelCache.put(cacheKey, label);
+        }
+        
         // Apply formatting based on this instance's config
         return LabelFormatter.changeLabelToTheConfiguredFormat(label, config);
     }
@@ -489,6 +613,20 @@ public class Dereferencer {
         String vocabularyUri = extractBaseUri(iri);
         
         try {
+            // EARLY CHECK: Skip if host previously failed (before checking vocabulary cache)
+            String host = extractHost(vocabularyUri);
+            
+            // Check if this host is in the failed hosts cache AND has value true (actually failed)
+            Boolean cachedFailure = failedHostsCache.getIfPresent(host);
+            if (host != null && cachedFailure != null && cachedFailure) {
+                logger.warning("✓ SKIPPING (host previously failed): " + host + " → IRI: " + iri + " → vocabularyUri: " + vocabularyUri);
+                ValueFactory vf = SimpleValueFactory.getInstance();
+                IRI propertyUrlIRI = vf.createIRI(iri);
+                return propertyUrlIRI.getLocalName();
+            } else if (host != null) {
+                logger.info("✓ HOST NOT IN CACHE (will attempt fetch): " + host + " → vocabularyUri: " + vocabularyUri);
+            }
+            
             // Check if vocabulary is already in cache
             Model cachedModel = vocabularyCache.getIfPresent(vocabularyUri);
             boolean isCached = cachedModel != null;
@@ -535,7 +673,7 @@ public class Dereferencer {
             String label = findLabelForIRI(model, iri, config);
             
             // long duration = System.currentTimeMillis() - startTime;
-            // logger.fine( "Label '" + label + "' retrieved in " + duration + "ms (cached vocab: " + isCached + ")");
+            logger.info( "Label '" + label + "' retrieved  (cached vocab: " + isCached + ")");
             
             // Log cache statistics periodically
             // if (vocabularyCache.size() > 0) {
@@ -549,10 +687,47 @@ public class Dereferencer {
             return label;
             
         } catch (ExecutionException e) {
-            logger.log(Level.WARNING, "Failed to fetch vocabulary for " + vocabularyUri + ": " + e.getMessage());
+            Throwable cause = e.getCause();
+            String host = extractHost(vocabularyUri);
+            
+            // DETAILED EXCEPTION LOGGING
+            logger.warning("=== VOCABULARY FETCH FAILED ===");
+            logger.warning("  IRI: " + iri);
+            logger.warning("  Vocabulary URI: " + vocabularyUri);
+            logger.warning("  Host: " + host);
+            logger.warning("  Exception Type: " + cause.getClass().getName());
+            logger.warning("  Exception Message: " + cause.getMessage());
+            if (cause.getCause() != null) {
+                logger.warning("  Root Cause: " + cause.getCause().getClass().getName() + ": " + cause.getCause().getMessage());
+            }
+            logger.warning("  Stack trace: " + cause.toString());
+            logger.warning("===============================");
+
+            // Check if it's a network-related failure (host unreachable, DNS failure, etc.)
+            if (cause instanceof java.net.UnknownHostException /* || 
+                 cause instanceof java.net.SocketTimeoutException ||
+                cause instanceof java.net.ConnectException ||
+                cause instanceof org.apache.http.conn.ConnectTimeoutException ||
+                cause instanceof org.apache.http.conn.HttpHostConnectException */) {
+                
+                // Mark this host as failed to prevent future attempts
+                if (host != null) {
+                    failedHostsCache.put(host, true);
+                    logger.warning("✓ CACHED failed host '" + host + "' due to " + cause.getClass().getSimpleName() + 
+                                 " for vocabularyUri: " + vocabularyUri);
+                } else {
+                    logger.warning("✗ CANNOT CACHE failed host (host is null) for vocabularyUri: " + vocabularyUri);
+                }
+            } else {
+                // Log non-network failures for debugging - these should NOT cache the host
+                logger.warning("Vocabulary fetch failed but NOT caching host (" + cause.getClass().getSimpleName() + 
+                          ") for vocabularyUri: " + vocabularyUri);
+            }
+            
             // Cache an empty model to prevent retrying this vocabulary
             vocabularyCache.put(vocabularyUri, ModelFactory.createDefaultModel());
-            // logger.fine("Cached empty model for failed vocabulary: " + vocabularyUri);
+            logger.warning("Cached empty model for failed vocabulary: " + vocabularyUri);
+            
             // Fall back to local name
             ValueFactory vf = SimpleValueFactory.getInstance();
             IRI propertyUrlIRI = vf.createIRI(iri);

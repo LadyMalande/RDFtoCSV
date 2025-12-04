@@ -71,7 +71,7 @@ class RDFtoCSVTest {
 
 //     //BaseRock generated method id: ${testConstructorWithFileName}, hash: B7210CFF75EC7ED5BF54503E1FCF8DA4
      @ParameterizedTest
-     @CsvSource({ "test.rdf,../test.rdf,../test.rdf.csv-metadata.json", "http://example.com/test.rdf,test.rdf,http://example.com/test.rdf.csv-metadata.json" })
+     @CsvSource({ "test.rdf,../test,../test.rdf.csv-metadata.json", "http://example.com/test.rdf,test.rdf,test.rdf.csv-metadata.json" })
      void testConstructorWithFileName(String input, String expectedFilePath, String expectedMetadataFilename) {
 
         AppConfig testConfig = new AppConfig.Builder(input)
@@ -90,7 +90,7 @@ class RDFtoCSVTest {
             .build();
         RDFtoCSV instance = new RDFtoCSV(testConfig);
         // RDFtoCSV constructor adds "../" prefix for non-URL file paths
-        assertEquals("../test.rdf", instance.getFilePathForOutput());
+        assertEquals("../test", instance.getFilePathForOutput());
         assertEquals("../test.rdf.csv-metadata.json", instance.getMetadataFilename());
      }
 

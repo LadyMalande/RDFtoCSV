@@ -9,7 +9,6 @@ import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import com.miklosova.rdftocsvw.support.AppConfig;
 
 import com.opencsv.CSVReader;
-import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
@@ -28,10 +27,11 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     private static final Logger logger = Logger.getLogger(StreamingNTriplesMetadataCreator.class.getName());
 
     /**
-     * The Map of known subjects. <CSV file url, List of Subject IRIs>: the list of subjects that are used as IDs in a given csv file
+     * The Map of known subjects. <CSV file url, Set of Subject IRIs>: the set of subjects that are used as IDs in a given csv file
+     * Changed from List to Set for O(1) contains() performance instead of O(n)
      */
 
-    Map<String, List<IRI>> mapOfKnownSubjects;
+    Map<String, Set<IRI>> mapOfKnownSubjects;
     /**
      * The Map of known predicates. <CSV file url, List of Predicate IRIs>: the list of predicates that are used as IDs in a given csv file
      */
@@ -41,6 +41,41 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
      * The Table schema by files. Table Schema objects mapped to their CSV file urls
      */
     Map<String, TableSchema> tableSchemaByFiles;
+    
+    /**
+     * In-memory buffer for CSV data. Maps CSV file path to list of rows.
+     * This eliminates the O(n²) file I/O bottleneck by buffering all data in memory.
+     */
+    private Map<String, List<String[]>> csvDataBuffer;
+    
+    /**
+     * Map of subject to row number for subjects already flushed to disk.
+     * Maps: CSV file path -> (subject IRI -> row number in file).
+     * Used to handle scattered subjects by reading back specific rows when needed.
+     */
+    private Map<String, Map<String, Integer>> subjectRowIndex;
+    
+    /**
+     * Rows that need to be updated in the CSV file after being read back from disk.
+     * Maps: CSV file path -> Map(row number -> updated row data).
+     */
+    private Map<String, Map<Integer, String[]>> rowsToUpdate;
+    
+    /**
+     * Open file writers for CSV files. Kept open during processing to avoid O(n) append overhead.
+     * Maps: CSV file path -> BufferedWriter.
+     */
+    private Map<String, BufferedWriter> openWriters;
+    
+    /**
+     * Batch size for periodic flushing to disk (to limit memory usage)
+     */
+    private static final int BATCH_FLUSH_SIZE = 5000;
+    
+    /**
+     * Counter for last flush operation
+     */
+    private int lastFlushAt = 0;
     
     /**
      * Counter for processed triples (for timing output only)
@@ -73,20 +108,31 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
      */
     public StreamingNTriplesMetadataCreator(AppConfig config) {
         super(config);
+        
         tableSchemaByFiles = new HashMap<>();
         mapOfKnownPredicates = new HashMap<>();
         mapOfKnownSubjects = new HashMap<>();
+        csvDataBuffer = new HashMap<>();
+        subjectRowIndex = new HashMap<>();
+        rowsToUpdate = new HashMap<>();
+        openWriters = new HashMap<>();
         this.metadata = new Metadata(config);
     }
 
     @Override
     public Metadata addMetadata(PrefinishedOutput<?> info) {
+        // Clear failed hosts cache at the start of metadata creation
+        // This prevents stale failures from persisting across multiple runs in the same JVM
+        Dereferencer.clearFailedHostsCache();
 
         if (config.getStreamingContinuous()) {
             readInputStream();
         } else {
             readFileWithStreaming();
         }
+
+        // Flush all buffered CSV data to disk
+        flushAllBuffers();
 
         repairMetadataAndMakeItJsonld(metadata);
 
@@ -168,7 +214,12 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         long afterName = System.nanoTime();
         
         newColumn.setPropertyUrl(triple.predicate.stringValue());
-        newColumn.setValueUrl("{+" + newColumn.getName() + "}");
+        // Only set valueUrl for IRI or blank node objects (not literals)
+        if (triple.object.isIRI()) {
+            newColumn.setValueUrl(((IRI) triple.object).getNamespace() + "{+" + newColumn.getName() + "}");
+        } else if (triple.object.isBNode()) {
+            newColumn.setValueUrl("{+" + newColumn.getName() + "}");
+        }
         long afterUrls = System.nanoTime();
         
         newColumn.createDatatypeFromValue(triple.object);
@@ -273,7 +324,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
     private String getCSVNameIfSubjectOrPredicateKnown(IRI subject, IRI predicate) {
 
-        for (Map.Entry<String, List<IRI>> entry : mapOfKnownSubjects.entrySet()) {
+        for (Map.Entry<String, Set<IRI>> entry : mapOfKnownSubjects.entrySet()) {
             if (entry.getValue().contains(subject)) {
 
                 List<IRI> knownPredicates = mapOfKnownPredicates.get(entry.getKey());
@@ -284,7 +335,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
         for (Map.Entry<String, List<IRI>> entry : mapOfKnownPredicates.entrySet()) {
             if (entry.getValue().contains(predicate)) {
-                List<IRI> knownSubjects = mapOfKnownSubjects.get(entry.getKey());
+                Set<IRI> knownSubjects = mapOfKnownSubjects.get(entry.getKey());
                 knownSubjects.add(subject);
                 return entry.getKey();
             }
@@ -309,7 +360,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     }
 
     private TableSchema getTableSchemaOfMatchingMetadata(Triple triple) {
-        for (Map.Entry<String, List<IRI>> entry : mapOfKnownSubjects.entrySet()) {
+        for (Map.Entry<String, Set<IRI>> entry : mapOfKnownSubjects.entrySet()) {
             if (entry.getValue().contains(triple.getSubject())) {
                 return tableSchemaByFiles.get(entry.getKey());
             }
@@ -326,7 +377,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     private TableSchema createNewTableSchema(Triple triple) {
         ArrayList<IRI> knownPredicates = new ArrayList<>();
         knownPredicates.add(triple.getPredicate());
-        ArrayList<IRI> knownSubjects = new ArrayList<>();
+        HashSet<IRI> knownSubjects = new HashSet<>();
         knownSubjects.add(triple.getSubject());
         mapOfKnownPredicates.put(currentCSVName, knownPredicates);
         mapOfKnownSubjects.put(currentCSVName, knownSubjects);
@@ -399,35 +450,74 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
      * @throws IOException the io exception
      */
     public void writeTripleToCSV(String filePath, Triple triple) throws IOException {
+        // Debug: Log every triple being written
+        logger.info("writeTripleToCSV: predicate=" + triple.getPredicate().stringValue() + 
+                   ", object=" + (triple.getObject().isIRI() ? "IRI:" + triple.getObject().stringValue() : 
+                                 triple.getObject().isLiteral() ? "Literal:..." : "Other"));
+        
         long startWrite = System.nanoTime();
         
         List<String[]> rowDataVariationsForSubject = new ArrayList<>();
         boolean isNeedForAddingDataVariations = false;
         int indexOfDataVariationColumn = -1;
-        File file = new File(filePath);
-        List<String[]> lines = new ArrayList<>();
         boolean isModified = false;
         long afterInit = System.nanoTime();
 
         unifiedBySubject = isThereTheSameSubject(triple.getSubject());
         long afterUnified = System.nanoTime();
 
-        // Read the file and process it line by line
-        try (CSVReader reader = new CSVReader(new FileReader(file))) {
-            String[] line;
-            boolean isFirstLine = true;
-            while ((line = reader.readNext()) != null) {
-                if (isFirstLine) {
-                    isFirstLine = false;
+        // Get or initialize the in-memory buffer for this CSV file
+        List<String[]> lines = csvDataBuffer.computeIfAbsent(filePath, k -> new ArrayList<>());
+        
+        // Check if this subject was already flushed to disk
+        Map<String, Integer> rowIndex = subjectRowIndex.get(filePath);
+        String subjectStr = triple.subject.stringValue();
+        boolean subjectWasFlushed = rowIndex != null && rowIndex.containsKey(subjectStr);
+        
+        if (subjectWasFlushed) {
+            // Subject was flushed - need to read it back and update
+            int rowNumber = rowIndex.get(subjectStr);
+            Map<Integer, String[]> updates = rowsToUpdate.computeIfAbsent(filePath, k -> new HashMap<>());
+            
+            // Get the row (either from pending updates or read from disk)
+            String[] line = updates.get(rowNumber);
+            if (line == null) {
+                line = readRowFromCSV(filePath, rowNumber);
+            }
+            
+            if (line != null) {
+                int indexOfChangeColumn = getIndexOfCurrentPredicate(triple.getPredicate(), triple.getObject());
+                
+                if (indexOfChangeColumn >= line.length) {
+                    String[] extendedArray = Arrays.copyOf(line, line.length + 1);
+                    extendedArray[line.length] = triple.object.stringValue();
+                    updates.put(rowNumber, extendedArray);
+                } else if (indexOfChangeColumn != -1 && !line[indexOfChangeColumn].isEmpty()) {
+                    if (!config.getFirstNormalForm()) {
+                        String[] updatedLine = line.clone();
+                        updatedLine[indexOfChangeColumn] = line[indexOfChangeColumn] + "," + triple.getObject().stringValue();
+                        updates.put(rowNumber, updatedLine);
+                        tableSchema.getColumns().get(indexOfChangeColumn).setSeparator(",");
+                    }
+                } else if (indexOfChangeColumn != -1) {
+                    String[] updatedLine = line.clone();
+                    updatedLine[indexOfChangeColumn] = triple.getObject().stringValue();
+                    updates.put(rowNumber, updatedLine);
+                }
+            }
+        } else {
+            // Subject is in memory - process normally
+            // Process existing lines in memory
+            for (int i = 0; i < lines.size(); i++) {
+                String[] line = lines.get(i);
+                
+                if (i == 0) {
+                    // Skip header row
+                    continue;
                 }
 
                 // Add the Object into the correct column in the line as there is already a line with this subject
-                else if (unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
-                    // Add this line as a data variation to the data variation list
-
-                    // Split the line into parts by commas
-
-
+                if (unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
                     int indexOfChangeColumn = getIndexOfCurrentPredicate(triple.getPredicate(), triple.getObject());
 
                     // Insert the new value between two commas in the middle (adjust index as needed)
@@ -438,7 +528,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
                         // Add the new element at the last position
                         extendedArray[line.length] = triple.object.stringValue();
-                        line = extendedArray;
+                        lines.set(i, extendedArray);
                         isModified = true;
                     } else if (indexOfChangeColumn != -1 && !line[indexOfChangeColumn].equalsIgnoreCase("")) {
                         if (config.getFirstNormalForm()) {
@@ -449,53 +539,65 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                             }
                             isNeedForAddingDataVariations = true;
                             indexOfDataVariationColumn = indexOfChangeColumn;
-                            // Check whether the object is the same as the value that is already in the data - that would imply that
-                            // I am trying to optimize the data, but that would modify it, so just make the same line duplicitly
-                            // If those data really came from RDF
                         } else {
-                            line[indexOfChangeColumn] = line[indexOfChangeColumn] + "," + triple.getObject().stringValue();
+                            String[] updatedLine = line.clone();
+                            updatedLine[indexOfChangeColumn] = line[indexOfChangeColumn] + "," + triple.getObject().stringValue();
+                            lines.set(i, updatedLine);
                             tableSchema.getColumns().get(indexOfChangeColumn).setSeparator(",");
                             isModified = true;
                         }
-
                     } else {
                         // Add new object at the end of the line
-                        line[indexOfChangeColumn] = triple.getObject().stringValue();
+                        String[] updatedLine = line.clone();
+                        updatedLine[indexOfChangeColumn] = triple.getObject().stringValue();
+                        lines.set(i, updatedLine);
                         isModified = true;  // Mark that the line has been modified
                     }
-
                 }
-                lines.add(line);  // Add the processed line to the list
-
-
             }
 
             if (isNeedForAddingDataVariations) {
                 // Add data variations for all the lines that have the same subject in the list
-                appendDataVariationsToCSV(file, rowDataVariationsForSubject, indexOfDataVariationColumn, triple.getObject());
+                for (String[] lineToVary : rowDataVariationsForSubject) {
+                    String[] copiedArray = Arrays.copyOf(lineToVary, lineToVary.length);
+                    copiedArray[indexOfDataVariationColumn] = triple.getObject().stringValue();
+                    lines.add(copiedArray);
+                }
             } else if (!isModified && unifiedBySubject) {
                 // If the file is still unmodified, we need to add a new predicate column at the end of the row
                 lines.add(createLineStringListByMetadata(triple).toArray(new String[0]));
                 isModified = true;
             }
 
-
             if (!isModified && !unifiedBySubject) {
                 // The match has been made by matching Predicate = we must create a new line at the end of the file and add values accordingly
-                // We can just append to the file - the lines wont be written again at the end of this writing modification
-                List<String[]> newLine = new ArrayList<>();
-                newLine.add(createLineStringListByMetadata(triple).toArray(new String[0]));
-                FileWrite.writeLinesToCSVFile(file, newLine, true);
+                lines.add(createLineStringListByMetadata(triple).toArray(new String[0]));
             }
-
-        } catch (CsvValidationException e) {
-            logger.log(Level.SEVERE, "There was an exception while trying to write CSV file from triple and there was a validation exception.");
-
         }
 
-        // Write the updated content back to the file
-        if (isModified) {
-            FileWrite.writeLinesToCSVFile(file, lines, false);
+        if (isNeedForAddingDataVariations) {
+            // Add data variations for all the lines that have the same subject in the list
+            for (String[] lineToVary : rowDataVariationsForSubject) {
+                String[] copiedArray = Arrays.copyOf(lineToVary, lineToVary.length);
+                copiedArray[indexOfDataVariationColumn] = triple.getObject().stringValue();
+                lines.add(copiedArray);
+            }
+        } else if (!isModified && unifiedBySubject) {
+            // If the file is still unmodified, we need to add a new predicate column at the end of the row
+            lines.add(createLineStringListByMetadata(triple).toArray(new String[0]));
+            isModified = true;
+        }
+
+        if (!isModified && !unifiedBySubject) {
+            // The match has been made by matching Predicate = we must create a new line at the end of the file and add values accordingly
+            lines.add(createLineStringListByMetadata(triple).toArray(new String[0]));
+        }
+        
+        // Periodic batch flush to limit memory usage for large files
+        if (processedTriplesCount - lastFlushAt >= BATCH_FLUSH_SIZE) {
+            flushBufferToDisk(filePath);
+            lastFlushAt = processedTriplesCount;
+            System.err.println("[BUFFER-FLUSH] Flushed buffer at triple " + processedTriplesCount + " to limit memory usage");
         }
         
         long endWrite = System.nanoTime();
@@ -510,6 +612,182 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 totalMicros - initMicros - unifiedMicros));
             System.err.flush();
         }
+    }
+
+    /**
+     * Flush a single CSV file buffer to disk.
+     * Used for periodic batch flushing during processing.
+     * Keeps file writer open for constant-time appends.
+     * @param filePath the CSV file to flush
+     */
+    private void flushBufferToDisk(String filePath) {
+        List<String[]> lines = csvDataBuffer.get(filePath);
+        if (lines == null || lines.isEmpty()) {
+            return;
+        }
+        
+        long startFlush = System.nanoTime();
+        
+        File file = new File(filePath);
+        Map<String, Integer> rowIndex = subjectRowIndex.computeIfAbsent(filePath, k -> new HashMap<>());
+        
+        try {
+            BufferedWriter writer = openWriters.get(filePath);
+            
+            // First time writing this file - create writer and write header
+            if (writer == null) {
+                writer = new BufferedWriter(new FileWriter(file, false)); // overwrite mode
+                openWriters.put(filePath, writer);
+                
+                // Write header
+                String[] header = lines.get(0);
+                writer.write(String.join(",", escapeCSVRow(header)));
+                writer.newLine();
+                
+                logger.log(Level.INFO, "Initial write: created file " + filePath);
+            }
+            
+            // Write data rows (skip header at index 0)
+            int currentRowNumber = rowIndex.size() + 1; // Continue from last row number
+            int rowsWritten = 0;
+            
+            for (int i = 1; i < lines.size(); i++) {
+                String[] row = lines.get(i);
+                writer.write(String.join(",", escapeCSVRow(row)));
+                writer.newLine();
+                rowIndex.put(row[0], currentRowNumber);
+                currentRowNumber++;
+                rowsWritten++;
+            }
+            
+            // Flush writer to ensure data is written
+            writer.flush();
+            
+            lines.clear();
+            
+            long endFlush = System.nanoTime();
+            long flushMicros = (endFlush - startFlush) / 1000;
+            
+            System.err.println(String.format("[BUFFER-FLUSH] Wrote %d rows in %dμs. Total indexed: %d", 
+                rowsWritten, flushMicros, rowIndex.size()));
+            
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Error flushing buffer to disk: " + filePath, e);
+        }
+    }
+    
+    /**
+     * Escape CSV row values for proper CSV formatting.
+     * @param row the row to escape
+     * @return array of escaped values
+     */
+    private String[] escapeCSVRow(String[] row) {
+        String[] escaped = new String[row.length];
+        for (int i = 0; i < row.length; i++) {
+            String value = row[i];
+            // Quote if contains comma, quote, or newline
+            if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
+                value = "\"" + value.replace("\"", "\"\"") + "\"";
+            }
+            escaped[i] = value;
+        }
+        return escaped;
+    }
+    
+    /**
+     * Flush all buffered CSV data to disk.
+     * This method is called once at the end of processing to write all accumulated data.
+     */
+    private void flushAllBuffers() {
+        // First, apply any pending row updates to files that were already flushed
+        for (Map.Entry<String, Map<Integer, String[]>> entry : rowsToUpdate.entrySet()) {
+            String filePath = entry.getKey();
+            Map<Integer, String[]> updates = entry.getValue();
+            
+            if (!updates.isEmpty()) {
+                applyRowUpdates(filePath, updates);
+            }
+        }
+        rowsToUpdate.clear();
+        
+        // Then flush any remaining buffered data
+        for (Map.Entry<String, List<String[]>> entry : csvDataBuffer.entrySet()) {
+            String filePath = entry.getKey();
+            List<String[]> lines = entry.getValue();
+            
+            if (!lines.isEmpty()) {
+                flushBufferToDisk(filePath); // This will use the open writer
+                logger.log(Level.INFO, "Final flush: " + lines.size() + " rows to " + filePath);
+            }
+        }
+        
+        // Close all open file writers
+        for (Map.Entry<String, BufferedWriter> entry : openWriters.entrySet()) {
+            try {
+                entry.getValue().close();
+                logger.log(Level.INFO, "Closed writer for: " + entry.getKey());
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, "Error closing writer: " + entry.getKey(), e);
+            }
+        }
+        openWriters.clear();
+        
+        // Clear the buffer after flushing
+        csvDataBuffer.clear();
+    }
+    
+    /**
+     * Read a specific row from a CSV file.
+     * @param filePath the CSV file path
+     * @param rowNumber the row number to read (0-based)
+     * @return the row data or null if not found
+     */
+    private String[] readRowFromCSV(String filePath, int rowNumber) {
+        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+            String[] line;
+            int currentRow = 0;
+            while ((line = reader.readNext()) != null) {
+                if (currentRow == rowNumber) {
+                    return line;
+                }
+                currentRow++;
+            }
+        } catch (IOException | CsvValidationException e) {
+            logger.log(Level.SEVERE, "Failed to read row " + rowNumber + " from " + filePath, e);
+        }
+        return null;
+    }
+    
+    /**
+     * Apply pending row updates to a CSV file by rewriting it.
+     * @param filePath the CSV file to update
+     * @param updates map of row number to updated row data
+     */
+    private void applyRowUpdates(String filePath, Map<Integer, String[]> updates) {
+        List<String[]> allRows = new ArrayList<>();
+        
+        // Read entire file
+        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+            String[] line;
+            int rowNumber = 0;
+            while ((line = reader.readNext()) != null) {
+                // Use updated row if available, otherwise use original
+                if (updates.containsKey(rowNumber)) {
+                    allRows.add(updates.get(rowNumber));
+                } else {
+                    allRows.add(line);
+                }
+                rowNumber++;
+            }
+        } catch (IOException | CsvValidationException e) {
+            logger.log(Level.SEVERE, "Failed to read file for updates: " + filePath, e);
+            return;
+        }
+        
+        // Rewrite entire file with updates
+        File file = new File(filePath);
+        FileWrite.writeLinesToCSVFile(file, allRows, false);
+        logger.log(Level.INFO, "Applied " + updates.size() + " row updates to " + filePath);
     }
 
     private boolean dataLineVariationIsNotPresent(List<String[]> rowDataVariationsForSubject, String[] line, int indexOfChangeColumn) {
@@ -529,20 +807,6 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             }
         }
         return true;
-    }
-
-    private void appendDataVariationsToCSV(File file, List<String[]> linesToMakeVariantFor, int indexOfDataVariationColumn, Value object) {
-        try (CSVWriter writer = new CSVWriter(new FileWriter(file, true))) {
-            // Appends to the file instead of overwriting
-            for (String[] line : linesToMakeVariantFor) {
-                String[] copiedArray = Arrays.copyOf(line, line.length);
-                copiedArray[indexOfDataVariationColumn] = object.stringValue();
-                writer.writeNext(copiedArray, false);
-            }
-
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "There was an exception while trying to append data variations to CSV");
-        }
     }
 
     private int getIndexOfCurrentPredicate(IRI predicate, Value object) {
@@ -581,11 +845,69 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         list.add(triple.subject.stringValue());
 
         TableSchema relevantTS = tableSchemaByFiles.get(currentCSVName);
+        
+        // Debug: Log the predicate we're looking for
+        logger.info("createLineStringListByMetadata: Looking for predicate: " + triple.getPredicate().stringValue() + 
+                   ", Object type: " + (triple.getObject().isIRI() ? "IRI" : triple.getObject().isLiteral() ? "Literal" : "Other"));
+        
+        // Debug: Log all columns in the table schema
+        logger.info("TableSchema has " + relevantTS.getColumns().size() + " columns:");
+        for (int j = 0; j < relevantTS.getColumns().size(); j++) {
+            Column col = relevantTS.getColumns().get(j);
+            logger.info("  [" + j + "] name=" + col.getName() + ", titles=" + col.getTitles() + 
+                       ", propertyUrl=" + col.getPropertyUrl() + ", valueUrl=" + col.getValueUrl());
+        }
+        
         for (int i = 0; i < relevantTS.getColumns().size(); i++) {
-            if (!relevantTS.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && relevantTS.getColumns().get(i).getPropertyUrl().equalsIgnoreCase(triple.getPredicate().stringValue())) {
-                list.add(triple.getObject().stringValue());
+            Column column = relevantTS.getColumns().get(i);
+            if (!column.getTitles().equalsIgnoreCase("Subject") && column.getPropertyUrl().equalsIgnoreCase(triple.getPredicate().stringValue())) {
+                // Log ALL matching columns to see what's happening
+                logger.info("MATCHED Column: name=" + column.getName() + ", titles=" + column.getTitles() + 
+                           ", propertyUrl=" + column.getPropertyUrl() + ", valueUrl=" + column.getValueUrl());
+                
+                // Check if column has a valueUrl pattern like {+variableName}
+                String valueToWrite;
+                if (column.getValueUrl() != null && column.getValueUrl().contains("{+")) {
+                    // Check if it's a full pattern like {+type} or partial like https://example.com#{+type}
+                    boolean isFullPattern = column.getValueUrl().trim().startsWith("{+");
+                    
+                    logger.info("Processing column: " + column.getName() + ", ValueUrl: " + column.getValueUrl() + 
+                               ", isFullPattern: " + isFullPattern + ", Object type: " + 
+                               (triple.getObject().isIRI() ? "IRI" : triple.getObject().isLiteral() ? "Literal" : "Other"));
+                    
+                    if (isFullPattern) {
+                        // Full pattern: use complete IRI
+                        if (triple.getObject().isLiteral()) {
+                            valueToWrite = ((Literal) triple.getObject()).getLabel();
+                        } else {
+                            valueToWrite = triple.getObject().stringValue();
+                        }
+                        logger.info("  → Full pattern, writing: " + valueToWrite);
+                    } else {
+                        // Partial pattern: extract local name for template
+                        if (triple.getObject().isIRI()) {
+                            IRI objectIRI = (IRI) triple.getObject();
+                            valueToWrite = objectIRI.getLocalName();
+                            logger.info("  → Partial pattern + IRI, Full: " + objectIRI.stringValue() + ", Local: " + valueToWrite);
+                        } else if (triple.getObject().isLiteral()) {
+                            valueToWrite = ((Literal) triple.getObject()).getLabel();
+                            logger.info("  → Partial pattern + Literal, writing: " + valueToWrite);
+                        } else {
+                            valueToWrite = triple.getObject().stringValue();
+                            logger.info("  → Partial pattern + Other, writing: " + valueToWrite);
+                        }
+                    }
+                } else {
+                    // No pattern - use full value
+                    if (triple.getObject().isLiteral()) {
+                        valueToWrite = ((Literal) triple.getObject()).getLabel();
+                    } else {
+                        valueToWrite = triple.getObject().stringValue();
+                    }
+                }
+                list.add(valueToWrite);
 
-            } else if (!relevantTS.getColumns().get(i).getTitles().equalsIgnoreCase("Subject")) {
+            } else if (!column.getTitles().equalsIgnoreCase("Subject")) {
                 list.add("");
             }
         }
