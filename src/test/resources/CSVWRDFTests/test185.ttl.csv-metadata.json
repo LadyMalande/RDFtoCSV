@@ -16,8 +16,7 @@
         "@type" : "Column",
         "titles" : "boolean",
         "name" : "boolean",
-        "propertyUrl" : "file://test185.csv#boolean",
-        "valueUrl" : "{+boolean}"
+        "propertyUrl" : "file://test185.csv#boolean"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

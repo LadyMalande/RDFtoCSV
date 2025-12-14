@@ -16,20 +16,17 @@
         "@type" : "Column",
         "titles" : "Book1",
         "name" : "Book1",
-        "propertyUrl" : "file://test008.csv#Book1",
-        "valueUrl" : "{+Book1}"
+        "propertyUrl" : "file://test008.csv#Book1"
       }, {
         "@type" : "Column",
         "titles" : "Book2",
         "name" : "Book2",
-        "propertyUrl" : "file://test008.csv#Book2",
-        "valueUrl" : "{+Book2}"
+        "propertyUrl" : "file://test008.csv#Book2"
       }, {
         "@type" : "Column",
         "titles" : "Path",
         "name" : "Path",
-        "propertyUrl" : "file://test008.csv#Path",
-        "valueUrl" : "{+Path}"
+        "propertyUrl" : "file://test008.csv#Path"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

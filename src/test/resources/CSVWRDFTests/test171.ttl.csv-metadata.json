@@ -17,7 +17,6 @@
         "titles" : "decimal",
         "name" : "decimal",
         "propertyUrl" : "file://test171.csv#decimal",
-        "valueUrl" : "{+decimal}",
         "datatype" : "decimal"
       }, {
         "@type" : "Column",

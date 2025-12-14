@@ -17,21 +17,18 @@
         "titles" : "dayTimeDuration",
         "name" : "dayTimeDuration",
         "propertyUrl" : "file://test193.csv#dayTimeDuration",
-        "valueUrl" : "{+dayTimeDuration}",
         "datatype" : "dayTimeDuration"
       }, {
         "@type" : "Column",
         "titles" : "duration",
         "name" : "duration",
         "propertyUrl" : "file://test193.csv#duration",
-        "valueUrl" : "{+duration}",
         "datatype" : "duration"
       }, {
         "@type" : "Column",
         "titles" : "yearMonthDuration",
         "name" : "yearMonthDuration",
         "propertyUrl" : "file://test193.csv#yearMonthDuration",
-        "valueUrl" : "{+yearMonthDuration}",
         "datatype" : "yearMonthDuration"
       }, {
         "@type" : "Column",

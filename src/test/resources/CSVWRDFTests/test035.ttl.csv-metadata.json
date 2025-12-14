@@ -23,61 +23,53 @@
         "titles" : "min_pay",
         "name" : "min_pay",
         "propertyUrl" : "http://example.org/gov.uk/def/min_pay",
-        "valueUrl" : "{+min_pay}",
         "datatype" : "integer"
       }, {
         "@type" : "Column",
         "titles" : "name",
         "name" : "name",
         "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
-        "valueUrl" : "{+name}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/person/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "number_of_posts",
         "name" : "number_of_posts",
         "propertyUrl" : "http://example.org/gov.uk/def/number_of_posts",
-        "valueUrl" : "{+number_of_posts}",
         "datatype" : "double"
       }, {
         "@type" : "Column",
         "titles" : "profession",
         "name" : "profession",
-        "propertyUrl" : "http://example.org/gov.uk/def/profession",
-        "valueUrl" : "{+profession}"
+        "propertyUrl" : "http://example.org/gov.uk/def/profession"
       }, {
         "@type" : "Column",
         "titles" : "max_pay",
         "name" : "max_pay",
         "propertyUrl" : "http://example.org/gov.uk/def/max_pay",
-        "valueUrl" : "{+max_pay}",
         "datatype" : "integer"
       }, {
         "@type" : "Column",
         "titles" : "job",
         "name" : "job",
-        "propertyUrl" : "http://example.org/gov.uk/def/job",
-        "valueUrl" : "{+job}"
+        "propertyUrl" : "http://example.org/gov.uk/def/job"
       }, {
         "@type" : "Column",
         "titles" : "Identifier",
         "name" : "identifier",
         "propertyUrl" : "http://purl.org/dc/terms/identifier",
-        "valueUrl" : "{+identifier}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "grade",
         "name" : "grade",
-        "propertyUrl" : "http://example.org/gov.uk/def/grade",
-        "valueUrl" : "{+grade}"
+        "propertyUrl" : "http://example.org/gov.uk/def/grade"
       }, {
         "@type" : "Column",
         "titles" : "held by",
         "name" : "heldBy",
         "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
         "valueUrl" : "http://example.org/organization/hefce.ac.uk/person/{+heldBy}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "post in",

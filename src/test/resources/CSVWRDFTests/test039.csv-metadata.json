@@ -17,56 +17,48 @@
         "titles" : "COL=propertyUrl (en)",
         "name" : "COL=propertyUrl_en",
         "propertyUrl" : "file://test039.csv#COL=propertyUrl",
-        "valueUrl" : "{+COL=propertyUrl_en}",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "col=datatype",
         "name" : "col=datatype",
         "propertyUrl" : "file://test039.csv#col=datatype",
-        "valueUrl" : "{+col=datatype}",
         "datatype" : "normalizedString"
       }, {
         "@type" : "Column",
         "titles" : "col=default (en)",
         "name" : "col=default_en",
         "propertyUrl" : "file://test039.csv#col=default",
-        "valueUrl" : "{+col=default_en}",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "col=lang (en-US)",
         "name" : "col=lang_en-US",
         "propertyUrl" : "file://test039.csv#col=lang",
-        "valueUrl" : "{+col=lang_en-US}",
         "lang" : "en-US"
       }, {
         "@type" : "Column",
         "titles" : "col=null (en)",
         "name" : "col=null_en",
         "propertyUrl" : "file://test039.csv#col=null",
-        "valueUrl" : "{+col=null_en}",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "col=ordered (en)",
         "name" : "col=ordered_en",
         "propertyUrl" : "file://test039.csv#col=ordered",
-        "valueUrl" : "{+col=ordered_en}",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "col=separator (en)",
         "name" : "col=separator_en",
         "propertyUrl" : "file://test039.csv#col=separator",
-        "valueUrl" : "{+col=separator_en}",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "col=textDirection (en)",
         "name" : "col=textDirection_en",
         "propertyUrl" : "file://test039.csv#col=textDirection",
-        "valueUrl" : "{+col=textDirection_en}",
         "lang" : "en"
       }, {
         "@type" : "Column",
@@ -79,7 +71,6 @@
         "titles" : "col=aboutUrl (en)",
         "name" : "col=aboutUrl_en",
         "propertyUrl" : "file://test039.csv#col=aboutUrl",
-        "valueUrl" : "{+col=aboutUrl_en}",
         "lang" : "en"
       }, {
         "@type" : "Column",

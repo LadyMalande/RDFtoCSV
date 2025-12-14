@@ -16,20 +16,17 @@
         "@type" : "Column",
         "titles" : "decimal",
         "name" : "decimal",
-        "propertyUrl" : "file://test160.csv#decimal",
-        "valueUrl" : "{+decimal}"
+        "propertyUrl" : "file://test160.csv#decimal"
       }, {
         "@type" : "Column",
         "titles" : "double",
         "name" : "double",
-        "propertyUrl" : "file://test160.csv#double",
-        "valueUrl" : "{+double}"
+        "propertyUrl" : "file://test160.csv#double"
       }, {
         "@type" : "Column",
         "titles" : "integer",
         "name" : "integer",
-        "propertyUrl" : "file://test160.csv#integer",
-        "valueUrl" : "{+integer}"
+        "propertyUrl" : "file://test160.csv#integer"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

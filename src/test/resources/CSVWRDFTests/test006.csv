@@ -1,7 +1,7 @@
 Subject,FamilyName,Surname,childName
-https://blank_Nodes_IRI.org/2,Simpson,Homer,Bart
-https://blank_Nodes_IRI.org/4,Simpson,Homer,Lisa
-https://blank_Nodes_IRI.org/6,Simpson,Homer,Maggie
-https://blank_Nodes_IRI.org/8,Simpson,Marge,Bart
-https://blank_Nodes_IRI.org/10,Simpson,Marge,Lisa
-https://blank_Nodes_IRI.org/12,Simpson,Marge,Maggie
+2,Simpson,Homer,Bart
+4,Simpson,Homer,Lisa
+6,Simpson,Homer,Maggie
+8,Simpson,Marge,Bart
+10,Simpson,Marge,Lisa
+12,Simpson,Marge,Maggie

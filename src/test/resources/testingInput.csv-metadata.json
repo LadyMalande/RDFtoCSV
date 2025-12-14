@@ -17,31 +17,28 @@
         "titles" : "datatypeTest",
         "name" : "datatypeTest",
         "propertyUrl" : "http://example.org/datatypeTest",
-        "valueUrl" : "{+datatypeTest}",
         "datatype" : "integer",
-        "aboutUrl" : "http://example.org/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "Creator",
         "name" : "creator",
         "propertyUrl" : "http://purl.org/dc/terms/creator",
         "valueUrl" : "http://example.org/{+creator}",
-        "aboutUrl" : "http://example.org/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "Title (cs)",
         "name" : "title_cs",
         "propertyUrl" : "http://purl.org/dc/terms/title",
-        "valueUrl" : "{+title_cs}",
-        "aboutUrl" : "http://example.org/{+Subject}",
+        "aboutUrl" : "{+Subject}",
         "lang" : "cs"
       }, {
         "@type" : "Column",
         "titles" : "Title (en)",
         "name" : "title_en",
         "propertyUrl" : "http://purl.org/dc/terms/title",
-        "valueUrl" : "{+title_en}",
-        "aboutUrl" : "http://example.org/{+Subject}",
+        "aboutUrl" : "{+Subject}",
         "lang" : "en"
       }, {
         "@type" : "Column",
@@ -49,7 +46,7 @@
         "name" : "type",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
         "valueUrl" : "{+type}",
-        "aboutUrl" : "http://example.org/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "propertyUrl" : "rdf:type",

@@ -17,7 +17,6 @@
         "titles" : "integer",
         "name" : "integer",
         "propertyUrl" : "file://test159.csv#integer",
-        "valueUrl" : "{+integer}",
         "datatype" : "integer"
       }, {
         "@type" : "Column",

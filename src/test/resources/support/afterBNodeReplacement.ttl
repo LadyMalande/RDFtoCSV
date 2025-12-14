@@ -2,7 +2,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
-_:genid-11bcdffd21964ebeabf80c39805cf003346-b0 a <http://purl.org/dc/dcmitype/Text>;
+_:genid-b8b09d3bf44d4c3fb1ef664b271c13cd346-b0 a <http://purl.org/dc/dcmitype/Text>;
   dcterms:creator ex:TerezaMiklóšová;
   dcterms:title "Automatický převod RDF dat do CSV"@cs, "Jiný název"@cs, "Automated transformation of RDF data to CSV"@en .
 

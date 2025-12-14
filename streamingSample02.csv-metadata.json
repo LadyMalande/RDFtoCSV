@@ -18,7 +18,7 @@
         "name" : "predicate01",
         "propertyUrl" : "http://example.org/predicate01",
         "valueUrl" : "http://example.org/resource/{+predicate01}",
-        "aboutUrl" : "http://example.org/resource/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       } ],
       "primaryKey" : "Subject",
       "rowTitles" : [ "Subject", "predicate01" ]

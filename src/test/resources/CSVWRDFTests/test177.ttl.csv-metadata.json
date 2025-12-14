@@ -16,8 +16,7 @@
         "@type" : "Column",
         "titles" : "negativeInteger",
         "name" : "negativeInteger",
-        "propertyUrl" : "file://test177.csv#negativeInteger",
-        "valueUrl" : "{+negativeInteger}"
+        "propertyUrl" : "file://test177.csv#negativeInteger"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

@@ -17,7 +17,6 @@
         "titles" : "string",
         "name" : "string",
         "propertyUrl" : "file://test242.csv#string",
-        "valueUrl" : "{+string}",
         "datatype" : "datatpe"
       }, {
         "@type" : "Column",

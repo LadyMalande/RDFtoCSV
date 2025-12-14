@@ -17,37 +17,32 @@
         "titles" : "on_street",
         "name" : "on_street",
         "propertyUrl" : "file://tree-ops.csv#on_street",
-        "valueUrl" : "{+on_street}",
-        "aboutUrl" : "file://tree-ops.csv#{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "species",
         "name" : "species",
         "propertyUrl" : "file://tree-ops.csv#species",
-        "valueUrl" : "{+species}",
-        "aboutUrl" : "file://tree-ops.csv#{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "GID",
         "name" : "GID",
         "propertyUrl" : "file://tree-ops.csv#GID",
-        "valueUrl" : "{+GID}",
-        "aboutUrl" : "file://tree-ops.csv#{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "trim_cycle",
         "name" : "trim_cycle",
         "propertyUrl" : "file://tree-ops.csv#trim_cycle",
-        "valueUrl" : "{+trim_cycle}",
-        "aboutUrl" : "file://tree-ops.csv#{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "inventory_date",
         "name" : "inventory_date",
         "propertyUrl" : "file://tree-ops.csv#inventory_date",
-        "valueUrl" : "{+inventory_date}",
         "datatype" : "date",
-        "aboutUrl" : "file://tree-ops.csv#{+Subject}"
+        "aboutUrl" : "{+Subject}"
       } ],
       "primaryKey" : "Subject",
       "rowTitles" : [ "Subject", "on_street", "species", "GID", "trim_cycle", "inventory_date" ]

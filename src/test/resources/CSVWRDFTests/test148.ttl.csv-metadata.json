@@ -17,35 +17,30 @@
         "titles" : "GID (de)",
         "name" : "GID_de",
         "propertyUrl" : "file://tree-ops.csv#GID",
-        "valueUrl" : "{+GID_de}",
         "lang" : "de"
       }, {
         "@type" : "Column",
         "titles" : "Inventory%20Date (de)",
         "name" : "Inventory%20Date_de",
         "propertyUrl" : "file://tree-ops.csv#Inventory%20Date",
-        "valueUrl" : "{+Inventory%20Date_de}",
         "lang" : "de"
       }, {
         "@type" : "Column",
         "titles" : "Species (de)",
         "name" : "Species_de",
         "propertyUrl" : "file://tree-ops.csv#Species",
-        "valueUrl" : "{+Species_de}",
         "lang" : "de"
       }, {
         "@type" : "Column",
         "titles" : "Trim%20Cycle (de)",
         "name" : "Trim%20Cycle_de",
         "propertyUrl" : "file://tree-ops.csv#Trim%20Cycle",
-        "valueUrl" : "{+Trim%20Cycle_de}",
         "lang" : "de"
       }, {
         "@type" : "Column",
         "titles" : "_col.2 (de)",
         "name" : "_col.2_de",
         "propertyUrl" : "file://tree-ops.csv#_col.2",
-        "valueUrl" : "{+_col.2_de}",
         "lang" : "de"
       }, {
         "@type" : "Column",

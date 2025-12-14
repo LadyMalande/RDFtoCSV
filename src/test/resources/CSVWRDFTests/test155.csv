@@ -1,6 +1,6 @@
 Subject,byte,decimal,double,float,int,integer,long,negativeInteger,nonNegativeInteger,nonPositiveInteger,number,positiveInteger,short,unsignedByte,unsignedInt,unsignedLong,unsignedShort
-https://blank_Nodes_IRI.org/2,-10,0.1,0.0e0,0.0e0,-10,0,-10,-1,1,0,0.0e0,1,-10,1,1,1,1
-https://blank_Nodes_IRI.org/4,123,10.1,10.10e1,10.10e1,1234,10,1234,-123,123,-123,10.10e1,123,1234,123,1234,1234,1234
-https://blank_Nodes_IRI.org/6,123,10.1,NaN,NaN,1234,10,1234,-123,123,-123,NaN,123,1234,123,1234,1234,1234
-https://blank_Nodes_IRI.org/8,123,10.1,INF,INF,1234,10,1234,-123,123,-123,INF,123,1234,123,1234,1234,1234
-https://blank_Nodes_IRI.org/10,123,10.1,-INF,-INF,1234,10,1234,-123,123,-123,-INF,123,1234,123,1234,1234,1234
+2,-10,0.1,0.0e0,0.0e0,-10,0,-10,-1,1,0,0.0e0,1,-10,1,1,1,1
+4,123,10.1,10.10e1,10.10e1,1234,10,1234,-123,123,-123,10.10e1,123,1234,123,1234,1234,1234
+6,123,10.1,NaN,NaN,1234,10,1234,-123,123,-123,NaN,123,1234,123,1234,1234,1234
+8,123,10.1,INF,INF,1234,10,1234,-123,123,-123,INF,123,1234,123,1234,1234,1234
+10,123,10.1,-INF,-INF,1234,10,1234,-123,123,-123,-INF,123,1234,123,1234,1234,1234

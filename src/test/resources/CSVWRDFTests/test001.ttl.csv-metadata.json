@@ -16,14 +16,12 @@
         "@type" : "Column",
         "titles" : "FamilyName",
         "name" : "FamilyName",
-        "propertyUrl" : "file://test001.csv#FamilyName",
-        "valueUrl" : "{+FamilyName}"
+        "propertyUrl" : "file://test001.csv#FamilyName"
       }, {
         "@type" : "Column",
         "titles" : "Surname",
         "name" : "Surname",
-        "propertyUrl" : "file://test001.csv#Surname",
-        "valueUrl" : "{+Surname}"
+        "propertyUrl" : "file://test001.csv#Surname"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

@@ -16,8 +16,7 @@
         "@type" : "Column",
         "titles" : "HH%3Amm%3Ass.S",
         "name" : "HH%3Amm%3Ass.S",
-        "propertyUrl" : "file://test247.csv#HH%3Amm%3Ass.S",
-        "valueUrl" : "{+HH%3Amm%3Ass.S}"
+        "propertyUrl" : "file://test247.csv#HH%3Amm%3Ass.S"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

@@ -176,6 +176,12 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
         // Parse the single line
         Statement statement = processNTripleLine(line);
+        
+        // Skip if parsing returned null (comment lines, blank lines, or parse errors)
+        if (statement == null) {
+            return;
+        }
+        
         Statement statementWithIRIs = replaceBlankNodesWithIRI(statement, line);
         Triple triple = new Triple((IRI) statementWithIRIs.getSubject(), statementWithIRIs.getPredicate(), statementWithIRIs.getObject());
         addMetadataToTableSchema(triple);
@@ -432,9 +438,15 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                     col.setAboutUrl("{+Subject}");
 
                 }
-                if (col.getValueUrl() != null && newColumn.getValueUrl() != null && !col.getValueUrl().equalsIgnoreCase(newColumn.getValueUrl()) && (col.getValueUrl().indexOf(triple.getSubject().getNamespace()) != 0 || col.getValueUrl().length() != newColumn.getValueUrl().length())) {
+                if (col.getValueUrl() != null && newColumn.getValueUrl() != null && !col.getValueUrl().equalsIgnoreCase(newColumn.getValueUrl())) {
                     // Adjust the metadata so that they are general as the namespaces are not matching
-                    col.setValueUrl("{+" + col.getName() + "}");
+                    String oldValueUrl = col.getValueUrl();
+                    String newValueUrl = "{+" + col.getName() + "}";
+                    col.setValueUrl(newValueUrl);
+                    
+                    // Update previously buffered rows to use full IRIs instead of local names
+                    int columnIndex = tableSchema.getColumns().indexOf(col);
+                    updateBufferedRowsForValueUrlChange(currentCSVName, columnIndex, oldValueUrl, newValueUrl);
                 }
                 return true;
             }
@@ -507,18 +519,27 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             }
         } else {
             // Subject is in memory - process normally
-            // Process existing lines in memory
+            // Process existing lines in memory (buffer contains only data rows, no header)
             for (int i = 0; i < lines.size(); i++) {
                 String[] line = lines.get(i);
-                
-                if (i == 0) {
-                    // Skip header row
-                    continue;
-                }
 
                 // Add the Object into the correct column in the line as there is already a line with this subject
                 if (unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
                     int indexOfChangeColumn = getIndexOfCurrentPredicate(triple.getPredicate(), triple.getObject());
+                    
+                    // Check if the row needs to be expanded to match current schema size
+                    TableSchema currentSchema = tableSchemaByFiles.get(currentCSVName);
+                    int expectedColumns = currentSchema.getColumns().size();
+                    
+                    if (line.length < expectedColumns) {
+                        // Row is shorter than schema - expand it with empty values
+                        String[] expandedLine = new String[expectedColumns];
+                        System.arraycopy(line, 0, expandedLine, 0, line.length);
+                        for (int j = line.length; j < expectedColumns; j++) {
+                            expandedLine[j] = "";
+                        }
+                        line = expandedLine;
+                    }
 
                     // Insert the new value between two commas in the middle (adjust index as needed)
                     if (indexOfChangeColumn >= line.length) {
@@ -556,6 +577,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 }
             }
 
+            // Handle adding new rows based on the conditions
             if (isNeedForAddingDataVariations) {
                 // Add data variations for all the lines that have the same subject in the list
                 for (String[] lineToVary : rowDataVariationsForSubject) {
@@ -567,30 +589,10 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 // If the file is still unmodified, we need to add a new predicate column at the end of the row
                 lines.add(createLineStringListByMetadata(triple).toArray(new String[0]));
                 isModified = true;
-            }
-
-            if (!isModified && !unifiedBySubject) {
+            } else if (!isModified && !unifiedBySubject) {
                 // The match has been made by matching Predicate = we must create a new line at the end of the file and add values accordingly
                 lines.add(createLineStringListByMetadata(triple).toArray(new String[0]));
             }
-        }
-
-        if (isNeedForAddingDataVariations) {
-            // Add data variations for all the lines that have the same subject in the list
-            for (String[] lineToVary : rowDataVariationsForSubject) {
-                String[] copiedArray = Arrays.copyOf(lineToVary, lineToVary.length);
-                copiedArray[indexOfDataVariationColumn] = triple.getObject().stringValue();
-                lines.add(copiedArray);
-            }
-        } else if (!isModified && unifiedBySubject) {
-            // If the file is still unmodified, we need to add a new predicate column at the end of the row
-            lines.add(createLineStringListByMetadata(triple).toArray(new String[0]));
-            isModified = true;
-        }
-
-        if (!isModified && !unifiedBySubject) {
-            // The match has been made by matching Predicate = we must create a new line at the end of the file and add values accordingly
-            lines.add(createLineStringListByMetadata(triple).toArray(new String[0]));
         }
         
         // Periodic batch flush to limit memory usage for large files
@@ -639,23 +641,32 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 writer = new BufferedWriter(new FileWriter(file, false)); // overwrite mode
                 openWriters.put(filePath, writer);
                 
-                // Write header
-                String[] header = lines.get(0);
-                writer.write(String.join(",", escapeCSVRow(header)));
-                writer.newLine();
-                
-                logger.log(Level.INFO, "Initial write: created file " + filePath);
+                // Build header from metadata columns instead of using buffered header row
+                TableSchema schema = tableSchemaByFiles.get(filePath);
+                if (schema != null && !schema.getColumns().isEmpty()) {
+                    List<String> headerColumns = new ArrayList<>();
+                    for (Column column : schema.getColumns()) {
+                        headerColumns.add(column.getTitles());
+                    }
+                    String[] header = headerColumns.toArray(new String[0]);
+                    writer.write(String.join(",", escapeCSVRow(header)));
+                    writer.newLine();
+                    logger.log(Level.INFO, "Initial write: created file " + filePath + " with " + header.length + " columns");
+                } else {
+                    logger.log(Level.WARNING, "No schema found for " + filePath + ", cannot write header!");
+                }
             }
             
-            // Write data rows (skip header at index 0)
+            // Write data rows (all rows in buffer are data rows now)
             int currentRowNumber = rowIndex.size() + 1; // Continue from last row number
             int rowsWritten = 0;
             
-            for (int i = 1; i < lines.size(); i++) {
-                String[] row = lines.get(i);
+            for (String[] row : lines) {
                 writer.write(String.join(",", escapeCSVRow(row)));
                 writer.newLine();
-                rowIndex.put(row[0], currentRowNumber);
+                if (row.length > 0) {
+                    rowIndex.put(row[0], currentRowNumber);
+                }
                 currentRowNumber++;
                 rowsWritten++;
             }
@@ -842,8 +853,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
     private List<String> createLineStringListByMetadata(Triple triple) {
         List<String> list = new ArrayList<>();
-        list.add(triple.subject.stringValue());
-
+        
         TableSchema relevantTS = tableSchemaByFiles.get(currentCSVName);
         
         // Debug: Log the predicate we're looking for
@@ -858,10 +868,15 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                        ", propertyUrl=" + col.getPropertyUrl() + ", valueUrl=" + col.getValueUrl());
         }
         
+        // Create a row with ALL columns, filling in values where we have them
         for (int i = 0; i < relevantTS.getColumns().size(); i++) {
             Column column = relevantTS.getColumns().get(i);
-            if (!column.getTitles().equalsIgnoreCase("Subject") && column.getPropertyUrl().equalsIgnoreCase(triple.getPredicate().stringValue())) {
-                // Log ALL matching columns to see what's happening
+            
+            if (column.getTitles().equalsIgnoreCase("Subject")) {
+                // Subject column - use the triple's subject
+                list.add(triple.subject.stringValue());
+            } else if (column.getPropertyUrl() != null && column.getPropertyUrl().equalsIgnoreCase(triple.getPredicate().stringValue())) {
+                // This column matches the current triple's predicate
                 logger.info("MATCHED Column: name=" + column.getName() + ", titles=" + column.getTitles() + 
                            ", propertyUrl=" + column.getPropertyUrl() + ", valueUrl=" + column.getValueUrl());
                 
@@ -906,11 +921,90 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                     }
                 }
                 list.add(valueToWrite);
-
-            } else if (!column.getTitles().equalsIgnoreCase("Subject")) {
+            } else {
+                // This column doesn't match - add empty value for proper CSV alignment
+                // Check if this column has a partial pattern in valueUrl
+                // Empty cells with partial patterns would incorrectly expand to just the prefix URL
+                if (column.getValueUrl() != null && column.getValueUrl().contains("{+") && !column.getValueUrl().trim().startsWith("{+")) {
+                    // Partial pattern detected - convert to simple pattern since we have empty values
+                    logger.info("Converting partial pattern to simple pattern for column '" + column.getName() + 
+                               "' because of empty value. Old: " + column.getValueUrl());
+                    column.setValueUrl("{+" + column.getName() + "}");
+                    logger.info("New valueUrl: " + column.getValueUrl());
+                }
                 list.add("");
             }
         }
+        
+        logger.info("Created row with " + list.size() + " values for " + relevantTS.getColumns().size() + " columns");
+        
         return list;
+    }
+
+    /**
+     * Update previously buffered CSV rows when a column's valueUrl changes from partial to full pattern.
+     * This happens when the same predicate has objects with different namespaces.
+     * Previously written values need to be expanded from local names to full IRIs.
+     *
+     * @param filePath the CSV file path
+     * @param columnIndex the index of the column that changed
+     * @param oldValueUrl the old partial pattern (e.g., "http://example.org/vocab/{+type}")
+     * @param newValueUrl the new full pattern (e.g., "{+type}")
+     */
+    private void updateBufferedRowsForValueUrlChange(String filePath, int columnIndex, String oldValueUrl, String newValueUrl) {
+        // Only process if changing from partial pattern to full pattern
+        boolean wasPartialPattern = oldValueUrl != null && oldValueUrl.contains("{+") && !oldValueUrl.trim().startsWith("{+");
+        boolean isNowFullPattern = newValueUrl != null && newValueUrl.trim().startsWith("{+");
+        
+        if (!wasPartialPattern || !isNowFullPattern) {
+            return; // No update needed
+        }
+        
+        // Extract the namespace prefix from the old partial pattern
+        // e.g., "http://example.org/vocab/{+type}" -> "http://example.org/vocab/"
+        String namespacePrefix = oldValueUrl.substring(0, oldValueUrl.indexOf("{+"));
+        
+        logger.info("Updating buffered rows: column " + columnIndex + " changed from partial (" + 
+                   oldValueUrl + ") to full (" + newValueUrl + "). Prepending namespace: " + namespacePrefix);
+        
+        // Update in-memory buffer
+        List<String[]> lines = csvDataBuffer.get(filePath);
+        if (lines != null) {
+            int updatedCount = 0;
+            for (String[] row : lines) {
+                if (columnIndex < row.length && row[columnIndex] != null && !row[columnIndex].isEmpty()) {
+                    // Check if value is just a local name (doesn't already contain the full IRI)
+                    if (!row[columnIndex].startsWith("http://") && !row[columnIndex].startsWith("https://")) {
+                        // Prepend the namespace to convert local name to full IRI
+                        String oldValue = row[columnIndex];
+                        row[columnIndex] = namespacePrefix + oldValue;
+                        updatedCount++;
+                        logger.fine("Updated row: column " + columnIndex + " changed '" + oldValue + "' to '" + row[columnIndex] + "'");
+                    }
+                }
+            }
+            logger.info("Updated " + updatedCount + " buffered rows in memory for column " + columnIndex);
+        }
+        
+        // Update already-flushed rows on disk (if any exist)
+        Map<Integer, String[]> updates = rowsToUpdate.get(filePath);
+        if (updates != null && !updates.isEmpty()) {
+            int diskUpdatedCount = 0;
+            for (Map.Entry<Integer, String[]> entry : updates.entrySet()) {
+                String[] row = entry.getValue();
+                if (columnIndex < row.length && row[columnIndex] != null && !row[columnIndex].isEmpty()) {
+                    if (!row[columnIndex].startsWith("http://") && !row[columnIndex].startsWith("https://")) {
+                        String oldValue = row[columnIndex];
+                        row[columnIndex] = namespacePrefix + oldValue;
+                        diskUpdatedCount++;
+                        logger.fine("Updated disk row " + entry.getKey() + ": column " + columnIndex + 
+                                   " changed '" + oldValue + "' to '" + row[columnIndex] + "'");
+                    }
+                }
+            }
+            if (diskUpdatedCount > 0) {
+                logger.info("Updated " + diskUpdatedCount + " flushed rows on disk for column " + columnIndex);
+            }
+        }
     }
 }

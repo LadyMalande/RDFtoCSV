@@ -16,20 +16,17 @@
         "@type" : "Column",
         "titles" : "FamilyName",
         "name" : "FamilyName",
-        "propertyUrl" : "file://test006.csv#FamilyName",
-        "valueUrl" : "{+FamilyName}"
+        "propertyUrl" : "file://test006.csv#FamilyName"
       }, {
         "@type" : "Column",
         "titles" : "Surname",
         "name" : "Surname",
-        "propertyUrl" : "file://test006.csv#Surname",
-        "valueUrl" : "{+Surname}"
+        "propertyUrl" : "file://test006.csv#Surname"
       }, {
         "@type" : "Column",
         "titles" : "childName",
         "name" : "childName",
-        "propertyUrl" : "file://test006.csv#childName",
-        "valueUrl" : "{+childName}"
+        "propertyUrl" : "file://test006.csv#childName"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

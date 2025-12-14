@@ -16,32 +16,27 @@
         "@type" : "Column",
         "titles" : "GID",
         "name" : "GID",
-        "propertyUrl" : "file://tree-ops.csv#GID",
-        "valueUrl" : "{+GID}"
+        "propertyUrl" : "file://tree-ops.csv#GID"
       }, {
         "@type" : "Column",
         "titles" : "Inventory%20Date",
         "name" : "Inventory%20Date",
-        "propertyUrl" : "file://tree-ops.csv#Inventory%20Date",
-        "valueUrl" : "{+Inventory%20Date}"
+        "propertyUrl" : "file://tree-ops.csv#Inventory%20Date"
       }, {
         "@type" : "Column",
         "titles" : "On%20Street",
         "name" : "On%20Street",
-        "propertyUrl" : "file://tree-ops.csv#On%20Street",
-        "valueUrl" : "{+On%20Street}"
+        "propertyUrl" : "file://tree-ops.csv#On%20Street"
       }, {
         "@type" : "Column",
         "titles" : "Species",
         "name" : "Species",
-        "propertyUrl" : "file://tree-ops.csv#Species",
-        "valueUrl" : "{+Species}"
+        "propertyUrl" : "file://tree-ops.csv#Species"
       }, {
         "@type" : "Column",
         "titles" : "Trim%20Cycle",
         "name" : "Trim%20Cycle",
-        "propertyUrl" : "file://tree-ops.csv#Trim%20Cycle",
-        "valueUrl" : "{+Trim%20Cycle}"
+        "propertyUrl" : "file://tree-ops.csv#Trim%20Cycle"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

@@ -1,6 +1,6 @@
 Subject,reports to,min_pay,name,number_of_posts,profession,max_pay,job,Identifier,grade,held by,post in
-https://blank_Nodes_IRI.org/0,90115,17426,,8.67,Operational Delivery,20002,Administrator,,4,,hefce.ac.uk
-https://blank_Nodes_IRI.org/1,90115,19546,,0.5,Operational Delivery,22478,Administrator,,5,,hefce.ac.uk
+0,90115,17426,,8.67,Operational Delivery,20002,Administrator,,4,,hefce.ac.uk
+1,90115,19546,,0.5,Operational Delivery,22478,Administrator,,5,,hefce.ac.uk
 http://example.org/organization/hefce.ac.uk/post/90115,90334,,,,Finance,,Deputy Chief Executive,90115,SCS1A,1,hefce.ac.uk
 http://example.org/organization/hefce.ac.uk/person/1,,,Steve Egan,,,,,,,,
 http://example.org/organization/hefce.ac.uk/post/90334,,,,,Policy,,Chief Executive,90334,SCS4,2,hefce.ac.uk

@@ -17,14 +17,12 @@
         "titles" : "boolean",
         "name" : "boolean",
         "propertyUrl" : "file://test183.csv#boolean",
-        "valueUrl" : "{+boolean}",
         "datatype" : "boolean"
       }, {
         "@type" : "Column",
         "titles" : "boolean1",
         "name" : "boolean1",
         "propertyUrl" : "file://test183.csv#boolean1",
-        "valueUrl" : "{+boolean1}",
         "datatype" : "boolean"
       }, {
         "@type" : "Column",

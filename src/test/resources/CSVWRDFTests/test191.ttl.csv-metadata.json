@@ -16,8 +16,7 @@
         "@type" : "Column",
         "titles" : "date",
         "name" : "date",
-        "propertyUrl" : "file://test191.csv#date",
-        "valueUrl" : "{+date}"
+        "propertyUrl" : "file://test191.csv#date"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

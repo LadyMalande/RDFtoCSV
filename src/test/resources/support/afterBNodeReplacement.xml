@@ -4,14 +4,14 @@
 	xmlns:ns0="http://example.org/">
 
 <rdf:Description rdf:about="http://example.org/resource/subject02">
-	<ns0:predicate02 rdf:nodeID="genid-11bcdffd21964ebeabf80c39805cf003349-genid2"/>
+	<ns0:predicate02 rdf:nodeID="genid-b8b09d3bf44d4c3fb1ef664b271c13cd349-genid2"/>
 	<ns0:predicate01 rdf:resource="http://example.org/resource/object01"/>
-	<ns0:predicate01 rdf:nodeID="genid-11bcdffd21964ebeabf80c39805cf003349-genid3"/>
+	<ns0:predicate01 rdf:nodeID="genid-b8b09d3bf44d4c3fb1ef664b271c13cd349-genid3"/>
 </rdf:Description>
 
-<rdf:Description rdf:nodeID="genid-11bcdffd21964ebeabf80c39805cf003349-genid1">
+<rdf:Description rdf:nodeID="genid-b8b09d3bf44d4c3fb1ef664b271c13cd349-genid1">
 	<ns0:predicate01 rdf:resource="http://example.org/resource/object01"/>
-	<ns0:predicate02 rdf:nodeID="genid-11bcdffd21964ebeabf80c39805cf003349-genid2"/>
+	<ns0:predicate02 rdf:nodeID="genid-b8b09d3bf44d4c3fb1ef664b271c13cd349-genid2"/>
 </rdf:Description>
 
 <rdf:Description rdf:about="http://example.org/resource/subject02">

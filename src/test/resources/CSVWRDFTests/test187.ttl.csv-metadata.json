@@ -17,63 +17,54 @@
         "titles" : "date",
         "name" : "date",
         "propertyUrl" : "file://test187.csv#date",
-        "valueUrl" : "{+date}",
         "datatype" : "date"
       }, {
         "@type" : "Column",
         "titles" : "datetime",
         "name" : "datetime",
         "propertyUrl" : "file://test187.csv#datetime",
-        "valueUrl" : "{+datetime}",
         "datatype" : "dateTime"
       }, {
         "@type" : "Column",
         "titles" : "dateTimeStamp",
         "name" : "dateTimeStamp",
         "propertyUrl" : "file://test187.csv#dateTimeStamp",
-        "valueUrl" : "{+dateTimeStamp}",
         "datatype" : "dateTimeStamp"
       }, {
         "@type" : "Column",
         "titles" : "gDay",
         "name" : "gDay",
         "propertyUrl" : "file://test187.csv#gDay",
-        "valueUrl" : "{+gDay}",
         "datatype" : "gDay"
       }, {
         "@type" : "Column",
         "titles" : "gMonth",
         "name" : "gMonth",
         "propertyUrl" : "file://test187.csv#gMonth",
-        "valueUrl" : "{+gMonth}",
         "datatype" : "gMonth"
       }, {
         "@type" : "Column",
         "titles" : "gMonthDay",
         "name" : "gMonthDay",
         "propertyUrl" : "file://test187.csv#gMonthDay",
-        "valueUrl" : "{+gMonthDay}",
         "datatype" : "gMonthDay"
       }, {
         "@type" : "Column",
         "titles" : "gYear",
         "name" : "gYear",
         "propertyUrl" : "file://test187.csv#gYear",
-        "valueUrl" : "{+gYear}",
         "datatype" : "gYear"
       }, {
         "@type" : "Column",
         "titles" : "gYearMonth",
         "name" : "gYearMonth",
         "propertyUrl" : "file://test187.csv#gYearMonth",
-        "valueUrl" : "{+gYearMonth}",
         "datatype" : "gYearMonth"
       }, {
         "@type" : "Column",
         "titles" : "time",
         "name" : "time",
         "propertyUrl" : "file://test187.csv#time",
-        "valueUrl" : "{+time}",
         "datatype" : "time"
       }, {
         "@type" : "Column",

@@ -16,8 +16,7 @@
         "@type" : "Column",
         "titles" : "unsignedByte",
         "name" : "unsignedByte",
-        "propertyUrl" : "file://test175.csv#unsignedByte",
-        "valueUrl" : "{+unsignedByte}"
+        "propertyUrl" : "file://test175.csv#unsignedByte"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

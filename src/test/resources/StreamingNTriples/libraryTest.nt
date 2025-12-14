@@ -1,0 +1,149 @@
+# Comprehensive N-Triples test data - Library and People scenario
+# This file covers: IRIs, blank nodes, literals, language tags, datatypes, RDF lists
+
+# ===== LIBRARY BUILDING (IRI subject) =====
+<http://example.org/library/central-library> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Library> .
+<http://example.org/library/central-library> <http://xmlns.com/foaf/0.1/name> "Central City Library"@en .
+<http://example.org/library/central-library> <http://xmlns.com/foaf/0.1/name> "Centrální městská knihovna"@cs .
+<http://example.org/library/central-library> <http://example.org/vocab/established> "1995-06-15"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://example.org/library/central-library> <http://example.org/vocab/numberOfBooks> "50000"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/library/central-library> <http://example.org/vocab/isOpen> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://example.org/library/central-library> <http://example.org/vocab/latitude> "50.0755"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://example.org/library/central-library> <http://example.org/vocab/longitude> "14.4378"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://example.org/library/central-library> <http://www.w3.org/2000/01/rdf-schema#comment> "The main public library serving the city center.\nOpen Monday-Friday 9am-7pm." .
+
+# ===== BOOKS (multiple types and properties) =====
+<http://example.org/book/1984> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Book> .
+<http://example.org/book/1984> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Fiction> .
+<http://example.org/book/1984> <http://purl.org/dc/terms/title> "Nineteen Eighty-Four"@en .
+<http://example.org/book/1984> <http://purl.org/dc/terms/title> "1984"@cs .
+<http://example.org/book/1984> <http://example.org/vocab/author> <http://example.org/person/george-orwell> .
+<http://example.org/book/1984> <http://example.org/vocab/publishedYear> "1949"^^<http://www.w3.org/2001/XMLSchema#gYear> .
+<http://example.org/book/1984> <http://example.org/vocab/isbn> "978-0-452-28423-4" .
+<http://example.org/book/1984> <http://example.org/vocab/pageCount> "328"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/book/1984> <http://example.org/vocab/availableCopies> "3"^^<http://www.w3.org/2001/XMLSchema#integer> .
+
+<http://example.org/book/pride-prejudice> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Book> .
+<http://example.org/book/pride-prejudice> <http://purl.org/dc/terms/title> "Pride and Prejudice"@en .
+<http://example.org/book/pride-prejudice> <http://example.org/vocab/author> <http://example.org/person/jane-austen> .
+<http://example.org/book/pride-prejudice> <http://example.org/vocab/publishedYear> "1813"^^<http://www.w3.org/2001/XMLSchema#gYear> .
+<http://example.org/book/pride-prejudice> <http://example.org/vocab/pageCount> "432"^^<http://www.w3.org/2001/XMLSchema#integer> .
+
+# ===== AUTHORS (people with properties) =====
+<http://example.org/person/george-orwell> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<http://example.org/person/george-orwell> <http://xmlns.com/foaf/0.1/name> "George Orwell" .
+<http://example.org/person/george-orwell> <http://xmlns.com/foaf/0.1/givenName> "Eric" .
+<http://example.org/person/george-orwell> <http://xmlns.com/foaf/0.1/familyName> "Blair" .
+<http://example.org/person/george-orwell> <http://example.org/vocab/birthDate> "1903-06-25"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://example.org/person/george-orwell> <http://example.org/vocab/deathDate> "1950-01-21"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://example.org/person/george-orwell> <http://example.org/vocab/nationality> "British" .
+
+<http://example.org/person/jane-austen> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<http://example.org/person/jane-austen> <http://xmlns.com/foaf/0.1/name> "Jane Austen" .
+<http://example.org/person/jane-austen> <http://example.org/vocab/birthDate> "1775-12-16"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://example.org/person/jane-austen> <http://example.org/vocab/deathDate> "1817-07-18"^^<http://www.w3.org/2001/XMLSchema#date> .
+
+# ===== BLANK NODE as SUBJECT (book review without IRI) =====
+_:review1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Review> .
+_:review1 <http://example.org/vocab/reviewOf> <http://example.org/book/1984> .
+_:review1 <http://example.org/vocab/rating> "5"^^<http://www.w3.org/2001/XMLSchema#integer> .
+_:review1 <http://example.org/vocab/reviewText> "An absolute masterpiece of dystopian fiction!"@en .
+_:review1 <http://example.org/vocab/reviewDate> "2024-03-15"^^<http://www.w3.org/2001/XMLSchema#date> .
+_:review1 <http://example.org/vocab/reviewer> _:anonymousReviewer1 .
+
+# ===== BLANK NODE as OBJECT (anonymous reviewer) =====
+_:anonymousReviewer1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:anonymousReviewer1 <http://xmlns.com/foaf/0.1/name> "Anonymous Reader" .
+_:anonymousReviewer1 <http://example.org/vocab/memberSince> "2020-01-10"^^<http://www.w3.org/2001/XMLSchema#date> .
+
+# ===== LIBRARY MEMBER (with address as blank node) =====
+<http://example.org/member/m12345> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/LibraryMember> .
+<http://example.org/member/m12345> <http://xmlns.com/foaf/0.1/name> "Jan Novák" .
+<http://example.org/member/m12345> <http://xmlns.com/foaf/0.1/name> "Jan Novák"@cs .
+<http://example.org/member/m12345> <http://xmlns.com/foaf/0.1/mbox> <mailto:jan.novak@example.com> .
+<http://example.org/member/m12345> <http://example.org/vocab/memberId> "M12345" .
+<http://example.org/member/m12345> <http://example.org/vocab/memberSince> "2018-09-01"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://example.org/member/m12345> <http://example.org/vocab/age> "34"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/member/m12345> <http://example.org/vocab/address> _:address1 .
+
+_:address1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Address> .
+_:address1 <http://example.org/vocab/street> "Václavské náměstí 15" .
+_:address1 <http://example.org/vocab/city> "Praha" .
+_:address1 <http://example.org/vocab/postalCode> "110 00" .
+_:address1 <http://example.org/vocab/country> "Czech Republic"@en .
+_:address1 <http://example.org/vocab/country> "Česká republika"@cs .
+
+# ===== LOAN RECORD (connecting member and book) =====
+<http://example.org/loan/loan-2024-001> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Loan> .
+<http://example.org/loan/loan-2024-001> <http://example.org/vocab/borrower> <http://example.org/member/m12345> .
+<http://example.org/loan/loan-2024-001> <http://example.org/vocab/borrowedBook> <http://example.org/book/1984> .
+<http://example.org/loan/loan-2024-001> <http://example.org/vocab/loanDate> "2024-11-01"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://example.org/loan/loan-2024-001> <http://example.org/vocab/dueDate> "2024-11-22"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://example.org/loan/loan-2024-001> <http://example.org/vocab/isOverdue> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+
+# ===== RDF LIST (book series using blank nodes for list structure) =====
+<http://example.org/series/lord-of-the-rings> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/BookSeries> .
+<http://example.org/series/lord-of-the-rings> <http://purl.org/dc/terms/title> "The Lord of the Rings" .
+<http://example.org/series/lord-of-the-rings> <http://example.org/vocab/booksInOrder> _:bookList1 .
+
+_:bookList1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://example.org/book/fellowship> .
+_:bookList1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:bookList2 .
+
+_:bookList2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://example.org/book/two-towers> .
+_:bookList2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:bookList3 .
+
+_:bookList3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://example.org/book/return-king> .
+_:bookList3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+<http://example.org/book/fellowship> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Book> .
+<http://example.org/book/fellowship> <http://purl.org/dc/terms/title> "The Fellowship of the Ring" .
+<http://example.org/book/fellowship> <http://example.org/vocab/volumeNumber> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
+
+<http://example.org/book/two-towers> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Book> .
+<http://example.org/book/two-towers> <http://purl.org/dc/terms/title> "The Two Towers" .
+<http://example.org/book/two-towers> <http://example.org/vocab/volumeNumber> "2"^^<http://www.w3.org/2001/XMLSchema#integer> .
+
+<http://example.org/book/return-king> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Book> .
+<http://example.org/book/return-king> <http://purl.org/dc/terms/title> "The Return of the King" .
+<http://example.org/book/return-king> <http://example.org/vocab/volumeNumber> "3"^^<http://www.w3.org/2001/XMLSchema#integer> .
+
+# ===== SPECIAL CHARACTERS IN LITERALS =====
+<http://example.org/book/special-chars> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Book> .
+<http://example.org/book/special-chars> <http://purl.org/dc/terms/title> "Books & Libraries: A \"Complete\" Guide" .
+<http://example.org/book/special-chars> <http://www.w3.org/2000/01/rdf-schema#comment> "This book covers:\n1. Library organization\n2. Book cataloging\n3. Digital archives\n\nIt's the definitive guide!" .
+
+# ===== NUMERIC DATATYPES VARIETY =====
+<http://example.org/stats/2024> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/AnnualStatistics> .
+<http://example.org/stats/2024> <http://example.org/vocab/year> "2024"^^<http://www.w3.org/2001/XMLSchema#gYear> .
+<http://example.org/stats/2024> <http://example.org/vocab/totalVisitors> "125000"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/stats/2024> <http://example.org/vocab/averageDaily> "342.47"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://example.org/stats/2024> <http://example.org/vocab/budget> "2500000.50"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://example.org/stats/2024> <http://example.org/vocab/growthRate> "0.085"^^<http://www.w3.org/2001/XMLSchema#double> .
+<http://example.org/stats/2024> <http://example.org/vocab/satisfactionScore> "4.7"^^<http://www.w3.org/2001/XMLSchema#float> .
+
+# ===== TIME DATATYPES =====
+<http://example.org/event/reading-club> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Event> .
+<http://example.org/event/reading-club> <http://purl.org/dc/terms/title> "Weekly Reading Club"@en .
+<http://example.org/event/reading-club> <http://purl.org/dc/terms/title> "Týdenní čtenářský kroužek"@cs .
+<http://example.org/event/reading-club> <http://example.org/vocab/startTime> "18:30:00"^^<http://www.w3.org/2001/XMLSchema#time> .
+<http://example.org/event/reading-club> <http://example.org/vocab/dateTime> "2024-12-11T18:30:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://example.org/event/reading-club> <http://example.org/vocab/duration> "PT2H"^^<http://www.w3.org/2001/XMLSchema#duration> .
+
+# ===== BLANK NODES IN VARIOUS POSITIONS =====
+_:organizer1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:organizer1 <http://xmlns.com/foaf/0.1/name> "Library Volunteer" .
+_:organizer1 <http://example.org/vocab/organizes> <http://example.org/event/reading-club> .
+
+<http://example.org/event/reading-club> <http://example.org/vocab/location> _:meetingRoom .
+
+_:meetingRoom <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Room> .
+_:meetingRoom <http://example.org/vocab/roomNumber> "204" .
+_:meetingRoom <http://example.org/vocab/capacity> "25"^^<http://www.w3.org/2001/XMLSchema#integer> .
+_:meetingRoom <http://example.org/vocab/hasProjector> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+
+# ===== MULTILINGUAL CONTENT =====
+<http://example.org/library/central-library> <http://example.org/vocab/welcomeMessage> "Welcome to our library!"@en .
+<http://example.org/library/central-library> <http://example.org/vocab/welcomeMessage> "Vítejte v naší knihovně!"@cs .
+<http://example.org/library/central-library> <http://example.org/vocab/welcomeMessage> "Bienvenue dans notre bibliothèque!"@fr .
+<http://example.org/library/central-library> <http://example.org/vocab/welcomeMessage> "Willkommen in unserer Bibliothek!"@de .
+<http://example.org/library/central-library> <http://example.org/vocab/welcomeMessage> "¡Bienvenido a nuestra biblioteca!"@es .

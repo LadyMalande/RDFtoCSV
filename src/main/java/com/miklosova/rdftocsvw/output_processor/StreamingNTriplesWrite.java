@@ -130,12 +130,30 @@ public class StreamingNTriplesWrite {
 
     private Object columnHeaders() {
         StringBuilder sb = new StringBuilder();
-        for (Column column : metadata.getTables().get(0).getTableSchema().getColumns()) {
-            sb.append(column.getTitles()).append(",");
+        List<Column> columns = metadata.getTables().get(0).getTableSchema().getColumns();
+        
+        if (columns.isEmpty()) {
+            logger.log(Level.WARNING, "No columns found in metadata when generating headers!");
+            return "\n";
         }
-        sb.deleteCharAt(sb.length() - 1);
+        
+        for (Column column : columns) {
+            String title = column.getTitles();
+            if (title != null && !title.isEmpty()) {
+                sb.append(title).append(",");
+            } else {
+                logger.log(Level.WARNING, "Column has null or empty title: " + column.getName());
+            }
+        }
+        
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);  // Remove last comma
+        }
         sb.append("\n");
-        return sb.toString();
+        
+        String headers = sb.toString();
+        logger.log(Level.INFO, "Generated CSV headers: " + headers.trim());
+        return headers;
     }
 
     private void writeToOutputFile(CSVOutputGrid bufferForCSVOutput) {
@@ -149,25 +167,38 @@ public class StreamingNTriplesWrite {
         for (IRI subject : currentSubjects) {
             for (Column column : metadata.getTables().get(0).getTableSchema().getColumns()) {
                 if (column.getName().equalsIgnoreCase("Subject")) {
-                    // add subject
-                    sb.append(subject.stringValue());
+                    // Add subject - check if it needs to be quoted and handle valueUrl pattern
+                    String subjectValue = formatValueByPattern(subject, column.getValueUrl());
+                    sb.append(maybeQuote(subjectValue));
 
-                } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).size() == 1) {
-                    if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isIRI()) {
-                        sb.append(bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0));
-                    } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isLiteral()) {
-                        sb.append(((Literal) bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0)).getLabel());
+                } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject) != null &&
+                           bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && 
+                           bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).size() == 1) {
+                    Value value = bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0);
+                    if (value.isIRI()) {
+                        String formattedValue = formatValueByPattern((IRI) value, column.getValueUrl());
+                        sb.append(maybeQuote(formattedValue));
+                    } else if (value.isLiteral()) {
+                        sb.append(maybeQuote(((Literal) value).getLabel()));
                     }
-                } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).size() > 1) {
+                } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject) != null &&
+                           bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && 
+                           bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).size() > 1) {
                     sb.append("\"");
                     if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isIRI()) {
-                        bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).forEach(value -> sb.append(value).append(","));
+                        for (Value value : bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName())) {
+                            String formattedValue = formatValueByPattern((IRI) value, column.getValueUrl());
+                            sb.append(formattedValue).append(",");
+                        }
                     } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isLiteral()) {
                         bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).forEach(value -> sb.append(((Literal) value).getLabel()).append(","));
                     }
 
                     sb.deleteCharAt(sb.length() - 1);
                     sb.append("\"");
+                } else {
+                    // Column has no value for this subject - append empty string
+                    // (This is critical for CSV alignment!)
                 }
                 sb.append(",");
             }
@@ -175,6 +206,34 @@ public class StreamingNTriplesWrite {
             sb.append("\n");
         }
         return sb.toString();
+    }
+
+    /**
+     * Format an IRI value based on the column's valueUrl pattern.
+     * - If valueUrl is null or starts with "{+", use full IRI
+     * - If valueUrl contains "{+" but doesn't start with it (partial pattern), use local name
+     * - Otherwise, use local name
+     */
+    private String formatValueByPattern(IRI iri, String valueUrl) {
+        if (valueUrl == null || valueUrl.startsWith("{+")) {
+            // Simple pattern {+Variable} or no pattern - use full IRI
+            return iri.stringValue();
+        } else if (valueUrl.contains("{+")) {
+            // Partial pattern like "https://example.com/{+Variable}" - use local name
+            return iri.getLocalName();
+        }
+        // Default - use local name
+        return iri.getLocalName();
+    }
+
+    /**
+     * Quote a value if it contains commas and isn't already quoted.
+     */
+    private String maybeQuote(String value) {
+        if (value.contains(",") && !value.startsWith("\"") && !value.endsWith("\"")) {
+            return "\"" + value + "\"";
+        }
+        return value;
     }
 
     private boolean gettingNewSubjects() {

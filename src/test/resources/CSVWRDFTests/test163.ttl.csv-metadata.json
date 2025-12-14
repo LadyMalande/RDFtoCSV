@@ -16,8 +16,7 @@
         "@type" : "Column",
         "titles" : "integer",
         "name" : "integer",
-        "propertyUrl" : "file://test163.csv#integer",
-        "valueUrl" : "{+integer}"
+        "propertyUrl" : "file://test163.csv#integer"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

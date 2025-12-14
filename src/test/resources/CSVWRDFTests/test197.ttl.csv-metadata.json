@@ -16,8 +16,7 @@
         "@type" : "Column",
         "titles" : "NMTOKEN",
         "name" : "NMTOKEN",
-        "propertyUrl" : "file://test197.csv#NMTOKEN",
-        "valueUrl" : "{+NMTOKEN}"
+        "propertyUrl" : "file://test197.csv#NMTOKEN"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

@@ -17,21 +17,18 @@
         "titles" : "NMTOKEN",
         "name" : "NMTOKEN",
         "propertyUrl" : "file://test195.csv#NMTOKEN",
-        "valueUrl" : "{+NMTOKEN}",
         "datatype" : "NMTOKEN"
       }, {
         "@type" : "Column",
         "titles" : "base64Binary",
         "name" : "base64Binary",
         "propertyUrl" : "file://test195.csv#base64Binary",
-        "valueUrl" : "{+base64Binary}",
         "datatype" : "base64Binary"
       }, {
         "@type" : "Column",
         "titles" : "hexBinary",
         "name" : "hexBinary",
         "propertyUrl" : "file://test195.csv#hexBinary",
-        "valueUrl" : "{+hexBinary}",
         "datatype" : "hexBinary"
       }, {
         "@type" : "Column",

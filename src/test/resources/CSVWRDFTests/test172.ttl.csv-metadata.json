@@ -16,8 +16,7 @@
         "@type" : "Column",
         "titles" : "byte",
         "name" : "byte",
-        "propertyUrl" : "file://test172.csv#byte",
-        "valueUrl" : "{+byte}"
+        "propertyUrl" : "file://test172.csv#byte"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

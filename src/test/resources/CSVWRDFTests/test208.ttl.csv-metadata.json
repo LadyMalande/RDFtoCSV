@@ -16,42 +16,36 @@
         "@type" : "Column",
         "titles" : "maxExclusive",
         "name" : "maxExclusive",
-        "propertyUrl" : "file://test208.csv#maxExclusive",
-        "valueUrl" : "{+maxExclusive}"
+        "propertyUrl" : "file://test208.csv#maxExclusive"
       }, {
         "@type" : "Column",
         "titles" : "maxInclusive",
         "name" : "maxInclusive",
         "propertyUrl" : "file://test208.csv#maxInclusive",
-        "valueUrl" : "{+maxInclusive}",
         "datatype" : "float"
       }, {
         "@type" : "Column",
         "titles" : "maximum",
         "name" : "maximum",
         "propertyUrl" : "file://test208.csv#maximum",
-        "valueUrl" : "{+maximum}",
         "datatype" : "float"
       }, {
         "@type" : "Column",
         "titles" : "minExclusive",
         "name" : "minExclusive",
         "propertyUrl" : "file://test208.csv#minExclusive",
-        "valueUrl" : "{+minExclusive}",
         "datatype" : "float"
       }, {
         "@type" : "Column",
         "titles" : "minInclusive",
         "name" : "minInclusive",
         "propertyUrl" : "file://test208.csv#minInclusive",
-        "valueUrl" : "{+minInclusive}",
         "datatype" : "float"
       }, {
         "@type" : "Column",
         "titles" : "minimum",
         "name" : "minimum",
         "propertyUrl" : "file://test208.csv#minimum",
-        "valueUrl" : "{+minimum}",
         "datatype" : "float"
       }, {
         "@type" : "Column",

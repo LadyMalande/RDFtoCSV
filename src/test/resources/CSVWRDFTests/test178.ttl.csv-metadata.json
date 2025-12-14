@@ -16,8 +16,7 @@
         "@type" : "Column",
         "titles" : "nonPositiveInteger",
         "name" : "nonPositiveInteger",
-        "propertyUrl" : "file://test178.csv#nonPositiveInteger",
-        "valueUrl" : "{+nonPositiveInteger}"
+        "propertyUrl" : "file://test178.csv#nonPositiveInteger"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

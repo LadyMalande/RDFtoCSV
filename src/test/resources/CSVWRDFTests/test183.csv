@@ -1,5 +1,5 @@
 Subject,boolean,boolean1
-https://blank_Nodes_IRI.org/2,true,true
-https://blank_Nodes_IRI.org/4,false,false
-https://blank_Nodes_IRI.org/6,true,true
-https://blank_Nodes_IRI.org/8,false,false
+2,true,true
+4,false,false
+6,true,true
+8,false,false

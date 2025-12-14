@@ -16,32 +16,27 @@
         "@type" : "Column",
         "titles" : "GID",
         "name" : "GID",
-        "propertyUrl" : "file://test009.csv#GID",
-        "valueUrl" : "{+GID}"
+        "propertyUrl" : "file://test009.csv#GID"
       }, {
         "@type" : "Column",
         "titles" : "Inventory%20Date",
         "name" : "Inventory%20Date",
-        "propertyUrl" : "file://test009.csv#Inventory%20Date",
-        "valueUrl" : "{+Inventory%20Date}"
+        "propertyUrl" : "file://test009.csv#Inventory%20Date"
       }, {
         "@type" : "Column",
         "titles" : "On%20Street",
         "name" : "On%20Street",
-        "propertyUrl" : "file://test009.csv#On%20Street",
-        "valueUrl" : "{+On%20Street}"
+        "propertyUrl" : "file://test009.csv#On%20Street"
       }, {
         "@type" : "Column",
         "titles" : "Species",
         "name" : "Species",
-        "propertyUrl" : "file://test009.csv#Species",
-        "valueUrl" : "{+Species}"
+        "propertyUrl" : "file://test009.csv#Species"
       }, {
         "@type" : "Column",
         "titles" : "Trim%20Cycle",
         "name" : "Trim%20Cycle",
-        "propertyUrl" : "file://test009.csv#Trim%20Cycle",
-        "valueUrl" : "{+Trim%20Cycle}"
+        "propertyUrl" : "file://test009.csv#Trim%20Cycle"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

@@ -17,41 +17,35 @@
         "titles" : "maxExclusive",
         "name" : "maxExclusive",
         "propertyUrl" : "file://test207.csv#maxExclusive",
-        "valueUrl" : "{+maxExclusive}",
         "datatype" : "float"
       }, {
         "@type" : "Column",
         "titles" : "maxInclusive",
         "name" : "maxInclusive",
         "propertyUrl" : "file://test207.csv#maxInclusive",
-        "valueUrl" : "{+maxInclusive}",
         "datatype" : "float"
       }, {
         "@type" : "Column",
         "titles" : "maximum",
         "name" : "maximum",
         "propertyUrl" : "file://test207.csv#maximum",
-        "valueUrl" : "{+maximum}",
         "datatype" : "float"
       }, {
         "@type" : "Column",
         "titles" : "minExclusive",
         "name" : "minExclusive",
-        "propertyUrl" : "file://test207.csv#minExclusive",
-        "valueUrl" : "{+minExclusive}"
+        "propertyUrl" : "file://test207.csv#minExclusive"
       }, {
         "@type" : "Column",
         "titles" : "minInclusive",
         "name" : "minInclusive",
         "propertyUrl" : "file://test207.csv#minInclusive",
-        "valueUrl" : "{+minInclusive}",
         "datatype" : "float"
       }, {
         "@type" : "Column",
         "titles" : "minimum",
         "name" : "minimum",
         "propertyUrl" : "file://test207.csv#minimum",
-        "valueUrl" : "{+minimum}",
         "datatype" : "float"
       }, {
         "@type" : "Column",

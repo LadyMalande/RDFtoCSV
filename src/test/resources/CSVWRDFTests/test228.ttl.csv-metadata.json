@@ -17,7 +17,6 @@
         "titles" : "list",
         "name" : "list",
         "propertyUrl" : "file://test228.csv#list",
-        "valueUrl" : "{+list}",
         "datatype" : "NMTOKEN"
       }, {
         "@type" : "Column",

@@ -16,8 +16,7 @@
         "@type" : "Column",
         "titles" : "string",
         "name" : "string",
-        "propertyUrl" : "file://test238.csv#string",
-        "valueUrl" : "{+string}"
+        "propertyUrl" : "file://test238.csv#string"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

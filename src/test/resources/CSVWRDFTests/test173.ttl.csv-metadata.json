@@ -16,8 +16,7 @@
         "@type" : "Column",
         "titles" : "unsignedLong",
         "name" : "unsignedLong",
-        "propertyUrl" : "file://test173.csv#unsignedLong",
-        "valueUrl" : "{+unsignedLong}"
+        "propertyUrl" : "file://test173.csv#unsignedLong"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

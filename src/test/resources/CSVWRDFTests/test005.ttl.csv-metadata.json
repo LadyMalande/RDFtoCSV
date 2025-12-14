@@ -16,26 +16,22 @@
         "@type" : "Column",
         "titles" : "FamilyName",
         "name" : "FamilyName",
-        "propertyUrl" : "file://test005.csv#FamilyName",
-        "valueUrl" : "{+FamilyName}"
+        "propertyUrl" : "file://test005.csv#FamilyName"
       }, {
         "@type" : "Column",
         "titles" : "Surname",
         "name" : "Surname",
-        "propertyUrl" : "file://test005.csv#Surname",
-        "valueUrl" : "{+Surname}"
+        "propertyUrl" : "file://test005.csv#Surname"
       }, {
         "@type" : "Column",
         "titles" : "child_id",
         "name" : "child_id",
-        "propertyUrl" : "file://test005.csv#child_id",
-        "valueUrl" : "{+child_id}"
+        "propertyUrl" : "file://test005.csv#child_id"
       }, {
         "@type" : "Column",
         "titles" : "id",
         "name" : "id",
-        "propertyUrl" : "file://test005.csv#id",
-        "valueUrl" : "{+id}"
+        "propertyUrl" : "file://test005.csv#id"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

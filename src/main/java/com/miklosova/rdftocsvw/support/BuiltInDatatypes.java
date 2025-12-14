@@ -24,7 +24,10 @@ public class BuiltInDatatypes {
                         datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#boolean") ||
                         datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#dateTime") ||
                         datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#date") ||
-                        datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#time")
+                        datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#time") ||
+                        datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#duration") ||
+                        datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#dayTimeDuration") ||
+                        datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#yearMonthDuration")
         );
     }
 }

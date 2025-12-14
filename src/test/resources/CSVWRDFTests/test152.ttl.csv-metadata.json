@@ -17,40 +17,34 @@
         "titles" : "NMTOKEN",
         "name" : "NMTOKEN",
         "propertyUrl" : "file://test152.csv#NMTOKEN",
-        "valueUrl" : "{+NMTOKEN}",
         "datatype" : "NMTOKEN"
       }, {
         "@type" : "Column",
         "titles" : "anyUri",
         "name" : "anyUri",
         "propertyUrl" : "file://test152.csv#anyUri",
-        "valueUrl" : "{+anyUri}",
         "datatype" : "anyURI"
       }, {
         "@type" : "Column",
         "titles" : "normalizedString",
         "name" : "normalizedString",
         "propertyUrl" : "file://test152.csv#normalizedString",
-        "valueUrl" : "{+normalizedString}",
         "datatype" : "normalizedString"
       }, {
         "@type" : "Column",
         "titles" : "string1",
         "name" : "string1",
-        "propertyUrl" : "file://test152.csv#string1",
-        "valueUrl" : "{+string1}"
+        "propertyUrl" : "file://test152.csv#string1"
       }, {
         "@type" : "Column",
         "titles" : "string2",
         "name" : "string2",
-        "propertyUrl" : "file://test152.csv#string2",
-        "valueUrl" : "{+string2}"
+        "propertyUrl" : "file://test152.csv#string2"
       }, {
         "@type" : "Column",
         "titles" : "string3",
         "name" : "string3",
-        "propertyUrl" : "file://test152.csv#string3",
-        "valueUrl" : "{+string3}"
+        "propertyUrl" : "file://test152.csv#string3"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

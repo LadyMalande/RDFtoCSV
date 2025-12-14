@@ -1,4 +1,4 @@
 Subject,dbh,inventory_date,kml,on_street,protected,species,trim_cycle (en),comments
-https://blank_Nodes_IRI.org/3,11,2010-10-18,"""<file://Point><file://coordinates>-122.156485,37.440963<file:///coordinates><file:///Point>""",ADDISON AV,false,Celtis australis,Large Tree Routine Prune,
-https://blank_Nodes_IRI.org/4,11,2010-06-02,"""<file://Point><file://coordinates>-122.156749,37.440958<file:///coordinates><file:///Point>""",EMERSON ST,false,Liquidambar styraciflua,Large Tree Routine Prune,
-https://blank_Nodes_IRI.org/5,29,2010-06-01,"""<file://Point><file://coordinates>-122.156299,37.441151<file:///coordinates><file:///Point>""",ADDISON AV,true,Robinia pseudoacacia,Large Tree Routine Prune,beware of BEES
+3,11,2010-10-18,"""<file://Point><file://coordinates>-122.156485,37.440963<file:///coordinates><file:///Point>""",ADDISON AV,false,Celtis australis,Large Tree Routine Prune,
+4,11,2010-06-02,"""<file://Point><file://coordinates>-122.156749,37.440958<file:///coordinates><file:///Point>""",EMERSON ST,false,Liquidambar styraciflua,Large Tree Routine Prune,
+5,29,2010-06-01,"""<file://Point><file://coordinates>-122.156299,37.441151<file:///coordinates><file:///Point>""",ADDISON AV,true,Robinia pseudoacacia,Large Tree Routine Prune,beware of BEES

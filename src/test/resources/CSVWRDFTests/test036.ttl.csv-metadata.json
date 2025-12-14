@@ -17,54 +17,46 @@
         "titles" : "dbh",
         "name" : "dbh",
         "propertyUrl" : "file://tree-ops-ext.csv#dbh",
-        "valueUrl" : "{+dbh}",
         "datatype" : "integer"
       }, {
         "@type" : "Column",
         "titles" : "inventory_date",
         "name" : "inventory_date",
         "propertyUrl" : "file://tree-ops-ext.csv#inventory_date",
-        "valueUrl" : "{+inventory_date}",
         "datatype" : "date"
       }, {
         "@type" : "Column",
         "titles" : "kml",
         "name" : "kml",
         "propertyUrl" : "file://tree-ops-ext.csv#kml",
-        "valueUrl" : "{+kml}",
         "datatype" : "XMLLiteral"
       }, {
         "@type" : "Column",
         "titles" : "on_street",
         "name" : "on_street",
-        "propertyUrl" : "file://tree-ops-ext.csv#on_street",
-        "valueUrl" : "{+on_street}"
+        "propertyUrl" : "file://tree-ops-ext.csv#on_street"
       }, {
         "@type" : "Column",
         "titles" : "protected",
         "name" : "protected",
         "propertyUrl" : "file://tree-ops-ext.csv#protected",
-        "valueUrl" : "{+protected}",
         "datatype" : "boolean"
       }, {
         "@type" : "Column",
         "titles" : "species",
         "name" : "species",
-        "propertyUrl" : "file://tree-ops-ext.csv#species",
-        "valueUrl" : "{+species}"
+        "propertyUrl" : "file://tree-ops-ext.csv#species"
       }, {
         "@type" : "Column",
         "titles" : "trim_cycle (en)",
         "name" : "trim_cycle_en",
         "propertyUrl" : "file://tree-ops-ext.csv#trim_cycle",
-        "valueUrl" : "{+trim_cycle_en}",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "comments",
         "name" : "comments",
         "propertyUrl" : "file://tree-ops-ext.csv#comments",
-        "valueUrl" : "{+comments}",
         "datatype" : "normalizedString"
       }, {
         "@type" : "Column",

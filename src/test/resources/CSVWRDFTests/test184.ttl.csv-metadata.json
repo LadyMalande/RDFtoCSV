@@ -17,7 +17,6 @@
         "titles" : "boolean",
         "name" : "boolean",
         "propertyUrl" : "file://test184.csv#boolean",
-        "valueUrl" : "{+boolean}",
         "datatype" : "boolean"
       }, {
         "@type" : "Column",

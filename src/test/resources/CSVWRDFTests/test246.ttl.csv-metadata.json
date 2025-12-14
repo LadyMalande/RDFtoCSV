@@ -17,14 +17,12 @@
         "titles" : "yyyy%2DMM%2DddTHH%3Amm%3Ass.S",
         "name" : "yyyy%2DMM%2DddTHH%3Amm%3Ass.S",
         "propertyUrl" : "file://test246.csv#yyyy%2DMM%2DddTHH%3Amm%3Ass.S",
-        "valueUrl" : "{+yyyy%2DMM%2DddTHH%3Amm%3Ass.S}",
         "datatype" : "dateTime"
       }, {
         "@type" : "Column",
         "titles" : "yyyy%2DMM%2DddTHH%3Amm%3Ass.SS",
         "name" : "yyyy%2DMM%2DddTHH%3Amm%3Ass.SS",
         "propertyUrl" : "file://test246.csv#yyyy%2DMM%2DddTHH%3Amm%3Ass.SS",
-        "valueUrl" : "{+yyyy%2DMM%2DddTHH%3Amm%3Ass.SS}",
         "datatype" : "dateTime"
       }, {
         "@type" : "Column",

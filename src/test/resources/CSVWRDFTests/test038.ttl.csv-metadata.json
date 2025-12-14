@@ -16,57 +16,48 @@
         "@type" : "Column",
         "titles" : "col=aboutUrl",
         "name" : "col=aboutUrl",
-        "propertyUrl" : "file://test038.csv#col=aboutUrl",
-        "valueUrl" : "{+col=aboutUrl}"
+        "propertyUrl" : "file://test038.csv#col=aboutUrl"
       }, {
         "@type" : "Column",
         "titles" : "col=datatype",
         "name" : "col=datatype",
-        "propertyUrl" : "file://test038.csv#col=datatype",
-        "valueUrl" : "{+col=datatype}"
+        "propertyUrl" : "file://test038.csv#col=datatype"
       }, {
         "@type" : "Column",
         "titles" : "col=default",
         "name" : "col=default",
-        "propertyUrl" : "file://test038.csv#col=default",
-        "valueUrl" : "{+col=default}"
+        "propertyUrl" : "file://test038.csv#col=default"
       }, {
         "@type" : "Column",
         "titles" : "col=lang (en)",
         "name" : "col=lang_en",
         "propertyUrl" : "file://test038.csv#col=lang",
-        "valueUrl" : "{+col=lang_en}",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "col=null",
         "name" : "col=null",
-        "propertyUrl" : "file://test038.csv#col=null",
-        "valueUrl" : "{+col=null}"
+        "propertyUrl" : "file://test038.csv#col=null"
       }, {
         "@type" : "Column",
         "titles" : "col=ordered",
         "name" : "col=ordered",
-        "propertyUrl" : "file://test038.csv#col=ordered",
-        "valueUrl" : "{+col=ordered}"
+        "propertyUrl" : "file://test038.csv#col=ordered"
       }, {
         "@type" : "Column",
         "titles" : "col=propertyUrl",
         "name" : "col=propertyUrl",
-        "propertyUrl" : "file://test038.csv#col=propertyUrl",
-        "valueUrl" : "{+col=propertyUrl}"
+        "propertyUrl" : "file://test038.csv#col=propertyUrl"
       }, {
         "@type" : "Column",
         "titles" : "col=separator",
         "name" : "col=separator",
-        "propertyUrl" : "file://test038.csv#col=separator",
-        "valueUrl" : "{+col=separator}"
+        "propertyUrl" : "file://test038.csv#col=separator"
       }, {
         "@type" : "Column",
         "titles" : "col=textDirection",
         "name" : "col=textDirection",
-        "propertyUrl" : "file://test038.csv#col=textDirection",
-        "valueUrl" : "{+col=textDirection}"
+        "propertyUrl" : "file://test038.csv#col=textDirection"
       }, {
         "@type" : "Column",
         "titles" : "col=valueUrl",

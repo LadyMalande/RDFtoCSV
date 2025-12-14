@@ -1,7 +1,7 @@
 Subject,FamilyName,Surname,childFoaf,childName,foaf_id
-https://blank_Nodes_IRI.org/2,Simpson,Homer,http://example/bart,Bart,http://example/homer
-https://blank_Nodes_IRI.org/4,Simpson,Homer,http://example/lisa,Lisa,http://example/homer
-https://blank_Nodes_IRI.org/6,Simpson,Homer,http://example/maggie,Maggie,http://example/homer
-https://blank_Nodes_IRI.org/8,Simpson,Marge,http://example/bart,Bart,http://example/marge
-https://blank_Nodes_IRI.org/10,Simpson,Marge,http://example/lisa,Lisa,http://example/marge
-https://blank_Nodes_IRI.org/12,Simpson,Marge,http://example/maggie,Maggie,http://example/marge
+2,Simpson,Homer,http://example/bart,Bart,http://example/homer
+4,Simpson,Homer,http://example/lisa,Lisa,http://example/homer
+6,Simpson,Homer,http://example/maggie,Maggie,http://example/homer
+8,Simpson,Marge,http://example/bart,Bart,http://example/marge
+10,Simpson,Marge,http://example/lisa,Lisa,http://example/marge
+12,Simpson,Marge,http://example/maggie,Maggie,http://example/marge

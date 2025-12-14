@@ -16,8 +16,7 @@
         "@type" : "Column",
         "titles" : "positiveInteger",
         "name" : "positiveInteger",
-        "propertyUrl" : "file://test176.csv#positiveInteger",
-        "valueUrl" : "{+positiveInteger}"
+        "propertyUrl" : "file://test176.csv#positiveInteger"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

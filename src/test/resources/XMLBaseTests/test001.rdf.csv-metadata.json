@@ -17,8 +17,7 @@
         "titles" : "value",
         "name" : "value",
         "propertyUrl" : "http://example.org/value",
-        "valueUrl" : "{+value}",
-        "aboutUrl" : "http://example.org/dir/file#{+Subject}"
+        "aboutUrl" : "{+Subject}"
       } ],
       "primaryKey" : "Subject",
       "rowTitles" : [ "Subject", "value" ]

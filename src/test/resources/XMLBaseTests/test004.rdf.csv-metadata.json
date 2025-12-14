@@ -18,34 +18,32 @@
         "name" : "subject",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#subject",
         "valueUrl" : "https://blank_Nodes_IRI.org/{+subject}",
-        "aboutUrl" : "http://example.org/dir/file#{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "value",
         "name" : "value",
-        "propertyUrl" : "http://example.org/value",
-        "valueUrl" : "{+value}"
+        "propertyUrl" : "http://example.org/value"
       }, {
         "@type" : "Column",
         "titles" : "object",
         "name" : "object",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#object",
-        "valueUrl" : "{+object}",
-        "aboutUrl" : "http://example.org/dir/file#{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "type",
         "name" : "type",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
         "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+type}",
-        "aboutUrl" : "http://example.org/dir/file#{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "predicate",
         "name" : "predicate",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate",
         "valueUrl" : "http://example.org/{+predicate}",
-        "aboutUrl" : "http://example.org/dir/file#{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "propertyUrl" : "rdf:type",

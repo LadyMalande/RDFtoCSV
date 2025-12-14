@@ -1,0 +1,17 @@
+Subject,type,employeeId,firstName,lastName,email,hireDate,salary,department,manager,phoneNumber,active,skills (en),commissionRate,certifications (en),teamSize,deptName,location,budget
+http://example.org/company/emp001,Employee,E001,Alice,Johnson,alice.johnson@example.com,2020-03-15,75000,http://example.org/dept/engineering,http://example.org/company/emp010,+1-555-0101,true,"Java,Python",,,,,,
+http://example.org/company/emp002,Employee,E002,Bob,Smith,bob.smith@example.com,2019-07-22,82000,http://example.org/dept/engineering,http://example.org/company/emp010,+1-555-0102,true,"JavaScript,React,Node.js",,,,,,
+http://example.org/company/emp003,Employee,E003,Carol,Williams,carol.williams@example.com,2021-01-10,95000,http://example.org/dept/sales,http://example.org/company/emp011,+1-555-0103,true,,0.05,,,,,
+http://example.org/company/emp004,Employee,E004,David,Brown,david.brown@example.com,2018-11-05,68000,http://example.org/dept/marketing,http://example.org/company/emp012,+1-555-0104,true,"SEO,Content Marketing",,,,,,
+http://example.org/company/emp005,Employee,E005,Emma,Davis,emma.davis@example.com,2022-06-01,72000,http://example.org/dept/engineering,http://example.org/company/emp010,+1-555-0105,true,"C++,Rust",,,,,,
+http://example.org/company/emp006,Employee,E006,Frank,Miller,frank.miller@example.com,2017-09-18,88000,http://example.org/dept/sales,http://example.org/company/emp011,+1-555-0106,true,,0.07,,,,,
+http://example.org/company/emp007,Employee,E007,Grace,Wilson,grace.wilson@example.com,2020-12-10,65000,http://example.org/dept/hr,,+1-555-0107,true,,,"PHR,SHRM-CP",,,,
+http://example.org/company/emp008,Employee,E008,Henry,Moore,henry.moore@example.com,2019-04-25,71000,http://example.org/dept/marketing,http://example.org/company/emp012,+1-555-0108,true,"Google Analytics,Social Media",,,,,,
+http://example.org/company/emp009,Employee,E009,Iris,Taylor,iris.taylor@example.com,2021-08-15,79000,http://example.org/dept/engineering,http://example.org/company/emp010,+1-555-0109,true,"Go,Kubernetes,Docker",,,,,,
+http://example.org/company/emp010,"Employee,http://example.org/vocab/Manager",E010,Jack,Anderson,jack.anderson@example.com,2015-02-20,110000,http://example.org/dept/engineering,,+1-555-0110,true,,,,5,,,
+http://example.org/company/emp011,"Employee,http://example.org/vocab/Manager",E011,Karen,Thomas,karen.thomas@example.com,2016-05-12,105000,http://example.org/dept/sales,,+1-555-0111,true,,,,3,,,
+http://example.org/company/emp012,"Employee,http://example.org/vocab/Manager",E012,Laura,Jackson,laura.jackson@example.com,2016-10-08,98000,http://example.org/dept/marketing,,+1-555-0112,true,,,,3,,,
+http://example.org/dept/engineering,Department,,,,,,,,,,,,,,,Engineering,Building A,500000
+http://example.org/dept/sales,Department,,,,,,,,,,,,,,,Sales,Building B,300000
+http://example.org/dept/marketing,Department,,,,,,,,,,,,,,,Marketing,Building B,250000
+http://example.org/dept/hr,Department,,,,,,,,,,,,,,,Human Resources,Building C,150000

@@ -16,8 +16,7 @@
         "@type" : "Column",
         "titles" : "float",
         "name" : "float",
-        "propertyUrl" : "file://test182.csv#float",
-        "valueUrl" : "{+float}"
+        "propertyUrl" : "file://test182.csv#float"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

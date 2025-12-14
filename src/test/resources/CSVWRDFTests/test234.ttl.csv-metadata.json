@@ -16,14 +16,12 @@
         "@type" : "Column",
         "titles" : "PK1",
         "name" : "PK1",
-        "propertyUrl" : "file://test234.csv#PK1",
-        "valueUrl" : "{+PK1}"
+        "propertyUrl" : "file://test234.csv#PK1"
       }, {
         "@type" : "Column",
         "titles" : "PK2",
         "name" : "PK2",
-        "propertyUrl" : "file://test234.csv#PK2",
-        "valueUrl" : "{+PK2}"
+        "propertyUrl" : "file://test234.csv#PK2"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

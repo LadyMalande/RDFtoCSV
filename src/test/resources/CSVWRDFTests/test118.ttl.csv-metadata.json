@@ -16,28 +16,24 @@
         "@type" : "Column",
         "titles" : "countryCode",
         "name" : "countryCode",
-        "propertyUrl" : "file://action.csv?query#countryCode",
-        "valueUrl" : "{+countryCode}"
+        "propertyUrl" : "file://action.csv?query#countryCode"
       }, {
         "@type" : "Column",
         "titles" : "latitude",
         "name" : "latitude",
         "propertyUrl" : "file://action.csv?query#latitude",
-        "valueUrl" : "{+latitude}",
         "datatype" : "double"
       }, {
         "@type" : "Column",
         "titles" : "longitude",
         "name" : "longitude",
         "propertyUrl" : "file://action.csv?query#longitude",
-        "valueUrl" : "{+longitude}",
         "datatype" : "double"
       }, {
         "@type" : "Column",
         "titles" : "name",
         "name" : "name",
-        "propertyUrl" : "file://action.csv?query#name",
-        "valueUrl" : "{+name}"
+        "propertyUrl" : "file://action.csv?query#name"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",

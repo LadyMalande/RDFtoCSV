@@ -22,14 +22,12 @@
         "@type" : "Column",
         "titles" : "name",
         "name" : "name",
-        "propertyUrl" : "http://schema.org/name",
-        "valueUrl" : "{+name}"
+        "propertyUrl" : "http://schema.org/name"
       }, {
         "@type" : "Column",
         "titles" : "startDate",
         "name" : "startDate",
         "propertyUrl" : "http://schema.org/startDate",
-        "valueUrl" : "{+startDate}",
         "datatype" : "dateTime"
       }, {
         "@type" : "Column",
@@ -47,14 +45,12 @@
         "@type" : "Column",
         "titles" : "address",
         "name" : "address",
-        "propertyUrl" : "http://schema.org/address",
-        "valueUrl" : "{+address}"
+        "propertyUrl" : "http://schema.org/address"
       }, {
         "@type" : "Column",
         "titles" : "url",
         "name" : "url",
         "propertyUrl" : "http://schema.org/url",
-        "valueUrl" : "{+url}",
         "datatype" : "anyURI"
       }, {
         "@type" : "Column",

@@ -16,8 +16,7 @@
         "@type" : "Column",
         "titles" : "double",
         "name" : "double",
-        "propertyUrl" : "file://test180.csv#double",
-        "valueUrl" : "{+double}"
+        "propertyUrl" : "file://test180.csv#double"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",
