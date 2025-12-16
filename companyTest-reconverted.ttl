@@ -12,6 +12,8 @@
   <http://example.org/vocab/salary> 75000.0;
   <http://example.org/vocab/skills> "Java"@en, "Python"@en .
 
+<file:/C:/Users/terka/RDFtoCSV/companyTest.nt_preprocessed.csv> a <file:/C:/Users/terka/RDFtoCSV/Employee> .
+
 <http://example.org/company/emp002> a <http://example.org/vocab/Employee>;
   <http://example.org/vocab/active> true;
   <http://example.org/vocab/department> <http://example.org/dept/engineering>;
@@ -115,7 +117,10 @@
   <http://example.org/vocab/salary> 79000.0;
   <http://example.org/vocab/skills> "Docker"@en, "Go"@en, "Kubernetes"@en .
 
-<http://example.org/company/emp010> a <http://example.org/vocab/Employee,http://example.org/vocab/Manager>;
+<file:/C:/Users/terka/RDFtoCSV/companyTest.nt_preprocessed.csv> a <file:/C:/Users/terka/RDFtoCSV/Department>,
+    <file:/C:/Users/terka/RDFtoCSV/Employee>, <file:/C:/Users/terka/RDFtoCSV/Manager> .
+
+<http://example.org/company/emp010> a <http://example.org/vocab/Employee>, <http://example.org/vocab/Manager>;
   <http://example.org/vocab/active> true;
   <http://example.org/vocab/department> <http://example.org/dept/engineering>;
   <http://example.org/vocab/email> "jack.anderson@example.com";
@@ -127,7 +132,7 @@
   <http://example.org/vocab/salary> 110000.0;
   <http://example.org/vocab/teamSize> 5 .
 
-<http://example.org/company/emp011> a <http://example.org/vocab/Employee,http://example.org/vocab/Manager>;
+<http://example.org/company/emp011> a <http://example.org/vocab/Employee>, <http://example.org/vocab/Manager>;
   <http://example.org/vocab/active> true;
   <http://example.org/vocab/department> <http://example.org/dept/sales>;
   <http://example.org/vocab/email> "karen.thomas@example.com";
@@ -139,7 +144,7 @@
   <http://example.org/vocab/salary> 105000.0;
   <http://example.org/vocab/teamSize> 3 .
 
-<http://example.org/company/emp012> a <http://example.org/vocab/Employee,http://example.org/vocab/Manager>;
+<http://example.org/company/emp012> a <http://example.org/vocab/Employee>, <http://example.org/vocab/Manager>;
   <http://example.org/vocab/active> true;
   <http://example.org/vocab/department> <http://example.org/dept/marketing>;
   <http://example.org/vocab/email> "laura.jackson@example.com";

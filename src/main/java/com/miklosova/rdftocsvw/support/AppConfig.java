@@ -692,6 +692,7 @@ public class AppConfig {
         if (lastDot > 0) {
             fileName = fileName.substring(0, lastDot);
         }
+        LOGGER.info("+++Final base filename without extension: " + fileName);
         return fileName;
     }
 }

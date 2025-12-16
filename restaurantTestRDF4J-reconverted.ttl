@@ -2,10 +2,13 @@
 <http://example.org/restaurant/dish1> a <http://example.org/vocab/Dish>;
   <http://example.org/vocab/calories> 800;
   <http://example.org/vocab/category> <http://example.org/category/pizza>;
-  <http://example.org/vocab/containsAllergen> <file:/C:/Users/terka/RDFtoCSV/restaurantTest.nt_merged_preprocessed.csv>;
+  <http://example.org/vocab/containsAllergen> <http://example.org/allergen/>;
   <http://example.org/vocab/name> "Margherita Pizza"@en, "Pizza Margherita"@it;
   <http://example.org/vocab/price> 12.5;
   <http://example.org/vocab/vegetarian> true .
+
+<file:/C:/Users/terka/RDFtoCSV/restaurantTestRDF4J.nt_preprocessed.csv> a <file:/C:/Users/terka/RDFtoCSV/Category>,
+    <file:/C:/Users/terka/RDFtoCSV/Dish> .
 
 <http://example.org/restaurant/dish2> a <http://example.org/vocab/Dish>;
   <http://example.org/vocab/calories> 350;
@@ -25,13 +28,13 @@
   <http://example.org/vocab/vegetarian> false .
 
 <http://example.org/category/pizza> a <http://example.org/vocab/Category>;
-  <http://example.org/vocab/containsAllergen> <file:/C:/Users/terka/RDFtoCSV/restaurantTest.nt_merged_preprocessed.csv>;
+  <http://example.org/vocab/containsAllergen> <http://example.org/allergen/>;
   <http://example.org/vocab/label> "Pizza" .
 
 <http://example.org/category/salad> a <http://example.org/vocab/Category>;
-  <http://example.org/vocab/containsAllergen> <file:/C:/Users/terka/RDFtoCSV/restaurantTest.nt_merged_preprocessed.csv>;
+  <http://example.org/vocab/containsAllergen> <http://example.org/allergen/>;
   <http://example.org/vocab/label> "Salad" .
 
 <http://example.org/category/seafood> a <http://example.org/vocab/Category>;
-  <http://example.org/vocab/containsAllergen> <file:/C:/Users/terka/RDFtoCSV/restaurantTest.nt_merged_preprocessed.csv>;
+  <http://example.org/vocab/containsAllergen> <http://example.org/allergen/>;
   <http://example.org/vocab/label> "Seafood" .

@@ -1,0 +1,3 @@
+Book,author,genre,type,title
+http://example.org/book/1,F. Scott Fitzgerald,"Fiction,Classic,American Literature",Book,The Great Gatsby
+http://example.org/book/2,Harper Lee,"Fiction,Southern Gothic",Book,To Kill a Mockingbird

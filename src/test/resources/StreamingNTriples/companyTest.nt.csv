@@ -1,0 +1,17 @@
+Subject,active,firstName,certifications (en),location,manager,skills (en),hireDate,lastName,deptName,email,salary,phoneNumber,employeeId,teamSize,budget,department,commissionRate,type
+http://example.org/company/emp001,true,Alice,,,emp010,"Java,Python",2020-03-15,Johnson,,alice.johnson@example.com,75000,+1-555-0101,E001,,,engineering,,Employee
+http://example.org/company/emp002,true,Bob,,,emp010,"JavaScript,React,Node.js",2019-07-22,Smith,,bob.smith@example.com,82000,+1-555-0102,E002,,,engineering,,Employee
+http://example.org/company/emp003,true,Carol,,,emp011,,2021-01-10,Williams,,carol.williams@example.com,95000,+1-555-0103,E003,,,sales,0.05,Employee
+http://example.org/company/emp004,true,David,,,emp012,"SEO,Content Marketing",2018-11-05,Brown,,david.brown@example.com,68000,+1-555-0104,E004,,,marketing,,Employee
+http://example.org/company/emp005,true,Emma,,,emp010,"C++,Rust",2022-06-01,Davis,,emma.davis@example.com,72000,+1-555-0105,E005,,,engineering,,Employee
+http://example.org/company/emp006,true,Frank,,,emp011,,2017-09-18,Miller,,frank.miller@example.com,88000,+1-555-0106,E006,,,sales,0.07,Employee
+http://example.org/company/emp007,true,Grace,"PHR,SHRM-CP",,,,2020-12-10,Wilson,,grace.wilson@example.com,65000,+1-555-0107,E007,,,hr,,Employee
+http://example.org/company/emp008,true,Henry,,,emp012,"Google Analytics,Social Media",2019-04-25,Moore,,henry.moore@example.com,71000,+1-555-0108,E008,,,marketing,,Employee
+http://example.org/company/emp009,true,Iris,,,emp010,"Go,Kubernetes,Docker",2021-08-15,Taylor,,iris.taylor@example.com,79000,+1-555-0109,E009,,,engineering,,Employee
+http://example.org/company/emp010,true,Jack,,,,,2015-02-20,Anderson,,jack.anderson@example.com,110000,+1-555-0110,E010,5,,engineering,,"Employee,Manager"
+http://example.org/company/emp011,true,Karen,,,,,2016-05-12,Thomas,,karen.thomas@example.com,105000,+1-555-0111,E011,3,,sales,,"Employee,Manager"
+http://example.org/company/emp012,true,Laura,,,,,2016-10-08,Jackson,,laura.jackson@example.com,98000,+1-555-0112,E012,3,,marketing,,"Employee,Manager"
+http://example.org/dept/engineering,,,,Building A,,,,,Engineering,,,,,,500000,,,Department
+http://example.org/dept/sales,,,,Building B,,,,,Sales,,,,,,300000,,,Department
+http://example.org/dept/marketing,,,,Building B,,,,,Marketing,,,,,,250000,,,Department
+http://example.org/dept/hr,,,,Building C,,,,,Human Resources,,,,,,150000,,,Department

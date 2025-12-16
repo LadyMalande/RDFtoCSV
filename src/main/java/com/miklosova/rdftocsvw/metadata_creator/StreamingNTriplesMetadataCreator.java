@@ -501,19 +501,25 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 int indexOfChangeColumn = getIndexOfCurrentPredicate(triple.getPredicate(), triple.getObject());
                 
                 if (indexOfChangeColumn >= line.length) {
+                    Column currentColumn = tableSchema.getColumns().get(indexOfChangeColumn);
+                    String formattedValue = formatValueByPattern(triple.getObject(), currentColumn);
                     String[] extendedArray = Arrays.copyOf(line, line.length + 1);
-                    extendedArray[line.length] = triple.object.stringValue();
+                    extendedArray[line.length] = formattedValue;
                     updates.put(rowNumber, extendedArray);
                 } else if (indexOfChangeColumn != -1 && !line[indexOfChangeColumn].isEmpty()) {
                     if (!config.getFirstNormalForm()) {
+                        Column currentColumn = tableSchema.getColumns().get(indexOfChangeColumn);
+                        String formattedValue = formatValueByPattern(triple.getObject(), currentColumn);
                         String[] updatedLine = line.clone();
-                        updatedLine[indexOfChangeColumn] = line[indexOfChangeColumn] + "," + triple.getObject().stringValue();
+                        updatedLine[indexOfChangeColumn] = line[indexOfChangeColumn] + "," + formattedValue;
                         updates.put(rowNumber, updatedLine);
-                        tableSchema.getColumns().get(indexOfChangeColumn).setSeparator(",");
+                        currentColumn.setSeparator(",");
                     }
                 } else if (indexOfChangeColumn != -1) {
+                    Column currentColumn = tableSchema.getColumns().get(indexOfChangeColumn);
+                    String formattedValue = formatValueByPattern(triple.getObject(), currentColumn);
                     String[] updatedLine = line.clone();
-                    updatedLine[indexOfChangeColumn] = triple.getObject().stringValue();
+                    updatedLine[indexOfChangeColumn] = formattedValue;
                     updates.put(rowNumber, updatedLine);
                 }
             }
@@ -547,8 +553,10 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                         // Create a new array with one additional element
                         String[] extendedArray = Arrays.copyOf(line, line.length + 1);
 
-                        // Add the new element at the last position
-                        extendedArray[line.length] = triple.object.stringValue();
+                        // Add the new element at the last position - format based on column's valueUrl pattern
+                        Column currentColumn = tableSchema.getColumns().get(indexOfChangeColumn);
+                        String formattedValue = formatValueByPattern(triple.getObject(), currentColumn);
+                        extendedArray[line.length] = formattedValue;
                         lines.set(i, extendedArray);
                         isModified = true;
                     } else if (indexOfChangeColumn != -1 && !line[indexOfChangeColumn].equalsIgnoreCase("")) {
@@ -561,16 +569,21 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                             isNeedForAddingDataVariations = true;
                             indexOfDataVariationColumn = indexOfChangeColumn;
                         } else {
+                            // Format the new value based on the column's valueUrl pattern
+                            Column currentColumn = tableSchema.getColumns().get(indexOfChangeColumn);
+                            String formattedValue = formatValueByPattern(triple.getObject(), currentColumn);
                             String[] updatedLine = line.clone();
-                            updatedLine[indexOfChangeColumn] = line[indexOfChangeColumn] + "," + triple.getObject().stringValue();
+                            updatedLine[indexOfChangeColumn] = line[indexOfChangeColumn] + "," + formattedValue;
                             lines.set(i, updatedLine);
-                            tableSchema.getColumns().get(indexOfChangeColumn).setSeparator(",");
+                            currentColumn.setSeparator(",");
                             isModified = true;
                         }
                     } else {
                         // Add new object at the end of the line
+                        Column currentColumn = tableSchema.getColumns().get(indexOfChangeColumn);
+                        String formattedValue = formatValueByPattern(triple.getObject(), currentColumn);
                         String[] updatedLine = line.clone();
-                        updatedLine[indexOfChangeColumn] = triple.getObject().stringValue();
+                        updatedLine[indexOfChangeColumn] = formattedValue;
                         lines.set(i, updatedLine);
                         isModified = true;  // Mark that the line has been modified
                     }
@@ -580,9 +593,11 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             // Handle adding new rows based on the conditions
             if (isNeedForAddingDataVariations) {
                 // Add data variations for all the lines that have the same subject in the list
+                Column currentColumn = tableSchema.getColumns().get(indexOfDataVariationColumn);
+                String formattedValue = formatValueByPattern(triple.getObject(), currentColumn);
                 for (String[] lineToVary : rowDataVariationsForSubject) {
                     String[] copiedArray = Arrays.copyOf(lineToVary, lineToVary.length);
-                    copiedArray[indexOfDataVariationColumn] = triple.getObject().stringValue();
+                    copiedArray[indexOfDataVariationColumn] = formattedValue;
                     lines.add(copiedArray);
                 }
             } else if (!isModified && unifiedBySubject) {
@@ -929,8 +944,14 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                     // Partial pattern detected - convert to simple pattern since we have empty values
                     logger.info("Converting partial pattern to simple pattern for column '" + column.getName() + 
                                "' because of empty value. Old: " + column.getValueUrl());
-                    column.setValueUrl("{+" + column.getName() + "}");
-                    logger.info("New valueUrl: " + column.getValueUrl());
+                    String oldValueUrl = column.getValueUrl();
+                    String newValueUrl = "{+" + column.getName() + "}";
+                    column.setValueUrl(newValueUrl);
+                    logger.info("New valueUrl: " + newValueUrl);
+                    
+                    // Update all previously buffered rows to use full IRIs instead of local names
+                    int columnIndex = relevantTS.getColumns().indexOf(column);
+                    updateBufferedRowsForValueUrlChange(currentCSVName, columnIndex, oldValueUrl, newValueUrl);
                 }
                 list.add("");
             }
@@ -939,6 +960,46 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         logger.info("Created row with " + list.size() + " values for " + relevantTS.getColumns().size() + " columns");
         
         return list;
+    }
+
+    /**
+     * Format a value based on the column's valueUrl pattern.
+     * - If valueUrl is null or starts with "{+", use full value (IRI or literal)
+     * - If valueUrl contains "{+" but doesn't start with it (partial pattern), extract local name from IRI
+     * 
+     * @param value the RDF value to format
+     * @param column the column with valueUrl pattern
+     * @return the formatted string value
+     */
+    private String formatValueByPattern(Value value, Column column) {
+        if (column.getValueUrl() != null && column.getValueUrl().contains("{+")) {
+            boolean isFullPattern = column.getValueUrl().trim().startsWith("{+");
+            
+            if (isFullPattern) {
+                // Full pattern: use complete value
+                if (value.isLiteral()) {
+                    return ((Literal) value).getLabel();
+                } else {
+                    return value.stringValue();
+                }
+            } else {
+                // Partial pattern: extract local name for IRI values
+                if (value.isIRI()) {
+                    return ((IRI) value).getLocalName();
+                } else if (value.isLiteral()) {
+                    return ((Literal) value).getLabel();
+                } else {
+                    return value.stringValue();
+                }
+            }
+        } else {
+            // No pattern - use full value
+            if (value.isLiteral()) {
+                return ((Literal) value).getLabel();
+            } else {
+                return value.stringValue();
+            }
+        }
     }
 
     /**
@@ -973,13 +1034,40 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             int updatedCount = 0;
             for (String[] row : lines) {
                 if (columnIndex < row.length && row[columnIndex] != null && !row[columnIndex].isEmpty()) {
-                    // Check if value is just a local name (doesn't already contain the full IRI)
-                    if (!row[columnIndex].startsWith("http://") && !row[columnIndex].startsWith("https://")) {
-                        // Prepend the namespace to convert local name to full IRI
+                    String cellValue = row[columnIndex];
+                    
+                    // Check if the cell contains comma-separated values (multi-valued cell)
+                    if (cellValue.contains(",")) {
+                        // Split by comma and expand each value individually
+                        String[] values = cellValue.split(",");
+                        StringBuilder expandedValue = new StringBuilder();
+                        for (String value : values) {
+                            value = value.trim();
+                            // Only prepend namespace if not already a full IRI
+                            if (!value.startsWith("http://") && !value.startsWith("https://") && !value.isEmpty()) {
+                                expandedValue.append(namespacePrefix).append(value);
+                            } else {
+                                expandedValue.append(value);
+                            }
+                            expandedValue.append(",");
+                        }
+                        // Remove trailing comma
+                        if (expandedValue.length() > 0) {
+                            expandedValue.deleteCharAt(expandedValue.length() - 1);
+                        }
                         String oldValue = row[columnIndex];
-                        row[columnIndex] = namespacePrefix + oldValue;
+                        row[columnIndex] = expandedValue.toString();
                         updatedCount++;
                         logger.fine("Updated row: column " + columnIndex + " changed '" + oldValue + "' to '" + row[columnIndex] + "'");
+                    } else {
+                        // Single value - check if value is just a local name (doesn't already contain the full IRI)
+                        if (!cellValue.startsWith("http://") && !cellValue.startsWith("https://")) {
+                            // Prepend the namespace to convert local name to full IRI
+                            String oldValue = row[columnIndex];
+                            row[columnIndex] = namespacePrefix + oldValue;
+                            updatedCount++;
+                            logger.fine("Updated row: column " + columnIndex + " changed '" + oldValue + "' to '" + row[columnIndex] + "'");
+                        }
                     }
                 }
             }
@@ -993,12 +1081,41 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             for (Map.Entry<Integer, String[]> entry : updates.entrySet()) {
                 String[] row = entry.getValue();
                 if (columnIndex < row.length && row[columnIndex] != null && !row[columnIndex].isEmpty()) {
-                    if (!row[columnIndex].startsWith("http://") && !row[columnIndex].startsWith("https://")) {
+                    String cellValue = row[columnIndex];
+                    
+                    // Check if the cell contains comma-separated values (multi-valued cell)
+                    if (cellValue.contains(",")) {
+                        // Split by comma and expand each value individually
+                        String[] values = cellValue.split(",");
+                        StringBuilder expandedValue = new StringBuilder();
+                        for (String value : values) {
+                            value = value.trim();
+                            // Only prepend namespace if not already a full IRI
+                            if (!value.startsWith("http://") && !value.startsWith("https://") && !value.isEmpty()) {
+                                expandedValue.append(namespacePrefix).append(value);
+                            } else {
+                                expandedValue.append(value);
+                            }
+                            expandedValue.append(",");
+                        }
+                        // Remove trailing comma
+                        if (expandedValue.length() > 0) {
+                            expandedValue.deleteCharAt(expandedValue.length() - 1);
+                        }
                         String oldValue = row[columnIndex];
-                        row[columnIndex] = namespacePrefix + oldValue;
+                        row[columnIndex] = expandedValue.toString();
                         diskUpdatedCount++;
                         logger.fine("Updated disk row " + entry.getKey() + ": column " + columnIndex + 
                                    " changed '" + oldValue + "' to '" + row[columnIndex] + "'");
+                    } else {
+                        // Single value - check if not already a full IRI
+                        if (!cellValue.startsWith("http://") && !cellValue.startsWith("https://")) {
+                            String oldValue = row[columnIndex];
+                            row[columnIndex] = namespacePrefix + oldValue;
+                            diskUpdatedCount++;
+                            logger.fine("Updated disk row " + entry.getKey() + ": column " + columnIndex + 
+                                       " changed '" + oldValue + "' to '" + row[columnIndex] + "'");
+                        }
                     }
                 }
             }

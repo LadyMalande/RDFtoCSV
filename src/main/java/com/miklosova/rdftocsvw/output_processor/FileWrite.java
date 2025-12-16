@@ -99,8 +99,10 @@ public class FileWrite {
         }
         StringBuilder sb = new StringBuilder();
         String outputPath = config.getOutputFilePath();
+        System.out.println("writeFilesToConfigFile   config.getOutputFilePath() = " + config.getOutputFilePath());
         
         for (String fileName : fileNamesCreated) {
+            logger.info("[will go to intermediateFileNames]fileName from fileNamesCreated: " + fileName);
             // If fileName is not an absolute path and we have an output path, build full path
             boolean isAbsolutePath = (fileName.length() >= 3 && Character.isLetter(fileName.charAt(0)) && 
                                       fileName.charAt(1) == ':') || fileName.startsWith("/");
@@ -109,14 +111,20 @@ public class FileWrite {
                 // Prepend output directory to relative filename
                 File outputFile = new File(outputPath);
                 File parentDir = outputFile.getParentFile();
+                logger.info("[parentDir: " + parentDir.getAbsolutePath());
                 if (parentDir != null) {
-                    fileName = new File(parentDir, fileName).getAbsolutePath();
+                    // The filename must get to the short version instead of the relative one
+                    File file = new File(fileName);
+                    String shortLocalFileName = file.getName();
+                    //fileName = new File(parentDir, shortLocalFileName).getAbsolutePath();
+                    //fileName = new File("../", shortLocalFileName).getAbsolutePath();
+                    fileName = String.valueOf(new File("./", shortLocalFileName));
                 }
             }
             
             sb.append(fileName).append(",");
         }
-        //System.out.println("newFileName writeFilesToConfigFile   allFileNames = " + sb.toString());
+        System.out.println("newFileName writeFilesToConfigFile   allFileNames = " + sb.toString());
         config.setIntermediateFileNames(sb.toString());
     }
 
@@ -166,6 +174,21 @@ public class FileWrite {
 
         List<String[]> lines = new ArrayList<>();
         List<Column> orderOfColumnKeys = addHeadersFromMetadata(fileName, metadata, lines, config);
+        
+        // Get the actual first column (Subject column) from metadata
+        File fileObject = new File(fileName);
+        Optional<Table> findTable = metadata.getTables().stream()
+            .filter(tables -> tables.getUrl().equals(fileObject.getName()))
+            .findFirst();
+        Column actualFirstColumn = null;
+        if (findTable.isPresent()) {
+            actualFirstColumn = findTable.get().getTableSchema().getColumns().stream()
+                .filter(column -> column.getPropertyUrl() == null)
+                .findFirst()
+                .orElse(null);
+        }
+        
+        final Column firstColumnForWriting = actualFirstColumn;
 
         for (Row row : rows) {
 
@@ -184,8 +207,8 @@ public class FileWrite {
                     i = 0;
                     line = new String[lines.get(0).length];
 
-                    line[0] = (appendIdByValuePattern(row, orderOfColumnKeys.get(0)));
-
+                    line[0] = (appendIdByValuePattern(row, firstColumnForWriting != null ? firstColumnForWriting : orderOfColumnKeys.get(0)));
+                    logger.info("line[0]=" + line[0]);
 
                     firstColumn = true;
 
@@ -222,7 +245,8 @@ public class FileWrite {
 
             } else {
                 // Write CSV rows without first normal form -> make lists in cells
-                line[0] = appendIdByValuePattern(row, orderOfColumnKeys.get(0));
+                line[0] = appendIdByValuePattern(row, firstColumnForWriting != null ? firstColumnForWriting : orderOfColumnKeys.get(0));
+                logger.info("line[0]=" + line[0]);
                 i++;
                 firstColumn = true;
                 for (Column column : orderOfColumnKeys) {
@@ -499,7 +523,12 @@ public class FileWrite {
                 return iri.getLocalName();
             }
         }
-        
+        logger.info("appendIdByValuePattern - column.getName(): " + column.getName());
+        logger.info("appendIdByValuePattern - column.getName(): " + column.getTitles());
+        logger.info("appendIdByValuePattern - column.getValueUrl(): " + column.getValueUrl());
+        /*logger.info("appendIdByValuePattern - column.getValueUrl().contains(\"{+\"): " + column.getValueUrl().contains("{+"));
+        logger.info("appendIdByValuePattern - !column.getValueUrl().startsWith(\"{+\") " + !column.getValueUrl().startsWith("{+"));
+*/
         // Check if the valueUrl is a partial pattern (e.g., "https://example.com/{+Concept}")
         // If so, we need to extract the local name to fill the pattern
         if (column.getValueUrl() != null && column.getValueUrl().contains("{+") && !column.getValueUrl().startsWith("{+")) {

@@ -65,12 +65,15 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
         this.data = data;
         this.config = config;
         this.allRows = new ArrayList<>();
-        if (config == null || config.getOutputFileName() == null) {
-            throw new IllegalStateException("AppConfig with outputFileName is required");
+        if (config == null || config.getOutputFilePath() == null) {
+            throw new IllegalStateException("AppConfig with outputFilePath is required");
         }
-        String outputFilename = config.getOutputFileName();
-        File f = new File(outputFilename);
-        CSVFileTOWriteTo = f.getName();
+        
+        // Construct CSV filename the same way as metadata filename
+        // Metadata: config.getOutputFilePath() + ".csv-metadata.json"
+        // CSV:      config.getOutputFilePath() + ".csv"
+        // This ensures they are placed in the same directory
+        CSVFileTOWriteTo = config.getOutputFilePath() + ".csv";
     }
 
     @Override
@@ -109,7 +112,9 @@ public class BasicQueryMetadataCreator extends MetadataCreator implements IMetad
         // Write the rows with respective keys to the current file
 
         //ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES) + "," + newFileName);
-        metadata.addMetadata(newFileName, rnk.getKeys(), rnk.getRows());
+        // Use only the basename in metadata so CSV and metadata are in same directory
+        String csvBasename = new File(newFileName).getName();
+        metadata.addMetadata(csvBasename, rnk.getKeys(), rnk.getRows());
         
         com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
             com.miklosova.rdftocsvw.support.ProgressLogger.Stage.METADATA, 60, "Creating table schema"
