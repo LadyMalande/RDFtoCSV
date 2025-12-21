@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "test002TestOutput.csv",
+    "url" : "test002.rdf.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {

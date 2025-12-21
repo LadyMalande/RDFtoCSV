@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "test011bTestOutput.csv",
+    "url" : "test011b.nt.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -17,8 +17,7 @@
         "titles" : "bar",
         "name" : "bar",
         "propertyUrl" : "http://example.org/bar",
-        "valueUrl" : "{+bar}",
-        "aboutUrl" : "http://example.org/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       } ],
       "primaryKey" : "Subject",
       "rowTitles" : [ "Subject", "bar" ]

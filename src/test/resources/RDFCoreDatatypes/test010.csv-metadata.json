@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "test010TestOutput.csv",
+    "url" : "test010.nt.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -17,15 +17,14 @@
         "titles" : "bar",
         "name" : "bar",
         "propertyUrl" : "http://example.org/bar",
-        "valueUrl" : "{+bar}",
-        "aboutUrl" : "http://example.org/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "range",
         "name" : "range",
         "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#range",
         "valueUrl" : "http://www.w3.org/2001/XMLSchema#{+range}",
-        "aboutUrl" : "http://example.org/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       } ],
       "primaryKey" : "Subject",
       "rowTitles" : [ "Subject", "bar", "range" ]

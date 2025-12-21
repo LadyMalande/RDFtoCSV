@@ -1,4 +1,4 @@
-Subject,datatypeTest,creator,title (cs),title (en),type
+Subject,datatypeTest,Creator,Title (cs),Title (en),type
 myThesis,,TerezaMiklóšová,Automatický převod RDF dat do CSV,Automated transformation of RDF data to CSV,http://purl.org/dc/dcmitype/Text
 myJavaDoc,,TerezaMiklóšová,Javadoc dokumentace pro diplomovou práci,Javadoc documentation for thesis project,http://purl.org/dc/dcmitype/Text
 myProject,3,TerezaMiklóšová,Generování pravidel SHACL a ShEx podle konceptuálního datového modelu,Generating SHACL and ShEx rules based on conceptual data model,http://purl.org/dc/dcmitype/Software

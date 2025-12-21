@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "test008bTestOutput.csv",
+    "url" : "test008b.nt.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -18,14 +18,14 @@
         "name" : "b",
         "propertyUrl" : "http://example.org/b",
         "valueUrl" : "https://blank_Nodes_IRI.org/{+b}",
-        "aboutUrl" : "http://example.org/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "d",
         "name" : "d",
         "propertyUrl" : "http://example.org/d",
         "valueUrl" : "https://blank_Nodes_IRI.org/{+d}",
-        "aboutUrl" : "http://example.org/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       } ],
       "primaryKey" : "Subject",
       "rowTitles" : [ "Subject", "b", "d" ]

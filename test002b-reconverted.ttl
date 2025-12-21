@@ -1,0 +1,6 @@
+
+<http://example.org/foo> <http://example.org/bar> <https://blank_Nodes_IRI.org/0> .
+
+<https://blank_Nodes_IRI.org/0> a <https://blank_Nodes_IRI.org/1> .
+
+<https://blank_Nodes_IRI.org/1> a <http://www.w3.org/2000/01/rdf-schema#Datatype> .

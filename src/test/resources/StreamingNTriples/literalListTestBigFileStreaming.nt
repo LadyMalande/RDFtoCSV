@@ -1,0 +1,11 @@
+<http://example.org/book/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Book> .
+<http://example.org/book/1> <http://example.org/vocab/title> "The Great Gatsby" .
+<http://example.org/book/1> <http://example.org/vocab/author> "F. Scott Fitzgerald" .
+<http://example.org/book/1> <http://example.org/vocab/genre> "Fiction" .
+<http://example.org/book/1> <http://example.org/vocab/genre> "Classic" .
+<http://example.org/book/1> <http://example.org/vocab/genre> "American Literature" .
+<http://example.org/book/2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Book> .
+<http://example.org/book/2> <http://example.org/vocab/title> "To Kill a Mockingbird" .
+<http://example.org/book/2> <http://example.org/vocab/author> "Harper Lee" .
+<http://example.org/book/2> <http://example.org/vocab/genre> "Fiction" .
+<http://example.org/book/2> <http://example.org/vocab/genre> "Southern Gothic" .

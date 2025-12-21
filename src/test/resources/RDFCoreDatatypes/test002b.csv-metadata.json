@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "test002bTestOutput.csv",
+    "url" : "test002b.nt.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -18,7 +18,7 @@
         "name" : "bar",
         "propertyUrl" : "http://example.org/bar",
         "valueUrl" : "https://blank_Nodes_IRI.org/{+bar}",
-        "aboutUrl" : "http://example.org/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "type",

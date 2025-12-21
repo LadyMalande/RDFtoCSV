@@ -15,12 +15,18 @@ import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.InvalidObjectException;
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -278,13 +284,363 @@ public class StreamingMetadataCreator extends MetadataCreator {
             metadata.getTables().clear();
             metadata.getTables().addAll(consolidatedMetadata.getTables());
         }
-        // Add properties after consolidation
+        
+        // Optimize metadata and CSV files for better readability
+        // This analyzes the CSV to determine optimal valueUrl patterns
+        for (Table table : metadata.getTables()) {
+            File csvFile = new File(table.getUrl());
+            if (csvFile.exists()) {
+                optimizeMetadataAndCSV(metadata, csvFile);
+                break; // Only process once since metadata is shared
+            }
+        }
+        
+        // Add properties after optimization
         metadata.getTables().forEach(table -> {
             table.getTableSchema().addRowTitles();
             table.getTableSchema().setPrimaryKey("Subject");
             table.addTransformations(config);
         });
         metadata.jsonldMetadata();
+    }
+    
+    /**
+     * Data structure to hold analysis results for a column.
+     */
+    private static class ColumnAnalysis {
+        boolean hasEmpty = false;
+        Set<String> uniquePrefixes = new HashSet<>();
+        String commonPrefix = null;
+        
+        /**
+         * Determine if this column should use a prefix pattern.
+         * Rules:
+         * 1. If there's an empty/null value → use simple pattern {+columnName}
+         * 2. If there are multiple prefixes → use simple pattern {+columnName}
+         * 3. If all rows have the same prefix → use prefix pattern
+         */
+        boolean shouldUsePrefix() {
+            return !hasEmpty && uniquePrefixes.size() == 1 && commonPrefix != null;
+        }
+    }
+    
+    /**
+     * Optimizes metadata and CSV for better readability after initial conversion.
+     * Analyzes the CSV to determine optimal valueUrl patterns and adjusts CSV values accordingly.
+     * 
+     * Rules for IRI columns (those with valueUrl):
+     * 1. If a column has empty/null values → use {+columnName}, restore full URIs in CSV
+     * 2. If a column has multiple IRI prefixes → use {+columnName}, restore full URIs in CSV
+     * 3. If all rows share the same prefix → keep prefix pattern, keep shortened values in CSV
+     * 
+     * Literal columns (no valueUrl) are not affected.
+     * 
+     * @param metadata the metadata to optimize
+     * @param csvFile the CSV file to analyze and possibly rewrite
+     */
+    protected void optimizeMetadataAndCSV(Metadata metadata, File csvFile) {
+        try {
+            // Step 1: Analyze columns in the CSV
+            Map<String, ColumnAnalysis> analysis = analyzeColumnPrefixes(metadata, csvFile);
+            
+            // Step 2: Update metadata and restore prefixes in CSV where needed
+            boolean csvNeedsRewrite = updateMetadataAndRestorePrefixes(metadata, analysis, csvFile);
+            
+            if (csvNeedsRewrite) {
+                logger.info("Metadata and CSV optimization completed for " + csvFile.getName());
+            } else {
+                logger.fine("No CSV modifications needed - all columns can use prefix patterns");
+            }
+        } catch (IOException e) {
+            logger.log(Level.WARNING, "Failed to optimize metadata and CSV: " + e.getMessage(), e);
+            // Don't fail the whole conversion, just log the warning
+        }
+    }
+    
+    /**
+     * Analyzes each IRI column (those with valueUrl) in the CSV to determine:
+     * - Whether it has empty values
+     * - What unique IRI prefixes appear
+     * - What the common prefix is (if only one exists)
+     * 
+     * @param metadata the metadata with column definitions
+     * @param csvFile the CSV file to analyze
+     * @return map of column name to analysis results
+     */
+    private Map<String, ColumnAnalysis> analyzeColumnPrefixes(Metadata metadata, File csvFile) throws IOException {
+        Map<String, ColumnAnalysis> analysis = new HashMap<>();
+        
+        // Get column info from metadata - only process columns with valueUrl (IRI columns)
+        List<String> columnNames = new ArrayList<>();
+        Map<Integer, String> columnIndexToName = new HashMap<>();
+        Map<Integer, String> columnIndexToCurrentValueUrl = new HashMap<>();
+        
+        for (Table table : metadata.getTables()) {
+            List<Column> columns = table.getTableSchema().getColumns();
+            for (int i = 0; i < columns.size(); i++) {
+                Column column = columns.get(i);
+                String colName = column.getName();
+                columnNames.add(colName);
+                
+                // Only analyze columns that have valueUrl (IRI columns, not literals)
+                if (column.getValueUrl() != null && !column.getValueUrl().isEmpty()) {
+                    columnIndexToName.put(i, colName);
+                    columnIndexToCurrentValueUrl.put(i, column.getValueUrl());
+                    analysis.put(colName, new ColumnAnalysis());
+                }
+            }
+        }
+        
+        if (analysis.isEmpty()) {
+            return analysis; // No IRI columns to analyze
+        }
+        
+        // Read CSV file line by line
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
+            String headerLine = reader.readLine(); // Skip header
+            if (headerLine == null) {
+                return analysis; // Empty file
+            }
+            
+            String line;
+            while ((line = reader.readLine()) != null) {
+                List<String> values = parseCsvLineSimple(line);
+                
+                // Analyze each IRI column value
+                for (Map.Entry<Integer, String> entry : columnIndexToName.entrySet()) {
+                    int colIndex = entry.getKey();
+                    String colName = entry.getValue();
+                    
+                    if (colIndex >= values.size()) continue;
+                    
+                    String value = values.get(colIndex);
+                    ColumnAnalysis colAnalysis = analysis.get(colName);
+                    
+                    if (colAnalysis == null) continue;
+                    
+                    // Check for empty
+                    if (value == null || value.trim().isEmpty()) {
+                        colAnalysis.hasEmpty = true;
+                        continue;
+                    }
+                    
+                    // Reconstruct full URI if the current valueUrl uses a prefix pattern
+                    String currentValueUrl = columnIndexToCurrentValueUrl.get(colIndex);
+                    String fullUri = value;
+                    
+                    if (currentValueUrl != null && currentValueUrl.contains("{+") && !currentValueUrl.startsWith("{+")) {
+                        // Extract prefix from pattern like "http://example.org/category/{+CategoryName}"
+                        String prefix = currentValueUrl.substring(0, currentValueUrl.indexOf("{+"));
+                        fullUri = prefix + value;
+                    }
+                    
+                    // Check if it's a URI and extract prefix
+                    if (isUrl(fullUri)) {
+                        String prefix = extractPrefix(fullUri);
+                        if (prefix != null) {
+                            colAnalysis.uniquePrefixes.add(prefix);
+                            // Set common prefix if this is the first or matches existing
+                            if (colAnalysis.commonPrefix == null) {
+                                colAnalysis.commonPrefix = prefix;
+                            } else if (!colAnalysis.commonPrefix.equals(prefix)) {
+                                colAnalysis.commonPrefix = null; // Multiple prefixes found
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return analysis;
+    }
+    
+    /**
+     * Simple CSV line parser that handles quoted fields.
+     * Returns list of field values.
+     */
+    private List<String> parseCsvLineSimple(String line) {
+        List<String> result = new ArrayList<>();
+        StringBuilder current = new StringBuilder();
+        boolean inQuotes = false;
+        
+        for (int i = 0; i < line.length(); i++) {
+            char c = line.charAt(i);
+            
+            if (c == '"') {
+                // Check for escaped quote ""
+                if (i + 1 < line.length() && line.charAt(i + 1) == '"') {
+                    current.append('"');
+                    i++; // Skip next quote
+                } else {
+                    inQuotes = !inQuotes;
+                }
+            } else if (c == ',' && !inQuotes) {
+                result.add(current.toString());
+                current = new StringBuilder();
+            } else {
+                current.append(c);
+            }
+        }
+        result.add(current.toString());
+        
+        return result;
+    }
+    
+    /**
+     * Extracts the prefix from a URI.
+     * For example: "http://example.org/person/John" → "http://example.org/person/"
+     */
+    private String extractPrefix(String uri) {
+        int lastSlash = uri.lastIndexOf('/');
+        int lastHash = uri.lastIndexOf('#');
+        int splitPoint = Math.max(lastSlash, lastHash);
+        
+        if (splitPoint > 0 && splitPoint < uri.length() - 1) {
+            return uri.substring(0, splitPoint + 1);
+        }
+        return null;
+    }
+    
+    /**
+     * Updates metadata with optimal valueUrl patterns based on analysis.
+     * CRITICAL: When changing from prefix pattern to simple pattern, must restore full URIs in CSV!
+     * 
+     * @param metadata the metadata to update
+     * @param analysis the column analysis results
+     * @param csvFile the CSV file to potentially rewrite
+     * @return true if CSV was rewritten, false otherwise
+     */
+    private boolean updateMetadataAndRestorePrefixes(Metadata metadata, Map<String, ColumnAnalysis> analysis, File csvFile) throws IOException {
+        // Track which columns need their prefixes restored in CSV
+        Map<Integer, String> columnsNeedingPrefixRestoration = new HashMap<>();
+        List<String> columnNames = new ArrayList<>();
+        
+        for (Table table : metadata.getTables()) {
+            List<Column> columns = table.getTableSchema().getColumns();
+            for (int i = 0; i < columns.size(); i++) {
+                Column column = columns.get(i);
+                columnNames.add(column.getName());
+                
+                // Skip columns without valueUrl (literals) and Subject column
+                if (column.getValueUrl() == null || "Subject".equals(column.getName())) {
+                    continue;
+                }
+                
+                String currentValueUrl = column.getValueUrl();
+                ColumnAnalysis colAnalysis = analysis.get(column.getName());
+                if (colAnalysis == null) continue;
+                
+                // Determine if this column currently uses a prefix pattern
+                boolean currentlyHasPrefix = currentValueUrl.contains("{+") && !currentValueUrl.startsWith("{+");
+                
+                if (colAnalysis.shouldUsePrefix()) {
+                    // Rule 3: Single prefix → use or keep prefix pattern
+                    String newPattern = colAnalysis.commonPrefix + "{+" + column.getName() + "}";
+                    if (!newPattern.equals(currentValueUrl)) {
+                        column.setValueUrl(newPattern);
+                        logger.fine("Column '" + column.getName() + "' using prefix pattern: " + colAnalysis.commonPrefix);
+                    }
+                } else {
+                    // Rules 1 & 2: Empty values or multiple prefixes → use simple pattern
+                    // If currently has prefix pattern, need to restore full URIs in CSV!
+                    if (currentlyHasPrefix) {
+                        String prefix = currentValueUrl.substring(0, currentValueUrl.indexOf("{+"));
+                        columnsNeedingPrefixRestoration.put(i, prefix);
+                        logger.fine("Column '" + column.getName() + "' needs prefix restoration: " + prefix);
+                    }
+                    
+                    column.setValueUrl("{+" + column.getName() + "}");
+                    
+                    if (colAnalysis.hasEmpty) {
+                        logger.fine("Column '" + column.getName() + "' has empty values, using simple pattern");
+                    } else if (colAnalysis.uniquePrefixes.size() > 1) {
+                        logger.fine("Column '" + column.getName() + "' has " + colAnalysis.uniquePrefixes.size() + " prefixes, using simple pattern");
+                    }
+                }
+            }
+        }
+        
+        // Rewrite CSV if any columns need prefix restoration
+        if (!columnsNeedingPrefixRestoration.isEmpty()) {
+            restorePrefixesInCSV(csvFile, columnsNeedingPrefixRestoration);
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Rewrites the CSV file, restoring full URIs for columns that were changed from prefix patterns to simple patterns.
+     * This prevents csv2rdf from creating malformed file:// URIs.
+     * 
+     * @param csvFile the CSV file to rewrite
+     * @param columnPrefixes map of column index to prefix that needs to be restored
+     */
+    private void restorePrefixesInCSV(File csvFile, Map<Integer, String> columnPrefixes) throws IOException {
+        File tempFile = new File(csvFile.getParent(), csvFile.getName() + ".tmp");
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFile));
+             java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter(tempFile))) {
+            
+            // Copy header as-is
+            String headerLine = reader.readLine();
+            if (headerLine != null) {
+                writer.println(headerLine);
+            }
+            
+            // Process data lines - restore prefixes to values
+            String line;
+            while ((line = reader.readLine()) != null) {
+                List<String> values = parseCsvLineSimple(line);
+                List<String> newValues = new ArrayList<>();
+                
+                for (int i = 0; i < values.size(); i++) {
+                    String value = values.get(i);
+                    String prefix = columnPrefixes.get(i);
+                    
+                    // If this column needs prefix restoration and value is not empty
+                    if (prefix != null && value != null && !value.trim().isEmpty() && !value.startsWith("http://") && !value.startsWith("https://")) {
+                        // Restore the full URI
+                        newValues.add(prefix + value);
+                    } else {
+                        newValues.add(value);
+                    }
+                }
+                
+                // Write CSV line with proper escaping
+                writer.println(formatCsvLine(newValues));
+            }
+        }
+        
+        // Replace original with temp file
+        if (!csvFile.delete()) {
+            logger.warning("Could not delete original CSV file");
+        }
+        if (!tempFile.renameTo(csvFile)) {
+            logger.warning("Could not rename temp file to original");
+        }
+    }
+    
+    /**
+     * Formats a list of values as a CSV line with proper quoting and escaping.
+     */
+    private String formatCsvLine(List<String> values) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < values.size(); i++) {
+            if (i > 0) sb.append(',');
+            String value = values.get(i);
+            if (value == null) value = "";
+            
+            // Quote if contains comma, quote, or newline
+            if (value.contains(",") || value.contains("\"") || value.contains("\n") || value.contains("\r")) {
+                sb.append('"');
+                sb.append(value.replace("\"", "\"\""));
+                sb.append('"');
+            } else {
+                sb.append(value);
+            }
+        }
+        return sb.toString();
     }
 
     private void makeMetadataNameUnique(Metadata metadata) {

@@ -52,7 +52,7 @@
         "titles" : "containsAllergen",
         "name" : "containsAllergen",
         "propertyUrl" : "http://example.org/vocab/containsAllergen",
-        "valueUrl" : "http://example.org/allergen/{+containsAllergen}",
+        "valueUrl" : "{+containsAllergen}",
         "aboutUrl" : "{+Subject}",
         "separator" : ","
       }, {
@@ -73,7 +73,7 @@
         "titles" : "category",
         "name" : "category",
         "propertyUrl" : "http://example.org/vocab/category",
-        "valueUrl" : "http://example.org/category/{+category}",
+        "valueUrl" : "{+category}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",

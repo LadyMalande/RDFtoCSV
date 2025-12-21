@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "test009aTestOutput.csv",
+    "url" : "test009a.nt.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -17,16 +17,14 @@
         "titles" : "b",
         "name" : "b",
         "propertyUrl" : "http://example.org/b",
-        "valueUrl" : "{+b}",
-        "aboutUrl" : "http://example.org/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "d",
         "name" : "d",
         "propertyUrl" : "http://example.org/d",
-        "valueUrl" : "{+d}",
         "datatype" : "integer",
-        "aboutUrl" : "http://example.org/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       } ],
       "primaryKey" : "Subject",
       "rowTitles" : [ "Subject", "b", "d" ]

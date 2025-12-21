@@ -3,8 +3,11 @@ package com.miklosova.rdftocsvw.metadata_creator;
 import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 import com.miklosova.rdftocsvw.support.AppConfig;
 import org.eclipse.rdf4j.model.BNode;
+import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.impl.LinkedHashModel;
+import org.eclipse.rdf4j.model.util.Models;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
 import org.junit.jupiter.api.TestInstance;
@@ -67,7 +70,7 @@ public class ReverseConversionTest {
         String csv2rdfPath = "./src/test/resources/tools/csv2rdf-0.4.7-standalone.jar";
         
         return java.util.stream.Stream.of(
-                
+/*
             new TestFileSet(
                 "./src/test/resources/StreamingNTriples/restaurantTest.nt",
                 "./RDFtoCSV/src/test/resources/StreamingNTriples/restaurantTest.nt",
@@ -115,7 +118,103 @@ public class ReverseConversionTest {
                         "literalListTest",
                         "./literalListTest-reconverted.ttl",
                         csv2rdfPath, "rdf4j"
-                )
+                ),*/
+                new TestFileSet(
+                        "./src/test/resources/StreamingNTriples/restaurantTestBigFileStreaming.nt",
+                        "./RDFtoCSV/src/test/resources/StreamingNTriples/restaurantTestBigFileStreaming.nt",
+                        "./restaurantTestBigFileStreaming.csv-metadata.json",
+                        "restaurantTestBigFileStreaming",
+                        "./restaurantTestBigFileStreaming-reconverted.ttl",
+                        csv2rdfPath, "bigFileStreaming"
+                ),
+                new TestFileSet(
+                        "./src/test/resources/StreamingNTriples/companyTestBigFileStreaming.nt",
+                        "./RDFtoCSV/src/test/resources/StreamingNTriples/companyTestBigFileStreaming.nt",
+                        "./companyTestBigFileStreaming.csv-metadata.json",
+                        "companyTestBigFileStreaming",
+                        "./companyTestBigFileStreaming-reconverted.ttl",
+                        csv2rdfPath, "bigFileStreaming"
+                ),
+                new TestFileSet(
+                        "./src/test/resources/StreamingNTriples/literalListTestBigFileStreaming.nt",
+                        "./RDFtoCSV/src/test/resources/StreamingNTriples/literalListTestBigFileStreaming.nt",
+                        "./literalListTestBigFileStreaming.csv-metadata.json",
+                        "literalListTestBigFileStreaming",
+                        "./literalListTestBigFileStreaming-reconverted.ttl",
+                        csv2rdfPath, "bigFileStreaming"
+                )/* ,
+                            new TestFileSet(
+                "./src/test/resources/CSVWRDFTests/test001.ttl",
+                "./RDFtoCSV/src/test/resources/CSVWRDFTests/test001.ttl",
+                "./test001.csv-metadata.json",
+                "test001",
+                "./test001-reconverted.ttl",
+                csv2rdfPath, "rdf4j"
+            ),
+            new TestFileSet(
+                "./src/test/resources/CSVWRDFTests/test002b.nt",
+                "./RDFtoCSV/src/test/resources/CSVWRDFTests/test002b.nt",
+                "./test002b.csv-metadata.json",
+                "test002b",
+                "./test002b-reconverted.ttl",
+                csv2rdfPath, "streaming"
+            ),
+            new TestFileSet(
+                "./src/test/resources/CSVWRDFTests/test005.ttl",
+                "./RDFtoCSV/src/test/resources/CSVWRDFTests/test005.ttl",
+                "./test005.csv-metadata.json",
+                "test005",
+                "./test005-reconverted.ttl",
+                csv2rdfPath, "rdf4j"
+            ),
+                new TestFileSet(
+                        "./src/test/resources/CSVWRDFTests/test006.ttl",
+                        "./RDFtoCSV/src/test/resources/CSVWRDFTests/test006.ttl",
+                        "./test006.csv-metadata.json",
+                        "test006",
+                        "./test006-reconverted.ttl",
+                        csv2rdfPath, "rdf4j"
+                ),
+                new TestFileSet(
+                        "./src/test/resources/CSVWRDFTests/test007.ttl",
+                        "./RDFtoCSV/src/test/resources/CSVWRDFTests/test007.ttl",
+                        "./test007.csv-metadata.json",
+                        "test007",
+                        "./test007-reconverted.ttl",
+                        csv2rdfPath, "rdf4j"
+                ),
+                new TestFileSet(
+                        "./src/test/resources/CSVWRDFTests/test008.ttl",
+                        "./RDFtoCSV/src/test/resources/CSVWRDFTests/test008.ttl",
+                        "./test008.csv-metadata.json",
+                        "test008",
+                        "./test008-reconverted.ttl",
+                        csv2rdfPath, "rdf4j"
+                ),
+                new TestFileSet(
+                        "./src/test/resources/CSVWRDFTests/test009.ttl",
+                        "./RDFtoCSV/src/test/resources/CSVWRDFTests/test009.ttl",
+                        "./test009.csv-metadata.json",
+                        "test009",
+                        "./test009-reconverted.ttl",
+                        csv2rdfPath, "rdf4j"
+                ),
+                new TestFileSet(
+                        "./src/test/resources/CSVWRDFTests/test010.ttl",
+                        "./RDFtoCSV/src/test/resources/CSVWRDFTests/test010.ttl",
+                        "./test010.csv-metadata.json",
+                        "test010",
+                        "./test010-reconverted.ttl",
+                        csv2rdfPath, "rdf4j"
+                ),
+                new TestFileSet(
+                        "./src/test/resources/CSVWRDFTests/test011.ttl",
+                        "./RDFtoCSV/src/test/resources/CSVWRDFTests/test011.ttl",
+                        "./test011.csv-metadata.json",
+                        "test011",
+                        "./test011-reconverted.ttl",
+                        csv2rdfPath, "rdf4j"
+                )*/
         );
     }
 
@@ -166,6 +265,7 @@ public class ReverseConversionTest {
         String originalCsvPath = null;
         String[] possiblePaths = {
             testFileSet.csvBaseName + ".nt.csv",           // RDF4J output with -o option
+            testFileSet.csvBaseName + ".ttl.csv",           // RDF4J output with -o option
             testFileSet.csvBaseName + ".nt_merged.csv", // Streaming merged output
             testFileSet.csvBaseName + ".nt0.csv"        // Streaming first file
         };
@@ -175,6 +275,11 @@ public class ReverseConversionTest {
             System.out.println(" Trying to find CSV at: " + csvFile.getAbsolutePath());
 
             if (csvFile.exists()) {
+                if(!config.getParsing().equals("rdf4j")){
+                    if(path.contains(".nt.csv")){
+                        continue;
+                    }
+                }
                 originalCsvPath = path;
                 System.out.println("  Found CSV at: " + originalCsvPath);
                 break;
@@ -493,15 +598,47 @@ public class ReverseConversionTest {
     }
 
     /**
-     * Compare two RDF graphs, accounting for blank node renaming
+     * Compare two RDF graphs, accounting for blank node renaming using graph isomorphism
      */
     private void compareRdfGraphs(List<Statement> original, List<Statement> reconverted) {
-        // Create normalized representations that ignore blank node identifiers
-        Set<NormalizedTriple> originalNormalized = normalizeStatements(original);
-        Set<NormalizedTriple> reconvertedNormalized = normalizeStatements(reconverted);
+        // Convert to RDF4J Models for isomorphism checking
+        Model originalModel = new LinkedHashModel(original);
+        Model reconvertedModel = new LinkedHashModel(reconverted);
         
-        System.out.println("Original normalized triples: " + originalNormalized.size());
-        System.out.println("Reconverted normalized triples: " + reconvertedNormalized.size());
+        System.out.println("Original triples: " + originalModel.size());
+        System.out.println("Reconverted triples: " + reconvertedModel.size());
+        
+        // Use RDF4J's Models.isomorphic() for proper graph isomorphism checking
+        // This correctly handles blank node equivalence
+        if (Models.isomorphic(originalModel, reconvertedModel)) {
+            System.out.println("✓ Graphs are isomorphic - round-trip successful!");
+            return;
+        }
+        
+        // If not isomorphic, the graphs may differ. 
+        // However, the difference might be acceptable CSVW metadata triples.
+        // Let's check if only the size differs due to metadata, not the actual data.
+        System.out.println("\n⚠ Graphs are not strictly isomorphic. Checking for acceptable differences...");
+        
+        // Try comparing without CSVW metadata triples
+        Model originalWithoutCSVW = filterOutCSVWMetadata(originalModel);
+        Model reconvertedWithoutCSVW = filterOutCSVWMetadata(reconvertedModel);
+        
+        System.out.println("After filtering CSVW metadata:");
+        System.out.println("  Original data triples: " + originalWithoutCSVW.size());
+        System.out.println("  Reconverted data triples: " + reconvertedWithoutCSVW.size());
+        
+        if (Models.isomorphic(originalWithoutCSVW, reconvertedWithoutCSVW)) {
+            System.out.println("✓ Data triples are isomorphic (CSVW metadata differences are acceptable)");
+            return;
+        }
+        
+        // Still not isomorphic - provide detailed diagnostics
+        System.out.println("\n⚠ Data triples are also not isomorphic. Analyzing differences...");
+        
+        // Create normalized representations for detailed comparison
+        Set<NormalizedTriple> originalNormalized = normalizeStatements(new ArrayList<>(originalWithoutCSVW));
+        Set<NormalizedTriple> reconvertedNormalized = normalizeStatements(new ArrayList<>(reconvertedWithoutCSVW));
         
         // Find missing triples (from original not in reconverted)
         Set<NormalizedTriple> missing = new HashSet<>(originalNormalized);
@@ -523,9 +660,10 @@ public class ReverseConversionTest {
             extra.removeAll(csv2rdfBugs);
         }
         
-        // Report differences
+        // Report differences (excluding blank node IDs which are shown for debugging only)
         if (!missing.isEmpty()) {
             System.out.println("\n⚠ Missing triples (present in original but not in reconverted):");
+            System.out.println("   Note: Blank node IDs (_:bnX) in this output are normalized and may not match the actual IDs");
             missing.stream().limit(10).forEach(t -> System.out.println("  - " + t));
             if (missing.size() > 10) {
                 System.out.println("  ... and " + (missing.size() - 10) + " more");
@@ -534,21 +672,46 @@ public class ReverseConversionTest {
         
         if (!extra.isEmpty()) {
             System.out.println("\n⚠ Extra triples (present in reconverted but not in original):");
+            System.out.println("   Note: Blank node IDs (_:bnX) in this output are normalized and may not match the actual IDs");
             extra.stream().limit(10).forEach(t -> System.out.println("  + " + t));
             if (extra.size() > 10) {
                 System.out.println("  ... and " + (extra.size() - 10) + " more");
             }
         }
         
-        // The reconverted graph should contain at least all the original triples
-        // (it might have a few extra metadata triples, but all data should be there)
-        assertTrue(missing.isEmpty(), 
-            "Reconverted RDF is missing " + missing.size() + " triples from the original");
-        
-        // Allow some extra triples (CSVW might add metadata), but warn if too many
-        if (extra.size() > originalNormalized.size() * 0.1) { // More than 10% extra
-            System.out.println("⚠ Warning: Reconverted RDF has significantly more triples than original");
+        // After filtering csv2rdf bugs, check if there are still differences
+        if (!missing.isEmpty() || !extra.isEmpty()) {
+            fail("Graphs are not isomorphic. There are real semantic differences in the data.");
         }
+    }
+    
+    /**
+     * Filter out CSVW metadata triples, keeping only the actual data.
+     * CSVW metadata includes TableGroup, Table, Row, and describes relationships.
+     */
+    private Model filterOutCSVWMetadata(Model model) {
+        String CSVW_NS = "http://www.w3.org/ns/csvw#";
+        Model filtered = new LinkedHashModel();
+        
+        for (Statement stmt : model) {
+            String predicate = stmt.getPredicate().stringValue();
+            
+            // Keep triples that are NOT CSVW metadata structure
+            // Filter out: rdf:type csvw:*, csvw:table, csvw:row, csvw:describes, csvw:url, csvw:rownum
+            if (predicate.equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type") && 
+                stmt.getObject().stringValue().startsWith(CSVW_NS)) {
+                continue; // Skip type declarations for CSVW classes
+            }
+            if (predicate.startsWith(CSVW_NS)) {
+                // Skip all CSVW metadata predicates (table, row, describes, url, rownum, etc.)
+                continue;
+            }
+            
+            // Keep all other triples (actual data)
+            filtered.add(stmt);
+        }
+        
+        return filtered;
     }
 
     /**

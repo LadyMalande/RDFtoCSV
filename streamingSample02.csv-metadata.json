@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "streamingSample02.csv",
+    "url" : "streamingSample02.nt.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {

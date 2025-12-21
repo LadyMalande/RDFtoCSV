@@ -71,7 +71,7 @@ class RDFtoCSVTest {
 
 //     //BaseRock generated method id: ${testConstructorWithFileName}, hash: B7210CFF75EC7ED5BF54503E1FCF8DA4
      @ParameterizedTest
-     @CsvSource({ "test.rdf,../test,../test.rdf.csv-metadata.json", "http://example.com/test.rdf,test.rdf,test.rdf.csv-metadata.json" })
+     @CsvSource({ "test.rdf,test,test.csv-metadata.json", "http://example.com/test.rdf,test.rdf,test.rdf.csv-metadata.json" })
      void testConstructorWithFileName(String input, String expectedFilePath, String expectedMetadataFilename) {
 
         AppConfig testConfig = new AppConfig.Builder(input)

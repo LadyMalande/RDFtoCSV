@@ -82,7 +82,8 @@ public class StreamingNTriplesWrite {
         assert fileToWriteTo != null;
         config.setIntermediateFileNames(fileToWriteTo.toString());
         this.metadata = metadata;
-        String fileNameFromConfig = config.getFile();
+        // Use the resolved input file name (same as StreamingMetadataCreator)
+        String fileNameFromConfig = config.getInputFileName();
         this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) :  fileNameFromConfig;
         processedSubjects = new HashSet<>();
         this.metadataCreator = new StreamingMetadataCreator(config);
@@ -167,9 +168,9 @@ public class StreamingNTriplesWrite {
         for (IRI subject : currentSubjects) {
             for (Column column : metadata.getTables().get(0).getTableSchema().getColumns()) {
                 if (column.getName().equalsIgnoreCase("Subject")) {
-                    // Add subject - check if it needs to be quoted and handle valueUrl pattern
-                    String subjectValue = formatValueByPattern(subject, column.getValueUrl());
-                    sb.append(maybeQuote(subjectValue));
+                    // Add subject - check if it needs to be quoted and handle aboutUrl pattern
+                    String subjectValue = formatValueByPattern(subject, column.getAboutUrl());
+                    sb.append(escapeCsvValue(subjectValue));
 
                 } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject) != null &&
                            bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && 
@@ -177,25 +178,31 @@ public class StreamingNTriplesWrite {
                     Value value = bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0);
                     if (value.isIRI()) {
                         String formattedValue = formatValueByPattern((IRI) value, column.getValueUrl());
-                        sb.append(maybeQuote(formattedValue));
+                        sb.append(escapeCsvValue(formattedValue));
                     } else if (value.isLiteral()) {
-                        sb.append(maybeQuote(((Literal) value).getLabel()));
+                        sb.append(escapeCsvValue(((Literal) value).getLabel()));
                     }
                 } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject) != null &&
                            bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && 
                            bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).size() > 1) {
-                    sb.append("\"");
+                    // Multiple values in one cell - join with commas and wrap in quotes
+                    StringBuilder multiValue = new StringBuilder();
                     if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isIRI()) {
                         for (Value value : bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName())) {
                             String formattedValue = formatValueByPattern((IRI) value, column.getValueUrl());
-                            sb.append(formattedValue).append(",");
+                            multiValue.append(formattedValue).append(",");
                         }
                     } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isLiteral()) {
-                        bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).forEach(value -> sb.append(((Literal) value).getLabel()).append(","));
+                        for (Value value : bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName())) {
+                            multiValue.append(((Literal) value).getLabel()).append(",");
+                        }
                     }
-
-                    sb.deleteCharAt(sb.length() - 1);
-                    sb.append("\"");
+                    // Remove trailing comma
+                    if (multiValue.length() > 0) {
+                        multiValue.deleteCharAt(multiValue.length() - 1);
+                    }
+                    // Escape the entire multi-value string as a single CSV cell
+                    sb.append(escapeCsvValue(multiValue.toString()));
                 } else {
                     // Column has no value for this subject - append empty string
                     // (This is critical for CSV alignment!)
@@ -209,16 +216,20 @@ public class StreamingNTriplesWrite {
     }
 
     /**
-     * Format an IRI value based on the column's valueUrl pattern.
-     * - If valueUrl is null or starts with "{+", use full IRI
-     * - If valueUrl contains "{+" but doesn't start with it (partial pattern), use local name
+     * Format an IRI value based on the column's URL pattern (aboutUrl or valueUrl).
+     * - If urlPattern is null or starts with "{+", use full IRI
+     * - If urlPattern contains "{+" but doesn't start with it (partial pattern like "http://example.org/{+var}"), use local name
      * - Otherwise, use local name
+     * 
+     * @param iri the IRI to format
+     * @param urlPattern the URL pattern from aboutUrl or valueUrl
+     * @return the formatted string (either full IRI or local name)
      */
-    private String formatValueByPattern(IRI iri, String valueUrl) {
-        if (valueUrl == null || valueUrl.startsWith("{+")) {
+    private String formatValueByPattern(IRI iri, String urlPattern) {
+        if (urlPattern == null || urlPattern.startsWith("{+")) {
             // Simple pattern {+Variable} or no pattern - use full IRI
             return iri.stringValue();
-        } else if (valueUrl.contains("{+")) {
+        } else if (urlPattern.contains("{+")) {
             // Partial pattern like "https://example.com/{+Variable}" - use local name
             return iri.getLocalName();
         }
@@ -227,11 +238,18 @@ public class StreamingNTriplesWrite {
     }
 
     /**
-     * Quote a value if it contains commas and isn't already quoted.
+     * Properly escape a CSV value according to RFC 4180.
+     * - If value contains comma, quote, or newline, it must be quoted
+     * - Internal quotes must be escaped by doubling them
      */
-    private String maybeQuote(String value) {
-        if (value.contains(",") && !value.startsWith("\"") && !value.endsWith("\"")) {
-            return "\"" + value + "\"";
+    private String escapeCsvValue(String value) {
+        if (value == null || value.isEmpty()) {
+            return value;
+        }
+        // Quote if contains comma, quote, or newline
+        if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
+            // Escape internal quotes by doubling them, then wrap in quotes
+            return "\"" + value.replace("\"", "\"\"") + "\"";
         }
         return value;
     }

@@ -44,7 +44,7 @@
         "titles" : "manager",
         "name" : "manager",
         "propertyUrl" : "http://example.org/vocab/manager",
-        "valueUrl" : "http://example.org/company/{+manager}",
+        "valueUrl" : "{+manager}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
@@ -117,7 +117,7 @@
         "titles" : "department",
         "name" : "department",
         "propertyUrl" : "http://example.org/vocab/department",
-        "valueUrl" : "http://example.org/dept/{+department}",
+        "valueUrl" : "{+department}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",

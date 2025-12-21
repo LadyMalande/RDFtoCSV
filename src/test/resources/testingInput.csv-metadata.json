@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "testingInputForTwoEntities.csv",
+    "url" : "testingInputForTwoEntities.ttl.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {

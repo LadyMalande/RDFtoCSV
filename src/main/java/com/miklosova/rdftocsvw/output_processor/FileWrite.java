@@ -111,8 +111,9 @@ public class FileWrite {
                 // Prepend output directory to relative filename
                 File outputFile = new File(outputPath);
                 File parentDir = outputFile.getParentFile();
-                logger.info("[parentDir: " + parentDir.getAbsolutePath());
+                
                 if (parentDir != null) {
+                    logger.info("[parentDir: " + parentDir.getAbsolutePath());
                     // The filename must get to the short version instead of the relative one
                     File file = new File(fileName);
                     String shortLocalFileName = file.getName();
@@ -505,11 +506,8 @@ public class FileWrite {
     }
 
     private static String safeLiteral(Literal literal) {
-        if (literal.getLabel().contains(",") && !literal.getLabel().startsWith("\"") && !literal.getLabel().endsWith("\"")) {
-            return "\"" + literal.getLabel() + "\"";
-        } else {
-            return literal.getLabel();
-        }
+        // Return raw label - CSVWriter will handle quoting/escaping automatically
+        return literal.getLabel();
     }
 
     private static String appendIdByValuePattern(Row row, Column column) {

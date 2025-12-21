@@ -1,0 +1,30 @@
+
+_:bnode__1 <file://test006.csv#FamilyName> "Simpson";
+  <file://test006.csv#Surname> "Homer";
+  <file://test006.csv#childName> "Bart";
+  <file:/C:/Users/terka/RDFtoCSV/test006.ttl.csv#rowNum> <file:/C:/Users/terka/RDFtoCSV/1> .
+
+_:bnode__2 <file://test006.csv#FamilyName> "Simpson";
+  <file://test006.csv#Surname> "Homer";
+  <file://test006.csv#childName> "Lisa";
+  <file:/C:/Users/terka/RDFtoCSV/test006.ttl.csv#rowNum> <file:/C:/Users/terka/RDFtoCSV/2> .
+
+_:bnode__3 <file://test006.csv#FamilyName> "Simpson";
+  <file://test006.csv#Surname> "Homer";
+  <file://test006.csv#childName> "Maggie";
+  <file:/C:/Users/terka/RDFtoCSV/test006.ttl.csv#rowNum> <file:/C:/Users/terka/RDFtoCSV/3> .
+
+_:bnode__4 <file://test006.csv#FamilyName> "Simpson";
+  <file://test006.csv#Surname> "Marge";
+  <file://test006.csv#childName> "Bart";
+  <file:/C:/Users/terka/RDFtoCSV/test006.ttl.csv#rowNum> <file:/C:/Users/terka/RDFtoCSV/4> .
+
+_:bnode__5 <file://test006.csv#FamilyName> "Simpson";
+  <file://test006.csv#Surname> "Marge";
+  <file://test006.csv#childName> "Lisa";
+  <file:/C:/Users/terka/RDFtoCSV/test006.ttl.csv#rowNum> <file:/C:/Users/terka/RDFtoCSV/5> .
+
+_:bnode__6 <file://test006.csv#FamilyName> "Simpson";
+  <file://test006.csv#Surname> "Marge";
+  <file://test006.csv#childName> "Maggie";
+  <file:/C:/Users/terka/RDFtoCSV/test006.ttl.csv#rowNum> <file:/C:/Users/terka/RDFtoCSV/6> .

@@ -366,7 +366,7 @@
         "titles" : "duration",
         "name" : "duration",
         "propertyUrl" : "http://example.org/vocab/duration",
-        "datatype" : "http://www.w3.org/2001/XMLSchema#duration",
+        "datatype" : "duration",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",

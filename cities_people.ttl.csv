@@ -1,0 +1,11 @@
+Subject,name,alternative label,country,knows,population,Subject,Date Created,name,livesIn,mbox,type,preferred label (en)
+paul,Paul Brown,,,"john,mary",,,2020-12-30,,london,paul@brown.com,http://xmlns.com/foaf/0.1/Person,
+lucia,Lucia Martinez,,,mary,,,,,berlin,lucia.martinez@ex.org,http://xmlns.com/foaf/0.1/Person,
+paris,,,France,,2161000,france,,,,,http://example.org/City,Paris
+london,,,United Kingdom,,8982000,uk,,,,,http://example.org/City,London
+mary,Mary Smith,,,,,,2021-04-13,,paris,mary@smith.com,http://xmlns.com/foaf/0.1/Person,
+john,John Doe,,,,,,2022-01-02,,london,jdoe@example.org,http://xmlns.com/foaf/0.1/Person,
+berlin,,,Germany,,3769000,germany,,,,,http://example.org/City,Berlin
+uk,,UK,,,,,,,,,http://example.org/Country,
+france,,,,,,,,,,,http://example.org/Country,
+germany,,,,,,,,,,,http://example.org/Country,

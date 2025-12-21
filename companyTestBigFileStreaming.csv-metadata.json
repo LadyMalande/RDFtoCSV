@@ -1,0 +1,139 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "companyTestBigFileStreaming.nt_merged.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "employeeId",
+        "name" : "employeeId",
+        "propertyUrl" : "http://example.org/vocab/employeeId",
+        "aboutUrl" : "http://example.org/company/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "firstName",
+        "name" : "firstName",
+        "propertyUrl" : "http://example.org/vocab/firstName",
+        "aboutUrl" : "http://example.org/company/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "lastName",
+        "name" : "lastName",
+        "propertyUrl" : "http://example.org/vocab/lastName",
+        "aboutUrl" : "http://example.org/company/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "email",
+        "name" : "email",
+        "propertyUrl" : "http://example.org/vocab/email",
+        "aboutUrl" : "http://example.org/company/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hireDate",
+        "name" : "hireDate",
+        "propertyUrl" : "http://example.org/vocab/hireDate",
+        "datatype" : "date",
+        "aboutUrl" : "http://example.org/company/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "salary",
+        "name" : "salary",
+        "propertyUrl" : "http://example.org/vocab/salary",
+        "datatype" : "decimal",
+        "aboutUrl" : "http://example.org/company/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "department",
+        "name" : "department",
+        "propertyUrl" : "http://example.org/vocab/department",
+        "valueUrl" : "{+department}",
+        "aboutUrl" : "http://example.org/company/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "manager",
+        "name" : "manager",
+        "propertyUrl" : "http://example.org/vocab/manager",
+        "valueUrl" : "{+manager}",
+        "aboutUrl" : "http://example.org/company/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "phoneNumber",
+        "name" : "phoneNumber",
+        "propertyUrl" : "http://example.org/vocab/phoneNumber",
+        "aboutUrl" : "http://example.org/company/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "active",
+        "name" : "active",
+        "propertyUrl" : "http://example.org/vocab/active",
+        "datatype" : "boolean",
+        "aboutUrl" : "http://example.org/company/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "skills (en)",
+        "name" : "skills_en",
+        "propertyUrl" : "http://example.org/vocab/skills",
+        "aboutUrl" : "http://example.org/company/{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "commissionRate",
+        "name" : "commissionRate",
+        "propertyUrl" : "http://example.org/vocab/commissionRate",
+        "datatype" : "decimal",
+        "aboutUrl" : "http://example.org/company/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "certifications (en)",
+        "name" : "certifications_en",
+        "propertyUrl" : "http://example.org/vocab/certifications",
+        "aboutUrl" : "http://example.org/company/{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "teamSize",
+        "name" : "teamSize",
+        "propertyUrl" : "http://example.org/vocab/teamSize",
+        "datatype" : "integer",
+        "aboutUrl" : "http://example.org/company/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "deptName",
+        "name" : "deptName",
+        "propertyUrl" : "http://example.org/vocab/deptName",
+        "aboutUrl" : "http://example.org/dept/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "location",
+        "name" : "location",
+        "propertyUrl" : "http://example.org/vocab/location",
+        "aboutUrl" : "http://example.org/dept/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "budget",
+        "name" : "budget",
+        "propertyUrl" : "http://example.org/vocab/budget",
+        "datatype" : "decimal",
+        "aboutUrl" : "http://example.org/dept/{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "employeeId", "firstName", "lastName", "email", "hireDate", "salary", "department", "manager", "phoneNumber", "active", "skills_en", "commissionRate", "certifications_en", "teamSize", "deptName", "location", "budget" ]
+    }
+  } ]
+}

@@ -8,9 +8,12 @@ http://example.org/company/emp006,Employee,E006,Frank,Miller,frank.miller@exampl
 http://example.org/company/emp007,Employee,E007,Grace,Wilson,grace.wilson@example.com,2020-12-10,65000,http://example.org/dept/hr,,+1-555-0107,true,,,"PHR,SHRM-CP",,,,
 http://example.org/company/emp008,Employee,E008,Henry,Moore,henry.moore@example.com,2019-04-25,71000,http://example.org/dept/marketing,http://example.org/company/emp012,+1-555-0108,true,"Google Analytics,Social Media",,,,,,
 http://example.org/company/emp009,Employee,E009,Iris,Taylor,iris.taylor@example.com,2021-08-15,79000,http://example.org/dept/engineering,http://example.org/company/emp010,+1-555-0109,true,"Go,Kubernetes,Docker",,,,,,
-http://example.org/company/emp010,"Employee,Manager",E010,Jack,Anderson,jack.anderson@example.com,2015-02-20,110000,http://example.org/dept/engineering,,+1-555-0110,true,,,,5,,,
-http://example.org/company/emp011,"Employee,Manager",E011,Karen,Thomas,karen.thomas@example.com,2016-05-12,105000,http://example.org/dept/sales,,+1-555-0111,true,,,,3,,,
-http://example.org/company/emp012,"Employee,Manager",E012,Laura,Jackson,laura.jackson@example.com,2016-10-08,98000,http://example.org/dept/marketing,,+1-555-0112,true,,,,3,,,
+http://example.org/company/emp010,Employee,E010,Jack,Anderson,jack.anderson@example.com,2015-02-20,110000,http://example.org/dept/engineering,,+1-555-0110,true,,,,5,,,
+http://example.org/company/emp010,Manager,E010,Jack,Anderson,jack.anderson@example.com,2015-02-20,110000,http://example.org/dept/engineering,,+1-555-0110,true,,,,5,,,
+http://example.org/company/emp011,Employee,E011,Karen,Thomas,karen.thomas@example.com,2016-05-12,105000,http://example.org/dept/sales,,+1-555-0111,true,,,,3,,,
+http://example.org/company/emp011,Manager,E011,Karen,Thomas,karen.thomas@example.com,2016-05-12,105000,http://example.org/dept/sales,,+1-555-0111,true,,,,3,,,
+http://example.org/company/emp012,Employee,E012,Laura,Jackson,laura.jackson@example.com,2016-10-08,98000,http://example.org/dept/marketing,,+1-555-0112,true,,,,3,,,
+http://example.org/company/emp012,Manager,E012,Laura,Jackson,laura.jackson@example.com,2016-10-08,98000,http://example.org/dept/marketing,,+1-555-0112,true,,,,3,,,
 http://example.org/dept/engineering,Department,,,,,,,,,,,,,,,Engineering,Building A,500000
 http://example.org/dept/sales,Department,,,,,,,,,,,,,,,Sales,Building B,300000
 http://example.org/dept/marketing,Department,,,,,,,,,,,,,,,Marketing,Building B,250000
