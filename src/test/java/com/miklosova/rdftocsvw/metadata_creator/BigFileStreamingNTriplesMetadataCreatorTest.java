@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.metadata_creator;
 
 import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.BaseTest;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -26,10 +27,15 @@ class BigFileStreamingNTriplesMetadataCreatorTest extends BaseTest {
     @Mock
     private PrefinishedOutput<RowsAndKeys> mockData;
 
+    private AppConfig config;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        creator = new BigFileStreamingNTriplesMetadataCreator(mockData);
+        config = new AppConfig.Builder("test.nt")
+                .parsing("bigFileStreaming")
+                .build();
+        creator = new BigFileStreamingNTriplesMetadataCreator(mockData, config);
     }
 
     //BaseRock generated method id: ${testAddMetadata}, hash: 9375F9F8FBCF2389A58C560528A23697

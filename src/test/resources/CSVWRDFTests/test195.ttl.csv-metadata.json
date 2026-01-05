@@ -1,49 +1,53 @@
 {
-  "@context": "http://www.w3.org/ns/csvw",
-  "@type": "TableGroup",
-  "tables": [
-    {
-      "@type": "Table",
-      "url": "test195.ttlTestOutput0.csv",
-      "tableSchema": {
-        "@type": "Schema",
-        "columns": [
-          {
-            "@type": "Column",
-            "titles": "Subjekt",
-            "name": "Subjekt",
-            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
-            "suppressOutput": true
-          },
-          {
-            "@type": "Column",
-            "titles": "NMTOKEN",
-            "name": "NMTOKEN",
-            "propertyUrl": "file://test195.csv#NMTOKEN",
-            "datatype": "NMTOKEN"
-          },
-          {
-            "@type": "Column",
-            "titles": "base64Binary",
-            "name": "base64Binary",
-            "propertyUrl": "file://test195.csv#base64Binary",
-            "datatype": "base64Binary"
-          },
-          {
-            "@type": "Column",
-            "titles": "hexBinary",
-            "name": "hexBinary",
-            "propertyUrl": "file://test195.csv#hexBinary",
-            "datatype": "hexBinary"
-          }
-        ],
-        "rowTitles": [
-          "Subjekt",
-          "NMTOKEN",
-          "base64Binary",
-          "hexBinary"
-        ]
-      }
-    }
-  ]
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test195.ttl.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "NMTOKEN",
+        "name" : "NMTOKEN",
+        "propertyUrl" : "file://test195.csv#NMTOKEN",
+        "datatype" : "NMTOKEN"
+      }, {
+        "@type" : "Column",
+        "titles" : "base64Binary",
+        "name" : "base64Binary",
+        "propertyUrl" : "file://test195.csv#base64Binary",
+        "datatype" : "base64Binary"
+      }, {
+        "@type" : "Column",
+        "titles" : "hexBinary",
+        "name" : "hexBinary",
+        "propertyUrl" : "file://test195.csv#hexBinary",
+        "datatype" : "hexBinary"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "NMTOKEN", "base64Binary", "hexBinary" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ]
+  } ]
 }

@@ -1,0 +1,136 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test187.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "date",
+        "name" : "date",
+        "propertyUrl" : "file://test187.csv#date",
+        "valueUrl" : "{+date}",
+        "datatype" : "date"
+      }, {
+        "@type" : "Column",
+        "titles" : "datetime",
+        "name" : "datetime",
+        "propertyUrl" : "file://test187.csv#datetime",
+        "valueUrl" : "{+datetime}",
+        "datatype" : "dateTime"
+      }, {
+        "@type" : "Column",
+        "titles" : "dateTimeStamp",
+        "name" : "dateTimeStamp",
+        "propertyUrl" : "file://test187.csv#dateTimeStamp",
+        "valueUrl" : "{+dateTimeStamp}",
+        "datatype" : "dateTimeStamp"
+      }, {
+        "@type" : "Column",
+        "titles" : "gDay",
+        "name" : "gDay",
+        "propertyUrl" : "file://test187.csv#gDay",
+        "valueUrl" : "{+gDay}",
+        "datatype" : "gDay"
+      }, {
+        "@type" : "Column",
+        "titles" : "gMonth",
+        "name" : "gMonth",
+        "propertyUrl" : "file://test187.csv#gMonth",
+        "valueUrl" : "{+gMonth}",
+        "datatype" : "gMonth"
+      }, {
+        "@type" : "Column",
+        "titles" : "gMonthDay",
+        "name" : "gMonthDay",
+        "propertyUrl" : "file://test187.csv#gMonthDay",
+        "valueUrl" : "{+gMonthDay}",
+        "datatype" : "gMonthDay"
+      }, {
+        "@type" : "Column",
+        "titles" : "gYear",
+        "name" : "gYear",
+        "propertyUrl" : "file://test187.csv#gYear",
+        "valueUrl" : "{+gYear}",
+        "datatype" : "gYear"
+      }, {
+        "@type" : "Column",
+        "titles" : "gYearMonth",
+        "name" : "gYearMonth",
+        "propertyUrl" : "file://test187.csv#gYearMonth",
+        "valueUrl" : "{+gYearMonth}",
+        "datatype" : "gYearMonth"
+      }, {
+        "@type" : "Column",
+        "titles" : "time",
+        "name" : "time",
+        "propertyUrl" : "file://test187.csv#time",
+        "valueUrl" : "{+time}",
+        "datatype" : "time"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "date", "datetime", "dateTimeStamp", "gDay", "gMonth", "gMonthDay", "gYear", "gYearMonth", "time" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ],
+    "config" : {
+      "file" : "./src/test/resources/CSVWRDFTests/test187.ttl",
+      "logLevel" : "INFO",
+      "multipleTables" : false,
+      "parsing" : "rdf4j",
+      "streaming" : false,
+      "firstNormalForm" : true,
+      "output" : "./src/test/resources/CSVWRDFTests/test187",
+      "outputMetadata" : "./src/test/resources/CSVWRDFTests/test187.ttl.csv-metadata.json",
+      "columnNamingConvention" : "original",
+      "preferredLanguages" : "en,cs",
+      "conversionMethod" : "basicQuery",
+      "intermediateFileNames" : "test187.csv,",
+      "conversionHasBlankNodes" : true,
+      "conversionHasRdfTypes" : true,
+      "outputZipFileName" : "test187_CSVW.zip",
+      "readMethod" : "rdf4j",
+      "metadataRowNums" : true,
+      "outputFilePath" : "./src/test/resources/CSVWRDFTests/test187.ttl",
+      "outputMetadataFileName" : "./src/test/resources/CSVWRDFTests/test187.csv-metadata.json",
+      "outputFileName" : "test187.csv",
+      "streamingContinuous" : false,
+      "simpleBasicQuery" : false,
+      "inputFileName" : "./src/test/resources/CSVWRDFTests/test187.ttl",
+      "default_OUTPUT" : "RDFtoCSVOutput.csv",
+      "default_PARSING" : "rdf4j",
+      "default_CONVERSION_HAS_RDF_TYPES" : true,
+      "default_CONVERSION_HAS_BLANK_NODES" : false,
+      "default_CONVERSION_METHOD" : "basicQuery",
+      "default_LOG_LEVEL" : "INFO",
+      "default_MULTIPLE_TABLES" : false,
+      "default_READ_METHOD" : "rdf4j",
+      "default_STREAMING" : false,
+      "default_METADATA_ROWNUMS" : false,
+      "default_STREAMING_CONTINUOUS" : false,
+      "default_SIMPLE_BASIC_QUERY" : false,
+      "default_FIRST_NORMAL_FORM" : true
+    }
+  } ]
+}

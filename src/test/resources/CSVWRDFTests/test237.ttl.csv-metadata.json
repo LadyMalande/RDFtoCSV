@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "0.csv",
+    "url" : "test237.ttl.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -14,36 +14,10 @@
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "latitude",
-        "name" : "latitude",
-        "propertyUrl" : "http://schema.org/latitude",
-        "datatype" : "double",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "longitude",
-        "name" : "longitude",
-        "propertyUrl" : "http://schema.org/longitude",
-        "datatype" : "double",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subject}"
-      }, {
-        "@type" : "Column",
         "titles" : "name",
         "name" : "name",
         "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "countryCode",
-        "name" : "countryCode",
-        "propertyUrl" : "http://www.geonames.org/ontology#countryCode",
-        "aboutUrl" : "http://example.org/countries.csv#{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "countryRef",
-        "name" : "countryRef",
-        "propertyUrl" : "file://country_slice.csv#countryRef",
-        "valueUrl" : "http://example.org/countries.csv#{+countryRef}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "population",
@@ -52,13 +26,39 @@
         "datatype" : "integer"
       }, {
         "@type" : "Column",
+        "titles" : "latitude",
+        "name" : "latitude",
+        "propertyUrl" : "http://schema.org/latitude",
+        "datatype" : "double",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "longitude",
+        "name" : "longitude",
+        "propertyUrl" : "http://schema.org/longitude",
+        "datatype" : "double",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
         "titles" : "year",
         "name" : "year",
         "propertyUrl" : "file://country_slice.csv#year",
         "datatype" : "gYear"
+      }, {
+        "@type" : "Column",
+        "titles" : "ISO country code",
+        "name" : "countryCode",
+        "propertyUrl" : "http://www.geonames.org/ontology#countryCode",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "countryRef",
+        "name" : "countryRef",
+        "propertyUrl" : "file://country_slice.csv#countryRef",
+        "valueUrl" : "{+countryRef}"
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "latitude", "longitude", "name", "countryCode", "countryRef", "population", "year" ]
+      "rowTitles" : [ "Subject", "name", "population", "latitude", "longitude", "year", "countryCode", "countryRef" ]
     },
     "transformations" : [ {
       "@type" : "Template",

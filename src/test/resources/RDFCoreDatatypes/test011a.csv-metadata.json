@@ -1,35 +1,26 @@
 {
-  "@context": "http://www.w3.org/ns/csvw",
-  "@type": "TableGroup",
-  "tables": [
-    {
-      "@type": "Table",
-      "url": "test011aTestOutput0.csv",
-      "tableSchema": {
-        "@type": "Schema",
-        "columns": [
-          {
-            "@type": "Column",
-            "titles": "Subjekt",
-            "name": "Subjekt",
-            "valueUrl": "http://example.org/{+Subjekt}",
-            "suppressOutput": true
-          },
-          {
-            "@type": "Column",
-            "titles": "bar",
-            "name": "bar",
-            "propertyUrl": "http://example.org/bar",
-            "aboutUrl": "http://example.org/{+Subjekt}"
-          }
-        ],
-        "primaryKey": "Subjekt",
-        "aboutUrl": "http://example.org/{+Subjekt}",
-        "rowTitles": [
-          "Subjekt",
-          "bar"
-        ]
-      }
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test011a.nt.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "http://example.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "bar",
+        "name" : "bar",
+        "propertyUrl" : "http://example.org/bar",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "bar" ]
     }
-  ]
+  } ]
 }

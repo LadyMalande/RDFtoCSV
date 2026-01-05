@@ -1,0 +1,1226 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "label",
+        "name" : "label",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#label",
+        "valueUrl" : "{+label}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasIter",
+        "name" : "hasIter",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasIter",
+        "valueUrl" : "{+hasIter}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "repairRelatedTo",
+        "name" : "repairRelatedTo",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#repairRelatedTo",
+        "valueUrl" : "{+repairRelatedTo}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "label", "hasIter", "repairRelatedTo" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt1.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_1",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "isDistrictAuthority",
+        "name" : "isDistrictAuthority",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#isDistrictAuthority",
+        "valueUrl" : "{+isDistrictAuthority}",
+        "datatype" : "boolean",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_1", "isDistrictAuthority" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt2.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "type" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt3.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "contractingAuthority",
+        "name" : "contractingAuthority",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#contractingAuthority",
+        "valueUrl" : "{+contractingAuthority}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasEconomicIndicator",
+        "name" : "hasEconomicIndicator",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasEconomicIndicator",
+        "valueUrl" : "{+hasEconomicIndicator}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "officialInstabilityType",
+        "name" : "officialInstabilityType",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#officialInstabilityType",
+        "valueUrl" : "{+officialInstabilityType}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "contractingAuthority", "hasEconomicIndicator", "officialInstabilityType" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt4.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Date Modified",
+        "name" : "modified",
+        "propertyUrl" : "http://purl.org/dc/terms/modified",
+        "valueUrl" : "{+modified}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "modified" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt5.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "hasEconomicIndicator",
+        "name" : "hasEconomicIndicator_1",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasEconomicIndicator",
+        "valueUrl" : "{+hasEconomicIndicator}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "isLotOf",
+        "name" : "isLotOf",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#isLotOf",
+        "valueUrl" : "{+isLotOf}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "hasEconomicIndicator_1", "isLotOf" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt6.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Type",
+        "name" : "type_1",
+        "propertyUrl" : "http://purl.org/dc/terms/type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "type_1" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt7.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Is Referenced By",
+        "name" : "isReferencedBy",
+        "propertyUrl" : "http://purl.org/dc/terms/isReferencedBy",
+        "valueUrl" : "{+isReferencedBy}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "isReferencedBy" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt8.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "cup",
+        "name" : "cup",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#cup",
+        "valueUrl" : "{+cup}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasEconomicIndicator",
+        "name" : "hasEconomicIndicator_null",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasEconomicIndicator",
+        "valueUrl" : "{+hasEconomicIndicator}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "cup", "hasEconomicIndicator_null" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt9.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "lot",
+        "name" : "lot",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#lot",
+        "valueUrl" : "{+lot}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "lot" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt10.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "repairRelatedTo",
+        "name" : "repairRelatedTo_1",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#repairRelatedTo",
+        "valueUrl" : "{+repairRelatedTo}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "repairRelatedTo_1" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt11.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Relation",
+        "name" : "relation",
+        "propertyUrl" : "http://purl.org/dc/terms/relation",
+        "valueUrl" : "{+relation}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "relation" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt12.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Date",
+        "name" : "date",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/date",
+        "valueUrl" : "{+date}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasStep",
+        "name" : "hasStep",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasStep",
+        "valueUrl" : "{+hasStep}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "date", "hasStep" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt13.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "entity",
+        "name" : "entity",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#entity",
+        "valueUrl" : "{+entity}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "entity" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt14.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "hasIter",
+        "name" : "hasIter_1",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasIter",
+        "valueUrl" : "{+hasIter}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "hasIter_1" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt15.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "unit",
+        "name" : "unit",
+        "propertyUrl" : "http://qudt.org/vocab/unit#unit",
+        "valueUrl" : "{+unit}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "unit" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt16.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "instabilityGroup",
+        "name" : "instabilityGroup",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#instabilityGroup",
+        "valueUrl" : "{+instabilityGroup}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "instabilityType",
+        "name" : "instabilityType",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#instabilityType",
+        "valueUrl" : "{+instabilityType}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "instabilityGroup", "instabilityType" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt17.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "primaryGeographicalFeature",
+        "name" : "primaryGeographicalFeature",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#primaryGeographicalFeature",
+        "valueUrl" : "{+primaryGeographicalFeature}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "primaryGeographicalFeature" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt18.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "hasStep",
+        "name" : "hasStep_1",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasStep",
+        "valueUrl" : "{+hasStep}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "hasStep_1" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt19.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "value",
+        "name" : "value",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+        "valueUrl" : "{+value}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "value" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt20.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "repairCategory",
+        "name" : "repairCategory",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#repairCategory",
+        "valueUrl" : "{+repairCategory}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "repairCategory" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt21.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "isMemberOf",
+        "name" : "isMemberOf",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/top/isMemberOf",
+        "valueUrl" : "{+isMemberOf}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "isMemberOf" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt22.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "isLotOf",
+        "name" : "isLotOf_1",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#isLotOf",
+        "valueUrl" : "{+isLotOf}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Relation",
+        "name" : "relation_1",
+        "propertyUrl" : "http://purl.org/dc/terms/relation",
+        "valueUrl" : "{+relation}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "note",
+        "name" : "note",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#note",
+        "valueUrl" : "{+note}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "isLotOf_1", "relation_1", "note" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt23.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "latitude",
+        "name" : "lat",
+        "propertyUrl" : "http://www.w3.org/2003/01/geo/wgs84_pos#lat",
+        "valueUrl" : "{+lat}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "longitude",
+        "name" : "long",
+        "propertyUrl" : "http://www.w3.org/2003/01/geo/wgs84_pos#long",
+        "valueUrl" : "{+long}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "point",
+        "name" : "point",
+        "propertyUrl" : "http://www.georss.org/georss/point",
+        "valueUrl" : "{+point}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "lat", "long", "point" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt24.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Source",
+        "name" : "source",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/source",
+        "valueUrl" : "{+source}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "source" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt25.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "hasAgreement",
+        "name" : "hasAgreement",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#hasAgreement",
+        "valueUrl" : "{+hasAgreement}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "hasAgreement" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt26.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Publisher",
+        "name" : "publisher",
+        "propertyUrl" : "http://purl.org/dc/terms/publisher",
+        "valueUrl" : "{+publisher}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "publisher" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt27.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Type",
+        "name" : "type_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "type_null" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt28.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "contact",
+        "name" : "contact",
+        "propertyUrl" : "http://purl.org/procurement/public-contracts#contact",
+        "valueUrl" : "{+contact}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "contact" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt29.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Description",
+        "name" : "description",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/description",
+        "valueUrl" : "{+description}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "description" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt30.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "location",
+        "name" : "location",
+        "propertyUrl" : "http://www.w3.org/2003/01/geo/wgs84_pos#location",
+        "valueUrl" : "{+location}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "location" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt31.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "amountFinanced",
+        "name" : "amountFinanced",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#amountFinanced",
+        "valueUrl" : "{+amountFinanced}",
+        "datatype" : "http://qudt.org/1.1/vocab/unit#Euro",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "amountFinanced" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt32.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_1",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject_null",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "subject", "subject_1", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null", "subject_null" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt33.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "role",
+        "name" : "role",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#role",
+        "valueUrl" : "{+role}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "role" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt34.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "instabilityRelatedTo",
+        "name" : "instabilityRelatedTo",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#instabilityRelatedTo",
+        "valueUrl" : "{+instabilityRelatedTo}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "instabilityRelatedTo" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt35.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "procedureType",
+        "name" : "procedureType",
+        "propertyUrl" : "http://purl.org/procurement/public-contracts#procedureType",
+        "valueUrl" : "{+procedureType}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "procedureType" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt36.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "lithologyType",
+        "name" : "lithologyType",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#lithologyType",
+        "valueUrl" : "{+lithologyType}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "lithologyType" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt37.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "lithologyRelatedTo",
+        "name" : "lithologyRelatedTo",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#lithologyRelatedTo",
+        "valueUrl" : "{+lithologyRelatedTo}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "lithologyRelatedTo" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt38.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "note",
+        "name" : "note_1",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#note",
+        "valueUrl" : "{+note}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "note_1" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt39.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "repairType",
+        "name" : "repairType",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#repairType",
+        "valueUrl" : "{+repairType}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "repairType" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt40.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "officialInstabilityType",
+        "name" : "officialInstabilityType_1",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#officialInstabilityType",
+        "valueUrl" : "{+officialInstabilityType}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "officialInstabilityType_1" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt41.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "secondaryGeographicalFeature",
+        "name" : "secondaryGeographicalFeature",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#secondaryGeographicalFeature",
+        "valueUrl" : "{+secondaryGeographicalFeature}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "secondaryGeographicalFeature" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "dissesto_2k_triples.nt42.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject_null",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "instabilityType",
+        "name" : "instabilityType_1",
+        "propertyUrl" : "https://w3id.org/italia/env/onto/core#instabilityType",
+        "valueUrl" : "{+instabilityType}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject_null", "instabilityType_1" ]
+    }
+  } ]
+}

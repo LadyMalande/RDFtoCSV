@@ -8,6 +8,8 @@
 @prefix vs:      <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
 
 @prefix wot:     <http://xmlns.com/wot/0.1/>.
+@prefix cc:      <http://creativecommons.org/ns#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
 
 
 ex:myThesis

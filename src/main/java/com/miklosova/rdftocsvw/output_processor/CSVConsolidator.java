@@ -3,7 +3,8 @@ package com.miklosova.rdftocsvw.output_processor;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
+
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
@@ -12,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -24,6 +26,22 @@ import static com.miklosova.rdftocsvw.output_processor.MetadataConsolidator.getF
  */
 public class CSVConsolidator {
     private static final Logger logger = Logger.getLogger(CSVConsolidator.class.getName());
+    private AppConfig config;
+
+    /**
+     * Default constructor for backward compatibility.
+     */
+    public CSVConsolidator() {
+        this.config = null;
+    }
+
+    /**
+     * Constructor with AppConfig.
+     * @param config The application configuration
+     */
+    public CSVConsolidator(AppConfig config) {
+        this.config = config;
+    }
 
     /**
      * Consolidate CSVd.
@@ -64,15 +82,29 @@ public class CSVConsolidator {
      * @param oldMetadata   the old metadata
      * @param newMetadata   the new metadata
      * @param fileToWriteTo the file to write to
+     * @deprecated Use {@link #writeToCSVFromOldMetadataToMerged(Metadata, Metadata, File, AppConfig)} instead
      */
+    @Deprecated
     public void writeToCSVFromOldMetadataToMerged(Metadata oldMetadata, Metadata newMetadata, File fileToWriteTo) {
+        writeToCSVFromOldMetadataToMerged(oldMetadata, newMetadata, fileToWriteTo, config);
+    }
+
+    /**
+     * Write to csv from old metadata to merged CSV with AppConfig.
+     *
+     * @param oldMetadata   the old metadata
+     * @param newMetadata   the new metadata
+     * @param fileToWriteTo the file to write to
+     * @param config the application configuration
+     */
+    public void writeToCSVFromOldMetadataToMerged(Metadata oldMetadata, Metadata newMetadata, File fileToWriteTo, AppConfig config) {
 
         try (CSVWriter writer = new CSVWriter(new FileWriter(fileToWriteTo, true))) {
             // Appends to the file instead of overwriting
             String[] lineToWrite = new String[newMetadata.getTables().get(0).getTableSchema().getColumns().size()];
 
             for (Table t : oldMetadata.getTables()) {
-                String fullFilePath = getFilePathForFileName(t.getUrl());
+                String fullFilePath = getFilePathForFileName(t.getUrl(), config);
                 assert fullFilePath != null;
                 File fileToWrite = new File(fullFilePath);
                 try (CSVReader reader = new CSVReader(new FileReader(fileToWrite))) {
@@ -84,16 +116,33 @@ public class CSVConsolidator {
                             isFirstLine = false;
                         } else {
                             List<Column> columns = newMetadata.getTables().get(0).getTableSchema().getColumns();
+                            // Initialize all cells to empty string
+                            Arrays.fill(lineToWrite, "");
+                            
                             for (int i = 0; i < columns.size(); i++) {
                                 if (i == 0) {
-                                    lineToWrite[i] = line[0];
+                                    // Subject column - always use first column from source
+                                    lineToWrite[i] = (line.length > 0) ? line[0] : "";
                                 } else {
                                     int finalI = i;
                                     if (t.getTableSchema().getColumns().stream().anyMatch(
                                             column -> isMergeable(columns.get(finalI), column))) {
                                         Optional<Column> columnOptional = t.getTableSchema().getColumns().stream().filter(
                                                 column -> (isMergeable(columns.get(finalI), column))).findFirst();
-                                        lineToWrite[i] = (columnOptional.isPresent()) ? line[t.getTableSchema().getColumns().indexOf(columnOptional.get())] : "";
+                                        if (columnOptional.isPresent()) {
+                                            int sourceColumnIndex = t.getTableSchema().getColumns().indexOf(columnOptional.get());
+                                            // Safe array access - check bounds before reading
+                                            String cellValue = (sourceColumnIndex < line.length) ? line[sourceColumnIndex] : "";
+                                            
+                                            // Apply valueUrl pattern extraction if needed
+                                            Column targetColumn = columns.get(finalI);
+                                            if (targetColumn.getValueUrl() != null && targetColumn.getValueUrl().contains("{+") 
+                                                && !cellValue.isEmpty()) {
+                                                cellValue = extractValueWithPattern(cellValue, targetColumn.getValueUrl());
+                                            }
+                                            
+                                            lineToWrite[i] = cellValue;
+                                        }
                                     }
                                 }
                             }
@@ -105,9 +154,9 @@ public class CSVConsolidator {
                     throw new RuntimeException(e);
                 }
             }
-            System.out.println("newFileName writeToCSVFromOldMetadataToMerged   fileToWriteTo = " + fileToWriteTo.toString());
+            //System.out.println("newFileName writeToCSVFromOldMetadataToMerged   fileToWriteTo = " + fileToWriteTo.toString());
 
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileToWriteTo.toString());
+            config.setIntermediateFileNames(fileToWriteTo.toString());
         } catch (IOException e) {
             logger.log(Level.SEVERE, "There was an exception while trying to write data into new merged CSV.");
         }
@@ -128,5 +177,37 @@ public class CSVConsolidator {
                 && c2.getPropertyUrl().equalsIgnoreCase(c1.getPropertyUrl()) &&
                 ((c1.getLang() == null && c2.getLang() == null) ||
                         (c1.getLang().equalsIgnoreCase(c2.getLang())));
+    }
+
+    /**
+     * Extract the appropriate value based on valueUrl pattern.
+     * For partial patterns like "https://example.com/#{+var}", extracts the local name by removing the prefix.
+     * For full patterns like "{+var}", returns the complete value.
+     *
+     * @param cellValue the full IRI value from the CSV cell
+     * @param valueUrlPattern the valueUrl pattern from column metadata (e.g., "https://data.mvcr.gov.cz/zdroj/číselníky/{+inScheme}")
+     * @return the extracted value according to the pattern
+     */
+    private String extractValueWithPattern(String cellValue, String valueUrlPattern) {
+        // Check if it's a full pattern like {+variableName}
+        boolean isFullPattern = valueUrlPattern.trim().startsWith("{+");
+        
+        if (isFullPattern) {
+            // Full pattern: use complete value as-is
+            return cellValue;
+        } else {
+            // Partial pattern like "https://example.com/vocab#{+var}"
+            // Extract the prefix (everything before {+)
+            int patternStart = valueUrlPattern.indexOf("{+");
+            if (patternStart > 0) {
+                String prefix = valueUrlPattern.substring(0, patternStart);
+                // Remove the prefix from the cell value
+                if (cellValue.startsWith(prefix)) {
+                    return cellValue.substring(prefix.length());
+                }
+            }
+            // Fallback: return as-is if pattern doesn't match
+            return cellValue;
+        }
     }
 }

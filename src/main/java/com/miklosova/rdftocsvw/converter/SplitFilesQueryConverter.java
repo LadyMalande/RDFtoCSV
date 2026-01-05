@@ -3,7 +3,8 @@ package com.miklosova.rdftocsvw.converter;
 import com.miklosova.rdftocsvw.converter.data_structure.*;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
+
 import com.miklosova.rdftocsvw.support.ConverterHelper;
 import lombok.extern.java.Log;
 import org.eclipse.rdf4j.model.*;
@@ -96,26 +97,55 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
     Integer fileNumberX;
 
     /**
+     * The AppConfig instance.
+     */
+    private AppConfig config;
+
+    /**
      * Instantiates a new Split files query converter.
      *
      * @param db the db
+     * @deprecated Use {@link #SplitFilesQueryConverter(Repository, AppConfig)} instead
      */
+    @Deprecated
     public SplitFilesQueryConverter(Repository db) {
         keys = new HashSet<>();
         this.db = db;
         this.fileNumberX = 0;
         this.fileNamesCreated = new ArrayList<>();
-        this.metadata = new Metadata();
+        this.metadata = new Metadata(null);
+        this.config = null;
+    }
+
+    /**
+     * Instantiates a new Split files query converter with AppConfig.
+     *
+     * @param db the db
+     * @param config the application configuration
+     */
+    public SplitFilesQueryConverter(Repository db, AppConfig config) {
+        keys = new HashSet<>();
+        this.db = db;
+        this.fileNumberX = 0;
+        this.fileNamesCreated = new ArrayList<>();
+        this.metadata = new Metadata(config);
+        this.config = config;
+        super.config = config; // Set parent's config field
     }
 
 
     @Override
     public PrefinishedOutput<RowsAndKeys> convertWithQuery(RepositoryConnection rc) {
+        com.miklosova.rdftocsvw.support.ProgressLogger.startStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING);
+        
         this.rc = rc;
         allKeys = new ArrayList<>();
         allRows = new ArrayList<>();
         changeBNodesForIri(rc);
         deleteBlankNodes(rc);
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 25, "Executing SPARQL queries");
+        
         PrefinishedOutput<RowsAndKeys> queryResult;
         String query = getCSVTableQueryForModel(true);
         try {
@@ -124,6 +154,8 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
             query = getCSVTableQueryForModel(false);
             queryResult = queryRDFModel(query, false);
         }
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.completeStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING);
         return queryResult;
     }
 
@@ -131,11 +163,15 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
     private PrefinishedOutput<RowsAndKeys> queryRDFModel(String queryString, boolean askForTypes) {
         rows = new ArrayList<>();
         PrefinishedOutput<RowsAndKeys> gen = new PrefinishedOutput<>((new RowsAndKeys.RowsAndKeysFactory()).factory());
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
+        config.setConversionHasRdfTypes(askForTypes);
         // Query the data and pass the result as String
         ConnectionPool connectionPool = new ConnectionPool(db, Runtime.getRuntime().availableProcessors());
         // Query in rdf4j
         // Create a new Repository.
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+            com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 30, "Initializing connection pool"
+        );
 
         try (SailRepositoryConnection conn = (SailRepositoryConnection) db.getConnection()) {
 
@@ -153,6 +189,10 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
                 }
             });
             while (!conn.isEmpty()) {
+                
+                com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                    com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 40, "Executing SPARQL query"
+                );
 
                 TupleQuery query = conn.prepareTupleQuery(queryString);
                 // A QueryResult is also an AutoCloseable resource, so make sure it gets closed when done.
@@ -165,7 +205,7 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
                     for (BindingSet solution : result) {
                         // ... and print out the value of the variable binding for ?s and ?n
                         if (solution.getValue("o").stringValue().equalsIgnoreCase(CSVW_TableGroup)) {
-                            StandardModeConverter smc = new StandardModeConverter(db);
+                            StandardModeConverter smc = new StandardModeConverter(db, config);
                             return smc.convertWithQuery(this.rc);
                         }
 
@@ -185,8 +225,18 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
                             }
                         }
                     }
+                    
+                    com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                        com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 50,
+                        String.format("Found %d root entities", roots.size())
+                    );
+                    
                     countDominantTypes(conn, roots, askForTypes);
                     Value dominantType = getDominantType();
+                    
+                    com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                        com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 60, "Processing entity types"
+                    );
 
                     recursiveQueryForFiles(connectionPool, dominantType, askForTypes);
 
@@ -198,7 +248,7 @@ public class SplitFilesQueryConverter extends ConverterHelper implements IQueryP
             for (int i = 0; i < allRows.size(); i++) {
                 gen.getPrefinishedOutput().getRowsAndKeys().add(new RowAndKey(allKeys.get(i), allRows.get(i)));
             }
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
+            config.setConversionHasRdfTypes(askForTypes);
 
 
         }

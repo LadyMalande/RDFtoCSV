@@ -1,7 +1,8 @@
 package com.miklosova.rdftocsvw.converter;
 
 import com.miklosova.rdftocsvw.converter.data_structure.*;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
+
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Statement;
@@ -20,6 +21,7 @@ import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,15 +59,34 @@ public class StandardModeConverter implements IQueryParser {
      */
     Repository db;
 
+    /**
+     * The AppConfig instance.
+     */
+    private AppConfig config;
 
     /**
      * Instantiates a new Standard mode converter.
      *
      * @param db the db
+     * @deprecated Use {@link #StandardModeConverter(Repository, AppConfig)} instead
      */
+    @Deprecated
     public StandardModeConverter(Repository db) {
         this.keys = new ArrayList<>();
         this.db = db;
+        this.config = null;
+    }
+
+    /**
+     * Instantiates a new Standard mode converter with AppConfig.
+     *
+     * @param db the db
+     * @param config the application configuration
+     */
+    public StandardModeConverter(Repository db, AppConfig config) {
+        this.keys = new ArrayList<>();
+        this.db = db;
+        this.config = config;
     }
 
     private static String getQueryForObjectBySubjectAndPredicate(Value s, String predicate) {
@@ -81,7 +102,7 @@ public class StandardModeConverter implements IQueryParser {
     @Override
     public PrefinishedOutput<RowsAndKeys> convertWithQuery(RepositoryConnection rc) {
         PrefinishedOutput<RowsAndKeys> gen = new PrefinishedOutput<>(new RowsAndKeys.RowsAndKeysFactory().factory());
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(true));
+        config.setConversionHasRdfTypes(true);
 
         allRows = new ArrayList<>();
         allKeys = new ArrayList<>();
@@ -147,10 +168,32 @@ public class StandardModeConverter implements IQueryParser {
 
                 Value fileIRI = solution.getValue("o");
                 String fileName = extractFileName(fileIRI);
-                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileName);
-                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, fileName);
-                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME,
-                        ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH) + fileName + "-metadata.json");
+                
+                // Build full path for the intermediate file
+                String outputPath = config.getOutputFilePath();
+                String fullPath;
+                if (outputPath != null && !outputPath.isEmpty()) {
+                    // Use output path directory + filename
+                    File outputFile = new File(outputPath);
+                    File parentDir = outputFile.getParentFile();
+                    if (parentDir != null) {
+                        fullPath = new File(parentDir, fileName).getAbsolutePath();
+                    } else {
+                        fullPath = fileName;
+                    }
+                } else {
+                    fullPath = fileName;
+                }
+                
+                config.setIntermediateFileNames(fullPath);
+                config.setOutputFileName(fileName);
+
+                // Only set output metadata filename if not already explicitly set
+                String currentMetadataFileName = config.getOutputMetadataFileName();
+                if (currentMetadataFileName == null || currentMetadataFileName.isEmpty()) {
+                    String outputFilePath = config.getOutputFilePath();
+                    config.setOutputMetadataFileName(outputFilePath + fileName + "-metadata.json");
+                }
             }
         }
 
@@ -159,7 +202,7 @@ public class StandardModeConverter implements IQueryParser {
 
         Map<Value, Integer> rowNumsByRowIrisMap = buildRownumMap(conn, rowIRIs);
         if (!rowNumsByRowIrisMap.isEmpty()) {
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.METADATA_ROWNUMS, "true");
+            config.setMetadataRowNums(true);
         }
         for (Value rowIRI : rowIRIs) {
             addNewRow(conn, rowIRI);

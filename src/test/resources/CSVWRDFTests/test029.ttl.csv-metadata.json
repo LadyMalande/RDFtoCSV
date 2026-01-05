@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "0.csv",
+    "url" : "test029.ttl.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -14,16 +14,6 @@
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "countryCode",
-        "name" : "countryCode",
-        "propertyUrl" : "file://countries.csv#countryCode"
-      }, {
-        "@type" : "Column",
-        "titles" : "latitude",
-        "name" : "latitude",
-        "propertyUrl" : "file://countries.csv#latitude"
-      }, {
-        "@type" : "Column",
         "titles" : "longitude",
         "name" : "longitude",
         "propertyUrl" : "file://countries.csv#longitude"
@@ -32,9 +22,19 @@
         "titles" : "name",
         "name" : "name",
         "propertyUrl" : "file://countries.csv#name"
+      }, {
+        "@type" : "Column",
+        "titles" : "countryCode",
+        "name" : "countryCode",
+        "propertyUrl" : "file://countries.csv#countryCode"
+      }, {
+        "@type" : "Column",
+        "titles" : "latitude",
+        "name" : "latitude",
+        "propertyUrl" : "file://countries.csv#latitude"
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "countryCode", "latitude", "longitude", "name" ]
+      "rowTitles" : [ "Subject", "longitude", "name", "countryCode", "latitude" ]
     },
     "transformations" : [ {
       "@type" : "Template",

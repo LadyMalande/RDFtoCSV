@@ -1,0 +1,11 @@
+Subject,name,alternative label,country,knows,population,Subject,Date Created,name,livesIn,mbox,type,preferred label (en)
+http://example.org/paul,Paul Brown,,,"john,mary",,,2020-12-30,,london,paul@brown.com,http://xmlns.com/foaf/0.1/Person,
+http://example.org/lucia,Lucia Martinez,,,mary,,,,,berlin,lucia.martinez@ex.org,http://xmlns.com/foaf/0.1/Person,
+http://example.org/paris,,,France,,2161000,france,,,,,http://example.org/City,Paris
+http://example.org/london,,,United Kingdom,,8982000,uk,,,,,http://example.org/City,London
+http://example.org/mary,Mary Smith,,,,,,2021-04-13,,paris,mary@smith.com,http://xmlns.com/foaf/0.1/Person,
+http://example.org/john,John Doe,,,,,,2022-01-02,,london,jdoe@example.org,http://xmlns.com/foaf/0.1/Person,
+http://example.org/berlin,,,Germany,,3769000,germany,,,,,http://example.org/City,Berlin
+http://example.org/uk,,UK,,,,,,,,,http://example.org/Country,
+http://example.org/france,,,,,,,,,,,http://example.org/Country,
+http://example.org/germany,,,,,,,,,,,http://example.org/Country,

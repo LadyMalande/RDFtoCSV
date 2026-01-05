@@ -1,46 +1,50 @@
 {
-  "@context": "http://www.w3.org/ns/csvw",
-  "@type": "TableGroup",
-  "tables": [
-    {
-      "@type": "Table",
-      "url": "test157.ttlTestOutput0.csv",
-      "tableSchema": {
-        "@type": "Schema",
-        "columns": [
-          {
-            "@type": "Column",
-            "titles": "Subjekt",
-            "name": "Subjekt",
-            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
-            "suppressOutput": true
-          },
-          {
-            "@type": "Column",
-            "titles": "decimal",
-            "name": "decimal",
-            "propertyUrl": "file://test157.csv#decimal"
-          },
-          {
-            "@type": "Column",
-            "titles": "double",
-            "name": "double",
-            "propertyUrl": "file://test157.csv#double"
-          },
-          {
-            "@type": "Column",
-            "titles": "integer",
-            "name": "integer",
-            "propertyUrl": "file://test157.csv#integer"
-          }
-        ],
-        "rowTitles": [
-          "Subjekt",
-          "decimal",
-          "double",
-          "integer"
-        ]
-      }
-    }
-  ]
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test157.ttl.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "decimal",
+        "name" : "decimal",
+        "propertyUrl" : "file://test157.csv#decimal"
+      }, {
+        "@type" : "Column",
+        "titles" : "double",
+        "name" : "double",
+        "propertyUrl" : "file://test157.csv#double"
+      }, {
+        "@type" : "Column",
+        "titles" : "integer",
+        "name" : "integer",
+        "propertyUrl" : "file://test157.csv#integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "decimal", "double", "integer" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ]
+  } ]
 }

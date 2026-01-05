@@ -1,0 +1,17 @@
+Subject,type,employeeId,firstName,lastName,email,hireDate,salary,department,manager,phoneNumber,active,skills (en),commissionRate,certifications (en),teamSize,deptName,location,budget
+http://example.org/company/emp010,"http://example.org/vocab/Employee,http://example.org/vocab/Manager",E010,Jack,Anderson,jack.anderson@example.com,2015-02-20,110000,http://example.org/dept/engineering,,+1-555-0110,true,,,,5,,,
+http://example.org/company/emp004,http://example.org/vocab/Employee,,,,,,,,,,,,,,,,,
+http://example.org/company/emp003,http://example.org/vocab/Employee,,,,,,,,,,,,,,,,,
+http://example.org/company/emp002,http://example.org/vocab/Employee,,,,,,,,,,,,,,,,,
+http://example.org/company/emp001,http://example.org/vocab/Employee,,,,,,,,,,,,,,,,,
+http://example.org/company/emp008,http://example.org/vocab/Employee,,,,,,,,,,,,,,,,,
+http://example.org/company/emp007,http://example.org/vocab/Employee,,,,,,,,,,,,,,,,,
+http://example.org/company/emp006,http://example.org/vocab/Employee,,,,,,,,,,,,,,,,,
+http://example.org/company/emp005,http://example.org/vocab/Employee,,,,,,,,,,,,,,,,,
+http://example.org/company/emp009,http://example.org/vocab/Employee,,,,,,,,,,,,,,,,,
+http://example.org/company/emp011,"http://example.org/vocab/Employee,http://example.org/vocab/Employee,http://example.org/vocab/Manager",E011,Karen,Thomas,karen.thomas@example.com,2016-05-12,105000,http://example.org/dept/sales,,+1-555-0111,true,,,,3,,,
+http://example.org/dept/hr,"http://example.org/vocab/Department,http://example.org/vocab/Department",,,,,,,,,,,,,,,Human Resources,Building C,150000
+http://example.org/dept/sales,"http://example.org/vocab/Department,http://example.org/vocab/Department",,,,,,,,,,,,,,,Sales,Building B,300000
+http://example.org/dept/engineering,"http://example.org/vocab/Department,http://example.org/vocab/Department",,,,,,,,,,,,,,,Engineering,Building A,500000
+http://example.org/company/emp012,"http://example.org/vocab/Employee,http://example.org/vocab/Employee,http://example.org/vocab/Manager",E012,Laura,Jackson,laura.jackson@example.com,2016-10-08,98000,http://example.org/dept/marketing,,+1-555-0112,true,,,,3,,,
+http://example.org/dept/marketing,"http://example.org/vocab/Department,http://example.org/vocab/Department",,,,,,,,,,,,,,,Marketing,Building B,250000

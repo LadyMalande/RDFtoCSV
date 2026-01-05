@@ -3,7 +3,8 @@ package com.miklosova.rdftocsvw.input_processor;
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.RDF4JMethod;
 import com.miklosova.rdftocsvw.input_processor.streaming_methods.StreamingMethod;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
+
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFParseException;
@@ -21,6 +22,24 @@ import java.util.logging.Logger;
 public class MethodService {
     private MethodGateway methodGateway;
     private static final Logger logger = Logger.getLogger(FileWrite.class.getName());
+    private AppConfig config;
+
+    /**
+     * Default constructor for backward compatibility.
+     * @deprecated Use {@link #MethodService(AppConfig)} instead
+     */
+    @Deprecated
+    public MethodService() {
+        this.config = null;
+    }
+
+    /**
+     * Constructor with AppConfig.
+     * @param config The application configuration
+     */
+    public MethodService(AppConfig config) {
+        this.config = config;
+    }
 
     /**
      * Process input repository connection.
@@ -36,16 +55,21 @@ public class MethodService {
         methodGateway = new MethodGateway();
         processMethodChoice(methodChoice);
         fileName = processFileOrIRI(fileName);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, fileName);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME,  fileName+ ".csv-metadata.json");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH,  fileName);
+        
+        if (config == null) {
+            throw new IllegalStateException("AppConfig is required");
+        }
+        config.setOutputFilePath(fileName);
+        // Note: IntermediateFileNames and other runtime values are set elsewhere during conversion
+        
         File fileToRead = new File(fileName);
         try {
             return methodGateway.processInput(fileToRead, db);
         } catch(OutOfMemoryError err){
             logger.log(Level.WARNING, "The data is too big to be processed by RDF4J method. The method has been changed to 'BigFileStreaming'. Continuing processing...");
-            methodGateway.setParsingMethod(new StreamingMethod());
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_METHOD, "bigfilestreaming");
+            methodGateway.setParsingMethod(new StreamingMethod(config));
+            
+            config.setConversionMethod("bigfilestreaming");
             return methodGateway.processInput(fileToRead, db);
         }
     }
@@ -78,10 +102,10 @@ public class MethodService {
 
             readr.close();
             writer.close();
-            logger.log(Level.INFO, "Successfully Downloaded. NewFileName is " + newFileName);
+            logger.info( "Successfully Downloaded. NewFileName is " + newFileName);
             return newFileName;
         } catch (MalformedURLException e) {
-            System.err.println("URL is invalid");
+            //System.err.println("URL is invalid: " + fileName + ". Returns original filename in processFileOrIRI method.");
             return fileName;
             // the URL is not in a valid form
         } catch (IOException ex) {
@@ -93,12 +117,11 @@ public class MethodService {
     }
 
     private void processMethodChoice(String methodChoice) {
-        logger.info("methodChoice=" + methodChoice);
+        //logger.info("methodChoice=" + methodChoice);
         switch (methodChoice.toLowerCase()) {
             case "rdf4j" -> methodGateway.setParsingMethod(new RDF4JMethod());
-            case "streaming", "bigfilestreaming" -> methodGateway.setParsingMethod(new StreamingMethod());
-            default -> {ConfigurationManager.throwAdviceInTheTerminal();
-                throw new IllegalArgumentException("Invalid reading method");}
+            case "streaming", "bigfilestreaming" -> methodGateway.setParsingMethod(new StreamingMethod(config));
+            default -> throw new IllegalArgumentException("Invalid reading method: " + methodChoice);
         }
     }
 }

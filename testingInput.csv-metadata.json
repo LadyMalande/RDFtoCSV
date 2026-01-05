@@ -1,0 +1,54 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "testingInput.nt_merged.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://www.w3.org/2004/02/skos/core#{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "preferred label (en)",
+        "name" : "prefLabel_en",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "is in scheme",
+        "name" : "inScheme",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#inScheme",
+        "valueUrl" : "{+inScheme}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "preferred label (cs)",
+        "name" : "prefLabel_cs",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "notation",
+        "name" : "notation",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#notation",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "prefLabel_en", "inScheme", "prefLabel_cs", "notation" ]
+    }
+  } ]
+}

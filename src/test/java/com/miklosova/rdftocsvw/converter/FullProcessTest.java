@@ -42,7 +42,7 @@ public class FullProcessTest {
     @Test
     @Disabled
     public void originalIsSubsetOfResult() {
-        String[] args = new String[]{"-f", filePath, "-p", "streaming"};
+        String[] args = new String[]{"-f", filePath, "-p", methodName};
         Main.main(args);
         /*
         ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
@@ -87,4 +87,10 @@ public class FullProcessTest {
         }
 */
     }
+    
+    @Test
+    public void RDFtoCSVWithURL() {
+    String[] args = new String[]{"-f", "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/refs/heads/main/test_data/testingInput.ttl", "-p", methodName};
+    Main.main(args);
+}
 }

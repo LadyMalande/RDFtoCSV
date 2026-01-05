@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.support;
 
 import com.miklosova.rdftocsvw.converter.RDFtoCSV;
+import org.apache.commons.cli.*;
 import org.eclipse.rdf4j.rio.RDFParseException;
 
 import java.io.File;
@@ -26,48 +27,172 @@ public class Main {
      * @param args The input arguments.
      */
     public static void main(String[] args) {
-        // Capture start time
-
+        long overallStartTime = System.currentTimeMillis();
+        System.out.println("=== RDFtoCSV Conversion Started ===");
+        
         if (args.length < 1) {
-            System.err.println("Usage: java -jar RDFtoCSV<vrsion>.jar -f <filename>\n for better explanation of arguments, run  java -jar RDFtoCSV<vrsion>.jar -f <filename> -h ");
+            System.err.println("Usage: java -jar RDFtoCSV<version>.jar -f <filename>\n for better explanation of arguments, run  java -jar RDFtoCSV<version>.jar -f <filename> -h ");
             System.exit(1);
         }
 
-        String RDFFileToRead = null;
+        // Parse command line arguments
+        Options options = createOptions();
+        CommandLineParser parser = new DefaultParser();
+        
+        try {
+            CommandLine cmd = parser.parse(options, args);
+            
+            // Check for help flag
+            if (cmd.hasOption("h")) {
+                printHelp(options);
+                System.exit(0);
+            }
+            
+            // Check for required file argument
+            if (!cmd.hasOption("f") && !cmd.hasOption("streaming")) {
+                System.err.println("Error: File argument (-f) is required unless using streaming mode (-s)");
+                printHelp(options);
+                System.exit(1);
+            }
+            
+            String fileArg = cmd.getOptionValue("f");
+            String RDFFileToRead = resolveFilePath(fileArg);
+            
+            if (RDFFileToRead == null) {
+                System.err.println("The file passed to the program is null. Usage: java -jar Main <filename>");
+                System.exit(1);
+            }
+            
+            // Build AppConfig from command line arguments
+            AppConfig config;
+            try {
+                config = buildConfigFromArgs(cmd, RDFFileToRead);
+            } catch (IllegalArgumentException e) {
+                System.err.println("Error: " + e.getMessage());
+                System.exit(1);
+                return;
+            }
+            
+            // Create RDFtoCSV with the new config
+            RDFtoCSV rdFtoCSV = new RDFtoCSV(config);
+            
+            try {
+                // Use convertToZipFile() for CLI - creates physical ZIP file on disk
+                rdFtoCSV.convertToZipFile();
+                
+                long overallEndTime = System.currentTimeMillis();
+                System.out.println("=== RDFtoCSV Conversion Completed Successfully ===");
+                System.out.println("Total execution time: " + (overallEndTime - overallStartTime) + "ms");
+                
+            } catch (RDFParseException | IOException rdfParseException) {
+                System.err.println(rdfParseException.getMessage());
+            }
+            
+        } catch (ParseException e) {
+            System.err.println("Error parsing command line arguments: " + e.getMessage());
+            printHelp(options);
+            System.exit(1);
+        }
+    }
+    
+    /**
+     * Build AppConfig from parsed command line arguments.
+     */
+    private static AppConfig buildConfigFromArgs(CommandLine cmd, String filePath) {
+        AppConfig.Builder builder = new AppConfig.Builder(filePath);
+        
+        // Optional parameters
+        if (cmd.hasOption("p")) {
+            builder.parsing(cmd.getOptionValue("p"));
+        }
+        
+        if (cmd.hasOption("t")) {
+            builder.multipleTables(true);
+        }
+        
+        if (cmd.hasOption("s")) {
+            builder.streaming(true);
+        }
+        
+        if (cmd.hasOption("n")) {
+            builder.firstNormalForm(false);
+        }
+        
+        if (cmd.hasOption("o")) {
+            builder.output(cmd.getOptionValue("o"));
+        }
+        
+        if (cmd.hasOption("l")) {
+            builder.preferredLanguages(cmd.getOptionValue("l"));
+        }
+        
+        if (cmd.hasOption("c")) {
+            builder.columnNamingConvention(cmd.getOptionValue("c"));
+        }
+        
+        if (cmd.hasOption("skip-deref")) {
+            builder.skipDereferencing(true);
+        }
+        
+        if (cmd.hasOption("log")) {
+            builder.performanceLogPath(cmd.getOptionValue("log"));
+        }
+        
+        return builder.build();
+    }
+    
+    /**
+     * Resolve the file path based on the current execution context.
+     */
+    private static String resolveFilePath(String fileArg) {
+        if (fileArg == null) {
+            return null;
+        }
+        
+        if (isUrl(fileArg)) {
+            return fileArg;
+        }
+        
         try {
             URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
             File file = new File(location.toURI().getPath());
             String jarDirectory = file.getParentFile().getName();
-            String fileInDirectory;
-            String fileArgFromArgs = ConfigurationManager.readArgWithDefaultOptions(args, "file");
+            
             if (jarDirectory.equalsIgnoreCase("target")) {
-                fileInDirectory = fileArgFromArgs;
+                return fileArg;
             } else {
-                fileInDirectory = jarDirectory + File.separator + fileArgFromArgs;
+                return jarDirectory + File.separator + fileArg;
             }
-            if(isUrl(fileArgFromArgs)){
-                fileInDirectory = fileArgFromArgs;
-            }
-
-            RDFFileToRead = fileInDirectory;
         } catch (URISyntaxException e) {
             logger.log(Level.SEVERE, e.getReason() + " " + e.getMessage());
+            return fileArg;
         }
-
-        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
-
-        RDFtoCSV rdFtoCSV;
-
-        if (RDFFileToRead == null) {
-            System.err.println("The file passed to the program is null. Usage: java -jar Main <filename>");
-            System.exit(1);
-        }
-        rdFtoCSV = new RDFtoCSV(RDFFileToRead);
-
-        try {
-            rdFtoCSV.convertToZip();
-        } catch (RDFParseException | IOException rdfParseException) {
-            System.err.println(rdfParseException.getMessage());
-        }
+    }
+    
+    /**
+     * Create command line options.
+     */
+    private static Options createOptions() {
+        Options options = new Options();
+        options.addOption("t", "multipleTables", false, "Enable creation of multiple tables during conversion");
+        options.addOption("p", "parsing", true, "Specify the parsing method (rdf4j, streaming, bigfilestreaming)");
+        options.addOption("h", "help", false, "Show the command line options");
+        options.addOption("f", "file", true, "File for conversion");
+        options.addOption("s", "streaming", false, "Parse the file in streaming mode (continual parsing until stopped)");
+        options.addOption("n", "noFirstNormalForm", false, "Do not put the output CSV data into first normal form (every cell contains only one entry, no lists of values)");
+        options.addOption("o", "output", true, "Put the output path for the file");
+        options.addOption("l", "languages", true, "Comma-separated list of preferred languages for labels (e.g., 'en,cs,de'). Default: 'en,cs'");
+        options.addOption("c", "convention", true, "Column naming convention (camelCase, PascalCase, snake_case, SCREAMING_SNAKE_CASE, kebab-case, Title Case, dot.notation, original). Default: 'original'");
+        options.addOption("d", "skip-deref", false, "Skip vocabulary dereferencing and use IRI local names for column titles (significantly improves performance)");
+        options.addOption("log", "performance-log", true, "Path to the performance log file. Default: 'performance_log.txt'");
+        return options;
+    }
+    
+    /**
+     * Print help information.
+     */
+    private static void printHelp(Options options) {
+        HelpFormatter formatter = HelpFormatter.builder().get();
+        formatter.printHelp("RDFtoCSV Command Line Tool", options);
     }
 }

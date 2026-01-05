@@ -7,6 +7,7 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.BaseTest;
 import com.opencsv.CSVReader;
 
@@ -31,7 +32,6 @@ import org.junit.jupiter.api.BeforeEach;
 import java.io.FileWriter;
 import java.nio.file.Path;
 
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 import com.opencsv.exceptions.CsvValidationException;
@@ -50,15 +50,16 @@ class CSVConsolidatorTest extends BaseTest {
     @TempDir
     Path tempDir;
 
+    AppConfig config;
+
     @BeforeEach
     void setUp() {
-        csvConsolidator = new CSVConsolidator();
-        oldMetadata = new Metadata();
-        newMetadata = new Metadata();
-        rdfToCSV = new RDFtoCSV(fileName);
+        config = new AppConfig.Builder(fileName).parsing("rdf4j").build();
+        csvConsolidator = new CSVConsolidator(config);
+        oldMetadata = new Metadata(config);
+        newMetadata = new Metadata(config);
+        rdfToCSV = new RDFtoCSV(config);
         db = new SailRepository(new MemoryStore());
-        args = new String[]{"-f", "test.rdf", "-p", "rdf4j"};
-        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
             keys = new ArrayList<>();
             keys.add(iri("http://predicate1.cz"));
             keys.add(iri("http://predicate2.cz"));
@@ -72,13 +73,13 @@ class CSVConsolidatorTest extends BaseTest {
     //BaseRock generated method id: ${testConsolidateCSVs}, hash: E8BB2DB378F9ED35DF1628A0294727C6
     @Test
     void testConsolidateCSVs() throws IOException {
-        Table table = new Table();
+        Table table = new Table(config);
         table.setUrl("test.csv");
-        Column column1 = new Column();
+        Column column1 = new Column(config);
         column1.setTitles("Column1");
-        Column column2 = new Column();
+        Column column2 = new Column(config);
         column2.setTitles("Column2");
-        table.setTableSchema(new TableSchema());
+        table.setTableSchema(new TableSchema(config));
         oldMetadata.getTables().add(table);
 
         File tempFile = tempDir.resolve("test.csv").toFile();
@@ -91,13 +92,13 @@ class CSVConsolidatorTest extends BaseTest {
         line2[0] = "Value1";
         line2[1] = "Value2";
         lines.add(line);lines.add(line2);
-        MetadataConsolidator mc = new MetadataConsolidator();
-        newMetadata = mc.consolidateMetadata(oldMetadata);
+        MetadataConsolidator mc = new MetadataConsolidator(config);
+        newMetadata = mc.consolidateMetadata(oldMetadata, config);
         //File newTempFile = tempDir.resolve(newMetadata.getTables().get(0).getUrl()).toFile();
         System.out.println("newTempFile = " + newMetadata.getTables().get(0).getUrl());
 
         FileWrite.writeLinesToCSVFile(tempFile,lines,false);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,tempFile.getAbsolutePath());
+        config.setIntermediateFileNames(tempFile.getAbsolutePath());
         File newTempFile = new File(newMetadata.getTables().get(0).getUrl());
     csvConsolidator.consolidateCSVs(oldMetadata, newMetadata);
     assertTrue(tempFile.exists());
@@ -151,19 +152,18 @@ class CSVConsolidatorTest extends BaseTest {
         newMetadata.getTables().add(newTable);
         File oldFile = tempDir.resolve("old.csv").toFile();
         System.out.println("old.csv path = " + oldFile.getAbsolutePath());
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,oldFile.getAbsolutePath());
+        config.setIntermediateFileNames(oldFile.getAbsolutePath());
         try (CSVWriter writer = new CSVWriter(new FileWriter(oldFile))) {
     writer.writeNext(new String[] { "Header1", "Header2" });
     writer.writeNext(new String[] { "Value1", "Value2" });
 }
         File newFile = tempDir.resolve("new.csv").toFile();
 
-    csvConsolidator.writeToCSVFromOldMetadataToMerged(oldMetadata, newMetadata, newFile);
+    csvConsolidator.writeToCSVFromOldMetadataToMerged(oldMetadata, newMetadata, newFile, config);
     try (CSVReader reader = new CSVReader(new FileReader(newFile))) {
         String[] line = reader.readNext();
         assertArrayEquals(new String[] { "Value1", "Value2" }, line);
     }
-
     }
 
     //BaseRock generated method id: ${testIsMergeable}, hash: 08AA314B774CBD58DAEC8EC836207443
@@ -183,39 +183,71 @@ class CSVConsolidatorTest extends BaseTest {
         assertFalse(csvConsolidator.isMergeable(c1, c2));
     }
 
-    //BaseRock generated method id: ${testConsolidateCSVsWithIOException}, hash: 0A9F544484564AF054A10A4D988E49BE
+    // AppConfig-based test methods
+
     @Test
-    void testConsolidateCSVsWithIOException() throws IOException {
+    void testConsolidateCSVsWithAppConfig() throws IOException {
+        AppConfig config = new AppConfig.Builder("test.rdf")
+                .parsing("rdf4j")
+                .build();
+
         Table table = new Table();
         table.setUrl("test.csv");
+        Column column1 = new Column();
+        column1.setTitles("Column1");
+        Column column2 = new Column();
+        column2.setTitles("Column2");
         table.setTableSchema(new TableSchema());
-        newMetadata.getTables().add(table);
+        oldMetadata.getTables().add(table);
+
         File tempFile = tempDir.resolve("test.csv").toFile();
-        try (MockedStatic<MetadataConsolidator> mockedStatic = mockStatic(MetadataConsolidator.class)) {
-    mockedStatic.when(() -> MetadataConsolidator.getFilePathForFileName(anyString())).thenReturn(tempFile.getAbsolutePath());
-    tempFile.setReadOnly();
-    assertDoesNotThrow(() -> csvConsolidator.consolidateCSVs(oldMetadata, newMetadata));
-}
+
+        ArrayList<String[]> lines = new ArrayList<>();
+        String[] line = new String[2];
+        line[0] = "Column1";
+        line[1] = "Column2";
+        String[] line2 = new String[2];
+        line2[0] = "Value1";
+        line2[1] = "Value2";
+        lines.add(line);
+        lines.add(line2);
+
+        MetadataConsolidator mc = new MetadataConsolidator(config);
+        newMetadata = mc.consolidateMetadata(oldMetadata, config);
+
+        FileWrite.writeLinesToCSVFile(tempFile, lines, false);
+        config.setIntermediateFileNames(tempFile.getAbsolutePath());
+
+        File newTempFile = new File(newMetadata.getTables().get(0).getUrl());
+        CSVConsolidator consolidator = new CSVConsolidator(config);
+        consolidator.consolidateCSVs(oldMetadata, newMetadata);
+        assertTrue(tempFile.exists());
+        assertTrue(newTempFile.exists());
     }
 
-    //BaseRock generated method id: ${testWriteToCSVFromOldMetadataToMergedWithCsvValidationException}, hash: D1302C22C01E585618DFF0AA1F9270A5
     @Test
-    void testWriteToCSVFromOldMetadataToMergedWithCsvValidationException() throws IOException {
-        Table oldTable = new Table();
-        oldTable.setUrl("old.csv");
-        oldMetadata.getTables().add(oldTable);
-        Table newTable = new Table();
-        newMetadata.getTables().add(newTable);
-        File oldFile = tempDir.resolve("old.csv").toFile();
-        File newFile = tempDir.resolve("new.csv").toFile();
-        try (MockedStatic<MetadataConsolidator> mockedStatic = mockStatic(MetadataConsolidator.class)) {
-    mockedStatic.when(() -> MetadataConsolidator.getFilePathForFileName(anyString())).thenReturn(oldFile.getAbsolutePath());
-            try (CSVReader mockReader = mock(CSVReader.class)) {
-                when(mockReader.readNext()).thenThrow(CsvValidationException.class);
-            } catch (CsvValidationException e) {
-                throw new RuntimeException(e);
-            }
-            assertThrows(RuntimeException.class, () -> csvConsolidator.writeToCSVFromOldMetadataToMerged(oldMetadata, newMetadata, newFile));
-}
+    void testCreateHeadersLineForCSVWithAppConfig() throws IOException, CsvValidationException {
+        AppConfig config = new AppConfig.Builder("test.rdf")
+                .parsing("rdf4j")
+                .build();
+
+        Table table = new Table();
+        Column column1 = new Column();
+        column1.setTitles("Column1");
+        Column column2 = new Column();
+        column2.setTitles("Column2");
+        table.setTableSchema(new TableSchema());
+        table.getTableSchema().setColumns(Arrays.asList(column1, column2));
+
+        File tempFile = tempDir.resolve("test.csv").toFile();
+        newMetadata.getTables().add(table);
+
+        CSVConsolidator consolidator = new CSVConsolidator(config);
+        consolidator.createHeadersLineForCSV(newMetadata, tempFile);
+
+        try (CSVReader reader = new CSVReader(new FileReader(tempFile))) {
+            String[] header = reader.readNext();
+            assertArrayEquals(new String[]{"Column1", "Column2"}, header);
+        }
     }
 }

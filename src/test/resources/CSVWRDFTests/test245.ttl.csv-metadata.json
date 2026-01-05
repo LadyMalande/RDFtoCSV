@@ -1,41 +1,47 @@
 {
-  "@context": "http://www.w3.org/ns/csvw",
-  "@type": "TableGroup",
-  "tables": [
-    {
-      "@type": "Table",
-      "url": "test245.ttlTestOutput0.csv",
-      "tableSchema": {
-        "@type": "Schema",
-        "columns": [
-          {
-            "@type": "Column",
-            "titles": "Subjekt",
-            "name": "Subjekt",
-            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
-            "suppressOutput": true
-          },
-          {
-            "@type": "Column",
-            "titles": "HH%3Amm%3Ass.S",
-            "name": "HH%3Amm%3Ass.S",
-            "propertyUrl": "file://test245.csv#HH%3Amm%3Ass.S",
-            "datatype": "time"
-          },
-          {
-            "@type": "Column",
-            "titles": "HH%3Amm%3Ass.SS",
-            "name": "HH%3Amm%3Ass.SS",
-            "propertyUrl": "file://test245.csv#HH%3Amm%3Ass.SS",
-            "datatype": "time"
-          }
-        ],
-        "rowTitles": [
-          "Subjekt",
-          "HH%3Amm%3Ass.S",
-          "HH%3Amm%3Ass.SS"
-        ]
-      }
-    }
-  ]
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test245.ttl.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "HH%3Amm%3Ass.S",
+        "name" : "HH%3Amm%3Ass.S",
+        "propertyUrl" : "file://test245.csv#HH%3Amm%3Ass.S",
+        "datatype" : "time"
+      }, {
+        "@type" : "Column",
+        "titles" : "HH%3Amm%3Ass.SS",
+        "name" : "HH%3Amm%3Ass.SS",
+        "propertyUrl" : "file://test245.csv#HH%3Amm%3Ass.SS",
+        "datatype" : "time"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "HH%3Amm%3Ass.S", "HH%3Amm%3Ass.SS" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ]
+  } ]
 }

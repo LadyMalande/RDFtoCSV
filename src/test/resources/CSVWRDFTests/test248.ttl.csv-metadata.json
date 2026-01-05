@@ -1,53 +1,55 @@
 {
-  "@context": "http://www.w3.org/ns/csvw",
-  "@type": "TableGroup",
-  "tables": [
-    {
-      "@type": "Table",
-      "url": "test248.ttlTestOutput0.csv",
-      "tableSchema": {
-        "@type": "Schema",
-        "columns": [
-          {
-            "@type": "Column",
-            "titles": "Subjekt",
-            "name": "Subjekt",
-            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
-            "suppressOutput": true
-          },
-          {
-            "@type": "Column",
-            "titles": "characters",
-            "name": "characters",
-            "propertyUrl": "file://test248.csv#characters"
-          },
-          {
-            "@type": "Column",
-            "titles": "codepoints",
-            "name": "codepoints",
-            "propertyUrl": "file://test248.csv#codepoints"
-          },
-          {
-            "@type": "Column",
-            "titles": "description",
-            "name": "description",
-            "propertyUrl": "file://test248.csv#description"
-          },
-          {
-            "@type": "Column",
-            "titles": "nfc",
-            "name": "nfc",
-            "propertyUrl": "file://test248.csv#nfc"
-          }
-        ],
-        "rowTitles": [
-          "Subjekt",
-          "characters",
-          "codepoints",
-          "description",
-          "nfc"
-        ]
-      }
-    }
-  ]
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test248.ttl.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "characters",
+        "name" : "characters",
+        "propertyUrl" : "file://test248.csv#characters"
+      }, {
+        "@type" : "Column",
+        "titles" : "codepoints",
+        "name" : "codepoints",
+        "propertyUrl" : "file://test248.csv#codepoints"
+      }, {
+        "@type" : "Column",
+        "titles" : "description",
+        "name" : "description",
+        "propertyUrl" : "file://test248.csv#description"
+      }, {
+        "@type" : "Column",
+        "titles" : "nfc",
+        "name" : "nfc",
+        "propertyUrl" : "file://test248.csv#nfc"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "characters", "codepoints", "description", "nfc" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ]
+  } ]
 }

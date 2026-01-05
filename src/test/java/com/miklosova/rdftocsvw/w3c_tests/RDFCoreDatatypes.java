@@ -2,8 +2,8 @@ package com.miklosova.rdftocsvw.w3c_tests;
 
 import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.support.BaseTest;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.support.TestSupport;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
@@ -27,6 +27,7 @@ public class RDFCoreDatatypes extends BaseTest {
     private String filePathForOutput;
     private String expectedDatatype;
     private PrefinishedOutput prefinishedOutput;
+    private AppConfig config;
     private String expectedException;
 
     public RDFCoreDatatypes(String nameForTest, String expectedDatatype, String expectedException) {
@@ -79,9 +80,15 @@ public class RDFCoreDatatypes extends BaseTest {
     @BeforeEach
     void createPrefinishedOutputAndMetadata() {
         db = new SailRepository(new MemoryStore());
-        this.prefinishedOutput = TestSupport.createPrefinishedOutput(this.filePath, this.filePathForMetadata, this.filePathForOutput, this.PROCESS_METHOD, this.db, new String[]{this.filePath}
+        config = new AppConfig.Builder(this.filePath)
+                .parsing(this.PROCESS_METHOD)
+                .output(this.filePathForOutput)
+                .outputMetadata(this.filePathForMetadata)
+                .build();
+        config.setIntermediateFileNames(this.filePathForOutput); // Simulate what ConfigurationManager did
+        this.prefinishedOutput = TestSupport.createPrefinishedOutput(this.filePath, this.filePathForMetadata, this.filePathForOutput, this.PROCESS_METHOD, this.db, new String[]{this.filePath}, config
         );
-        this.testMetadata = TestSupport.createMetadata(this.prefinishedOutput);
+        this.testMetadata = TestSupport.createMetadata(this.prefinishedOutput, config);
     }
 
     @Test
@@ -100,12 +107,11 @@ public class RDFCoreDatatypes extends BaseTest {
             createPrefinishedOutputAndMetadata();
 
             TestSupport.writeToFile(this.prefinishedOutput, this.testMetadata);
-
-            String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+            // Use AppConfig to get intermediate file names
+            String allFiles = config.getIntermediateFileNames();
             for (String filename : allFiles.split(",")) {
                 Assert.assertFalse(TestSupport.isFileEmpty(filename));
             }
-
             Assert.assertFalse(TestSupport.isFileEmpty(this.filePathForMetadata));
         }
     }

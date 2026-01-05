@@ -1,0 +1,309 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "events_Brno_rdf4j_1table.nt0.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Location",
+        "name" : "Location",
+        "valueUrl" : "{+Location}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Description (cs)",
+        "name" : "description_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/description",
+        "aboutUrl" : "{+Location}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "Description (en)",
+        "name" : "description_en",
+        "propertyUrl" : "http://purl.org/dc/terms/description",
+        "aboutUrl" : "{+Location}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (cs)",
+        "name" : "title_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "{+Location}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (en)",
+        "name" : "title_en",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "{+Location}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "Type",
+        "name" : "type",
+        "propertyUrl" : "http://purl.org/dc/terms/type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Location}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type_1",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Location}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "openingHoursSpecification",
+        "name" : "openingHoursSpecification",
+        "propertyUrl" : "http://schema.org/openingHoursSpecification",
+        "valueUrl" : "{+openingHoursSpecification}",
+        "aboutUrl" : "{+Location}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_type",
+        "name" : "type_MULTILEVEL_",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type_MULTILEVEL_}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "_má-časový-interval",
+        "name" : "masovinterval_MULTILEVEL_",
+        "propertyUrl" : "https://slovník.gov.cz/generický/čas/pojem/má-časový-interval",
+        "valueUrl" : "{+masovinterval_MULTILEVEL_}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_hasBeginning",
+        "name" : "hasBeginning_MULTILEVEL_",
+        "propertyUrl" : "http://www.w3.org/2006/time#hasBeginning",
+        "valueUrl" : "{+hasBeginning_MULTILEVEL_}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "_inXSDDateTimeStamp",
+        "name" : "inXSDDateTimeStamp_MULTILEVEL_",
+        "propertyUrl" : "http://www.w3.org/2006/time#inXSDDateTimeStamp",
+        "datatype" : "dateTimeStamp",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "_hasEnd",
+        "name" : "hasEnd_MULTILEVEL_",
+        "propertyUrl" : "http://www.w3.org/2006/time#hasEnd",
+        "valueUrl" : "{+hasEnd_MULTILEVEL_}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "geometry",
+        "name" : "geometry",
+        "propertyUrl" : "http://www.w3.org/ns/locn#geometry",
+        "valueUrl" : "{+geometry}",
+        "aboutUrl" : "{+Location}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_coordinates",
+        "name" : "coordinates_MULTILEVEL_",
+        "propertyUrl" : "https://purl.org/geojson/vocab#coordinates",
+        "valueUrl" : "{+coordinates_MULTILEVEL_}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "_first",
+        "name" : "first_MULTILEVEL_",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+        "datatype" : "double",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "_rest",
+        "name" : "rest_MULTILEVEL_",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+        "valueUrl" : "{+rest_MULTILEVEL_}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "má-kontakt",
+        "name" : "mkontakt",
+        "propertyUrl" : "https://slovník.gov.cz/datový/události/pojem/má-kontakt",
+        "valueUrl" : "{+mkontakt}",
+        "aboutUrl" : "{+Location}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_hasEmail",
+        "name" : "hasEmail_MULTILEVEL_",
+        "propertyUrl" : "http://www.w3.org/2006/vcard/ns#hasEmail",
+        "valueUrl" : "{+hasEmail_MULTILEVEL_}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "_hasURL",
+        "name" : "hasURL_MULTILEVEL_",
+        "propertyUrl" : "http://www.w3.org/2006/vcard/ns#hasURL",
+        "datatype" : "anyURI",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "_druh (cs)",
+        "name" : "druh_MULTILEVEL__cs",
+        "propertyUrl" : "https://slovník.gov.cz/generický/kontakty/pojem/druh",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "_druh (en)",
+        "name" : "druh_MULTILEVEL__en",
+        "propertyUrl" : "https://slovník.gov.cz/generický/kontakty/pojem/druh",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-vstupné",
+        "name" : "mvstupn",
+        "propertyUrl" : "https://slovník.gov.cz/datový/události/pojem/má-vstupné",
+        "valueUrl" : "{+mvstupn}",
+        "aboutUrl" : "{+Location}"
+      }, {
+        "@type" : "Column",
+        "titles" : "má-přílohu",
+        "name" : "mplohu",
+        "propertyUrl" : "https://slovník.gov.cz/generický/věci/pojem/má-přílohu",
+        "valueUrl" : "{+mplohu}",
+        "aboutUrl" : "{+Location}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_downloadUrl",
+        "name" : "downloadUrl_MULTILEVEL_",
+        "propertyUrl" : "http://schema.org/downloadUrl",
+        "datatype" : "anyURI",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "_encodingFormat",
+        "name" : "encodingFormat_MULTILEVEL_",
+        "propertyUrl" : "http://schema.org/encodingFormat",
+        "valueUrl" : "{+encodingFormat_MULTILEVEL_}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "_má-podmínky-užití",
+        "name" : "mpodmnkyuit_MULTILEVEL_",
+        "propertyUrl" : "https://slovník.gov.cz/generický/digitální-objekty/pojem/má-podmínky-užití",
+        "valueUrl" : "{+mpodmnkyuit_MULTILEVEL_}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_databáze-chráněná-zvláštními-právy-pořizovatele-databáze",
+        "name" : "databzechrnnzvltnmiprvypoizovateledatabze_MULTILEVEL_",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/databáze-chráněná-zvláštními-právy-pořizovatele-databáze",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "_licence-autorského-díla",
+        "name" : "licenceautorskhodla_MULTILEVEL_",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/licence-autorského-díla",
+        "valueUrl" : "{+licenceautorskhodla_MULTILEVEL_}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_obsahuje-autorské-dílo",
+        "name" : "obsahujeautorskdlo_MULTILEVEL_",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-autorské-dílo",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "_obsahuje-osobní-údaje",
+        "name" : "obsahujeosobndaje_MULTILEVEL_",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-osobní-údaje",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "_obsahuje-více-autorských-děl",
+        "name" : "obsahujevceautorskchdl_MULTILEVEL_",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/obsahuje-více-autorských-děl",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "_originální-databáze",
+        "name" : "originlndatabze_MULTILEVEL_",
+        "propertyUrl" : "https://slovník.gov.cz/generický/podmínky-užití/pojem/originální-databáze",
+        "datatype" : "boolean"
+      }, {
+        "@type" : "Column",
+        "titles" : "_má-vykonavatele-majetkových-práv-autorských-u-autorského-díla",
+        "name" : "mvykonavatelemajetkovchprvautorskchuautorskhodla_MULTILEVEL_",
+        "propertyUrl" : "https://slovník.gov.cz/generický/digitální-objekty/pojem/má-vykonavatele-majetkových-práv-autorských-u-autorského-díla",
+        "valueUrl" : "{+mvykonavatelemajetkovchprvautorskchuautorskhodla_MULTILEVEL_}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_notation",
+        "name" : "notation_MULTILEVEL_",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#notation",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "_legalName (cs)",
+        "name" : "legalName_MULTILEVEL__cs",
+        "propertyUrl" : "http://www.w3.org/ns/regorg#legalName",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "superEvent",
+        "name" : "superEvent",
+        "propertyUrl" : "http://schema.org/superEvent",
+        "valueUrl" : "{+superEvent}",
+        "aboutUrl" : "{+Location}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_Title (cs)",
+        "name" : "title_MULTILEVEL__cs",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "https://www.gotobrno.cz/akce/pruvodcovske-sluzby-prohlidky-brna-pro-skoly/{+Location}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "_Title (en)",
+        "name" : "title_MULTILEVEL__en",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "https://www.gotobrno.cz/akce/pruvodcovske-sluzby-prohlidky-brna-pro-skoly/{+Location}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "_openingHoursSpecification",
+        "name" : "openingHoursSpecification_MULTILEVEL_",
+        "propertyUrl" : "http://schema.org/openingHoursSpecification",
+        "valueUrl" : "{+openingHoursSpecification_MULTILEVEL_}",
+        "aboutUrl" : "https://www.gotobrno.cz/akce/pruvodcovske-sluzby-prohlidky-brna-pro-skoly/{+Location}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_geometry",
+        "name" : "geometry_MULTILEVEL_",
+        "propertyUrl" : "http://www.w3.org/ns/locn#geometry",
+        "valueUrl" : "{+geometry_MULTILEVEL_}",
+        "aboutUrl" : "https://www.gotobrno.cz/akce/pruvodcovske-sluzby-prohlidky-brna-pro-skoly/{+Location}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_má-kontakt",
+        "name" : "mkontakt_MULTILEVEL_",
+        "propertyUrl" : "https://slovník.gov.cz/datový/události/pojem/má-kontakt",
+        "valueUrl" : "{+mkontakt_MULTILEVEL_}",
+        "aboutUrl" : "https://www.gotobrno.cz/akce/pruvodcovske-sluzby-prohlidky-brna-pro-skoly/{+Location}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_má-přílohu",
+        "name" : "mplohu_MULTILEVEL_",
+        "propertyUrl" : "https://slovník.gov.cz/generický/věci/pojem/má-přílohu",
+        "valueUrl" : "{+mplohu_MULTILEVEL_}",
+        "aboutUrl" : "https://www.gotobrno.cz/akce/pruvodcovske-sluzby-prohlidky-brna-pro-skoly/{+Location}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://purl.org/dc/terms/Location",
+        "aboutUrl" : "{+Location}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Location",
+      "rowTitles" : [ "Location", "description_cs", "description_en", "title_cs", "title_en", "type", "type_1", "openingHoursSpecification", "type_MULTILEVEL_", "masovinterval_MULTILEVEL_", "hasBeginning_MULTILEVEL_", "inXSDDateTimeStamp_MULTILEVEL_", "hasEnd_MULTILEVEL_", "geometry", "coordinates_MULTILEVEL_", "first_MULTILEVEL_", "rest_MULTILEVEL_", "mkontakt", "hasEmail_MULTILEVEL_", "hasURL_MULTILEVEL_", "druh_MULTILEVEL__cs", "druh_MULTILEVEL__en", "mvstupn", "mplohu", "downloadUrl_MULTILEVEL_", "encodingFormat_MULTILEVEL_", "mpodmnkyuit_MULTILEVEL_", "databzechrnnzvltnmiprvypoizovateledatabze_MULTILEVEL_", "licenceautorskhodla_MULTILEVEL_", "obsahujeautorskdlo_MULTILEVEL_", "obsahujeosobndaje_MULTILEVEL_", "obsahujevceautorskchdl_MULTILEVEL_", "originlndatabze_MULTILEVEL_", "mvykonavatelemajetkovchprvautorskchuautorskhodla_MULTILEVEL_", "notation_MULTILEVEL_", "legalName_MULTILEVEL__cs", "superEvent", "title_MULTILEVEL__cs", "title_MULTILEVEL__en", "openingHoursSpecification_MULTILEVEL_", "geometry_MULTILEVEL_", "mkontakt_MULTILEVEL_", "mplohu_MULTILEVEL_" ]
+    }
+  } ]
+}

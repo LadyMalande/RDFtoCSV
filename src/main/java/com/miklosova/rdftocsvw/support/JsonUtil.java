@@ -53,14 +53,20 @@ public class JsonUtil {
 
     }
 
+
+
     /**
-     * Write json to file.
+     * Write json to file using AppConfig.
      *
      * @param resultNode The serialized object to write to file.
+     * @param config The application configuration
      */
-    public static void writeJsonToFile(ObjectNode resultNode) {
+    public static void writeJsonToFile(ObjectNode resultNode, AppConfig config) {
+        if (config == null) {
+            throw new IllegalArgumentException("AppConfig cannot be null");
+        }
         // Serialize the final object to a JSON string
-        String metadataFilename = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME);
+        String metadataFilename = config.getOutputMetadataFileName();
         logger.log(Level.INFO, "metadataFilename = " + metadataFilename);
         FileWrite.deleteFile(metadataFilename);
         try {
@@ -75,15 +81,28 @@ public class JsonUtil {
      *
      * @param obj The object to serialize and write to file.
      * @return The serialized JSON object String.
+     * @deprecated Use {@link #serializeAndWriteToFile(Object, AppConfig)} instead
      */
+    @Deprecated
     public static String serializeAndWriteToFile(Object obj) {
+        throw new UnsupportedOperationException("serializeAndWriteToFile requires AppConfig. Use serializeAndWriteToFile(obj, config) instead.");
+    }
+
+    /**
+     * Serialize and write to file using AppConfig and return the serialized JSON object string.
+     *
+     * @param obj The object to serialize and write to file.
+     * @param config The application configuration
+     * @return The serialized JSON object String.
+     */
+    public static String serializeAndWriteToFile(Object obj, AppConfig config) {
         ObjectNode resultNode = null;
         try {
             resultNode = serializeWithContext(obj);
         } catch (JsonProcessingException e) {
             logger.log(Level.SEVERE, e.getCause() + " " + e.getLocalizedMessage());
         }
-        writeJsonToFile(resultNode);
+        writeJsonToFile(resultNode, config);
         try {
             return mapper.writeValueAsString(resultNode);
         } catch (JsonProcessingException e) {

@@ -1,11 +1,13 @@
 package com.miklosova.rdftocsvw.metadata_creator.metadata_structure;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.miklosova.rdftocsvw.converter.data_structure.Row;
 import com.miklosova.rdftocsvw.converter.data_structure.TypeIdAndValues;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.JsonUtil;
 import ioinformarics.oss.jackson.module.jsonld.JsonldModule;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
@@ -32,9 +34,28 @@ public class Metadata {
      * Array of files tied to the metadata file
      */
     private final List<Table> tables;
+    /**
+     * Application configuration
+     */
+    @JsonIgnore
+    private AppConfig config;
 
+    /**
+     * Instantiates a new Metadata.
+     * @deprecated Use {@link #Metadata(AppConfig)} instead
+     */
+    @Deprecated
     public Metadata() {
+        this(null);
+    }
+
+    /**
+     * Instantiates a new Metadata with AppConfig.
+     * @param config the application configuration
+     */
+    public Metadata(AppConfig config) {
         this.tables = new ArrayList<>();
+        this.config = config;
     }
 
     public String jsonldMetadata() {
@@ -44,18 +65,34 @@ public class Metadata {
         SORTED_MAPPER.registerModule(new JsonldModule());
 
         // Print the resulting JSON
-        return JsonUtil.serializeAndWriteToFile(this);
+        return JsonUtil.serializeAndWriteToFile(this, this.config);
     }
 
     public void addMetadata(String newFileName, ArrayList<Value> keys, ArrayList<Row> rows) {
         File filePath = new File(newFileName);
-        Table newTable = new Table(filePath.getName());
+        Table newTable = new Table(filePath.getName(), this.config);
         this.tables.add(newTable);
         newTable.addTableMetadata(keys, rows);
     }
 
     public List<Table> getTables() {
         return tables;
+    }
+
+    /**
+     * Gets the application configuration.
+     * @return the config
+     */
+    public AppConfig getConfig() {
+        return config;
+    }
+
+    /**
+     * Sets the application configuration.
+     * @param config the config to set
+     */
+    public void setConfig(AppConfig config) {
+        this.config = config;
     }
 
 

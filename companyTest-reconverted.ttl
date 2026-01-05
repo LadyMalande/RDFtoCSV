@@ -1,0 +1,177 @@
+
+<http://example.org/company/emp001> a <http://example.org/vocab/Employee>;
+  <http://example.org/vocab/active> true;
+  <http://example.org/vocab/department> <http://example.org/dept/engineering>;
+  <http://example.org/vocab/email> "alice.johnson@example.com";
+  <http://example.org/vocab/employeeId> "E001";
+  <http://example.org/vocab/firstName> "Alice";
+  <http://example.org/vocab/hireDate> "2020-03-15"^^<http://www.w3.org/2001/XMLSchema#date>;
+  <http://example.org/vocab/lastName> "Johnson";
+  <http://example.org/vocab/manager> <http://example.org/company/emp010>;
+  <http://example.org/vocab/phoneNumber> "+1-555-0101";
+  <http://example.org/vocab/salary> 75000.0;
+  <http://example.org/vocab/skills> "Java"@en, "Python"@en .
+
+<file:/C:/Users/terka/RDFtoCSV/companyTest.nt_preprocessed.csv> a <file:/C:/Users/terka/RDFtoCSV/Employee> .
+
+<http://example.org/company/emp002> a <http://example.org/vocab/Employee>;
+  <http://example.org/vocab/active> true;
+  <http://example.org/vocab/department> <http://example.org/dept/engineering>;
+  <http://example.org/vocab/email> "bob.smith@example.com";
+  <http://example.org/vocab/employeeId> "E002";
+  <http://example.org/vocab/firstName> "Bob";
+  <http://example.org/vocab/hireDate> "2019-07-22"^^<http://www.w3.org/2001/XMLSchema#date>;
+  <http://example.org/vocab/lastName> "Smith";
+  <http://example.org/vocab/manager> <http://example.org/company/emp010>;
+  <http://example.org/vocab/phoneNumber> "+1-555-0102";
+  <http://example.org/vocab/salary> 82000.0;
+  <http://example.org/vocab/skills> "JavaScript"@en, "Node.js"@en, "React"@en .
+
+<http://example.org/company/emp003> a <http://example.org/vocab/Employee>;
+  <http://example.org/vocab/active> true;
+  <http://example.org/vocab/commissionRate> 0.05;
+  <http://example.org/vocab/department> <http://example.org/dept/sales>;
+  <http://example.org/vocab/email> "carol.williams@example.com";
+  <http://example.org/vocab/employeeId> "E003";
+  <http://example.org/vocab/firstName> "Carol";
+  <http://example.org/vocab/hireDate> "2021-01-10"^^<http://www.w3.org/2001/XMLSchema#date>;
+  <http://example.org/vocab/lastName> "Williams";
+  <http://example.org/vocab/manager> <http://example.org/company/emp011>;
+  <http://example.org/vocab/phoneNumber> "+1-555-0103";
+  <http://example.org/vocab/salary> 95000.0 .
+
+<http://example.org/company/emp004> a <http://example.org/vocab/Employee>;
+  <http://example.org/vocab/active> true;
+  <http://example.org/vocab/department> <http://example.org/dept/marketing>;
+  <http://example.org/vocab/email> "david.brown@example.com";
+  <http://example.org/vocab/employeeId> "E004";
+  <http://example.org/vocab/firstName> "David";
+  <http://example.org/vocab/hireDate> "2018-11-05"^^<http://www.w3.org/2001/XMLSchema#date>;
+  <http://example.org/vocab/lastName> "Brown";
+  <http://example.org/vocab/manager> <http://example.org/company/emp012>;
+  <http://example.org/vocab/phoneNumber> "+1-555-0104";
+  <http://example.org/vocab/salary> 68000.0;
+  <http://example.org/vocab/skills> "Content Marketing"@en, "SEO"@en .
+
+<http://example.org/company/emp005> a <http://example.org/vocab/Employee>;
+  <http://example.org/vocab/active> true;
+  <http://example.org/vocab/department> <http://example.org/dept/engineering>;
+  <http://example.org/vocab/email> "emma.davis@example.com";
+  <http://example.org/vocab/employeeId> "E005";
+  <http://example.org/vocab/firstName> "Emma";
+  <http://example.org/vocab/hireDate> "2022-06-01"^^<http://www.w3.org/2001/XMLSchema#date>;
+  <http://example.org/vocab/lastName> "Davis";
+  <http://example.org/vocab/manager> <http://example.org/company/emp010>;
+  <http://example.org/vocab/phoneNumber> "+1-555-0105";
+  <http://example.org/vocab/salary> 72000.0;
+  <http://example.org/vocab/skills> "C++"@en, "Rust"@en .
+
+<http://example.org/company/emp006> a <http://example.org/vocab/Employee>;
+  <http://example.org/vocab/active> true;
+  <http://example.org/vocab/commissionRate> 0.07;
+  <http://example.org/vocab/department> <http://example.org/dept/sales>;
+  <http://example.org/vocab/email> "frank.miller@example.com";
+  <http://example.org/vocab/employeeId> "E006";
+  <http://example.org/vocab/firstName> "Frank";
+  <http://example.org/vocab/hireDate> "2017-09-18"^^<http://www.w3.org/2001/XMLSchema#date>;
+  <http://example.org/vocab/lastName> "Miller";
+  <http://example.org/vocab/manager> <http://example.org/company/emp011>;
+  <http://example.org/vocab/phoneNumber> "+1-555-0106";
+  <http://example.org/vocab/salary> 88000.0 .
+
+<http://example.org/company/emp007> a <http://example.org/vocab/Employee>;
+  <http://example.org/vocab/active> true;
+  <http://example.org/vocab/certifications> "PHR"@en, "SHRM-CP"@en;
+  <http://example.org/vocab/department> <http://example.org/dept/hr>;
+  <http://example.org/vocab/email> "grace.wilson@example.com";
+  <http://example.org/vocab/employeeId> "E007";
+  <http://example.org/vocab/firstName> "Grace";
+  <http://example.org/vocab/hireDate> "2020-12-10"^^<http://www.w3.org/2001/XMLSchema#date>;
+  <http://example.org/vocab/lastName> "Wilson";
+  <http://example.org/vocab/phoneNumber> "+1-555-0107";
+  <http://example.org/vocab/salary> 65000.0 .
+
+<http://example.org/company/emp008> a <http://example.org/vocab/Employee>;
+  <http://example.org/vocab/active> true;
+  <http://example.org/vocab/department> <http://example.org/dept/marketing>;
+  <http://example.org/vocab/email> "henry.moore@example.com";
+  <http://example.org/vocab/employeeId> "E008";
+  <http://example.org/vocab/firstName> "Henry";
+  <http://example.org/vocab/hireDate> "2019-04-25"^^<http://www.w3.org/2001/XMLSchema#date>;
+  <http://example.org/vocab/lastName> "Moore";
+  <http://example.org/vocab/manager> <http://example.org/company/emp012>;
+  <http://example.org/vocab/phoneNumber> "+1-555-0108";
+  <http://example.org/vocab/salary> 71000.0;
+  <http://example.org/vocab/skills> "Google Analytics"@en, "Social Media"@en .
+
+<http://example.org/company/emp009> a <http://example.org/vocab/Employee>;
+  <http://example.org/vocab/active> true;
+  <http://example.org/vocab/department> <http://example.org/dept/engineering>;
+  <http://example.org/vocab/email> "iris.taylor@example.com";
+  <http://example.org/vocab/employeeId> "E009";
+  <http://example.org/vocab/firstName> "Iris";
+  <http://example.org/vocab/hireDate> "2021-08-15"^^<http://www.w3.org/2001/XMLSchema#date>;
+  <http://example.org/vocab/lastName> "Taylor";
+  <http://example.org/vocab/manager> <http://example.org/company/emp010>;
+  <http://example.org/vocab/phoneNumber> "+1-555-0109";
+  <http://example.org/vocab/salary> 79000.0;
+  <http://example.org/vocab/skills> "Docker"@en, "Go"@en, "Kubernetes"@en .
+
+<file:/C:/Users/terka/RDFtoCSV/companyTest.nt_preprocessed.csv> a <file:/C:/Users/terka/RDFtoCSV/Department>,
+    <file:/C:/Users/terka/RDFtoCSV/Employee>, <file:/C:/Users/terka/RDFtoCSV/Manager> .
+
+<http://example.org/company/emp010> a <http://example.org/vocab/Employee>, <http://example.org/vocab/Manager>;
+  <http://example.org/vocab/active> true;
+  <http://example.org/vocab/department> <http://example.org/dept/engineering>;
+  <http://example.org/vocab/email> "jack.anderson@example.com";
+  <http://example.org/vocab/employeeId> "E010";
+  <http://example.org/vocab/firstName> "Jack";
+  <http://example.org/vocab/hireDate> "2015-02-20"^^<http://www.w3.org/2001/XMLSchema#date>;
+  <http://example.org/vocab/lastName> "Anderson";
+  <http://example.org/vocab/phoneNumber> "+1-555-0110";
+  <http://example.org/vocab/salary> 110000.0;
+  <http://example.org/vocab/teamSize> 5 .
+
+<http://example.org/company/emp011> a <http://example.org/vocab/Employee>, <http://example.org/vocab/Manager>;
+  <http://example.org/vocab/active> true;
+  <http://example.org/vocab/department> <http://example.org/dept/sales>;
+  <http://example.org/vocab/email> "karen.thomas@example.com";
+  <http://example.org/vocab/employeeId> "E011";
+  <http://example.org/vocab/firstName> "Karen";
+  <http://example.org/vocab/hireDate> "2016-05-12"^^<http://www.w3.org/2001/XMLSchema#date>;
+  <http://example.org/vocab/lastName> "Thomas";
+  <http://example.org/vocab/phoneNumber> "+1-555-0111";
+  <http://example.org/vocab/salary> 105000.0;
+  <http://example.org/vocab/teamSize> 3 .
+
+<http://example.org/company/emp012> a <http://example.org/vocab/Employee>, <http://example.org/vocab/Manager>;
+  <http://example.org/vocab/active> true;
+  <http://example.org/vocab/department> <http://example.org/dept/marketing>;
+  <http://example.org/vocab/email> "laura.jackson@example.com";
+  <http://example.org/vocab/employeeId> "E012";
+  <http://example.org/vocab/firstName> "Laura";
+  <http://example.org/vocab/hireDate> "2016-10-08"^^<http://www.w3.org/2001/XMLSchema#date>;
+  <http://example.org/vocab/lastName> "Jackson";
+  <http://example.org/vocab/phoneNumber> "+1-555-0112";
+  <http://example.org/vocab/salary> 98000.0;
+  <http://example.org/vocab/teamSize> 3 .
+
+<http://example.org/dept/engineering> a <http://example.org/vocab/Department>;
+  <http://example.org/vocab/budget> 500000.0;
+  <http://example.org/vocab/deptName> "Engineering";
+  <http://example.org/vocab/location> "Building A" .
+
+<http://example.org/dept/sales> a <http://example.org/vocab/Department>;
+  <http://example.org/vocab/budget> 300000.0;
+  <http://example.org/vocab/deptName> "Sales";
+  <http://example.org/vocab/location> "Building B" .
+
+<http://example.org/dept/marketing> a <http://example.org/vocab/Department>;
+  <http://example.org/vocab/budget> 250000.0;
+  <http://example.org/vocab/deptName> "Marketing";
+  <http://example.org/vocab/location> "Building B" .
+
+<http://example.org/dept/hr> a <http://example.org/vocab/Department>;
+  <http://example.org/vocab/budget> 150000.0;
+  <http://example.org/vocab/deptName> "Human Resources";
+  <http://example.org/vocab/location> "Building C" .

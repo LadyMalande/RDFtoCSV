@@ -1,0 +1,11 @@
+Concept,type,is in scheme,preferred label (cs),preferred label (en),notation
+dpč,http://www.w3.org/2004/02/skos/core#Concept,https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů,Dohoda o pracovní činnosti,Agreement to Perform Work,dpč
+dpp,http://www.w3.org/2004/02/skos/core#Concept,https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů,Dohoda o provedení práce,Agreement to Complete a Job,dpp
+plný-úvazek,http://www.w3.org/2004/02/skos/core#Concept,https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů,Pracovní poměr - plný úvazek,Full time employment,plný-úvazek
+zkrácený-úvazek,http://www.w3.org/2004/02/skos/core#Concept,https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů,Pracovní poměr - zkrácený úvazek,Part time employment,zkrácený-úvazek
+služební-poměr,http://www.w3.org/2004/02/skos/core#Concept,https://data.mvcr.gov.cz/zdroj/číselníky/typy-pracovních-vztahů,Služební poměr,Civil service employment,služební-poměr
+
+-----------ANOTHER CSV TABLE-----------
+
+Concept Scheme,type,preferred label (cs),preferred label (en)
+typy-pracovních-vztahů,http://www.w3.org/2004/02/skos/core#ConceptScheme,Typy pracovních vztahů,Employment relation types

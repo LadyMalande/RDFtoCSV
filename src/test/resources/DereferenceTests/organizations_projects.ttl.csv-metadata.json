@@ -1,0 +1,99 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "organizations_projectsOUT.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "http://example.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "Title",
+        "name" : "title",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/title",
+        "valueUrl" : "{+title}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
+        "valueUrl" : "{+name}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "country",
+        "name" : "country",
+        "propertyUrl" : "http://example.org/country",
+        "valueUrl" : "{+country}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "runsProject",
+        "name" : "runsProject",
+        "propertyUrl" : "http://example.org/runsProject",
+        "valueUrl" : "http://example.org/{+runsProject}",
+        "aboutUrl" : "http://example.org/{+Subject}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "member",
+        "name" : "member",
+        "propertyUrl" : "http://example.org/member",
+        "valueUrl" : "http://example.org/{+member}",
+        "aboutUrl" : "http://example.org/{+Subject}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "collaborator",
+        "name" : "collaborator",
+        "propertyUrl" : "http://example.org/collaborator",
+        "valueUrl" : "http://example.org/{+collaborator}",
+        "aboutUrl" : "http://example.org/{+Subject}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "lead",
+        "name" : "lead",
+        "propertyUrl" : "http://example.org/lead",
+        "valueUrl" : "http://example.org/{+lead}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "homepage",
+        "name" : "homepage",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/homepage",
+        "valueUrl" : "{+homepage}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "mbox",
+        "name" : "mbox",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/mbox",
+        "valueUrl" : "mailto:{+mbox}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "http://example.org/{+Organization}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "title", "name", "country", "runsProject", "member", "collaborator", "lead", "homepage", "mbox", "type" ]
+    }
+  } ]
+}

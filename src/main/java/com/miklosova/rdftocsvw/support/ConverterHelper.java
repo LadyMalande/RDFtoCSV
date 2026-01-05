@@ -1,5 +1,6 @@
 package com.miklosova.rdftocsvw.support;
 
+import com.miklosova.rdftocsvw.support.AppConfig;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
@@ -30,6 +31,11 @@ public class ConverterHelper {
      * The Map of types and their number of occurrences.
      */
     public Map<Value, Integer> mapOfTypesAndTheirNumbers;
+    
+    /**
+     * The application configuration.
+     */
+    protected AppConfig config;
 
     /**
      * Root has this type boolean.
@@ -122,7 +128,9 @@ public class ConverterHelper {
                 }
             }
             if (statement != null) {
-                ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES, "true");
+                if (config != null) {
+                    config.setConversionHasBlankNodes(true);
+                }
                 rc.add(statement);
             }
             counter = counter + 1;

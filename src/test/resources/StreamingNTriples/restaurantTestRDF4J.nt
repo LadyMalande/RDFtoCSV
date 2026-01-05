@@ -1,0 +1,30 @@
+<http://example.org/restaurant/dish1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Dish> .
+<http://example.org/restaurant/dish1> <http://example.org/vocab/name> "Margherita Pizza"@en .
+<http://example.org/restaurant/dish1> <http://example.org/vocab/name> "Pizza Margherita"@it .
+<http://example.org/restaurant/dish1> <http://example.org/vocab/price> "12.50"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://example.org/restaurant/dish1> <http://example.org/vocab/calories> "800"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/restaurant/dish1> <http://example.org/vocab/vegetarian> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://example.org/restaurant/dish1> <http://example.org/vocab/category> <http://example.org/category/pizza> .
+<http://example.org/restaurant/dish2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Dish> .
+<http://example.org/restaurant/dish2> <http://example.org/vocab/name> "Caesar Salad"@en .
+<http://example.org/restaurant/dish2> <http://example.org/vocab/price> "9.99"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://example.org/restaurant/dish2> <http://example.org/vocab/calories> "350"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/restaurant/dish2> <http://example.org/vocab/vegetarian> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://example.org/restaurant/dish2> <http://example.org/vocab/category> <http://example.org/category/salad> .
+<http://example.org/restaurant/dish2> <http://example.org/vocab/containsAllergen> <http://example.org/allergen/dairy> .
+<http://example.org/restaurant/dish2> <http://example.org/vocab/containsAllergen> <http://example.org/allergen/gluten> .
+<http://example.org/restaurant/dish3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Dish> .
+<http://example.org/restaurant/dish3> <http://example.org/vocab/name> "Grilled Salmon"@en .
+<http://example.org/restaurant/dish3> <http://example.org/vocab/name> "Saumon Grillé"@fr .
+<http://example.org/restaurant/dish3> <http://example.org/vocab/price> "18.75"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://example.org/restaurant/dish3> <http://example.org/vocab/calories> "450"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/restaurant/dish3> <http://example.org/vocab/vegetarian> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://example.org/restaurant/dish3> <http://example.org/vocab/category> <http://example.org/category/seafood> .
+<http://example.org/restaurant/dish3> <http://example.org/vocab/containsAllergen> <http://example.org/allergen/fish> .
+<http://example.org/restaurant/dish3> <http://example.org/vocab/prepTime> "PT25M"^^<http://www.w3.org/2001/XMLSchema#duration> .
+<http://example.org/category/pizza> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Category> .
+<http://example.org/category/pizza> <http://example.org/vocab/label> "Pizza" .
+<http://example.org/category/salad> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Category> .
+<http://example.org/category/salad> <http://example.org/vocab/label> "Salad" .
+<http://example.org/category/seafood> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/vocab/Category> .
+<http://example.org/category/seafood> <http://example.org/vocab/label> "Seafood" .

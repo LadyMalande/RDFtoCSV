@@ -1,0 +1,52 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "literalListTest.nt.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Book",
+        "name" : "Book",
+        "valueUrl" : "http://example.org/book/{+Book}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "author",
+        "name" : "author",
+        "propertyUrl" : "http://example.org/vocab/author",
+        "aboutUrl" : "http://example.org/book/{+Book}"
+      }, {
+        "@type" : "Column",
+        "titles" : "genre",
+        "name" : "genre",
+        "propertyUrl" : "http://example.org/vocab/genre",
+        "aboutUrl" : "http://example.org/book/{+Book}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://example.org/vocab/{+type}",
+        "aboutUrl" : "http://example.org/book/{+Book}"
+      }, {
+        "@type" : "Column",
+        "titles" : "title",
+        "name" : "title",
+        "propertyUrl" : "http://example.org/vocab/title",
+        "aboutUrl" : "http://example.org/book/{+Book}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://example.org/vocab/Book",
+        "aboutUrl" : "http://example.org/book/{+Book}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Book",
+      "rowTitles" : [ "Book", "author", "genre", "type", "title" ]
+    }
+  } ]
+}

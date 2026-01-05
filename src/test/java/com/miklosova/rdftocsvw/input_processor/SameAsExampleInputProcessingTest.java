@@ -1,5 +1,6 @@
 package com.miklosova.rdftocsvw.input_processor;
 
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.BaseTest;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.BindingSet;
@@ -76,7 +77,10 @@ public class SameAsExampleInputProcessingTest extends BaseTest {
 
     private void prepareConnectionAndResult() {
         valuesFromTurtle = new HashSet<>();
-        msForTurtle = new MethodService();
+        AppConfig configForTurtle = new AppConfig.Builder(filePathForImage)
+                .parsing(inputProcessingMethod)
+                .build();
+        msForTurtle = new MethodService(configForTurtle);
         dbForTurtle = new SailRepository(new MemoryStore());
         try (RepositoryConnection rcForTurtle = msForTurtle.processInput(filePathForImage, inputProcessingMethod, dbForTurtle)) {
             TupleQuery query = rcForTurtle.prepareTupleQuery(queryString);
@@ -95,7 +99,10 @@ public class SameAsExampleInputProcessingTest extends BaseTest {
     }
 
     void setUp() {
-        ms = new MethodService();
+        AppConfig config = new AppConfig.Builder(filePath)
+                .parsing(inputProcessingMethod)
+                .build();
+        ms = new MethodService(config);
         db = new SailRepository(new MemoryStore());
 
         SelectQuery selectQuery = Queries.SELECT();

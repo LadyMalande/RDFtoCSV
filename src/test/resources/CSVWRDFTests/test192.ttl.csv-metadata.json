@@ -1,88 +1,80 @@
 {
-  "@context": "http://www.w3.org/ns/csvw",
-  "@type": "TableGroup",
-  "tables": [
-    {
-      "@type": "Table",
-      "url": "test192.ttlTestOutput0.csv",
-      "tableSchema": {
-        "@type": "Schema",
-        "columns": [
-          {
-            "@type": "Column",
-            "titles": "Subjekt",
-            "name": "Subjekt",
-            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
-            "suppressOutput": true
-          },
-          {
-            "@type": "Column",
-            "titles": "d%2DM%2Dyyyy%20HHmm",
-            "name": "d%2DM%2Dyyyy%20HHmm",
-            "propertyUrl": "file://test192.csv#d%2DM%2Dyyyy%20HHmm"
-          },
-          {
-            "@type": "Column",
-            "titles": "d%2DM%2Dyyyy%20HHmm%20X",
-            "name": "d%2DM%2Dyyyy%20HHmm%20X",
-            "propertyUrl": "file://test192.csv#d%2DM%2Dyyyy%20HHmm%20X"
-          },
-          {
-            "@type": "Column",
-            "titles": "dd%2DMM%2Dyyyy%20HH%3Amm",
-            "name": "dd%2DMM%2Dyyyy%20HH%3Amm",
-            "propertyUrl": "file://test192.csv#dd%2DMM%2Dyyyy%20HH%3Amm"
-          },
-          {
-            "@type": "Column",
-            "titles": "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass",
-            "name": "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass",
-            "propertyUrl": "file://test192.csv#yyyy%2DMM%2Ddd%20HH%3Amm%3Ass"
-          },
-          {
-            "@type": "Column",
-            "titles": "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass%20X",
-            "name": "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass%20X",
-            "propertyUrl": "file://test192.csv#yyyy%2DMM%2Ddd%20HH%3Amm%3Ass%20X"
-          },
-          {
-            "@type": "Column",
-            "titles": "yyyy%2DMM%2DddTHH%3Amm",
-            "name": "yyyy%2DMM%2DddTHH%3Amm",
-            "propertyUrl": "file://test192.csv#yyyy%2DMM%2DddTHH%3Amm"
-          },
-          {
-            "@type": "Column",
-            "titles": "yyyy%2DMM%2DddTHH%3Amm%3Ass",
-            "name": "yyyy%2DMM%2DddTHH%3Amm%3Ass",
-            "propertyUrl": "file://test192.csv#yyyy%2DMM%2DddTHH%3Amm%3Ass"
-          },
-          {
-            "@type": "Column",
-            "titles": "yyyy%2DMM%2DddTHH%3Amm%3AssXXX",
-            "name": "yyyy%2DMM%2DddTHH%3Amm%3AssXXX",
-            "propertyUrl": "file://test192.csv#yyyy%2DMM%2DddTHH%3Amm%3AssXXX"
-          },
-          {
-            "@type": "Column",
-            "titles": "yyyyMMdd%20HHmmss",
-            "name": "yyyyMMdd%20HHmmss",
-            "propertyUrl": "file://test192.csv#yyyyMMdd%20HHmmss"
-          }
-        ],
-        "rowTitles": [
-          "Subjekt",
-          "d%2DM%2Dyyyy%20HHmm",
-          "d%2DM%2Dyyyy%20HHmm%20X",
-          "dd%2DMM%2Dyyyy%20HH%3Amm",
-          "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass",
-          "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass%20X",
-          "yyyy%2DMM%2DddTHH%3Amm",
-          "yyyy%2DMM%2DddTHH%3Amm%3Ass",
-          "yyyy%2DMM%2DddTHH%3Amm%3AssXXX",
-          "yyyyMMdd%20HHmmss"
-        ]
-      }
-    }
-  ]
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test192.ttl.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "d%2DM%2Dyyyy%20HHmm",
+        "name" : "d%2DM%2Dyyyy%20HHmm",
+        "propertyUrl" : "file://test192.csv#d%2DM%2Dyyyy%20HHmm"
+      }, {
+        "@type" : "Column",
+        "titles" : "d%2DM%2Dyyyy%20HHmm%20X",
+        "name" : "d%2DM%2Dyyyy%20HHmm%20X",
+        "propertyUrl" : "file://test192.csv#d%2DM%2Dyyyy%20HHmm%20X"
+      }, {
+        "@type" : "Column",
+        "titles" : "dd%2DMM%2Dyyyy%20HH%3Amm",
+        "name" : "dd%2DMM%2Dyyyy%20HH%3Amm",
+        "propertyUrl" : "file://test192.csv#dd%2DMM%2Dyyyy%20HH%3Amm"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass",
+        "name" : "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass",
+        "propertyUrl" : "file://test192.csv#yyyy%2DMM%2Ddd%20HH%3Amm%3Ass"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass%20X",
+        "name" : "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass%20X",
+        "propertyUrl" : "file://test192.csv#yyyy%2DMM%2Ddd%20HH%3Amm%3Ass%20X"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyy%2DMM%2DddTHH%3Amm",
+        "name" : "yyyy%2DMM%2DddTHH%3Amm",
+        "propertyUrl" : "file://test192.csv#yyyy%2DMM%2DddTHH%3Amm"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyy%2DMM%2DddTHH%3Amm%3Ass",
+        "name" : "yyyy%2DMM%2DddTHH%3Amm%3Ass",
+        "propertyUrl" : "file://test192.csv#yyyy%2DMM%2DddTHH%3Amm%3Ass"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyy%2DMM%2DddTHH%3Amm%3AssXXX",
+        "name" : "yyyy%2DMM%2DddTHH%3Amm%3AssXXX",
+        "propertyUrl" : "file://test192.csv#yyyy%2DMM%2DddTHH%3Amm%3AssXXX"
+      }, {
+        "@type" : "Column",
+        "titles" : "yyyyMMdd%20HHmmss",
+        "name" : "yyyyMMdd%20HHmmss",
+        "propertyUrl" : "file://test192.csv#yyyyMMdd%20HHmmss"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "d%2DM%2Dyyyy%20HHmm", "d%2DM%2Dyyyy%20HHmm%20X", "dd%2DMM%2Dyyyy%20HH%3Amm", "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass", "yyyy%2DMM%2Ddd%20HH%3Amm%3Ass%20X", "yyyy%2DMM%2DddTHH%3Amm", "yyyy%2DMM%2DddTHH%3Amm%3Ass", "yyyy%2DMM%2DddTHH%3Amm%3AssXXX", "yyyyMMdd%20HHmmss" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ]
+  } ]
 }

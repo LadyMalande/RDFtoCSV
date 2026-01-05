@@ -1,0 +1,2 @@
+Subject,type,predicate,object,subject,_value
+frag,http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement,http://example.org/value,v,https://blank_Nodes_IRI.org/0,v

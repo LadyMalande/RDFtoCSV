@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "0.csv",
+    "url" : "test035.ttl.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -14,15 +14,10 @@
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "reportsTo",
+        "titles" : "reports to",
         "name" : "reportsTo",
         "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo}"
-      }, {
-        "@type" : "Column",
-        "titles" : "grade",
-        "name" : "grade",
-        "propertyUrl" : "http://example.org/gov.uk/def/grade"
+        "valueUrl" : "{+reportsTo}"
       }, {
         "@type" : "Column",
         "titles" : "min_pay",
@@ -31,15 +26,10 @@
         "datatype" : "integer"
       }, {
         "@type" : "Column",
-        "titles" : "max_pay",
-        "name" : "max_pay",
-        "propertyUrl" : "http://example.org/gov.uk/def/max_pay",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "job",
-        "name" : "job",
-        "propertyUrl" : "http://example.org/gov.uk/def/job"
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "number_of_posts",
@@ -53,32 +43,42 @@
         "propertyUrl" : "http://example.org/gov.uk/def/profession"
       }, {
         "@type" : "Column",
-        "titles" : "postIn",
-        "name" : "postIn",
-        "propertyUrl" : "http://www.w3.org/ns/org#postIn",
-        "valueUrl" : "http://example.org/organization/{+postIn}"
+        "titles" : "max_pay",
+        "name" : "max_pay",
+        "propertyUrl" : "http://example.org/gov.uk/def/max_pay",
+        "datatype" : "integer"
+      }, {
+        "@type" : "Column",
+        "titles" : "job",
+        "name" : "job",
+        "propertyUrl" : "http://example.org/gov.uk/def/job"
       }, {
         "@type" : "Column",
         "titles" : "Identifier",
         "name" : "identifier",
         "propertyUrl" : "http://purl.org/dc/terms/identifier",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "titles" : "heldBy",
+        "titles" : "grade",
+        "name" : "grade",
+        "propertyUrl" : "http://example.org/gov.uk/def/grade"
+      }, {
+        "@type" : "Column",
+        "titles" : "held by",
         "name" : "heldBy",
         "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/person/{+heldBy}",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/post/{+Subject}"
+        "valueUrl" : "{+heldBy}",
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "titles" : "name",
-        "name" : "name",
-        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
-        "aboutUrl" : "http://example.org/organization/hefce.ac.uk/person/{+Subject}"
+        "titles" : "post in",
+        "name" : "postIn",
+        "propertyUrl" : "http://www.w3.org/ns/org#postIn",
+        "valueUrl" : "{+postIn}"
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "reportsTo", "grade", "min_pay", "max_pay", "job", "number_of_posts", "profession", "postIn", "identifier", "heldBy", "name" ]
+      "rowTitles" : [ "Subject", "reportsTo", "min_pay", "name", "number_of_posts", "profession", "max_pay", "job", "identifier", "grade", "heldBy", "postIn" ]
     },
     "transformations" : [ {
       "@type" : "Template",

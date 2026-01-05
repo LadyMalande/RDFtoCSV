@@ -1,0 +1,3 @@
+Subject,type,title,author,genre
+http://example.org/book/1,"http://example.org/vocab/Book,http://example.org/vocab/Book",The Great Gatsby,F. Scott Fitzgerald,"Fiction,Classic,American Literature"
+http://example.org/book/2,"http://example.org/vocab/Book,http://example.org/vocab/Book",To Kill a Mockingbird,Harper Lee,"Fiction,Southern Gothic"

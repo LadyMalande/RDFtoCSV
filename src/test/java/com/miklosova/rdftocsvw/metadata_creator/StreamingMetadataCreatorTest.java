@@ -9,6 +9,7 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
@@ -31,7 +32,6 @@ import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 import java.util.ArrayList;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -41,22 +41,22 @@ class StreamingMetadataCreatorTest {
     private StreamingMetadataCreator streamingMetadataCreator;
 
     @Mock
-    private ConfigurationManager configurationManager;
-
-    @Mock
     private Main main;
     private String[] args;
     private RDFtoCSV rdfToCSV;
     private Repository db;
+
+    private AppConfig config;
     private String fileName = "/RDFtoCSV/src/test/resources/differentSerializations/testingInput.nt";
 
     @BeforeEach
     void setUp() {
-        rdfToCSV = new RDFtoCSV(fileName);
-        db = new SailRepository(new MemoryStore());
+
         args = new String[]{"-f", "test.rdf", "-p", "rdf4j"};
-        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
-        streamingMetadataCreator = new StreamingMetadataCreator();
+        config = new AppConfig.Builder("test.rdf").parsing("rdf4j").build();
+        rdfToCSV = new RDFtoCSV(config);
+        db = new SailRepository(new MemoryStore());
+        streamingMetadataCreator = new StreamingMetadataCreator(config);
     }
 
     //BaseRock generated method id: ${testConstructor}, hash: 6FDCBC966DF1DF6A210F58234369527E
@@ -64,9 +64,9 @@ class StreamingMetadataCreatorTest {
     void testConstructor() throws URISyntaxException, MalformedURLException {
         String fileNameFromConfig = "test.nt";
         URL mockLocation = new URL("file:/path/to/jar");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INPUT_FILENAME, fileNameFromConfig);
+        AppConfig testConfig = new AppConfig.Builder(fileNameFromConfig).parsing("rdf4j").build();
         File mockFile = mock(File.class);
-        StreamingMetadataCreator creator = new StreamingMetadataCreator();
+        StreamingMetadataCreator creator = new StreamingMetadataCreator(testConfig);
         assertEquals(fileNameFromConfig, creator.fileNameToRead);
     }
 
@@ -91,7 +91,7 @@ class StreamingMetadataCreatorTest {
         ValueFactory vf = SimpleValueFactory.getInstance();
         Statement st = vf.createStatement(vf.createBNode("node1"), vf.createIRI("http://example.com/predicate"), vf.createBNode("node2"));
         String line = "_:node1 <http://example.com/predicate> _:node2 .";
-        Statement result = StreamingMetadataCreator.replaceBlankNodesWithIRI(st, line);
+        Statement result = streamingMetadataCreator.replaceBlankNodesWithIRI(st, line);
         assertTrue(result.getSubject().isIRI());
         assertTrue(result.getObject().isIRI());
         assertEquals("http://example.com/predicate", result.getPredicate().stringValue());
@@ -111,14 +111,14 @@ class StreamingMetadataCreatorTest {
     //BaseRock generated method id: ${testRepairMetadataAndMakeItJsonld}, hash: 22A5403987C6544A03814008CD8CB653
     @Test
     void testRepairMetadataAndMakeItJsonld() {
-        Metadata metadata = mock(Metadata.class);
-        Table table = new Table("test.csv");
-        TableSchema schema = new TableSchema();
+        Metadata metadata = new Metadata(config);
+        Table table = new Table("test.csv", config);
+        TableSchema schema = new TableSchema(config);
         schema.setColumns(new ArrayList<>());
         table.setTableSchema(schema);
         metadata.getTables().add(table);
         File f = new File("test.csv");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES,f.getAbsolutePath());
+        config.setIntermediateFileNames(f.getAbsolutePath());
         streamingMetadataCreator.repairMetadataAndMakeItJsonld(metadata);
         //verify(metadata).jsonldMetadata();
     }
@@ -126,7 +126,7 @@ class StreamingMetadataCreatorTest {
     //BaseRock generated method id: ${testCreateFirstColumn}, hash: 387B95E50804AEDF318F78EC64030EC8
     @Test
     void testCreateFirstColumn() {
-        streamingMetadataCreator.tableSchema = new TableSchema();
+        streamingMetadataCreator.tableSchema = new TableSchema(config);
         streamingMetadataCreator.tableSchema.setColumns(new ArrayList<>());
         streamingMetadataCreator.createFirstColumn();
         assertEquals(1, streamingMetadataCreator.tableSchema.getColumns().size());
@@ -140,7 +140,7 @@ class StreamingMetadataCreatorTest {
     //BaseRock generated method id: ${testProcessLine}, hash: E42C02BB8F787708EC13BAF2D83F7874
     @Test
     void testProcessLine() {
-        streamingMetadataCreator.tableSchema = new TableSchema();
+        streamingMetadataCreator.tableSchema = new TableSchema(config);
         streamingMetadataCreator.tableSchema.setColumns(new ArrayList<>());
         String line = "<http://example.com/subject> <http://example.com/predicate> \"object\" .";
         streamingMetadataCreator.processLine(line);
@@ -165,7 +165,7 @@ class StreamingMetadataCreatorTest {
     @Test
     void testProcessLineIntoTriple() {
         String line = "<http://example.com/subject> <http://example.com/predicate> \"object\" .";
-        Triple result = StreamingMetadataCreator.processLineIntoTriple(line);
+        Triple result = streamingMetadataCreator.processLineIntoTriple(line);
         assertNotNull(result);
         assertTrue(result.subject instanceof IRI);
         assertTrue(result.predicate instanceof IRI);
@@ -175,7 +175,7 @@ class StreamingMetadataCreatorTest {
     //BaseRock generated method id: ${testAddMetadataToTableSchema}, hash: 820A46F89A9205BDBF408500200529B6
     @Test
     void testAddMetadataToTableSchema() {
-        streamingMetadataCreator.tableSchema = new TableSchema();
+        streamingMetadataCreator.tableSchema = new TableSchema(config);
         streamingMetadataCreator.tableSchema.setColumns(new ArrayList<>());
         ValueFactory vf = SimpleValueFactory.getInstance();
         Triple triple = new Triple(vf.createIRI("http://example.com/subject"), vf.createIRI("http://example.com/predicate"), vf.createLiteral("object"));
@@ -190,14 +190,14 @@ class StreamingMetadataCreatorTest {
     //BaseRock generated method id: ${testConsolidateMetadataAndCSVs}, hash: 0AF72C6FFFCF0798214ADFF89B345A06
     @Test
     void testConsolidateMetadataAndCSVs() {
-        Metadata oldMetadata = new Metadata();
+        Metadata oldMetadata = new Metadata(config);
         MetadataConsolidator mockMc = mock(MetadataConsolidator.class);
         CSVConsolidator mockCc = mock(CSVConsolidator.class);
-        Metadata consolidatedMetadata = new Metadata();
-        when(mockMc.consolidateMetadata(oldMetadata)).thenReturn(consolidatedMetadata);
+        Metadata consolidatedMetadata = new Metadata(config);
+        when(mockMc.consolidateMetadata(oldMetadata, config)).thenReturn(consolidatedMetadata);
         Metadata result = streamingMetadataCreator.consolidateMetadataAndCSVs(oldMetadata);
         assertNotNull(result);
-        verify(mockMc, times(0)).consolidateMetadata(oldMetadata);
+        verify(mockMc, times(0)).consolidateMetadata(oldMetadata, config);
         verify(mockCc, times(0)).consolidateCSVs(oldMetadata, consolidatedMetadata);
     }
 

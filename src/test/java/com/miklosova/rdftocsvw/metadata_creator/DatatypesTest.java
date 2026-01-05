@@ -5,8 +5,8 @@ import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.BaseTest;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
@@ -56,10 +56,10 @@ public class DatatypesTest extends BaseTest {
     @BeforeEach
     void createMetadata() {
         System.out.println("Override before each");
-        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{"-f", filePath});
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
+        config = new AppConfig.Builder(filePath).build();
+        config.setOutputMetadataFileName(filePathForMetadata);
         db = new SailRepository(new MemoryStore());
-        MethodService methodService = new MethodService();
+        MethodService methodService = new MethodService(config);
         RepositoryConnection rc = null;
         try {
             rc = methodService.processInput(filePath, PROCESS_METHOD, db);
@@ -68,11 +68,11 @@ public class DatatypesTest extends BaseTest {
         }
         assert (rc != null);
         // Convert the table to intermediate data for processing into metadata
-        ConversionService cs = new ConversionService();
+        ConversionService cs = new ConversionService(config);
         System.out.println("createMetadata @BeforeEach");
         this.prefinishedOutput = cs.convertByQuery(rc, db);
         // Convert intermediate data into basic metadata
-        MetadataService ms = new MetadataService();
+        MetadataService ms = new MetadataService(config);
         Metadata metadata = ms.createMetadata(prefinishedOutput);
 
         this.testMetadata = metadata;
@@ -80,18 +80,17 @@ public class DatatypesTest extends BaseTest {
 
     @Test
     public void isGivenDatatype() {
-        logger.info("Starting test isGivenDatatype.");
+        //logger.info("Starting test isGivenDatatype.");
         createMetadata();
 
         RowsAndKeys rnk = (RowsAndKeys) prefinishedOutput.getPrefinishedOutput();
         int i = 0;
         ArrayList<String> fileNamesCreated = new ArrayList<>();
-        String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-
+        String allFiles = config.getIntermediateFileNames();
         for (String filename : allFiles.split(",")) {
             String newFileName = filePathForOutput + i + ".csv";
-            System.out.println("newFileName " + filename);
-            FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), this.testMetadata);
+            //System.out.println("newFileName " + filename);
+            FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), this.testMetadata, config);
         }
 
         System.out.println("START isGivenDatatype");

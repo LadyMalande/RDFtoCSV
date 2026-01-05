@@ -2,7 +2,8 @@ package com.miklosova.rdftocsvw.converter;
 
 import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.converter.data_structure.RowsAndKeys;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
+
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 
@@ -10,6 +11,8 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
  * The Conversion service. Part of Strategy design pattern.
  */
 public class ConversionService {
+    private AppConfig config;
+    
     /**
      * Gets conversion gateway.
      *
@@ -20,6 +23,23 @@ public class ConversionService {
     }
 
     private ConversionGateway conversionGateway;
+
+    /**
+     * Default constructor for backward compatibility.
+     * @deprecated Use {@link #ConversionService(AppConfig)} instead
+     */
+    @Deprecated
+    public ConversionService() {
+        this.config = null;
+    }
+
+    /**
+     * Constructor with AppConfig.
+     * @param config The application configuration
+     */
+    public ConversionService(AppConfig config) {
+        this.config = config;
+    }
 
     /**
      * Convert by query prefinished output.
@@ -42,11 +62,14 @@ public class ConversionService {
      * @param db the Repository to make connection for querying on
      */
     private void processConversionType(Repository db) {
-        String conversionChoice = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD);
+        if (config == null) {
+            throw new IllegalStateException("AppConfig is required");
+        }
+        String conversionChoice = config.getConversionMethod();
 
         switch (conversionChoice) {
-            case "basicQuery", "trivial" -> conversionGateway.setConversionMethod(new BasicQueryConverter(db));
-            case "splitQuery" -> conversionGateway.setConversionMethod(new SplitFilesQueryConverter(db));
+            case "basicQuery", "trivial" -> conversionGateway.setConversionMethod(new BasicQueryConverter(db, config));
+            case "splitQuery" -> conversionGateway.setConversionMethod(new SplitFilesQueryConverter(db, config));
             default -> throw new IllegalArgumentException("Invalid conversion method: " + conversionChoice);
         }
     }

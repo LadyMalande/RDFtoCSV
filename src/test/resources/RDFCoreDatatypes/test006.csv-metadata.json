@@ -1,45 +1,34 @@
 {
-  "@context": "http://www.w3.org/ns/csvw",
-  "@type": "TableGroup",
-  "tables": [
-    {
-      "@type": "Table",
-      "url": "test006TestOutput0.csv",
-      "tableSchema": {
-        "@type": "Schema",
-        "columns": [
-          {
-            "@type": "Column",
-            "titles": "Subjekt",
-            "name": "Subjekt",
-            "valueUrl": "http://example.org/{+Subjekt}",
-            "suppressOutput": true
-          },
-          {
-            "@type": "Column",
-            "titles": "bar",
-            "name": "bar",
-            "propertyUrl": "http://example.org/bar",
-            "datatype": "decimal",
-            "aboutUrl": "http://example.org/{+Subjekt}"
-          },
-          {
-            "@type": "Column",
-            "titles": "range",
-            "name": "range",
-            "propertyUrl": "http://www.w3.org/2000/01/rdf-schema#range",
-            "valueUrl": "{+range}",
-            "aboutUrl": "http://example.org/{+Subjekt}"
-          }
-        ],
-        "primaryKey": "Subjekt",
-        "aboutUrl": "http://example.org/{+Subjekt}",
-        "rowTitles": [
-          "Subjekt",
-          "bar",
-          "range"
-        ]
-      }
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test006.nt.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "http://example.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "bar",
+        "name" : "bar",
+        "propertyUrl" : "http://example.org/bar",
+        "datatype" : "decimal",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "range",
+        "name" : "range",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#range",
+        "valueUrl" : "http://www.w3.org/2001/XMLSchema#{+range}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "bar", "range" ]
     }
-  ]
+  } ]
 }

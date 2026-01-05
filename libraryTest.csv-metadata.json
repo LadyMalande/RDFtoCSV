@@ -1,0 +1,467 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "libraryTest.nt_merged.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "name (en)",
+        "name" : "name_en",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "name (cs)",
+        "name" : "name_cs",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "established",
+        "name" : "established",
+        "propertyUrl" : "http://example.org/vocab/established",
+        "datatype" : "date",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "numberOfBooks",
+        "name" : "numberOfBooks",
+        "propertyUrl" : "http://example.org/vocab/numberOfBooks",
+        "datatype" : "integer",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "isOpen",
+        "name" : "isOpen",
+        "propertyUrl" : "http://example.org/vocab/isOpen",
+        "datatype" : "boolean",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "latitude",
+        "name" : "latitude",
+        "propertyUrl" : "http://example.org/vocab/latitude",
+        "datatype" : "decimal",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "longitude",
+        "name" : "longitude",
+        "propertyUrl" : "http://example.org/vocab/longitude",
+        "datatype" : "decimal",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "comment",
+        "name" : "comment",
+        "propertyUrl" : "http://www.w3.org/2000/01/rdf-schema#comment",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (en)",
+        "name" : "title_en",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "Title (cs)",
+        "name" : "title_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "author",
+        "name" : "author",
+        "propertyUrl" : "http://example.org/vocab/author",
+        "valueUrl" : "{+author}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "publishedYear",
+        "name" : "publishedYear",
+        "propertyUrl" : "http://example.org/vocab/publishedYear",
+        "datatype" : "http://www.w3.org/2001/XMLSchema#gYear",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "isbn",
+        "name" : "isbn",
+        "propertyUrl" : "http://example.org/vocab/isbn",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "pageCount",
+        "name" : "pageCount",
+        "propertyUrl" : "http://example.org/vocab/pageCount",
+        "datatype" : "integer",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "availableCopies",
+        "name" : "availableCopies",
+        "propertyUrl" : "http://example.org/vocab/availableCopies",
+        "datatype" : "integer",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "givenName",
+        "name" : "givenName",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/givenName",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "familyName",
+        "name" : "familyName",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/familyName",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "birthDate",
+        "name" : "birthDate",
+        "propertyUrl" : "http://example.org/vocab/birthDate",
+        "datatype" : "date",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "deathDate",
+        "name" : "deathDate",
+        "propertyUrl" : "http://example.org/vocab/deathDate",
+        "datatype" : "date",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "nationality",
+        "name" : "nationality",
+        "propertyUrl" : "http://example.org/vocab/nationality",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "reviewOf",
+        "name" : "reviewOf",
+        "propertyUrl" : "http://example.org/vocab/reviewOf",
+        "valueUrl" : "{+reviewOf}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "rating",
+        "name" : "rating",
+        "propertyUrl" : "http://example.org/vocab/rating",
+        "datatype" : "integer",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "reviewText (en)",
+        "name" : "reviewText_en",
+        "propertyUrl" : "http://example.org/vocab/reviewText",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "reviewDate",
+        "name" : "reviewDate",
+        "propertyUrl" : "http://example.org/vocab/reviewDate",
+        "datatype" : "date",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "reviewer",
+        "name" : "reviewer",
+        "propertyUrl" : "http://example.org/vocab/reviewer",
+        "valueUrl" : "{+reviewer}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "memberSince",
+        "name" : "memberSince",
+        "propertyUrl" : "http://example.org/vocab/memberSince",
+        "datatype" : "date",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "mbox",
+        "name" : "mbox",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/mbox",
+        "valueUrl" : "{+mbox}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "memberId",
+        "name" : "memberId",
+        "propertyUrl" : "http://example.org/vocab/memberId",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "age",
+        "name" : "age",
+        "propertyUrl" : "http://example.org/vocab/age",
+        "datatype" : "integer",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "address",
+        "name" : "address",
+        "propertyUrl" : "http://example.org/vocab/address",
+        "valueUrl" : "{+address}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "street",
+        "name" : "street",
+        "propertyUrl" : "http://example.org/vocab/street",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "city",
+        "name" : "city",
+        "propertyUrl" : "http://example.org/vocab/city",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "postalCode",
+        "name" : "postalCode",
+        "propertyUrl" : "http://example.org/vocab/postalCode",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "country (en)",
+        "name" : "country_en",
+        "propertyUrl" : "http://example.org/vocab/country",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "country (cs)",
+        "name" : "country_cs",
+        "propertyUrl" : "http://example.org/vocab/country",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "borrower",
+        "name" : "borrower",
+        "propertyUrl" : "http://example.org/vocab/borrower",
+        "valueUrl" : "{+borrower}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "borrowedBook",
+        "name" : "borrowedBook",
+        "propertyUrl" : "http://example.org/vocab/borrowedBook",
+        "valueUrl" : "{+borrowedBook}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "loanDate",
+        "name" : "loanDate",
+        "propertyUrl" : "http://example.org/vocab/loanDate",
+        "datatype" : "date",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "dueDate",
+        "name" : "dueDate",
+        "propertyUrl" : "http://example.org/vocab/dueDate",
+        "datatype" : "date",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "isOverdue",
+        "name" : "isOverdue",
+        "propertyUrl" : "http://example.org/vocab/isOverdue",
+        "datatype" : "boolean",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "booksInOrder",
+        "name" : "booksInOrder",
+        "propertyUrl" : "http://example.org/vocab/booksInOrder",
+        "valueUrl" : "{+booksInOrder}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "volumeNumber",
+        "name" : "volumeNumber",
+        "propertyUrl" : "http://example.org/vocab/volumeNumber",
+        "datatype" : "integer",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "year",
+        "name" : "year",
+        "propertyUrl" : "http://example.org/vocab/year",
+        "datatype" : "http://www.w3.org/2001/XMLSchema#gYear",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "totalVisitors",
+        "name" : "totalVisitors",
+        "propertyUrl" : "http://example.org/vocab/totalVisitors",
+        "datatype" : "integer",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "averageDaily",
+        "name" : "averageDaily",
+        "propertyUrl" : "http://example.org/vocab/averageDaily",
+        "datatype" : "decimal",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "budget",
+        "name" : "budget",
+        "propertyUrl" : "http://example.org/vocab/budget",
+        "datatype" : "decimal",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "growthRate",
+        "name" : "growthRate",
+        "propertyUrl" : "http://example.org/vocab/growthRate",
+        "datatype" : "double",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "satisfactionScore",
+        "name" : "satisfactionScore",
+        "propertyUrl" : "http://example.org/vocab/satisfactionScore",
+        "datatype" : "float",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "startTime",
+        "name" : "startTime",
+        "propertyUrl" : "http://example.org/vocab/startTime",
+        "datatype" : "time",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "dateTime",
+        "name" : "dateTime",
+        "propertyUrl" : "http://example.org/vocab/dateTime",
+        "datatype" : "dateTime",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "duration",
+        "name" : "duration",
+        "propertyUrl" : "http://example.org/vocab/duration",
+        "datatype" : "duration",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "organizes",
+        "name" : "organizes",
+        "propertyUrl" : "http://example.org/vocab/organizes",
+        "valueUrl" : "{+organizes}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "location",
+        "name" : "location",
+        "propertyUrl" : "http://example.org/vocab/location",
+        "valueUrl" : "{+location}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "roomNumber",
+        "name" : "roomNumber",
+        "propertyUrl" : "http://example.org/vocab/roomNumber",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "capacity",
+        "name" : "capacity",
+        "propertyUrl" : "http://example.org/vocab/capacity",
+        "datatype" : "integer",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "hasProjector",
+        "name" : "hasProjector",
+        "propertyUrl" : "http://example.org/vocab/hasProjector",
+        "datatype" : "boolean",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "welcomeMessage (en)",
+        "name" : "welcomeMessage_en",
+        "propertyUrl" : "http://example.org/vocab/welcomeMessage",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "welcomeMessage (cs)",
+        "name" : "welcomeMessage_cs",
+        "propertyUrl" : "http://example.org/vocab/welcomeMessage",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "welcomeMessage (fr)",
+        "name" : "welcomeMessage_fr",
+        "propertyUrl" : "http://example.org/vocab/welcomeMessage",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "fr"
+      }, {
+        "@type" : "Column",
+        "titles" : "welcomeMessage (de)",
+        "name" : "welcomeMessage_de",
+        "propertyUrl" : "http://example.org/vocab/welcomeMessage",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "welcomeMessage (es)",
+        "name" : "welcomeMessage_es",
+        "propertyUrl" : "http://example.org/vocab/welcomeMessage",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "es"
+      }, {
+        "@type" : "Column",
+        "titles" : "first",
+        "name" : "first",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+        "valueUrl" : "{+first}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "rest",
+        "name" : "rest",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+        "valueUrl" : "{+rest}",
+        "aboutUrl" : "{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "name_en", "name_cs", "established", "numberOfBooks", "isOpen", "latitude", "longitude", "comment", "title_en", "title_cs", "author", "publishedYear", "isbn", "pageCount", "availableCopies", "givenName", "familyName", "birthDate", "deathDate", "nationality", "reviewOf", "rating", "reviewText_en", "reviewDate", "reviewer", "memberSince", "mbox", "memberId", "age", "address", "street", "city", "postalCode", "country_en", "country_cs", "borrower", "borrowedBook", "loanDate", "dueDate", "isOverdue", "booksInOrder", "volumeNumber", "year", "totalVisitors", "averageDaily", "budget", "growthRate", "satisfactionScore", "startTime", "dateTime", "duration", "organizes", "location", "roomNumber", "capacity", "hasProjector", "welcomeMessage_en", "welcomeMessage_cs", "welcomeMessage_fr", "welcomeMessage_de", "welcomeMessage_es", "first", "rest" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ]
+  } ]
+}

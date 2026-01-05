@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "0.csv",
+    "url" : "test033.ttl.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -14,51 +14,51 @@
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://schema.org/{+type}",
-        "aboutUrl" : "file://events-listing.csv#{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "location",
-        "name" : "location",
-        "propertyUrl" : "http://schema.org/location",
-        "valueUrl" : "file://events-listing.csv#{+location}",
-        "aboutUrl" : "file://events-listing.csv#{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "name",
-        "name" : "name",
-        "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "file://events-listing.csv#{+Subject}"
-      }, {
-        "@type" : "Column",
         "titles" : "offers",
         "name" : "offers",
         "propertyUrl" : "http://schema.org/offers",
-        "valueUrl" : "file://events-listing.csv#{+offers}",
-        "aboutUrl" : "file://events-listing.csv#{+Subject}"
+        "valueUrl" : "{+offers}",
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "startDate",
         "name" : "startDate",
         "propertyUrl" : "http://schema.org/startDate",
         "datatype" : "dateTime",
-        "aboutUrl" : "file://events-listing.csv#{+Subject}"
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "location",
+        "name" : "location",
+        "propertyUrl" : "http://schema.org/location",
+        "valueUrl" : "{+location}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://schema.org/name",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "address",
+        "name" : "address",
+        "propertyUrl" : "http://schema.org/address",
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "url",
         "name" : "url",
         "propertyUrl" : "http://schema.org/url",
         "datatype" : "anyURI",
-        "aboutUrl" : "file://events-listing.csv#{+Subject}"
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
-        "titles" : "address",
-        "name" : "address",
-        "propertyUrl" : "http://schema.org/address",
-        "aboutUrl" : "file://events-listing.csv#{+Subject}"
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://schema.org/{+type}",
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "propertyUrl" : "rdf:type",
@@ -67,7 +67,7 @@
         "virtual" : true
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "type", "location", "name", "offers", "startDate", "url", "address" ]
+      "rowTitles" : [ "Subject", "offers", "startDate", "location", "name", "address", "url", "type" ]
     }
   } ]
 }

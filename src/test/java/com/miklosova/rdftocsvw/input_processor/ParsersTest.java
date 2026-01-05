@@ -3,7 +3,7 @@ package com.miklosova.rdftocsvw.input_processor;
 import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.input_processor.parsing_methods.*;
 import com.miklosova.rdftocsvw.support.BaseTest;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
@@ -33,6 +33,7 @@ import static org.mockito.Mockito.doThrow;
 @ExtendWith(MockitoExtension.class)
 @RunWith(Parameterized.class)
 public class ParsersTest extends BaseTest {
+    private AppConfig config;
     private String processMethod;
     private String filePath;
     private String originalFileToCopy;
@@ -78,9 +79,10 @@ public class ParsersTest extends BaseTest {
 
     @BeforeEach
     void createDbAndMethodService() {
-        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{"-f",filePath, "-p", "rdf4j"});
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.READ_METHOD, processMethod);
-        ms = new MethodService();
+        config = new AppConfig.Builder(filePath)
+                .parsing(processMethod)
+                .build();
+        ms = new MethodService(config);
         db = new SailRepository(new MemoryStore());
 
 

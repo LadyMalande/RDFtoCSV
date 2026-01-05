@@ -2,7 +2,8 @@ package com.miklosova.rdftocsvw.converter;
 
 import com.miklosova.rdftocsvw.converter.data_structure.*;
 import com.miklosova.rdftocsvw.input_processor.MethodService;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
+
 import com.miklosova.rdftocsvw.support.ConverterHelper;
 import lombok.extern.java.Log;
 import org.eclipse.rdf4j.model.*;
@@ -61,6 +62,17 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
      */
     Map<Value, Integer> IRIalreadyProcessedTimes;
     /**
+     * Cache of how many times each resource is referenced as an object.
+     * Key: Resource URI, Value: reference count
+     * Built once upfront to avoid expensive per-triple COUNT queries.
+     */
+    private Map<String, Integer> objectReferenceCounts;
+    /**
+     * HashSet to track seen row IDs for O(1) duplicate detection.
+     * Avoids O(n) stream.anyMatch() which causes O(n²) overall performance.
+     */
+    private Set<Value> seenRowIds;
+    /**
      * The Already processed times.
      */
     int alreadyProcessedTimes = 0;
@@ -75,18 +87,44 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
     RepositoryConnection rc;
 
     /**
+     * The AppConfig instance.
+     */
+    private AppConfig config;
+
+    /**
      * Instantiates a new Basic query converter.
      *
      * @param db the db
+     * @deprecated Use {@link #BasicQueryConverter(Repository, AppConfig)} instead
      */
+    @Deprecated
     public BasicQueryConverter(Repository db) {
         this.keys = new HashSet<>();
         this.db = db;
         this.IRIalreadyProcessedTimes = new HashMap<>();
+        this.config = null;
+    }
+
+    /**
+     * Instantiates a new Basic query converter with AppConfig.
+     *
+     * @param db the db
+     * @param config the application configuration
+     */
+    public BasicQueryConverter(Repository db, AppConfig config) {
+        this.keys = new HashSet<>();
+        this.db = db;
+        this.IRIalreadyProcessedTimes = new HashMap<>();
+        this.config = config;
+        super.config = config; // Set parent's config field
+        this.rows = new ArrayList<>();
+        this.seenRowIds = new HashSet<>();
     }
 
     @Override
     public PrefinishedOutput<RowsAndKeys> convertWithQuery(RepositoryConnection rc) {
+        com.miklosova.rdftocsvw.support.ProgressLogger.startStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING);
+        
         this.rc = rc;
         changeBNodesForIri(rc);
         deleteBlankNodes(rc);
@@ -94,6 +132,9 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
         new PrefinishedOutput<>((new RowAndKey.RowAndKeyFactory()).factory());
         PrefinishedOutput<RowAndKey> queryResult;
         String query = getCSVTableQueryForModel(true);
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 25, "Executing SPARQL queries");
+        
         try {
             queryResult = queryRDFModel(query, true);
 
@@ -101,22 +142,31 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
             query = getCSVTableQueryForModel(false);
             queryResult = queryRDFModel(query, false);
         }
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 75, "Processing query results");
+        
         RowsAndKeys rak = new RowsAndKeys();
         ArrayList<RowAndKey> rakArray = new ArrayList<>();
         assert queryResult != null;
         rakArray.add(queryResult.getPrefinishedOutput());
         rak.setRowsAndKeys(rakArray);
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.completeStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING);
         return new PrefinishedOutput<>(rak);
     }
 
 
     private PrefinishedOutput<RowAndKey> queryRDFModel(String queryString, boolean askForTypes) throws IndexOutOfBoundsException {
         PrefinishedOutput<RowAndKey> gen = new PrefinishedOutput<>((new RowAndKey.RowAndKeyFactory()).factory());
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
+        config.setConversionHasRdfTypes(askForTypes);
         // Query the data and pass the result as String
 
         // Query in rdf4j
         // Create a new Repository.
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+            com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 30, "Preparing SPARQL queries"
+        );
 
         try (SailRepositoryConnection conn = (SailRepositoryConnection) db.getConnection()) {
 
@@ -136,6 +186,10 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
             });
 
             while (!conn.isEmpty()) {
+                com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                    com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 40, "Executing SPARQL query"
+                );
+                
                 TupleQuery query = conn.prepareTupleQuery(queryString);
                 // A QueryResult is also an AutoCloseable resource, so make sure it gets closed when done.
                 try (TupleQueryResult result = query.evaluate()) {
@@ -148,11 +202,50 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                     if (resultList.isEmpty() && askForTypes) {
                         throw new IndexOutOfBoundsException();
                     }
+                    
+                    com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                        com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, 50, 
+                        String.format("Processing %d query results", resultList.size())
+                    );
+                    
+                    // Build reference count cache upfront to avoid per-triple COUNT queries
+                    //logger.info("[RDF4J-DEBUG] Building object reference count cache...");
+                    long cacheStartTime = System.currentTimeMillis();
+                    objectReferenceCounts = buildObjectReferenceCounts(conn);
+                    long cacheTime = System.currentTimeMillis() - cacheStartTime;
+                    //logger.info(String.format("[RDF4J-DEBUG] Built reference cache with %d entries in %dms", objectReferenceCounts.size(), cacheTime));
+                    
                     roots = new HashSet<>();
+                    int processedCount = 0;
+                    int totalResults = resultList.size();
+                    long loopStartTime = System.currentTimeMillis();
+                    long lastLogTime = loopStartTime;
+                    
+                    //logger.info("[RDF4J-DEBUG] Starting main processing loop for " + totalResults + " results");
+                    
                     for (BindingSet solution : resultList) {
+                        processedCount++;
+                        
+                        // Log every 10,000 rows with timing info
+                        if (processedCount % 10000 == 0) {
+                            long currentTime = System.currentTimeMillis();
+                            long elapsed = currentTime - lastLogTime;
+                            long totalElapsed = currentTime - loopStartTime;
+                            double rowsPerSecond = (processedCount * 1000.0) / totalElapsed;
+                            //logger.info(String.format("[RDF4J-DEBUG] Processed %d/%d rows (%.1f%%) - Last 10K in %dms - Avg %.1f rows/sec", processedCount, totalResults, (processedCount * 100.0 / totalResults), elapsed, rowsPerSecond));
+                            lastLogTime = currentTime;
+                        }
+                        
+                        if (processedCount % Math.max(1, totalResults / 5) == 0) {
+                            int progress = 50 + (processedCount * 20 / totalResults);
+                            com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                                com.miklosova.rdftocsvw.support.ProgressLogger.Stage.CONVERTING, progress,
+                                String.format("Processing row %d/%d", processedCount, totalResults)
+                            );
+                        }
                         // ... and print out the value of the variable binding for ?s and ?n
                         if (solution.getValue("o").stringValue().equalsIgnoreCase(CSVW_TableGroup)) {
-                            StandardModeConverter smc = new StandardModeConverter(db);
+                            StandardModeConverter smc = new StandardModeConverter(db, config);
                             new RowAndKey();
                             RowAndKey smcOutputRowAndKey;
                             PrefinishedOutput<RowAndKey> smcOutput = new PrefinishedOutput<>((new RowAndKey.RowAndKeyFactory()).factory());
@@ -169,14 +262,18 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                             return queryWasBig;
                         }
 
-
+                        long deleteStartTime = System.currentTimeMillis();
                         deleteQueryToGetObjectsForRoot(solution.getValue("s"));
+                        long deleteTime = System.currentTimeMillis() - deleteStartTime;
+                        if (deleteTime > 100) {
+                            logger.warning(String.format("[RDF4J-DEBUG] deleteQueryToGetObjectsForRoot took %dms for row %d/%d",
+                                deleteTime, processedCount, totalResults));
+                        }
 
-
-                        if (rows.stream().anyMatch(row -> row.id.equals(newRow.id))) {
-                            // a row with the same id is already present in the data, don't create new one
-                        } else {
+                        // O(1) duplicate check using HashSet instead of O(n) stream
+                        if (!seenRowIds.contains(newRow.id)) {
                             rows.add(newRow);
+                            seenRowIds.add(newRow.id);
                         }
 
                     }
@@ -203,7 +300,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                 queryString = getQueryForSubstituteRoots(askForTypes);
             }
 
-            ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES, String.valueOf(askForTypes));
+            config.setConversionHasRdfTypes(askForTypes);
         } catch (IndexOutOfBoundsException ex) {
             throw new IndexOutOfBoundsException();
         }
@@ -215,9 +312,15 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
     }
 
     private PrefinishedOutput<RowAndKey> queryForSubjects(RepositoryConnection conn, Row newRow, Value root, Value subject, int level) {
+        long queryStartTime = System.currentTimeMillis();
         String queryToGetAllPredicatesAndObjects = getQueryToGetObjectsForRoot(subject);
         TupleQuery query = conn.prepareTupleQuery(queryToGetAllPredicatesAndObjects);
         try (TupleQueryResult result = query.evaluate()) {
+            long queryExecTime = System.currentTimeMillis() - queryStartTime;
+            if (queryExecTime > 100) {
+                logger.warning(String.format("[RDF4J-DEBUG] queryForSubjects took %dms for subject: %s (level=%d)", 
+                    queryExecTime, subject.stringValue(), level));
+            }
 
 
             // we just iterate over all solutions in the result...
@@ -273,8 +376,8 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                 /*
                 // This route would make cascade header structure, but the problem is, when the data start to multiply and each of the contents starts having its own structure.
                 // This solution works fine for shallow cascade, like Code lists, but it is not detailed enough for complex RDF structures with a lot of dependences between nodes.
-                if(ConfigurationManager.getVariableFromConfigFile("simpleBasicQuery") != null && ConfigurationManager.getVariableFromConfigFile("simpleBasicQuery").equalsIgnoreCase("false")) {
-                    if (solution.getValue("o") != null && solution.getValue("o").isIRI()) {
+                // Note: simpleBasicQuery check removed with ConfigurationManager
+                if (solution.getValue("o") != null && solution.getValue("o").isIRI()) {
                         if (solution.getValue("o") != root) {
                             queryForSubjects(conn, newRow, root, solution.getValue("o"), level + 1);
                         }
@@ -286,8 +389,27 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                 // Delete the triple from the storage
                 Resource subjectToDelete = Values.iri(subject.toString());
                 IRI predicate = Values.iri(solution.getValue("p").toString());
-                if (subjectIsInOnlyOneTripleAsObject(conn, subjectToDelete)) {
-                    conn.remove(subjectToDelete, predicate, solution.getValue("o"));
+                Value object = solution.getValue("o");
+                
+                // If the object is an IRI, update its reference count since we're about to delete this triple
+                if (object.isIRI()) {
+                    String objectKey = object.stringValue();
+                    Integer objRefCount = objectReferenceCounts.getOrDefault(objectKey, 0);
+                    if (objRefCount > 0) {
+                        // Decrement because this triple (subject->predicate->object) is being deleted
+                        objectReferenceCounts.put(objectKey, objRefCount - 1);
+                    }
+                }
+                
+                // Check if the SUBJECT appears as an object in other triples (is it referenced elsewhere?)
+                String subjectKey = subjectToDelete.toString();
+                Integer refCount = objectReferenceCounts.getOrDefault(subjectKey, 0);
+                
+                if (refCount <= 1) {
+                    // Subject is only referenced once (or not at all) - safe to delete all its triples
+                    conn.remove(subjectToDelete, predicate, object);
+                    // After deletion, this subject is no longer referenced anywhere
+                    objectReferenceCounts.put(subjectKey, 0);
                 } else {
                     if (IRIalreadyProcessedTimes.get(subjectToDelete) != null) {
                         if (IRIalreadyProcessedTimes.get(subjectToDelete) + 1 == alreadyProcessedTimes) {
@@ -309,6 +431,43 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
         return null;
     }
 
+    /**
+     * Build a cache of how many times each resource appears as an object in the repository.
+     * This replaces hundreds of thousands of individual COUNT queries with a single GROUP BY query.
+     * 
+     * @param conn Repository connection
+     * @return Map of resource URI -> reference count
+     */
+    private Map<String, Integer> buildObjectReferenceCounts(RepositoryConnection conn) {
+        Map<String, Integer> counts = new HashMap<>();
+        
+        // Single query to count all object references - much faster than individual COUNT queries
+        String query = """
+            SELECT ?o (COUNT(?s) AS ?count)
+            WHERE {
+                ?s ?p ?o .
+                FILTER(isIRI(?o))
+            }
+            GROUP BY ?o
+            """;
+        
+        TupleQuery tq = conn.prepareTupleQuery(query);
+        try (TupleQueryResult result = tq.evaluate()) {
+            while (result.hasNext()) {
+                BindingSet bs = result.next();
+                String objectUri = bs.getValue("o").stringValue();
+                int count = Integer.parseInt(((Literal) bs.getValue("count")).getLabel());
+                counts.put(objectUri, count);
+            }
+        }
+        
+        return counts;
+    }
+    
+    /**
+     * @deprecated This method is too slow - replaced by objectReferenceCounts cache
+     */
+    @Deprecated
     private boolean subjectIsInOnlyOneTripleAsObject(RepositoryConnection conn, Resource subjectToDelete) {
         String selectQueryString = """
                 ASK {
@@ -356,22 +515,26 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
     }
 
     private void deleteQueryToGetObjectsForRoot(Value root) {
-        String del = "DELETE { ?s ?p ?o .} WHERE { <" + root.stringValue() + "> ?p ?o .}";
+        // Delete all triples where root is the subject
+        String del = "DELETE WHERE { <" + root.stringValue() + "> ?p ?o . }";
         Update deleteQuery = rc.prepareUpdate(del);
         deleteQuery.execute();
-
     }
 
     public PrefinishedOutput<RowAndKey> convertData() {
         // Convert the table to intermediate data for processing into metadata
-        ConversionService cs = new ConversionService();
+        ConversionService cs = new ConversionService(config);
         Repository newdb = new SailRepository(new MemoryStore());
-        MethodService methodService = new MethodService();
+        MethodService methodService = new MethodService(config);
 
-        String readMethod = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD);
+        if (config == null) {
+            throw new IllegalStateException("AppConfig is required");
+        }
+        String readMethod = config.getParsing();
+        String inputFilename = config.getFile();
         try {
-            ConfigurationManager.saveVariableToConfigFile("simpleBasicQuery", "true");
-            RepositoryConnection newRc = methodService.processInput(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INPUT_FILENAME), readMethod, newdb);
+            config.setSimpleBasicQuery(true);
+            RepositoryConnection newRc = methodService.processInput(inputFilename, readMethod, newdb);
             PrefinishedOutput<RowsAndKeys> rk = new PrefinishedOutput<>((new RowsAndKeys.RowsAndKeysFactory()).factory());
             rk = cs.convertByQuery(newRc, newdb);
             PrefinishedOutput<RowAndKey> rk1 = new PrefinishedOutput<>((new RowAndKey.RowAndKeyFactory()).factory());

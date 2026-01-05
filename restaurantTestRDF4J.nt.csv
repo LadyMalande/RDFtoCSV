@@ -1,0 +1,7 @@
+Subject,name (en),name (it),name (fr),calories,vegetarian,containsAllergen,label,price,category,prepTime,type
+http://example.org/restaurant/dish1,Margherita Pizza,Pizza Margherita,,800,true,,,12.50,http://example.org/category/pizza,,Dish
+http://example.org/restaurant/dish2,Caesar Salad,,,350,false,"http://example.org/allergen/dairy,http://example.org/allergen/gluten",,9.99,http://example.org/category/salad,,Dish
+http://example.org/restaurant/dish3,Grilled Salmon,,Saumon Grillé,450,false,http://example.org/allergen/fish,,18.75,http://example.org/category/seafood,PT25M,Dish
+http://example.org/category/pizza,,,,,,,Pizza,,,,Category
+http://example.org/category/salad,,,,,,,Salad,,,,Category
+http://example.org/category/seafood,,,,,,,Seafood,,,,Category

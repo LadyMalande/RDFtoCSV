@@ -1,0 +1,42 @@
+
+_:bnode__1 <file://test007.csv#FamilyName> "Simpson";
+  <file://test007.csv#Surname> "Homer";
+  <file://test007.csv#childFoaf> "http://example/bart";
+  <file://test007.csv#childName> "Bart";
+  <file://test007.csv#foaf_id> "http://example/homer";
+  <file:/C:/Users/terka/RDFtoCSV/test007.ttl.csv#rowNum> <file:/C:/Users/terka/RDFtoCSV/1> .
+
+_:bnode__2 <file://test007.csv#FamilyName> "Simpson";
+  <file://test007.csv#Surname> "Homer";
+  <file://test007.csv#childFoaf> "http://example/lisa";
+  <file://test007.csv#childName> "Lisa";
+  <file://test007.csv#foaf_id> "http://example/homer";
+  <file:/C:/Users/terka/RDFtoCSV/test007.ttl.csv#rowNum> <file:/C:/Users/terka/RDFtoCSV/2> .
+
+_:bnode__3 <file://test007.csv#FamilyName> "Simpson";
+  <file://test007.csv#Surname> "Homer";
+  <file://test007.csv#childFoaf> "http://example/maggie";
+  <file://test007.csv#childName> "Maggie";
+  <file://test007.csv#foaf_id> "http://example/homer";
+  <file:/C:/Users/terka/RDFtoCSV/test007.ttl.csv#rowNum> <file:/C:/Users/terka/RDFtoCSV/3> .
+
+_:bnode__4 <file://test007.csv#FamilyName> "Simpson";
+  <file://test007.csv#Surname> "Marge";
+  <file://test007.csv#childFoaf> "http://example/bart";
+  <file://test007.csv#childName> "Bart";
+  <file://test007.csv#foaf_id> "http://example/marge";
+  <file:/C:/Users/terka/RDFtoCSV/test007.ttl.csv#rowNum> <file:/C:/Users/terka/RDFtoCSV/4> .
+
+_:bnode__5 <file://test007.csv#FamilyName> "Simpson";
+  <file://test007.csv#Surname> "Marge";
+  <file://test007.csv#childFoaf> "http://example/lisa";
+  <file://test007.csv#childName> "Lisa";
+  <file://test007.csv#foaf_id> "http://example/marge";
+  <file:/C:/Users/terka/RDFtoCSV/test007.ttl.csv#rowNum> <file:/C:/Users/terka/RDFtoCSV/5> .
+
+_:bnode__6 <file://test007.csv#FamilyName> "Simpson";
+  <file://test007.csv#Surname> "Marge";
+  <file://test007.csv#childFoaf> "http://example/maggie";
+  <file://test007.csv#childName> "Maggie";
+  <file://test007.csv#foaf_id> "http://example/marge";
+  <file:/C:/Users/terka/RDFtoCSV/test007.ttl.csv#rowNum> <file:/C:/Users/terka/RDFtoCSV/6> .

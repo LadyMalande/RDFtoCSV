@@ -1,10 +1,12 @@
 package com.miklosova.rdftocsvw.output_processor;
 
 
+import com.miklosova.rdftocsvw.metadata_creator.StreamingMetadataCreator;
 import com.miklosova.rdftocsvw.metadata_creator.Triple;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
+
 import com.miklosova.rdftocsvw.support.Main;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
@@ -20,7 +22,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.miklosova.rdftocsvw.metadata_creator.StreamingMetadataCreator.processLineIntoTriple;
 import static com.miklosova.rdftocsvw.output_processor.FileWrite.writeToTheFile;
 import static com.miklosova.rdftocsvw.support.ConnectionChecker.isUrl;
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -45,93 +46,237 @@ public class StreamingNTriplesWrite {
     private CSVOutputGrid bufferForCSVOutput;
 
     private final File fileToWriteTo;
+    
+    /**
+     * BufferedWriter for efficient streaming writes.
+     */
+    private java.io.BufferedWriter csvWriter;
+    
+    /**
+     * Total rows written so far.
+     */
+    private int totalRowsWritten = 0;
+    
+    /**
+     * Rows accumulated since last flush.
+     */
+    private int rowsSinceLastFlush = 0;
+    
+    /**
+     * Timestamp of last write operation.
+     */
+    private long lastWriteTime = 0;
+    
+    /**
+     * The AppConfig instance.
+     */
+    private AppConfig config;
+    
+    /**
+     * Helper for processing triples with blank node handling.
+     */
+    private StreamingMetadataCreator metadataCreator;
 
     /**
      * Instantiates a new Streaming n triples write.
      *
      * @param metadata the metadata are already finished
      * @param fileName the file name to write to
+     * @deprecated Use {@link #StreamingNTriplesWrite(Metadata, String, AppConfig)} instead
      */
+    @Deprecated
     public StreamingNTriplesWrite(Metadata metadata, String fileName) {
+        this(metadata, fileName, null);
+    }
+
+    /**
+     * Instantiates a new Streaming n triples write with AppConfig.
+     *
+     * @param metadata the metadata are already finished
+     * @param fileName the file name to write to
+     * @param config the application configuration
+     */
+    public StreamingNTriplesWrite(Metadata metadata, String fileName, AppConfig config) {
+        this.config = config;
         fileToWriteTo = FileWrite.makeFileByNameAndExtension(fileName, "csv");
         assert fileToWriteTo != null;
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, fileToWriteTo.toString());
+        config.setIntermediateFileNames(fileToWriteTo.toString());
         this.metadata = metadata;
-        String fileNameFromConfig = ConfigurationManager.getVariableFromConfigFile("input.inputFileName");
-
+        // Use the resolved input file name (same as StreamingMetadataCreator)
+        String fileNameFromConfig = config.getInputFileName();
         this.fileNameToRead = isUrl(fileNameFromConfig) ? (iri(fileNameFromConfig).getLocalName()) :  fileNameFromConfig;
         processedSubjects = new HashSet<>();
+        this.metadataCreator = new StreamingMetadataCreator(config);
     }
 
     /**
      * Write to CSV file using metadata information.
      */
     public void writeToFileByMetadata() {
+        com.miklosova.rdftocsvw.support.ProgressLogger.startStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING);
 
-        writeToTheFile(fileToWriteTo, columnHeaders(), false);
+        try {
+            // Open BufferedWriter once for entire write process
+            csvWriter = new java.io.BufferedWriter(new java.io.FileWriter(fileToWriteTo), 256 * 1024);
+            
+            // Write header
+            csvWriter.write(columnHeaders().toString());
+            
+            // Initialize timing
+            lastWriteTime = System.nanoTime();
 
-        bufferForCSVOutput = new CSVOutputGrid();
-        while (gettingNewSubjects()) {
-            int i = 1;
-            try (BufferedReader reader = new BufferedReader(new FileReader(fileNameToRead))) {
-                String line;
-                // Read file line by line
-                while ((line = reader.readLine()) != null) {
-                    // Skip lines until the desired line
-                    if (i >= lineIndexOfProcessed) {
-                        processLine(line, bufferForCSVOutput);
+            bufferForCSVOutput = new CSVOutputGrid();
+            int batchCount = 0;
+            while (gettingNewSubjects()) {
+                batchCount++;
+                /* 
+                com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                    com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING, 
+                    Math.min(90, batchCount * 10), 
+                    String.format("Writing batch %d (subjects: %d)", batchCount, currentSubjects.size())
+                );
+                */
+                int i = 1;
+                try (BufferedReader reader = new BufferedReader(new FileReader(fileNameToRead))) {
+                    String line;
+                    // Read file line by line
+                    while ((line = reader.readLine()) != null) {
+                        // Skip lines until the desired line
+                        if (i >= lineIndexOfProcessed) {
+                            processLine(line, bufferForCSVOutput);
+                        }
+                        i++;
                     }
-                    i++;
+                } catch (IOException e) {
+                    logger.log(Level.SEVERE, "There was an exception while writing to the CSV file using metadata in Streaming method ");
                 }
-            } catch (IOException e) {
-                logger.log(Level.SEVERE, "There was an exception while writing to the CSV file using metadata in Streaming method ");
+                writeToOutputFile(bufferForCSVOutput);
+                processedSubjects.addAll(currentSubjects);
             }
-            bufferForCSVOutput.print();
-            writeToOutputFile(bufferForCSVOutput);
-            processedSubjects.addAll(currentSubjects);
+            
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Error opening CSV file for writing", e);
+        } finally {
+            // Close writer once at the end
+            if (csvWriter != null) {
+                try {
+                    // Final flush for any remaining rows
+                    if (rowsSinceLastFlush > 0) {
+                        csvWriter.flush();
+                        logger.info(String.format("Final flush: %,d rows (total: %,d)", 
+                            rowsSinceLastFlush, totalRowsWritten));
+                    }
+                    csvWriter.close();
+                    logger.log(Level.INFO, "Successfully wrote to the file " + fileToWriteTo.getAbsolutePath() + ".");
+                } catch (IOException e) {
+                    logger.log(Level.SEVERE, "Error closing CSV writer", e);
+                }
+            }
         }
+        
+        com.miklosova.rdftocsvw.support.ProgressLogger.completeStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING);
     }
 
     private Object columnHeaders() {
         StringBuilder sb = new StringBuilder();
-        for (Column column : metadata.getTables().get(0).getTableSchema().getColumns()) {
-            sb.append(column.getTitles()).append(",");
+        List<Column> columns = metadata.getTables().get(0).getTableSchema().getColumns();
+        
+        if (columns.isEmpty()) {
+            logger.log(Level.WARNING, "No columns found in metadata when generating headers!");
+            return "\n";
         }
-        sb.deleteCharAt(sb.length() - 1);
+        
+        for (Column column : columns) {
+            String title = column.getTitles();
+            if (title != null && !title.isEmpty()) {
+                sb.append(title).append(",");
+            } else {
+                logger.log(Level.WARNING, "Column has null or empty title: " + column.getName());
+            }
+        }
+        
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);  // Remove last comma
+        }
         sb.append("\n");
-        return sb.toString();
+        
+        String headers = sb.toString();
+        //logger.log(Level.INFO, "Generated CSV headers: " + headers.trim());
+        return headers;
     }
 
     private void writeToOutputFile(CSVOutputGrid bufferForCSVOutput) {
-        String createdChunkOfCSV = parseOutputGridForCSV(bufferForCSVOutput);
-        writeToTheFile(fileToWriteTo, createdChunkOfCSV, true);
+        try {
+            String createdChunkOfCSV = parseOutputGridForCSV(bufferForCSVOutput);
+            int rowsInBatch = currentSubjects.size();
+            
+            // Write to buffer (not flushed yet)
+            csvWriter.write(createdChunkOfCSV);
+            
+            totalRowsWritten += rowsInBatch;
+            rowsSinceLastFlush += rowsInBatch;
+            
+            // Flush to disk when we've accumulated 10,000 rows
+            if (rowsSinceLastFlush >= 10000) {
+                csvWriter.flush();
+                
+                long now = System.nanoTime();
+                long elapsedMs = (now - lastWriteTime) / 1_000_000;
+                double rowsPerSec = (rowsSinceLastFlush / (double) elapsedMs) * 1000.0;
+                logger.info(String.format("Flushed %,d rows to disk (total: %,d) in %,d ms (%.0f rows/sec)", 
+                    rowsSinceLastFlush, totalRowsWritten, elapsedMs, rowsPerSec));
+                
+                lastWriteTime = now;
+                rowsSinceLastFlush = 0;
+            }
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Error writing batch to CSV", e);
+        }
     }
 
     private String parseOutputGridForCSV(CSVOutputGrid bufferForCSVOutput) {
         StringBuilder sb = new StringBuilder();
-        bufferForCSVOutput.print();
         for (IRI subject : currentSubjects) {
             for (Column column : metadata.getTables().get(0).getTableSchema().getColumns()) {
                 if (column.getName().equalsIgnoreCase("Subject")) {
-                    // add subject
-                    sb.append(subject.stringValue());
+                    // Add subject - check if it needs to be quoted and handle aboutUrl pattern
+                    String subjectValue = formatValueByPattern(subject, column.getAboutUrl());
+                    sb.append(escapeCsvValue(subjectValue));
 
-                } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).size() == 1) {
-                    if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isIRI()) {
-                        sb.append(bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0));
-                    } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isLiteral()) {
-                        sb.append(((Literal) bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0)).getLabel());
+                } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject) != null &&
+                           bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && 
+                           bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).size() == 1) {
+                    Value value = bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0);
+                    if (value.isIRI()) {
+                        String formattedValue = formatValueByPattern((IRI) value, column.getValueUrl());
+                        sb.append(escapeCsvValue(formattedValue));
+                    } else if (value.isLiteral()) {
+                        sb.append(escapeCsvValue(((Literal) value).getLabel()));
                     }
-                } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).size() > 1) {
-                    sb.append("\"");
+                } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject) != null &&
+                           bufferForCSVOutput.getCsvOutputBuffer().get(subject).containsKey(column.getName()) && 
+                           bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).size() > 1) {
+                    // Multiple values in one cell - join with commas and wrap in quotes
+                    StringBuilder multiValue = new StringBuilder();
                     if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isIRI()) {
-                        bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).forEach(value -> sb.append(value).append(","));
+                        for (Value value : bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName())) {
+                            String formattedValue = formatValueByPattern((IRI) value, column.getValueUrl());
+                            multiValue.append(formattedValue).append(",");
+                        }
                     } else if (bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).get(0).isLiteral()) {
-                        bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName()).forEach(value -> sb.append(((Literal) value).getLabel()).append(","));
+                        for (Value value : bufferForCSVOutput.getCsvOutputBuffer().get(subject).get(column.getName())) {
+                            multiValue.append(((Literal) value).getLabel()).append(",");
+                        }
                     }
-
-                    sb.deleteCharAt(sb.length() - 1);
-                    sb.append("\"");
+                    // Remove trailing comma
+                    if (multiValue.length() > 0) {
+                        multiValue.deleteCharAt(multiValue.length() - 1);
+                    }
+                    // Escape the entire multi-value string as a single CSV cell
+                    sb.append(escapeCsvValue(multiValue.toString()));
+                } else {
+                    // Column has no value for this subject - append empty string
+                    // (This is critical for CSV alignment!)
                 }
                 sb.append(",");
             }
@@ -139,6 +284,45 @@ public class StreamingNTriplesWrite {
             sb.append("\n");
         }
         return sb.toString();
+    }
+
+    /**
+     * Format an IRI value based on the column's URL pattern (aboutUrl or valueUrl).
+     * - If urlPattern is null or starts with "{+", use full IRI
+     * - If urlPattern contains "{+" but doesn't start with it (partial pattern like "http://example.org/{+var}"), use local name
+     * - Otherwise, use local name
+     * 
+     * @param iri the IRI to format
+     * @param urlPattern the URL pattern from aboutUrl or valueUrl
+     * @return the formatted string (either full IRI or local name)
+     */
+    private String formatValueByPattern(IRI iri, String urlPattern) {
+        if (urlPattern == null || urlPattern.startsWith("{+")) {
+            // Simple pattern {+Variable} or no pattern - use full IRI
+            return iri.stringValue();
+        } else if (urlPattern.contains("{+")) {
+            // Partial pattern like "https://example.com/{+Variable}" - use local name
+            return iri.getLocalName();
+        }
+        // Default - use local name
+        return iri.getLocalName();
+    }
+
+    /**
+     * Properly escape a CSV value according to RFC 4180.
+     * - If value contains comma, quote, or newline, it must be quoted
+     * - Internal quotes must be escaped by doubling them
+     */
+    private String escapeCsvValue(String value) {
+        if (value == null || value.isEmpty()) {
+            return value;
+        }
+        // Quote if contains comma, quote, or newline
+        if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
+            // Escape internal quotes by doubling them, then wrap in quotes
+            return "\"" + value.replace("\"", "\"\"") + "\"";
+        }
+        return value;
     }
 
     private boolean gettingNewSubjects() {
@@ -151,7 +335,10 @@ public class StreamingNTriplesWrite {
             Column firstColumn = metadata.getTables().get(0).getTableSchema().getColumns().get(0);
 
             while ((line = reader.readLine()) != null) {
-                Triple triple = processLineIntoTriple(line);
+                Triple triple = metadataCreator.processLineIntoTriple(line);
+                if (triple == null) {
+                    continue;  // Skip invalid lines
+                }
                 if (firstColumn.getValueUrl() == null) {
                     if (triple.getSubject().isBNode()) {
                         firstColumn.setValueUrl("{+Subject}");
@@ -181,7 +368,7 @@ public class StreamingNTriplesWrite {
                     }
                 }
                 i++;
-                int maximumOfProcessedSubjects = 10;
+                int maximumOfProcessedSubjects = 10000;
                 if (currentSubjects.size() == maximumOfProcessedSubjects) {
                     lineIndexOfProcessed = i;
                     return true;
@@ -203,7 +390,10 @@ public class StreamingNTriplesWrite {
      * @param grid The temporary representation for the CSV
      */
     private void processLine(String line, CSVOutputGrid grid) {
-        Triple triple = processLineIntoTriple(line);
+        Triple triple = metadataCreator.processLineIntoTriple(line);
+        if (triple == null) {
+            return;  // Skip invalid lines
+        }
         if (currentSubjects.contains(triple.getSubject())) {
             String keyForColumn = Column.getNameFromIRI(triple.getPredicate(), triple.getObject());
             if (grid.getCsvOutputBuffer().get(triple.getSubject()).containsKey(keyForColumn)) {

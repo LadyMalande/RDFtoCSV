@@ -1,97 +1,87 @@
 {
-  "@context": "http://www.w3.org/ns/csvw",
-  "@type": "TableGroup",
-  "tables": [
-    {
-      "@type": "Table",
-      "url": "test038.ttlTestOutput0.csv",
-      "tableSchema": {
-        "@type": "Schema",
-        "columns": [
-          {
-            "@type": "Column",
-            "titles": "Subjekt",
-            "name": "Subjekt",
-            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
-            "suppressOutput": true
-          },
-          {
-            "@type": "Column",
-            "titles": "col=aboutUrl",
-            "name": "col=aboutUrl",
-            "propertyUrl": "file://test038.csv#col=aboutUrl"
-          },
-          {
-            "@type": "Column",
-            "titles": "col=datatype",
-            "name": "col=datatype",
-            "propertyUrl": "file://test038.csv#col=datatype"
-          },
-          {
-            "@type": "Column",
-            "titles": "col=default",
-            "name": "col=default",
-            "propertyUrl": "file://test038.csv#col=default"
-          },
-          {
-            "@type": "Column",
-            "titles": "col=lang (en)",
-            "name": "col=lang_en",
-            "propertyUrl": "file://test038.csv#col=lang",
-            "lang": "en"
-          },
-          {
-            "@type": "Column",
-            "titles": "col=null",
-            "name": "col=null",
-            "propertyUrl": "file://test038.csv#col=null"
-          },
-          {
-            "@type": "Column",
-            "titles": "col=ordered",
-            "name": "col=ordered",
-            "propertyUrl": "file://test038.csv#col=ordered"
-          },
-          {
-            "@type": "Column",
-            "titles": "col=propertyUrl",
-            "name": "col=propertyUrl",
-            "propertyUrl": "file://test038.csv#col=propertyUrl"
-          },
-          {
-            "@type": "Column",
-            "titles": "col=separator",
-            "name": "col=separator",
-            "propertyUrl": "file://test038.csv#col=separator"
-          },
-          {
-            "@type": "Column",
-            "titles": "col=textDirection",
-            "name": "col=textDirection",
-            "propertyUrl": "file://test038.csv#col=textDirection"
-          },
-          {
-            "@type": "Column",
-            "titles": "col=valueUrl",
-            "name": "col=valueUrl",
-            "propertyUrl": "file://test038.csv#col=valueUrl",
-            "valueUrl": "http://schema.org/{+col=valueUrl}"
-          }
-        ],
-        "rowTitles": [
-          "Subjekt",
-          "col=aboutUrl",
-          "col=datatype",
-          "col=default",
-          "col=lang_en",
-          "col=null",
-          "col=ordered",
-          "col=propertyUrl",
-          "col=separator",
-          "col=textDirection",
-          "col=valueUrl"
-        ]
-      }
-    }
-  ]
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test038.ttl.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "col=aboutUrl",
+        "name" : "col=aboutUrl",
+        "propertyUrl" : "file://test038.csv#col=aboutUrl"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=datatype",
+        "name" : "col=datatype",
+        "propertyUrl" : "file://test038.csv#col=datatype"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=default",
+        "name" : "col=default",
+        "propertyUrl" : "file://test038.csv#col=default"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=lang (en)",
+        "name" : "col=lang_en",
+        "propertyUrl" : "file://test038.csv#col=lang",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=null",
+        "name" : "col=null",
+        "propertyUrl" : "file://test038.csv#col=null"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=ordered",
+        "name" : "col=ordered",
+        "propertyUrl" : "file://test038.csv#col=ordered"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=propertyUrl",
+        "name" : "col=propertyUrl",
+        "propertyUrl" : "file://test038.csv#col=propertyUrl"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=separator",
+        "name" : "col=separator",
+        "propertyUrl" : "file://test038.csv#col=separator"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=textDirection",
+        "name" : "col=textDirection",
+        "propertyUrl" : "file://test038.csv#col=textDirection"
+      }, {
+        "@type" : "Column",
+        "titles" : "col=valueUrl",
+        "name" : "col=valueUrl",
+        "propertyUrl" : "file://test038.csv#col=valueUrl",
+        "valueUrl" : "http://schema.org/{+col=valueUrl}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "col=aboutUrl", "col=datatype", "col=default", "col=lang_en", "col=null", "col=ordered", "col=propertyUrl", "col=separator", "col=textDirection", "col=valueUrl" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ]
+  } ]
 }

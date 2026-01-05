@@ -1,0 +1,114 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "dereferenceTestInputOUT.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "http://example.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "creator",
+        "name" : "creator",
+        "propertyUrl" : "http://purl.org/dc/terms/creator",
+        "valueUrl" : "http://example.org/{+creator}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Distribution",
+        "name" : "Distribution",
+        "propertyUrl" : "http://creativecommons.org/ns#Distribution",
+        "valueUrl" : "{+Distribution}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "usageNote",
+        "name" : "usageNote",
+        "propertyUrl" : "http://purl.org/vocab/vann/usageNote",
+        "valueUrl" : "{+usageNote}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "scopeNote",
+        "name" : "scopeNote",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#scopeNote",
+        "valueUrl" : "{+scopeNote}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "title (cs)",
+        "name" : "title_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "valueUrl" : "{+title_cs}",
+        "aboutUrl" : "http://example.org/{+Subject}",
+        "lang" : "cs",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "title (en)",
+        "name" : "title_en",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "valueUrl" : "{+title_en}",
+        "aboutUrl" : "http://example.org/{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "title (pl)",
+        "name" : "title_pl",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "valueUrl" : "{+title_pl}",
+        "aboutUrl" : "http://example.org/{+Subject}",
+        "lang" : "pl"
+      }, {
+        "@type" : "Column",
+        "titles" : "encryptedBy",
+        "name" : "encrypter",
+        "propertyUrl" : "http://xmlns.com/wot/0.1/encrypter",
+        "valueUrl" : "http://example.org/{+encrypter}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "givenName",
+        "name" : "givenName",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/givenName",
+        "valueUrl" : "{+givenName}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "moreInfo",
+        "name" : "moreinfo",
+        "propertyUrl" : "http://www.w3.org/2003/06/sw-vocab-status/ns#moreinfo",
+        "valueUrl" : "{+moreinfo}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "publisher",
+        "name" : "publisher",
+        "propertyUrl" : "http://purl.org/dc/elements/1.1/publisher",
+        "valueUrl" : "{+publisher}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "http://example.org/{+Text}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "creator", "Distribution", "usageNote", "scopeNote", "title_cs", "title_en", "title_pl", "encrypter", "givenName", "moreinfo", "type", "publisher" ]
+    }
+  } ]
+}

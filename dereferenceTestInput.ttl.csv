@@ -1,0 +1,4 @@
+Subject,Creator,Distribution,Usage Note,scope note,Title (cs),Title (en),Title (pl),encrypter,givenName,more info,type,Publisher
+myThesis,http://example.org/TerezaMiklóšová,Should not be in predicate,"Jedna se o diplomovou praci, pouzivat v souladu s nakladanim dle zakona o diplomovych pracech.",Note of scope,"Automatický převod RDF dat do CSV,Jin7 n8yev",Automated transformation of RDF data to CSV,,http://example.org/noPerson,Tereza,More information here,http://purl.org/dc/dcmitype/Text,Tereza Miklóšová
+yourThesis,http://example.org/LenkaHoráková,,,,Tvoje diplomová práce,,Twoja praca magisterska,,,,http://purl.org/dc/dcmitype/Text,
+myGraph,,,,,,,,,,,http://www.w3.org/1999/02/22-rdf-syntax-ns#Graph,

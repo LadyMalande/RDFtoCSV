@@ -4,9 +4,9 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.TableSchema;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
+import com.miklosova.rdftocsvw.support.Pair;
 import com.opencsv.CSVReader;
-import org.jruby.ir.Tuple;
 
 import java.io.File;
 import java.io.FileReader;
@@ -21,6 +21,18 @@ import java.util.logging.Logger;
  */
 public class MetadataConsolidator {
     private static final Logger logger = Logger.getLogger(MetadataConsolidator.class.getName());
+    private final AppConfig config;
+
+    /**
+     * Constructor with AppConfig.
+     * @param config The application configuration
+     */
+    public MetadataConsolidator(AppConfig config) {
+        if (config == null) {
+            throw new IllegalArgumentException("AppConfig cannot be null");
+        }
+        this.config = config;
+    }
 
 
     /**
@@ -50,18 +62,21 @@ public class MetadataConsolidator {
     }
 
     /**
-     * Consolidate metadata metadata.
+     * Consolidate metadata metadata with AppConfig.
      *
      * @param oldMetadata the old metadata
+     * @param config the application configuration
      * @return the metadata
      */
-    public Metadata consolidateMetadata(Metadata oldMetadata) {
-        Metadata newMetadata = new Metadata();
+    public Metadata consolidateMetadata(Metadata oldMetadata, AppConfig config) {
+        Metadata newMetadata = new Metadata(config);
         Map<String, Integer> occurrencesOfColumnName = new HashMap<>();
-        File f = new File(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILENAME));
+        AppConfig effectiveConfig = (config != null) ? config : this.config;
+        String outputFilename = effectiveConfig.getOutputFilePath();
+        File f = new File(outputFilename);
 
         String nameExtension = "_merged.csv";
-        Table table = new Table(f.getName() + nameExtension);
+        Table table = new Table(f.getName() + nameExtension, config);
         newMetadata.getTables().add(table);
         TableSchema tableSchema = new TableSchema();
         table.setTableSchema(tableSchema);
@@ -91,23 +106,25 @@ public class MetadataConsolidator {
     }
 
     /**
-     * First column has links to another column tuple.
+     * First column has links to another column pair with AppConfig.
      *
      * @param oldMetadata the old metadata
      * @param table       the table
-     * @return the tuple
+     * @param config      the application configuration
+     * @return the pair of table URL and column name
      */
-    public Tuple<String, String> firstColumnHasLinksToAnotherColumn(Metadata oldMetadata, Table table) {
+    public Pair<String, String> firstColumnHasLinksToAnotherColumn(Metadata oldMetadata, Table table, AppConfig config) {
+        AppConfig effectiveConfig = (config != null) ? config : this.config;
         for (Table t : oldMetadata.getTables()) {
             if (t != table) {
                 try {
 
                     // Create an object of file reader
                     // class with CSV file as a parameter.
-                    String fullFilePath = getFilePathForFileName(t.getUrl());
+                    String fullFilePath = getFilePathForFileName(t.getUrl(), effectiveConfig);
                     assert fullFilePath != null;
                     FileReader filereader = new FileReader(fullFilePath);
-                    String fullFilePathOfGivenColumn = getFilePathForFileName(table.getUrl());
+                    String fullFilePathOfGivenColumn = getFilePathForFileName(table.getUrl(), effectiveConfig);
                     assert fullFilePathOfGivenColumn != null;
                     // create csvReader object passing
                     // file reader as a parameter
@@ -128,7 +145,7 @@ public class MetadataConsolidator {
 
 
                                     if (!cellValue.isEmpty() && !subjectOfGivenTable.isEmpty() && cellValue.equalsIgnoreCase(subjectOfGivenTable)) {
-                                        return new Tuple<>(t.getUrl(), t.getTableSchema().getColumns().get(i).getName());
+                                        return new Pair<>(t.getUrl(), t.getTableSchema().getColumns().get(i).getName());
                                     }
                                 }
                             }
@@ -143,13 +160,17 @@ public class MetadataConsolidator {
     }
 
     /**
-     * Gets file path for file name.
+     * Gets file path for file name with AppConfig.
      *
      * @param url the url
+     * @param config the application configuration
      * @return the file path for file name
      */
-    public static String getFilePathForFileName(String url) {
-        String intermediateFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+    public static String getFilePathForFileName(String url, AppConfig config) {
+        if (config == null) {
+            throw new IllegalArgumentException("AppConfig cannot be null");
+        }
+        String intermediateFiles = config.getIntermediateFileNames();
         String[] files = intermediateFiles.split(",");
         for (String file : files) {
             if (file.endsWith(url)) {

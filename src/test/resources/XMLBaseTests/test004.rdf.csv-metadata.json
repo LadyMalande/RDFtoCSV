@@ -1,0 +1,66 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test004.rdf.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "subject",
+        "name" : "subject",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#subject",
+        "valueUrl" : "{+subject}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "value",
+        "name" : "value",
+        "propertyUrl" : "http://example.org/value"
+      }, {
+        "@type" : "Column",
+        "titles" : "object",
+        "name" : "object",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#object",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "predicate",
+        "name" : "predicate",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate",
+        "valueUrl" : "{+predicate}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "{+Statement}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "subject", "value", "object", "type", "predicate" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ]
+  } ]
+}

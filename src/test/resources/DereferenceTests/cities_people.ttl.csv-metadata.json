@@ -1,0 +1,114 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "cities_peopleOUT.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "http://example.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
+        "valueUrl" : "{+name}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Alternative Label",
+        "name" : "altLabel",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#altLabel",
+        "valueUrl" : "{+altLabel}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "country",
+        "name" : "country",
+        "propertyUrl" : "http://example.org/country",
+        "valueUrl" : "{+country}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "knows",
+        "name" : "knows",
+        "propertyUrl" : "http://example.org/knows",
+        "valueUrl" : "http://example.org/{+knows}",
+        "aboutUrl" : "http://example.org/{+Subject}",
+        "separator" : ","
+      }, {
+        "@type" : "Column",
+        "titles" : "population",
+        "name" : "population",
+        "propertyUrl" : "http://example.org/population",
+        "valueUrl" : "{+population}",
+        "datatype" : "integer",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "subject",
+        "propertyUrl" : "http://purl.org/dc/terms/subject",
+        "valueUrl" : "http://example.org/{+subject}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Date Created",
+        "name" : "created",
+        "propertyUrl" : "http://purl.org/dc/terms/created",
+        "valueUrl" : "{+created}",
+        "datatype" : "date",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name_1",
+        "propertyUrl" : "http://example.org/name",
+        "valueUrl" : "{+name}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "livesIn",
+        "name" : "livesIn",
+        "propertyUrl" : "http://example.org/livesIn",
+        "valueUrl" : "http://example.org/{+livesIn}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "mbox",
+        "name" : "mbox",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/mbox",
+        "valueUrl" : "mailto:{+mbox}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Preferred Label (en)",
+        "name" : "prefLabel_en",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
+        "valueUrl" : "{+prefLabel_en}",
+        "aboutUrl" : "http://example.org/{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "http://example.org/{+Person}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "name", "altLabel", "country", "knows", "population", "subject", "created", "name_1", "livesIn", "mbox", "type", "prefLabel_en" ]
+    }
+  } ]
+}

@@ -1,7 +1,9 @@
 package com.miklosova.rdftocsvw.metadata_creator.metadata_structure;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.miklosova.rdftocsvw.converter.data_structure.Row;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
+
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import org.eclipse.rdf4j.model.Value;
 
@@ -28,6 +30,12 @@ public class Table {
      */
     private List<Transformation> transformations;
 
+    /**
+     * Application configuration
+     */
+    @JsonIgnore
+    private AppConfig config;
+
 
     /**
      * Instantiates a new Table.
@@ -35,13 +43,29 @@ public class Table {
      * @param url the url
      */
     public Table(String url) {
+        this(url, null);
+    }
+
+    public Table(AppConfig config) {
+        this.config = config;
+    }
+
+    /**
+     * Instantiates a new Table with AppConfig.
+     *
+     * @param url the url
+     * @param config the application configuration
+     */
+    public Table(String url, AppConfig config) {
         this.url = url;
+        this.config = config;
     }
 
     /**
      * Instantiates a new Table.
      */
     public Table() {
+        this(null, null);
     }
 
     /**
@@ -99,24 +123,55 @@ public class Table {
     }
 
     /**
+     * Gets application configuration.
+     *
+     * @return the application configuration
+     */
+    public AppConfig getConfig() {
+        return config;
+    }
+
+    /**
+     * Sets application configuration.
+     *
+     * @param config the application configuration
+     */
+    public void setConfig(AppConfig config) {
+        this.config = config;
+    }
+
+    /**
      * Add table metadata.
      *
      * @param keys the keys (headers)
      * @param rows the rows of the inner CSV representation
      */
     public void addTableMetadata(ArrayList<Value> keys, ArrayList<Row> rows) {
-
-        this.tableSchema = new TableSchema(keys, rows);
-        this.tableSchema.addTableSchemaMetadata();
-        addTransformations();
+        this.tableSchema = new TableSchema(keys, rows, this.config);
+        this.tableSchema.addTableSchemaMetadata(this.config);
+        addTransformations(this.config);
     }
 
 
     /**
      * Add transformations. They are added to the Table if there are blank nodes present.
+     * @deprecated Use {@link #addTransformations(AppConfig)} instead
      */
+    @Deprecated
     public void addTransformations() {
-        if (ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES) != null && ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_BLANK_NODES).equalsIgnoreCase("true")) {
+        addTransformations(null);
+    }
+
+    /**
+     * Add transformations with AppConfig. They are added to the Table if there are blank nodes present.
+     * @param config the application configuration
+     */
+    public void addTransformations(AppConfig config) {
+        if (config == null || config.getConversionHasBlankNodes() == null) {
+            return; // Skip if no config available
+        }
+        String hasBlankNodes = String.valueOf(config.getConversionHasBlankNodes());
+        if (hasBlankNodes.equalsIgnoreCase("true")) {
             this.transformations = new ArrayList<>();
             this.transformations.add(new Transformation(
                     "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",

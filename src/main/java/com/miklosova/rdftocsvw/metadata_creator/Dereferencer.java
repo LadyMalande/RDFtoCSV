@@ -3,8 +3,9 @@ package com.miklosova.rdftocsvw.metadata_creator;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import org.apache.http.Header;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -41,6 +42,12 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  */
 public class Dereferencer {
     private static final Logger logger = Logger.getLogger(Dereferencer.class.getName());
+    
+    // Suppress Jena XML parser warnings about StAX properties
+    static {
+        Logger.getLogger("org.apache.jena.util.JenaXMLInput").setLevel(Level.OFF);
+    }
+    
     private static final String WOT_RDF_FILE = "http://xmlns.com/wot/0.1/index.rdf";
     private static final String VANN_RDF_FILE = "http://purl.org/vocab/vann/vann-vocab-20100607.rdf";
 
@@ -67,44 +74,129 @@ public class Dereferencer {
     //private final String CC_PREFIX = "http://web.resource.org/cc/"; - the web does not publish lables of given addresses such as https://web.resource.org/cc/Distribution
     static String SKOS_REFERENCE = "http://www.w3.org/2009/08/skos-reference/skos.rdf";
     static String[] standardKnownPrefixes = {SKOS_PREFIX, WOT_PREFIX, VS_PREFIX, VANN_PREFIX, DCTERMS_PREFIX, DC_PREFIX, FOAF_PREFIX, RDFSchema_PREFIX, OWL_PREFIX, SKOS_REFERENCE};
+    // Marker for failed dereferencing attempts - stored in cache to prevent retries
+    private static final String FETCH_FAILED_MARKER = "__FETCH_FAILED__";
+    // Timeout configuration for HTTP requests (in milliseconds)
+    // These are intentionally conservative to handle external vocabulary servers
+    private static final int CONNECTION_TIMEOUT = 3000; // 3 seconds to establish connection
+    private static final int SOCKET_TIMEOUT = 7000; // 7 seconds to wait for data
+    private static final int CONNECTION_REQUEST_TIMEOUT = 2000; // 2 seconds to get connection from pool
     // Define language preferences (order matters: first is most desired)
-    private static List<String> PREFERRED_LANGUAGES = loadPreferredLanguages(); // Example: Prefer English, then German, then French
+    private List<String> PREFERRED_LANGUAGES; // Initialized in constructor after config is set
+    
+    // Cache for failed hosts - prevents repeated attempts to unreachable domains
+    // Key: hostname (e.g., "slovník.gov.cz")
+    // Value: true (indicates this host failed with UnknownHostException or connection error)
+    private static final LoadingCache<String, Boolean> failedHostsCache = CacheBuilder.newBuilder()
+            .maximumSize(100)
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .build(new CacheLoader<String, Boolean>() {
+                @Override
+                public Boolean load(String host) {
+                    return false; // Default: host not failed
+                }
+            });
+    
+    // Cache for vocabulary RDF models - shared across all Dereferencer instances
+    // Key: base vocabulary URI (e.g., "http://www.w3.org/2004/02/skos/core")
+    // Value: parsed Jena Model containing the entire vocabulary
+    private static final LoadingCache<String, Model> vocabularyCache = CacheBuilder.newBuilder()
+            .maximumSize(50)  // Cache up to 50 different vocabularies
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .recordStats()  // Enable statistics tracking
+            .build(new CacheLoader<String, Model>() {
+                @Override
+                public Model load(String vocabularyUri) throws Exception {
+                    return fetchVocabularyModel(vocabularyUri);
+                }
+            });
+    
     private static final LoadingCache<String, String> labelCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(1, TimeUnit.HOURS)
+            .recordStats()  // Enable statistics tracking
             .build(new CacheLoader<String, String>() {
                 @Override
                 public String load(String iri) throws Exception {
                     try {
-
-                        return fetchLabelUncached(iri);
+                        return fetchLabelUncached(iri, null);
+                    } catch (java.net.SocketTimeoutException | java.net.ConnectException | org.apache.http.conn.ConnectTimeoutException e) {
+                        // Connection failed or timed out - cache the failure to avoid retrying
+                        logger.log(Level.WARNING, "Connection failed/timed out for IRI: " + iri + " - " + e.getMessage());
+                        ValueFactory vf = SimpleValueFactory.getInstance();
+                        IRI propertyUrlIRI = vf.createIRI(iri);
+                        String localName = propertyUrlIRI.getLocalName();
+                        // Store the local name in cache so we don't retry this URL
+                        return localName;
                     } catch (IOException e) {
                         ValueFactory vf = SimpleValueFactory.getInstance();
                         IRI propertyUrlIRI = vf.createIRI(iri);
-                        logger.info("--------After IOException is caught in fetchLabelUncached, trying to get LocalName...");
-                        return propertyUrlIRI.getLocalName();
-                        //throw new RuntimeException("Failed to fetch label for IRI: " + iri, e);
+                        String localName = propertyUrlIRI.getLocalName();
+                        logger.log(Level.WARNING, "IOException while fetching label for IRI: " + iri + " - " + e.getMessage() + ", using local name: " + localName);
+                        return localName;
                     }
                 }
             });
     private String url;
 
+    private AppConfig config;
+
+    /**
+     * Get statistics about cached failed hosts for debugging.
+     * @return Summary string of failed hosts cache
+     */
+    public static String getFailedHostsCacheStats() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Failed Hosts Cache: ").append(failedHostsCache.size()).append(" entries\n");
+        for (String host : failedHostsCache.asMap().keySet()) {
+            sb.append("  - ").append(host).append("\n");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Clear the failed hosts cache AND vocabulary cache AND label cache.
+     * Should be called at the start of each conversion to avoid persisting stale failures
+     * across multiple runs in the same JVM session (e.g., when running from IntelliJ).
+     */
+    public static void clearFailedHostsCache() {
+        int hostsSize = failedHostsCache.asMap().size();
+        int vocabSize = vocabularyCache.asMap().size();
+        int labelSize = labelCache.asMap().size();
+        
+        if (hostsSize > 0 || vocabSize > 0 || labelSize > 0) {
+            logger.info("Clearing ALL caches - Failed hosts: " + hostsSize + " entries " + 
+                       (hostsSize > 0 ? "(" + String.join(", ", failedHostsCache.asMap().keySet()) + ")" : "") +
+                       ", Vocabularies: " + vocabSize + " entries" +
+                       ", Labels: " + labelSize + " entries");
+            failedHostsCache.invalidateAll();
+            vocabularyCache.invalidateAll();
+            labelCache.invalidateAll();
+        } else {
+            logger.info("All three caches already empty (no stale entries to clear)");
+        }
+    }
+
     /**
      * Instantiates a new Dereferencer.
      *
      * @param url the IRI to parse into pretty label
+     * @param config the application configuration
      */
-    public Dereferencer(String url) {
+    public Dereferencer(String url, AppConfig config) {
         this.url = url;
+        this.config = config;
+        // Initialize PREFERRED_LANGUAGES after config is set
+        this.PREFERRED_LANGUAGES = loadPreferredLanguages(config);
     }
 
     // Package-private setter for testing
-    static void setPreferredLanguagesForTesting(List<String> languages) {
+    void setPreferredLanguagesForTesting(List<String> languages) {
         PREFERRED_LANGUAGES = languages;
     }
 
     // Reset method for tests
-    static void resetPreferredLanguages() {
+    void resetPreferredLanguages() {
         PREFERRED_LANGUAGES = loadPreferredLanguages();
     }
 
@@ -303,30 +395,32 @@ public class Dereferencer {
 
         URI uri = URI.create(fullUri);
         String path = uri.getPath();
-        logger.info("uri.getFragment(): " + uri.getFragment());
+        //logger.info("uri.getFragment(): " + uri.getFragment());
         if (Arrays.asList(standardKnownPrefixes).contains(fullUri)) {
             return fullUri;
         }
         if (uri.getFragment() != null) {
-            // The uri is ready to be fetched as is
-            return fullUri;
+            // Strip fragment to get base vocabulary URI (e.g., http://...skos/core#prefLabel → http://...skos/core)
+            String baseUri = uri.getScheme() + "://" + uri.getHost() + uri.getPath();
+            logger.finest("Stripped fragment from " + fullUri + " → base: " + baseUri);
+            return baseUri;
         }
         if (fullUri.startsWith(WOT_PREFIX)) {
             return WOT_RDF_FILE;
         }
         if (fullUri.startsWith(VANN_PREFIX)) {
-            logger.log(Level.INFO, "IRI starts with VANN_PREFIX");
+            //logger.log(Level.INFO, "IRI starts with VANN_PREFIX");
             return VANN_RDF_FILE;
         }
         if (fullUri.startsWith(SCHEMA_PREFIX)) {
-            logger.log(Level.INFO, "IRI starts with SCHEMA_PREFIX");
+            //logger.log(Level.INFO, "IRI starts with SCHEMA_PREFIX");
             return SCHEMA_RDF_FILE;
         }
         if (startsWithAny(fullUri, standardKnownPrefixes)) {
             int lastSlash = path.lastIndexOf('/');
             String basePath = path.substring(0, lastSlash);
             String baseUri = uri.getScheme() + "://" + uri.getHost() + basePath;
-            logger.info("baseUri: " + baseUri);
+            //logger.finest("baseUri starts with any STANDARDKNOWNPREFIXES: " + baseUri);
             return baseUri;
         } else {
             return fullUri;
@@ -368,7 +462,7 @@ public class Dereferencer {
                 // Read response content
                 String content = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
 
-                logger.log(Level.INFO, "rdfFormat="+rdfFormat);
+                //logger.log(Level.INFO, "rdfFormat="+rdfFormat);
                 if(rdfFormat == null){
                     throw new IOException("No rdf format content was fetched for IRI "+iri+", create a column title from local name in the IRI.");
                 }
@@ -401,7 +495,7 @@ public class Dereferencer {
 
                 String label = findLabelForIRI(model, iri);
 
-                logger.log(Level.INFO, "label found? " + label);
+                //logger.log(Level.INFO, "label found? " + label);
 
                 long endTime = System.currentTimeMillis();
                 long duration = endTime - startTime;
@@ -413,7 +507,7 @@ public class Dereferencer {
     }*/
 
     private static Lang determineLang(String contentType) {
-        logger.info("IN determineLang( " + contentType + " ) ");
+        logger.finest("IN determineLang( " + contentType + " ) ");
 
         if (contentType == null) return null;
         contentType = contentType.toLowerCase();
@@ -429,184 +523,327 @@ public class Dereferencer {
         return null;
     }
 
-    public static String fetchLabel(String iri) throws IOException, ExecutionException {
-        return labelCache.getUnchecked(iri);
+    /**
+     * Safely extract the host from a URI that may contain Unicode characters.
+     * For URIs with Unicode in the hostname (like slovník.gov.cz), manually extracts the host.
+     * 
+     * @param uriString The URI string to extract host from
+     * @return The host portion of the URI, or null if extraction fails
+     */
+    private static String extractHost(String uriString) {
+        try {
+            // First try java.net.URL which handles some Unicode cases better
+            try {
+                java.net.URL url = new java.net.URL(uriString);
+                String host = url.getHost();
+                if (host != null && !host.isEmpty()) {
+                    return host;
+                }
+            } catch (java.net.MalformedURLException e) {
+                // Fall through to manual extraction
+            }
+            
+            // Try standard URI parsing (works for ASCII URIs)
+            try {
+                java.net.URI uri = new java.net.URI(uriString);
+                String host = uri.getHost();
+                if (host != null && !host.isEmpty()) {
+                    return host;
+                }
+            } catch (java.net.URISyntaxException e) {
+                // Fall through to manual extraction
+            }
+            
+            // Manual extraction for URIs with Unicode in hostname
+            // Extract hostname from "protocol://hostname/path" or "protocol://hostname:port/path"
+            int protocolEnd = uriString.indexOf("://");
+            if (protocolEnd > 0) {
+                String afterProtocol = uriString.substring(protocolEnd + 3);
+                
+                // Find the end of hostname (first /, :, ?, or #)
+                int pathStart = afterProtocol.length();
+                int slashPos = afterProtocol.indexOf('/');
+                int colonPos = afterProtocol.indexOf(':');
+                int queryPos = afterProtocol.indexOf('?');
+                int fragmentPos = afterProtocol.indexOf('#');
+                
+                if (slashPos >= 0) pathStart = Math.min(pathStart, slashPos);
+                if (colonPos >= 0) pathStart = Math.min(pathStart, colonPos);
+                if (queryPos >= 0) pathStart = Math.min(pathStart, queryPos);
+                if (fragmentPos >= 0) pathStart = Math.min(pathStart, fragmentPos);
+                
+                String host = afterProtocol.substring(0, pathStart);
+                if (!host.isEmpty()) {
+                    logger.fine("Manually extracted host: " + host + " from URI: " + uriString);
+                    return host;
+                }
+            }
+            
+            return null;
+        } catch (Exception e) {
+            logger.fine("Could not extract host from URI: " + uriString + " - " + e.getMessage());
+            return null;
+        }
     }
 
-    static String fetchLabelUncached(String iri) throws IOException {
-        long startTime = System.currentTimeMillis();
-        logger.info("--------Before new HttpGet(extractBaseUri(" + iri + "));");
+    public String fetchLabel(String iri) throws IOException, ExecutionException {
+        // Create cache key that includes language preferences
+        String languages = (config != null && config.getPreferredLanguages() != null) 
+            ? config.getPreferredLanguages() 
+            : "en,cs";
+        String cacheKey = iri + "|langs:" + languages;
+        
+        // Check if already cached with this language preference
+        String label = labelCache.getIfPresent(cacheKey);
+        if (label == null) {
+            // Not in cache - fetch it with proper config
+            label = fetchLabelUncached(iri, config);
+            // Store in cache with language-specific key
+            labelCache.put(cacheKey, label);
+        }
+        
+        // Apply formatting based on this instance's config
+        return LabelFormatter.changeLabelToTheConfiguredFormat(label, config);
+    }
 
-        HttpGet httpGet = new HttpGet(extractBaseUri(iri));
-        long startTime1 = System.currentTimeMillis();
-        // More focused Accept header
-        //httpGet.addHeader("Accept", "text/turtle, application/rdf+xml, application/ld+json");
+    public static String fetchLabelUncached(String iri, AppConfig config) throws IOException {
+        long startTime = System.currentTimeMillis();
+        
+        // Extract the base vocabulary URI
+        String vocabularyUri = extractBaseUri(iri);
+        
+        try {
+            // EARLY CHECK: Skip if host previously failed (before checking vocabulary cache)
+            String host = extractHost(vocabularyUri);
+            
+            // Check if this host is in the failed hosts cache AND has value true (actually failed)
+            Boolean cachedFailure = failedHostsCache.getIfPresent(host);
+            if (host != null && cachedFailure != null && cachedFailure) {
+                //logger.warning("SKIPPING (host previously failed): " + host + " → IRI: " + iri + " → vocabularyUri: " + vocabularyUri);
+                ValueFactory vf = SimpleValueFactory.getInstance();
+                IRI propertyUrlIRI = vf.createIRI(iri);
+                return propertyUrlIRI.getLocalName();
+            } else if (host != null) {
+                //logger.info("HOST NOT IN CACHE (will attempt fetch): " + host + " → vocabularyUri: " + vocabularyUri);
+            }
+            
+            // Check if vocabulary is already in cache
+            Model cachedModel = vocabularyCache.getIfPresent(vocabularyUri);
+            boolean isCached = cachedModel != null;
+            
+            // Check if this vocabulary was previously marked as failed (empty model)
+            if (isCached && cachedModel.isEmpty()) {
+                // Vocabulary fetch failed before - return local name immediately
+                //logger.fine("CACHED (failed vocab): " + vocabularyUri + " → using local name for: " + iri);
+                ValueFactory vf = SimpleValueFactory.getInstance();
+                IRI propertyUrlIRI = vf.createIRI(iri);
+                return propertyUrlIRI.getLocalName();
+            }
+            
+            if (isCached) {
+                //logger.fine("CACHED vocab: " + vocabularyUri + " → IRI: " + iri);
+            } else {
+                //logger.warning("NEW vocab fetch needed: " + vocabularyUri + " → IRI: " + iri);
+            }
+            
+            // Get or fetch the vocabulary model from cache
+            Model model = vocabularyCache.get(vocabularyUri);
+            
+            // Check again if the newly fetched model is empty (fetch failed)
+            if (model.isEmpty()) {
+                // Fetch failed - return local name
+                // logger.fine("Vocabulary fetch resulted in empty model: " + vocabularyUri);
+                ValueFactory vf = SimpleValueFactory.getInstance();
+                IRI propertyUrlIRI = vf.createIRI(iri);
+                return propertyUrlIRI.getLocalName();
+            }
+            
+            // PERFORMANCE: Skip label lookup for very large vocabularies (e.g., QUDT with 3.8MB)
+            // Searching through thousands of statements for a label that probably doesn't exist is extremely slow
+            /* 
+            long modelSize = model.size();
+            if (modelSize > 5000) {  // If vocabulary has more than 5000 statements
+                logger.info("Skipping label lookup for large vocabulary (" + modelSize + " statements): " + vocabularyUri);
+                ValueFactory vf = SimpleValueFactory.getInstance();
+                IRI propertyUrlIRI = vf.createIRI(iri);
+                return propertyUrlIRI.getLocalName();
+            }
+            */
+            // Find the label in the model
+            String label = findLabelForIRI(model, iri, config);
+            
+            // long duration = System.currentTimeMillis() - startTime;
+            //logger.info( "Label '" + label + "' retrieved  (cached vocab: " + isCached + ")");
+            
+            // Log cache statistics periodically
+            // if (vocabularyCache.size() > 0) {
+            //     logger.fine(" Vocab cache: Size=" + vocabularyCache.size() + 
+            //                ", Hits=" + vocabularyCache.stats().hitCount() + 
+            //                ", Misses=" + vocabularyCache.stats().missCount() +
+            //                ", HitRate=" + String.format("%.1f%%", vocabularyCache.stats().hitRate() * 100));
+            // }
+            
+            // Note: Label formatting now happens in fetchLabel() per-instance
+            return label;
+            
+        } catch (ExecutionException e) {
+            Throwable cause = e.getCause();
+            String host = extractHost(vocabularyUri);
+            
+            // DETAILED EXCEPTION LOGGING
+            logger.warning("=== VOCABULARY FETCH FAILED ===");
+            logger.warning("  IRI: " + iri);
+            logger.warning("  Vocabulary URI: " + vocabularyUri);
+            logger.warning("  Host: " + host);
+            logger.warning("  Exception Type: " + cause.getClass().getName());
+            logger.warning("  Exception Message: " + cause.getMessage());
+            if (cause.getCause() != null) {
+                logger.warning("  Root Cause: " + cause.getCause().getClass().getName() + ": " + cause.getCause().getMessage());
+            }
+            logger.warning("  Stack trace: " + cause.toString());
+            logger.warning("===============================");
+
+            // Check if it's a network-related failure (host unreachable, DNS failure, etc.)
+            if (cause instanceof java.net.UnknownHostException /* || 
+                 cause instanceof java.net.SocketTimeoutException ||
+                cause instanceof java.net.ConnectException ||
+                cause instanceof org.apache.http.conn.ConnectTimeoutException ||
+                cause instanceof org.apache.http.conn.HttpHostConnectException */) {
+                
+                // Mark this host as failed to prevent future attempts
+                if (host != null) {
+                    failedHostsCache.put(host, true);
+                    logger.warning("✓ CACHED failed host '" + host + "' due to " + cause.getClass().getSimpleName() + 
+                                 " for vocabularyUri: " + vocabularyUri);
+                } else {
+                    logger.warning("✗ CANNOT CACHE failed host (host is null) for vocabularyUri: " + vocabularyUri);
+                }
+            } else {
+                // Log non-network failures for debugging - these should NOT cache the host
+                logger.warning("Vocabulary fetch failed but NOT caching host (" + cause.getClass().getSimpleName() + 
+                          ") for vocabularyUri: " + vocabularyUri);
+            }
+            
+            // Cache an empty model to prevent retrying this vocabulary
+            vocabularyCache.put(vocabularyUri, ModelFactory.createDefaultModel());
+            logger.warning("Cached empty model for failed vocabulary: " + vocabularyUri);
+            
+            // Fall back to local name
+            ValueFactory vf = SimpleValueFactory.getInstance();
+            IRI propertyUrlIRI = vf.createIRI(iri);
+            return propertyUrlIRI.getLocalName();
+        }
+    }
+    
+    /**
+     * Fetch and parse an RDF vocabulary from its base URI.
+     * This method is called by the vocabulary cache when a vocabulary hasn't been loaded yet.
+     * 
+     * @param vocabularyUri The base URI of the vocabulary to fetch
+     * @return Parsed Jena Model containing the vocabulary
+     * @throws IOException if fetching or parsing fails
+     */
+    private static Model fetchVocabularyModel(String vocabularyUri) throws IOException {
+        long startTime = System.currentTimeMillis();
+        //logger.warning("========================================");
+        //logger.warning("FETCHING NEW VOCABULARY: " + vocabularyUri);
+        //logger.warning("========================================");
+        
+        HttpGet httpGet = new HttpGet(vocabularyUri);
+        
+        // Configure request timeouts
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(CONNECTION_TIMEOUT)
+                .setSocketTimeout(SOCKET_TIMEOUT)
+                .setConnectionRequestTimeout(CONNECTION_REQUEST_TIMEOUT)
+                .build();
+        httpGet.setConfig(requestConfig);
+        
         // Set Accept header for RDF formats
         httpGet.addHeader("Accept",
                 "application/rdf+xml, " +
-                        "text/turtle, " +
-                        "application/ld+json, " +
-                        "application/n-triples, " +
-                        "application/n-quads, " +
-                        "application/trig");
-        long startTime2 = System.currentTimeMillis();
-        Arrays.stream(httpGet.getAllHeaders()).toList().forEach(header -> logger.info("request header -- " + header.getName() + ": " + header.getValue()));
+                "text/turtle, " +
+                "application/ld+json, " +
+                "application/n-triples, " +
+                "application/n-quads, " +
+                "application/trig");
 
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-            long startTime3 = System.currentTimeMillis();
-            logger.info("--------STATUS CODE = " + response.getStatusLine().getStatusCode());
-
             if (response.getStatusLine().getStatusCode() != 200) {
-                Arrays.stream(response.getAllHeaders()).toList().forEach(header -> logger.info(header.getName() + ": " + header.getValue()));
-                logger.warning(response.getEntity().getContent().toString());
-                throw new IOException("HTTP request failed: " + response.getStatusLine());
+                logger.warning("HTTP request failed for vocabulary " + vocabularyUri + ": " + response.getStatusLine());
+                logger.fine("Returning empty model to cache this failed vocabulary fetch");
+                // Return empty model to cache the failure - prevents retrying for all IRIs from this vocabulary
+                return ModelFactory.createDefaultModel();
             }
-            long startTime4 = System.currentTimeMillis();
-            // Get content as bytes to avoid double conversion
+            
+            // Get content as bytes
             Header contentLengthHeader = response.getFirstHeader("Content-Length");
             if (contentLengthHeader != null) {
                 long size = Long.parseLong(contentLengthHeader.getValue());
-                logger.info("Content size from header: " + size + " bytes for iri " + extractBaseUri(iri));
-            } else {
-                logger.warning("Content-Length header not available");
-                Arrays.stream(response.getAllHeaders()).toList().forEach(header -> logger.info(header.getName() + ": " + header.getValue()));
+                //logger.info("Vocabulary size: " + size + " bytes for " + vocabularyUri);
             }
-            logger.info("Before setting the response to content in byte[]");
+            
             byte[] content = EntityUtils.toByteArray(response.getEntity());
-            long startTime5 = System.currentTimeMillis();
-            logger.info("Before response.getEntity().getContentType().getValue();");
             String contentType = response.getEntity().getContentType().getValue();
-            logger.info("After response.getEntity().getContentType().getValue();");
-            long startTime6 = System.currentTimeMillis();
             Lang lang = determineLang(contentType);
-            long startTime7 = System.currentTimeMillis();
-            logger.info("lang = " + lang);
+            
             if (lang == null) {
                 throw new IOException("Unsupported RDF format: " + contentType);
             }
-            long startTime8 = System.currentTimeMillis();
-            Model model = ModelFactory.createDefaultModel();
-            long startTime9 = System.currentTimeMillis();
-            long startTime10 = 0;
-            logger.info("iri -----------------------------------*-*-*-*-*-*" + iri);
+            
+            // Parse into a temporary full model
+            Model fullModel = ModelFactory.createDefaultModel();
+            
             try (InputStream in = new ByteArrayInputStream(content)) {
-                startTime10 = System.currentTimeMillis();
-                // Using RDFDataMgr for faster parsing
-                if (iri.startsWith(VANN_PREFIX)) {
-                    RDFDataMgr.read(model, in, VANN_RDF_FILE, lang);
-                } else if (iri.startsWith(SCHEMA_PREFIX)) {
-                    logger.info("Logged in with SCHEMA_PREFIX -----------------------------------*-*-*-*-*-*");
-                    RDFDataMgr.read(model, in, SCHEMA_RDF_FILE, lang);
-                } else {
-                    RDFDataMgr.read(model, in, lang);
+                // Using RDFDataMgr for parsing
+                try {
+                    if (vocabularyUri.startsWith(VANN_PREFIX)) {
+                        RDFDataMgr.read(fullModel, in, VANN_RDF_FILE, lang);
+                    } else if (vocabularyUri.startsWith(SCHEMA_PREFIX)) {
+                        RDFDataMgr.read(fullModel, in, SCHEMA_RDF_FILE, lang);
+                    } else {
+                        RDFDataMgr.read(fullModel, in, lang);
+                    }
+                } catch (org.apache.jena.riot.RiotException e) {
+                    logger.log(Level.WARNING, "RiotException while parsing vocabulary " + vocabularyUri + ": " + e.getMessage());
+                    throw new IOException("Failed to parse vocabulary RDF", e);
                 }
             }
-            long startTime11 = System.currentTimeMillis();
-            String label = findLabelForIRI(model, iri);
-            long startTime12 = System.currentTimeMillis();
-
-            logger.log(Level.INFO, "Fetched label for " + iri + " in " + (System.currentTimeMillis() - startTime) + "ms");
-            logger.log(Level.INFO, "HttpGet httpGet = new HttpGet(extractBaseUri(iri)); in " + (startTime1 - startTime) + "ms");
-            logger.log(Level.INFO, "Fetched label for " + iri + " in " + (startTime2 - startTime1) + "ms");
-            logger.log(Level.INFO, "----------------------" + iri + "---------------------------------------");
-            logger.log(Level.INFO, "try (CloseableHttpResponse response = httpClient.execute(httpGet)) { in " + (startTime3 - startTime2) + "ms");
-            logger.log(Level.INFO, "----------------------" + iri + "---------------------------------");
-            logger.log(Level.INFO, "Fetched label for " + iri + " in " + (startTime4 - startTime3) + "ms");
-            logger.log(Level.INFO, "byte[] content = EntityUtils.toByteArray(response.getEntity()); in " + (startTime5 - startTime4) + "ms");
-            logger.log(Level.INFO, "String contentType = response.getEntity().getContentType().getValue(); in " + (startTime6 - startTime5) + "ms");
-            logger.log(Level.INFO, "Lang lang = determineLang(contentType); in " + (startTime7 - startTime6) + "ms");
-            logger.log(Level.INFO, "Fetched label for " + iri + " in " + (startTime8 - startTime7) + "ms");
-            logger.log(Level.INFO, "Model model = ModelFactory.createDefaultModel(); in " + (startTime9 - startTime8) + "ms");
-            logger.log(Level.INFO, "try (InputStream in = new ByteArrayInputStream(content)) { in " + (startTime10 - startTime9) + "ms");
-            logger.log(Level.INFO, "RDFDataMgr.read(model, in, lang); in " + (startTime11 - startTime10) + "ms");
-            logger.log(Level.INFO, "String label = findLabelForIRI(model, iri); in " + (startTime12 - startTime11) + "ms");
-
-            logger.log(Level.INFO, "LABEL = " + label);
-
-            label = LabelFormatter.changeLabelToTheConfiguredFormat(label);
-
-            return label;
+            
+            long parseTime = System.currentTimeMillis() - startTime;
+            logger.log(Level.INFO, "Parsed vocabulary " + vocabularyUri + " in " + parseTime + "ms");
+            
+            // Filter: keep ONLY label-related triples to reduce memory and search time
+            Model filteredModel = ModelFactory.createDefaultModel();
+            String[] labelPredicates = {
+                RDFS.label.getURI(),
+                "http://www.w3.org/2000/01/rdf-schema#label",
+                "http://www.w3.org/2004/02/skos/core#prefLabel",
+                "http://purl.org/dc/elements/1.1/title",
+                "http://purl.org/dc/terms/title",
+                "http://www.w3.org/2000/01/rdf-schema#comment"
+            };
+            
+            long filterStart = System.currentTimeMillis();
+            for (String labelPredicate : labelPredicates) {
+                Property predicate = fullModel.createProperty(labelPredicate);
+                StmtIterator iter = fullModel.listStatements(null, predicate, (RDFNode) null);
+                while (iter.hasNext()) {
+                    filteredModel.add(iter.nextStatement());
+                }
+                iter.close();
+            }
+            
+            long originalSize = fullModel.size();
+            long filteredSize = filteredModel.size();
+            long filterTime = System.currentTimeMillis() - filterStart;
+            long totalTime = System.currentTimeMillis() - startTime;
+            
+            //logger.log(Level.INFO, "Filtered vocabulary from " + originalSize + " to " + filteredSize + 
+            //          " triples (filtered in " + filterTime + "ms, total " + totalTime + "ms)");
+            
+            return filteredModel;
         }
-/*        logger.log(Level.INFO, "Beginning fetchLabelUncached");
-        long startTime = System.currentTimeMillis();
-        HttpGet httpGet = new HttpGet(extractBaseUri(iri));
-        logger.log(Level.INFO, "HttpGet got");
-        // Create HTTP client
-
-
-
-
-            // Set Accept header for RDF formats
-            httpGet.addHeader("Accept",
-                    "application/rdf+xml, " +
-                            "text/turtle, " +
-                            "application/ld+json, " +
-                            "application/n-triples, " +
-                            "application/n-quads, " +
-                            "application/trig");
-
-            // Execute request
-            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-                logger.log(Level.INFO, "Executed CloseableHttpResponse response = httpClient.execute(httpGet)");
-                int statusCode = response.getStatusLine().getStatusCode();
-                logger.log(Level.INFO, "Got status code " + statusCode);
-                if (statusCode != 200) {
-                    throw new IOException("HTTP request failed with status code: " + statusCode);
-                }
-
-                // Get content type to determine RDF format
-                String contentType = response.getEntity().getContentType().getValue();
-                String rdfFormat = determineRDFFormat(contentType);
-                logger.log(Level.INFO, "Determined RDFFormat " + rdfFormat);
-*//*
-                if (rdfFormat == null) {
-                    throw new IOException("Unsupported RDF format in response: " + contentType);
-                }
-*//*
-
-                logger.log(Level.INFO, "rdfFormat="+rdfFormat);
-                if(rdfFormat == null){
-                    throw new IOException("No rdf format content was fetched for IRI "+iri+", create a column title from local name in the IRI.");
-                }
-                //logger.log(Level.INFO, content);
-                Model model = null;
-                try {
-                    // Parse RDF
-                    model = ModelFactory.createDefaultModel();
-
-                    logger.log(Level.INFO, "Before model.read(extractBaseUri(iri)); level 1");
-                    model.read(extractBaseUri(iri));
-                    logger.log(Level.INFO, "After model.read(extractBaseUri(iri)); level 1");
-                } catch (JenaException timedOut){
-                    try {
-
-                        model = ModelFactory.createDefaultModel();
-
-                        model.read(extractBaseUri(iri));
-                    } catch (JenaException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-*//*                model.read(
-                        new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)),
-                        iri,
-                        rdfFormat
-                );*//*
-
-
-
-                String label = findLabelForIRI(model, iri);
-
-                logger.log(Level.INFO, "label found? " + label);
-
-                long endTime = System.currentTimeMillis();
-                long duration = endTime - startTime;
-                logger.log(Level.WARNING, "Method execution time: " + duration + "ms");
-
-                return label;
-
-        }*/
     }
 
     private static String determineRDFFormat(String contentType) {
@@ -646,10 +883,18 @@ public class Dereferencer {
      * @param iri   The IRI of the resource to get the label for.
      * @return The selected label string, or null if no label was found.
      */
-    public static String findLabelForIRI(Model model, String iri) {
+    private static String findLabelForIRI(Model model, String iri, AppConfig config) {
+        // Fast path: If model is empty (failed vocabulary), return local name immediately
+        if (model.isEmpty()) {
+            return SimpleValueFactory.getInstance().createIRI(iri).getLocalName();
+        }
 
         // Get the resource for the IRI
         Resource resource = model.getResource(iri);
+        
+        // Load preferred languages from config (or use defaults)
+        List<String> preferredLanguages = (config != null) ? loadPreferredLanguagesStatic(config) : Arrays.asList("en", "cs");
+        
         // Try standard label predicates in order of preference
         String[] labelPredicates = {
                 RDFS.label.getURI(),        // rdfs:label
@@ -660,12 +905,19 @@ public class Dereferencer {
                 "http://www.w3.org/2000/01/rdf-schema#comment" // rdfs:comment (fallback)
 
         };
+        
         // Check each predicate in order (e.g., rdfs:label, skos:prefLabel, etc.)
         for (String predicateURI : labelPredicates) {
             Property predicateProperty = model.createProperty(predicateURI);
 
             // Get all statements for this predicate
             StmtIterator labelStmts = resource.listProperties(predicateProperty);
+            
+            // Fast check: if no statements at all, skip to next predicate
+            if (!labelStmts.hasNext()) {
+                labelStmts.close();
+                continue;
+            }
 
             // Variables to store the best candidate found for this predicate
             Literal bestLiteralForPredicate = null;
@@ -674,16 +926,16 @@ public class Dereferencer {
             while (labelStmts.hasNext()) {
                 Statement stmt = labelStmts.nextStatement();
                 RDFNode object = stmt.getObject();
-                logger.info("object of <" + stmt.getString() + ">: " + object.toString());
+                // logger.finest("object of <" + stmt.getString() + ">: " + object.toString());
                 if (object.isLiteral()) {
                     Literal literal = object.asLiteral();
                     String lang = literal.getLanguage(); // Get language tag (can be empty string "")
                     String lexicalForm = literal.getLexicalForm();
 
-                    logger.info("Found literal for predicate " + predicateURI + ": '" + lexicalForm + "'@" + lang);
+                    // logger.finest("Found literal for predicate " + predicateURI + ": '" + lexicalForm + "'@" + lang);
 
                     // Score this literal's language
-                    int currentScore = scoreLanguage(lang);
+                    int currentScore = scoreLanguage(lang, preferredLanguages);
 
                     // Check if this literal is better than the current best for this predicate
                     if (currentScore > bestLanguageScore) {
@@ -700,12 +952,12 @@ public class Dereferencer {
             // "Good enough" means we found at least one literal for this predicate.
             // Our scoring system ensures the best one was chosen.
             if (bestLiteralForPredicate != null) {
-                logger.info("Selected label: '" + bestLiteralForPredicate.getLexicalForm() + "'@" + bestLiteralForPredicate.getLanguage() + " for predicate " + predicateURI);
+                // logger.finest("Selected label: '" + bestLiteralForPredicate.getLexicalForm() + "'@" + bestLiteralForPredicate.getLanguage() + " for predicate " + predicateURI);
                 return bestLiteralForPredicate.getLexicalForm();
             }
         }
         // If no label was found in any predicate, you could return the local name or null.
-        logger.info("No suitable label found for resource: " + resource.getURI());
+        // logger.fine("No suitable label found for resource: " + resource.getURI());
         return resource.getLocalName(); // Fallback to the URI's local part
     }
 
@@ -716,12 +968,12 @@ public class Dereferencer {
      * @param lang The language tag from the literal (e.g., "en", "de", "").
      * @return A score representing the preference for this language.
      */
-    private static int scoreLanguage(String lang) {
+    private static int scoreLanguage(String lang, List<String> preferredLanguages) {
         // 1. Highest priority: Check if it's a preferred language.
         //    The index in the list determines priority (earlier = higher score).
-        int preferredIndex = PREFERRED_LANGUAGES.indexOf(lang.toLowerCase());
-        logger.info("PREFERRED_LANGUAGES = [" + String.join(", ", PREFERRED_LANGUAGES) + "]");
-        logger.info("PREFERRED_LANGUAGES.indexOf(lang) = " + preferredIndex);
+        int preferredIndex = preferredLanguages.indexOf(lang.toLowerCase());
+        // logger.finest("PREFERRED_LANGUAGES = [" + String.join(", ", PREFERRED_LANGUAGES) + "]");
+        // logger.finest("PREFERRED_LANGUAGES.indexOf(lang) = " + preferredIndex);
         if (preferredIndex != -1) {
             // Return a high score, inversely proportional to its position in the list.
             // "en" (index 0) -> 1000, "de" (index 1) -> 999, "fr" (index 2) -> 998
@@ -749,10 +1001,10 @@ public class Dereferencer {
         // Get the resource for the IRI
         Resource resource = model.getResource(iri);
 
-        logger.log(Level.INFO, "---------------------------findLabelForIRI for " + iri );
+        logger.log(Level.FINEST, "---------------------------findLabelForIRI for " + iri );
 
 
-        logger.info("resource in findLabelForIRI: " + resource.getURI() + " localName: " + resource.getLocalName() );
+        logger.finest("resource in findLabelForIRI: " + resource.getURI() + " localName: " + resource.getLocalName() );
 
         // Try standard label predicates in order of preference
         String[] labelPredicates = {
@@ -793,8 +1045,50 @@ public class Dereferencer {
         return null; // No label found
     }*/
 
-    private static List<String> loadPreferredLanguages() {
-        String configValue = ConfigurationManager.loadConfig("app.preferredLanguages");
+    /**
+     * Load preferred languages from configuration.
+     * @return list of preferred language codes
+     * @deprecated Use {@link #loadPreferredLanguages(AppConfig)} instead
+     */
+    @Deprecated
+    private List<String> loadPreferredLanguages() {
+        return loadPreferredLanguages(this.config);
+    }
+
+    /**
+     * Load preferred languages from AppConfig or configuration (static version).
+     * @param config the application configuration
+     * @return list of preferred language codes
+     */
+    private static List<String> loadPreferredLanguagesStatic(AppConfig config) {
+        //logger.info("loadPreferredLanguages config: " + config.getPreferredLanguages());
+        String configValue = config.getPreferredLanguages();
+        if (configValue == null || configValue.trim().isEmpty()) {
+            return Arrays.asList("en", "cs"); // default fallback
+        }
+
+        List<String> languages = Arrays.stream(configValue.split(","))
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
+
+        // Additional safety check: if processing results in empty list, return default
+        if (languages.isEmpty()) {
+            return Arrays.asList("en", "cs");
+        }
+
+        return languages;
+    }
+
+    /**
+     * Load preferred languages from AppConfig or configuration.
+     * @param config the application configuration
+     * @return list of preferred language codes
+     */
+    private List<String> loadPreferredLanguages(AppConfig config) {
+        //logger.info("loadPreferredLanguages config: " + config.getPreferredLanguages());
+        String configValue = config.getPreferredLanguages();
         if (configValue == null || configValue.trim().isEmpty()) {
             return Arrays.asList("en", "cs"); // default fallback
         }

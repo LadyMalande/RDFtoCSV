@@ -3,7 +3,7 @@ package com.miklosova.rdftocsvw.converter;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.miklosova.rdftocsvw.support.BaseTest;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class BigFileConversionTest extends BaseTest {
     private String fileName = "/src/test/resources/CSVExactMatch/csvFileToTestSameCSV.csv";
@@ -21,16 +20,16 @@ public class BigFileConversionTest extends BaseTest {
     @Test
     void testreadingBigFilesToString() {
         try {
-            this.filePath = RESOURCES_PATH + fileName ;
-            rdfToCSV = new RDFtoCSV(fileName);
+            this.filePath = RESOURCES_PATH + fileName;
+            AppConfig config = new AppConfig.Builder(filePath)
+                    .parsing("rdf4j")
+                    .build();
+            rdfToCSV = new RDFtoCSV(config);
             db = new SailRepository(new MemoryStore());
-            args = new String[]{"-f", filePath, "-p", "rdf4j"};
-            ConfigurationManager.loadSettingsFromInputToConfigFile(args);
-            String stringRead = String.join("\n", Files.readLines(new File(filePath), Charsets.UTF_8) );
+            String stringRead = String.join("\n", Files.readLines(new File(filePath), Charsets.UTF_8));
             assertNotNull(stringRead);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 }

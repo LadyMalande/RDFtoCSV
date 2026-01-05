@@ -1,65 +1,65 @@
 {
-  "@context": "http://www.w3.org/ns/csvw",
-  "@type": "TableGroup",
-  "tables": [
-    {
-      "@type": "Table",
-      "url": "test148.ttlTestOutput0.csv",
-      "tableSchema": {
-        "@type": "Schema",
-        "columns": [
-          {
-            "@type": "Column",
-            "titles": "Subjekt",
-            "name": "Subjekt",
-            "valueUrl": "https://blank_Nodes_IRI.org/{+Subjekt}",
-            "suppressOutput": true
-          },
-          {
-            "@type": "Column",
-            "titles": "GID (de)",
-            "name": "GID_de",
-            "propertyUrl": "file://tree-ops.csv#GID",
-            "lang": "de"
-          },
-          {
-            "@type": "Column",
-            "titles": "Inventory%20Date (de)",
-            "name": "Inventory%20Date_de",
-            "propertyUrl": "file://tree-ops.csv#Inventory%20Date",
-            "lang": "de"
-          },
-          {
-            "@type": "Column",
-            "titles": "Species (de)",
-            "name": "Species_de",
-            "propertyUrl": "file://tree-ops.csv#Species",
-            "lang": "de"
-          },
-          {
-            "@type": "Column",
-            "titles": "Trim%20Cycle (de)",
-            "name": "Trim%20Cycle_de",
-            "propertyUrl": "file://tree-ops.csv#Trim%20Cycle",
-            "lang": "de"
-          },
-          {
-            "@type": "Column",
-            "titles": "_col.2 (de)",
-            "name": "_col.2_de",
-            "propertyUrl": "file://tree-ops.csv#_col.2",
-            "lang": "de"
-          }
-        ],
-        "rowTitles": [
-          "Subjekt",
-          "GID_de",
-          "Inventory%20Date_de",
-          "Species_de",
-          "Trim%20Cycle_de",
-          "_col.2_de"
-        ]
-      }
-    }
-  ]
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test148.ttl.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "GID (de)",
+        "name" : "GID_de",
+        "propertyUrl" : "file://tree-ops.csv#GID",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "Inventory%20Date (de)",
+        "name" : "Inventory%20Date_de",
+        "propertyUrl" : "file://tree-ops.csv#Inventory%20Date",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "Species (de)",
+        "name" : "Species_de",
+        "propertyUrl" : "file://tree-ops.csv#Species",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "Trim%20Cycle (de)",
+        "name" : "Trim%20Cycle_de",
+        "propertyUrl" : "file://tree-ops.csv#Trim%20Cycle",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.2 (de)",
+        "name" : "_col.2_de",
+        "propertyUrl" : "file://tree-ops.csv#_col.2",
+        "lang" : "de"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "GID_de", "Inventory%20Date_de", "Species_de", "Trim%20Cycle_de", "_col.2_de" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ]
+  } ]
 }

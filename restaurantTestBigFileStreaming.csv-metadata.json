@@ -1,0 +1,96 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "restaurantTestBigFileStreaming.nt_merged.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://example.org/vocab/{+type}",
+        "aboutUrl" : "{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "name (en)",
+        "name" : "name_en",
+        "propertyUrl" : "http://example.org/vocab/name",
+        "aboutUrl" : "http://example.org/restaurant/{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "name (it)",
+        "name" : "name_it",
+        "propertyUrl" : "http://example.org/vocab/name",
+        "aboutUrl" : "http://example.org/restaurant/{+Subject}",
+        "lang" : "it"
+      }, {
+        "@type" : "Column",
+        "titles" : "price",
+        "name" : "price",
+        "propertyUrl" : "http://example.org/vocab/price",
+        "datatype" : "decimal",
+        "aboutUrl" : "http://example.org/restaurant/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "calories",
+        "name" : "calories",
+        "propertyUrl" : "http://example.org/vocab/calories",
+        "datatype" : "integer",
+        "aboutUrl" : "http://example.org/restaurant/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "vegetarian",
+        "name" : "vegetarian",
+        "propertyUrl" : "http://example.org/vocab/vegetarian",
+        "datatype" : "boolean",
+        "aboutUrl" : "http://example.org/restaurant/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "category",
+        "name" : "category",
+        "propertyUrl" : "http://example.org/vocab/category",
+        "valueUrl" : "http://example.org/category/{+category}",
+        "aboutUrl" : "http://example.org/restaurant/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "containsAllergen",
+        "name" : "containsAllergen",
+        "propertyUrl" : "http://example.org/vocab/containsAllergen",
+        "valueUrl" : "http://example.org/allergen/{+containsAllergen}",
+        "aboutUrl" : "http://example.org/restaurant/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "name (fr)",
+        "name" : "name_fr",
+        "propertyUrl" : "http://example.org/vocab/name",
+        "aboutUrl" : "http://example.org/restaurant/{+Subject}",
+        "lang" : "fr"
+      }, {
+        "@type" : "Column",
+        "titles" : "prepTime",
+        "name" : "prepTime",
+        "propertyUrl" : "http://example.org/vocab/prepTime",
+        "datatype" : "duration",
+        "aboutUrl" : "http://example.org/restaurant/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "label",
+        "name" : "label",
+        "propertyUrl" : "http://example.org/vocab/label",
+        "aboutUrl" : "http://example.org/category/{+Subject}"
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "type", "name_en", "name_it", "price", "calories", "vegetarian", "category", "containsAllergen", "name_fr", "prepTime", "label" ]
+    }
+  } ]
+}

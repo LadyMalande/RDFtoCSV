@@ -1,0 +1,49 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "countries.csv,country_slice.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "latitude",
+        "name" : "latitude",
+        "propertyUrl" : "http://schema.org/latitude",
+        "datatype" : "double"
+      }, {
+        "@type" : "Column",
+        "titles" : "longitude",
+        "name" : "longitude",
+        "propertyUrl" : "http://schema.org/longitude",
+        "datatype" : "double"
+      }, {
+        "@type" : "Column",
+        "titles" : "name",
+        "name" : "name",
+        "propertyUrl" : "http://schema.org/name"
+      }, {
+        "@type" : "Column",
+        "titles" : "countryCode",
+        "name" : "countryCode",
+        "propertyUrl" : "http://www.geonames.org/ontology#countryCode"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "latitude", "longitude", "name", "countryCode" ]
+    }
+  } ]
+}

@@ -9,6 +9,7 @@ import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.MetadataService;
 import com.miklosova.rdftocsvw.output_processor.FileWrite;
 import com.miklosova.rdftocsvw.support.*;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.rio.RDFParseException;
@@ -35,6 +36,7 @@ public class XMLBaseTests extends BaseTest {
     private String filePathForOutput;
     private String expectedDatatype;
     private PrefinishedOutput prefinishedOutput;
+    private AppConfig config;
 
     private String exception;
 
@@ -83,16 +85,15 @@ public class XMLBaseTests extends BaseTest {
 
     @BeforeEach
     void createMetadata() {
-        rdfToCSV = new RDFtoCSV(fileName);
+        config = new AppConfig.Builder(filePath)
+                .parsing(PROCESS_METHOD)
+                .output(filePathForOutput)
+                .build();
+        rdfToCSV = new RDFtoCSV(config);
+        config.setOutputFileName(filePathForOutput);
+        config.setOutputMetadataFileName(filePathForMetadata);
         db = new SailRepository(new MemoryStore());
-        args = new String[]{"-f", filePath, "-p", "rdf4j"};
-        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
-        System.out.println("Override before each");
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
-        System.out.println("filePathForMetadata " + filePathForMetadata);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, filePathForOutput);
-        db = new SailRepository(new MemoryStore());
-        MethodService methodService = new MethodService();
+        MethodService methodService = new MethodService(config);
         RepositoryConnection rc = null;
         try {
             rc = methodService.processInput(filePath, PROCESS_METHOD, db);
@@ -100,14 +101,10 @@ public class XMLBaseTests extends BaseTest {
             throw new RuntimeException(e);
         }
         assert (rc != null);
-        // Convert the table to intermediate data for processing into metadata
-        ConversionService cs = new ConversionService();
-        System.out.println("createMetadata @BeforeEach");
+        ConversionService cs = new ConversionService(config);
         this.prefinishedOutput = cs.convertByQuery(rc, db);
-        // Convert intermediate data into basic metadata
-        MetadataService ms = new MetadataService();
+        MetadataService ms = new MetadataService(config);
         Metadata metadata = ms.createMetadata(prefinishedOutput);
-
         this.testMetadata = metadata;
     }
 
@@ -119,15 +116,13 @@ public class XMLBaseTests extends BaseTest {
             RowsAndKeys rnk = (RowsAndKeys) prefinishedOutput.getPrefinishedOutput();
             int i = 0;
             ArrayList<String> fileNamesCreated = new ArrayList<>();
-            String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
-
+            String allFiles = config.getIntermediateFileNames();
             for (String filename : allFiles.split(",")) {
-                System.out.println("newFileName " + filename);
-                FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), this.testMetadata);
+                //System.out.println("newFileName " + filename);
+                FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), this.testMetadata, config);
                 Assert.assertFalse(TestSupport.isFileEmpty(filename));
             }
-            JsonUtil.serializeAndWriteToFile(this.testMetadata);
-
+            JsonUtil.serializeAndWriteToFile(this.testMetadata, config);
             Assert.assertFalse(TestSupport.isFileEmpty(this.filePathForMetadata));
         } else {
             switch(exception){

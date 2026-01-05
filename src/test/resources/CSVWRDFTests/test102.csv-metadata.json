@@ -1,0 +1,103 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "tree-ops.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "GID",
+        "name" : "GID",
+        "propertyUrl" : "file://tree-ops.csv#GID",
+        "valueUrl" : "{+GID}"
+      }, {
+        "@type" : "Column",
+        "titles" : "inventory_date",
+        "name" : "inventory_date",
+        "propertyUrl" : "file://tree-ops.csv#inventory_date",
+        "valueUrl" : "{+inventory_date}"
+      }, {
+        "@type" : "Column",
+        "titles" : "on_street",
+        "name" : "on_street",
+        "propertyUrl" : "file://tree-ops.csv#on_street",
+        "valueUrl" : "{+on_street}"
+      }, {
+        "@type" : "Column",
+        "titles" : "species",
+        "name" : "species",
+        "propertyUrl" : "file://tree-ops.csv#species",
+        "valueUrl" : "{+species}"
+      }, {
+        "@type" : "Column",
+        "titles" : "trim_cycle",
+        "name" : "trim_cycle",
+        "propertyUrl" : "file://tree-ops.csv#trim_cycle",
+        "valueUrl" : "{+trim_cycle}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "GID", "inventory_date", "on_street", "species", "trim_cycle" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ],
+    "config" : {
+      "file" : "./src/test/resources/CSVWRDFTests/test102.ttl",
+      "logLevel" : "INFO",
+      "multipleTables" : false,
+      "parsing" : "rdf4j",
+      "streaming" : false,
+      "firstNormalForm" : true,
+      "output" : "./src/test/resources/CSVWRDFTests/test102",
+      "outputMetadata" : "./src/test/resources/CSVWRDFTests/test102.ttl.csv-metadata.json",
+      "columnNamingConvention" : "original",
+      "preferredLanguages" : "en,cs",
+      "conversionMethod" : "basicQuery",
+      "intermediateFileNames" : "tree-ops.csv,",
+      "conversionHasBlankNodes" : true,
+      "conversionHasRdfTypes" : true,
+      "outputZipFileName" : "test102_CSVW.zip",
+      "readMethod" : "rdf4j",
+      "metadataRowNums" : true,
+      "outputFilePath" : "./src/test/resources/CSVWRDFTests/test102.ttl",
+      "outputMetadataFileName" : "./src/test/resources/CSVWRDFTests/test102.csv-metadata.json",
+      "outputFileName" : "tree-ops.csv",
+      "streamingContinuous" : false,
+      "simpleBasicQuery" : false,
+      "inputFileName" : "./src/test/resources/CSVWRDFTests/test102.ttl",
+      "default_OUTPUT" : "RDFtoCSVOutput.csv",
+      "default_PARSING" : "rdf4j",
+      "default_CONVERSION_HAS_RDF_TYPES" : true,
+      "default_CONVERSION_HAS_BLANK_NODES" : false,
+      "default_CONVERSION_METHOD" : "basicQuery",
+      "default_LOG_LEVEL" : "INFO",
+      "default_MULTIPLE_TABLES" : false,
+      "default_READ_METHOD" : "rdf4j",
+      "default_STREAMING" : false,
+      "default_METADATA_ROWNUMS" : false,
+      "default_STREAMING_CONTINUOUS" : false,
+      "default_SIMPLE_BASIC_QUERY" : false,
+      "default_FIRST_NORMAL_FORM" : true
+    }
+  } ]
+}

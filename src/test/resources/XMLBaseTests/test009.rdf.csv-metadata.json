@@ -1,0 +1,33 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "test009.rdf.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "valueUrl" : "http://example.org/{+type}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type_1",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://example.org/{+type}",
+        "aboutUrl" : "http://example.org/{+type}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://example.org/type",
+        "aboutUrl" : "http://example.org/{+type}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "type",
+      "rowTitles" : [ "type", "type_1" ]
+    }
+  } ]
+}

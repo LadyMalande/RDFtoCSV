@@ -1,0 +1,4 @@
+Subject,type,prefLabel (en),inScheme,notation,prefLabel (cs)
+https://data.mvcr.gov.cz/zdroj/číselníky/pohlaví,,Sex,Pohlaví,,
+https://data.mvcr.gov.cz/zdroj/číselníky/pohlaví/položky/mužské,http://www.w3.org/2004/02/skos/core#Concept,Male,https://data.mvcr.gov.cz/zdroj/číselníky/pohlaví,mužské,Mužské
+https://data.mvcr.gov.cz/zdroj/číselníky/pohlaví/položky/ženské,http://www.w3.org/2004/02/skos/core#Concept,Female,https://data.mvcr.gov.cz/zdroj/číselníky/pohlaví,ženské,Ženské

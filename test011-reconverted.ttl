@@ -1,0 +1,14 @@
+
+_:bnode__1 <file://tree-ops.csv#GID> "1";
+  <file://tree-ops.csv#inventory_date> "2010-10-18"^^<http://www.w3.org/2001/XMLSchema#date>;
+  <file://tree-ops.csv#on_street> "ADDISON AV";
+  <file://tree-ops.csv#species> "Celtis australis";
+  <file://tree-ops.csv#trim_cycle> "Large Tree Routine Prune";
+  <file:/C:/Users/terka/RDFtoCSV/test011.ttl.csv#rowNum> <file:/C:/Users/terka/RDFtoCSV/1> .
+
+_:bnode__2 <file://tree-ops.csv#GID> "2";
+  <file://tree-ops.csv#inventory_date> "2010-06-02"^^<http://www.w3.org/2001/XMLSchema#date>;
+  <file://tree-ops.csv#on_street> "EMERSON ST";
+  <file://tree-ops.csv#species> "Liquidambar styraciflua";
+  <file://tree-ops.csv#trim_cycle> "Large Tree Routine Prune";
+  <file:/C:/Users/terka/RDFtoCSV/test011.ttl.csv#rowNum> <file:/C:/Users/terka/RDFtoCSV/2> .

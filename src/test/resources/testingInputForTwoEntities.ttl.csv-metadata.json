@@ -1,0 +1,64 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "testingInputForTwoEntities.ttl.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "http://example.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "datatypeTest",
+        "name" : "datatypeTest",
+        "propertyUrl" : "http://example.org/datatypeTest",
+        "valueUrl" : "{+datatypeTest}",
+        "datatype" : "integer",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "creator",
+        "name" : "creator",
+        "propertyUrl" : "http://purl.org/dc/terms/creator",
+        "valueUrl" : "http://example.org/{+creator}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "titles" : "title (cs)",
+        "name" : "title_cs",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "valueUrl" : "{+title_cs}",
+        "aboutUrl" : "http://example.org/{+Subject}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "title (en)",
+        "name" : "title_en",
+        "propertyUrl" : "http://purl.org/dc/terms/title",
+        "valueUrl" : "{+title_en}",
+        "aboutUrl" : "http://example.org/{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "http://example.org/{+Subject}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "{+type}",
+        "aboutUrl" : "http://example.org/{+Text}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "datatypeTest", "creator", "title_cs", "title_en", "type" ]
+    }
+  } ]
+}

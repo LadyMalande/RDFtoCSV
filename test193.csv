@@ -1,0 +1,10 @@
+Subject,dayTimeDuration,duration,yearMonthDuration
+https://blank_Nodes_IRI.org/2,P1DT2H,PT130S,P0Y20M
+https://blank_Nodes_IRI.org/4,P1DT2H3M,PT130M,P0Y20M
+https://blank_Nodes_IRI.org/6,P1DT2H3S,PT130H,P0Y20M
+https://blank_Nodes_IRI.org/8,P1DT2M,P130D,P0Y20M
+https://blank_Nodes_IRI.org/10,P1DT2S,P130M,P0Y20M
+https://blank_Nodes_IRI.org/12,P1DT2H,P130Y,P0Y20M
+https://blank_Nodes_IRI.org/14,P1DT2H,PT2M10S,P0Y20M
+https://blank_Nodes_IRI.org/16,P0DT2H,P0Y20M0D,P1Y20M
+https://blank_Nodes_IRI.org/18,-P1DT2H,-P60D,-P0Y20M

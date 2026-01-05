@@ -1,0 +1,103 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "tree-ops.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Subject",
+        "name" : "Subject",
+        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.1",
+        "name" : "_col.1",
+        "propertyUrl" : "file://tree-ops.csv#_col.1",
+        "valueUrl" : "{+_col.1}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.2",
+        "name" : "_col.2",
+        "propertyUrl" : "file://tree-ops.csv#_col.2",
+        "valueUrl" : "{+_col.2}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.3",
+        "name" : "_col.3",
+        "propertyUrl" : "file://tree-ops.csv#_col.3",
+        "valueUrl" : "{+_col.3}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.4",
+        "name" : "_col.4",
+        "propertyUrl" : "file://tree-ops.csv#_col.4",
+        "valueUrl" : "{+_col.4}"
+      }, {
+        "@type" : "Column",
+        "titles" : "_col.5",
+        "name" : "_col.5",
+        "propertyUrl" : "file://tree-ops.csv#_col.5",
+        "valueUrl" : "{+_col.5}"
+      }, {
+        "@type" : "Column",
+        "titles" : "Row Number",
+        "name" : "rowNum",
+        "valueUrl" : "{_row}",
+        "datatype" : "integer",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Subject",
+      "rowTitles" : [ "Subject", "_col.1", "_col.2", "_col.3", "_col.4", "_col.5" ]
+    },
+    "transformations" : [ {
+      "@type" : "Template",
+      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+      "source" : "rdf",
+      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+    } ],
+    "config" : {
+      "file" : "./src/test/resources/CSVWRDFTests/test023.ttl",
+      "logLevel" : "INFO",
+      "multipleTables" : false,
+      "parsing" : "rdf4j",
+      "streaming" : false,
+      "firstNormalForm" : true,
+      "output" : "./src/test/resources/CSVWRDFTests/test023.ttl",
+      "outputMetadata" : "./src/test/resources/CSVWRDFTests/test023.ttl.csv-metadata.json",
+      "columnNamingConvention" : "original",
+      "preferredLanguages" : "en,cs",
+      "conversionMethod" : "basicQuery",
+      "intermediateFileNames" : "tree-ops.csv,",
+      "conversionHasBlankNodes" : true,
+      "conversionHasRdfTypes" : true,
+      "outputZipFileName" : "test023_CSVW.zip",
+      "readMethod" : "rdf4j",
+      "metadataRowNums" : true,
+      "outputFilePath" : "./src/test/resources/CSVWRDFTests/test023.ttl",
+      "outputMetadataFileName" : "./src/test/resources/CSVWRDFTests/test023.ttltree-ops.csv-metadata.json",
+      "outputFileName" : "tree-ops.csv",
+      "streamingContinuous" : false,
+      "simpleBasicQuery" : false,
+      "inputFileName" : "./src/test/resources/CSVWRDFTests/test023.ttl",
+      "default_CONVERSION_METHOD" : "basicQuery",
+      "default_SIMPLE_BASIC_QUERY" : false,
+      "default_READ_METHOD" : "rdf4j",
+      "default_FIRST_NORMAL_FORM" : true,
+      "default_STREAMING_CONTINUOUS" : false,
+      "default_MULTIPLE_TABLES" : false,
+      "default_METADATA_ROWNUMS" : false,
+      "default_LOG_LEVEL" : "INFO",
+      "default_STREAMING" : false,
+      "default_CONVERSION_HAS_RDF_TYPES" : true,
+      "default_CONVERSION_HAS_BLANK_NODES" : false,
+      "default_OUTPUT" : "RDFtoCSVOutput.csv",
+      "default_PARSING" : "rdf4j"
+    }
+  } ]
+}

@@ -5,7 +5,7 @@
  *
  *
  * @version 1.0
- * @author Tereza Miklóšová
+ * @author Tereza MiklĂłĹˇovĂˇ
  * @see com.miklosova.rdftocsvw
  * @since 1.0
  */

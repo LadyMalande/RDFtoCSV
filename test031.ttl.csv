@@ -1,0 +1,7 @@
+Subject,name,population,latitude,longitude,year,ISO country code,countryRef
+http://example.org/countries.csv#AD,Andorra,,42.546245,1.601554,,AD,
+http://example.org/countries.csv#AE,United Arab Emirates,,23.424076,53.847818,,AE,
+0,,9616353,,,1960,,http://example.org/countries.csv#AF
+1,,9799379,,,1961,,http://example.org/countries.csv#AF
+2,,9989846,,,1962,,http://example.org/countries.csv#AF
+http://example.org/countries.csv#AF,Afghanistan,,33.93911,67.709953,,AF,

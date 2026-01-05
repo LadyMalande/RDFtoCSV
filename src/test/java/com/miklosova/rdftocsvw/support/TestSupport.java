@@ -73,12 +73,11 @@ public class TestSupport {
     }
 
     public static boolean isRDFSubsetOfTerms(String filePathForTest, String filePathForOriginal) throws IOException {
-        ConfigurationManager.loadSettingsFromInputToConfigFile(new String[]{"-f", filePathForTest, "-p", "rdf4j"});
         Repository db = new SailRepository(new MemoryStore());
-        System.out.println(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_METHOD));
-        System.out.println(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.READ_METHOD));
-        RepositoryConnection rc1 = parseInput(filePathForTest, DEFAULT_READ_METHOD, db);
-        RepositoryConnection rc2 = parseInput(filePathForOriginal, DEFAULT_READ_METHOD, db);
+
+        AppConfig config = new AppConfig.Builder(filePathForTest).build();
+        RepositoryConnection rc1 = parseInput(filePathForTest, DEFAULT_READ_METHOD, db, config);
+        RepositoryConnection rc2 = parseInput(filePathForOriginal, DEFAULT_READ_METHOD, db, config);
 
         String query = prepareQueryForExtractAll();
         TupleQueryResult result1 = getResultOfQuery(rc1, query);
@@ -99,12 +98,9 @@ public class TestSupport {
     public static boolean isFileEmpty(String fileName) {
         boolean isEmpty = true;
 
-        BufferedReader br;
         String readLine;
-        try {
-            br = new BufferedReader(new java.io.FileReader(fileName));
+        try (BufferedReader br = new BufferedReader(new java.io.FileReader(fileName))) {
             readLine = br.readLine();
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -115,19 +111,19 @@ public class TestSupport {
     }
 
     public static void writeToFile(PrefinishedOutput prefinishedOutput, Metadata metadata) {
-        String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+        String allFiles = metadata.getConfig().getIntermediateFileNames();
         try {
             RowsAndKeys rnk = (RowsAndKeys) prefinishedOutput.getPrefinishedOutput();
 
             for (String filename : allFiles.split(",")) {
                 System.out.println("newFileName " + filename);
-                FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), metadata);
+                FileWrite.saveCSVFileFromRows(filename, rnk.getRowsAndKeys().get(0).getRows(), metadata, metadata.getConfig());
             }
         } catch (ClassCastException ex) {
             RowAndKey rnk = (RowAndKey) prefinishedOutput.getPrefinishedOutput();
             String filename = allFiles.split(",")[0];
-            System.out.println("newFileName " + filename);
-            FileWrite.saveCSVFileFromRows(filename, rnk.getRows(), metadata);
+            //System.out.println("newFileName " + filename);
+            FileWrite.saveCSVFileFromRows(filename, rnk.getRows(), metadata, metadata.getConfig());
         }
 
 
@@ -269,13 +265,12 @@ public class TestSupport {
         return true;
     }
 
-    public static PrefinishedOutput<RowsAndKeys> createPrefinishedOutput(String filePath, String filePathForMetadata, String filePathForOutput, String PROCESS_METHOD, Repository db, String[] args) {
+    public static PrefinishedOutput<RowsAndKeys> createPrefinishedOutput(String filePath, String filePathForMetadata, String filePathForOutput, String PROCESS_METHOD, Repository db, String[] args, AppConfig config) {
         System.out.println("Override before each");
-        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME, filePathForMetadata);
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILENAME, filePathForOutput);
+        config.setOutputMetadataFileName(filePathForMetadata);
+        config.setOutputFileName(filePathForOutput);
 
-        MethodService methodService = new MethodService();
+        MethodService methodService = new MethodService(config);
         RepositoryConnection rc = null;
         try {
             rc = methodService.processInput(filePath, PROCESS_METHOD, db);
@@ -284,16 +279,16 @@ public class TestSupport {
         }
         assert (rc != null);
         // Convert the table to intermediate data for processing into metadata
-        ConversionService cs = new ConversionService();
+        ConversionService cs = new ConversionService(config);
         System.out.println("createMetadata @BeforeEach");
         return cs.convertByQuery(rc, db);
 
     }
 
-    public static Metadata createMetadata(PrefinishedOutput<RowsAndKeys> prefinishedOutput) {
+    public static Metadata createMetadata(PrefinishedOutput<RowsAndKeys> prefinishedOutput, AppConfig config) {
 
         // Convert intermediate data into basic metadata
-        MetadataService ms = new MetadataService();
+        MetadataService ms = new MetadataService(config);
 
         return ms.createMetadata(prefinishedOutput);
     }
@@ -304,11 +299,11 @@ public class TestSupport {
         return tupleResult.evaluate();
     }
 
-    public static ArrayList<BindingSet> connectToDbAndPrepareQuery(String filePath, String methodName, String queryString) {
+    public static ArrayList<BindingSet> connectToDbAndPrepareQuery(String filePath, String methodName, String queryString, AppConfig config) {
 
         ArrayList<BindingSet> results = new ArrayList<>();
         Repository db = new SailRepository(new MemoryStore());
-        MethodService methodService = new MethodService();
+        MethodService methodService = new MethodService(config);
         System.out.println("connectToDbAndPrepareQuery " + filePath);
         RepositoryConnection rc = null;
         try {
@@ -338,9 +333,9 @@ public class TestSupport {
         }
     }
 
-    public static RepositoryConnection parseInput(String fileName, String readMethod, Repository db) throws IOException {
+    public static RepositoryConnection parseInput(String fileName, String readMethod, Repository db, AppConfig config) throws IOException {
         db = new SailRepository(new MemoryStore());
-        MethodService methodService = new MethodService();
+        MethodService methodService = new MethodService(config);
         RepositoryConnection rc = methodService.processInput(fileName, readMethod, db);
         assert (rc != null);
         return rc;

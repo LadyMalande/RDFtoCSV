@@ -3,15 +3,16 @@ package com.miklosova.rdftocsvw.w3c_tests;
 import com.miklosova.rdftocsvw.converter.data_structure.PrefinishedOutput;
 import com.miklosova.rdftocsvw.converter.RDFtoCSV;
 import com.miklosova.rdftocsvw.support.BaseTest;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.TestSupport;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -39,6 +40,7 @@ public class CSVWValidatorTests extends BaseTest {
     private String filePathForOutput;
     private String expectedDatatype;
     private PrefinishedOutput prefinishedOutput;
+    private AppConfig config;
     private String expectedException;
     private RepositoryConnection repositoryConnection;
 
@@ -46,8 +48,9 @@ public class CSVWValidatorTests extends BaseTest {
     public CSVWValidatorTests(String nameForTest, String expectedDatatype, String expectedException) {
         this.nameForTest = nameForTest;
         this.filePath = RESOURCES_PATH + nameForTest + ".ttl";
-        //this.filePathForMetadata = RESOURCES_PATH + nameForTest + ".csv-metadata.json";
-        this.filePathForOutput = RESOURCES_PATH + nameForTest + "TestOutput";
+        this.filePathForMetadata = RESOURCES_PATH + nameForTest + ".ttl.csv-metadata.json";
+        // Remove .ttl extension from output path to avoid duplication
+        this.filePathForOutput = RESOURCES_PATH + nameForTest;
         this.expectedException = expectedException;
     }
 
@@ -78,20 +81,31 @@ public class CSVWValidatorTests extends BaseTest {
 
     }
 
-    @BeforeEach
-    void createPrefinishedOutputAndMetadata() {
-        rdfToCSV = new RDFtoCSV(filePath);
+    @Before
+    public void createPrefinishedOutputAndMetadata() {
+        // Skip setup for tests that should be skipped
+        int testNum = Integer.parseInt(nameForTest.substring(4));
+        Assume.assumeFalse("Skipping test because there is no file defined for this test", NO_FILE.contains(testNum));
+        Assume.assumeFalse("Skipping test because the test is not defined", NOT_DEFINED.contains(testNum));
+        
+        // Skip if expecting exception - setup will be called in test method
+        if (expectedException != null) {
+            return;
+        }
+        
+        config = new AppConfig.Builder(filePath)
+                .parsing(READ_METHOD)
+                .output(filePathForOutput)
+                .outputMetadata(filePathForMetadata)
+                .build();
+        rdfToCSV = new RDFtoCSV(config);
         db = new SailRepository(new MemoryStore());
-        args = new String[]{"-f", filePath, "-p", "rdf4j", "-t"};
-        ConfigurationManager.loadSettingsFromInputToConfigFile(args);
-        //ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.OUTPUT_FILE_PATH, RESOURCES_PATH);
         try {
             repositoryConnection = rdfToCSV.createRepositoryConnection(db, this.filePath, READ_METHOD);
             this.prefinishedOutput = rdfToCSV.convertData(repositoryConnection, db);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //this.prefinishedOutput = TestSupport.createPrefinishedOutput(this.filePath, this.filePathForMetadata, this.filePathForOutput, this.PROCESS_METHOD, this.db, new String[]{this.filePath});
         this.testMetadata = rdfToCSV.createMetadata(this.prefinishedOutput);
     }
 
@@ -108,16 +122,18 @@ public class CSVWValidatorTests extends BaseTest {
             }
             //Assert.assertTrue(exception.getMessage().contains(EXCEPTION_MESSAGE));
         } else {
+            int testNum = Integer.parseInt(nameForTest.substring(4));
+            Assume.assumeFalse("Skipping test because there is no file defined for this test", NO_FILE.contains(testNum));
+            Assume.assumeFalse("Skipping test because the test is not defined", NOT_DEFINED.contains(testNum));
             createPrefinishedOutputAndMetadata();
 
             TestSupport.writeToFile(this.prefinishedOutput, this.testMetadata);
 
-            String allFiles = ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES);
+            String allFiles = config.getIntermediateFileNames();
             for (String filename : allFiles.split(",")) {
-                Assert.assertFalse(TestSupport.isFileEmpty(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_FILE_PATH)));
+                Assert.assertFalse(TestSupport.isFileEmpty(filename));
             }
-
-            Assert.assertFalse(TestSupport.isFileEmpty(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.OUTPUT_METADATA_FILE_NAME)));
+            Assert.assertFalse(TestSupport.isFileEmpty(this.filePathForMetadata));
         }
     }
 }

@@ -1,0 +1,6 @@
+Concept,notation,_type,_preferred label (cs),_preferred label (en),type,is in scheme,preferred label (cs),preferred label (en)
+dpč,dpč,ConceptScheme,Typy pracovních vztahů,Employment relation types,Concept,typy-pracovních-vztahů,Dohoda o pracovní činnosti,Agreement to Perform Work
+dpp,dpp,ConceptScheme,Typy pracovních vztahů,Employment relation types,Concept,typy-pracovních-vztahů,Dohoda o provedení práce,Agreement to Complete a Job
+plný-úvazek,plný-úvazek,ConceptScheme,Typy pracovních vztahů,Employment relation types,Concept,typy-pracovních-vztahů,Pracovní poměr - plný úvazek,Full time employment
+zkrácený-úvazek,zkrácený-úvazek,ConceptScheme,Typy pracovních vztahů,Employment relation types,Concept,typy-pracovních-vztahů,Pracovní poměr - zkrácený úvazek,Part time employment
+služební-poměr,služební-poměr,ConceptScheme,Typy pracovních vztahů,Employment relation types,Concept,typy-pracovních-vztahů,Služební poměr,Civil service employment

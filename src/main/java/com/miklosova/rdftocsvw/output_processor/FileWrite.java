@@ -2,14 +2,12 @@ package com.miklosova.rdftocsvw.output_processor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
 import com.miklosova.rdftocsvw.converter.data_structure.Row;
 import com.miklosova.rdftocsvw.converter.data_structure.TypeIdAndValues;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata;
 import com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table;
-import com.miklosova.rdftocsvw.support.ConfigurationManager;
+import com.miklosova.rdftocsvw.support.AppConfig;
 import com.miklosova.rdftocsvw.support.JsonUtil;
 import com.opencsv.CSVWriter;
 import org.eclipse.rdf4j.model.IRI;
@@ -20,6 +18,8 @@ import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
@@ -80,12 +80,53 @@ public class FileWrite {
      * Creates a one line of file names of created CSVs separated by commas and writes it to a config file.
      *
      * @param fileNamesCreated array list of created CSV file names
+     * @deprecated Use {@link #writeFilesToConfigFile(ArrayList, AppConfig)} instead
      */
+    @Deprecated
     public static void writeFilesToConfigFile(ArrayList<String> fileNamesCreated) {
+        writeFilesToConfigFile(fileNamesCreated, null);
+    }
+
+    /**
+     * Creates a one line of file names of created CSVs separated by commas and writes it to a config or AppConfig.
+     *
+     * @param fileNamesCreated array list of created CSV file names
+     * @param config the application configuration
+     */
+    public static void writeFilesToConfigFile(ArrayList<String> fileNamesCreated, AppConfig config) {
+        if (config == null) {
+            throw new IllegalArgumentException("AppConfig cannot be null");
+        }
         StringBuilder sb = new StringBuilder();
-        fileNamesCreated.forEach(fileName -> sb.append(fileName).append(","));
-        System.out.println("newFileName writeFilesToConfigFile   allFileNames = " + sb.toString());
-        ConfigurationManager.saveVariableToConfigFile(ConfigurationManager.INTERMEDIATE_FILE_NAMES, sb.toString());
+        String outputPath = config.getOutputFilePath();
+        //System.out.println("writeFilesToConfigFile   config.getOutputFilePath() = " + config.getOutputFilePath());
+        
+        for (String fileName : fileNamesCreated) {
+            //logger.info("[will go to intermediateFileNames]fileName from fileNamesCreated: " + fileName);
+            // If fileName is not an absolute path and we have an output path, build full path
+            boolean isAbsolutePath = (fileName.length() >= 3 && Character.isLetter(fileName.charAt(0)) && 
+                                      fileName.charAt(1) == ':') || fileName.startsWith("/");
+            
+            if (!isAbsolutePath && outputPath != null && !outputPath.isEmpty()) {
+                // Prepend output directory to relative filename
+                File outputFile = new File(outputPath);
+                File parentDir = outputFile.getParentFile();
+                
+                if (parentDir != null) {
+                    //logger.info("[parentDir: " + parentDir.getAbsolutePath());
+                    // The filename must get to the short version instead of the relative one
+                    File file = new File(fileName);
+                    String shortLocalFileName = file.getName();
+                    //fileName = new File(parentDir, shortLocalFileName).getAbsolutePath();
+                    //fileName = new File("../", shortLocalFileName).getAbsolutePath();
+                    fileName = String.valueOf(new File("./", shortLocalFileName));
+                }
+            }
+            
+            sb.append(fileName).append(",");
+        }
+        //System.out.println("newFileName writeFilesToConfigFile   allFileNames = " + sb.toString());
+        config.setIntermediateFileNames(sb.toString());
     }
 
     /**
@@ -95,13 +136,34 @@ public class FileWrite {
      * @param rows     ArrayList of Rows created by conversion by rdf4j method.
      * @param metadata Metadata created during the rdf4j method.
      * @return The contents of the file with headers as String.
+     * @deprecated Use {@link #saveCSVFileFromRows(String, ArrayList, Metadata, AppConfig)} instead
      */
+    @Deprecated
     public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata) {
-        logger.info("fileName for final .csv file before changing = " + fileName);
-        fileName = (fileName.split("/"))[fileName.split("/").length - 1];
-        logger.info("fileName for final .csv file after changing = " + fileName);
+        return saveCSVFileFromRows(fileName, rows, metadata, null);
+    }
+
+    /**
+     * Save the CSV file from ArrayList of Rows created during conversion.
+     *
+     * @param fileName The name for the created CSV file.
+     * @param rows     ArrayList of Rows created by conversion by rdf4j method.
+     * @param metadata Metadata created during the rdf4j method.
+     * @param config   the application configuration
+     * @return The contents of the file with headers as String.
+     */
+    public static String saveCSVFileFromRows(String fileName, ArrayList<Row> rows, Metadata metadata, AppConfig config) {
+        //logger.info("fileName for final .csv file before changing = " + fileName);
+        // Only extract basename if this is a relative path with / separator (URL or Unix-style path from old code)
+        // Don't strip path if it's an absolute Windows path (C:\...) or Unix path (starts with /)
+        boolean isAbsolutePath = (fileName.length() >= 3 && Character.isLetter(fileName.charAt(0)) && 
+                                  fileName.charAt(1) == ':') || fileName.startsWith("/");
+        if (!isAbsolutePath && fileName.contains("/")) {
+            fileName = (fileName.split("/"))[fileName.split("/").length - 1];
+        }
+        //logger.info("fileName for final .csv file after changing = " + fileName);
         fileName = getFullPathOfFile(fileName);
-        logger.info("fileName for final .csv file = " + fileName);
+        //logger.info("fileName for final .csv file = " + fileName);
         ObjectNode originalMetadataJSON = null;
         try {
             originalMetadataJSON = JsonUtil.serializeWithContext(metadata);
@@ -112,7 +174,22 @@ public class FileWrite {
         File f = FileWrite.makeFileByNameAndExtension(fileName, null);
 
         List<String[]> lines = new ArrayList<>();
-        List<Column> orderOfColumnKeys = addHeadersFromMetadata(fileName, metadata, lines);
+        List<Column> orderOfColumnKeys = addHeadersFromMetadata(fileName, metadata, lines, config);
+        
+        // Get the actual first column (Subject column) from metadata
+        File fileObject = new File(fileName);
+        Optional<Table> findTable = metadata.getTables().stream()
+            .filter(tables -> tables.getUrl().equals(fileObject.getName()))
+            .findFirst();
+        Column actualFirstColumn = null;
+        if (findTable.isPresent()) {
+            actualFirstColumn = findTable.get().getTableSchema().getColumns().stream()
+                .filter(column -> column.getPropertyUrl() == null)
+                .findFirst()
+                .orElse(null);
+        }
+        
+        final Column firstColumnForWriting = actualFirstColumn;
 
         for (Row row : rows) {
 
@@ -121,7 +198,7 @@ public class FileWrite {
                     .filter(entry -> (entry.getValue().values.size() > 1))
                     .toList();
 
-            List<Map<Value, Value>> combinations = generateCombinations(multivalues);
+            List<Map<Value, Value>> combinations = generateCombinations(multivalues, config);
 
             String[] line = new String[lines.get(0).length];
             int i = 0;
@@ -131,8 +208,8 @@ public class FileWrite {
                     i = 0;
                     line = new String[lines.get(0).length];
 
-                    line[0] = (appendIdByValuePattern(row, orderOfColumnKeys.get(0)));
-
+                    line[0] = (appendIdByValuePattern(row, firstColumnForWriting != null ? firstColumnForWriting : orderOfColumnKeys.get(0)));
+                    //logger.info("line[0]=" + line[0]);
 
                     firstColumn = true;
 
@@ -142,16 +219,19 @@ public class FileWrite {
                         if (column.getPropertyUrl() != null) {
                             multilevelPropertyUrl = column.getOriginalColumnKey().stringValue();
                         }
-                        if (!Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES)) && firstColumn) {
+                        boolean hasRdfTypes = (config != null && config.getConversionHasRdfTypes() != null) ? 
+                            config.getConversionHasRdfTypes() : true;
+                        if (!hasRdfTypes && firstColumn) {
                             firstColumn = false;
                             i--;
                         } else {
                             if (combination.get(iri(multilevelPropertyUrl)) != null) {
                                 if (combination.get(iri(multilevelPropertyUrl)).isIRI()) {
-                                    if (column.getValueUrl().startsWith("{")) {
-                                        line[i] = combination.get(iri(multilevelPropertyUrl)).stringValue();
-                                    } else {
+                                    // If valueUrl contains a template variable {+...}, extract local name to fill the template
+                                    if (column.getValueUrl() != null && column.getValueUrl().contains("{+")) {
                                         line[i] = ((IRI) combination.get(iri(multilevelPropertyUrl))).getLocalName();
+                                    } else {
+                                        line[i] = combination.get(iri(multilevelPropertyUrl)).stringValue();
                                     }
                                 } else if (combination.get(iri(multilevelPropertyUrl)).isLiteral()) {
                                     line[i] = safeLiteral((Literal) combination.get(iri(multilevelPropertyUrl)));
@@ -166,12 +246,14 @@ public class FileWrite {
 
             } else {
                 // Write CSV rows without first normal form -> make lists in cells
-                line[0] = appendIdByValuePattern(row, orderOfColumnKeys.get(0));
+                line[0] = appendIdByValuePattern(row, firstColumnForWriting != null ? firstColumnForWriting : orderOfColumnKeys.get(0));
+                //logger.info("line[0]=" + line[0]);
                 i++;
                 firstColumn = true;
                 for (Column column : orderOfColumnKeys) {
-
-                    if (!Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES)) && firstColumn) {
+                    boolean hasRdfTypes = (config != null && config.getConversionHasRdfTypes() != null) ? 
+                        config.getConversionHasRdfTypes() : true;
+                    if (!hasRdfTypes && firstColumn) {
                         firstColumn = false;
                         i--;
                     } else {
@@ -196,17 +278,52 @@ public class FileWrite {
         }
 
         if (originalMetadataJSON != metadataNow) {
-            JsonUtil.serializeAndWriteToFile(metadata);
-
+            JsonUtil.serializeAndWriteToFile(metadata, config);
         }
         FileWrite.writeLinesToCSVFile(f, lines, true);
-        try {
-            assert f != null;
-            return String.join("\n", Files.readLines(f, Charsets.UTF_8));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        
+        // Return filename instead of reading entire file into memory
+        return fileName;
+    }
 
+    /**
+     * Read CSV file contents as a string. Use cautiously with large files.
+     * For web service use only - CLI should use file-based operations.
+     *
+     * @param fileName the file name to read
+     * @param maxLines maximum number of lines to read (0 = unlimited, but risky for large files)
+     * @return the file contents as string
+     */
+    public static String readCSVFileAsString(String fileName, int maxLines) {
+        fileName = getFullPathOfFile(fileName);
+        File f = new File(fileName);
+        
+        if (!f.exists()) {
+            return "Error: File not found: " + fileName;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(f))) {
+            String line;
+            int lineCount = 0;
+            while ((line = reader.readLine()) != null) {
+                if (sb.length() > 0) {
+                    sb.append('\n');
+                }
+                sb.append(line);
+                lineCount++;
+                
+                if (maxLines > 0 && lineCount >= maxLines) {
+                    sb.append("\n... (truncated at ").append(maxLines).append(" lines)");
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Error reading CSV file: " + fileName, e);
+            return "Error reading file: " + e.getMessage();
+        }
+        
+        return sb.toString();
     }
 
     /**
@@ -241,9 +358,24 @@ public class FileWrite {
      *
      * @param listOfLists the list of lists
      * @return the list of generated combinations
+     * @deprecated Use {@link #generateCombinations(List, AppConfig)} instead
      */
+    @Deprecated
     public static List<Map<Value, Value>> generateCombinations(List<Map.Entry<Value, TypeIdAndValues>> listOfLists) {
-        if (Boolean.parseBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.FIRST_NORMAL_FORM))) {
+        return generateCombinations(listOfLists, null);
+    }
+
+    /**
+     * Generate combinations from the Columns containing multiple values in one cell.
+     *
+     * @param listOfLists the list of lists
+     * @param config the application configuration
+     * @return the list of generated combinations
+     */
+    public static List<Map<Value, Value>> generateCombinations(List<Map.Entry<Value, TypeIdAndValues>> listOfLists, AppConfig config) {
+        boolean firstNormalForm = (config != null && config.getFirstNormalForm() != null) ? 
+            config.getFirstNormalForm() : true;
+        if (firstNormalForm) {
             // Map of predicatesOfColumns and Values in the Column
             List<Map<Value, Value>> resultingRowOfFormerMultivalues = new ArrayList<>();
             if (!listOfLists.isEmpty() && listOfLists.get(0).getValue().values.get(0).isLiteral() && ((Literal) listOfLists.get(0).getValue().values.get(0)).getLanguage().isPresent()) {
@@ -374,51 +506,84 @@ public class FileWrite {
     }
 
     private static String safeLiteral(Literal literal) {
-        if (literal.getLabel().contains(",") && !literal.getLabel().startsWith("\"") && !literal.getLabel().endsWith("\"")) {
-            return "\"" + literal.getLabel() + "\"";
-        } else {
-            return literal.getLabel();
-        }
+        // Return raw label - CSVWriter will handle quoting/escaping automatically
+        return literal.getLabel();
     }
 
     private static String appendIdByValuePattern(Row row, Column column) {
-        if (column.getValueUrl().startsWith("{")) {
-            return row.id.stringValue();
-        } else {
+        // Handle blank nodes (including those with blank_Nodes_IRI prefix)
+        if (row.id.isBNode() || row.id.stringValue().startsWith("https://blank_Nodes_IRI")) {
             if (row.id.isBNode()) {
                 return row.id.stringValue();
             } else {
+                // For blank_Nodes_IRI, extract just the local part (the number)
                 IRI iri = (IRI) row.id;
                 return iri.getLocalName();
             }
         }
+        //logger.info("appendIdByValuePattern - column.getName(): " + column.getName());
+        //logger.info("appendIdByValuePattern - column.getName(): " + column.getTitles());
+        //logger.info("appendIdByValuePattern - column.getValueUrl(): " + column.getValueUrl());
+        /*logger.info("appendIdByValuePattern - column.getValueUrl().contains(\"{+\"): " + column.getValueUrl().contains("{+"));
+        logger.info("appendIdByValuePattern - !column.getValueUrl().startsWith(\"{+\") " + !column.getValueUrl().startsWith("{+"));
+*/
+        // Check if the valueUrl is a partial pattern (e.g., "https://example.com/{+Concept}")
+        // If so, we need to extract the local name to fill the pattern
+        if (column.getValueUrl() != null && column.getValueUrl().contains("{+") && !column.getValueUrl().startsWith("{+")) {
+            // Partial pattern - extract local name
+            IRI iri = (IRI) row.id;
+            return iri.getLocalName();
+        }
+        
+        // For simple pattern {+Subject} or no pattern, return the full IRI
+        return row.id.stringValue();
     }
 
-    private static List<Column> addHeadersFromMetadata(String fileName, Metadata metadata, List<String[]> lines) {
+    private static List<Column> addHeadersFromMetadata(String fileName, Metadata metadata, List<String[]> lines, AppConfig config) {
+        //logger.info("fileName in addHeadersFromMetadata: " + fileName);
+
         List<Column> orderOfColumns = new ArrayList<>();
 
         File fileObject = new File(fileName);
         Optional<Table> findTable = metadata.getTables().stream().filter(tables -> tables.getUrl().equals(fileObject.getName())).findFirst();
         Table fud = findTable.orElse(null);
+        
+        if (fud == null) {
+            logger.log(Level.SEVERE, "Table not found in metadata for file: " + fileObject.getName());
+            logger.log(Level.SEVERE, "Available tables in metadata: " + 
+                metadata.getTables().stream().map(Table::getUrl).collect(java.util.stream.Collectors.joining(", ")));
+            throw new IllegalStateException("Table not found in metadata for file: " + fileObject.getName() + 
+                ". Available tables: " + metadata.getTables().stream().map(Table::getUrl).collect(java.util.stream.Collectors.joining(", ")));
+        }
+        
         List<String> headersBuffer = new ArrayList<>();
 
         Column firstColumn = null;
-        if (Boolean.getBoolean(ConfigurationManager.getVariableFromConfigFile(ConfigurationManager.CONVERSION_HAS_RDF_TYPES))) {
-
-            assert fud != null;
-            firstColumn = fud.getTableSchema().getColumns().stream().filter(column -> column.getPropertyUrl() == null).findFirst().get();
-            headersBuffer.add(firstColumn.getTitles());
+        boolean hasRdfTypes = (config != null && config.getConversionHasRdfTypes() != null) ? 
+            config.getConversionHasRdfTypes() : true;
+        if (hasRdfTypes) {
+            Optional<Column> firstColOpt = fud.getTableSchema().getColumns().stream()
+                .filter(column -> column.getPropertyUrl() == null)
+                .findFirst();
+            
+            if (firstColOpt.isPresent()) {
+                firstColumn = firstColOpt.get();
+                headersBuffer.add(firstColumn.getTitles());
+            } else {
+                logger.log(Level.WARNING, "No first column (with null propertyUrl) found in table: " + fud.getUrl());
+            }
         }
 
-
-        assert fud != null;
         for (Column column : fud.getTableSchema().getColumns()) {
             if (column != firstColumn && column.getVirtual() == null) {
-                headersBuffer.add(column.getTitles());
+                String columnTitle = column.getTitles();
+                //logger.info("Column header - name: " + column.getName() + ", title: " + columnTitle);
+                headersBuffer.add(columnTitle);
                 orderOfColumns.add(column);
             }
         }
         String[] headers = headersBuffer.toArray(new String[0]);
+        //logger.info("Final CSV headers: " + String.join(", ", headers));
         lines.add(headers);
         return orderOfColumns;
     }

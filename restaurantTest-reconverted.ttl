@@ -1,0 +1,37 @@
+
+<http://example.org/restaurant/dish1> a <http://example.org/vocab/Dish>;
+  <http://example.org/vocab/calories> 800;
+  <http://example.org/vocab/category> <http://example.org/category/pizza>;
+  <http://example.org/vocab/containsAllergen> <file:/C:/Users/terka/RDFtoCSV/restaurantTest.nt_merged_preprocessed.csv>;
+  <http://example.org/vocab/name> "Margherita Pizza"@en, "Pizza Margherita"@it;
+  <http://example.org/vocab/price> 12.5;
+  <http://example.org/vocab/vegetarian> true .
+
+<http://example.org/restaurant/dish2> a <http://example.org/vocab/Dish>;
+  <http://example.org/vocab/calories> 350;
+  <http://example.org/vocab/category> <http://example.org/category/salad>;
+  <http://example.org/vocab/containsAllergen> <http://example.org/allergen/dairy>, <http://example.org/allergen/gluten>;
+  <http://example.org/vocab/name> "Caesar Salad"@en;
+  <http://example.org/vocab/price> 9.99;
+  <http://example.org/vocab/vegetarian> false .
+
+<http://example.org/restaurant/dish3> a <http://example.org/vocab/Dish>;
+  <http://example.org/vocab/calories> 450;
+  <http://example.org/vocab/category> <http://example.org/category/seafood>;
+  <http://example.org/vocab/containsAllergen> <http://example.org/allergen/fish>;
+  <http://example.org/vocab/name> "Grilled Salmon"@en, "Saumon Grillé"@fr;
+  <http://example.org/vocab/prepTime> "PT25M"^^<http://www.w3.org/2001/XMLSchema#duration>;
+  <http://example.org/vocab/price> 18.75;
+  <http://example.org/vocab/vegetarian> false .
+
+<http://example.org/category/pizza> a <http://example.org/vocab/Category>;
+  <http://example.org/vocab/containsAllergen> <file:/C:/Users/terka/RDFtoCSV/restaurantTest.nt_merged_preprocessed.csv>;
+  <http://example.org/vocab/label> "Pizza" .
+
+<http://example.org/category/salad> a <http://example.org/vocab/Category>;
+  <http://example.org/vocab/containsAllergen> <file:/C:/Users/terka/RDFtoCSV/restaurantTest.nt_merged_preprocessed.csv>;
+  <http://example.org/vocab/label> "Salad" .
+
+<http://example.org/category/seafood> a <http://example.org/vocab/Category>;
+  <http://example.org/vocab/containsAllergen> <file:/C:/Users/terka/RDFtoCSV/restaurantTest.nt_merged_preprocessed.csv>;
+  <http://example.org/vocab/label> "Seafood" .
