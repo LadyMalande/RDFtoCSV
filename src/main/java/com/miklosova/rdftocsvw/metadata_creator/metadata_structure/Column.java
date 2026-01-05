@@ -561,7 +561,7 @@ public class Column {
                 this.titles = propertyUrlIRI.getLocalName();
             }
         }
-        System.out.println("Column title fetched: " + this.titles);
+        //System.out.println("Column title fetched: " + this.titles);
         
         // Apply naming convention formatting
         String baseTitle = (this.titles != null) ? this.titles : propertyUrlIRI.getLocalName();
@@ -571,7 +571,7 @@ public class Column {
             Literal literal = (Literal) object;
             Optional<String> languageTag = literal.getLanguage();
             String langTag = null;
-            System.out.println("Column title fetched: " + formattedTitle + " is literal");
+            //System.out.println("Column title fetched: " + formattedTitle + " is literal");
             if (languageTag.isPresent()) {
                 langTag = languageTag.get();
             }

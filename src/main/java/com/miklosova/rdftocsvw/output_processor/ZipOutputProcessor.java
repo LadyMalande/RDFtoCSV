@@ -131,8 +131,8 @@ public class ZipOutputProcessor implements IOutputProcessor {
         String inputFilesInString = config.getIntermediateFileNames();
         String filenameForZip = config.getOutputZipFileName();
         String metadataFileName = config.getOutputMetadataFileName();
-        logger.log(Level.INFO, "config.getIntermediateFileNames() = " + config.getIntermediateFileNames());
-        logger.log(Level.INFO, "zipFileName = " + filenameForZip);
+        //logger.log(Level.INFO, "config.getIntermediateFileNames() = " + config.getIntermediateFileNames());
+        //logger.log(Level.INFO, "zipFileName = " + filenameForZip);
         String[] listOfFiles = inputFilesInString.split(",");
         String[] newArray;
         if (listOfFiles[listOfFiles.length - 1].isEmpty()) {

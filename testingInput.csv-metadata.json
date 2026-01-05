@@ -3,7 +3,7 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "testingInput.ttl.csv",
+    "url" : "testingInput.nt_merged.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
@@ -14,12 +14,6 @@
         "suppressOutput" : true
       }, {
         "@type" : "Column",
-        "titles" : "notation",
-        "name" : "notation",
-        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#notation",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
         "titles" : "type",
         "name" : "type",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
@@ -27,10 +21,17 @@
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
+        "titles" : "preferred label (en)",
+        "name" : "prefLabel_en",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
+        "aboutUrl" : "{+Subject}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
         "titles" : "is in scheme",
         "name" : "inScheme",
         "propertyUrl" : "http://www.w3.org/2004/02/skos/core#inScheme",
-        "valueUrl" : "https://data.mvcr.gov.cz/zdroj/číselníky/{+inScheme}",
+        "valueUrl" : "{+inScheme}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
@@ -41,20 +42,13 @@
         "lang" : "cs"
       }, {
         "@type" : "Column",
-        "titles" : "preferred label (en)",
-        "name" : "prefLabel_en",
-        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#prefLabel",
-        "aboutUrl" : "{+Subject}",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "{+type}",
-        "aboutUrl" : "{+Concept}",
-        "virtual" : true
+        "titles" : "notation",
+        "name" : "notation",
+        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#notation",
+        "aboutUrl" : "{+Subject}"
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "notation", "type", "inScheme", "prefLabel_cs", "prefLabel_en" ]
+      "rowTitles" : [ "Subject", "type", "prefLabel_en", "inScheme", "prefLabel_cs", "notation" ]
     }
   } ]
 }

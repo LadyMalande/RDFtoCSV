@@ -442,7 +442,7 @@
         "titles" : "first",
         "name" : "first",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-        "valueUrl" : "http://example.org/book/{+first}",
+        "valueUrl" : "{+first}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",

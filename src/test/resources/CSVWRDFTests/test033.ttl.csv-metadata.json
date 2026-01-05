@@ -17,7 +17,7 @@
         "titles" : "offers",
         "name" : "offers",
         "propertyUrl" : "http://schema.org/offers",
-        "valueUrl" : "file://events-listing.csv#{+offers}",
+        "valueUrl" : "{+offers}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
@@ -31,7 +31,7 @@
         "titles" : "location",
         "name" : "location",
         "propertyUrl" : "http://schema.org/location",
-        "valueUrl" : "file://events-listing.csv#{+location}",
+        "valueUrl" : "{+location}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",

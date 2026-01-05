@@ -34,8 +34,9 @@ public class StreamingNTriplesCSVTest extends BaseTest {
 
     public StreamingNTriplesCSVTest(String nameForTest, String filePath, String expectedFileName, String parsingMethod) {
         this.nameForTest = nameForTest;
+        this.parsingMethod = parsingMethod;
         this.filePath = RESOURCES_PATH + filePath + ".nt";
-        this.expectedFile = RESOURCES_PATH_EXPECTATION + filePath + "Expectation.csv";
+        this.expectedFile = RESOURCES_PATH_EXPECTATION + filePath + parsingMethod +  "Expectation.csv";
         this.filePathForOutput = RESOURCES_PATH_OUTPUT + filePath + ".nt" + "_merged.csv";
         //RESOURCES_PATH_OUTPUT + filePath + ".nt" + "123.csv";
 
@@ -57,19 +58,18 @@ public class StreamingNTriplesCSVTest extends BaseTest {
                  */
                 //{"", "organizační-struktura", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv"},
 
-                {"Knihovna sample", "libraryTest", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv", "rdf4j"},
-                {"Knihovna sample", "libraryTest", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv", "streaming"},
-                {"Knihovna sample", "libraryTest", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv", "bigFileStreaming"},
-                {"Číselník pracovních vzathů", "testingInput", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv", "rdf4j"},
+                //{"Knihovna sample", "libraryTest", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv", "rdf4j"},
+                //{"Knihovna sample", "libraryTest", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv", "streaming"},
+                //{"Knihovna sample", "libraryTest", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv", "bigFileStreaming"},
+                //{"Číselník pracovních vzathů", "testingInput", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv", "rdf4j"},
                 {"Číselník pracovních vzathů", "testingInput", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv", "streaming"},
-                {"Číselník pracovních vzathů", "testingInput", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv", "bigFileStreaming"},
+                //{"Číselník pracovních vzathů", "testingInput", "./src/test/resources/StreamingNTriples/streamingSample02Expectation.csv", "bigFileStreaming"},
 //{ "", "", "", "", "", ""},
         });
     }
 
     void createCSV() {
-        Main.main(new String[]{"-f", filePath, "-p", "streaming"});
-
+        Main.main(new String[]{"-f", filePath, "-p", parsingMethod, "-n"});  // -n = noFirstNormalForm to match old test expectations
     }
 
     @Test

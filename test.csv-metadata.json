@@ -6,9 +6,7 @@
     "url" : "test_merged.csv",
     "tableSchema" : {
       "@type" : "Schema",
-      "columns" : [ ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ ]
+      "columns" : [ ]
     }
   } ]
 }

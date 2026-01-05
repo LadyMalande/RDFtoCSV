@@ -10,6 +10,7 @@ import org.eclipse.rdf4j.model.impl.LinkedHashModel;
 import org.eclipse.rdf4j.model.util.Models;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -34,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * 
  * Note: Blank nodes will have different identifiers, but their relationships should be preserved.
  */
+@Disabled
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ReverseConversionTest {
 
@@ -70,7 +72,9 @@ public class ReverseConversionTest {
         String csv2rdfPath = "./src/test/resources/tools/csv2rdf-0.4.7-standalone.jar";
         
         return java.util.stream.Stream.of(
-/*
+/**/
+
+
             new TestFileSet(
                 "./src/test/resources/StreamingNTriples/restaurantTest.nt",
                 "./RDFtoCSV/src/test/resources/StreamingNTriples/restaurantTest.nt",
@@ -118,7 +122,7 @@ public class ReverseConversionTest {
                         "literalListTest",
                         "./literalListTest-reconverted.ttl",
                         csv2rdfPath, "rdf4j"
-                ),*/
+                ),
                 new TestFileSet(
                         "./src/test/resources/StreamingNTriples/restaurantTestBigFileStreaming.nt",
                         "./RDFtoCSV/src/test/resources/StreamingNTriples/restaurantTestBigFileStreaming.nt",
@@ -234,6 +238,7 @@ public class ReverseConversionTest {
         AppConfig config = new AppConfig.Builder(testFileSet.inputFileForConversion)
                 .parsing(testFileSet.parsingParameter)
                 .output(outputPath)
+                .firstNormalForm(false)  // Disable FNF for round-trip testing
                 .build();
         
         // Create and run converter

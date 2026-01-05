@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class PerformanceLogger {
     private static final Logger logger = Logger.getLogger(PerformanceLogger.class.getName());
-    private static final String DEFAULT_LOG_FILE = "performance_log.txt";
+    private static final String DEFAULT_LOG_FILE = "performance_log_pohlavi_rdf4j.txt";
     private static final String DELIMITER = "=" + "=".repeat(80) + "\n";
     
     private final String logFilePath;

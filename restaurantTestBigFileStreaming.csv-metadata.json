@@ -17,7 +17,7 @@
         "titles" : "type",
         "name" : "type",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "{+type}",
+        "valueUrl" : "http://example.org/vocab/{+type}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
@@ -59,14 +59,14 @@
         "titles" : "category",
         "name" : "category",
         "propertyUrl" : "http://example.org/vocab/category",
-        "valueUrl" : "{+category}",
+        "valueUrl" : "http://example.org/category/{+category}",
         "aboutUrl" : "http://example.org/restaurant/{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "containsAllergen",
         "name" : "containsAllergen",
         "propertyUrl" : "http://example.org/vocab/containsAllergen",
-        "valueUrl" : "{+containsAllergen}",
+        "valueUrl" : "http://example.org/allergen/{+containsAllergen}",
         "aboutUrl" : "http://example.org/restaurant/{+Subject}"
       }, {
         "@type" : "Column",

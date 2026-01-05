@@ -105,7 +105,7 @@ public class MethodService {
             logger.info( "Successfully Downloaded. NewFileName is " + newFileName);
             return newFileName;
         } catch (MalformedURLException e) {
-            System.err.println("URL is invalid: " + fileName + ". Returns original filename in processFileOrIRI method.");
+            //System.err.println("URL is invalid: " + fileName + ". Returns original filename in processFileOrIRI method.");
             return fileName;
             // the URL is not in a valid form
         } catch (IOException ex) {
@@ -117,7 +117,7 @@ public class MethodService {
     }
 
     private void processMethodChoice(String methodChoice) {
-        logger.info("methodChoice=" + methodChoice);
+        //logger.info("methodChoice=" + methodChoice);
         switch (methodChoice.toLowerCase()) {
             case "rdf4j" -> methodGateway.setParsingMethod(new RDF4JMethod());
             case "streaming", "bigfilestreaming" -> methodGateway.setParsingMethod(new StreamingMethod(config));

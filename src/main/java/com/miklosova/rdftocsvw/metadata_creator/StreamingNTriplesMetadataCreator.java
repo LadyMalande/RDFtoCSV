@@ -33,14 +33,27 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
 
     Map<String, Set<IRI>> mapOfKnownSubjects;
     /**
-     * The Map of known predicates. <CSV file url, List of Predicate IRIs>: the list of predicates that are used as IDs in a given csv file
+     * The Map of known predicates. <CSV file url, Set of Predicate IRIs>: the set of predicates that are used as IDs in a given csv file
+     * Changed from List to HashSet for O(1) contains() performance
      */
 
-    Map<String, List<IRI>> mapOfKnownPredicates;
+    Map<String, Set<IRI>> mapOfKnownPredicates;
     /**
      * The Table schema by files. Table Schema objects mapped to their CSV file urls
      */
     Map<String, TableSchema> tableSchemaByFiles;
+    
+    /**
+     * Cache mapping: CSV file path -> (predicate IRI string -> column index)
+     * Avoids O(n) linear search through columns for every triple
+     */
+    private Map<String, Map<String, Integer>> predicateToColumnIndex;
+    
+    /**
+     * Cache mapping: CSV file path -> (subject IRI string -> row index in buffer)
+     * Avoids O(n) linear search through buffered rows for every triple
+     */
+    private Map<String, Map<String, Integer>> subjectToRowIndex;
     
     /**
      * In-memory buffer for CSV data. Maps CSV file path to list of rows.
@@ -81,6 +94,11 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
      * Counter for processed triples (for timing output only)
      */
     private int processedTriplesCount = 0;
+    
+    /**
+     * Timestamp of last timing measurement (in nanoseconds)
+     */
+    private long lastTimingMeasurement = 0;
 
     /**
      * The Unified by subject. Is the triple being unified by Subject or Predicate (if it's unified to previously known data)?
@@ -116,6 +134,8 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         subjectRowIndex = new HashMap<>();
         rowsToUpdate = new HashMap<>();
         openWriters = new HashMap<>();
+        predicateToColumnIndex = new HashMap<>();
+        subjectToRowIndex = new HashMap<>();
         this.metadata = new Metadata(config);
     }
 
@@ -196,12 +216,12 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     @Override
     void addMetadataToTableSchema(Triple triple) {
         processedTriplesCount++;
-        
+        /* 
         // Debug output every 500 triples
         if (processedTriplesCount % 500 == 0) {
             System.err.println("[DEBUG-NT] Processing triple #" + processedTriplesCount);
         }
-        
+        */
         long startTotal = System.nanoTime();
         
         if (config == null) {
@@ -255,6 +275,16 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             long afterMatching = System.nanoTime();
 
             tableSchema.getColumns().add(newColumn);
+            
+            // Update the predicate-to-column-index cache
+            Map<String, Integer> columnCache = predicateToColumnIndex.get(currentCSVName);
+            if (columnCache != null) {
+                String cacheKey = triple.getPredicate().stringValue();
+                if (triple.getObject().isLiteral() && ((Literal) triple.getObject()).getLanguage().isPresent()) {
+                    cacheKey += "@" + ((Literal) triple.getObject()).getLanguage().get();
+                }
+                columnCache.put(cacheKey, tableSchema.getColumns().size() - 1);
+            }
 
             try {
                 rewriteTheHeadersInCSV(currentCSVName, newColumn.getTitles());
@@ -279,7 +309,15 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 long rewriteMicros = (afterRewrite - afterMatching) / 1000;
                 long totalMicros = (afterRewrite - startTotal) / 1000;
                 
-                System.err.println(String.format("[TIMING-NT] Triple %d: TOTAL=%dμs", processedTriplesCount, totalMicros));
+                // Calculate elapsed time since last measurement
+                long elapsedSinceLastMs = (lastTimingMeasurement == 0) ? 0 : (afterRewrite - lastTimingMeasurement) / 1_000_000;
+                lastTimingMeasurement = afterRewrite;
+                
+                if (elapsedSinceLastMs > 0) {
+                    //System.err.println(String.format("[TIMING-NT] Triple %d: TOTAL=%dμs | 500 triples in %dms", processedTriplesCount, totalMicros, elapsedSinceLastMs));
+                } else {
+                    //System.err.println(String.format("[TIMING-NT] Triple %d: TOTAL=%dμs", processedTriplesCount, totalMicros));
+                }
                 System.err.println(String.format("  Config=%dμs, Column=%dμs, Lang=%dμs, Name=%dμs", 
                     configMicros, columnMicros, langMicros, nameMicros));
                 System.err.println(String.format("  URLs=%dμs, Datatype=%dμs, Titles=%dμs, CSVName=%dμs", 
@@ -291,41 +329,53 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         } else {
             // Column already exists - just timing
             if (processedTriplesCount % 500 == 0) {
-                long totalMicros = (System.nanoTime() - startTotal) / 1000;
-                System.err.println(String.format("[TIMING-NT] Triple %d: TOTAL=%dμs (column already exists)", processedTriplesCount, totalMicros));
+                long currentTime = System.nanoTime();
+                long totalMicros = (currentTime - startTotal) / 1000;
+                
+                // Calculate elapsed time since last measurement
+                long elapsedSinceLastMs = (lastTimingMeasurement == 0) ? 0 : (currentTime - lastTimingMeasurement) / 1_000_000;
+                lastTimingMeasurement = currentTime;
+                
+                if (elapsedSinceLastMs > 0) {
+                    System.err.println(String.format("[TIMING-NT] Triple %d: TOTAL=%dμs (column already exists) | 500 triples in %dms", processedTriplesCount, totalMicros, elapsedSinceLastMs));
+                } else {
+                    System.err.println(String.format("[TIMING-NT] Triple %d: TOTAL=%dμs (column already exists)", processedTriplesCount, totalMicros));
+                }
                 System.err.flush();
             }
         }
     }
 
     private void rewriteTheHeadersInCSV(String filePath, String titles) throws FileNotFoundException {
-        File file = new File(filePath);
-        List<String[]> lines = new ArrayList<>();
-        // Read the file and process it line by line
-        try (CSVReader reader = new CSVReader(new FileReader(file))) {
-            String[] line;
-            boolean isFirstLine = true;
-            while ((line = reader.readNext()) != null) {
-                if (isFirstLine) {
-                    isFirstLine = false;
-                    String[] headerWithNewColumnTitle = Arrays.copyOf(line, line.length + 1);
-
-                    // Add the new element at the last position
-                    headerWithNewColumnTitle[line.length] = titles;
-                    lines.add(headerWithNewColumnTitle);
-                } else {
-                    String[] lineWithBlankFinalColumn = Arrays.copyOf(line, line.length + 1);
-
-                    // Add the new element at the last position
-                    lineWithBlankFinalColumn[line.length] = "";
-                    lines.add(lineWithBlankFinalColumn);
-                }
-
+        // PERFORMANCE FIX: Instead of reading and rewriting the entire CSV file,
+        // just add an empty column to all buffered rows in memory.
+        // The header will be built from metadata when flushing to disk.
+        
+        List<String[]> lines = csvDataBuffer.get(filePath);
+        if (lines != null && !lines.isEmpty()) {
+            // Extend all buffered rows with an empty column
+            for (int i = 0; i < lines.size(); i++) {
+                String[] row = lines.get(i);
+                String[] extendedRow = Arrays.copyOf(row, row.length + 1);
+                extendedRow[row.length] = "";
+                lines.set(i, extendedRow);
             }
-        } catch (IOException | CsvValidationException e) {
-            throw new RuntimeException(e);
+            // Note: subjectToRowIndex remains valid since row indices don't change
         }
-        FileWrite.writeLinesToCSVFile(file, lines, false);
+        
+        // If file was already flushed to disk, update the pending row updates
+        Map<Integer, String[]> updates = rowsToUpdate.get(filePath);
+        if (updates != null && !updates.isEmpty()) {
+            for (Map.Entry<Integer, String[]> entry : updates.entrySet()) {
+                String[] row = entry.getValue();
+                String[] extendedRow = Arrays.copyOf(row, row.length + 1);
+                extendedRow[row.length] = "";
+                entry.setValue(extendedRow);
+            }
+        }
+        
+        // Note: The actual header with column titles is now written in flushBufferToDisk()
+        // by reading from the TableSchema metadata, so we don't need to maintain it separately
     }
 
     private String getCSVNameIfSubjectOrPredicateKnown(IRI subject, IRI predicate) {
@@ -333,13 +383,13 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         for (Map.Entry<String, Set<IRI>> entry : mapOfKnownSubjects.entrySet()) {
             if (entry.getValue().contains(subject)) {
 
-                List<IRI> knownPredicates = mapOfKnownPredicates.get(entry.getKey());
+                Set<IRI> knownPredicates = mapOfKnownPredicates.get(entry.getKey());
                 knownPredicates.add(predicate);
                 return entry.getKey();
             }
         }
 
-        for (Map.Entry<String, List<IRI>> entry : mapOfKnownPredicates.entrySet()) {
+        for (Map.Entry<String, Set<IRI>> entry : mapOfKnownPredicates.entrySet()) {
             if (entry.getValue().contains(predicate)) {
                 Set<IRI> knownSubjects = mapOfKnownSubjects.get(entry.getKey());
                 knownSubjects.add(subject);
@@ -371,7 +421,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 return tableSchemaByFiles.get(entry.getKey());
             }
         }
-        for (Map.Entry<String, List<IRI>> entry : mapOfKnownPredicates.entrySet()) {
+        for (Map.Entry<String, Set<IRI>> entry : mapOfKnownPredicates.entrySet()) {
             if (entry.getValue().contains(triple.getPredicate())) {
                 return tableSchemaByFiles.get(entry.getKey());
             }
@@ -381,12 +431,16 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     }
 
     private TableSchema createNewTableSchema(Triple triple) {
-        ArrayList<IRI> knownPredicates = new ArrayList<>();
+        HashSet<IRI> knownPredicates = new HashSet<>();
         knownPredicates.add(triple.getPredicate());
         HashSet<IRI> knownSubjects = new HashSet<>();
         knownSubjects.add(triple.getSubject());
         mapOfKnownPredicates.put(currentCSVName, knownPredicates);
         mapOfKnownSubjects.put(currentCSVName, knownSubjects);
+        
+        // Initialize caches for this new CSV file
+        predicateToColumnIndex.put(currentCSVName, new HashMap<>());
+        subjectToRowIndex.put(currentCSVName, new HashMap<>());
 
         // Create new Table and tableSchema inside it
         Table newTable = new Table(currentCSVName);
@@ -463,10 +517,11 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
      */
     public void writeTripleToCSV(String filePath, Triple triple) throws IOException {
         // Debug: Log every triple being written
+        /* 
         logger.info("writeTripleToCSV: predicate=" + triple.getPredicate().stringValue() + 
                    ", object=" + (triple.getObject().isIRI() ? "IRI:" + triple.getObject().stringValue() : 
                                  triple.getObject().isLiteral() ? "Literal:..." : "Other"));
-        
+        */
         long startWrite = System.nanoTime();
         
         List<String[]> rowDataVariationsForSubject = new ArrayList<>();
@@ -525,27 +580,31 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             }
         } else {
             // Subject is in memory - process normally
-            // Process existing lines in memory (buffer contains only data rows, no header)
-            for (int i = 0; i < lines.size(); i++) {
+            // Use index to find the row with matching subject (O(1) instead of O(n))
+            Map<String, Integer> memoryRowIndex = subjectToRowIndex.get(filePath);
+            Integer existingRowIndex = (memoryRowIndex != null) ? memoryRowIndex.get(subjectStr) : null;
+            
+            if (unifiedBySubject && existingRowIndex != null && existingRowIndex < lines.size()) {
+                // Found existing row - update it directly
+                int i = existingRowIndex;
                 String[] line = lines.get(i);
-
-                // Add the Object into the correct column in the line as there is already a line with this subject
-                if (unifiedBySubject && line[0].equalsIgnoreCase(triple.subject.stringValue())) {
-                    int indexOfChangeColumn = getIndexOfCurrentPredicate(triple.getPredicate(), triple.getObject());
-                    
-                    // Check if the row needs to be expanded to match current schema size
-                    TableSchema currentSchema = tableSchemaByFiles.get(currentCSVName);
-                    int expectedColumns = currentSchema.getColumns().size();
-                    
-                    if (line.length < expectedColumns) {
-                        // Row is shorter than schema - expand it with empty values
-                        String[] expandedLine = new String[expectedColumns];
-                        System.arraycopy(line, 0, expandedLine, 0, line.length);
-                        for (int j = line.length; j < expectedColumns; j++) {
-                            expandedLine[j] = "";
-                        }
-                        line = expandedLine;
+                int indexOfChangeColumn = getIndexOfCurrentPredicate(triple.getPredicate(), triple.getObject());
+                
+                // Row should already be the correct size due to rewriteTheHeadersInCSV
+                // but check just in case
+                TableSchema currentSchema = tableSchemaByFiles.get(currentCSVName);
+                int expectedColumns = currentSchema.getColumns().size();
+                
+                if (line.length < expectedColumns) {
+                    // Shouldn't happen often, but handle it
+                    String[] expandedLine = new String[expectedColumns];
+                    System.arraycopy(line, 0, expandedLine, 0, line.length);
+                    for (int j = line.length; j < expectedColumns; j++) {
+                        expandedLine[j] = "";
                     }
+                    line = expandedLine;
+                    lines.set(i, line); // Update in buffer
+                }
 
                     // Insert the new value between two commas in the middle (adjust index as needed)
                     if (indexOfChangeColumn >= line.length) {
@@ -587,7 +646,9 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                         lines.set(i, updatedLine);
                         isModified = true;  // Mark that the line has been modified
                     }
-                }
+            } else if (!unifiedBySubject || existingRowIndex == null) {
+                // No existing row found - will add new row below
+                // (existingRowIndex == null means subject not in buffer yet)
             }
 
             // Handle adding new rows based on the conditions
@@ -602,11 +663,23 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 }
             } else if (!isModified && unifiedBySubject) {
                 // If the file is still unmodified, we need to add a new predicate column at the end of the row
-                lines.add(createLineStringListByMetadata(triple).toArray(new String[0]));
+                String[] newRow = createLineStringListByMetadata(triple).toArray(new String[0]);
+                lines.add(newRow);
+                // Update index
+                Map<String, Integer> rowIdx = subjectToRowIndex.get(filePath);
+                if (rowIdx != null && newRow.length > 0) {
+                    rowIdx.put(newRow[0], lines.size() - 1);
+                }
                 isModified = true;
             } else if (!isModified && !unifiedBySubject) {
                 // The match has been made by matching Predicate = we must create a new line at the end of the file and add values accordingly
-                lines.add(createLineStringListByMetadata(triple).toArray(new String[0]));
+                String[] newRow = createLineStringListByMetadata(triple).toArray(new String[0]);
+                lines.add(newRow);
+                // Update index
+                Map<String, Integer> rowIdx = subjectToRowIndex.get(filePath);
+                if (rowIdx != null && newRow.length > 0) {
+                    rowIdx.put(newRow[0], lines.size() - 1);
+                }
             }
         }
         
@@ -624,10 +697,11 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             long totalMicros = (endWrite - startWrite) / 1000;
             long initMicros = (afterInit - startWrite) / 1000;
             long unifiedMicros = (afterUnified - afterInit) / 1000;
-            System.err.println(String.format("[TIMING-WRITE] Triple %d: TOTAL=%dμs (Init=%dμs, Unified=%dμs, Rest=%dμs)",
+            /* System.err.println(String.format("[TIMING-WRITE] Triple %d: TOTAL=%dμs (Init=%dμs, Unified=%dμs, Rest=%dμs)",
                 processedTriplesCount, totalMicros, initMicros, unifiedMicros, 
                 totalMicros - initMicros - unifiedMicros));
             System.err.flush();
+            */
         }
     }
 
@@ -691,11 +765,19 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             
             lines.clear();
             
+            // Clear the memory row index since these rows are now on disk
+            Map<String, Integer> memoryIndex = subjectToRowIndex.get(filePath);
+            if (memoryIndex != null) {
+                memoryIndex.clear();
+            }
+            
             long endFlush = System.nanoTime();
             long flushMicros = (endFlush - startFlush) / 1000;
             
+            /* 
             System.err.println(String.format("[BUFFER-FLUSH] Wrote %d rows in %dμs. Total indexed: %d", 
                 rowsWritten, flushMicros, rowIndex.size()));
+                */
             
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Error flushing buffer to disk: " + filePath, e);
@@ -743,7 +825,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             
             if (!lines.isEmpty()) {
                 flushBufferToDisk(filePath); // This will use the open writer
-                logger.log(Level.INFO, "Final flush: " + lines.size() + " rows to " + filePath);
+                //logger.log(Level.INFO, "Final flush: " + lines.size() + " rows to " + filePath);
             }
         }
         
@@ -836,8 +918,30 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
     }
 
     private int getIndexOfCurrentPredicate(IRI predicate, Value object) {
+        // Use cache for O(1) lookup instead of O(n) linear search
+        Map<String, Integer> columnCache = predicateToColumnIndex.get(currentCSVName);
+        if (columnCache != null) {
+            String cacheKey = predicate.stringValue();
+            if (object.isLiteral() && ((Literal) object).getLanguage().isPresent()) {
+                cacheKey += "@" + ((Literal) object).getLanguage().get();
+            }
+            Integer cachedIndex = columnCache.get(cacheKey);
+            if (cachedIndex != null) {
+                return cachedIndex;
+            }
+        }
+        
+        // Fallback to linear search if not in cache (shouldn't happen often)
         for (int i = 0; i < tableSchema.getColumns().size(); i++) {
             if (!tableSchema.getColumns().get(i).getTitles().equalsIgnoreCase("Subject") && isSameLanguagePredicate(tableSchema.getColumns().get(i).getPropertyUrl(), tableSchema.getColumns().get(i).getTitles(), predicate, object)) {
+                // Add to cache for next time
+                if (columnCache != null) {
+                    String cacheKey = predicate.stringValue();
+                    if (object.isLiteral() && ((Literal) object).getLanguage().isPresent()) {
+                        cacheKey += "@" + ((Literal) object).getLanguage().get();
+                    }
+                    columnCache.put(cacheKey, i);
+                }
                 return i;
             }
         }
@@ -872,15 +976,15 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         TableSchema relevantTS = tableSchemaByFiles.get(currentCSVName);
         
         // Debug: Log the predicate we're looking for
-        logger.info("createLineStringListByMetadata: Looking for predicate: " + triple.getPredicate().stringValue() + 
-                   ", Object type: " + (triple.getObject().isIRI() ? "IRI" : triple.getObject().isLiteral() ? "Literal" : "Other"));
+        //logger.info("createLineStringListByMetadata: Looking for predicate: " + triple.getPredicate().stringValue() + 
+         //          ", Object type: " + (triple.getObject().isIRI() ? "IRI" : triple.getObject().isLiteral() ? "Literal" : "Other"));
         
         // Debug: Log all columns in the table schema
-        logger.info("TableSchema has " + relevantTS.getColumns().size() + " columns:");
+        //logger.info("TableSchema has " + relevantTS.getColumns().size() + " columns:");
         for (int j = 0; j < relevantTS.getColumns().size(); j++) {
             Column col = relevantTS.getColumns().get(j);
-            logger.info("  [" + j + "] name=" + col.getName() + ", titles=" + col.getTitles() + 
-                       ", propertyUrl=" + col.getPropertyUrl() + ", valueUrl=" + col.getValueUrl());
+            //logger.info("  [" + j + "] name=" + col.getName() + ", titles=" + col.getTitles() + 
+             //          ", propertyUrl=" + col.getPropertyUrl() + ", valueUrl=" + col.getValueUrl());
         }
         
         // Create a row with ALL columns, filling in values where we have them
@@ -892,8 +996,8 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 list.add(triple.subject.stringValue());
             } else if (column.getPropertyUrl() != null && column.getPropertyUrl().equalsIgnoreCase(triple.getPredicate().stringValue())) {
                 // This column matches the current triple's predicate
-                logger.info("MATCHED Column: name=" + column.getName() + ", titles=" + column.getTitles() + 
-                           ", propertyUrl=" + column.getPropertyUrl() + ", valueUrl=" + column.getValueUrl());
+                //logger.info("MATCHED Column: name=" + column.getName() + ", titles=" + column.getTitles() + 
+                 //          ", propertyUrl=" + column.getPropertyUrl() + ", valueUrl=" + column.getValueUrl());
                 
                 // Check if column has a valueUrl pattern like {+variableName}
                 String valueToWrite;
@@ -901,9 +1005,9 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                     // Check if it's a full pattern like {+type} or partial like https://example.com#{+type}
                     boolean isFullPattern = column.getValueUrl().trim().startsWith("{+");
                     
-                    logger.info("Processing column: " + column.getName() + ", ValueUrl: " + column.getValueUrl() + 
-                               ", isFullPattern: " + isFullPattern + ", Object type: " + 
-                               (triple.getObject().isIRI() ? "IRI" : triple.getObject().isLiteral() ? "Literal" : "Other"));
+                    //logger.info("Processing column: " + column.getName() + ", ValueUrl: " + column.getValueUrl() + 
+                       //        ", isFullPattern: " + isFullPattern + ", Object type: " + 
+                         //      (triple.getObject().isIRI() ? "IRI" : triple.getObject().isLiteral() ? "Literal" : "Other"));
                     
                     if (isFullPattern) {
                         // Full pattern: use complete IRI
@@ -912,19 +1016,19 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                         } else {
                             valueToWrite = triple.getObject().stringValue();
                         }
-                        logger.info("  → Full pattern, writing: " + valueToWrite);
+                        //logger.info("  → Full pattern, writing: " + valueToWrite);
                     } else {
                         // Partial pattern: extract local name for template
                         if (triple.getObject().isIRI()) {
                             IRI objectIRI = (IRI) triple.getObject();
                             valueToWrite = objectIRI.getLocalName();
-                            logger.info("  → Partial pattern + IRI, Full: " + objectIRI.stringValue() + ", Local: " + valueToWrite);
+                            //logger.info("  → Partial pattern + IRI, Full: " + objectIRI.stringValue() + ", Local: " + valueToWrite);
                         } else if (triple.getObject().isLiteral()) {
                             valueToWrite = ((Literal) triple.getObject()).getLabel();
-                            logger.info("  → Partial pattern + Literal, writing: " + valueToWrite);
+                            //logger.info("  → Partial pattern + Literal, writing: " + valueToWrite);
                         } else {
                             valueToWrite = triple.getObject().stringValue();
-                            logger.info("  → Partial pattern + Other, writing: " + valueToWrite);
+                            //logger.info("  → Partial pattern + Other, writing: " + valueToWrite);
                         }
                     }
                 } else {
@@ -942,12 +1046,12 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 // Empty cells with partial patterns would incorrectly expand to just the prefix URL
                 if (column.getValueUrl() != null && column.getValueUrl().contains("{+") && !column.getValueUrl().trim().startsWith("{+")) {
                     // Partial pattern detected - convert to simple pattern since we have empty values
-                    logger.info("Converting partial pattern to simple pattern for column '" + column.getName() + 
-                               "' because of empty value. Old: " + column.getValueUrl());
+                   // logger.info("Converting partial pattern to simple pattern for column '" + column.getName() + 
+                     //          "' because of empty value. Old: " + column.getValueUrl());
                     String oldValueUrl = column.getValueUrl();
                     String newValueUrl = "{+" + column.getName() + "}";
                     column.setValueUrl(newValueUrl);
-                    logger.info("New valueUrl: " + newValueUrl);
+                    //logger.info("New valueUrl: " + newValueUrl);
                     
                     // Update all previously buffered rows to use full IRIs instead of local names
                     int columnIndex = relevantTS.getColumns().indexOf(column);
@@ -957,7 +1061,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             }
         }
         
-        logger.info("Created row with " + list.size() + " values for " + relevantTS.getColumns().size() + " columns");
+        //logger.info("Created row with " + list.size() + " values for " + relevantTS.getColumns().size() + " columns");
         
         return list;
     }
@@ -1025,8 +1129,8 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
         // e.g., "http://example.org/vocab/{+type}" -> "http://example.org/vocab/"
         String namespacePrefix = oldValueUrl.substring(0, oldValueUrl.indexOf("{+"));
         
-        logger.info("Updating buffered rows: column " + columnIndex + " changed from partial (" + 
-                   oldValueUrl + ") to full (" + newValueUrl + "). Prepending namespace: " + namespacePrefix);
+        //logger.info("Updating buffered rows: column " + columnIndex + " changed from partial (" + 
+        //           oldValueUrl + ") to full (" + newValueUrl + "). Prepending namespace: " + namespacePrefix);
         
         // Update in-memory buffer
         List<String[]> lines = csvDataBuffer.get(filePath);
@@ -1058,7 +1162,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                         String oldValue = row[columnIndex];
                         row[columnIndex] = expandedValue.toString();
                         updatedCount++;
-                        logger.fine("Updated row: column " + columnIndex + " changed '" + oldValue + "' to '" + row[columnIndex] + "'");
+                        //logger.fine("Updated row: column " + columnIndex + " changed '" + oldValue + "' to '" + row[columnIndex] + "'");
                     } else {
                         // Single value - check if value is just a local name (doesn't already contain the full IRI)
                         if (!cellValue.startsWith("http://") && !cellValue.startsWith("https://")) {
@@ -1066,12 +1170,12 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                             String oldValue = row[columnIndex];
                             row[columnIndex] = namespacePrefix + oldValue;
                             updatedCount++;
-                            logger.fine("Updated row: column " + columnIndex + " changed '" + oldValue + "' to '" + row[columnIndex] + "'");
+                            //logger.fine("Updated row: column " + columnIndex + " changed '" + oldValue + "' to '" + row[columnIndex] + "'");
                         }
                     }
                 }
             }
-            logger.info("Updated " + updatedCount + " buffered rows in memory for column " + columnIndex);
+            //logger.info("Updated " + updatedCount + " buffered rows in memory for column " + columnIndex);
         }
         
         // Update already-flushed rows on disk (if any exist)
@@ -1120,7 +1224,7 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
                 }
             }
             if (diskUpdatedCount > 0) {
-                logger.info("Updated " + diskUpdatedCount + " flushed rows on disk for column " + columnIndex);
+                //logger.info("Updated " + diskUpdatedCount + " flushed rows on disk for column " + columnIndex);
             }
         }
     }

@@ -3,102 +3,23 @@
   "@type" : "TableGroup",
   "tables" : [ {
     "@type" : "Table",
-    "url" : "dereferenceTestInput.ttl.csv",
+    "url" : "output.csv_merged.csv",
     "tableSchema" : {
       "@type" : "Schema",
       "columns" : [ {
         "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "http://example.org/{+Subject}",
-        "suppressOutput" : true
+        "name" : "column1",
+        "propertyUrl" : "http://example.com/property1"
       }, {
         "@type" : "Column",
-        "titles" : "Creator",
-        "name" : "creator",
-        "propertyUrl" : "http://purl.org/dc/terms/creator",
-        "valueUrl" : "http://example.org/{+creator}",
-        "aboutUrl" : "{+Subject}"
+        "name" : "column2",
+        "propertyUrl" : "http://example.com/property2"
       }, {
         "@type" : "Column",
-        "titles" : "Distribution",
-        "name" : "Distribution",
-        "propertyUrl" : "http://creativecommons.org/ns#Distribution",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "Usage Note",
-        "name" : "usageNote",
-        "propertyUrl" : "http://purl.org/vocab/vann/usageNote",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "scope note",
-        "name" : "scopeNote",
-        "propertyUrl" : "http://www.w3.org/2004/02/skos/core#scopeNote",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "Title (cs)",
-        "name" : "title_cs",
-        "propertyUrl" : "http://purl.org/dc/terms/title",
-        "aboutUrl" : "{+Subject}",
-        "lang" : "cs"
-      }, {
-        "@type" : "Column",
-        "titles" : "Title (en)",
-        "name" : "title_en",
-        "propertyUrl" : "http://purl.org/dc/terms/title",
-        "aboutUrl" : "{+Subject}",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "Title (pl)",
-        "name" : "title_pl",
-        "propertyUrl" : "http://purl.org/dc/terms/title",
-        "aboutUrl" : "{+Subject}",
-        "lang" : "pl"
-      }, {
-        "@type" : "Column",
-        "titles" : "encrypter",
-        "name" : "encrypter",
-        "propertyUrl" : "http://xmlns.com/wot/0.1/encrypter",
-        "valueUrl" : "http://example.org/{+encrypter}",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "givenName",
-        "name" : "givenName",
-        "propertyUrl" : "http://xmlns.com/foaf/0.1/givenName",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "more info",
-        "name" : "moreinfo",
-        "propertyUrl" : "http://www.w3.org/2003/06/sw-vocab-status/ns#moreinfo",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "{+type}",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "Publisher",
-        "name" : "publisher",
-        "propertyUrl" : "http://purl.org/dc/elements/1.1/publisher",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "{+type}",
-        "aboutUrl" : "http://example.org/{+Text}",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "creator", "Distribution", "usageNote", "scopeNote", "title_cs", "title_en", "title_pl", "encrypter", "givenName", "moreinfo", "type", "publisher" ]
+        "name" : "column1_1",
+        "propertyUrl" : "http://example.com/property3",
+        "valueUrl" : "{+column1_1}"
+      } ]
     }
   } ]
 }

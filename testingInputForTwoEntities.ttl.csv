@@ -1,6 +1,6 @@
 Subject,datatypeTest,Creator,Title (cs),Title (en),type
-myThesis,,TerezaMiklóšová,Automatický převod RDF dat do CSV,Automated transformation of RDF data to CSV,http://purl.org/dc/dcmitype/Text
-myJavaDoc,,TerezaMiklóšová,Javadoc dokumentace pro diplomovou práci,Javadoc documentation for thesis project,http://purl.org/dc/dcmitype/Text
-myProject,3,TerezaMiklóšová,Generování pravidel SHACL a ShEx podle konceptuálního datového modelu,Generating SHACL and ShEx rules based on conceptual data model,http://purl.org/dc/dcmitype/Software
-myProject2,25,TerezaMiklóšová,Projekt 2,Project Two,http://purl.org/dc/dcmitype/Software
+myThesis,,http://example.org/TerezaMiklóšová,Automatický převod RDF dat do CSV,Automated transformation of RDF data to CSV,http://purl.org/dc/dcmitype/Text
+myJavaDoc,,http://example.org/TerezaMiklóšová,Javadoc dokumentace pro diplomovou práci,Javadoc documentation for thesis project,http://purl.org/dc/dcmitype/Text
+myProject,3,http://example.org/TerezaMiklóšová,Generování pravidel SHACL a ShEx podle konceptuálního datového modelu,Generating SHACL and ShEx rules based on conceptual data model,http://purl.org/dc/dcmitype/Software
+myProject2,25,http://example.org/TerezaMiklóšová,Projekt 2,Project Two,http://purl.org/dc/dcmitype/Software
 myGraph,,,,,http://www.w3.org/1999/02/22-rdf-syntax-ns#Graph

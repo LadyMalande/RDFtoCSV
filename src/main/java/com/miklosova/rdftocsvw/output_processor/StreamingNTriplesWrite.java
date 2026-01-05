@@ -48,6 +48,26 @@ public class StreamingNTriplesWrite {
     private final File fileToWriteTo;
     
     /**
+     * BufferedWriter for efficient streaming writes.
+     */
+    private java.io.BufferedWriter csvWriter;
+    
+    /**
+     * Total rows written so far.
+     */
+    private int totalRowsWritten = 0;
+    
+    /**
+     * Rows accumulated since last flush.
+     */
+    private int rowsSinceLastFlush = 0;
+    
+    /**
+     * Timestamp of last write operation.
+     */
+    private long lastWriteTime = 0;
+    
+    /**
      * The AppConfig instance.
      */
     private AppConfig config;
@@ -95,35 +115,63 @@ public class StreamingNTriplesWrite {
     public void writeToFileByMetadata() {
         com.miklosova.rdftocsvw.support.ProgressLogger.startStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING);
 
-        writeToTheFile(fileToWriteTo, columnHeaders(), false);
-
-        bufferForCSVOutput = new CSVOutputGrid();
-        int batchCount = 0;
-        while (gettingNewSubjects()) {
-            batchCount++;
-            com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
-                com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING, 
-                Math.min(90, batchCount * 10), 
-                String.format("Writing batch %d (subjects: %d)", batchCount, currentSubjects.size())
-            );
+        try {
+            // Open BufferedWriter once for entire write process
+            csvWriter = new java.io.BufferedWriter(new java.io.FileWriter(fileToWriteTo), 256 * 1024);
             
-            int i = 1;
-            try (BufferedReader reader = new BufferedReader(new FileReader(fileNameToRead))) {
-                String line;
-                // Read file line by line
-                while ((line = reader.readLine()) != null) {
-                    // Skip lines until the desired line
-                    if (i >= lineIndexOfProcessed) {
-                        processLine(line, bufferForCSVOutput);
+            // Write header
+            csvWriter.write(columnHeaders().toString());
+            
+            // Initialize timing
+            lastWriteTime = System.nanoTime();
+
+            bufferForCSVOutput = new CSVOutputGrid();
+            int batchCount = 0;
+            while (gettingNewSubjects()) {
+                batchCount++;
+                /* 
+                com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
+                    com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING, 
+                    Math.min(90, batchCount * 10), 
+                    String.format("Writing batch %d (subjects: %d)", batchCount, currentSubjects.size())
+                );
+                */
+                int i = 1;
+                try (BufferedReader reader = new BufferedReader(new FileReader(fileNameToRead))) {
+                    String line;
+                    // Read file line by line
+                    while ((line = reader.readLine()) != null) {
+                        // Skip lines until the desired line
+                        if (i >= lineIndexOfProcessed) {
+                            processLine(line, bufferForCSVOutput);
+                        }
+                        i++;
                     }
-                    i++;
+                } catch (IOException e) {
+                    logger.log(Level.SEVERE, "There was an exception while writing to the CSV file using metadata in Streaming method ");
                 }
-            } catch (IOException e) {
-                logger.log(Level.SEVERE, "There was an exception while writing to the CSV file using metadata in Streaming method ");
+                writeToOutputFile(bufferForCSVOutput);
+                processedSubjects.addAll(currentSubjects);
             }
-            bufferForCSVOutput.print();
-            writeToOutputFile(bufferForCSVOutput);
-            processedSubjects.addAll(currentSubjects);
+            
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Error opening CSV file for writing", e);
+        } finally {
+            // Close writer once at the end
+            if (csvWriter != null) {
+                try {
+                    // Final flush for any remaining rows
+                    if (rowsSinceLastFlush > 0) {
+                        csvWriter.flush();
+                        logger.info(String.format("Final flush: %,d rows (total: %,d)", 
+                            rowsSinceLastFlush, totalRowsWritten));
+                    }
+                    csvWriter.close();
+                    logger.log(Level.INFO, "Successfully wrote to the file " + fileToWriteTo.getAbsolutePath() + ".");
+                } catch (IOException e) {
+                    logger.log(Level.SEVERE, "Error closing CSV writer", e);
+                }
+            }
         }
         
         com.miklosova.rdftocsvw.support.ProgressLogger.completeStage(com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING);
@@ -153,18 +201,41 @@ public class StreamingNTriplesWrite {
         sb.append("\n");
         
         String headers = sb.toString();
-        logger.log(Level.INFO, "Generated CSV headers: " + headers.trim());
+        //logger.log(Level.INFO, "Generated CSV headers: " + headers.trim());
         return headers;
     }
 
     private void writeToOutputFile(CSVOutputGrid bufferForCSVOutput) {
-        String createdChunkOfCSV = parseOutputGridForCSV(bufferForCSVOutput);
-        writeToTheFile(fileToWriteTo, createdChunkOfCSV, true);
+        try {
+            String createdChunkOfCSV = parseOutputGridForCSV(bufferForCSVOutput);
+            int rowsInBatch = currentSubjects.size();
+            
+            // Write to buffer (not flushed yet)
+            csvWriter.write(createdChunkOfCSV);
+            
+            totalRowsWritten += rowsInBatch;
+            rowsSinceLastFlush += rowsInBatch;
+            
+            // Flush to disk when we've accumulated 10,000 rows
+            if (rowsSinceLastFlush >= 10000) {
+                csvWriter.flush();
+                
+                long now = System.nanoTime();
+                long elapsedMs = (now - lastWriteTime) / 1_000_000;
+                double rowsPerSec = (rowsSinceLastFlush / (double) elapsedMs) * 1000.0;
+                logger.info(String.format("Flushed %,d rows to disk (total: %,d) in %,d ms (%.0f rows/sec)", 
+                    rowsSinceLastFlush, totalRowsWritten, elapsedMs, rowsPerSec));
+                
+                lastWriteTime = now;
+                rowsSinceLastFlush = 0;
+            }
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Error writing batch to CSV", e);
+        }
     }
 
     private String parseOutputGridForCSV(CSVOutputGrid bufferForCSVOutput) {
         StringBuilder sb = new StringBuilder();
-        bufferForCSVOutput.print();
         for (IRI subject : currentSubjects) {
             for (Column column : metadata.getTables().get(0).getTableSchema().getColumns()) {
                 if (column.getName().equalsIgnoreCase("Subject")) {
@@ -265,6 +336,9 @@ public class StreamingNTriplesWrite {
 
             while ((line = reader.readLine()) != null) {
                 Triple triple = metadataCreator.processLineIntoTriple(line);
+                if (triple == null) {
+                    continue;  // Skip invalid lines
+                }
                 if (firstColumn.getValueUrl() == null) {
                     if (triple.getSubject().isBNode()) {
                         firstColumn.setValueUrl("{+Subject}");
@@ -294,7 +368,7 @@ public class StreamingNTriplesWrite {
                     }
                 }
                 i++;
-                int maximumOfProcessedSubjects = 10;
+                int maximumOfProcessedSubjects = 10000;
                 if (currentSubjects.size() == maximumOfProcessedSubjects) {
                     lineIndexOfProcessed = i;
                     return true;
@@ -317,6 +391,9 @@ public class StreamingNTriplesWrite {
      */
     private void processLine(String line, CSVOutputGrid grid) {
         Triple triple = metadataCreator.processLineIntoTriple(line);
+        if (triple == null) {
+            return;  // Skip invalid lines
+        }
         if (currentSubjects.contains(triple.getSubject())) {
             String keyForColumn = Column.getNameFromIRI(triple.getPredicate(), triple.getObject());
             if (grid.getCsvOutputBuffer().get(triple.getSubject()).containsKey(keyForColumn)) {

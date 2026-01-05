@@ -55,7 +55,7 @@
         "titles" : "countryRef",
         "name" : "countryRef",
         "propertyUrl" : "file://country_slice.csv#countryRef",
-        "valueUrl" : "http://example.org/countries.csv#{+countryRef}"
+        "valueUrl" : "{+countryRef}"
       } ],
       "primaryKey" : "Subject",
       "rowTitles" : [ "Subject", "name", "population", "latitude", "longitude", "year", "countryCode", "countryRef" ]

@@ -88,7 +88,7 @@ class ConversionServiceTest extends BaseTest {
              assertNull(conn);
          } else {
              service.convertByQuery(conn, db);
-             System.out.println(service.getConversionGateway().getConversionMethod().toString());
+             //System.out.println(service.getConversionGateway().getConversionMethod().toString());
 
              assertNotNull(service.getConversionGateway().getConversionMethod());
              switch (conversionChoice) {

@@ -48,7 +48,7 @@ public class ProgressLogger {
             Math.min(100, Math.max(0, progress)),
             message != null ? message : stage.getDescription());
         
-        logger.log(Level.INFO, logMessage);
+        //logger.log(Level.INFO, logMessage);
         
         // Also output to console for CLI users
         System.out.println(logMessage);

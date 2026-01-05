@@ -282,11 +282,8 @@ class CommandLineIntegrationTest {
         
         AppConfig.Builder builder = new AppConfig.Builder(testRdfFile.toString())
                 .parsing("rdf4j")
-                .output(outputPath);
-        
-        if (fnfFlag) {
-            builder.firstNormalForm(true);
-        }
+                .output(outputPath)
+                .firstNormalForm(fnfFlag);  // Explicitly set the flag
         
         AppConfig config = builder.build();
 

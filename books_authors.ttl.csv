@@ -1,9 +1,10 @@
 Subject,Title,writesGenre,publishes,name,isbn,Date Issued,relatedTo,label,seeAlso,mbox,type,Creator
-publisher1,,,"book1,book2",,,,,Springer Press,,,http://example.org/Publisher,
-publisher2,,,book3,,,,,Tech Book House,,,http://example.org/Publisher,
-book1,The Semantic Web for Beginners,,,,978-1234567890,2021-09-01,,,book3,,http://example.org/Book,tom_clark
-book2,Advanced Linked Data,,,,978-0987654321,2019-05-22,,,,,http://example.org/Book,lucy_chen
-book3,RDF Best Practices,,,,978-1111222231,2020-02-15,book1,,,,http://example.org/Book,jack_miller
-tom_clark,,Non-fiction,,Tom Clark,,,,,,tom@clark.com,http://xmlns.com/foaf/0.1/Person,
-lucy_chen,,Academic,,Lucy Chen,,,,,,lucy.chen@books.com,http://xmlns.com/foaf/0.1/Person,
-jack_miller,,Tutorial,,Jack Miller,,,,,,jmiller@example.org,http://xmlns.com/foaf/0.1/Person,
+publisher1,,,book1,,,,,Springer Press,,,http://example.org/Publisher,
+publisher1,,,book2,,,,,Springer Press,,,http://example.org/Publisher,
+publisher2,,,http://example.org/book3,,,,,Tech Book House,,,http://example.org/Publisher,
+book1,The Semantic Web for Beginners,,,,978-1234567890,2021-09-01,,,http://example.org/book3,,http://example.org/Book,http://example.org/tom_clark
+book2,Advanced Linked Data,,,,978-0987654321,2019-05-22,,,,,http://example.org/Book,http://example.org/lucy_chen
+book3,RDF Best Practices,,,,978-1111222231,2020-02-15,http://example.org/book1,,,,http://example.org/Book,http://example.org/jack_miller
+tom_clark,,Non-fiction,,Tom Clark,,,,,,mailto:tom@clark.com,http://xmlns.com/foaf/0.1/Person,
+lucy_chen,,Academic,,Lucy Chen,,,,,,mailto:lucy.chen@books.com,http://xmlns.com/foaf/0.1/Person,
+jack_miller,,Tutorial,,Jack Miller,,,,,,mailto:jmiller@example.org,http://xmlns.com/foaf/0.1/Person,

@@ -409,18 +409,18 @@ public class Dereferencer {
             return WOT_RDF_FILE;
         }
         if (fullUri.startsWith(VANN_PREFIX)) {
-            logger.log(Level.INFO, "IRI starts with VANN_PREFIX");
+            //logger.log(Level.INFO, "IRI starts with VANN_PREFIX");
             return VANN_RDF_FILE;
         }
         if (fullUri.startsWith(SCHEMA_PREFIX)) {
-            logger.log(Level.INFO, "IRI starts with SCHEMA_PREFIX");
+            //logger.log(Level.INFO, "IRI starts with SCHEMA_PREFIX");
             return SCHEMA_RDF_FILE;
         }
         if (startsWithAny(fullUri, standardKnownPrefixes)) {
             int lastSlash = path.lastIndexOf('/');
             String basePath = path.substring(0, lastSlash);
             String baseUri = uri.getScheme() + "://" + uri.getHost() + basePath;
-            logger.finest("baseUri starts with any STANDARDKNOWNPREFIXES: " + baseUri);
+            //logger.finest("baseUri starts with any STANDARDKNOWNPREFIXES: " + baseUri);
             return baseUri;
         } else {
             return fullUri;
@@ -462,7 +462,7 @@ public class Dereferencer {
                 // Read response content
                 String content = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
 
-                logger.log(Level.INFO, "rdfFormat="+rdfFormat);
+                //logger.log(Level.INFO, "rdfFormat="+rdfFormat);
                 if(rdfFormat == null){
                     throw new IOException("No rdf format content was fetched for IRI "+iri+", create a column title from local name in the IRI.");
                 }
@@ -495,7 +495,7 @@ public class Dereferencer {
 
                 String label = findLabelForIRI(model, iri);
 
-                logger.log(Level.INFO, "label found? " + label);
+                //logger.log(Level.INFO, "label found? " + label);
 
                 long endTime = System.currentTimeMillis();
                 long duration = endTime - startTime;
@@ -619,12 +619,12 @@ public class Dereferencer {
             // Check if this host is in the failed hosts cache AND has value true (actually failed)
             Boolean cachedFailure = failedHostsCache.getIfPresent(host);
             if (host != null && cachedFailure != null && cachedFailure) {
-                logger.warning("✓ SKIPPING (host previously failed): " + host + " → IRI: " + iri + " → vocabularyUri: " + vocabularyUri);
+                //logger.warning("SKIPPING (host previously failed): " + host + " → IRI: " + iri + " → vocabularyUri: " + vocabularyUri);
                 ValueFactory vf = SimpleValueFactory.getInstance();
                 IRI propertyUrlIRI = vf.createIRI(iri);
                 return propertyUrlIRI.getLocalName();
             } else if (host != null) {
-                logger.info("✓ HOST NOT IN CACHE (will attempt fetch): " + host + " → vocabularyUri: " + vocabularyUri);
+                //logger.info("HOST NOT IN CACHE (will attempt fetch): " + host + " → vocabularyUri: " + vocabularyUri);
             }
             
             // Check if vocabulary is already in cache
@@ -634,16 +634,16 @@ public class Dereferencer {
             // Check if this vocabulary was previously marked as failed (empty model)
             if (isCached && cachedModel.isEmpty()) {
                 // Vocabulary fetch failed before - return local name immediately
-                 logger.fine("✓ CACHED (failed vocab): " + vocabularyUri + " → using local name for: " + iri);
+                //logger.fine("CACHED (failed vocab): " + vocabularyUri + " → using local name for: " + iri);
                 ValueFactory vf = SimpleValueFactory.getInstance();
                 IRI propertyUrlIRI = vf.createIRI(iri);
                 return propertyUrlIRI.getLocalName();
             }
             
             if (isCached) {
-                 logger.fine("✓ CACHED vocab: " + vocabularyUri + " → IRI: " + iri);
+                //logger.fine("CACHED vocab: " + vocabularyUri + " → IRI: " + iri);
             } else {
-                logger.warning("✗ NEW vocab fetch needed: " + vocabularyUri + " → IRI: " + iri);
+                //logger.warning("NEW vocab fetch needed: " + vocabularyUri + " → IRI: " + iri);
             }
             
             // Get or fetch the vocabulary model from cache
@@ -673,7 +673,7 @@ public class Dereferencer {
             String label = findLabelForIRI(model, iri, config);
             
             // long duration = System.currentTimeMillis() - startTime;
-            logger.info( "Label '" + label + "' retrieved  (cached vocab: " + isCached + ")");
+            //logger.info( "Label '" + label + "' retrieved  (cached vocab: " + isCached + ")");
             
             // Log cache statistics periodically
             // if (vocabularyCache.size() > 0) {
@@ -780,7 +780,7 @@ public class Dereferencer {
             Header contentLengthHeader = response.getFirstHeader("Content-Length");
             if (contentLengthHeader != null) {
                 long size = Long.parseLong(contentLengthHeader.getValue());
-                logger.info("Vocabulary size: " + size + " bytes for " + vocabularyUri);
+                //logger.info("Vocabulary size: " + size + " bytes for " + vocabularyUri);
             }
             
             byte[] content = EntityUtils.toByteArray(response.getEntity());
@@ -839,8 +839,8 @@ public class Dereferencer {
             long filterTime = System.currentTimeMillis() - filterStart;
             long totalTime = System.currentTimeMillis() - startTime;
             
-            logger.log(Level.INFO, "Filtered vocabulary from " + originalSize + " to " + filteredSize + 
-                      " triples (filtered in " + filterTime + "ms, total " + totalTime + "ms)");
+            //logger.log(Level.INFO, "Filtered vocabulary from " + originalSize + " to " + filteredSize + 
+            //          " triples (filtered in " + filterTime + "ms, total " + totalTime + "ms)");
             
             return filteredModel;
         }

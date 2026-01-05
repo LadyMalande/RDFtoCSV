@@ -57,11 +57,12 @@ public class AppConfig {
     private static final Boolean DEFAULT_METADATA_ROWNUMS = false;
     private static final Boolean DEFAULT_STREAMING_CONTINUOUS = false;
     private static final Boolean DEFAULT_SIMPLE_BASIC_QUERY = false;
-    private static final Boolean DEFAULT_FIRST_NORMAL_FORM = false;
+    private static final Boolean DEFAULT_FIRST_NORMAL_FORM = true;
     private static final Boolean DEFAULT_CONVERSION_HAS_RDF_TYPES = true;
     private static final String DEFAULT_COLUMN_NAMING_CONVENTION = ORIGINAL_NAMING_NOTATION;
     private static final String DEFAULT_PREFERRED_LANGUAGES = "en,cs";
     private static final Boolean DEFAULT_SKIP_DEREFERENCING = false;
+    private static final String DEFAULT_PERFORMANCE_LOG_PATH = "performance_log.txt";
 
     // User-provided parameters (required)
     private final String file;
@@ -77,6 +78,7 @@ public class AppConfig {
     private String columnNamingConvention;
     private final String preferredLanguages;
     private final Boolean skipDereferencing;
+    private final String performanceLogPath;
 
     // Runtime/derived parameters (set during execution or in constructor)
     private String conversionMethod;
@@ -134,6 +136,10 @@ public class AppConfig {
 
     public Boolean getSkipDereferencing() {
         return skipDereferencing;
+    }
+
+    public String getPerformanceLogPath() {
+        return performanceLogPath;
     }
 
     // Getters and setters for runtime parameters
@@ -257,6 +263,7 @@ public class AppConfig {
         this.columnNamingConvention = builder.columnNamingConvention != null ? builder.columnNamingConvention : DEFAULT_COLUMN_NAMING_CONVENTION;
         this.preferredLanguages = builder.preferredLanguages != null ? builder.preferredLanguages : DEFAULT_PREFERRED_LANGUAGES;
         this.skipDereferencing = builder.skipDereferencing != null ? builder.skipDereferencing : DEFAULT_SKIP_DEREFERENCING;
+        this.performanceLogPath = builder.performanceLogPath != null ? builder.performanceLogPath : DEFAULT_PERFORMANCE_LOG_PATH;
 
         // Initialize runtime parameters with defaults
         initializeRuntimeParameters();
@@ -294,12 +301,13 @@ public class AppConfig {
         this.outputFileName = baseFileName; // Initialize to base file name
         this.inputFileName = file; // Initialize to input file name
         this.outputMetadataFileName = this.outputFilePath + ".csv-metadata.json"; // Initialize to base file name + metadata extension
+        /* 
         LOGGER.info("+++this.baseFileName = getBaseFileName(file, output); = " + baseFileName);
         LOGGER.info("+++this.outputFilePath = output != null ? output : baseFileName; = " + this.outputFilePath);
         LOGGER.info("+++this.outputMetadataFileName = this.outputFilePath + .csv-metadata.json; = " + this.outputMetadataFileName);
         LOGGER.info("this.outputZipFileName = baseFileName + _CSVW.zip; = " + outputZipFileName);
         LOGGER.info("+++this.inputFileName = file; = " + this.inputFileName);
-
+        */
     }
 
     /**
@@ -328,6 +336,7 @@ public class AppConfig {
         private String columnNamingConvention;
         private String preferredLanguages = DEFAULT_PREFERRED_LANGUAGES;
         private Boolean skipDereferencing = DEFAULT_SKIP_DEREFERENCING;
+        private String performanceLogPath = DEFAULT_PERFORMANCE_LOG_PATH;
 
         /**
          * Create a new builder with the required file parameter.
@@ -406,9 +415,9 @@ public class AppConfig {
          * @return this Builder instance
          */
         public Builder preferredLanguages(String preferredLanguages) {
-            LOGGER.info("preferred languages that got into AppConfig Builder: '" + preferredLanguages + "'");
+            //LOGGER.info("preferred languages that got into AppConfig Builder: '" + preferredLanguages + "'");
             this.preferredLanguages = preferredLanguages != null ? preferredLanguages : DEFAULT_PREFERRED_LANGUAGES;
-            LOGGER.info("preferred languages after handling their setup in AppConfig Builder: '" + this.preferredLanguages + "'");
+            //LOGGER.info("preferred languages after handling their setup in AppConfig Builder: '" + this.preferredLanguages + "'");
             return this;
         }
 
@@ -421,6 +430,16 @@ public class AppConfig {
          */
         public Builder skipDereferencing(Boolean skipDereferencing) {
             this.skipDereferencing = skipDereferencing != null ? skipDereferencing : DEFAULT_SKIP_DEREFERENCING;
+            return this;
+        }
+
+        /**
+         * Set the performance log file path.
+         * @param performanceLogPath Path to the performance log file
+         * @return this Builder instance
+         */
+        public Builder performanceLogPath(String performanceLogPath) {
+            this.performanceLogPath = performanceLogPath != null ? performanceLogPath : DEFAULT_PERFORMANCE_LOG_PATH;
             return this;
         }
 
@@ -553,7 +572,7 @@ public class AppConfig {
                 // Multiple tables work with any RDF format, but give info
                 if (file.toLowerCase().endsWith(".nt")) {
                     // N-Triples with multiple tables is valid but might be large
-                    System.out.println("Info: Using multiple tables mode with N-Triples format");
+                    //System.out.println("Info: Using multiple tables mode with N-Triples format");
                 }
             }
         }
@@ -575,6 +594,7 @@ public class AppConfig {
         this.outputMetadata = null;
         this.preferredLanguages = DEFAULT_PREFERRED_LANGUAGES;
         this.skipDereferencing = DEFAULT_SKIP_DEREFERENCING;
+        this.performanceLogPath = DEFAULT_PERFORMANCE_LOG_PATH;
         initializeRuntimeParameters();
     }
 
@@ -595,6 +615,7 @@ public class AppConfig {
         //this.columnNamingConvention = DEFAULT_COLUMN_NAMING_CONVENTION;
         this.preferredLanguages = DEFAULT_PREFERRED_LANGUAGES;
         this.skipDereferencing = DEFAULT_SKIP_DEREFERENCING;
+        this.performanceLogPath = DEFAULT_PERFORMANCE_LOG_PATH;
         initializeRuntimeParameters();
     }
 
@@ -660,8 +681,8 @@ public class AppConfig {
      */
     public static String getBaseFileName(String inputFile, String outputFile) {
         String fileName = (outputFile != null && !outputFile.isEmpty()) ? outputFile : inputFile;
-        LOGGER.info("String fileName = (outputFile != null && !outputFile.isEmpty()) ? outputFile : inputFile;");
-        LOGGER.info("+++getBaseFileName --> fileName: " + fileName + ", outputFile = " + outputFile + ", inputFile = " + inputFile);
+        //LOGGER.info("String fileName = (outputFile != null && !outputFile.isEmpty()) ? outputFile : inputFile;");
+        //LOGGER.info("+++getBaseFileName --> fileName: " + fileName + ", outputFile = " + outputFile + ", inputFile = " + inputFile);
         
         // If it's a URL, extract just the filename from the URL path
         if (ConnectionChecker.isUrl(fileName)) {
@@ -675,7 +696,7 @@ public class AppConfig {
                 } else {
                     fileName = path;
                 }
-                LOGGER.info("+++Extracted filename from URL: " + fileName);
+                //LOGGER.info("+++Extracted filename from URL: " + fileName);
             } catch (java.net.MalformedURLException e) {
                 LOGGER.warning("Failed to parse URL: " + fileName);
             }
@@ -692,7 +713,7 @@ public class AppConfig {
         if (lastDot > 0) {
             fileName = fileName.substring(0, lastDot);
         }
-        LOGGER.info("+++Final base filename without extension: " + fileName);
+        //LOGGER.info("+++Final base filename without extension: " + fileName);
         return fileName;
     }
 }

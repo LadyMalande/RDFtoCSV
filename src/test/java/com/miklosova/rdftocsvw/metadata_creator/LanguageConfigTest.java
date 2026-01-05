@@ -174,6 +174,7 @@ public class LanguageConfigTest {
 
                 // DBpedia Ontology
                 Arguments.of("http://dbpedia.org/ontology/abstract", "en,de,fr", "has abstract"),
+                
                 Arguments.of("http://dbpedia.org/ontology/abstract", "ur,de,fr", "خلاصہ"),
                 Arguments.of("http://dbpedia.org/ontology/abstract", "el,de,fr", "έχει περίληψη"),
                 Arguments.of("http://dbpedia.org/ontology/abstract", "sr,de,fr", "апстракт"),

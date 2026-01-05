@@ -115,7 +115,7 @@ public class Main {
         }
         
         if (cmd.hasOption("n")) {
-            builder.firstNormalForm(true);
+            builder.firstNormalForm(false);
         }
         
         if (cmd.hasOption("o")) {
@@ -132,6 +132,10 @@ public class Main {
         
         if (cmd.hasOption("skip-deref")) {
             builder.skipDereferencing(true);
+        }
+        
+        if (cmd.hasOption("log")) {
+            builder.performanceLogPath(cmd.getOptionValue("log"));
         }
         
         return builder.build();
@@ -175,11 +179,12 @@ public class Main {
         options.addOption("h", "help", false, "Show the command line options");
         options.addOption("f", "file", true, "File for conversion");
         options.addOption("s", "streaming", false, "Parse the file in streaming mode (continual parsing until stopped)");
-        options.addOption("n", "firstNormalForm", false, "Put the output CSV data into first normal form (every cell contains only one entry, no lists of values)");
+        options.addOption("n", "noFirstNormalForm", false, "Do not put the output CSV data into first normal form (every cell contains only one entry, no lists of values)");
         options.addOption("o", "output", true, "Put the output path for the file");
         options.addOption("l", "languages", true, "Comma-separated list of preferred languages for labels (e.g., 'en,cs,de'). Default: 'en,cs'");
         options.addOption("c", "convention", true, "Column naming convention (camelCase, PascalCase, snake_case, SCREAMING_SNAKE_CASE, kebab-case, Title Case, dot.notation, original). Default: 'original'");
-        options.addOption(null, "skip-deref", false, "Skip vocabulary dereferencing and use IRI local names for column titles (significantly improves performance)");
+        options.addOption("d", "skip-deref", false, "Skip vocabulary dereferencing and use IRI local names for column titles (significantly improves performance)");
+        options.addOption("log", "performance-log", true, "Path to the performance log file. Default: 'performance_log.txt'");
         return options;
     }
     

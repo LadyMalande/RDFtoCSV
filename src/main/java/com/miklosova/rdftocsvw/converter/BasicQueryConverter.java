@@ -209,12 +209,11 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                     );
                     
                     // Build reference count cache upfront to avoid per-triple COUNT queries
-                    logger.info("[RDF4J-DEBUG] Building object reference count cache...");
+                    //logger.info("[RDF4J-DEBUG] Building object reference count cache...");
                     long cacheStartTime = System.currentTimeMillis();
                     objectReferenceCounts = buildObjectReferenceCounts(conn);
                     long cacheTime = System.currentTimeMillis() - cacheStartTime;
-                    logger.info(String.format("[RDF4J-DEBUG] Built reference cache with %d entries in %dms", 
-                        objectReferenceCounts.size(), cacheTime));
+                    //logger.info(String.format("[RDF4J-DEBUG] Built reference cache with %d entries in %dms", objectReferenceCounts.size(), cacheTime));
                     
                     roots = new HashSet<>();
                     int processedCount = 0;
@@ -222,7 +221,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                     long loopStartTime = System.currentTimeMillis();
                     long lastLogTime = loopStartTime;
                     
-                    logger.info("[RDF4J-DEBUG] Starting main processing loop for " + totalResults + " results");
+                    //logger.info("[RDF4J-DEBUG] Starting main processing loop for " + totalResults + " results");
                     
                     for (BindingSet solution : resultList) {
                         processedCount++;
@@ -233,8 +232,7 @@ public class BasicQueryConverter extends ConverterHelper implements IQueryParser
                             long elapsed = currentTime - lastLogTime;
                             long totalElapsed = currentTime - loopStartTime;
                             double rowsPerSecond = (processedCount * 1000.0) / totalElapsed;
-                            logger.info(String.format("[RDF4J-DEBUG] Processed %d/%d rows (%.1f%%) - Last 10K in %dms - Avg %.1f rows/sec",
-                                processedCount, totalResults, (processedCount * 100.0 / totalResults), elapsed, rowsPerSecond));
+                            //logger.info(String.format("[RDF4J-DEBUG] Processed %d/%d rows (%.1f%%) - Last 10K in %dms - Avg %.1f rows/sec", processedCount, totalResults, (processedCount * 100.0 / totalResults), elapsed, rowsPerSecond));
                             lastLogTime = currentTime;
                         }
                         

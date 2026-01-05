@@ -1,6 +1,6 @@
 Subject,type,name (en),name (cs),established,numberOfBooks,isOpen,latitude,longitude,comment,Title (en),Title (cs),author,publishedYear,isbn,pageCount,availableCopies,givenName,familyName,birthDate,deathDate,nationality,reviewOf,rating,reviewText (en),reviewDate,reviewer,memberSince,mbox,memberId,age,address,street,city,postalCode,country (en),country (cs),borrower,borrowedBook,loanDate,dueDate,isOverdue,booksInOrder,volumeNumber,year,totalVisitors,averageDaily,budget,growthRate,satisfactionScore,startTime,dateTime,duration,organizes,location,roomNumber,capacity,hasProjector,welcomeMessage (en),welcomeMessage (cs),welcomeMessage (fr),welcomeMessage (de),welcomeMessage (es),first,rest
-http://example.org/library/central-library,http://example.org/vocab/Library,Central City Library,Centrální městská knihovna,1995-06-15,50000,true,50.0755,14.4378,"The main public library serving the city center.
-Open Monday-Friday 9am-7pm.",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Welcome to our library!,Vítejte v naší knihovně!,Bienvenue dans notre bibliothèque!,Willkommen in unserer Bibliothek!,¡Bienvenido a nuestra biblioteca!,,
+http://example.org/library/central-library,http://example.org/vocab/Library,Central City Library,Centrální městská knihovna,1995-06-15,50000,true,50.0755,14.4378,The main public library serving the city center.
+"Open Monday-Friday 9am-7pm.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Welcome to our library!,Vítejte v naší knihovně!,Bienvenue dans notre bibliothèque!,Willkommen in unserer Bibliothek!,¡Bienvenido a nuestra biblioteca!,,"
 http://example.org/book/1984,"http://example.org/vocab/Book,http://example.org/vocab/Fiction",,,,,,,,,Nineteen Eighty-Four,1984,http://example.org/person/george-orwell,1949,978-0-452-28423-4,328,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 http://example.org/book/pride-prejudice,http://example.org/vocab/Book,,,,,,,,,Pride and Prejudice,,http://example.org/person/jane-austen,1813,,432,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 http://example.org/person/george-orwell,http://xmlns.com/foaf/0.1/Person,,,,,,,,,,,,,,,,Eric,Blair,1903-06-25,1950-01-21,British,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -14,16 +14,16 @@ http://example.org/series/lord-of-the-rings,http://example.org/vocab/BookSeries,
 http://example.org/book/fellowship,http://example.org/vocab/Book,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1,,,,,,,,,,,,,,,,,,,,,
 http://example.org/book/two-towers,http://example.org/vocab/Book,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2,,,,,,,,,,,,,,,,,,,,,
 http://example.org/book/return-king,http://example.org/vocab/Book,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,3,,,,,,,,,,,,,,,,,,,,,
-http://example.org/book/special-chars,http://example.org/vocab/Book,,,,,,,,"This book covers:
+http://example.org/book/special-chars,http://example.org/vocab/Book,,,,,,,,This book covers:
 1. Library organization
 2. Book cataloging
 3. Digital archives
 
-It's the definitive guide!",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+"It's the definitive guide!,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"
 http://example.org/stats/2024,http://example.org/vocab/AnnualStatistics,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2024,125000,342.47,2500000.50,0.085,4.7,,,,,,,,,,,,,,,
 http://example.org/event/reading-club,http://example.org/vocab/Event,,,,,,,,,Weekly Reading Club,Týdenní čtenářský kroužek,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,18:30:00,2024-12-11T18:30:00,PT2H,,https://blank_Nodes_IRI.org/7,,,,,,,,,,
 https://blank_Nodes_IRI.org/6,http://xmlns.com/foaf/0.1/Person,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,http://example.org/event/reading-club,,,,,,,,,,,
 https://blank_Nodes_IRI.org/7,http://example.org/vocab/Room,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,204,25,true,,,,,,,
-https://blank_Nodes_IRI.org/3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,fellowship,https://blank_Nodes_IRI.org/4
-https://blank_Nodes_IRI.org/4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,two-towers,https://blank_Nodes_IRI.org/5
-https://blank_Nodes_IRI.org/5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,return-king,http://www.w3.org/1999/02/22-rdf-syntax-ns#nil
+https://blank_Nodes_IRI.org/3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,http://example.org/book/fellowship,https://blank_Nodes_IRI.org/4
+https://blank_Nodes_IRI.org/4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,http://example.org/book/two-towers,https://blank_Nodes_IRI.org/5
+https://blank_Nodes_IRI.org/5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,http://example.org/book/return-king,http://www.w3.org/1999/02/22-rdf-syntax-ns#nil

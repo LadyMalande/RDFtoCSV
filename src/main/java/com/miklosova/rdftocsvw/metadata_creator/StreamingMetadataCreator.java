@@ -255,6 +255,9 @@ public class StreamingMetadataCreator extends MetadataCreator {
      */
     public static Triple processLineIntoTripleIRIsOnly(String line) {
         Statement statement = processNTripleLine(line);
+        if (statement == null) {
+            return null;
+        }
         return new Triple((IRI) statement.getSubject(), statement.getPredicate(), statement.getObject());
     }
 
@@ -266,6 +269,9 @@ public class StreamingMetadataCreator extends MetadataCreator {
      */
     public Triple processLineIntoTriple(String line) {
         Statement statement = processNTripleLine(line);
+        if (statement == null) {
+            return null;
+        }
         Statement statementWithIRIs = replaceBlankNodesWithIRI(statement, line);
         return new Triple((IRI) statementWithIRIs.getSubject(), statementWithIRIs.getPredicate(), statementWithIRIs.getObject());
     }
@@ -685,7 +691,7 @@ public class StreamingMetadataCreator extends MetadataCreator {
     void addMetadataToTableSchema(Triple triple) {
         // Debug: Print every 500 triples to track progress
         if (lineCounter == 0 || lineCounter % 500 == 0) {
-            logger.info("[DEBUG] Processing triple #" + lineCounter);
+            //logger.info("[DEBUG] Processing triple #" + lineCounter);
         }
         
         long startTotal = System.nanoTime();
@@ -743,8 +749,8 @@ public class StreamingMetadataCreator extends MetadataCreator {
         }
         long afterMatching = System.nanoTime();
         
-        // Log detailed timing every 500 triples to track performance trends
-        if (lineCounter % 500 == 0 && lineCounter > 0) {
+        // Log detailed timing every 100,000 triples to track performance trends
+        if (lineCounter % 100000 == 0 && lineCounter > 0) {
             long totalMicros = (afterMatching - startTotal) / 1000;
             long titlesMicros = (afterTitles - afterAboutUrl) / 1000;
             long matchingMicros = (afterMatching - afterTitles) / 1000;

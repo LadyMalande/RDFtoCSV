@@ -17,7 +17,7 @@
         "titles" : "reports to",
         "name" : "reportsTo",
         "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/post/{+reportsTo}"
+        "valueUrl" : "{+reportsTo}"
       }, {
         "@type" : "Column",
         "titles" : "min_pay",
@@ -68,14 +68,14 @@
         "titles" : "held by",
         "name" : "heldBy",
         "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
-        "valueUrl" : "http://example.org/organization/hefce.ac.uk/person/{+heldBy}",
+        "valueUrl" : "{+heldBy}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "post in",
         "name" : "postIn",
         "propertyUrl" : "http://www.w3.org/ns/org#postIn",
-        "valueUrl" : "http://example.org/organization/{+postIn}"
+        "valueUrl" : "{+postIn}"
       } ],
       "primaryKey" : "Subject",
       "rowTitles" : [ "Subject", "reportsTo", "min_pay", "name", "number_of_posts", "profession", "max_pay", "job", "identifier", "grade", "heldBy", "postIn" ]

@@ -17,7 +17,7 @@
         "titles" : "subject",
         "name" : "subject",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+subject}",
+        "valueUrl" : "{+subject}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
@@ -35,14 +35,14 @@
         "titles" : "type",
         "name" : "type",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+type}",
+        "valueUrl" : "{+type}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "predicate",
         "name" : "predicate",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate",
-        "valueUrl" : "http://example.org/{+predicate}",
+        "valueUrl" : "{+predicate}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",

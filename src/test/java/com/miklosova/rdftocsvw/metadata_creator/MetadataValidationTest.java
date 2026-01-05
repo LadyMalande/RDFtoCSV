@@ -104,7 +104,11 @@ public class MetadataValidationTest {
         
         try (FileInputStream fis = new FileInputStream(inputFile)) {
             Rio.parse(fis, "", RDFFormat.NTRIPLES)
-                .forEach(inputStatements::add);
+                .forEach(st -> {
+                    if (st != null) {
+                        inputStatements.add(st);
+                    }
+                });
         }
         
         System.out.println("Loaded " + inputStatements.size() + " statements from input file");
@@ -112,9 +116,10 @@ public class MetadataValidationTest {
         // Generate CSV and metadata using streaming method
         AppConfig config = new AppConfig.Builder(currentTestInputFileForConversion)
             .parsing("streaming")
+            .firstNormalForm(false)  // Match old test expectations
             .build();
         
-        Main.main(new String[]{"-f", currentTestInputFileForConversion, "-p", "streaming"});
+        Main.main(new String[]{"-f", currentTestInputFileForConversion, "-p", "streaming", "-n"});
         
         // Load the generated metadata JSON
         File metadataFile = new File(currentMetadataOutputFile);

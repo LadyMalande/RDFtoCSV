@@ -17,7 +17,7 @@
         "titles" : "type",
         "name" : "type",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "{+type}",
+        "valueUrl" : "http://example.org/vocab/{+type}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
@@ -62,14 +62,14 @@
         "titles" : "department",
         "name" : "department",
         "propertyUrl" : "http://example.org/vocab/department",
-        "valueUrl" : "{+department}",
+        "valueUrl" : "http://example.org/dept/{+department}",
         "aboutUrl" : "http://example.org/company/{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "manager",
         "name" : "manager",
         "propertyUrl" : "http://example.org/vocab/manager",
-        "valueUrl" : "{+manager}",
+        "valueUrl" : "http://example.org/company/{+manager}",
         "aboutUrl" : "http://example.org/company/{+Subject}"
       }, {
         "@type" : "Column",

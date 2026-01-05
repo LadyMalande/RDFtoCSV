@@ -99,10 +99,10 @@ public class FileWrite {
         }
         StringBuilder sb = new StringBuilder();
         String outputPath = config.getOutputFilePath();
-        System.out.println("writeFilesToConfigFile   config.getOutputFilePath() = " + config.getOutputFilePath());
+        //System.out.println("writeFilesToConfigFile   config.getOutputFilePath() = " + config.getOutputFilePath());
         
         for (String fileName : fileNamesCreated) {
-            logger.info("[will go to intermediateFileNames]fileName from fileNamesCreated: " + fileName);
+            //logger.info("[will go to intermediateFileNames]fileName from fileNamesCreated: " + fileName);
             // If fileName is not an absolute path and we have an output path, build full path
             boolean isAbsolutePath = (fileName.length() >= 3 && Character.isLetter(fileName.charAt(0)) && 
                                       fileName.charAt(1) == ':') || fileName.startsWith("/");
@@ -113,7 +113,7 @@ public class FileWrite {
                 File parentDir = outputFile.getParentFile();
                 
                 if (parentDir != null) {
-                    logger.info("[parentDir: " + parentDir.getAbsolutePath());
+                    //logger.info("[parentDir: " + parentDir.getAbsolutePath());
                     // The filename must get to the short version instead of the relative one
                     File file = new File(fileName);
                     String shortLocalFileName = file.getName();
@@ -125,7 +125,7 @@ public class FileWrite {
             
             sb.append(fileName).append(",");
         }
-        System.out.println("newFileName writeFilesToConfigFile   allFileNames = " + sb.toString());
+        //System.out.println("newFileName writeFilesToConfigFile   allFileNames = " + sb.toString());
         config.setIntermediateFileNames(sb.toString());
     }
 
@@ -209,7 +209,7 @@ public class FileWrite {
                     line = new String[lines.get(0).length];
 
                     line[0] = (appendIdByValuePattern(row, firstColumnForWriting != null ? firstColumnForWriting : orderOfColumnKeys.get(0)));
-                    logger.info("line[0]=" + line[0]);
+                    //logger.info("line[0]=" + line[0]);
 
                     firstColumn = true;
 
@@ -247,7 +247,7 @@ public class FileWrite {
             } else {
                 // Write CSV rows without first normal form -> make lists in cells
                 line[0] = appendIdByValuePattern(row, firstColumnForWriting != null ? firstColumnForWriting : orderOfColumnKeys.get(0));
-                logger.info("line[0]=" + line[0]);
+                //logger.info("line[0]=" + line[0]);
                 i++;
                 firstColumn = true;
                 for (Column column : orderOfColumnKeys) {
@@ -521,9 +521,9 @@ public class FileWrite {
                 return iri.getLocalName();
             }
         }
-        logger.info("appendIdByValuePattern - column.getName(): " + column.getName());
-        logger.info("appendIdByValuePattern - column.getName(): " + column.getTitles());
-        logger.info("appendIdByValuePattern - column.getValueUrl(): " + column.getValueUrl());
+        //logger.info("appendIdByValuePattern - column.getName(): " + column.getName());
+        //logger.info("appendIdByValuePattern - column.getName(): " + column.getTitles());
+        //logger.info("appendIdByValuePattern - column.getValueUrl(): " + column.getValueUrl());
         /*logger.info("appendIdByValuePattern - column.getValueUrl().contains(\"{+\"): " + column.getValueUrl().contains("{+"));
         logger.info("appendIdByValuePattern - !column.getValueUrl().startsWith(\"{+\") " + !column.getValueUrl().startsWith("{+"));
 */
@@ -540,7 +540,7 @@ public class FileWrite {
     }
 
     private static List<Column> addHeadersFromMetadata(String fileName, Metadata metadata, List<String[]> lines, AppConfig config) {
-        logger.info("fileName in addHeadersFromMetadata: " + fileName);
+        //logger.info("fileName in addHeadersFromMetadata: " + fileName);
 
         List<Column> orderOfColumns = new ArrayList<>();
 
@@ -577,13 +577,13 @@ public class FileWrite {
         for (Column column : fud.getTableSchema().getColumns()) {
             if (column != firstColumn && column.getVirtual() == null) {
                 String columnTitle = column.getTitles();
-                logger.info("Column header - name: " + column.getName() + ", title: " + columnTitle);
+                //logger.info("Column header - name: " + column.getName() + ", title: " + columnTitle);
                 headersBuffer.add(columnTitle);
                 orderOfColumns.add(column);
             }
         }
         String[] headers = headersBuffer.toArray(new String[0]);
-        logger.info("Final CSV headers: " + String.join(", ", headers));
+        //logger.info("Final CSV headers: " + String.join(", ", headers));
         lines.add(headers);
         return orderOfColumns;
     }

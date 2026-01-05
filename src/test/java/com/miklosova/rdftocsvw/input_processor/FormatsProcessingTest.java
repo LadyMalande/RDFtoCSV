@@ -54,7 +54,7 @@ public class FormatsProcessingTest extends BaseTest {
         try (RepositoryConnection rcForTurtle = msForTurtle.processInput(filePathForTurtle, inputProcessingMethod, dbForTurtle)) {
             queryString = prepareQuery();
             TupleQuery query = rcForTurtle.prepareTupleQuery(queryString);
-            System.out.println("query.getDataset() @Before prepareConnectionAndResult " + query.getDataset());
+            //System.out.println("query.getDataset() @Before prepareConnectionAndResult " + query.getDataset());
             // A QueryResult is also an AutoCloseable resource, so make sure it gets closed when done.
             try (TupleQueryResult resultForTurtle = query.evaluate()) {
                 for (BindingSet solution : resultForTurtle) {

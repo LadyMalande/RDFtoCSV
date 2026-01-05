@@ -46,7 +46,7 @@ public class MetadataService {
         String conversionChoice = config.getConversionMethod();
         String extension = FileWrite.getFileExtension(config.getFile());
         String streamingContinuous = config.getStreamingContinuous().toString();
-        System.out.println("conversionChoice=" + conversionChoice);
+        //System.out.println("conversionChoice=" + conversionChoice);
 
         switch (conversionChoice.toLowerCase()) {
             case "basicquery":

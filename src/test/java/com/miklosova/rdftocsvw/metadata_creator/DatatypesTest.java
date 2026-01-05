@@ -80,7 +80,7 @@ public class DatatypesTest extends BaseTest {
 
     @Test
     public void isGivenDatatype() {
-        logger.info("Starting test isGivenDatatype.");
+        //logger.info("Starting test isGivenDatatype.");
         createMetadata();
 
         RowsAndKeys rnk = (RowsAndKeys) prefinishedOutput.getPrefinishedOutput();

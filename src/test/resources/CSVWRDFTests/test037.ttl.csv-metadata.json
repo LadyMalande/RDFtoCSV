@@ -18,8 +18,7 @@
         "name" : "comments",
         "propertyUrl" : "file://tree-ops-ext.csv#comments",
         "datatype" : "normalizedString",
-        "aboutUrl" : "{+Subject}",
-        "separator" : ","
+        "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "trim_cycle (en)",

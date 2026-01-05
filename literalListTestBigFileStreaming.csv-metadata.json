@@ -17,7 +17,7 @@
         "titles" : "type",
         "name" : "type",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "{+type}",
+        "valueUrl" : "http://example.org/vocab/{+type}",
         "aboutUrl" : "http://example.org/book/{+Subject}"
       }, {
         "@type" : "Column",

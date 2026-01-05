@@ -1,2 +1,2 @@
 Subject,COL=propertyUrl (en),col=datatype,col=default (en),col=lang (en-US),col=null (en),col=ordered (en),col=separator (en),col=textDirection (en),col=valueUrl,col=aboutUrl (en)
-2,prop,string,def,,empty,true,-,ltr,value,about
+2,prop,string,def,en,empty,true,-,ltr,value,about

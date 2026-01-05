@@ -24,7 +24,7 @@
         "titles" : "Creator",
         "name" : "creator",
         "propertyUrl" : "http://purl.org/dc/terms/creator",
-        "valueUrl" : "http://example.org/{+creator}",
+        "valueUrl" : "{+creator}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",

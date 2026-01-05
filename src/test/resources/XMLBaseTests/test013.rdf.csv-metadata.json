@@ -17,14 +17,14 @@
         "titles" : "value",
         "name" : "value",
         "propertyUrl" : "http://example.org/value",
-        "valueUrl" : "http://example.org/dir/{+value}",
+        "valueUrl" : "{+value}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",
         "titles" : "type",
         "name" : "type",
         "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://example.org/{+type}",
+        "valueUrl" : "{+type}",
         "aboutUrl" : "{+Subject}"
       }, {
         "@type" : "Column",

@@ -103,7 +103,7 @@ class RDFtoCSVTest {
         when(conversionService.convertByQuery(any(RepositoryConnection.class), any(Repository.class))).thenReturn(mockPrefinishedOutput);
         when(metadataService.createMetadata(any(PrefinishedOutput.class))).thenReturn(mockMetadata);
         String result = rdfToCSV.getCSVTableAsString();
-        System.out.println("rdfToCSV.getCSVTableAsString() \n" + result);
+        //System.out.println("rdfToCSV.getCSVTableAsString() \n" + result);
         assertNotNull(result);
      }
 

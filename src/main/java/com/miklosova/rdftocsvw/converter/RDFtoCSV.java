@@ -105,7 +105,7 @@ public class RDFtoCSV {
      */
     public RDFtoCSV(AppConfig config) {
         this.config = config;
-        this.performanceLogger = new PerformanceLogger();
+        this.performanceLogger = new PerformanceLogger(config.getPerformanceLogPath());
         // Only add "../" prefix if not a URL and not an absolute path
         String filePath = config.getFile();
         if (isUrl(filePath)) {
@@ -126,13 +126,13 @@ public class RDFtoCSV {
         // For URLs, use local name for metadata filename; otherwise use full path
         if (isUrl(config.getFile())) {
             String localName = iri(this.fileName).getLocalName();
-            logger.info("localName for metadata filename creation: " + localName);
+            //logger.info("localName for metadata filename creation: " + localName);
             this.metadataFilename = localName + ".csv-metadata.json";
             this.filePathForOutput = localName;
         } else {
             // Use outputFilePath from config which already has extension stripped
             String baseFilePath = config.getOutputFilePath();
-            logger.info("baseFilePath for metadata filename creation: " + baseFilePath);
+            //logger.info("baseFilePath for metadata filename creation: " + baseFilePath);
             this.metadataFilename = baseFilePath + ".csv-metadata.json";
             this.filePathForOutput = baseFilePath;
         }
@@ -207,7 +207,7 @@ public class RDFtoCSV {
         this.config = builder.build();
         this.performanceLogger = new PerformanceLogger();
         this.fileName = fileName;
-        logger.info("Input file for conversion from RDFtoCSV: " + this.fileName);
+        //logger.info("Input file for conversion from RDFtoCSV: " + this.fileName);
         
         // Update config with the resolved input file path for streaming parsers
         config.setInputFileName(this.fileName);
@@ -220,13 +220,13 @@ public class RDFtoCSV {
             String localName = iri(this.fileName).getLocalName();
             this.metadataFilename = localName + ".csv-metadata.json";
             this.filePathForOutput = localName;
-            logger.info("this.metadataFilename = localName + .csv-metadata.json;" + this.metadataFilename);
+            //logger.info("this.metadataFilename = localName + .csv-metadata.json;" + this.metadataFilename);
         } else {
             // Use outputFilePath from config which already has extension stripped
             String baseFilePath = config.getOutputFilePath();
             this.metadataFilename = baseFilePath + ".csv-metadata.json";
             this.filePathForOutput = baseFilePath;
-            logger.info("this.metadataFilename = baseFilePath + .csv-metadata.json;" + this.metadataFilename);
+            //logger.info("this.metadataFilename = baseFilePath + .csv-metadata.json;" + this.metadataFilename);
         }
     }
 
@@ -446,7 +446,7 @@ public class RDFtoCSV {
         }
         //String fileNameSafe = isUrl(fileName) ? (iri(fileName).getLocalName()) : "../" + fileName;
         String fileNameSafe = isUrl(fileName) ? (iri(fileName).getLocalName()) : fileName;
-        System.out.println("fileNameSafe for final .csv file in getCSVTableAsFile = " + fileNameSafe);
+        //System.out.println("fileNameSafe for final .csv file in getCSVTableAsFile = " + fileNameSafe);
         File f = FileWrite.makeFileByNameAndExtension(fileNameSafe, "csv");
         assert f != null;
         FileWrite.writeToTheFile(f, outputString, true);
@@ -516,7 +516,8 @@ public class RDFtoCSV {
     }
 
     private String processStreaming(Metadata metadata) {
-        if (config.getConversionMethod().equalsIgnoreCase("bigFileStreaming")) {
+        // BigFileStreaming writes CSV during metadata creation (pass 2), so skip StreamingWrite
+        if (!config.getConversionMethod().equalsIgnoreCase("bigFileStreaming")) {
             processStreamingWrite(metadata, fileName);
         }
         return "CSV written to the file by stream, the file is available here: " + fileName + ".csv";
@@ -534,7 +535,7 @@ public class RDFtoCSV {
         if (po == null) {
             processStreaming(metadata);
         } else {
-            System.out.println("writeToCSV config.getIntermediateFileNames() = " + config.getIntermediateFileNames());
+            //System.out.println("writeToCSV config.getIntermediateFileNames() = " + config.getIntermediateFileNames());
 
             String allFiles = config.getIntermediateFileNames();
             String[] files = allFiles.split(",");
@@ -545,7 +546,7 @@ public class RDFtoCSV {
 
                 for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) {
                     String newFileName = files[i];
-                    System.out.println("for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) { in newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
+                    //System.out.println("for (RowAndKey rowAndKey : rnk.getRowsAndKeys()) { in newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
                     FileWrite.saveCSVFileFromRows(newFileName, rowAndKey.getRows(), metadata, config);
                     i++;
                     
@@ -559,7 +560,7 @@ public class RDFtoCSV {
                 RowAndKey rnk = (RowAndKey) po.getPrefinishedOutput();
 
                 String newFileName = files[0];
-                System.out.println("in catch ClassCastException newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
+                //System.out.println("in catch ClassCastException newFileName before saveCSVFileFromRows = " + newFileName + " allFileNames = " + allFiles);
                 FileWrite.saveCSVFileFromRows(newFileName, rnk.getRows(), metadata, config);
                 com.miklosova.rdftocsvw.support.ProgressLogger.logProgress(
                     com.miklosova.rdftocsvw.support.ProgressLogger.Stage.WRITING, 100, "1 CSV file"

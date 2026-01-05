@@ -1,4 +1,11 @@
 Subject,comments,trim_cycle (en),protected,species,dbh,kml,on_street,inventory_date
-gid-1,,Large Tree Routine Prune,false,Celtis australis,11,"""<file://Point><file://coordinates>-122.156485,37.440963<file:///coordinates><file:///Point>""",ADDISON AV,2010-10-18
-gid-2,,Large Tree Routine Prune,false,Liquidambar styraciflua,11,"""<file://Point><file://coordinates>-122.156749,37.440958<file:///coordinates><file:///Point>""",EMERSON ST,2010-06-02
-gid-6,"cavity or decay,trunk decay,codominant leaders,included bark,large leader or limb decay,previous failure root damage,root decay,beware of BEES",Large Tree Routine Prune,true,Robinia pseudoacacia,29,"""<file://Point><file://coordinates>-122.156299,37.441151<file:///coordinates><file:///Point>""",ADDISON AV,2010-06-01
+gid-1,,Large Tree Routine Prune,false,Celtis australis,11,"<file://Point><file://coordinates>-122.156485,37.440963<file:///coordinates><file:///Point>",ADDISON AV,2010-10-18
+gid-2,,Large Tree Routine Prune,false,Liquidambar styraciflua,11,"<file://Point><file://coordinates>-122.156749,37.440958<file:///coordinates><file:///Point>",EMERSON ST,2010-06-02
+gid-6,cavity or decay,Large Tree Routine Prune,true,Robinia pseudoacacia,29,"<file://Point><file://coordinates>-122.156299,37.441151<file:///coordinates><file:///Point>",ADDISON AV,2010-06-01
+gid-6,trunk decay,Large Tree Routine Prune,true,Robinia pseudoacacia,29,"<file://Point><file://coordinates>-122.156299,37.441151<file:///coordinates><file:///Point>",ADDISON AV,2010-06-01
+gid-6,codominant leaders,Large Tree Routine Prune,true,Robinia pseudoacacia,29,"<file://Point><file://coordinates>-122.156299,37.441151<file:///coordinates><file:///Point>",ADDISON AV,2010-06-01
+gid-6,included bark,Large Tree Routine Prune,true,Robinia pseudoacacia,29,"<file://Point><file://coordinates>-122.156299,37.441151<file:///coordinates><file:///Point>",ADDISON AV,2010-06-01
+gid-6,large leader or limb decay,Large Tree Routine Prune,true,Robinia pseudoacacia,29,"<file://Point><file://coordinates>-122.156299,37.441151<file:///coordinates><file:///Point>",ADDISON AV,2010-06-01
+gid-6,previous failure root damage,Large Tree Routine Prune,true,Robinia pseudoacacia,29,"<file://Point><file://coordinates>-122.156299,37.441151<file:///coordinates><file:///Point>",ADDISON AV,2010-06-01
+gid-6,root decay,Large Tree Routine Prune,true,Robinia pseudoacacia,29,"<file://Point><file://coordinates>-122.156299,37.441151<file:///coordinates><file:///Point>",ADDISON AV,2010-06-01
+gid-6,beware of BEES,Large Tree Routine Prune,true,Robinia pseudoacacia,29,"<file://Point><file://coordinates>-122.156299,37.441151<file:///coordinates><file:///Point>",ADDISON AV,2010-06-01
