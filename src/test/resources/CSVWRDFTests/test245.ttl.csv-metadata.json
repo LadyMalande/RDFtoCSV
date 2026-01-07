@@ -15,13 +15,13 @@
       }, {
         "@type" : "Column",
         "titles" : "HH%3Amm%3Ass.S",
-        "name" : "HH%3Amm%3Ass.S",
+        "name" : "HH3Amm3AssS",
         "propertyUrl" : "file://test245.csv#HH%3Amm%3Ass.S",
         "datatype" : "time"
       }, {
         "@type" : "Column",
         "titles" : "HH%3Amm%3Ass.SS",
-        "name" : "HH%3Amm%3Ass.SS",
+        "name" : "HH3Amm3AssSS",
         "propertyUrl" : "file://test245.csv#HH%3Amm%3Ass.SS",
         "datatype" : "time"
       }, {
@@ -33,7 +33,7 @@
         "virtual" : true
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "HH%3Amm%3Ass.S", "HH%3Amm%3Ass.SS" ]
+      "rowTitles" : [ "Subject", "HH3Amm3AssS", "HH3Amm3AssSS" ]
     },
     "transformations" : [ {
       "@type" : "Template",

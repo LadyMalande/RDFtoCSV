@@ -15,7 +15,7 @@
       }, {
         "@type" : "Column",
         "titles" : "HH%3Amm%3Ass.S",
-        "name" : "HH%3Amm%3Ass.S",
+        "name" : "HH3Amm3AssS",
         "propertyUrl" : "file://test247.csv#HH%3Amm%3Ass.S"
       }, {
         "@type" : "Column",
@@ -26,7 +26,7 @@
         "virtual" : true
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "HH%3Amm%3Ass.S" ]
+      "rowTitles" : [ "Subject", "HH3Amm3AssS" ]
     },
     "transformations" : [ {
       "@type" : "Template",

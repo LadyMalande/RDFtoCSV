@@ -39,6 +39,17 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
      * Total triples from pass 1 (used for progress tracking in pass 2).
      */
     private int totalTriplesFromPass1 = 0;
+    
+    /**
+     * Common namespace prefix detected among subjects during Pass 1.
+     * Null if no common namespace detected or namespaces are mixed.
+     */
+    private String commonSubjectNamespace = null;
+    
+    /**
+     * Flag indicating whether subjects have mixed namespaces.
+     */
+    private boolean mixedSubjectNamespaces = false;
 
     /**
      * Instantiates a new Big file streaming n triples metadata creator.
@@ -66,8 +77,10 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
     public Metadata addMetadata(PrefinishedOutput<?> info) {
         long overallStart = System.nanoTime();
         
-        File f = new File(fileNameToRead);
-        String csvFileName = f.getName() + ".csv";
+        // Use the output file path from config instead of input filename
+        // This ensures -o parameter controls the CSV filename
+        File outputFile = new File(config.getOutputFilePath());
+        String csvFileName = outputFile.getName() + ".csv";
         Table newTable = new Table(csvFileName);
         config.setIntermediateFileNames(csvFileName);
         metadata.getTables().add(newTable);
@@ -130,6 +143,10 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
                 }
                 
                 processLine(line);
+                
+                // Track subject namespace for aboutUrl pattern detection
+                trackSubjectNamespace(line);
+                
                 counter++;
                 
                 // Progress logging with timing
@@ -630,50 +647,82 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
     }
     
     /**
-     * Update first column's valueUrl based on subjects found in pass 1.
-     * Detects common namespace and sets valueUrl accordingly.
+     * Track subject namespace from N-Triples line.
+     * Extracts the namespace and checks if all subjects share the same prefix.
      */
-    private void updateFirstColumnValueUrl() {
-        Column firstColumn = tableSchema.getColumns().get(0);
+    private void trackSubjectNamespace(String line) {
+        if (mixedSubjectNamespaces) {
+            return; // Already know namespaces are mixed
+        }
         
-        // Check if we have a common namespace among subjects
-        String commonNamespace = detectCommonSubjectNamespace();
-        
-        if (commonNamespace != null && !commonNamespace.isEmpty()) {
-            // Use namespace + {+Subject} pattern
-            firstColumn.setValueUrl(commonNamespace + "{+Subject}");
-            logger.info("Set first column valueUrl to: " + firstColumn.getValueUrl());
-        } else {
-            // Keep default {+Subject} for full IRIs or mixed namespaces
-            firstColumn.setValueUrl("{+Subject}");
+        try {
+            // Extract subject IRI (skip blank nodes)
+            String subject = extractSubject(line);
+            if (subject == null || !subject.startsWith("<") || !subject.endsWith(">")) {
+                return; // Skip blank nodes and invalid subjects
+            }
+            
+            // Remove angle brackets
+            String subjectIRI = subject.substring(1, subject.length() - 1);
+            
+            // Extract namespace (everything up to last # or /)
+            String namespace = extractNamespace(subjectIRI);
+            
+            if (namespace == null) {
+                mixedSubjectNamespaces = true;
+                commonSubjectNamespace = null;
+                return;
+            }
+            
+            // First subject? Store its namespace
+            if (commonSubjectNamespace == null) {
+                commonSubjectNamespace = namespace;
+            } 
+            // Different namespace? Mark as mixed
+            else if (!commonSubjectNamespace.equals(namespace)) {
+                mixedSubjectNamespaces = true;
+                commonSubjectNamespace = null;
+            }
+            
+        } catch (Exception e) {
+            // Ignore parsing errors, just mark as mixed
+            mixedSubjectNamespaces = true;
+            commonSubjectNamespace = null;
         }
     }
     
     /**
-     * Detect common namespace prefix among subjects.
-     * Returns the common namespace if 80%+ of subjects share it, otherwise null.
+     * Extract namespace from IRI (everything up to and including last # or /).
      */
-    private String detectCommonSubjectNamespace() {
-        // Get first few columns to check their propertyUrl patterns
-        // In practice, subjects should be IRIs, so check the Subject column's common pattern
-        if (tableSchema.getColumns().size() > 1) {
-            // Look at first data column to infer subject namespace
-            Column secondColumn = tableSchema.getColumns().get(1);
-            if (secondColumn.getPropertyUrl() != null) {
-                // Extract namespace from property
-                String propertyUrl = secondColumn.getPropertyUrl();
-                int lastHash = propertyUrl.lastIndexOf('#');
-                int lastSlash = propertyUrl.lastIndexOf('/');
-                int splitPos = Math.max(lastHash, lastSlash);
-                if (splitPos > 0) {
-                    // Assume subjects might share this domain
-                    return propertyUrl.substring(0, splitPos + 1);
-                }
-            }
+    private String extractNamespace(String iri) {
+        int lastHash = iri.lastIndexOf('#');
+        int lastSlash = iri.lastIndexOf('/');
+        int splitPos = Math.max(lastHash, lastSlash);
+        
+        if (splitPos > 0 && splitPos < iri.length() - 1) {
+            return iri.substring(0, splitPos + 1);
         }
         
-        // Fallback: return null to use {+Subject} (full IRI)
-        return null;
+        return null; // Can't extract namespace
+    }
+    
+    /**
+     * Update first column's valueUrl based on subjects tracked in Pass 1.
+     * Uses the detected common namespace if all subjects share it.
+     */
+    private void updateFirstColumnValueUrl() {
+        Column firstColumn = tableSchema.getColumns().get(0);
+        
+        if (commonSubjectNamespace != null && !mixedSubjectNamespaces) {
+            // All subjects share the same namespace - use prefix pattern
+            firstColumn.setValueUrl(commonSubjectNamespace + "{+Subject}");
+            logger.info("Detected common subject namespace: " + commonSubjectNamespace);
+            logger.info("Set first column valueUrl to: " + firstColumn.getValueUrl());
+        } else {
+            // Mixed namespaces or no pattern - use full IRI pattern
+            firstColumn.setValueUrl("{+Subject}");
+            logger.info("Mixed subject namespaces detected - using full IRI pattern {+Subject}");
+        }
     }
     
     /**

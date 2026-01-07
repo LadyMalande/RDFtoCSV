@@ -28,7 +28,7 @@ public class Main {
      */
     public static void main(String[] args) {
         long overallStartTime = System.currentTimeMillis();
-        System.out.println("=== RDFtoCSV Conversion Started ===");
+        
         
         if (args.length < 1) {
             System.err.println("Usage: java -jar RDFtoCSV<version>.jar -f <filename>\n for better explanation of arguments, run  java -jar RDFtoCSV<version>.jar -f <filename> -h ");
@@ -72,7 +72,7 @@ public class Main {
                 System.exit(1);
                 return;
             }
-            
+            System.out.println("=== RDFtoCSV Conversion Started ===");
             // Create RDFtoCSV with the new config
             RDFtoCSV rdFtoCSV = new RDFtoCSV(config);
             
@@ -85,7 +85,8 @@ public class Main {
                 System.out.println("Total execution time: " + (overallEndTime - overallStartTime) + "ms");
                 
             } catch (RDFParseException | IOException rdfParseException) {
-                System.err.println(rdfParseException.getMessage());
+                System.err.println("Error: " + rdfParseException.getMessage());
+                System.exit(1);
             }
             
         } catch (ParseException e) {

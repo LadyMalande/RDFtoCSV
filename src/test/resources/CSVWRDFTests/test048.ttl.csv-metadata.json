@@ -15,7 +15,7 @@
       }, {
         "@type" : "Column",
         "titles" : "test048.csv",
-        "name" : "test048.csv",
+        "name" : "test048csv",
         "propertyUrl" : "file://test048.csv"
       }, {
         "@type" : "Column",
@@ -26,7 +26,7 @@
         "virtual" : true
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "test048.csv" ]
+      "rowTitles" : [ "Subject", "test048csv" ]
     },
     "transformations" : [ {
       "@type" : "Template",

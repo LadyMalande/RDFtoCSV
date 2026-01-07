@@ -162,4 +162,112 @@ class SplitFilesMetadataCreatorTest {
              fileWriteMockedStatic.verify(() -> FileWrite.writeFilesToConfigFile(emptyFileNames, config));
          }
      }
+
+     @Test
+     void testConsolidateDuplicateTypes() {
+         // Create rows with the same type
+         Row row1 = new Row(iri("http://subject1.cz"), iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), true);
+         row1.type = iri("http://example.com/Person");
+         
+         Row row2 = new Row(iri("http://subject2.cz"), iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), true);
+         row2.type = iri("http://example.com/Person");
+         
+         Row row3 = new Row(iri("http://subject3.cz"), iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), true);
+         row3.type = iri("http://example.com/Organization");
+         
+         ArrayList<Row> personRows1 = new ArrayList<>();
+         personRows1.add(row1);
+         
+         ArrayList<Row> personRows2 = new ArrayList<>();
+         personRows2.add(row2);
+         
+         ArrayList<Row> orgRows = new ArrayList<>();
+         orgRows.add(row3);
+         
+         ArrayList<Value> personKeys = new ArrayList<>();
+         personKeys.add(iri("http://predicate1.cz"));
+         
+         ArrayList<Value> orgKeys = new ArrayList<>();
+         orgKeys.add(iri("http://predicate2.cz"));
+         
+         RowsAndKeys rowsAndKeys = new RowsAndKeys();
+         rowsAndKeys.getRowsAndKeys().add(new RowAndKey(personKeys, personRows1));
+         rowsAndKeys.getRowsAndKeys().add(new RowAndKey(personKeys, personRows2));
+         rowsAndKeys.getRowsAndKeys().add(new RowAndKey(orgKeys, orgRows));
+         
+         when(mockData.getPrefinishedOutput()).thenReturn(rowsAndKeys);
+         
+         try (MockedStatic<FileWrite> fileWriteMockedStatic = mockStatic(FileWrite.class)) {
+             creator.addMetadata(mockData);
+             
+             // After consolidation, should only have 2 tables (Person and Organization), not 3
+             assertEquals(2, rowsAndKeys.getRowsAndKeys().size());
+             
+             // The first table should have both person rows merged
+             RowAndKey firstTable = rowsAndKeys.getRowsAndKeys().get(0);
+             assertEquals(2, firstTable.getRows().size());
+         }
+     }
+
+     @Test
+     void testDescriptiveFileNaming() {
+         Row eventRow = new Row(iri("http://subject1.cz"), iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), true);
+         eventRow.type = iri("http://schema.org/Event");
+         
+         ArrayList<Row> eventRows = new ArrayList<>();
+         eventRows.add(eventRow);
+         
+         ArrayList<Value> eventKeys = new ArrayList<>();
+         eventKeys.add(iri("http://schema.org/name"));
+         
+         RowsAndKeys rowsAndKeys = new RowsAndKeys();
+         rowsAndKeys.getRowsAndKeys().add(new RowAndKey(eventKeys, eventRows));
+         
+         when(mockData.getPrefinishedOutput()).thenReturn(rowsAndKeys);
+         
+         try (MockedStatic<FileWrite> fileWriteMockedStatic = mockStatic(FileWrite.class)) {
+             creator.addMetadata(mockData);
+             
+             // Verify the filename contains "Event" from the type
+             assertTrue(creator.allFileNames.get(0).contains("Event"));
+         }
+     }
+
+     @Test
+     void testCollisionHandlingInFileNames() {
+         Row event1 = new Row(iri("http://subject1.cz"), iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), true);
+         event1.type = iri("http://schema.org/Event");
+         
+         Row event2 = new Row(iri("http://subject2.cz"), iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), true);
+         event2.type = iri("http://other.org/Event");
+         
+         ArrayList<Row> rows1 = new ArrayList<>();
+         rows1.add(event1);
+         
+         ArrayList<Row> rows2 = new ArrayList<>();
+         rows2.add(event2);
+         
+         ArrayList<Value> keys1 = new ArrayList<>();
+         keys1.add(iri("http://predicate1.cz"));
+         
+         ArrayList<Value> keys2 = new ArrayList<>();
+         keys2.add(iri("http://predicate2.cz"));
+         
+         RowsAndKeys rowsAndKeys = new RowsAndKeys();
+         rowsAndKeys.getRowsAndKeys().add(new RowAndKey(keys1, rows1));
+         rowsAndKeys.getRowsAndKeys().add(new RowAndKey(keys2, rows2));
+         
+         when(mockData.getPrefinishedOutput()).thenReturn(rowsAndKeys);
+         
+         try (MockedStatic<FileWrite> fileWriteMockedStatic = mockStatic(FileWrite.class)) {
+             creator.addMetadata(mockData);
+             
+             // Both files should have "Event" but one should have a number suffix
+             assertEquals(2, creator.allFileNames.size());
+             assertTrue(creator.allFileNames.get(0).contains("Event"));
+             assertTrue(creator.allFileNames.get(1).contains("Event"));
+             // At least one should have a number suffix to avoid collision
+             assertTrue(creator.allFileNames.get(1).matches(".*Event\\d+\\.csv"));
+         }
+     }
 }

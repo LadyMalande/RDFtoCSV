@@ -15,27 +15,27 @@
       }, {
         "@type" : "Column",
         "titles" : "_col.1",
-        "name" : "_col.1",
+        "name" : "_col1",
         "propertyUrl" : "file://tree-ops.csv#_col.1"
       }, {
         "@type" : "Column",
         "titles" : "_col.2",
-        "name" : "_col.2",
+        "name" : "_col2",
         "propertyUrl" : "file://tree-ops.csv#_col.2"
       }, {
         "@type" : "Column",
         "titles" : "_col.3",
-        "name" : "_col.3",
+        "name" : "_col3",
         "propertyUrl" : "file://tree-ops.csv#_col.3"
       }, {
         "@type" : "Column",
         "titles" : "_col.4",
-        "name" : "_col.4",
+        "name" : "_col4",
         "propertyUrl" : "file://tree-ops.csv#_col.4"
       }, {
         "@type" : "Column",
         "titles" : "_col.5",
-        "name" : "_col.5",
+        "name" : "_col5",
         "propertyUrl" : "file://tree-ops.csv#_col.5"
       }, {
         "@type" : "Column",
@@ -46,7 +46,7 @@
         "virtual" : true
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "_col.1", "_col.2", "_col.3", "_col.4", "_col.5" ]
+      "rowTitles" : [ "Subject", "_col1", "_col2", "_col3", "_col4", "_col5" ]
     },
     "transformations" : [ {
       "@type" : "Template",

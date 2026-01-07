@@ -20,12 +20,12 @@
       }, {
         "@type" : "Column",
         "titles" : "Inventory%20Date",
-        "name" : "Inventory%20Date",
+        "name" : "Inventory20Date",
         "propertyUrl" : "file://tree-ops.csv#Inventory%20Date"
       }, {
         "@type" : "Column",
         "titles" : "On%20Street",
-        "name" : "On%20Street",
+        "name" : "On20Street",
         "propertyUrl" : "file://tree-ops.csv#On%20Street"
       }, {
         "@type" : "Column",
@@ -35,7 +35,7 @@
       }, {
         "@type" : "Column",
         "titles" : "Trim%20Cycle",
-        "name" : "Trim%20Cycle",
+        "name" : "Trim20Cycle",
         "propertyUrl" : "file://tree-ops.csv#Trim%20Cycle"
       }, {
         "@type" : "Column",
@@ -46,7 +46,7 @@
         "virtual" : true
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "GID", "Inventory%20Date", "On%20Street", "Species", "Trim%20Cycle" ]
+      "rowTitles" : [ "Subject", "GID", "Inventory20Date", "On20Street", "Species", "Trim20Cycle" ]
     },
     "transformations" : [ {
       "@type" : "Template",

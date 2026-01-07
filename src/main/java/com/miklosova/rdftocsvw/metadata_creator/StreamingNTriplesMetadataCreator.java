@@ -397,8 +397,9 @@ public class StreamingNTriplesMetadataCreator extends StreamingMetadataCreator i
             }
         }
         // Neither subject nor predicate are known, create new CSVName and add new table to metadata;
-        File f = new File(fileNameToRead);
-        String newCSVname = f.getName() + fileNumber + ".csv";
+        // Use the output filepath base name from config instead of input filename
+        File outputFile = new File(config.getOutputFilePath());
+        String newCSVname = outputFile.getName() + fileNumber + ".csv";
         String previousFiles = config.getIntermediateFileNames();
         String allFilesUpToNow = (previousFiles != null && !previousFiles.isEmpty()) ? previousFiles + "," + newCSVname : newCSVname;
         config.setIntermediateFileNames(allFilesUpToNow);

@@ -108,6 +108,32 @@ public class TableSchema {
     }
 
     /**
+     * Return the type if all rows have the same type, otherwise return null.
+     *
+     * @param rows the rows
+     * @return the type Value if all rows have the same type, null otherwise
+     */
+    public static Value returnTypeIfAllHaveSameType(List<Row> rows) {
+        if (rows == null || rows.isEmpty()) {
+            return null;
+        }
+        
+        List<Row> nonnulls = rows.stream().filter(row -> row.type != null).toList();
+        
+        // Some rows do not have type - the type is not the same for all of them
+        if (nonnulls.size() != rows.size()) {
+            return null;
+        }
+        
+        Value type = nonnulls.get(0).type;
+        
+        // Check if all rows have the same type
+        boolean allSame = nonnulls.stream().allMatch(row -> row.type.equals(type));
+        
+        return allSame ? type : null;
+    }
+
+    /**
      * Is namespace the same for all subjects boolean.
      *
      * @param rows the rows
@@ -301,8 +327,16 @@ public class TableSchema {
             return isNamespaceTheSameForAllPrimary(rows);
         }
         List<Row> rowsWithNonEmptyPredicate = rows.stream()
-                .filter(row -> row.columns.get(columnPredicate) != null) // Adjust getColumns() as per your implementation
+                .filter(row -> row.columns.get(columnPredicate) != null)
                 .toList();
+        
+        // Check if all rows have this predicate
+        // If some rows don't have it (null/empty), use simple pattern {+columnName}
+        // to avoid csv2rdf generating malformed URIs when processing empty cells with prefix patterns
+        if (rowsWithNonEmptyPredicate.size() != rows.size()) {
+            return false;
+        }
+        
         List<Row> rowsWithColumnPredicateLiteral = rowsWithNonEmptyPredicate.stream()
                 .filter(row -> row.columns.get(columnPredicate).type == TypeOfValue.LITERAL) // Adjust getColumns() as per your implementation
                 .toList();

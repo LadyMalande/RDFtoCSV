@@ -15,61 +15,61 @@
       }, {
         "@type" : "Column",
         "titles" : "COL=propertyUrl (en)",
-        "name" : "COL=propertyUrl_en",
+        "name" : "COLpropertyUrl_en",
         "propertyUrl" : "file://test039.csv#COL=propertyUrl",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "col=datatype",
-        "name" : "col=datatype",
+        "name" : "coldatatype",
         "propertyUrl" : "file://test039.csv#col=datatype",
         "datatype" : "normalizedString"
       }, {
         "@type" : "Column",
         "titles" : "col=default (en)",
-        "name" : "col=default_en",
+        "name" : "coldefault_en",
         "propertyUrl" : "file://test039.csv#col=default",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "col=lang (en-US)",
-        "name" : "col=lang_en-US",
+        "name" : "collang_en-US",
         "propertyUrl" : "file://test039.csv#col=lang",
         "lang" : "en-US"
       }, {
         "@type" : "Column",
         "titles" : "col=null (en)",
-        "name" : "col=null_en",
+        "name" : "colnull_en",
         "propertyUrl" : "file://test039.csv#col=null",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "col=ordered (en)",
-        "name" : "col=ordered_en",
+        "name" : "colordered_en",
         "propertyUrl" : "file://test039.csv#col=ordered",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "col=separator (en)",
-        "name" : "col=separator_en",
+        "name" : "colseparator_en",
         "propertyUrl" : "file://test039.csv#col=separator",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "col=textDirection (en)",
-        "name" : "col=textDirection_en",
+        "name" : "coltextDirection_en",
         "propertyUrl" : "file://test039.csv#col=textDirection",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "col=valueUrl",
-        "name" : "col=valueUrl",
+        "name" : "colvalueUrl",
         "propertyUrl" : "file://test039.csv#col=valueUrl",
-        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+col=valueUrl}"
+        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+colvalueUrl}"
       }, {
         "@type" : "Column",
         "titles" : "col=aboutUrl (en)",
-        "name" : "col=aboutUrl_en",
+        "name" : "colaboutUrl_en",
         "propertyUrl" : "file://test039.csv#col=aboutUrl",
         "lang" : "en"
       }, {
@@ -81,7 +81,7 @@
         "virtual" : true
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "COL=propertyUrl_en", "col=datatype", "col=default_en", "col=lang_en-US", "col=null_en", "col=ordered_en", "col=separator_en", "col=textDirection_en", "col=valueUrl", "col=aboutUrl_en" ]
+      "rowTitles" : [ "Subject", "COLpropertyUrl_en", "coldatatype", "coldefault_en", "collang_en-US", "colnull_en", "colordered_en", "colseparator_en", "coltextDirection_en", "colvalueUrl", "colaboutUrl_en" ]
     },
     "transformations" : [ {
       "@type" : "Template",

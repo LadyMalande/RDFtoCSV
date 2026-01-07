@@ -15,7 +15,7 @@
       }, {
         "@type" : "Column",
         "titles" : "Family%20Name",
-        "name" : "Family%20Name",
+        "name" : "Family20Name",
         "propertyUrl" : "file://test127.csv#Family%20Name"
       }, {
         "@type" : "Column",
@@ -31,7 +31,7 @@
         "virtual" : true
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "Family%20Name", "Surname" ]
+      "rowTitles" : [ "Subject", "Family20Name", "Surname" ]
     },
     "transformations" : [ {
       "@type" : "Template",

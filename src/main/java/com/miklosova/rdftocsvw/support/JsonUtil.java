@@ -65,9 +65,28 @@ public class JsonUtil {
         if (config == null) {
             throw new IllegalArgumentException("AppConfig cannot be null");
         }
+        
         // Serialize the final object to a JSON string
         String metadataFilename = config.getOutputMetadataFileName();
-        logger.log(Level.INFO, "metadataFilename = " + metadataFilename);
+        
+        // Check if metadata contains multiple tables
+        // If it does, use standard "csv-metadata.json" filename (overrides -o option)
+        if (resultNode.has("tables") && resultNode.get("tables").isArray() && resultNode.get("tables").size() > 1) {
+            // Multiple tables - use csv-metadata.json in the output directory
+            File originalFile = new File(metadataFilename);
+            File parentDir = originalFile.getParentFile();
+            metadataFilename = parentDir != null ? 
+                new File(parentDir, "csv-metadata.json").getPath() : 
+                "csv-metadata.json";
+            
+            // Update the config so the new filename is used everywhere
+            config.setOutputMetadataFileName(metadataFilename);
+            
+            logger.log(Level.INFO, "Multiple tables detected (" + resultNode.get("tables").size() + 
+                " tables), overriding -o option to use standard filename: csv-metadata.json");
+        }
+        
+        logger.log(Level.INFO, "Writing metadata to: " + metadataFilename);
         FileWrite.deleteFile(metadataFilename);
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(metadataFilename), resultNode);

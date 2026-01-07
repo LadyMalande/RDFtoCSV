@@ -15,55 +15,55 @@
       }, {
         "@type" : "Column",
         "titles" : "col=aboutUrl",
-        "name" : "col=aboutUrl",
+        "name" : "colaboutUrl",
         "propertyUrl" : "file://test038.csv#col=aboutUrl"
       }, {
         "@type" : "Column",
         "titles" : "col=datatype",
-        "name" : "col=datatype",
+        "name" : "coldatatype",
         "propertyUrl" : "file://test038.csv#col=datatype"
       }, {
         "@type" : "Column",
         "titles" : "col=default",
-        "name" : "col=default",
+        "name" : "coldefault",
         "propertyUrl" : "file://test038.csv#col=default"
       }, {
         "@type" : "Column",
         "titles" : "col=lang (en)",
-        "name" : "col=lang_en",
+        "name" : "collang_en",
         "propertyUrl" : "file://test038.csv#col=lang",
         "lang" : "en"
       }, {
         "@type" : "Column",
         "titles" : "col=null",
-        "name" : "col=null",
+        "name" : "colnull",
         "propertyUrl" : "file://test038.csv#col=null"
       }, {
         "@type" : "Column",
         "titles" : "col=ordered",
-        "name" : "col=ordered",
+        "name" : "colordered",
         "propertyUrl" : "file://test038.csv#col=ordered"
       }, {
         "@type" : "Column",
         "titles" : "col=propertyUrl",
-        "name" : "col=propertyUrl",
+        "name" : "colpropertyUrl",
         "propertyUrl" : "file://test038.csv#col=propertyUrl"
       }, {
         "@type" : "Column",
         "titles" : "col=separator",
-        "name" : "col=separator",
+        "name" : "colseparator",
         "propertyUrl" : "file://test038.csv#col=separator"
       }, {
         "@type" : "Column",
         "titles" : "col=textDirection",
-        "name" : "col=textDirection",
+        "name" : "coltextDirection",
         "propertyUrl" : "file://test038.csv#col=textDirection"
       }, {
         "@type" : "Column",
         "titles" : "col=valueUrl",
-        "name" : "col=valueUrl",
+        "name" : "colvalueUrl",
         "propertyUrl" : "file://test038.csv#col=valueUrl",
-        "valueUrl" : "http://schema.org/{+col=valueUrl}"
+        "valueUrl" : "http://schema.org/{+colvalueUrl}"
       }, {
         "@type" : "Column",
         "titles" : "Row Number",
@@ -73,7 +73,7 @@
         "virtual" : true
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "col=aboutUrl", "col=datatype", "col=default", "col=lang_en", "col=null", "col=ordered", "col=propertyUrl", "col=separator", "col=textDirection", "col=valueUrl" ]
+      "rowTitles" : [ "Subject", "colaboutUrl", "coldatatype", "coldefault", "collang_en", "colnull", "colordered", "colpropertyUrl", "colseparator", "coltextDirection", "colvalueUrl" ]
     },
     "transformations" : [ {
       "@type" : "Template",

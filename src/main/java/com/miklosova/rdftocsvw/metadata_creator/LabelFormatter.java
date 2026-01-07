@@ -72,9 +72,9 @@ public class LabelFormatter {
         }
 
         // Insert space before capital letters to handle toCamelCase
-        // Replace all non-alphanumeric characters with spaces
+        // Replace all non-alphanumeric characters with spaces (preserve Unicode letters)
         String spaced = input.replaceAll("([A-Z])", " $1")
-                .replaceAll("[^a-zA-Z0-9]", " ")
+                .replaceAll("[^\\p{L}\\p{N}]", " ")
                 .trim();
 
         String[] words = spaced.split(" +");
@@ -111,7 +111,7 @@ public class LabelFormatter {
 
         // Handle existing toCamelCase by inserting space before capitals
         String spaced = input.replaceAll("([A-Z])", " $1")
-                .replaceAll("[^a-zA-Z0-9]", " ")
+                .replaceAll("[^\\p{L}\\p{N}]", " ")
                 .trim();
 
         String[] words = spaced.split(" +");
@@ -152,7 +152,7 @@ public class LabelFormatter {
                 .replaceAll("([A-Z]+)([A-Z][a-z])", "$1 $2");   // Handle acronyms
 
         // Step 2: Convert all non-alphanumeric to underscores
-        String step2 = step1.replaceAll("[^a-zA-Z0-9]", "_");
+        String step2 = step1.replaceAll("[^\\p{L}\\p{N}]", "_");
 
         // Step 3: Clean up (lowercase, collapse underscores, trim)
         String result = step2.toLowerCase()
@@ -180,7 +180,7 @@ public class LabelFormatter {
                 .replaceAll("([A-Z]+)([A-Z][a-z])", "$1 $2");
 
         // Step 2: Convert all non-alphanumeric to single hyphens
-        String step2 = step1.replaceAll("[^a-zA-Z0-9]+", "-");
+        String step2 = step1.replaceAll("[^\\p{L}\\p{N}]+", "-");
 
         // Step 3: Clean up (lowercase, remove leading/trailing hyphens)
         return step2.toLowerCase()
@@ -199,7 +199,7 @@ public class LabelFormatter {
                 .replaceAll("([a-zA-Z])([0-9])([a-zA-Z])", "$1 $2 $3"); // Letters around numbers
 
         // Then split on any remaining non-alphanumeric characters except numbers
-        return Arrays.stream(spaced.split("[^a-zA-Z0-9]+"))
+        return Arrays.stream(spaced.split("[^\\p{L}\\p{N}]+"))
                 .filter(word -> !word.isEmpty())
                 .map(word -> {
                     // Special handling for number-only "words"
@@ -249,7 +249,7 @@ public class LabelFormatter {
                 .replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2");
 
         // Step 2: Convert any non-alphanumeric to underscore
-        String step2 = step1.replaceAll("[^a-zA-Z0-9]", "_");
+        String step2 = step1.replaceAll("[^\\p{L}\\p{N}]", "_");
 
         // Step 3: Clean up (collapse underscores, trim, uppercase)
         return step2.replaceAll("_+", "_")
@@ -268,7 +268,7 @@ public class LabelFormatter {
                 .replaceAll("([A-Z]+)([A-Z][a-z])", "$1 $2");   // Handle acronyms
 
         // Step 2: Convert all non-alphanumeric to dots
-        String step2 = step1.replaceAll("[^a-zA-Z0-9]", ".");
+        String step2 = step1.replaceAll("[^\\p{L}\\p{N}]", ".");
 
         // Step 3: Clean up (lowercase, collapse dots, trim)
         return step2.toLowerCase()

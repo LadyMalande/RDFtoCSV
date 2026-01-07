@@ -87,21 +87,21 @@ public class DereferencerGetRdfTest extends BaseTest {
     @ParameterizedTest
     @MethodSource("dataSource")
     void testFetchLabelFromTurtle(DereferencerTestParameters line) throws IOException {
-        Dereferencer dereferencer = new Dereferencer(line.getIri(), new AppConfig.Builder("test.ttl").build());
+        Dereferencer dereferencer = new Dereferencer(line.iri, new AppConfig.Builder("test.ttl").build());
 
         try {
-            String label = dereferencer.fetchLabel(line.getIri());
-            logger.info("line.getUrl(): " + line.getIri());
+            String label = dereferencer.fetchLabel(line.iri);
+            logger.info("line.getUrl(): " + line.iri);
             logger.info("label: " + label);
-            if (line.getPredicateName().equalsIgnoreCase("null")) {
+            if (line.predicateName.equalsIgnoreCase("null")) {
                 Assertions.assertNull(label);
             } else {
-                assertEquals(line.getPredicateName(), label);
+                assertEquals(line.predicateName, label);
             }
         } catch(ExecutionException ex){
             logger.log(Level.SEVERE, ex.getMessage());
         } catch(CacheLoader.InvalidCacheLoadException exNull){
-            assertTrue(line.getPredicateName().equals("null"));
+            assertTrue(line.predicateName.equals("null"));
         }
     }
 
@@ -196,7 +196,7 @@ public class DereferencerGetRdfTest extends BaseTest {
     @ParameterizedTest
     @MethodSource("filesSource")
     void createPrefinishedOutputAndMetadata(FilesParameters line) throws IOException {
-        rdfToCSV = new RDFtoCSV( new AppConfig.Builder(line.getFilePath()).parsing("rdf4j").output(line.getOutputPath()).build());
+        rdfToCSV = new RDFtoCSV( new AppConfig.Builder(line.filePath).parsing("rdf4j").output(line.outputPath).build());
         db = new SailRepository(new MemoryStore());
         try {
             rdfToCSV.convertToZip();

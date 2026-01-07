@@ -21,7 +21,7 @@
       }, {
         "@type" : "Column",
         "titles" : "Inventory%20Date (de)",
-        "name" : "Inventory%20Date_de",
+        "name" : "Inventory20Date_de",
         "propertyUrl" : "file://tree-ops.csv#Inventory%20Date",
         "lang" : "de"
       }, {
@@ -33,13 +33,13 @@
       }, {
         "@type" : "Column",
         "titles" : "Trim%20Cycle (de)",
-        "name" : "Trim%20Cycle_de",
+        "name" : "Trim20Cycle_de",
         "propertyUrl" : "file://tree-ops.csv#Trim%20Cycle",
         "lang" : "de"
       }, {
         "@type" : "Column",
         "titles" : "_col.2 (de)",
-        "name" : "_col.2_de",
+        "name" : "_col2_de",
         "propertyUrl" : "file://tree-ops.csv#_col.2",
         "lang" : "de"
       }, {
@@ -51,7 +51,7 @@
         "virtual" : true
       } ],
       "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "GID_de", "Inventory%20Date_de", "Species_de", "Trim%20Cycle_de", "_col.2_de" ]
+      "rowTitles" : [ "Subject", "GID_de", "Inventory20Date_de", "Species_de", "Trim20Cycle_de", "_col2_de" ]
     },
     "transformations" : [ {
       "@type" : "Template",
