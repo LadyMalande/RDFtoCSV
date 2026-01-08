@@ -654,7 +654,7 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
         if (mixedSubjectNamespaces) {
             return; // Already know namespaces are mixed
         }
-        
+    
         try {
             // Extract subject IRI (skip blank nodes)
             String subject = extractSubject(line);
@@ -666,7 +666,7 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
             String subjectIRI = subject.substring(1, subject.length() - 1);
             
             // Extract namespace (everything up to last # or /)
-            String namespace = extractNamespace(subjectIRI);
+            String namespace = null;//extractNamespace(subjectIRI);
             
             if (namespace == null) {
                 mixedSubjectNamespaces = true;
@@ -689,6 +689,9 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
             mixedSubjectNamespaces = true;
             commonSubjectNamespace = null;
         }
+            
+           mixedSubjectNamespaces = true;
+            commonSubjectNamespace = null;
     }
     
     /**
@@ -712,7 +715,7 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
      */
     private void updateFirstColumnValueUrl() {
         Column firstColumn = tableSchema.getColumns().get(0);
-        
+        /*
         if (commonSubjectNamespace != null && !mixedSubjectNamespaces) {
             // All subjects share the same namespace - use prefix pattern
             firstColumn.setValueUrl(commonSubjectNamespace + "{+Subject}");
@@ -722,7 +725,8 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
             // Mixed namespaces or no pattern - use full IRI pattern
             firstColumn.setValueUrl("{+Subject}");
             logger.info("Mixed subject namespaces detected - using full IRI pattern {+Subject}");
-        }
+        }*/
+        firstColumn.setValueUrl("{+Subject}");
     }
     
     /**
@@ -733,7 +737,7 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
     private String getSubjectValueForCSV(String subjectIRI) {
         Column firstColumn = tableSchema.getColumns().get(0);
         String valueUrl = firstColumn.getValueUrl();
-        
+        /* 
         if (valueUrl != null && !valueUrl.startsWith("{")) {
             // ValueUrl has a namespace prefix like "http://example.org/{+Subject}"
             // Extract the prefix
@@ -747,7 +751,7 @@ public class BigFileStreamingNTriplesMetadataCreator extends StreamingMetadataCr
                 }
             }
         }
-        
+        */
         // Return full IRI (for {+Subject} pattern)
         return subjectIRI;
     }
