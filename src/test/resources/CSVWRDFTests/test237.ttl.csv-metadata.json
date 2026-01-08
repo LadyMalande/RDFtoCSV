@@ -1,72 +1,69 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test237.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "name",
-        "name" : "name",
-        "propertyUrl" : "http://schema.org/name",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "population",
-        "name" : "population",
-        "propertyUrl" : "file://country_slice.csv#population",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "latitude",
-        "name" : "latitude",
-        "propertyUrl" : "http://schema.org/latitude",
-        "datatype" : "double",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "longitude",
-        "name" : "longitude",
-        "propertyUrl" : "http://schema.org/longitude",
-        "datatype" : "double",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "year",
-        "name" : "year",
-        "propertyUrl" : "file://country_slice.csv#year",
-        "datatype" : "gYear"
-      }, {
-        "@type" : "Column",
-        "titles" : "ISO country code",
-        "name" : "countryCode",
-        "propertyUrl" : "http://www.geonames.org/ontology#countryCode",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "countryRef",
-        "name" : "countryRef",
-        "propertyUrl" : "file://country_slice.csv#countryRef",
-        "valueUrl" : "{+countryRef}"
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "name", "population", "latitude", "longitude", "year", "countryCode", "countryRef" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
+  "@type" : "Table",
+  "url" : "test237.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "name",
+      "name" : "name",
+      "propertyUrl" : "http://schema.org/name",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "population",
+      "name" : "population",
+      "propertyUrl" : "file://country_slice.csv#population",
+      "datatype" : "integer"
+    }, {
+      "@type" : "Column",
+      "titles" : "latitude",
+      "name" : "latitude",
+      "propertyUrl" : "http://schema.org/latitude",
+      "datatype" : "double",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "longitude",
+      "name" : "longitude",
+      "propertyUrl" : "http://schema.org/longitude",
+      "datatype" : "double",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "year",
+      "name" : "year",
+      "propertyUrl" : "file://country_slice.csv#year",
+      "datatype" : "gYear"
+    }, {
+      "@type" : "Column",
+      "titles" : "ISO country code",
+      "name" : "countryCode",
+      "propertyUrl" : "http://www.geonames.org/ontology#countryCode",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "countryRef",
+      "name" : "countryRef",
+      "propertyUrl" : "file://country_slice.csv#countryRef",
+      "valueUrl" : "{+countryRef}"
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "name", "population", "latitude", "longitude", "year", "countryCode", "countryRef" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
   } ]
 }

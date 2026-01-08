@@ -555,7 +555,7 @@ public class AppConfig {
             }
 
             // Validate preferred languages format (should be comma-separated)
-            if (preferredLanguages != null) {
+            if (preferredLanguages != null && !preferredLanguages.trim().isEmpty()) {
                 // Check for valid format - comma-separated language codes
                 // Use split with -1 to preserve trailing empty strings
                 String[] langs = preferredLanguages.split(",");

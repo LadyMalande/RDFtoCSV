@@ -1,89 +1,86 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test187.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "date",
-        "name" : "date",
-        "propertyUrl" : "file://test187.csv#date",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "datetime",
-        "name" : "datetime",
-        "propertyUrl" : "file://test187.csv#datetime",
-        "datatype" : "dateTime"
-      }, {
-        "@type" : "Column",
-        "titles" : "dateTimeStamp",
-        "name" : "dateTimeStamp",
-        "propertyUrl" : "file://test187.csv#dateTimeStamp",
-        "datatype" : "dateTimeStamp"
-      }, {
-        "@type" : "Column",
-        "titles" : "gDay",
-        "name" : "gDay",
-        "propertyUrl" : "file://test187.csv#gDay",
-        "datatype" : "gDay"
-      }, {
-        "@type" : "Column",
-        "titles" : "gMonth",
-        "name" : "gMonth",
-        "propertyUrl" : "file://test187.csv#gMonth",
-        "datatype" : "gMonth"
-      }, {
-        "@type" : "Column",
-        "titles" : "gMonthDay",
-        "name" : "gMonthDay",
-        "propertyUrl" : "file://test187.csv#gMonthDay",
-        "datatype" : "gMonthDay"
-      }, {
-        "@type" : "Column",
-        "titles" : "gYear",
-        "name" : "gYear",
-        "propertyUrl" : "file://test187.csv#gYear",
-        "datatype" : "gYear"
-      }, {
-        "@type" : "Column",
-        "titles" : "gYearMonth",
-        "name" : "gYearMonth",
-        "propertyUrl" : "file://test187.csv#gYearMonth",
-        "datatype" : "gYearMonth"
-      }, {
-        "@type" : "Column",
-        "titles" : "time",
-        "name" : "time",
-        "propertyUrl" : "file://test187.csv#time",
-        "datatype" : "time"
-      }, {
-        "@type" : "Column",
-        "titles" : "Row Number",
-        "name" : "rowNum",
-        "valueUrl" : "{_row}",
-        "datatype" : "integer",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "date", "datetime", "dateTimeStamp", "gDay", "gMonth", "gMonthDay", "gYear", "gYearMonth", "time" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
+  "@type" : "Table",
+  "url" : "test187.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "date",
+      "name" : "date",
+      "propertyUrl" : "file://test187.csv#date",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "datetime",
+      "name" : "datetime",
+      "propertyUrl" : "file://test187.csv#datetime",
+      "datatype" : "dateTime"
+    }, {
+      "@type" : "Column",
+      "titles" : "dateTimeStamp",
+      "name" : "dateTimeStamp",
+      "propertyUrl" : "file://test187.csv#dateTimeStamp",
+      "datatype" : "dateTimeStamp"
+    }, {
+      "@type" : "Column",
+      "titles" : "gDay",
+      "name" : "gDay",
+      "propertyUrl" : "file://test187.csv#gDay",
+      "datatype" : "gDay"
+    }, {
+      "@type" : "Column",
+      "titles" : "gMonth",
+      "name" : "gMonth",
+      "propertyUrl" : "file://test187.csv#gMonth",
+      "datatype" : "gMonth"
+    }, {
+      "@type" : "Column",
+      "titles" : "gMonthDay",
+      "name" : "gMonthDay",
+      "propertyUrl" : "file://test187.csv#gMonthDay",
+      "datatype" : "gMonthDay"
+    }, {
+      "@type" : "Column",
+      "titles" : "gYear",
+      "name" : "gYear",
+      "propertyUrl" : "file://test187.csv#gYear",
+      "datatype" : "gYear"
+    }, {
+      "@type" : "Column",
+      "titles" : "gYearMonth",
+      "name" : "gYearMonth",
+      "propertyUrl" : "file://test187.csv#gYearMonth",
+      "datatype" : "gYearMonth"
+    }, {
+      "@type" : "Column",
+      "titles" : "time",
+      "name" : "time",
+      "propertyUrl" : "file://test187.csv#time",
+      "datatype" : "time"
+    }, {
+      "@type" : "Column",
+      "titles" : "Row Number",
+      "name" : "rowNum",
+      "valueUrl" : "{_row}",
+      "datatype" : "integer",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "date", "datetime", "dateTimeStamp", "gDay", "gMonth", "gMonthDay", "gYear", "gYearMonth", "time" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
   } ]
 }

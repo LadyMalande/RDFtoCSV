@@ -1,33 +1,30 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test-004.rdf.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Alt",
-        "name" : "Alt",
-        "valueUrl" : "http://example.org/{+Alt}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+type}",
-        "aboutUrl" : "http://example.org/{+Alt}"
-      }, {
-        "@type" : "Column",
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#Alt",
-        "aboutUrl" : "http://example.org/{+Alt}",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Alt",
-      "rowTitles" : [ "Alt", "type" ]
-    }
-  } ]
+  "@type" : "Table",
+  "url" : "test-004.rdf.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Alt",
+      "name" : "Alt",
+      "valueUrl" : "http://example.org/{+Alt}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "type",
+      "name" : "type",
+      "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+type}",
+      "aboutUrl" : "http://example.org/{+Alt}"
+    }, {
+      "@type" : "Column",
+      "propertyUrl" : "rdf:type",
+      "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#Alt",
+      "aboutUrl" : "http://example.org/{+Alt}",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Alt",
+    "rowTitles" : [ "Alt", "type" ]
+  }
 }

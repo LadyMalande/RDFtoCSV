@@ -1,92 +1,89 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test035.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "reports to",
-        "name" : "reportsTo",
-        "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
-        "valueUrl" : "{+reportsTo}"
-      }, {
-        "@type" : "Column",
-        "titles" : "min_pay",
-        "name" : "min_pay",
-        "propertyUrl" : "http://example.org/gov.uk/def/min_pay",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "name",
-        "name" : "name",
-        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "number_of_posts",
-        "name" : "number_of_posts",
-        "propertyUrl" : "http://example.org/gov.uk/def/number_of_posts",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "profession",
-        "name" : "profession",
-        "propertyUrl" : "http://example.org/gov.uk/def/profession"
-      }, {
-        "@type" : "Column",
-        "titles" : "max_pay",
-        "name" : "max_pay",
-        "propertyUrl" : "http://example.org/gov.uk/def/max_pay",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "job",
-        "name" : "job",
-        "propertyUrl" : "http://example.org/gov.uk/def/job"
-      }, {
-        "@type" : "Column",
-        "titles" : "Identifier",
-        "name" : "identifier",
-        "propertyUrl" : "http://purl.org/dc/terms/identifier",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "grade",
-        "name" : "grade",
-        "propertyUrl" : "http://example.org/gov.uk/def/grade"
-      }, {
-        "@type" : "Column",
-        "titles" : "held by",
-        "name" : "heldBy",
-        "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
-        "valueUrl" : "{+heldBy}",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "post in",
-        "name" : "postIn",
-        "propertyUrl" : "http://www.w3.org/ns/org#postIn",
-        "valueUrl" : "{+postIn}"
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "reportsTo", "min_pay", "name", "number_of_posts", "profession", "max_pay", "job", "identifier", "grade", "heldBy", "postIn" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
+  "@type" : "Table",
+  "url" : "test035.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "reports to",
+      "name" : "reportsTo",
+      "propertyUrl" : "http://www.w3.org/ns/org#reportsTo",
+      "valueUrl" : "{+reportsTo}"
+    }, {
+      "@type" : "Column",
+      "titles" : "min_pay",
+      "name" : "min_pay",
+      "propertyUrl" : "http://example.org/gov.uk/def/min_pay",
+      "datatype" : "integer"
+    }, {
+      "@type" : "Column",
+      "titles" : "name",
+      "name" : "name",
+      "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "number_of_posts",
+      "name" : "number_of_posts",
+      "propertyUrl" : "http://example.org/gov.uk/def/number_of_posts",
+      "datatype" : "double"
+    }, {
+      "@type" : "Column",
+      "titles" : "profession",
+      "name" : "profession",
+      "propertyUrl" : "http://example.org/gov.uk/def/profession"
+    }, {
+      "@type" : "Column",
+      "titles" : "max_pay",
+      "name" : "max_pay",
+      "propertyUrl" : "http://example.org/gov.uk/def/max_pay",
+      "datatype" : "integer"
+    }, {
+      "@type" : "Column",
+      "titles" : "job",
+      "name" : "job",
+      "propertyUrl" : "http://example.org/gov.uk/def/job"
+    }, {
+      "@type" : "Column",
+      "titles" : "Identifier",
+      "name" : "identifier",
+      "propertyUrl" : "http://purl.org/dc/terms/identifier",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "grade",
+      "name" : "grade",
+      "propertyUrl" : "http://example.org/gov.uk/def/grade"
+    }, {
+      "@type" : "Column",
+      "titles" : "held by",
+      "name" : "heldBy",
+      "propertyUrl" : "http://www.w3.org/ns/org#heldBy",
+      "valueUrl" : "{+heldBy}",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "post in",
+      "name" : "postIn",
+      "propertyUrl" : "http://www.w3.org/ns/org#postIn",
+      "valueUrl" : "{+postIn}"
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "reportsTo", "min_pay", "name", "number_of_posts", "profession", "max_pay", "job", "identifier", "grade", "heldBy", "postIn" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
   } ]
 }

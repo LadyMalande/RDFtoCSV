@@ -1,0 +1,4 @@
+Department,departmentCode,departmentName (en),type
+dev,DEV,Development,Department
+ops,OPS,Operations,Department
+qa,QA,Quality Assurance,Department

@@ -1,0 +1,4 @@
+PostalAddress,streetAddress,postalCode,addressLocality,addressCountry,type
+hybernska-5,Hybernská 5,110 00,Praha,CZ,PostalAddress
+josefska-2,Josefská 2,118 00,Praha,CZ,PostalAddress
+vodickova-10,Vodičkova 10,120 00,Praha,CZ,PostalAddress

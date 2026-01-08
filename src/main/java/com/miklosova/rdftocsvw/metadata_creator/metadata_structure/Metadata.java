@@ -34,6 +34,7 @@ public class Metadata {
      * Array of files tied to the metadata file
      */
     private final List<Table> tables;
+    
     /**
      * Application configuration
      */

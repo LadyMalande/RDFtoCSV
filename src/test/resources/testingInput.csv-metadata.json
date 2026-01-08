@@ -1,61 +1,59 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "testingInputForTwoEntities.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "http://example.org/{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "datatypeTest",
-        "name" : "datatypeTest",
-        "propertyUrl" : "http://example.org/datatypeTest",
-        "datatype" : "integer",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "Creator",
-        "name" : "creator",
-        "propertyUrl" : "http://purl.org/dc/terms/creator",
-        "valueUrl" : "{+creator}",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "Title (cs)",
-        "name" : "title_cs",
-        "propertyUrl" : "http://purl.org/dc/terms/title",
-        "aboutUrl" : "{+Subject}",
-        "lang" : "cs"
-      }, {
-        "@type" : "Column",
-        "titles" : "Title (en)",
-        "name" : "title_en",
-        "propertyUrl" : "http://purl.org/dc/terms/title",
-        "aboutUrl" : "{+Subject}",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "{+type}",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "{+type}",
-        "aboutUrl" : "http://example.org/{+Text}",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "datatypeTest", "creator", "title_cs", "title_en", "type" ]
-    }
-  } ]
+  "@type" : "Table",
+  "url" : "testingInputForTwoEntities.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "http://example.org/{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "datatypeTest",
+      "name" : "datatypeTest",
+      "propertyUrl" : "http://example.org/datatypeTest",
+      "datatype" : "integer",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "Creator",
+      "name" : "creator",
+      "propertyUrl" : "http://purl.org/dc/terms/creator",
+      "valueUrl" : "{+creator}",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "Title (cs)",
+      "name" : "title_cs",
+      "propertyUrl" : "http://purl.org/dc/terms/title",
+      "aboutUrl" : "{+Subject}",
+      "lang" : "cs"
+    }, {
+      "@type" : "Column",
+      "titles" : "Title (en)",
+      "name" : "title_en",
+      "propertyUrl" : "http://purl.org/dc/terms/title",
+      "aboutUrl" : "{+Subject}",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "type",
+      "name" : "type",
+      "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "valueUrl" : "{+type}",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "propertyUrl" : "rdf:type",
+      "valueUrl" : "{+type}",
+      "aboutUrl" : "http://example.org/{+Text}",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "datatypeTest", "creator", "title_cs", "title_en", "type" ]
+  },
+  "dc:description" : "Text columns marked with language codes (e.g., '(cs)', '(en)') in their headers contain values in the language indicated in parentheses, following the IETF BCP 47 naming convention."
 }

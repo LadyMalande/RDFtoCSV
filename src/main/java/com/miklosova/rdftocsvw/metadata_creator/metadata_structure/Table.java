@@ -1,6 +1,7 @@
 package com.miklosova.rdftocsvw.metadata_creator.metadata_structure;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.miklosova.rdftocsvw.converter.data_structure.Row;
 import com.miklosova.rdftocsvw.support.AppConfig;
 
@@ -29,6 +30,12 @@ public class Table {
      * A list of transformation definitions for given table
      */
     private List<Transformation> transformations;
+
+    /**
+     * Description of the table (dc:description)
+     */
+    @JsonProperty("dc:description")
+    private String dcDescription;
 
     /**
      * Application configuration
@@ -84,6 +91,24 @@ public class Table {
      */
     public void setTransformations(List<Transformation> transformations) {
         this.transformations = transformations;
+    }
+
+    /**
+     * Gets dc:description.
+     *
+     * @return the dc:description
+     */
+    public String getDcDescription() {
+        return dcDescription;
+    }
+
+    /**
+     * Sets dc:description.
+     *
+     * @param dcDescription the dc:description
+     */
+    public void setDcDescription(String dcDescription) {
+        this.dcDescription = dcDescription;
     }
 
     /**

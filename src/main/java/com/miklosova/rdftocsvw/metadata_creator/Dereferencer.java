@@ -333,7 +333,11 @@ public class Dereferencer {
         String xpath = "//td[text()='" + iri + "']";
         // Find the <tr> element with id="broader"
 
-        Element tr = doc.selectXpath(xpath).first().parent();
+        Element firstElement = doc.selectXpath(xpath).first();
+        if (firstElement == null) {
+            throw new NullPointerException("Could not find element matching xpath: " + xpath);
+        }
+        Element tr = firstElement.parent();
         if (tr != null) {
             // Find the next <tr> element relative to the <tr> with id="broader"
             Element nextTr = tr.nextElementSibling();
@@ -558,6 +562,13 @@ public class Dereferencer {
             // Extract hostname from "protocol://hostname/path" or "protocol://hostname:port/path"
             int protocolEnd = uriString.indexOf("://");
             if (protocolEnd > 0) {
+                // Validate protocol part - should only contain alphanumeric characters, '+', '-', or '.'
+                String protocol = uriString.substring(0, protocolEnd);
+                if (!protocol.matches("[a-zA-Z][a-zA-Z0-9+.-]*")) {
+                    logger.fine("Invalid protocol in URI: " + uriString);
+                    return null;
+                }
+                
                 String afterProtocol = uriString.substring(protocolEnd + 3);
                 
                 // Find the end of hostname (first /, :, ?, or #)

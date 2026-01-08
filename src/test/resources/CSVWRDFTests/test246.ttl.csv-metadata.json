@@ -1,47 +1,44 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test246.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "yyyy%2DMM%2DddTHH%3Amm%3Ass.S",
-        "name" : "yyyy2DMM2DddTHH3Amm3AssS",
-        "propertyUrl" : "file://test246.csv#yyyy%2DMM%2DddTHH%3Amm%3Ass.S",
-        "datatype" : "dateTime"
-      }, {
-        "@type" : "Column",
-        "titles" : "yyyy%2DMM%2DddTHH%3Amm%3Ass.SS",
-        "name" : "yyyy2DMM2DddTHH3Amm3AssSS",
-        "propertyUrl" : "file://test246.csv#yyyy%2DMM%2DddTHH%3Amm%3Ass.SS",
-        "datatype" : "dateTime"
-      }, {
-        "@type" : "Column",
-        "titles" : "Row Number",
-        "name" : "rowNum",
-        "valueUrl" : "{_row}",
-        "datatype" : "integer",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "yyyy2DMM2DddTHH3Amm3AssS", "yyyy2DMM2DddTHH3Amm3AssSS" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
+  "@type" : "Table",
+  "url" : "test246.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "yyyy%2DMM%2DddTHH%3Amm%3Ass.S",
+      "name" : "yyyy2DMM2DddTHH3Amm3AssS",
+      "propertyUrl" : "file://test246.csv#yyyy%2DMM%2DddTHH%3Amm%3Ass.S",
+      "datatype" : "dateTime"
+    }, {
+      "@type" : "Column",
+      "titles" : "yyyy%2DMM%2DddTHH%3Amm%3Ass.SS",
+      "name" : "yyyy2DMM2DddTHH3Amm3AssSS",
+      "propertyUrl" : "file://test246.csv#yyyy%2DMM%2DddTHH%3Amm%3Ass.SS",
+      "datatype" : "dateTime"
+    }, {
+      "@type" : "Column",
+      "titles" : "Row Number",
+      "name" : "rowNum",
+      "valueUrl" : "{_row}",
+      "datatype" : "integer",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "yyyy2DMM2DddTHH3Amm3AssS", "yyyy2DMM2DddTHH3Amm3AssSS" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
   } ]
 }

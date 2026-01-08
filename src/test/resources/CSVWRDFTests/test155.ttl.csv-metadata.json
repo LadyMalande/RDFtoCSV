@@ -1,137 +1,134 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test155.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "byte",
-        "name" : "byte",
-        "propertyUrl" : "file://test155.csv#byte",
-        "datatype" : "byte"
-      }, {
-        "@type" : "Column",
-        "titles" : "decimal",
-        "name" : "decimal",
-        "propertyUrl" : "file://test155.csv#decimal",
-        "datatype" : "decimal"
-      }, {
-        "@type" : "Column",
-        "titles" : "double",
-        "name" : "double",
-        "propertyUrl" : "file://test155.csv#double",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "float",
-        "name" : "float",
-        "propertyUrl" : "file://test155.csv#float",
-        "datatype" : "float"
-      }, {
-        "@type" : "Column",
-        "titles" : "int",
-        "name" : "int",
-        "propertyUrl" : "file://test155.csv#int",
-        "datatype" : "int"
-      }, {
-        "@type" : "Column",
-        "titles" : "integer",
-        "name" : "integer",
-        "propertyUrl" : "file://test155.csv#integer",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "long",
-        "name" : "long",
-        "propertyUrl" : "file://test155.csv#long",
-        "datatype" : "long"
-      }, {
-        "@type" : "Column",
-        "titles" : "negativeInteger",
-        "name" : "negativeInteger",
-        "propertyUrl" : "file://test155.csv#negativeInteger",
-        "datatype" : "negativeInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "nonNegativeInteger",
-        "name" : "nonNegativeInteger",
-        "propertyUrl" : "file://test155.csv#nonNegativeInteger",
-        "datatype" : "nonNegativeInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "nonPositiveInteger",
-        "name" : "nonPositiveInteger",
-        "propertyUrl" : "file://test155.csv#nonPositiveInteger",
-        "datatype" : "nonPositiveInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "number",
-        "name" : "number",
-        "propertyUrl" : "file://test155.csv#number",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "positiveInteger",
-        "name" : "positiveInteger",
-        "propertyUrl" : "file://test155.csv#positiveInteger",
-        "datatype" : "positiveInteger"
-      }, {
-        "@type" : "Column",
-        "titles" : "short",
-        "name" : "short",
-        "propertyUrl" : "file://test155.csv#short",
-        "datatype" : "short"
-      }, {
-        "@type" : "Column",
-        "titles" : "unsignedByte",
-        "name" : "unsignedByte",
-        "propertyUrl" : "file://test155.csv#unsignedByte",
-        "datatype" : "unsignedByte"
-      }, {
-        "@type" : "Column",
-        "titles" : "unsignedInt",
-        "name" : "unsignedInt",
-        "propertyUrl" : "file://test155.csv#unsignedInt",
-        "datatype" : "unsignedInt"
-      }, {
-        "@type" : "Column",
-        "titles" : "unsignedLong",
-        "name" : "unsignedLong",
-        "propertyUrl" : "file://test155.csv#unsignedLong",
-        "datatype" : "unsignedLong"
-      }, {
-        "@type" : "Column",
-        "titles" : "unsignedShort",
-        "name" : "unsignedShort",
-        "propertyUrl" : "file://test155.csv#unsignedShort",
-        "datatype" : "unsignedShort"
-      }, {
-        "@type" : "Column",
-        "titles" : "Row Number",
-        "name" : "rowNum",
-        "valueUrl" : "{_row}",
-        "datatype" : "integer",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "byte", "decimal", "double", "float", "int", "integer", "long", "negativeInteger", "nonNegativeInteger", "nonPositiveInteger", "number", "positiveInteger", "short", "unsignedByte", "unsignedInt", "unsignedLong", "unsignedShort" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
+  "@type" : "Table",
+  "url" : "test155.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "byte",
+      "name" : "byte",
+      "propertyUrl" : "file://test155.csv#byte",
+      "datatype" : "byte"
+    }, {
+      "@type" : "Column",
+      "titles" : "decimal",
+      "name" : "decimal",
+      "propertyUrl" : "file://test155.csv#decimal",
+      "datatype" : "decimal"
+    }, {
+      "@type" : "Column",
+      "titles" : "double",
+      "name" : "double",
+      "propertyUrl" : "file://test155.csv#double",
+      "datatype" : "double"
+    }, {
+      "@type" : "Column",
+      "titles" : "float",
+      "name" : "float",
+      "propertyUrl" : "file://test155.csv#float",
+      "datatype" : "float"
+    }, {
+      "@type" : "Column",
+      "titles" : "int",
+      "name" : "int",
+      "propertyUrl" : "file://test155.csv#int",
+      "datatype" : "int"
+    }, {
+      "@type" : "Column",
+      "titles" : "integer",
+      "name" : "integer",
+      "propertyUrl" : "file://test155.csv#integer",
+      "datatype" : "integer"
+    }, {
+      "@type" : "Column",
+      "titles" : "long",
+      "name" : "long",
+      "propertyUrl" : "file://test155.csv#long",
+      "datatype" : "long"
+    }, {
+      "@type" : "Column",
+      "titles" : "negativeInteger",
+      "name" : "negativeInteger",
+      "propertyUrl" : "file://test155.csv#negativeInteger",
+      "datatype" : "negativeInteger"
+    }, {
+      "@type" : "Column",
+      "titles" : "nonNegativeInteger",
+      "name" : "nonNegativeInteger",
+      "propertyUrl" : "file://test155.csv#nonNegativeInteger",
+      "datatype" : "nonNegativeInteger"
+    }, {
+      "@type" : "Column",
+      "titles" : "nonPositiveInteger",
+      "name" : "nonPositiveInteger",
+      "propertyUrl" : "file://test155.csv#nonPositiveInteger",
+      "datatype" : "nonPositiveInteger"
+    }, {
+      "@type" : "Column",
+      "titles" : "number",
+      "name" : "number",
+      "propertyUrl" : "file://test155.csv#number",
+      "datatype" : "double"
+    }, {
+      "@type" : "Column",
+      "titles" : "positiveInteger",
+      "name" : "positiveInteger",
+      "propertyUrl" : "file://test155.csv#positiveInteger",
+      "datatype" : "positiveInteger"
+    }, {
+      "@type" : "Column",
+      "titles" : "short",
+      "name" : "short",
+      "propertyUrl" : "file://test155.csv#short",
+      "datatype" : "short"
+    }, {
+      "@type" : "Column",
+      "titles" : "unsignedByte",
+      "name" : "unsignedByte",
+      "propertyUrl" : "file://test155.csv#unsignedByte",
+      "datatype" : "unsignedByte"
+    }, {
+      "@type" : "Column",
+      "titles" : "unsignedInt",
+      "name" : "unsignedInt",
+      "propertyUrl" : "file://test155.csv#unsignedInt",
+      "datatype" : "unsignedInt"
+    }, {
+      "@type" : "Column",
+      "titles" : "unsignedLong",
+      "name" : "unsignedLong",
+      "propertyUrl" : "file://test155.csv#unsignedLong",
+      "datatype" : "unsignedLong"
+    }, {
+      "@type" : "Column",
+      "titles" : "unsignedShort",
+      "name" : "unsignedShort",
+      "propertyUrl" : "file://test155.csv#unsignedShort",
+      "datatype" : "unsignedShort"
+    }, {
+      "@type" : "Column",
+      "titles" : "Row Number",
+      "name" : "rowNum",
+      "valueUrl" : "{_row}",
+      "datatype" : "integer",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "byte", "decimal", "double", "float", "int", "integer", "long", "negativeInteger", "nonNegativeInteger", "nonPositiveInteger", "number", "positiveInteger", "short", "unsignedByte", "unsignedInt", "unsignedLong", "unsignedShort" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
   } ]
 }

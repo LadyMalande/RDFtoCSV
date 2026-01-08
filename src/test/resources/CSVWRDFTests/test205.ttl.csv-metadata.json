@@ -1,70 +1,67 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test205.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "maxExclusive",
-        "name" : "maxExclusive",
-        "propertyUrl" : "file://test205.csv#maxExclusive",
-        "datatype" : "float"
-      }, {
-        "@type" : "Column",
-        "titles" : "maxInclusive",
-        "name" : "maxInclusive",
-        "propertyUrl" : "file://test205.csv#maxInclusive",
-        "datatype" : "float"
-      }, {
-        "@type" : "Column",
-        "titles" : "maximum",
-        "name" : "maximum",
-        "propertyUrl" : "file://test205.csv#maximum",
-        "datatype" : "float"
-      }, {
-        "@type" : "Column",
-        "titles" : "minExclusive",
-        "name" : "minExclusive",
-        "propertyUrl" : "file://test205.csv#minExclusive",
-        "datatype" : "float"
-      }, {
-        "@type" : "Column",
-        "titles" : "minInclusive",
-        "name" : "minInclusive",
-        "propertyUrl" : "file://test205.csv#minInclusive"
-      }, {
-        "@type" : "Column",
-        "titles" : "minimum",
-        "name" : "minimum",
-        "propertyUrl" : "file://test205.csv#minimum",
-        "datatype" : "float"
-      }, {
-        "@type" : "Column",
-        "titles" : "Row Number",
-        "name" : "rowNum",
-        "valueUrl" : "{_row}",
-        "datatype" : "integer",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "maxExclusive", "maxInclusive", "maximum", "minExclusive", "minInclusive", "minimum" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
+  "@type" : "Table",
+  "url" : "test205.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "maxExclusive",
+      "name" : "maxExclusive",
+      "propertyUrl" : "file://test205.csv#maxExclusive",
+      "datatype" : "float"
+    }, {
+      "@type" : "Column",
+      "titles" : "maxInclusive",
+      "name" : "maxInclusive",
+      "propertyUrl" : "file://test205.csv#maxInclusive",
+      "datatype" : "float"
+    }, {
+      "@type" : "Column",
+      "titles" : "maximum",
+      "name" : "maximum",
+      "propertyUrl" : "file://test205.csv#maximum",
+      "datatype" : "float"
+    }, {
+      "@type" : "Column",
+      "titles" : "minExclusive",
+      "name" : "minExclusive",
+      "propertyUrl" : "file://test205.csv#minExclusive",
+      "datatype" : "float"
+    }, {
+      "@type" : "Column",
+      "titles" : "minInclusive",
+      "name" : "minInclusive",
+      "propertyUrl" : "file://test205.csv#minInclusive"
+    }, {
+      "@type" : "Column",
+      "titles" : "minimum",
+      "name" : "minimum",
+      "propertyUrl" : "file://test205.csv#minimum",
+      "datatype" : "float"
+    }, {
+      "@type" : "Column",
+      "titles" : "Row Number",
+      "name" : "rowNum",
+      "valueUrl" : "{_row}",
+      "datatype" : "integer",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "maxExclusive", "maxInclusive", "maximum", "minExclusive", "minInclusive", "minimum" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
   } ]
 }

@@ -32,6 +32,43 @@ public class JsonUtil {
      * @return Metadata serialized into JSON.
      * @throws JsonProcessingException The json processing exception.
      */
+    /**
+     * Add language description to tables that contain columns with language tags.
+     *
+     * @param metadata The metadata object to process
+     */
+    private static void addLanguageDescriptionToTables(com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata metadata) {
+        for (com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Table table : metadata.getTables()) {
+            if (table.getTableSchema() != null && table.getTableSchema().getColumns() != null) {
+                java.util.Set<String> languageTags = new java.util.LinkedHashSet<>();
+                
+                // Collect unique language tags from this table's columns
+                for (com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Column column : table.getTableSchema().getColumns()) {
+                    if (column.getLang() != null && !column.getLang().isEmpty()) {
+                        languageTags.add(column.getLang());
+                    }
+                }
+                
+                // Add description if language tags are present
+                if (!languageTags.isEmpty() && table.getDcDescription() == null) {
+                    // Build language tag examples (limit to 3)
+                    StringBuilder langExamples = new StringBuilder();
+                    int count = 0;
+                    for (String lang : languageTags) {
+                        if (count > 0) langExamples.append(", ");
+                        langExamples.append("'(").append(lang).append(")'");
+                        count++;
+                        if (count >= 3) break;
+                    }
+                    
+                    table.setDcDescription("Text columns marked with language codes (e.g., " + 
+                        langExamples + ") in their headers contain values in the language indicated in parentheses, " +
+                        "following the IETF BCP 47 naming convention.");
+                }
+            }
+        }
+    }
+
     public static ObjectNode serializeWithContext(Object obj) throws JsonProcessingException {
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
@@ -84,6 +121,32 @@ public class JsonUtil {
             
             logger.log(Level.INFO, "Multiple tables detected (" + resultNode.get("tables").size() + 
                 " tables), overriding -o option to use standard filename: csv-metadata.json");
+        } else if (resultNode.has("tables") && resultNode.get("tables").isArray() && resultNode.get("tables").size() == 1) {
+            // Single table - flatten structure from TableGroup to Table
+            ObjectNode singleTable = (ObjectNode) resultNode.get("tables").get(0);
+            
+            // Create new flattened structure
+            ObjectNode flattenedNode = mapper.createObjectNode();
+            
+            // Copy @context from original
+            if (resultNode.has("@context")) {
+                flattenedNode.set("@context", resultNode.get("@context"));
+            }
+            
+            // Change @type from TableGroup to Table
+            flattenedNode.put("@type", "Table");
+            
+            // Copy all properties from the single table
+            singleTable.fields().forEachRemaining(entry -> {
+                if (!entry.getKey().equals("@type")) { // Skip @type as we already set it
+                    flattenedNode.set(entry.getKey(), entry.getValue());
+                }
+            });
+            
+            // Replace resultNode content with flattened structure
+            resultNode = flattenedNode;
+            
+            logger.log(Level.INFO, "Single table detected, using flattened Table structure");
         }
         
         logger.log(Level.INFO, "Writing metadata to: " + metadataFilename);
@@ -115,6 +178,11 @@ public class JsonUtil {
      * @return The serialized JSON object String.
      */
     public static String serializeAndWriteToFile(Object obj, AppConfig config) {
+        // Add language description to tables if they have language-tagged columns
+        if (obj instanceof com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata) {
+            addLanguageDescriptionToTables((com.miklosova.rdftocsvw.metadata_creator.metadata_structure.Metadata) obj);
+        }
+        
         ObjectNode resultNode = null;
         try {
             resultNode = serializeWithContext(obj);

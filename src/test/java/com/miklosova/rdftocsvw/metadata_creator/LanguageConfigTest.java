@@ -262,10 +262,7 @@ public class LanguageConfigTest {
 
     private static Stream<Arguments> FaultyLanguageTestCases() {
             return Stream.of(
-
-                    // Edge cases with empty/malformed values
-                    Arguments.of("", "en,cs"), // empty string should return default
-                    Arguments.of("   ", "en,cs"), // whitespace only should return default
+                    // Edge cases with empty elements that should throw exception
                     Arguments.of("en,,cs", "en,cs"), // empty middle element
                     Arguments.of(",en,cs", "en,cs") // empty first element
             );

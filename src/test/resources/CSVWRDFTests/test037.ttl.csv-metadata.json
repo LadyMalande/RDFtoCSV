@@ -1,74 +1,72 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test037.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "http://example.org/tree-ops-ext#{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "comments",
-        "name" : "comments",
-        "propertyUrl" : "file://tree-ops-ext.csv#comments",
-        "datatype" : "normalizedString",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "trim_cycle (en)",
-        "name" : "trim_cycle_en",
-        "propertyUrl" : "file://tree-ops-ext.csv#trim_cycle",
-        "aboutUrl" : "{+Subject}",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "protected",
-        "name" : "protected",
-        "propertyUrl" : "file://tree-ops-ext.csv#protected",
-        "datatype" : "boolean",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "species",
-        "name" : "species",
-        "propertyUrl" : "file://tree-ops-ext.csv#species",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "dbh",
-        "name" : "dbh",
-        "propertyUrl" : "file://tree-ops-ext.csv#dbh",
-        "datatype" : "integer",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "kml",
-        "name" : "kml",
-        "propertyUrl" : "file://tree-ops-ext.csv#kml",
-        "datatype" : "XMLLiteral",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "on_street",
-        "name" : "on_street",
-        "propertyUrl" : "file://tree-ops-ext.csv#on_street",
-        "aboutUrl" : "{+Subject}"
-      }, {
-        "@type" : "Column",
-        "titles" : "inventory_date",
-        "name" : "inventory_date",
-        "propertyUrl" : "file://tree-ops-ext.csv#inventory_date",
-        "datatype" : "date",
-        "aboutUrl" : "{+Subject}"
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "comments", "trim_cycle_en", "protected", "species", "dbh", "kml", "on_street", "inventory_date" ]
-    }
-  } ]
+  "@type" : "Table",
+  "url" : "test037.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "http://example.org/tree-ops-ext#{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "comments",
+      "name" : "comments",
+      "propertyUrl" : "file://tree-ops-ext.csv#comments",
+      "datatype" : "normalizedString",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "trim_cycle (en)",
+      "name" : "trim_cycle_en",
+      "propertyUrl" : "file://tree-ops-ext.csv#trim_cycle",
+      "aboutUrl" : "{+Subject}",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "protected",
+      "name" : "protected",
+      "propertyUrl" : "file://tree-ops-ext.csv#protected",
+      "datatype" : "boolean",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "species",
+      "name" : "species",
+      "propertyUrl" : "file://tree-ops-ext.csv#species",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "dbh",
+      "name" : "dbh",
+      "propertyUrl" : "file://tree-ops-ext.csv#dbh",
+      "datatype" : "integer",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "kml",
+      "name" : "kml",
+      "propertyUrl" : "file://tree-ops-ext.csv#kml",
+      "datatype" : "XMLLiteral",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "on_street",
+      "name" : "on_street",
+      "propertyUrl" : "file://tree-ops-ext.csv#on_street",
+      "aboutUrl" : "{+Subject}"
+    }, {
+      "@type" : "Column",
+      "titles" : "inventory_date",
+      "name" : "inventory_date",
+      "propertyUrl" : "file://tree-ops-ext.csv#inventory_date",
+      "datatype" : "date",
+      "aboutUrl" : "{+Subject}"
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "comments", "trim_cycle_en", "protected", "species", "dbh", "kml", "on_street", "inventory_date" ]
+  },
+  "dc:description" : "Text columns marked with language codes (e.g., '(en)') in their headers contain values in the language indicated in parentheses, following the IETF BCP 47 naming convention."
 }

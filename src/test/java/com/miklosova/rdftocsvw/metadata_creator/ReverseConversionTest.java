@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * 
  * Note: Blank nodes will have different identifiers, but their relationships should be preserved.
  */
-@Disabled
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ReverseConversionTest {
 
@@ -146,6 +146,14 @@ public class ReverseConversionTest {
                         "literalListTestBigFileStreaming",
                         "./literalListTestBigFileStreaming-reconverted.ttl",
                         csv2rdfPath, "bigFileStreaming"
+                ),
+                new TestFileSet(
+                        "./src/test/resources/StreamingNTriples/running_example.ttl",
+                        "./RDFtoCSV/src/test/resources/StreamingNTriples/running_example.ttl",
+                        "./csv-metadata.json",
+                        "running_example",
+                        "./running_example-reconverted.ttl",
+                        csv2rdfPath, "rdf4j"
                 )/* ,
                             new TestFileSet(
                 "./src/test/resources/CSVWRDFTests/test001.ttl",
