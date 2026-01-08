@@ -1,60 +1,57 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test112.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "GID",
-        "name" : "GID",
-        "propertyUrl" : "file://tree-ops.csv#GID"
-      }, {
-        "@type" : "Column",
-        "titles" : "inventory_date",
-        "name" : "inventory_date",
-        "propertyUrl" : "file://tree-ops.csv#inventory_date"
-      }, {
-        "@type" : "Column",
-        "titles" : "on_street",
-        "name" : "on_street",
-        "propertyUrl" : "file://tree-ops.csv#on_street"
-      }, {
-        "@type" : "Column",
-        "titles" : "species",
-        "name" : "species",
-        "propertyUrl" : "file://tree-ops.csv#species"
-      }, {
-        "@type" : "Column",
-        "titles" : "trim_cycle",
-        "name" : "trim_cycle",
-        "propertyUrl" : "file://tree-ops.csv#trim_cycle"
-      }, {
-        "@type" : "Column",
-        "titles" : "Row Number",
-        "name" : "rowNum",
-        "valueUrl" : "{_row}",
-        "datatype" : "integer",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "GID", "inventory_date", "on_street", "species", "trim_cycle" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
+  "@type" : "Table",
+  "url" : "test112.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "GID",
+      "name" : "GID",
+      "propertyUrl" : "file://tree-ops.csv#GID"
+    }, {
+      "@type" : "Column",
+      "titles" : "inventory_date",
+      "name" : "inventory_date",
+      "propertyUrl" : "file://tree-ops.csv#inventory_date"
+    }, {
+      "@type" : "Column",
+      "titles" : "on_street",
+      "name" : "on_street",
+      "propertyUrl" : "file://tree-ops.csv#on_street"
+    }, {
+      "@type" : "Column",
+      "titles" : "species",
+      "name" : "species",
+      "propertyUrl" : "file://tree-ops.csv#species"
+    }, {
+      "@type" : "Column",
+      "titles" : "trim_cycle",
+      "name" : "trim_cycle",
+      "propertyUrl" : "file://tree-ops.csv#trim_cycle"
+    }, {
+      "@type" : "Column",
+      "titles" : "Row Number",
+      "name" : "rowNum",
+      "valueUrl" : "{_row}",
+      "datatype" : "integer",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "GID", "inventory_date", "on_street", "species", "trim_cycle" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
   } ]
 }

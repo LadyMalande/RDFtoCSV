@@ -333,7 +333,11 @@ public class Dereferencer {
         String xpath = "//td[text()='" + iri + "']";
         // Find the <tr> element with id="broader"
 
-        Element tr = doc.selectXpath(xpath).first().parent();
+        Element firstElement = doc.selectXpath(xpath).first();
+        if (firstElement == null) {
+            throw new NullPointerException("Could not find element matching xpath: " + xpath);
+        }
+        Element tr = firstElement.parent();
         if (tr != null) {
             // Find the next <tr> element relative to the <tr> with id="broader"
             Element nextTr = tr.nextElementSibling();
@@ -558,6 +562,13 @@ public class Dereferencer {
             // Extract hostname from "protocol://hostname/path" or "protocol://hostname:port/path"
             int protocolEnd = uriString.indexOf("://");
             if (protocolEnd > 0) {
+                // Validate protocol part - should only contain alphanumeric characters, '+', '-', or '.'
+                String protocol = uriString.substring(0, protocolEnd);
+                if (!protocol.matches("[a-zA-Z][a-zA-Z0-9+.-]*")) {
+                    logger.fine("Invalid protocol in URI: " + uriString);
+                    return null;
+                }
+                
                 String afterProtocol = uriString.substring(protocolEnd + 3);
                 
                 // Find the end of hostname (first /, :, ?, or #)
@@ -608,7 +619,57 @@ public class Dereferencer {
 
     public static String fetchLabelUncached(String iri, AppConfig config) throws IOException {
         long startTime = System.currentTimeMillis();
-        
+
+        // Special handling for Wikidata properties
+        if (iri.startsWith("http://www.wikidata.org/prop/direct/")) {
+            String propertyId = iri.substring(iri.lastIndexOf("/") + 1);
+            // Get preferred languages from config or default
+            List<String> preferredLanguages = (config != null) ? loadPreferredLanguagesStatic(config) : Arrays.asList("en", "cs");
+            // Build FILTER for all preferred languages
+            StringBuilder langFilter = new StringBuilder();
+            langFilter.append("FILTER (");
+            for (int i = 0; i < preferredLanguages.size(); i++) {
+                String lang = preferredLanguages.get(i);
+                langFilter.append("lang(?label) = '").append(lang).append("'");
+                if (i < preferredLanguages.size() - 1) {
+                    langFilter.append(" || ");
+                }
+            }
+            langFilter.append(")");
+            String sparql = "PREFIX wd: <http://www.wikidata.org/entity/>\n" +
+                            "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                            "SELECT ?label WHERE { wd:" + propertyId + " rdfs:label ?label . " + langFilter.toString() + " } LIMIT 10";
+            String endpoint = "https://query.wikidata.org/sparql";
+            try {
+                org.apache.jena.query.Query query = org.apache.jena.query.QueryFactory.create(sparql);
+                org.apache.jena.query.QueryExecution qexec = org.apache.jena.query.QueryExecutionFactory.sparqlService(endpoint, query);
+                org.apache.jena.query.ResultSet results = qexec.execSelect();
+                // Try to return the label in the first preferred language found
+                String foundLabel = null;
+                int bestLangIndex = preferredLanguages.size();
+                while (results.hasNext()) {
+                    org.apache.jena.query.QuerySolution sol = results.next();
+                    String label = sol.getLiteral("label").getString();
+                    String lang = sol.getLiteral("label").getLanguage();
+                    int idx = preferredLanguages.indexOf(lang);
+                    if (idx != -1 && idx < bestLangIndex) {
+                        foundLabel = label;
+                        bestLangIndex = idx;
+                        if (idx == 0) break; // Best possible match
+                    } else if (foundLabel == null) {
+                        foundLabel = label; // fallback if no preferred lang
+                    }
+                }
+                qexec.close();
+                if (foundLabel != null) return foundLabel;
+            } catch (Exception e) {
+                logger.warning("Wikidata SPARQL label fetch failed for " + iri + ": " + e.getMessage());
+            }
+            // Fallback to local name if not found or error
+            return org.eclipse.rdf4j.model.impl.SimpleValueFactory.getInstance().createIRI(iri).getLocalName();
+        }
+
+        // ...existing code...
         // Extract the base vocabulary URI
         String vocabularyUri = extractBaseUri(iri);
         

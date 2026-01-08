@@ -1,95 +1,93 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test039.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "COL=propertyUrl (en)",
-        "name" : "COL=propertyUrl_en",
-        "propertyUrl" : "file://test039.csv#COL=propertyUrl",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=datatype",
-        "name" : "col=datatype",
-        "propertyUrl" : "file://test039.csv#col=datatype",
-        "datatype" : "normalizedString"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=default (en)",
-        "name" : "col=default_en",
-        "propertyUrl" : "file://test039.csv#col=default",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=lang (en-US)",
-        "name" : "col=lang_en-US",
-        "propertyUrl" : "file://test039.csv#col=lang",
-        "lang" : "en-US"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=null (en)",
-        "name" : "col=null_en",
-        "propertyUrl" : "file://test039.csv#col=null",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=ordered (en)",
-        "name" : "col=ordered_en",
-        "propertyUrl" : "file://test039.csv#col=ordered",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=separator (en)",
-        "name" : "col=separator_en",
-        "propertyUrl" : "file://test039.csv#col=separator",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=textDirection (en)",
-        "name" : "col=textDirection_en",
-        "propertyUrl" : "file://test039.csv#col=textDirection",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=valueUrl",
-        "name" : "col=valueUrl",
-        "propertyUrl" : "file://test039.csv#col=valueUrl",
-        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+col=valueUrl}"
-      }, {
-        "@type" : "Column",
-        "titles" : "col=aboutUrl (en)",
-        "name" : "col=aboutUrl_en",
-        "propertyUrl" : "file://test039.csv#col=aboutUrl",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "Row Number",
-        "name" : "rowNum",
-        "valueUrl" : "{_row}",
-        "datatype" : "integer",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "COL=propertyUrl_en", "col=datatype", "col=default_en", "col=lang_en-US", "col=null_en", "col=ordered_en", "col=separator_en", "col=textDirection_en", "col=valueUrl", "col=aboutUrl_en" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
-  } ]
+  "@type" : "Table",
+  "url" : "test039.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "COL=propertyUrl (en)",
+      "name" : "COLpropertyUrl_en",
+      "propertyUrl" : "file://test039.csv#COL=propertyUrl",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "col=datatype",
+      "name" : "coldatatype",
+      "propertyUrl" : "file://test039.csv#col=datatype",
+      "datatype" : "normalizedString"
+    }, {
+      "@type" : "Column",
+      "titles" : "col=default (en)",
+      "name" : "coldefault_en",
+      "propertyUrl" : "file://test039.csv#col=default",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "col=lang (en-US)",
+      "name" : "collang_en-US",
+      "propertyUrl" : "file://test039.csv#col=lang",
+      "lang" : "en-US"
+    }, {
+      "@type" : "Column",
+      "titles" : "col=null (en)",
+      "name" : "colnull_en",
+      "propertyUrl" : "file://test039.csv#col=null",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "col=ordered (en)",
+      "name" : "colordered_en",
+      "propertyUrl" : "file://test039.csv#col=ordered",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "col=separator (en)",
+      "name" : "colseparator_en",
+      "propertyUrl" : "file://test039.csv#col=separator",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "col=textDirection (en)",
+      "name" : "coltextDirection_en",
+      "propertyUrl" : "file://test039.csv#col=textDirection",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "col=valueUrl",
+      "name" : "colvalueUrl",
+      "propertyUrl" : "file://test039.csv#col=valueUrl",
+      "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+colvalueUrl}"
+    }, {
+      "@type" : "Column",
+      "titles" : "col=aboutUrl (en)",
+      "name" : "colaboutUrl_en",
+      "propertyUrl" : "file://test039.csv#col=aboutUrl",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "Row Number",
+      "name" : "rowNum",
+      "valueUrl" : "{_row}",
+      "datatype" : "integer",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "COLpropertyUrl_en", "coldatatype", "coldefault_en", "collang_en-US", "colnull_en", "colordered_en", "colseparator_en", "coltextDirection_en", "colvalueUrl", "colaboutUrl_en" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+  } ],
+  "dc:description" : "Text columns marked with language codes (e.g., '(en)', '(en-US)') in their headers contain values in the language indicated in parentheses, following the IETF BCP 47 naming convention."
 }

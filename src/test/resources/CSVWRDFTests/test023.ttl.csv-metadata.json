@@ -1,60 +1,57 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test023.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "_col.1",
-        "name" : "_col.1",
-        "propertyUrl" : "file://tree-ops.csv#_col.1"
-      }, {
-        "@type" : "Column",
-        "titles" : "_col.2",
-        "name" : "_col.2",
-        "propertyUrl" : "file://tree-ops.csv#_col.2"
-      }, {
-        "@type" : "Column",
-        "titles" : "_col.3",
-        "name" : "_col.3",
-        "propertyUrl" : "file://tree-ops.csv#_col.3"
-      }, {
-        "@type" : "Column",
-        "titles" : "_col.4",
-        "name" : "_col.4",
-        "propertyUrl" : "file://tree-ops.csv#_col.4"
-      }, {
-        "@type" : "Column",
-        "titles" : "_col.5",
-        "name" : "_col.5",
-        "propertyUrl" : "file://tree-ops.csv#_col.5"
-      }, {
-        "@type" : "Column",
-        "titles" : "Row Number",
-        "name" : "rowNum",
-        "valueUrl" : "{_row}",
-        "datatype" : "integer",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "_col.1", "_col.2", "_col.3", "_col.4", "_col.5" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
+  "@type" : "Table",
+  "url" : "test023.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "_col.1",
+      "name" : "_col1",
+      "propertyUrl" : "file://tree-ops.csv#_col.1"
+    }, {
+      "@type" : "Column",
+      "titles" : "_col.2",
+      "name" : "_col2",
+      "propertyUrl" : "file://tree-ops.csv#_col.2"
+    }, {
+      "@type" : "Column",
+      "titles" : "_col.3",
+      "name" : "_col3",
+      "propertyUrl" : "file://tree-ops.csv#_col.3"
+    }, {
+      "@type" : "Column",
+      "titles" : "_col.4",
+      "name" : "_col4",
+      "propertyUrl" : "file://tree-ops.csv#_col.4"
+    }, {
+      "@type" : "Column",
+      "titles" : "_col.5",
+      "name" : "_col5",
+      "propertyUrl" : "file://tree-ops.csv#_col.5"
+    }, {
+      "@type" : "Column",
+      "titles" : "Row Number",
+      "name" : "rowNum",
+      "valueUrl" : "{_row}",
+      "datatype" : "integer",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "_col1", "_col2", "_col3", "_col4", "_col5" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
   } ]
 }

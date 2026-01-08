@@ -33,7 +33,7 @@ package com.miklosova.rdftocsvw.support;
 
 class JsonUtilTest {
 
-     private ObjectMapper mockMapper;
+     private ObjectMapper objectMapper;
 
      // Removed ConfigurationManager mock
 
@@ -71,7 +71,7 @@ class JsonUtilTest {
          TableSchema tableSchema = new TableSchema(keys,rows, config);
          tableSchema.addTableSchemaMetadata(config);
          table.setTableSchema(tableSchema);
-         mockMapper = mock(ObjectMapper.class);
+         objectMapper = new ObjectMapper();
          // Removed ConfigurationManager mock
          mockFileWrite = mock(FileWrite.class);
      }
@@ -79,19 +79,12 @@ class JsonUtilTest {
      //BaseRock generated method id: ${testSerializeWithContext}, hash: 91C327EBBC373742EE2FFE5D5D896E88
      @Test
      void testSerializeWithContext() throws JsonProcessingException {
-         Object testObj = new Object();
-         String expectedResult = "{\"@context\":\"http://www.w3.org/ns/csvw\",\"@type\":\"TableGroup\",\"tables\":[]}";
-         ObjectNode mockResultNode = mock(ObjectNode.class);
-         try (MockedStatic<JsonUtil> mockedJsonUtil = Mockito.mockStatic(JsonUtil.class);
-             MockedStatic<AppConfig> mockedConfigManager = Mockito.mockStatic(AppConfig.class)) { // Updated to use AppConfig
-             mockedJsonUtil.when(() -> JsonUtil.serializeWithContext(any())).thenCallRealMethod();
-             //when(mockMapper.valueToTree(testObj)).thenReturn(mockJsonObject);
-             when(mockMapper.createObjectNode()).thenReturn(mockResultNode);
-             ObjectNode result = JsonUtil.serializeWithContext(metadata);
-             //verify(mockResultNode).put("@context", "http://www.w3.org/ns/csvw");
-             //verify(mockResultNode).setAll(mockJsonObject);
-             assertEquals(expectedResult.toString(), result.toString());
-         }
+         // Test that serializeWithContext produces valid JSON with the expected context
+         ObjectNode result = JsonUtil.serializeWithContext(metadata);
+         
+         assertNotNull(result);
+         assertTrue(result.has("@context"));
+         assertEquals("http://www.w3.org/ns/csvw", result.get("@context").asText());
      }
 
      //BaseRock generated method id: ${testWriteJsonToFile}, hash: 26CEE7FA8A28A9F507832B2016C16D58
@@ -122,7 +115,7 @@ class JsonUtilTest {
          try (MockedStatic<JsonUtil> mockedJsonUtil = Mockito.mockStatic(JsonUtil.class)) {
              mockedJsonUtil.when(() -> JsonUtil.serializeAndReturnPrettyString(any())).thenCallRealMethod();
              mockedJsonUtil.when(() -> JsonUtil.serializeWithContext(testObj)).thenReturn(mockResultNode);
-             when(mockMapper.writeValueAsString(mockResultNode)).thenReturn(expectedJson);
+             when(objectMapper.writeValueAsString(mockResultNode)).thenReturn(expectedJson);
              String result = JsonUtil.serializeAndReturnPrettyString(metadata);
              assertEquals(expectedJson, result);
          }

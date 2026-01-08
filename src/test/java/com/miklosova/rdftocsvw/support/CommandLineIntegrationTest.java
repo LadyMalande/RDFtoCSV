@@ -213,7 +213,9 @@ class CommandLineIntegrationTest {
 
             if (metadataFile.exists()) {
                 JsonNode metadata = objectMapper.readTree(metadataFile);
-                assertTrue(metadata.has("tables"), "Metadata should contain tables");
+                // Metadata can have "tables" array (multiple tables) or be flattened (single table)
+                assertTrue(metadata.has("tables") || metadata.has("tableSchema"), 
+                    "Metadata should contain either tables array or tableSchema (flattened single table)");
                 
                 // Verify convention is still in config after full conversion
                 assertEquals(convention, retrievedConfig.getColumnNamingConvention(),
@@ -471,7 +473,9 @@ class CommandLineIntegrationTest {
         File metadataFile = new File(metadataPath);
         if (metadataFile.exists()) {
             JsonNode metadata = objectMapper.readTree(metadataFile);
-            assertTrue(metadata.has("tables"), "Metadata should have tables");
+            // Metadata can have "tables" array (multiple tables) or be flattened (single table)
+            assertTrue(metadata.has("tables") || metadata.has("tableSchema"), 
+                "Metadata should have either tables array or tableSchema (flattened single table)");
         }
     }
 

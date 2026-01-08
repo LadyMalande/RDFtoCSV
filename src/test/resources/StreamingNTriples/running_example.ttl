@@ -1,0 +1,65 @@
+@prefix ex: <http://example.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <https://schema.org/> .
+@prefix wd: <http://www.wikidata.org/prop/direct/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Osoby
+<http://example.org/osoba/alice-smith> a foaf:Person ;
+    foaf:name "Alice Smith"@en ;
+    foaf:mbox <mailto:alice.smith@ex.org> ;
+    wd:P569 "1990-03-15"^^xsd:date ;
+    schema:age 34 ;
+    ex:jobTitle "Senior Developer"@en, "Vedoucí vývojář"@cs ;
+    ex:department <http://example.org/oddeleni/dev> ;
+    ex:address <http://example.org/adresa/josefska-2> .
+
+<http://example.org/osoba/robert-johnson> a foaf:Person ;
+    foaf:name "Robert Johnson"@en ;
+    foaf:mbox <mailto:robert.johnson@ex.org> ;
+    wd:P569 "1985-07-22"^^xsd:date ;
+    schema:age 39 ;
+    ex:jobTitle "QA Engineer"@en, "QA inženýr"@cs ;
+    ex:department <http://example.org/oddeleni/qa> ;
+    ex:address <http://example.org/adresa/hybernska-5> .
+
+<http://example.org/osoba/charlie-brown> a foaf:Person ;
+    foaf:name "Charlie Brown"@en ;
+    foaf:mbox <mailto:charlie.brown@ex.org> ;
+    wd:P569 "1976-11-08"^^xsd:date ;
+    schema:age 49 ;
+    ex:jobTitle "DevOps Specialist"@en, "Specialista DevOps"@cs ;
+    ex:department <http://example.org/oddeleni/ops> ;
+    ex:address <http://example.org/adresa/vodickova-10> .
+
+# Oddělení
+<http://example.org/oddeleni/dev> a ex:Department ;
+    ex:departmentName "Development"@en ;
+    ex:departmentCode "DEV" .
+
+<http://example.org/oddeleni/qa> a ex:Department ;
+    ex:departmentName "Quality Assurance"@en ;
+    ex:departmentCode "QA" .
+
+<http://example.org/oddeleni/ops> a ex:Department ;
+    ex:departmentName "Operations"@en ;
+    ex:departmentCode "OPS" .
+
+# Adresy
+<http://example.org/adresa/josefska-2> a schema:PostalAddress ;
+    schema:streetAddress "Josefská 2" ;
+    schema:addressLocality "Praha" ;
+    schema:postalCode "118 00" ;
+    schema:addressCountry "CZ" .
+
+<http://example.org/adresa/hybernska-5> a schema:PostalAddress ;
+    schema:streetAddress "Hybernská 5" ;
+    schema:addressLocality "Praha" ;
+    schema:postalCode "110 00" ;
+    schema:addressCountry "CZ" .
+
+<http://example.org/adresa/vodickova-10> a schema:PostalAddress ;
+    schema:streetAddress "Vodičkova 10" ;
+    schema:addressLocality "Praha" ;
+    schema:postalCode "120 00" ;
+    schema:addressCountry "CZ" .

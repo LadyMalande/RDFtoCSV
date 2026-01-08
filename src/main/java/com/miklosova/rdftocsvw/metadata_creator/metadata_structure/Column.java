@@ -164,8 +164,9 @@ public class Column {
      * @return the string without any harmful characters
      */
     public static String createSafeName(String localName) {
-        // Replace all non-ASCII characters and hyphens
-        return localName.replaceAll("[^\\x00-\\x7F-]", "").replace("-", "");
+        // Keep Unicode letters, digits, hyphens, and underscores. Remove only control characters and special symbols.
+        // This preserves characters like á, č, ě, í, ř, š, ž, ů, ý from Czech and other languages
+        return localName.replaceAll("[^\\p{L}\\p{N}_-]", "");
     }
 
     /**

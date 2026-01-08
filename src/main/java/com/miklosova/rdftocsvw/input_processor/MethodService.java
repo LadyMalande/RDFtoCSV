@@ -10,8 +10,11 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFParseException;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.IDN;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -78,30 +81,53 @@ public class MethodService {
      * Processes the File Name. If its URL and the connection enables the process to download it, it will do so.
      * @param fileName the argument that is given when starting the program (-f parameter value)
      * @return Name of the saved file (if URL is given to the converter, it downloads the file and takes only the file name to this output)
+     * @throws IOException if the URL cannot be downloaded
      */
-    private String processFileOrIRI(String fileName) {
+    private String processFileOrIRI(String fileName) throws IOException {
         try {
-            URL url = new URL(fileName);
-
-            BufferedReader readr =
-                    new BufferedReader(new InputStreamReader(url.openStream()));
+            // Convert internationalized domain names (IDN) to ASCII punycode
+            URL originalUrl = new URL(fileName);
+            String asciiHost = IDN.toASCII(originalUrl.getHost());
+            
+            // Reconstruct URL with ASCII host
+            String asciiUrlString = originalUrl.getProtocol() + "://" + asciiHost;
+            if (originalUrl.getPort() != -1) {
+                asciiUrlString += ":" + originalUrl.getPort();
+            }
+            if (originalUrl.getPath() != null) {
+                asciiUrlString += originalUrl.getPath();
+            }
+            if (originalUrl.getQuery() != null) {
+                asciiUrlString += "?" + originalUrl.getQuery();
+            }
+            
+            URL url = new URL(asciiUrlString);
 
             String[] splitURI = fileName.split("/");
-
             String newFileName = splitURI[splitURI.length - 1];
 
-            // Enter filename in which you want to download
-            BufferedWriter writer =
-                    new BufferedWriter(new FileWriter(newFileName));
-
-            // read each line from stream till end
-            String line;
-            while ((line = readr.readLine()) != null) {
-                writer.write(line + "\n");
+            // Download file using binary stream with proper HTTP headers
+            URLConnection connection = url.openConnection();
+            
+            // Set headers to mimic a browser request
+            if (connection instanceof HttpURLConnection) {
+                HttpURLConnection httpConn = (HttpURLConnection) connection;
+                httpConn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+                httpConn.setRequestProperty("Accept", "text/turtle, application/rdf+xml, application/ld+json, application/n-triples, application/n-quads, application/trig, text/n3, */*");
+                httpConn.setRequestProperty("Accept-Encoding", "gzip, deflate");
+                httpConn.setRequestProperty("Connection", "keep-alive");
+            }
+            
+            try (InputStream in = connection.getInputStream();
+                 FileOutputStream out = new FileOutputStream(newFileName)) {
+                
+                byte[] buffer = new byte[8192];
+                int bytesRead;
+                while ((bytesRead = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, bytesRead);
+                }
             }
 
-            readr.close();
-            writer.close();
             logger.info( "Successfully Downloaded. NewFileName is " + newFileName);
             return newFileName;
         } catch (MalformedURLException e) {
@@ -109,8 +135,13 @@ public class MethodService {
             return fileName;
             // the URL is not in a valid form
         } catch (IOException ex) {
-            System.err.println("the connection couldn't be established to download the URL");
-            return fileName;
+            String errorMessage = "Failed to download file from URL: " + fileName + 
+                                ". Please check the URL is accessible and try again.";
+            System.err.println(errorMessage);
+            System.err.println("Detailed error: " + ex.getClass().getName() + ": " + ex.getMessage());
+            ex.printStackTrace();
+
+            throw new IOException(errorMessage, ex);
             // the connection couldn't be established
         }
 

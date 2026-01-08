@@ -465,4 +465,55 @@ public class LabelFormatterTest {
         // Write the modified content back to the file
         Files.write(Paths.get(filepathDefault), linesDefault, StandardOpenOption.TRUNCATE_EXISTING);
     }
+
+    @ParameterizedTest
+    @MethodSource("unicodePreservationTestCases")
+    void testUnicodeCharacterPreservation(String input, String format, String expected) {
+        AppConfig config = new AppConfig.Builder("test.ttl")
+                .columnNamingConvention(format)
+                .build();
+
+        String result = LabelFormatter.changeLabelToTheConfiguredFormat(input, config);
+        assertEquals(expected, result, "Unicode characters should be preserved in " + format);
+    }
+
+    private static Stream<Arguments> unicodePreservationTestCases() {
+        return Stream.of(
+                // Czech characters
+                Arguments.of("má-přílohu", AppConfig.COLUMN_NAMING_TITLE_CASE, "Má Přílohu"),
+                Arguments.of("má-přílohu", AppConfig.COLUMN_NAMING_CAMEL_CASE, "máPřílohu"),
+                Arguments.of("má-přílohu", AppConfig.COLUMN_NAMING_PASCAL_CASE, "MáPřílohu"),
+                Arguments.of("má-přílohu", AppConfig.COLUMN_NAMING_SNAKE_CASE, "má_přílohu"),
+                Arguments.of("má-přílohu", AppConfig.COLUMN_NAMING_KEBAB_CASE, "má-přílohu"),
+                Arguments.of("má-přílohu", AppConfig.COLUMN_NAMING_SCREAMING_SNAKE_CASE, "MÁ_PŘÍLOHU"),
+                Arguments.of("má-přílohu", AppConfig.COLUMN_NAMING_DOT_NOTATION, "má.přílohu"),
+                
+                // More Czech words - using lowercase input since camelCase detection only works with ASCII capitals
+                Arguments.of("obsahuje-autorské-dílo", AppConfig.COLUMN_NAMING_TITLE_CASE, "Obsahuje Autorské Dílo"),
+                Arguments.of("podmínky-užití", AppConfig.COLUMN_NAMING_SNAKE_CASE, "podmínky_užití"),
+                Arguments.of("databáze-chráněná", AppConfig.COLUMN_NAMING_KEBAB_CASE, "databáze-chráněná"),
+                
+                // German characters
+                Arguments.of("größe-ändern", AppConfig.COLUMN_NAMING_TITLE_CASE, "Größe Ändern"),
+                Arguments.of("überschrift", AppConfig.COLUMN_NAMING_PASCAL_CASE, "Überschrift"),
+                
+                // French characters
+                Arguments.of("référence-créée", AppConfig.COLUMN_NAMING_CAMEL_CASE, "référenceCréée"),
+                Arguments.of("événement", AppConfig.COLUMN_NAMING_TITLE_CASE, "Événement"),
+                
+                // Spanish characters
+                Arguments.of("año-creación", AppConfig.COLUMN_NAMING_SNAKE_CASE, "año_creación"),
+                Arguments.of("niño", AppConfig.COLUMN_NAMING_PASCAL_CASE, "Niño"),
+                
+                // Greek characters
+                Arguments.of("αλφάβητο", AppConfig.COLUMN_NAMING_TITLE_CASE, "Αλφάβητο"),
+                
+                // Cyrillic characters
+                Arguments.of("привет-мир", AppConfig.COLUMN_NAMING_CAMEL_CASE, "приветМир"),
+                
+                // Mixed Unicode and ASCII
+                Arguments.of("hasNázev", AppConfig.COLUMN_NAMING_TITLE_CASE, "Has Název"),
+                Arguments.of("dateVýročí", AppConfig.COLUMN_NAMING_SNAKE_CASE, "date_výročí")
+        );
+    }
 }

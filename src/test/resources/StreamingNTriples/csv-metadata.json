@@ -1,0 +1,197 @@
+{
+  "@context" : "http://www.w3.org/ns/csvw",
+  "@type" : "TableGroup",
+  "tables" : [ {
+    "@type" : "Table",
+    "url" : "Person.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Person",
+        "name" : "Person",
+        "valueUrl" : "http://example.org/osoba/{+Person}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "department",
+        "name" : "department",
+        "propertyUrl" : "http://example.org/department",
+        "valueUrl" : "http://example.org/oddeleni/{+department}",
+        "aboutUrl" : "http://example.org/osoba/{+Person}"
+      }, {
+        "@type" : "Column",
+        "titles" : "name (en)",
+        "name" : "name_en",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/name",
+        "aboutUrl" : "http://example.org/osoba/{+Person}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "address",
+        "name" : "address",
+        "propertyUrl" : "http://example.org/address",
+        "valueUrl" : "http://example.org/adresa/{+address}",
+        "aboutUrl" : "http://example.org/osoba/{+Person}"
+      }, {
+        "@type" : "Column",
+        "titles" : "jobTitle (cs)",
+        "name" : "jobTitle_cs",
+        "propertyUrl" : "http://example.org/jobTitle",
+        "aboutUrl" : "http://example.org/osoba/{+Person}",
+        "lang" : "cs"
+      }, {
+        "@type" : "Column",
+        "titles" : "jobTitle (en)",
+        "name" : "jobTitle_en",
+        "propertyUrl" : "http://example.org/jobTitle",
+        "aboutUrl" : "http://example.org/osoba/{+Person}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "age",
+        "name" : "age",
+        "propertyUrl" : "https://schema.org/age",
+        "datatype" : "integer",
+        "aboutUrl" : "http://example.org/osoba/{+Person}"
+      }, {
+        "@type" : "Column",
+        "titles" : "P569",
+        "name" : "P569",
+        "propertyUrl" : "http://www.wikidata.org/prop/direct/P569",
+        "datatype" : "date",
+        "aboutUrl" : "http://example.org/osoba/{+Person}"
+      }, {
+        "@type" : "Column",
+        "titles" : "mbox",
+        "name" : "mbox",
+        "propertyUrl" : "http://xmlns.com/foaf/0.1/mbox",
+        "valueUrl" : "mailto:{+mbox}",
+        "aboutUrl" : "http://example.org/osoba/{+Person}"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://xmlns.com/foaf/0.1/{+type}",
+        "aboutUrl" : "http://example.org/osoba/{+Person}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://xmlns.com/foaf/0.1/Person",
+        "aboutUrl" : "http://example.org/osoba/{+Person}",
+        "virtual" : true
+      } ],
+      "foreignKeys" : [ {
+        "columnReference" : "address",
+        "reference" : {
+          "resource" : "PostalAddress.csv",
+          "columnReference" : "PostalAddress"
+        }
+      }, {
+        "columnReference" : "department",
+        "reference" : {
+          "resource" : "Department.csv",
+          "columnReference" : "Department"
+        }
+      } ],
+      "primaryKey" : "Person",
+      "rowTitles" : [ "Person", "department", "name_en", "address", "jobTitle_cs", "jobTitle_en", "age", "P569", "mbox", "type" ]
+    },
+    "dc:description" : "Text columns marked with language codes (e.g., '(en)', '(cs)') in their headers contain values in the language indicated in parentheses, following the IETF BCP 47 naming convention."
+  }, {
+    "@type" : "Table",
+    "url" : "PostalAddress.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "PostalAddress",
+        "name" : "PostalAddress",
+        "valueUrl" : "http://example.org/adresa/{+PostalAddress}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "streetAddress",
+        "name" : "streetAddress",
+        "propertyUrl" : "https://schema.org/streetAddress",
+        "aboutUrl" : "http://example.org/adresa/{+PostalAddress}"
+      }, {
+        "@type" : "Column",
+        "titles" : "postalCode",
+        "name" : "postalCode",
+        "propertyUrl" : "https://schema.org/postalCode",
+        "aboutUrl" : "http://example.org/adresa/{+PostalAddress}"
+      }, {
+        "@type" : "Column",
+        "titles" : "addressLocality",
+        "name" : "addressLocality",
+        "propertyUrl" : "https://schema.org/addressLocality",
+        "aboutUrl" : "http://example.org/adresa/{+PostalAddress}"
+      }, {
+        "@type" : "Column",
+        "titles" : "addressCountry",
+        "name" : "addressCountry",
+        "propertyUrl" : "https://schema.org/addressCountry",
+        "aboutUrl" : "http://example.org/adresa/{+PostalAddress}"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "https://schema.org/{+type}",
+        "aboutUrl" : "http://example.org/adresa/{+PostalAddress}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "https://schema.org/PostalAddress",
+        "aboutUrl" : "http://example.org/adresa/{+PostalAddress}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "PostalAddress",
+      "rowTitles" : [ "PostalAddress", "streetAddress", "postalCode", "addressLocality", "addressCountry", "type" ]
+    }
+  }, {
+    "@type" : "Table",
+    "url" : "Department.csv",
+    "tableSchema" : {
+      "@type" : "Schema",
+      "columns" : [ {
+        "@type" : "Column",
+        "titles" : "Department",
+        "name" : "Department",
+        "valueUrl" : "http://example.org/oddeleni/{+Department}",
+        "suppressOutput" : true
+      }, {
+        "@type" : "Column",
+        "titles" : "departmentCode",
+        "name" : "departmentCode",
+        "propertyUrl" : "http://example.org/departmentCode",
+        "aboutUrl" : "http://example.org/oddeleni/{+Department}"
+      }, {
+        "@type" : "Column",
+        "titles" : "departmentName (en)",
+        "name" : "departmentName_en",
+        "propertyUrl" : "http://example.org/departmentName",
+        "aboutUrl" : "http://example.org/oddeleni/{+Department}",
+        "lang" : "en"
+      }, {
+        "@type" : "Column",
+        "titles" : "type",
+        "name" : "type",
+        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "valueUrl" : "http://example.org/{+type}",
+        "aboutUrl" : "http://example.org/oddeleni/{+Department}"
+      }, {
+        "@type" : "Column",
+        "propertyUrl" : "rdf:type",
+        "valueUrl" : "http://example.org/Department",
+        "aboutUrl" : "http://example.org/oddeleni/{+Department}",
+        "virtual" : true
+      } ],
+      "primaryKey" : "Department",
+      "rowTitles" : [ "Department", "departmentCode", "departmentName_en", "type" ]
+    },
+    "dc:description" : "Text columns marked with language codes (e.g., '(en)') in their headers contain values in the language indicated in parentheses, following the IETF BCP 47 naming convention."
+  } ]
+}

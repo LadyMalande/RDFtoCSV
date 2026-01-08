@@ -21,6 +21,9 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -227,8 +230,9 @@ public class FileWrite {
                         } else {
                             if (combination.get(iri(multilevelPropertyUrl)) != null) {
                                 if (combination.get(iri(multilevelPropertyUrl)).isIRI()) {
-                                    // If valueUrl contains a template variable {+...}, extract local name to fill the template
-                                    if (column.getValueUrl() != null && column.getValueUrl().contains("{+")) {
+                                    // If valueUrl is a prefix pattern (contains {+ but doesn't start with it), extract local name
+                                    // If valueUrl is a simple pattern (starts with {+), use full IRI
+                                    if (column.getValueUrl() != null && column.getValueUrl().contains("{+") && !column.getValueUrl().trim().startsWith("{+")) {
                                         line[i] = ((IRI) combination.get(iri(multilevelPropertyUrl))).getLocalName();
                                     } else {
                                         line[i] = combination.get(iri(multilevelPropertyUrl)).stringValue();
@@ -335,7 +339,7 @@ public class FileWrite {
      */
     public static void writeLinesToCSVFile(File file, List<String[]> lines, boolean append) {
         // Write the updated content back to the file
-        try (CSVWriter writer = new CSVWriter(new FileWriter(file, append), ',',
+        try (CSVWriter writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(file, append), StandardCharsets.UTF_8), ',',
                 CSVWriter.DEFAULT_QUOTE_CHARACTER,
                 CSVWriter.DEFAULT_ESCAPE_CHARACTER,
                 CSVWriter.DEFAULT_LINE_END)) {
@@ -426,10 +430,14 @@ public class FileWrite {
             } else if (values.get(0).isIRI()) {
                 if (values.size() == 1) {
                     IRI iri = (IRI) values.get(0);
-                    if (column.getValueUrl().startsWith("{")) {
+                    // If valueUrl is a simple pattern (starts with {+), use full IRI
+                    // If valueUrl is a prefix pattern (contains {+ but doesn't start with it), use local name
+                    if (column.getValueUrl().trim().startsWith("{+")) {
                         return iri.stringValue();
-                    } else {
+                    } else if (column.getValueUrl().contains("{+")) {
                         return iri.getLocalName();
+                    } else {
+                        return iri.stringValue();
                     }
 
                 } else {
@@ -437,10 +445,14 @@ public class FileWrite {
                     StringBuilder sbForMultipleLangVariations = new StringBuilder();
                     values.forEach(val -> {
                         IRI iri = (IRI) val;
-                        if (column.getValueUrl().startsWith("{")) {
+                        // If valueUrl is a simple pattern (starts with {+), use full IRI
+                        // If valueUrl is a prefix pattern (contains {+ but doesn't start with it), use local name
+                        if (column.getValueUrl().trim().startsWith("{+")) {
                             sbForMultipleLangVariations.append(iri.stringValue());
-                        } else {
+                        } else if (column.getValueUrl().contains("{+")) {
                             sbForMultipleLangVariations.append(iri.getLocalName());
+                        } else {
+                            sbForMultipleLangVariations.append(iri.stringValue());
                         }
                         sbForMultipleLangVariations.append(",");
                     });
@@ -641,12 +653,8 @@ public class FileWrite {
      * @param appendOrNot Append (true) to the file or write to the file from the beginning
      */
     public static void writeToTheFile(File file, Object something, boolean appendOrNot) {
-        try {
-            FileWriter myWriter = new FileWriter(file, appendOrNot);
-
+        try (OutputStreamWriter myWriter = new OutputStreamWriter(new FileOutputStream(file, appendOrNot), StandardCharsets.UTF_8)) {
             myWriter.write(something.toString());
-
-            myWriter.close();
 
             logger.log(Level.INFO, "Successfully wrote to the file " + file.getAbsolutePath() + ".");
         } catch (IOException e) {

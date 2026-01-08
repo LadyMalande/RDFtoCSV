@@ -1,57 +1,54 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test122.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "countryCode",
-        "name" : "countryCode",
-        "propertyUrl" : "file://test122.csv#countryCode"
-      }, {
-        "@type" : "Column",
-        "titles" : "latitude",
-        "name" : "latitude",
-        "propertyUrl" : "file://test122.csv#latitude",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "longitude",
-        "name" : "longitude",
-        "propertyUrl" : "file://test122.csv#longitude",
-        "datatype" : "double"
-      }, {
-        "@type" : "Column",
-        "titles" : "name",
-        "name" : "name",
-        "propertyUrl" : "file://test122.csv#name"
-      }, {
-        "@type" : "Column",
-        "titles" : "Row Number",
-        "name" : "rowNum",
-        "valueUrl" : "{_row}",
-        "datatype" : "integer",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "countryCode", "latitude", "longitude", "name" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
+  "@type" : "Table",
+  "url" : "test122.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "countryCode",
+      "name" : "countryCode",
+      "propertyUrl" : "file://test122.csv#countryCode"
+    }, {
+      "@type" : "Column",
+      "titles" : "latitude",
+      "name" : "latitude",
+      "propertyUrl" : "file://test122.csv#latitude",
+      "datatype" : "double"
+    }, {
+      "@type" : "Column",
+      "titles" : "longitude",
+      "name" : "longitude",
+      "propertyUrl" : "file://test122.csv#longitude",
+      "datatype" : "double"
+    }, {
+      "@type" : "Column",
+      "titles" : "name",
+      "name" : "name",
+      "propertyUrl" : "file://test122.csv#name"
+    }, {
+      "@type" : "Column",
+      "titles" : "Row Number",
+      "name" : "rowNum",
+      "valueUrl" : "{_row}",
+      "datatype" : "integer",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "countryCode", "latitude", "longitude", "name" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
   } ]
 }

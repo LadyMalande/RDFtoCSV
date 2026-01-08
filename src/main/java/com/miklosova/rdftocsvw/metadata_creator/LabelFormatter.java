@@ -9,15 +9,58 @@ import java.util.stream.Collectors;
 
 import static com.miklosova.rdftocsvw.support.AppConfig.ORIGINAL_NAMING_NOTATION;
 
+/**
+ * Utility class for formatting column labels according to various naming conventions.
+ * Supports conversion between different case formats including:
+ * <ul>
+ *   <li>camelCase - lowercase first word, capitalize subsequent words</li>
+ *   <li>PascalCase - capitalize all words</li>
+ *   <li>snake_case - lowercase with underscores</li>
+ *   <li>SCREAMING_SNAKE_CASE - uppercase with underscores</li>
+ *   <li>kebab-case - lowercase with hyphens</li>
+ *   <li>Title Case - capitalize each word with spaces</li>
+ *   <li>dot.notation - lowercase with dots</li>
+ *   <li>original - preserve the original format</li>
+ * </ul>
+ * This class provides methods to transform labels from any input format to the configured output format.
+ */
 public class LabelFormatter {
 
     public static final Logger logger = Logger.getLogger(LabelFormatter.class.getName());
+    
+    /**
+     * Configuration string for camelCase naming convention.
+     */
     public static final String CAMEL_CASE_CONFIG_STRING = "camelCase";
+    
+    /**
+     * Configuration string for PascalCase naming convention.
+     */
     public static final String PASCAL_CASE_CONFIG_STRING = "PascalCase";
+    
+    /**
+     * Configuration string for snake_case naming convention.
+     */
     public static final String SNAKE_CASE_CONFIG_STRING = "snake_case";
+    
+    /**
+     * Configuration string for SCREAMING_SNAKE_CASE naming convention.
+     */
     public static final String SCREAMING_SNAKE_CASE_CONFIG_STRING = "SCREAMING_SNAKE_CASE";
+    
+    /**
+     * Configuration string for kebab-case naming convention.
+     */
     public static final String KEBAB_CASE_CONFIG_STRING = "kebab-case";
+    
+    /**
+     * Configuration string for Title Case naming convention.
+     */
     public static final String TITLE_CASE_CONFIG_STRING = "Title Case";
+    
+    /**
+     * Configuration string for dot.notation naming convention.
+     */
     public static final String DOT_NOTATION_CASE_CONFIG_STRING = "dot.notation";
 
     /**
@@ -66,15 +109,22 @@ public class LabelFormatter {
         return formattedLabel;
     }
 
+    /**
+     * Converts a string to PascalCase format.
+     * All words are capitalized and concatenated without separators.
+     *
+     * @param input the input string to convert
+     * @return the PascalCase formatted string
+     */
     private static String toPascalCase(String input) {
         if (input == null || input.isEmpty()) {
             return input;
         }
 
         // Insert space before capital letters to handle toCamelCase
-        // Replace all non-alphanumeric characters with spaces
+        // Replace all non-alphanumeric characters with spaces (preserve Unicode letters)
         String spaced = input.replaceAll("([A-Z])", " $1")
-                .replaceAll("[^a-zA-Z0-9]", " ")
+                .replaceAll("[^\\p{L}\\p{N}]", " ")
                 .trim();
 
         String[] words = spaced.split(" +");
@@ -98,6 +148,13 @@ public class LabelFormatter {
                 .collect(Collectors.joining());
     }
 
+    /**
+     * Converts a string to camelCase format.
+     * First word is lowercase, subsequent words are capitalized and concatenated.
+     *
+     * @param input the input string to convert
+     * @return the camelCase formatted string
+     */
     private static String toCamelCase(String input) {
         if (input == null || input.isEmpty()) {
             return input;
@@ -111,7 +168,7 @@ public class LabelFormatter {
 
         // Handle existing toCamelCase by inserting space before capitals
         String spaced = input.replaceAll("([A-Z])", " $1")
-                .replaceAll("[^a-zA-Z0-9]", " ")
+                .replaceAll("[^\\p{L}\\p{N}]", " ")
                 .trim();
 
         String[] words = spaced.split(" +");
@@ -138,6 +195,13 @@ public class LabelFormatter {
         return firstWord + camelCase;
     }
 
+    /**
+     * Converts a string to snake_case format.
+     * All words are lowercase and separated by underscores.
+     *
+     * @param input the input string to convert
+     * @return the snake_case formatted string
+     */
     private static String toSnakeCase(String input) {
         if (input == null) {
             return null;
@@ -152,7 +216,7 @@ public class LabelFormatter {
                 .replaceAll("([A-Z]+)([A-Z][a-z])", "$1 $2");   // Handle acronyms
 
         // Step 2: Convert all non-alphanumeric to underscores
-        String step2 = step1.replaceAll("[^a-zA-Z0-9]", "_");
+        String step2 = step1.replaceAll("[^\\p{L}\\p{N}]", "_");
 
         // Step 3: Clean up (lowercase, collapse underscores, trim)
         String result = step2.toLowerCase()
@@ -165,6 +229,13 @@ public class LabelFormatter {
                 .replaceAll("_+", "_");    // Collapse underscores again
     }
 
+    /**
+     * Converts a string to kebab-case format.
+     * All words are lowercase and separated by hyphens.
+     *
+     * @param input the input string to convert
+     * @return the kebab-case formatted string
+     */
     private static String toKebabCase(String input) {
         if (input == null || input.isEmpty()) {
             return input;
@@ -180,13 +251,20 @@ public class LabelFormatter {
                 .replaceAll("([A-Z]+)([A-Z][a-z])", "$1 $2");
 
         // Step 2: Convert all non-alphanumeric to single hyphens
-        String step2 = step1.replaceAll("[^a-zA-Z0-9]+", "-");
+        String step2 = step1.replaceAll("[^\\p{L}\\p{N}]+", "-");
 
         // Step 3: Clean up (lowercase, remove leading/trailing hyphens)
         return step2.toLowerCase()
                 .replaceAll("^-|-$", "");
     }
 
+    /**
+     * Converts a string to Title Case format.
+     * Each word is capitalized and separated by spaces.
+     *
+     * @param input the input string to convert
+     * @return the Title Case formatted string
+     */
     private static String toTitleCase(String input) {
         if (input == null || input.isEmpty()) {
             return input;
@@ -199,7 +277,7 @@ public class LabelFormatter {
                 .replaceAll("([a-zA-Z])([0-9])([a-zA-Z])", "$1 $2 $3"); // Letters around numbers
 
         // Then split on any remaining non-alphanumeric characters except numbers
-        return Arrays.stream(spaced.split("[^a-zA-Z0-9]+"))
+        return Arrays.stream(spaced.split("[^\\p{L}\\p{N}]+"))
                 .filter(word -> !word.isEmpty())
                 .map(word -> {
                     // Special handling for number-only "words"
@@ -224,12 +302,25 @@ public class LabelFormatter {
                 .collect(Collectors.joining(" "));
     }
 
+    /**
+     * Capitalizes the first letter of a word and lowercases the rest.
+     *
+     * @param word the word to capitalize
+     * @return the capitalized word
+     */
     private static String capitalize(String word) {
         if (word.isEmpty()) return word;
         return word.substring(0, 1).toUpperCase() +
                 word.substring(1).toLowerCase();
     }
 
+    /**
+     * Converts a string to SCREAMING_SNAKE_CASE format.
+     * All words are uppercase and separated by underscores.
+     *
+     * @param input the input string to convert
+     * @return the SCREAMING_SNAKE_CASE formatted string
+     */
     private static String toScreamingSnakeCase(String input) {
         if (input == null || input.isEmpty()) {
             return input;
@@ -249,7 +340,7 @@ public class LabelFormatter {
                 .replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2");
 
         // Step 2: Convert any non-alphanumeric to underscore
-        String step2 = step1.replaceAll("[^a-zA-Z0-9]", "_");
+        String step2 = step1.replaceAll("[^\\p{L}\\p{N}]", "_");
 
         // Step 3: Clean up (collapse underscores, trim, uppercase)
         return step2.replaceAll("_+", "_")
@@ -257,6 +348,13 @@ public class LabelFormatter {
                 .toUpperCase();
     }
 
+    /**
+     * Converts a string to dot.notation format.
+     * All words are lowercase and separated by dots.
+     *
+     * @param input the input string to convert
+     * @return the dot.notation formatted string
+     */
     private static String toDotNotation(String input) {
         if (input == null || input.isEmpty()) {
             return input;
@@ -268,7 +366,7 @@ public class LabelFormatter {
                 .replaceAll("([A-Z]+)([A-Z][a-z])", "$1 $2");   // Handle acronyms
 
         // Step 2: Convert all non-alphanumeric to dots
-        String step2 = step1.replaceAll("[^a-zA-Z0-9]", ".");
+        String step2 = step1.replaceAll("[^\\p{L}\\p{N}]", ".");
 
         // Step 3: Clean up (lowercase, collapse dots, trim)
         return step2.toLowerCase()

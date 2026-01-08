@@ -1,33 +1,30 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test-005.rdf.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Statement",
-        "name" : "Statement",
-        "valueUrl" : "http://example.org/{+Statement}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+type}",
-        "aboutUrl" : "http://example.org/{+Statement}"
-      }, {
-        "@type" : "Column",
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement",
-        "aboutUrl" : "http://example.org/{+Statement}",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Statement",
-      "rowTitles" : [ "Statement", "type" ]
-    }
-  } ]
+  "@type" : "Table",
+  "url" : "test-005.rdf.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Statement",
+      "name" : "Statement",
+      "valueUrl" : "http://example.org/{+Statement}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "type",
+      "name" : "type",
+      "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+type}",
+      "aboutUrl" : "http://example.org/{+Statement}"
+    }, {
+      "@type" : "Column",
+      "propertyUrl" : "rdf:type",
+      "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement",
+      "aboutUrl" : "http://example.org/{+Statement}",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Statement",
+    "rowTitles" : [ "Statement", "type" ]
+  }
 }

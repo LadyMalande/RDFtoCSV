@@ -48,21 +48,21 @@ public class ParsingService {
         String[] splitName = fileName.split("\\.");
         String fileExtension = splitName[splitName.length - 1];
         switch (fileExtension) {
-            case "ttl" -> inputGateway.setParsingMethod(new TurtleParser());
+            case "ttl", "turtle" -> inputGateway.setParsingMethod(new TurtleParser());
             case "brf" -> inputGateway.setParsingMethod(new BinaryParser());
             case "hdt" -> inputGateway.setParsingMethod(new HdtParser());
-            case "jsonld" -> inputGateway.setParsingMethod((new JsonldParser()));
+            case "jsonld", "json-ld" -> inputGateway.setParsingMethod((new JsonldParser()));
             case "n3" -> inputGateway.setParsingMethod(new N3Parser());
-            case "ndjsonld", "jsonl", "ndjson" -> inputGateway.setParsingMethod(new NdjsonldParser());
-            case "nq" -> inputGateway.setParsingMethod(new NquadsParser());
-            case "nt" -> inputGateway.setParsingMethod(new NtriplesParser());
+            case "ndjsonld", "ndjson-ld", "jsonl", "ndjson" -> inputGateway.setParsingMethod(new NdjsonldParser());
+            case "nq", "nquads" -> inputGateway.setParsingMethod(new NquadsParser());
+            case "nt", "ntriples" -> inputGateway.setParsingMethod(new NtriplesParser());
             case "xhtml", "html" -> inputGateway.setParsingMethod(new RdfaParser());
             case "rj" -> inputGateway.setParsingMethod(new RdfjsonParser());
             case "rdf", "rdfs", "owl", "xml" -> inputGateway.setParsingMethod(new RdfxmlParser());
             case "trig" -> inputGateway.setParsingMethod(new TrigParser());
-            case "trigs" -> inputGateway.setParsingMethod(new TrigstarParser());
+            case "trigs", "trig-star" -> inputGateway.setParsingMethod(new TrigstarParser());
             case "trix" -> inputGateway.setParsingMethod(new TrixParser());
-            case "ttls" -> inputGateway.setParsingMethod(new TurtlestarParser());
+            case "ttls", "ttl-star", "turtle-star" -> inputGateway.setParsingMethod(new TurtlestarParser());
             default -> throw new IllegalArgumentException("Invalid file extension");
         }
 

@@ -1,75 +1,72 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test032.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://schema.org/{+type}"
-      }, {
-        "@type" : "Column",
-        "titles" : "name",
-        "name" : "name",
-        "propertyUrl" : "http://schema.org/name"
-      }, {
-        "@type" : "Column",
-        "titles" : "startDate",
-        "name" : "startDate",
-        "propertyUrl" : "http://schema.org/startDate",
-        "datatype" : "dateTime"
-      }, {
-        "@type" : "Column",
-        "titles" : "location",
-        "name" : "location",
-        "propertyUrl" : "http://schema.org/location",
-        "valueUrl" : "file://events-listing.csv#{+location}"
-      }, {
-        "@type" : "Column",
-        "titles" : "offers",
-        "name" : "offers",
-        "propertyUrl" : "http://schema.org/offers",
-        "valueUrl" : "file://events-listing.csv#{+offers}"
-      }, {
-        "@type" : "Column",
-        "titles" : "address",
-        "name" : "address",
-        "propertyUrl" : "http://schema.org/address"
-      }, {
-        "@type" : "Column",
-        "titles" : "url",
-        "name" : "url",
-        "propertyUrl" : "http://schema.org/url",
-        "datatype" : "anyURI"
-      }, {
-        "@type" : "Column",
-        "titles" : "Row Number",
-        "name" : "rowNum",
-        "valueUrl" : "{_row}",
-        "datatype" : "integer",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "type", "name", "startDate", "location", "offers", "address", "url" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
+  "@type" : "Table",
+  "url" : "test032.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "type",
+      "name" : "type",
+      "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "valueUrl" : "http://schema.org/{+type}"
+    }, {
+      "@type" : "Column",
+      "titles" : "name",
+      "name" : "name",
+      "propertyUrl" : "http://schema.org/name"
+    }, {
+      "@type" : "Column",
+      "titles" : "startDate",
+      "name" : "startDate",
+      "propertyUrl" : "http://schema.org/startDate",
+      "datatype" : "dateTime"
+    }, {
+      "@type" : "Column",
+      "titles" : "location",
+      "name" : "location",
+      "propertyUrl" : "http://schema.org/location",
+      "valueUrl" : "file://events-listing.csv#{+location}"
+    }, {
+      "@type" : "Column",
+      "titles" : "offers",
+      "name" : "offers",
+      "propertyUrl" : "http://schema.org/offers",
+      "valueUrl" : "file://events-listing.csv#{+offers}"
+    }, {
+      "@type" : "Column",
+      "titles" : "address",
+      "name" : "address",
+      "propertyUrl" : "http://schema.org/address"
+    }, {
+      "@type" : "Column",
+      "titles" : "url",
+      "name" : "url",
+      "propertyUrl" : "http://schema.org/url",
+      "datatype" : "anyURI"
+    }, {
+      "@type" : "Column",
+      "titles" : "Row Number",
+      "name" : "rowNum",
+      "valueUrl" : "{_row}",
+      "datatype" : "integer",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "type", "name", "startDate", "location", "offers", "address", "url" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
   } ]
 }

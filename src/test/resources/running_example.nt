@@ -1,0 +1,51 @@
+<http://example.org/osoba/alice-smith> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<http://example.org/osoba/alice-smith> <http://xmlns.com/foaf/0.1/name> "Alice Smith"@en .
+<http://example.org/osoba/alice-smith> <http://xmlns.com/foaf/0.1/mbox> <mailto:alice.smith@ex.org> .
+<http://example.org/osoba/alice-smith> <http://www.wikidata.org/prop/direct/P569> "1990-03-15"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://example.org/osoba/alice-smith> <https://schema.org/age> "34"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/osoba/alice-smith> <http://example.org/jobTitle> "Senior Developer"@en .
+<http://example.org/osoba/alice-smith> <http://example.org/jobTitle> "Vedouc\u00ED v\u00FDvoj\u00E1\u0159"@cs .
+<http://example.org/osoba/alice-smith> <http://example.org/department> <http://example.org/oddeleni/dev> .
+<http://example.org/osoba/alice-smith> <http://example.org/address> <http://example.org/adresa/josefska-2> .
+<http://example.org/osoba/robert-johnson> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<http://example.org/osoba/robert-johnson> <http://xmlns.com/foaf/0.1/name> "Robert Johnson"@en .
+<http://example.org/osoba/robert-johnson> <http://xmlns.com/foaf/0.1/mbox> <mailto:robert.johnson@ex.org> .
+<http://example.org/osoba/robert-johnson> <http://www.wikidata.org/prop/direct/P569> "1985-07-22"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://example.org/osoba/robert-johnson> <https://schema.org/age> "39"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/osoba/robert-johnson> <http://example.org/jobTitle> "QA Engineer"@en .
+<http://example.org/osoba/robert-johnson> <http://example.org/jobTitle> "QA in\u017Een\u00FDr"@cs .
+<http://example.org/osoba/robert-johnson> <http://example.org/department> <http://example.org/oddeleni/qa> .
+<http://example.org/osoba/robert-johnson> <http://example.org/address> <http://example.org/adresa/hybernska-5> .
+<http://example.org/osoba/charlie-brown> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<http://example.org/osoba/charlie-brown> <http://xmlns.com/foaf/0.1/name> "Charlie Brown"@en .
+<http://example.org/osoba/charlie-brown> <http://xmlns.com/foaf/0.1/mbox> <mailto:charlie.brown@ex.org> .
+<http://example.org/osoba/charlie-brown> <http://www.wikidata.org/prop/direct/P569> "1976-11-08"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://example.org/osoba/charlie-brown> <https://schema.org/age> "49"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/osoba/charlie-brown> <http://example.org/jobTitle> "DevOps Specialist"@en .
+<http://example.org/osoba/charlie-brown> <http://example.org/jobTitle> "Specialista DevOps"@cs .
+<http://example.org/osoba/charlie-brown> <http://example.org/department> <http://example.org/oddeleni/ops> .
+<http://example.org/osoba/charlie-brown> <http://example.org/address> <http://example.org/adresa/vodickova-10> .
+<http://example.org/oddeleni/dev> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/Department> .
+<http://example.org/oddeleni/dev> <http://example.org/departmentName> "Development"@en .
+<http://example.org/oddeleni/dev> <http://example.org/departmentCode> "DEV" .
+<http://example.org/oddeleni/qa> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/Department> .
+<http://example.org/oddeleni/qa> <http://example.org/departmentName> "Quality Assurance"@en .
+<http://example.org/oddeleni/qa> <http://example.org/departmentCode> "QA" .
+<http://example.org/oddeleni/ops> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/Department> .
+<http://example.org/oddeleni/ops> <http://example.org/departmentName> "Operations"@en .
+<http://example.org/oddeleni/ops> <http://example.org/departmentCode> "OPS" .
+<http://example.org/adresa/josefska-2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/PostalAddress> .
+<http://example.org/adresa/josefska-2> <https://schema.org/streetAddress> "Josefsk\u00E1 2" .
+<http://example.org/adresa/josefska-2> <https://schema.org/addressLocality> "Praha" .
+<http://example.org/adresa/josefska-2> <https://schema.org/postalCode> "118 00" .
+<http://example.org/adresa/josefska-2> <https://schema.org/addressCountry> "CZ" .
+<http://example.org/adresa/hybernska-5> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/PostalAddress> .
+<http://example.org/adresa/hybernska-5> <https://schema.org/streetAddress> "Hybernsk\u00E1 5" .
+<http://example.org/adresa/hybernska-5> <https://schema.org/addressLocality> "Praha" .
+<http://example.org/adresa/hybernska-5> <https://schema.org/postalCode> "110 00" .
+<http://example.org/adresa/hybernska-5> <https://schema.org/addressCountry> "CZ" .
+<http://example.org/adresa/vodickova-10> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/PostalAddress> .
+<http://example.org/adresa/vodickova-10> <https://schema.org/streetAddress> "Vodi\u010Dkova 10" .
+<http://example.org/adresa/vodickova-10> <https://schema.org/addressLocality> "Praha" .
+<http://example.org/adresa/vodickova-10> <https://schema.org/postalCode> "120 00" .
+<http://example.org/adresa/vodickova-10> <https://schema.org/addressCountry> "CZ" .

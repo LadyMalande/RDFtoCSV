@@ -1,3 +1,0 @@
-Subject,value,type
-http://example.org/dir/file,,http://example.org/type
-http://example.org/dir/file#foo,http://example.org/dir/relpath,

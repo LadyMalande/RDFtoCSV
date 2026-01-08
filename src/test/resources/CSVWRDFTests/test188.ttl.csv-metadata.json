@@ -1,131 +1,128 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test188.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "M%2Dd%2Dyyyy",
-        "name" : "M%2Dd%2Dyyyy",
-        "propertyUrl" : "file://test188.csv#M%2Dd%2Dyyyy",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "M%2Fd%2Fyyyy",
-        "name" : "M%2Fd%2Fyyyy",
-        "propertyUrl" : "file://test188.csv#M%2Fd%2Fyyyy",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "M.d.yyyy",
-        "name" : "M.d.yyyy",
-        "propertyUrl" : "file://test188.csv#M.d.yyyy",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "MM%2Ddd%2Dyyyy",
-        "name" : "MM%2Ddd%2Dyyyy",
-        "propertyUrl" : "file://test188.csv#MM%2Ddd%2Dyyyy",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "MM%2Fdd%2Fyyyy",
-        "name" : "MM%2Fdd%2Fyyyy",
-        "propertyUrl" : "file://test188.csv#MM%2Fdd%2Fyyyy",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "MM.dd.yyyy",
-        "name" : "MM.dd.yyyy",
-        "propertyUrl" : "file://test188.csv#MM.dd.yyyy",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "d%2DM%2Dyyyy",
-        "name" : "d%2DM%2Dyyyy",
-        "propertyUrl" : "file://test188.csv#d%2DM%2Dyyyy",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "d%2FM%2Fyyyy",
-        "name" : "d%2FM%2Fyyyy",
-        "propertyUrl" : "file://test188.csv#d%2FM%2Fyyyy",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "d.M.yyyy",
-        "name" : "d.M.yyyy",
-        "propertyUrl" : "file://test188.csv#d.M.yyyy",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "dd%2DMM%2Dyyyy",
-        "name" : "dd%2DMM%2Dyyyy",
-        "propertyUrl" : "file://test188.csv#dd%2DMM%2Dyyyy",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "dd%2FMM%2Fyyyy",
-        "name" : "dd%2FMM%2Fyyyy",
-        "propertyUrl" : "file://test188.csv#dd%2FMM%2Fyyyy",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "dd.MM.yyyy",
-        "name" : "dd.MM.yyyy",
-        "propertyUrl" : "file://test188.csv#dd.MM.yyyy",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "dd.MM.yyyy%20XXX",
-        "name" : "dd.MM.yyyy%20XXX",
-        "propertyUrl" : "file://test188.csv#dd.MM.yyyy%20XXX",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "yyyy%2DMM%2Ddd",
-        "name" : "yyyy%2DMM%2Ddd",
-        "propertyUrl" : "file://test188.csv#yyyy%2DMM%2Ddd",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "yyyy%2DMM%2DddX",
-        "name" : "yyyy%2DMM%2DddX",
-        "propertyUrl" : "file://test188.csv#yyyy%2DMM%2DddX",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "yyyyMMdd",
-        "name" : "yyyyMMdd",
-        "propertyUrl" : "file://test188.csv#yyyyMMdd",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "Row Number",
-        "name" : "rowNum",
-        "valueUrl" : "{_row}",
-        "datatype" : "integer",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "M%2Dd%2Dyyyy", "M%2Fd%2Fyyyy", "M.d.yyyy", "MM%2Ddd%2Dyyyy", "MM%2Fdd%2Fyyyy", "MM.dd.yyyy", "d%2DM%2Dyyyy", "d%2FM%2Fyyyy", "d.M.yyyy", "dd%2DMM%2Dyyyy", "dd%2FMM%2Fyyyy", "dd.MM.yyyy", "dd.MM.yyyy%20XXX", "yyyy%2DMM%2Ddd", "yyyy%2DMM%2DddX", "yyyyMMdd" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
+  "@type" : "Table",
+  "url" : "test188.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "M%2Dd%2Dyyyy",
+      "name" : "M2Dd2Dyyyy",
+      "propertyUrl" : "file://test188.csv#M%2Dd%2Dyyyy",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "M%2Fd%2Fyyyy",
+      "name" : "M2Fd2Fyyyy",
+      "propertyUrl" : "file://test188.csv#M%2Fd%2Fyyyy",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "M.d.yyyy",
+      "name" : "Mdyyyy",
+      "propertyUrl" : "file://test188.csv#M.d.yyyy",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "MM%2Ddd%2Dyyyy",
+      "name" : "MM2Ddd2Dyyyy",
+      "propertyUrl" : "file://test188.csv#MM%2Ddd%2Dyyyy",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "MM%2Fdd%2Fyyyy",
+      "name" : "MM2Fdd2Fyyyy",
+      "propertyUrl" : "file://test188.csv#MM%2Fdd%2Fyyyy",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "MM.dd.yyyy",
+      "name" : "MMddyyyy",
+      "propertyUrl" : "file://test188.csv#MM.dd.yyyy",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "d%2DM%2Dyyyy",
+      "name" : "d2DM2Dyyyy",
+      "propertyUrl" : "file://test188.csv#d%2DM%2Dyyyy",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "d%2FM%2Fyyyy",
+      "name" : "d2FM2Fyyyy",
+      "propertyUrl" : "file://test188.csv#d%2FM%2Fyyyy",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "d.M.yyyy",
+      "name" : "dMyyyy",
+      "propertyUrl" : "file://test188.csv#d.M.yyyy",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "dd%2DMM%2Dyyyy",
+      "name" : "dd2DMM2Dyyyy",
+      "propertyUrl" : "file://test188.csv#dd%2DMM%2Dyyyy",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "dd%2FMM%2Fyyyy",
+      "name" : "dd2FMM2Fyyyy",
+      "propertyUrl" : "file://test188.csv#dd%2FMM%2Fyyyy",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "dd.MM.yyyy",
+      "name" : "ddMMyyyy",
+      "propertyUrl" : "file://test188.csv#dd.MM.yyyy",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "dd.MM.yyyy%20XXX",
+      "name" : "ddMMyyyy20XXX",
+      "propertyUrl" : "file://test188.csv#dd.MM.yyyy%20XXX",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "yyyy%2DMM%2Ddd",
+      "name" : "yyyy2DMM2Ddd",
+      "propertyUrl" : "file://test188.csv#yyyy%2DMM%2Ddd",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "yyyy%2DMM%2DddX",
+      "name" : "yyyy2DMM2DddX",
+      "propertyUrl" : "file://test188.csv#yyyy%2DMM%2DddX",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "yyyyMMdd",
+      "name" : "yyyyMMdd",
+      "propertyUrl" : "file://test188.csv#yyyyMMdd",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "Row Number",
+      "name" : "rowNum",
+      "valueUrl" : "{_row}",
+      "datatype" : "integer",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "M2Dd2Dyyyy", "M2Fd2Fyyyy", "Mdyyyy", "MM2Ddd2Dyyyy", "MM2Fdd2Fyyyy", "MMddyyyy", "d2DM2Dyyyy", "d2FM2Fyyyy", "dMyyyy", "dd2DMM2Dyyyy", "dd2FMM2Fyyyy", "ddMMyyyy", "ddMMyyyy20XXX", "yyyy2DMM2Ddd", "yyyy2DMM2DddX", "yyyyMMdd" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
   } ]
 }

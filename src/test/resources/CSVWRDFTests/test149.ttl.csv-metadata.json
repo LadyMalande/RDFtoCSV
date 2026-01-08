@@ -1,65 +1,63 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test149.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "GID (en)",
-        "name" : "GID_en",
-        "propertyUrl" : "file://tree-ops.csv#GID",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "Inventory%20Date (en)",
-        "name" : "Inventory%20Date_en",
-        "propertyUrl" : "file://tree-ops.csv#Inventory%20Date",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "Species (en)",
-        "name" : "Species_en",
-        "propertyUrl" : "file://tree-ops.csv#Species",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "Trim%20Cycle (en)",
-        "name" : "Trim%20Cycle_en",
-        "propertyUrl" : "file://tree-ops.csv#Trim%20Cycle",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "_col.2 (en)",
-        "name" : "_col.2_en",
-        "propertyUrl" : "file://tree-ops.csv#_col.2",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "Row Number",
-        "name" : "rowNum",
-        "valueUrl" : "{_row}",
-        "datatype" : "integer",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "GID_en", "Inventory%20Date_en", "Species_en", "Trim%20Cycle_en", "_col.2_en" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
-  } ]
+  "@type" : "Table",
+  "url" : "test149.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "GID (en)",
+      "name" : "GID_en",
+      "propertyUrl" : "file://tree-ops.csv#GID",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "Inventory%20Date (en)",
+      "name" : "Inventory20Date_en",
+      "propertyUrl" : "file://tree-ops.csv#Inventory%20Date",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "Species (en)",
+      "name" : "Species_en",
+      "propertyUrl" : "file://tree-ops.csv#Species",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "Trim%20Cycle (en)",
+      "name" : "Trim20Cycle_en",
+      "propertyUrl" : "file://tree-ops.csv#Trim%20Cycle",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "_col.2 (en)",
+      "name" : "_col2_en",
+      "propertyUrl" : "file://tree-ops.csv#_col.2",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "Row Number",
+      "name" : "rowNum",
+      "valueUrl" : "{_row}",
+      "datatype" : "integer",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "GID_en", "Inventory20Date_en", "Species_en", "Trim20Cycle_en", "_col2_en" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+  } ],
+  "dc:description" : "Text columns marked with language codes (e.g., '(en)') in their headers contain values in the language indicated in parentheses, following the IETF BCP 47 naming convention."
 }

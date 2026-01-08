@@ -1,55 +1,52 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test005.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "FamilyName",
-        "name" : "FamilyName",
-        "propertyUrl" : "file://test005.csv#FamilyName"
-      }, {
-        "@type" : "Column",
-        "titles" : "Surname",
-        "name" : "Surname",
-        "propertyUrl" : "file://test005.csv#Surname"
-      }, {
-        "@type" : "Column",
-        "titles" : "child_id",
-        "name" : "child_id",
-        "propertyUrl" : "file://test005.csv#child_id"
-      }, {
-        "@type" : "Column",
-        "titles" : "id",
-        "name" : "id",
-        "propertyUrl" : "file://test005.csv#id"
-      }, {
-        "@type" : "Column",
-        "titles" : "Row Number",
-        "name" : "rowNum",
-        "valueUrl" : "{_row}",
-        "datatype" : "integer",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "FamilyName", "Surname", "child_id", "id" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
+  "@type" : "Table",
+  "url" : "test005.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "FamilyName",
+      "name" : "FamilyName",
+      "propertyUrl" : "file://test005.csv#FamilyName"
+    }, {
+      "@type" : "Column",
+      "titles" : "Surname",
+      "name" : "Surname",
+      "propertyUrl" : "file://test005.csv#Surname"
+    }, {
+      "@type" : "Column",
+      "titles" : "child_id",
+      "name" : "child_id",
+      "propertyUrl" : "file://test005.csv#child_id"
+    }, {
+      "@type" : "Column",
+      "titles" : "id",
+      "name" : "id",
+      "propertyUrl" : "file://test005.csv#id"
+    }, {
+      "@type" : "Column",
+      "titles" : "Row Number",
+      "name" : "rowNum",
+      "valueUrl" : "{_row}",
+      "datatype" : "integer",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "FamilyName", "Surname", "child_id", "id" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
   } ]
 }

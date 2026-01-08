@@ -1,25 +1,22 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "output.csv_merged.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "name" : "column1",
-        "propertyUrl" : "http://example.com/property1"
-      }, {
-        "@type" : "Column",
-        "name" : "column2",
-        "propertyUrl" : "http://example.com/property2"
-      }, {
-        "@type" : "Column",
-        "name" : "column1_1",
-        "propertyUrl" : "http://example.com/property3",
-        "valueUrl" : "{+column1_1}"
-      } ]
-    }
-  } ]
+  "@type" : "Table",
+  "url" : "output.csv_merged.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "name" : "column1",
+      "propertyUrl" : "http://example.com/property1"
+    }, {
+      "@type" : "Column",
+      "name" : "column2",
+      "propertyUrl" : "http://example.com/property2"
+    }, {
+      "@type" : "Column",
+      "name" : "column1_1",
+      "propertyUrl" : "http://example.com/property3",
+      "valueUrl" : "{+column1_1}"
+    } ]
+  }
 }

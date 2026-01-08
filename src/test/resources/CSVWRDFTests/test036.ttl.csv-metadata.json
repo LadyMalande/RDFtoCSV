@@ -1,81 +1,79 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test036.ttl.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Subject",
-        "name" : "Subject",
-        "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "dbh",
-        "name" : "dbh",
-        "propertyUrl" : "file://tree-ops-ext.csv#dbh",
-        "datatype" : "integer"
-      }, {
-        "@type" : "Column",
-        "titles" : "inventory_date",
-        "name" : "inventory_date",
-        "propertyUrl" : "file://tree-ops-ext.csv#inventory_date",
-        "datatype" : "date"
-      }, {
-        "@type" : "Column",
-        "titles" : "kml",
-        "name" : "kml",
-        "propertyUrl" : "file://tree-ops-ext.csv#kml",
-        "datatype" : "XMLLiteral"
-      }, {
-        "@type" : "Column",
-        "titles" : "on_street",
-        "name" : "on_street",
-        "propertyUrl" : "file://tree-ops-ext.csv#on_street"
-      }, {
-        "@type" : "Column",
-        "titles" : "protected",
-        "name" : "protected",
-        "propertyUrl" : "file://tree-ops-ext.csv#protected",
-        "datatype" : "boolean"
-      }, {
-        "@type" : "Column",
-        "titles" : "species",
-        "name" : "species",
-        "propertyUrl" : "file://tree-ops-ext.csv#species"
-      }, {
-        "@type" : "Column",
-        "titles" : "trim_cycle (en)",
-        "name" : "trim_cycle_en",
-        "propertyUrl" : "file://tree-ops-ext.csv#trim_cycle",
-        "lang" : "en"
-      }, {
-        "@type" : "Column",
-        "titles" : "comments",
-        "name" : "comments",
-        "propertyUrl" : "file://tree-ops-ext.csv#comments",
-        "datatype" : "normalizedString"
-      }, {
-        "@type" : "Column",
-        "titles" : "Row Number",
-        "name" : "rowNum",
-        "valueUrl" : "{_row}",
-        "datatype" : "integer",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Subject",
-      "rowTitles" : [ "Subject", "dbh", "inventory_date", "kml", "on_street", "protected", "species", "trim_cycle_en", "comments" ]
-    },
-    "transformations" : [ {
-      "@type" : "Template",
-      "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
-      "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
-      "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
-      "source" : "rdf",
-      "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
-    } ]
-  } ]
+  "@type" : "Table",
+  "url" : "test036.ttl.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Subject",
+      "name" : "Subject",
+      "valueUrl" : "https://blank_Nodes_IRI.org/{+Subject}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "dbh",
+      "name" : "dbh",
+      "propertyUrl" : "file://tree-ops-ext.csv#dbh",
+      "datatype" : "integer"
+    }, {
+      "@type" : "Column",
+      "titles" : "inventory_date",
+      "name" : "inventory_date",
+      "propertyUrl" : "file://tree-ops-ext.csv#inventory_date",
+      "datatype" : "date"
+    }, {
+      "@type" : "Column",
+      "titles" : "kml",
+      "name" : "kml",
+      "propertyUrl" : "file://tree-ops-ext.csv#kml",
+      "datatype" : "XMLLiteral"
+    }, {
+      "@type" : "Column",
+      "titles" : "on_street",
+      "name" : "on_street",
+      "propertyUrl" : "file://tree-ops-ext.csv#on_street"
+    }, {
+      "@type" : "Column",
+      "titles" : "protected",
+      "name" : "protected",
+      "propertyUrl" : "file://tree-ops-ext.csv#protected",
+      "datatype" : "boolean"
+    }, {
+      "@type" : "Column",
+      "titles" : "species",
+      "name" : "species",
+      "propertyUrl" : "file://tree-ops-ext.csv#species"
+    }, {
+      "@type" : "Column",
+      "titles" : "trim_cycle (en)",
+      "name" : "trim_cycle_en",
+      "propertyUrl" : "file://tree-ops-ext.csv#trim_cycle",
+      "lang" : "en"
+    }, {
+      "@type" : "Column",
+      "titles" : "comments",
+      "name" : "comments",
+      "propertyUrl" : "file://tree-ops-ext.csv#comments",
+      "datatype" : "normalizedString"
+    }, {
+      "@type" : "Column",
+      "titles" : "Row Number",
+      "name" : "rowNum",
+      "valueUrl" : "{_row}",
+      "datatype" : "integer",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Subject",
+    "rowTitles" : [ "Subject", "dbh", "inventory_date", "kml", "on_street", "protected", "species", "trim_cycle_en", "comments" ]
+  },
+  "transformations" : [ {
+    "@type" : "Template",
+    "url" : "https://raw.githubusercontent.com/LadyMalande/RDFtoCSVNotes/main/scripts/transformationForBlankNodesStreamed.js",
+    "scriptFormat" : "http://www.iana.org/assignments/media-types/application/javascript",
+    "targetFormat" : "http://www.iana.org/assignments/media-types/turtle",
+    "source" : "rdf",
+    "titles" : "RDF format used as the output format in the transformation from CSV to RDF"
+  } ],
+  "dc:description" : "Text columns marked with language codes (e.g., '(en)') in their headers contain values in the language indicated in parentheses, following the IETF BCP 47 naming convention."
 }

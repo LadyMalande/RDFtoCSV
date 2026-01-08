@@ -1,33 +1,30 @@
 {
   "@context" : "http://www.w3.org/ns/csvw",
-  "@type" : "TableGroup",
-  "tables" : [ {
-    "@type" : "Table",
-    "url" : "test-003.rdf.csv",
-    "tableSchema" : {
-      "@type" : "Schema",
-      "columns" : [ {
-        "@type" : "Column",
-        "titles" : "Bag",
-        "name" : "Bag",
-        "valueUrl" : "http://example.org/{+Bag}",
-        "suppressOutput" : true
-      }, {
-        "@type" : "Column",
-        "titles" : "type",
-        "name" : "type",
-        "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+type}",
-        "aboutUrl" : "http://example.org/{+Bag}"
-      }, {
-        "@type" : "Column",
-        "propertyUrl" : "rdf:type",
-        "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag",
-        "aboutUrl" : "http://example.org/{+Bag}",
-        "virtual" : true
-      } ],
-      "primaryKey" : "Bag",
-      "rowTitles" : [ "Bag", "type" ]
-    }
-  } ]
+  "@type" : "Table",
+  "url" : "test-003.rdf.csv",
+  "tableSchema" : {
+    "@type" : "Schema",
+    "columns" : [ {
+      "@type" : "Column",
+      "titles" : "Bag",
+      "name" : "Bag",
+      "valueUrl" : "http://example.org/{+Bag}",
+      "suppressOutput" : true
+    }, {
+      "@type" : "Column",
+      "titles" : "type",
+      "name" : "type",
+      "propertyUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#{+type}",
+      "aboutUrl" : "http://example.org/{+Bag}"
+    }, {
+      "@type" : "Column",
+      "propertyUrl" : "rdf:type",
+      "valueUrl" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag",
+      "aboutUrl" : "http://example.org/{+Bag}",
+      "virtual" : true
+    } ],
+    "primaryKey" : "Bag",
+    "rowTitles" : [ "Bag", "type" ]
+  }
 }
