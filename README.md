@@ -73,7 +73,7 @@ The RDFtoCSV library converts RDF data to CSV on the Web.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
+<h1 color="red">The redis database with persistance instance service has been deleted (on render.com) after thesis defense. To use the tool, use the command line version.</h1>
 
 ### Built With
 
